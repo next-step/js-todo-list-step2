@@ -1,15 +1,15 @@
 import { BASE_URL } from './constants.js';
 
-const request = async (url) => {
+const request = async (url, option) => {
   try {
-    const result = await fetch(url);
+    const result = await fetch(url, option);
     return result.json();
   } catch (e) {
     console.error(e);
   }
 };
 
-const option = {
+const options = {
   POST: (text) => {
     return {
       method: 'POST',
@@ -26,9 +26,20 @@ const option = {
       method: 'DELETE',
     };
   },
-  PUT: () => {
+  TOGGLE: () => {
     return {
       method: 'PUT',
+    };
+  },
+  PUT: (text) => {
+    return {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        contents: text,
+      }),
     };
   },
 };
@@ -41,18 +52,24 @@ const api = {
     return request(`${BASE_URL}/api/u/${username}/item`);
   },
   fetchTodoPost: (username, text) => {
-    return request(`${BASE_URL}/api/u/${username}/item`, option.POST(text));
+    return request(`${BASE_URL}/api/u/${username}/item`, options.POST(text));
   },
-  fetchTodoUpdate: (username, id) => {
-    return request(`${BASE_URL}/api/u/${username}/item/${id}`, option.PUT());
+  fetchTodoUpdate: (username, id, text) => {
+    return request(
+      `${BASE_URL}/api/u/${username}/item/${id}`,
+      options.PUT(text),
+    );
   },
   fetchTodoRemove: (username, id) => {
-    return request(`${BASE_URL}/api/u/${username}/item/${id}`, option.DELETE());
+    return request(
+      `${BASE_URL}/api/u/${username}/item/${id}`,
+      options.DELETE(),
+    );
   },
   fetchTodoToggle: (username, id) => {
     return request(
       `${BASE_URL}/api/u/${username}/item/${id}/toggle`,
-      option.PUT,
+      options.TOGGLE(),
     );
   },
 };

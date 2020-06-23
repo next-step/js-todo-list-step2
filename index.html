@@ -7,7 +7,7 @@
   </head>
   <body>
     <div id="app">
-      <h1 id="user-title" data-username="eastjun">
+      <h1 id="user-title" data-username="ganeodolu">
         <span><strong>eastjun</strong>'s Todo List</span>
       </h1>
       <div>
@@ -29,6 +29,30 @@
           <ul id="todo-list" class="todo-list">
             <li>
               <div class="view">
+                <input class="toggle" type="checkbox" />
+                <label class="label">새로운 타이틀</label>
+                <button class="delete"></button>
+              </div>
+              <input class="edit" value="새로운 타이틀" />
+            </li>
+            <li class="editing">
+              <div class="view">
+                <input class="toggle" type="checkbox" />
+                <label class="label">완료된 타이틀</label>
+                <button class="delete"></button>
+              </div>
+              <input class="edit" value="완료된 타이틀" />
+            </li>
+            <li class="completed">
+              <div class="view">
+                <input class="toggle" type="checkbox" />
+                <label class="label">완료된 타이틀</label>
+                <button class="delete"></button>
+              </div>
+              <input class="edit" value="완료된 타이틀" />
+            </li>
+            <li>
+              <div class="view">
                 <label class="label">
                   <div class="animated-background">
                     <div class="skel-mask-container">
@@ -47,6 +71,7 @@
           <span id="completed-count" class="todo-count"
             ><span class="count"></span> 개 완료</span
           >
+          <span class="clear-completed">전체삭제</span>
         </div>
       </section>
       <script type="module" src="js/main.js"></script>
