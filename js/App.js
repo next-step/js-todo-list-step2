@@ -8,37 +8,28 @@ export default class App {
   constructor({
     username,
     userArray,
-    data,
-    $targetUserTitle,
-    $targetUserList,
+    $targetUserContainer,
     $targetTodoInput,
     $targetTodoList,
     $targetTodoCountContainer,
-    // $targetTodoCountCompleted,
   }) {
     this.username = username;
     this.userArray = userArray;
-    this.data = data;
-    this.$targetUserTitle = $targetUserTitle;
-    this.$targetUserList = $targetUserList;
+    this.$targetUserContainer = $targetUserContainer;
     this.$targetTodoInput = $targetTodoInput;
     this.$targetTodoList = $targetTodoList;
     this.$targetTodoCountContainer = $targetTodoCountContainer;
-    // this.$targetTodoCountCompleted = $targetTodoCountCompleted;
 
     this.userList = new UserList({
       username,
       userArray,
-      data,
-      $targetUserTitle,
-      $targetUserList,
-      onClickUser: (user) => {
-        this.setState(user);
+      $targetUserContainer,
+      onClickUser: (selectedUsername) => {
+        this.setState(selectedUsername);
       },
     });
 
     this.todoInput = new TodoInput({
-      data,
       $targetTodoInput,
       onInput: async (text) => {
         await api.fetchTodoPost(this.username, text);
@@ -47,7 +38,6 @@ export default class App {
     });
 
     this.todoList = new TodoList({
-      data,
       username,
       $targetTodoList,
       onToggle: async (id) => {
@@ -65,7 +55,6 @@ export default class App {
     });
 
     this.todoCount = new TodoCount({
-      data,
       username,
       $targetTodoCountContainer,
     });
@@ -75,8 +64,6 @@ export default class App {
 
   setState(selectedUsername) {
     this.username = selectedUsername;
-    // this.data = nextData;
-    // console.log(this.data)
     this.userList.setState(this.username);
     this.todoList.setState(this.username);
     this.todoCount.setState(this.username);

@@ -1,9 +1,9 @@
 import api from './util/api.js';
 import { KEY_NAME, ERROR_TYPE } from './util/constants.js';
+import * as templates from './util/templates.js';
 
 export default class TodoList {
-  constructor({ data, username, $targetTodoList, onToggle, onRemove, onEdit }) {
-    this.data = data;
+  constructor({ username, $targetTodoList, onToggle, onRemove, onEdit }) {
     this.username = username;
     this.$targetTodoList = $targetTodoList;
 
@@ -37,6 +37,7 @@ export default class TodoList {
       if (className === 'edit') {
         const $targetLi = e.target.closest('li');
         if (e.key === KEY_NAME.ESC) {
+          e.target.value = '';
           if ($targetLi.querySelector('.toggle').checked) {
             $targetLi.className = 'completed';
           } else {
@@ -58,32 +59,13 @@ export default class TodoList {
 
   setState(selectedUsername) {
     this.username = selectedUsername;
-    // this.data = nextData;
-    // console.log(this.data)
     this.render();
   }
 
   async render() {
-    console.log(this.username);
+    this.$targetTodoList.insertAdjacentHTML('beforeend', templates.LOADING);
     const response = await api.fetchUserTodo(this.username);
-    this.data = response.todoList;
-    this.$targetTodoList.innerHTML = this.data
-      .map((todo) => {
-        return `
-            <li ${todo.isCompleted ? 'class=completed' : ''} data-id=${
-          todo._id
-        }>
-              <div class="view">
-                <input class="toggle" type="checkbox" ${
-                  todo.isCompleted ? 'checked' : ''
-                } />
-                <label class="label">${todo.contents}</label>
-                <button class="delete"></button>
-              </div>
-              <input class="edit" placeholder=${todo.contents} value="" />
-            </li>
-      `;
-      })
-      .join('');
+    const data = response.todoList;
+    this.$targetTodoList.innerHTML = templates.TODOLIST(data);
   }
 }
