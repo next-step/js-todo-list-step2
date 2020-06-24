@@ -56,4 +56,4 @@ export const LOADING = `
         </div>
       </label>
     </div>
-  </li>`
+  </li>`;

@@ -69,7 +69,11 @@ export default class App {
     this.todoCount.setState(this.username);
   }
 
-  render() {
+  async render() {
+    await api.fetchTodoPost(this.username, "makeUser")
+    const response = await api.fetchUserTodo(this.username);
+    const data = response.todoList;
+    await api.fetchTodoRemove(this.username, data[data.length-1]._id)
     this.todoList.render();
   }
 }

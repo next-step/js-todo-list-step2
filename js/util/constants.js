@@ -7,5 +7,4 @@ export const KEY_NAME = {
 
 export const ERROR_TYPE = {
   NO_MATCH_CLASS: '버튼을 정확히 눌러주세요',
-  NO_MATCH_FILTER: '필터를 정확히 눌러주세요',
 };

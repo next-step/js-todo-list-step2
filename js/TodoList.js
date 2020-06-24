@@ -1,6 +1,7 @@
 import api from './util/api.js';
 import { KEY_NAME, ERROR_TYPE } from './util/constants.js';
 import * as templates from './util/templates.js';
+import * as functions from './util/functions.js';
 
 export default class TodoList {
   constructor({ username, $targetTodoList, onToggle, onRemove, onEdit }) {
@@ -38,20 +39,12 @@ export default class TodoList {
         const $targetLi = e.target.closest('li');
         if (e.key === KEY_NAME.ESC) {
           e.target.value = '';
-          if ($targetLi.querySelector('.toggle').checked) {
-            $targetLi.className = 'completed';
-          } else {
-            $targetLi.className = '';
-          }
+          functions.toggleTarget($targetLi);
         } else if (e.key === KEY_NAME.ENTER && e.target.value !== '') {
-          const id = $targetLi.dataset.id;
+          const { id } = $targetLi.dataset;
           const text = e.target.value;
           onEdit(id, text);
-          if ($targetLi.querySelector('.toggle').checked) {
-            $targetLi.className = 'completed';
-          } else {
-            $targetLi.className = '';
-          }
+          functions.toggleTarget($targetLi);
         }
       }
     });
