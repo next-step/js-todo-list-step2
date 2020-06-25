@@ -29,7 +29,7 @@ export default class App {
 
     this.userTitle = new UserTitle({
       username,
-      $targetUserTitle
+      $targetUserTitle,
     });
 
     this.userRegister = new UserRegister({
@@ -40,6 +40,7 @@ export default class App {
         const response = await api.fetchUserTodo(newUsername);
         const data = response.todoList;
         await api.fetchTodoRemove(newUsername, data[data.length - 1]._id);
+        this.userTitle.setState(newUsername);
         this.setState(newUsername);
       },
     });
@@ -49,7 +50,7 @@ export default class App {
       userArray,
       $targetUserList,
       onClickUser: (selectedUsername) => {
-        this.userTitle.setState(selectedUsername)
+        this.userTitle.setState(selectedUsername);
         this.setState(selectedUsername);
       },
     });
