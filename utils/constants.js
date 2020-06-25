@@ -1,9 +1,7 @@
 export const API_URL = 'https://blackcoffee-todolist.df.r.appspot.com'
 
-//for localstorage
-export const STORAGE_KEY = 'TODO'
+export const STORAGE_KEY = 'TODO' //for localstorage
 
-// HTTP METHOD
 export const httpMethod = {
   GET: 'GET',
   POST: 'POST',
@@ -11,7 +9,18 @@ export const httpMethod = {
   DELETE: 'DELETE'
 }
 
+export const tagName = {
+  INPUT: 'INPUT',
+  BUTTON: 'BUTTON'
+}
+
 export const className = {
-  edit: 'edit',
-  editing: 'editing',
+  EDIT: 'edit',
+  EDITING: 'editing',
+  TOGGLE: 'toggle'
+}
+
+export const keyName = {
+  ESC: 'Escape',
+  ENTER: 'Enter'
 }

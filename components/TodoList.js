@@ -1,7 +1,8 @@
-import { checkSelector } from "../utils/validations.js"
+import {checkSelector} from "../utils/validations.js"
+import {tagName, className, keyName} from "../utils/constants.js"
 
 export default function TodoList(props) {
-  const { selector, todos, username, onToggle, onDelete, onEdit } = props
+  const {selector, todos, onToggle, onDelete, onEdit} = props
   if (new.target !== TodoList) {
     return new TodoList(props)
   }
@@ -9,7 +10,6 @@ export default function TodoList(props) {
 
   this.init = () => {
     this.$target = document.querySelector(selector)
-    this.username = username
     this.todos = todos
     this.render()
     this.bindEvent()
@@ -19,47 +19,52 @@ export default function TodoList(props) {
     const clickEventHandler = (e) => {
       const li = e.target.closest('li')
       const {id} = li.dataset
-      if (e.target.tagName === 'INPUT' && e.target.className === 'toggle') {
-        onToggle(this.username, id)
-      } else if (e.target.tagName === 'BUTTON') {
-        onDelete(this.username, id)
+      if (
+        e.target.tagName === tagName.INPUT &&
+        e.target.className === className.TOGGLE
+      ) {
+        onToggle(id)
+      } else if (e.target.tagName === tagName.BUTTON) {
+        onDelete(id)
       }
     }
     const dblclickEventHandler = (e) => {
       const li = e.target.closest('li')
       this.editInputValue = e.target.innerText // 수정 시작할 때 초기 상태의 value 저장
-      if (!li.classList.contains('editing')) {
-        li.classList.add('editing')
-        li.querySelector('.edit').focus()
+      if (!li.classList.contains(className.EDITING)) {
+        li.classList.add(className.EDITING)
+        li.querySelector(`.${className.EDIT}`).focus()
       }
     }
     const keyUpEventHandler = (e) => {
-      if (e.key === 'Escape') { // ESC
+      if (e.key === keyName.ESC) { // ESC
         const li = e.target.closest('li')
-        li.classList.remove('editing')
-      } else if (e.key === 'Enter' && e.target.value.trim()) {
+        li.classList.remove(className.EDITING)
+      } else if (e.key === keyName.ENTER && e.target.value.trim()) {
         const li = e.target.closest('li')
-        li.classList.remove('editing')
-        onEdit({
-          username: this.username,
-          itemId: li.dataset.id,
-          contents: e.target.value.trim()
-        })
+        li.classList.remove(className.EDITING)
+        onEdit(li.dataset.id, e.target.value.trim())
       }
     }
 
     const focusInEventHandler = (e) => {
-      if (e.target.tagName === 'INPUT' && e.target.className === 'edit') {
+      if (
+        e.target.tagName === tagName.INPUT &&
+        e.target.className === className.EDIT
+      ) {
         e.target.selectionStart = e.target.value.length
       }
     }
 
     const focusOutEventHandler = (e) => {
-      if (e.target.tagName === 'INPUT' && e.target.className === 'edit') {
+      if (
+        e.target.tagName === tagName.INPUT &&
+        e.target.className === className.EDIT
+      ) {
         e.target.value = this.editInputValue //초기상태의 value로 reset
         const li = e.target.closest('li')
-        if (li.classList.contains('editing')) {
-          li.classList.remove('editing')
+        if (li.classList.contains(className.EDITING)) {
+          li.classList.remove(className.EDITING)
         }
       }
     }
@@ -75,7 +80,7 @@ export default function TodoList(props) {
     return `
       <li data-id=${_id} data-index=${index} class=${isCompleted ? 'completed' : ''}>
           <div class="view">
-            <input class="toggle" type="checkbox" />
+            <input class="toggle" type="checkbox" ${isCompleted ? 'checked' : ''}/>
             <label class="label">${contents}</label>
             <button class="destroy"></button>
           </div>
