@@ -24,7 +24,7 @@ export default class UserList {
     this.$targetUserList.innerHTML = templates.LOADING;
     this.userArray = await api.fetchUsers();
     if (this.userArray.length === 0) {
-      this.$targetUserList.innerHTML = MESSAGE.ADD_USER;
+      this.$targetUserList.innerHTML = MESSAGE.REGISTER_USER;
     } else {
       this.$targetUserList.innerHTML = templates.USERLIST(
         this.username,

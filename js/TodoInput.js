@@ -13,7 +13,7 @@ export default class TodoInput {
       if (e.key === KEY_NAME.ENTER && e.target.value !== '') {
         const userList = this.$targetUserList.querySelector('.ripple');
         if (!userList) {
-          alert(MESSAGE.ADD_USER);
+          alert(MESSAGE.REGISTER_USER);
           return;
         }
         const selectedUser = this.$targetUserList.querySelector(
