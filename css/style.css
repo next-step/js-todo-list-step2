@@ -7,7 +7,7 @@
 }
 
 #user-list li {
-  display: inline-block;
+  position: relative;
 }
 
 html,
@@ -61,8 +61,8 @@ button.user-register {
   border: none;
   border-radius: 2px;
   padding: 6px 9px;
-  margin: 30px 0;
-  font-size: 20px;
+  margin: 20px 0;
+  font-size: 16px;
   cursor: pointer;
   color: #333;
   background-color: #eeeeee;

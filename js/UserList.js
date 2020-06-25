@@ -1,18 +1,18 @@
 import api from './util/api.js';
 import * as templates from './util/templates.js';
+import { MESSAGE } from './util/constants.js';
 
 export default class UserList {
-  constructor({ username, userArray, $targetUserContainer, onClickUser }) {
+  constructor({ username, userArray, $targetUserList, onClickUser }) {
     this.username = username;
     this.userArray = userArray;
-    this.$targetUserContainer = $targetUserContainer;
+    this.$targetUserList = $targetUserList;
 
-    this.$targetUserContainer.addEventListener('click', (e) => {
+    this.$targetUserList.addEventListener('click', (e) => {
       if (e.target.className === 'ripple') {
         onClickUser(e.target.textContent);
       }
     });
-
     this.render();
   }
 
@@ -21,10 +21,15 @@ export default class UserList {
     this.render();
   }
   async render() {
+    this.$targetUserList.innerHTML = templates.LOADING;
     this.userArray = await api.fetchUsers();
-    this.$targetUserContainer.innerHTML = templates.USERLIST(
-      this.username,
-      this.userArray,
-    );
+    if (this.userArray.length === 0) {
+      this.$targetUserList.innerHTML = MESSAGE.ADD_USER;
+    } else {
+      this.$targetUserList.innerHTML = templates.USERLIST(
+        this.username,
+        this.userArray,
+      );
+    }
   }
 }

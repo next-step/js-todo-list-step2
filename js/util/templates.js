@@ -29,12 +29,16 @@ export const TODOLIST = (data) => {
   return result;
 };
 
-export const USERLIST = (username, userArray) => {
-  const title = `
+export const USERTITLE = (username) => {
+  const result = `
     <h1 id="user-title" data-username=${username}>
       <span><strong>${username}</strong>'s Todo List</span>
     </h1>
   `;
+  return result;
+};
+
+export const USERLIST = (username, userArray) => {
   const result = userArray
     .map((user) => {
       return `<button class="${
@@ -42,7 +46,7 @@ export const USERLIST = (username, userArray) => {
       }">${user.name}</button>`;
     })
     .join('');
-  return title.concat(result);
+  return result;
 };
 
 export const LOADING = `

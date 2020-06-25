@@ -1,15 +1,18 @@
 import TodoList from './TodoList.js';
+import UserTitle from './UserTitle.js';
 import UserList from './UserList.js';
 import TodoInput from './TodoInput.js';
 import api from './util/api.js';
 import TodoCount from './TodoCount.js';
 import UserRegister from './UserRegister.js';
+import { MESSAGE } from './util/constants.js';
 
 export default class App {
   constructor({
     username,
     userArray,
-    $targetUserContainer,
+    $targetUserTitle,
+    $targetUserList,
     $targetUserRegister,
     $targetTodoInput,
     $targetTodoList,
@@ -17,17 +20,23 @@ export default class App {
   }) {
     this.username = username;
     this.userArray = userArray;
-    this.$targetUserContainer = $targetUserContainer;
+    this.$targetUserTitle = $targetUserTitle;
+    this.$targetUserList = $targetUserList;
     this.$targetUserRegister = $targetUserRegister;
     this.$targetTodoInput = $targetTodoInput;
     this.$targetTodoList = $targetTodoList;
     this.$targetTodoCountContainer = $targetTodoCountContainer;
 
+    this.userTitle = new UserTitle({
+      username,
+      $targetUserTitle
+    });
+
     this.userRegister = new UserRegister({
       username,
       $targetUserRegister,
       onClickRegister: async (newUsername) => {
-        await api.fetchTodoPost(newUsername, 'makeUser');
+        await api.fetchTodoPost(newUsername, MESSAGE.TEMP);
         const response = await api.fetchUserTodo(newUsername);
         const data = response.todoList;
         await api.fetchTodoRemove(newUsername, data[data.length - 1]._id);
@@ -38,14 +47,16 @@ export default class App {
     this.userList = new UserList({
       username,
       userArray,
-      $targetUserContainer,
+      $targetUserList,
       onClickUser: (selectedUsername) => {
+        this.userTitle.setState(selectedUsername)
         this.setState(selectedUsername);
       },
     });
 
     this.todoInput = new TodoInput({
       $targetTodoInput,
+      $targetUserList,
       onInput: async (text) => {
         await api.fetchTodoPost(this.username, text);
         this.setState(this.username);
