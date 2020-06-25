@@ -1,54 +1,41 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
-    <title>Mission 4 Todo List</title>
     <meta charset="utf-8" />
-    <link href="./css/style.css" rel="stylesheet" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>이벤트 - TODOS</title>
+    <link rel="stylesheet" href="css/style.css" />
   </head>
   <body>
-    <div id="app">
-      <h1 id="user-title" data-useranme="eastjun">
-        <span><strong>eastjun</strong>'s Todo List</span>
-      </h1>
+    <section class="todoapp">
       <div>
-        <div id="user-list">
-          <button class="ripple active">eastjun</button>
-          <button class="ripple">westjun</button>
-          <button class="ripple">southjun</button>
-          <button class="ripple">northjun</button>
-        </div>
-      </div>
-      <section class="todoapp">
+        <h1>TODOS</h1>
         <input
-          id="todo-input"
+          id="new-todo-title"
           class="new-todo"
-          placeholder="할 일을 추가해주세요"
+          placeholder="할일을 추가해주세요"
           autofocus
         />
-        <div class="main">
-          <ul id="todo-list" class="todo-list">
-            <li>
-              <div class="view">
-                <label class="label">
-                  <div class="animated-background">
-                    <div class="skel-mask-container">
-                      <div class="skel-mask"></div>
-                    </div>
-                  </div>
-                </label>
-              </div>
-            </li>
-          </ul>
-        </div>
-        <div class="count-container">
-          <span id="todo-count" class="todo-count"
-            >총 <span class="count"></span> 개 중</span
-          >
-          <span id="completed-count" class="todo-count"
-            ><span class="count"></span> 개 완료</span
-          >
-        </div>
-      </section>
-    </div>
+      </div>
+      <div class="main">
+        <input class="toggle-all" type="checkbox" />
+        <ul id="todo-list" class="todo-list"></ul>
+      </div>
+      <div class="count-container">
+        <span class="todo-count">총 <strong>0</strong> 개</span>
+        <ul class="filters">
+          <li>
+            <a class="all selected" href="#/">전체보기</a>
+          </li>
+          <li>
+            <a class="active" href="#/active">해야할 일</a>
+          </li>
+          <li>
+            <a class="completed" href="#/completed">완료한 일</a>
+          </li>
+        </ul>
+      </div>
+    </section>
+    <script src="js/app.js"></script>
   </body>
 </html>
