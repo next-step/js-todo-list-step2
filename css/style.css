@@ -82,7 +82,7 @@ button.user-register {
   transition: background 0.6s;
 }
 .user-register:hover {
-  background: #22b4ee radial-gradient(circle, transparent 1%, #616161 1%)
+  background: #3f040e8e radial-gradient(circle, transparent 1%, #616161 1%)
     center/15000%;
 }
 
