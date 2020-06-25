@@ -11,17 +11,13 @@ export default class TodoList {
     this.$targetTodoList.addEventListener('click', (e) => {
       const { className } = e.target;
       const { id } = e.target.closest('li').dataset;
-      switch (className) {
-        case 'toggle':
-          onToggle(id);
-          break;
-        case 'delete':
-          onRemove(id);
-          break;
-        default:
-          console.error(ERROR_TYPE.NO_MATCH_CLASS);
-          break;
-      }
+      const selectAction = {
+        toggle: (id) => onToggle(id),
+        delete: (id) => onRemove(id),
+      };
+      selectAction[className]
+        ? selectAction[className](id)
+        : console.error(ERROR_TYPE.NO_MATCH_CLASS);
     });
 
     this.$targetTodoList.addEventListener('dblclick', (e) => {
