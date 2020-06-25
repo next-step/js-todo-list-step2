@@ -215,6 +215,7 @@ button.user-register {
   border: none;
   -webkit-appearance: none;
   appearance: none;
+  cursor: pointer;
 }
 
 .todo-list li .toggle {
@@ -237,6 +238,7 @@ button.user-register {
   display: block;
   line-height: 1.2;
   transition: color 0.4s;
+  cursor: pointer;
 }
 
 .todo-list li.completed label {
