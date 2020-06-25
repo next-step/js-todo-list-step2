@@ -1,4 +1,4 @@
-import {checkSelector} from "../utils/validations.js"
+import { checkSelector } from "../utils/validations.js"
 
 export default function TodoList(props) {
   const { selector, todos, username, onToggle, onDelete, onEdit } = props
@@ -9,6 +9,7 @@ export default function TodoList(props) {
 
   this.init = () => {
     this.$target = document.querySelector(selector)
+    this.username = username
     this.todos = todos
     this.render()
     this.bindEvent()
@@ -19,9 +20,9 @@ export default function TodoList(props) {
       const li = e.target.closest('li')
       const {id} = li.dataset
       if (e.target.tagName === 'INPUT' && e.target.className === 'toggle') {
-        onToggle(username, id)
+        onToggle(this.username, id)
       } else if (e.target.tagName === 'BUTTON') {
-        onDelete(username, id)
+        onDelete(this.username, id)
       }
     }
     const dblclickEventHandler = (e) => {
@@ -39,7 +40,11 @@ export default function TodoList(props) {
       } else if (e.key === 'Enter' && e.target.value.trim()) {
         const li = e.target.closest('li')
         li.classList.remove('editing')
-        onEdit(Number(li.dataset.id), e.target.value.trim()) // id, text
+        onEdit({
+          username: this.username,
+          itemId: li.dataset.id,
+          contents: e.target.value.trim()
+        })
       }
     }
 
@@ -82,8 +87,9 @@ export default function TodoList(props) {
     this.$target.innerHTML = this.todos.map(todoItemHTMLTemplate).join()
   }
 
-  this.setState = (nextTodos) => {
-    this.todos = nextTodos
+  this.setState = (username, todos) => {
+    this.username = username
+    this.todos = todos
     this.render()
   }
 

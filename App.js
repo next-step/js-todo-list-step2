@@ -49,49 +49,12 @@ export default function App() {
     this.getTodos(this.username)
   }
 
-  this.setState = (todos = []) => {
-    this.todos = todos
-    this.$todoList.setState(todos)
+  this.setState = () => {
+    this.$todoList.setState(this.username, this.todos)
     this.$todoCount.setState(
-      todos.length,
-      todos.filter(({isCompleted}) => isCompleted === true).length
+      this.todos.length,
+      this.todos.filter(({isCompleted}) => isCompleted === true).length
     )
-  }
-
-  this.onChangeUser = (username) => {
-    this.username = username
-    this.$user.setState()
-    this.getTodos(this.username)
-  }
-
-  this.onToggle = async (username, itemId) => {
-   try {
-     await fetchManager({
-       path: `/api/u/${username}/item/${itemId}/toggle`,
-       method: httpMethod.PUT
-     })
-     this.getTodos(username)
-   } catch(e) {
-     console.error(e)
-   }
-  }
-
-  this.onDelete = async (username, itemId) => {
-    try {
-      await fetchManager({
-        path: `/api/u/${username}/item/${itemId}`,
-        method: httpMethod.DELETE
-      })
-      this.getTodos(this.username)
-    } catch(e) {
-      console.error(e)
-    }
-  }
-
-  this.onEdit = (id, text) => {
-    const targetIndex = this.todos.findIndex((todo) => todo.id === id)
-    this.todos[targetIndex] = { ...this.todos[targetIndex], text }
-    this.setState(this.todos)
   }
 
   this.getUsers = async () => {
@@ -111,9 +74,53 @@ export default function App() {
         method: httpMethod.GET,
         path: `/api/u/${username}/item`,
       })
-      this.setState(todoList)
+      this.todos = todoList
+      this.setState()
     } catch (e) {
       // 해당 유저의 Todo가 하나도 없는 경우도 여기로옴.
+      console.error(e)
+    }
+  }
+
+  this.onChangeUser = (username) => {
+    this.username = username
+    this.$user.setState()
+    this.getTodos(username)
+  }
+
+  this.onToggle = async (username, itemId) => {
+   try {
+     await fetchManager({
+       method: httpMethod.PUT,
+       path: `/api/u/${username}/item/${itemId}/toggle`,
+     })
+     this.getTodos(username)
+   } catch(e) {
+     console.error(e)
+   }
+  }
+
+  this.onDelete = async (username, itemId) => {
+    try {
+      await fetchManager({
+        method: httpMethod.DELETE,
+        path: `/api/u/${username}/item/${itemId}`,
+      })
+      this.getTodos(username)
+    } catch(e) {
+      console.error(e)
+    }
+  }
+
+  this.onEdit = async ({ username, itemId, contents }) => {
+    try {
+      await fetchManager({
+        method: httpMethod.PUT,
+        path: `/api/u/${username}/item/${itemId}`,
+        body: { contents }
+      })
+      this.getTodos(username)
+    } catch (e) {
       console.error(e)
     }
   }
