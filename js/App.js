@@ -3,12 +3,14 @@ import UserList from './UserList.js';
 import TodoInput from './TodoInput.js';
 import api from './util/api.js';
 import TodoCount from './TodoCount.js';
+import UserRegister from './UserRegister.js';
 
 export default class App {
   constructor({
     username,
     userArray,
     $targetUserContainer,
+    $targetUserRegister,
     $targetTodoInput,
     $targetTodoList,
     $targetTodoCountContainer,
@@ -16,9 +18,22 @@ export default class App {
     this.username = username;
     this.userArray = userArray;
     this.$targetUserContainer = $targetUserContainer;
+    this.$targetUserRegister = $targetUserRegister;
     this.$targetTodoInput = $targetTodoInput;
     this.$targetTodoList = $targetTodoList;
     this.$targetTodoCountContainer = $targetTodoCountContainer;
+
+    this.userRegister = new UserRegister({
+      username,
+      $targetUserRegister,
+      onClickRegister: async (newUsername) => {
+        await api.fetchTodoPost(newUsername, 'makeUser');
+        const response = await api.fetchUserTodo(newUsername);
+        const data = response.todoList;
+        await api.fetchTodoRemove(newUsername, data[data.length - 1]._id);
+        this.setState(newUsername);
+      },
+    });
 
     this.userList = new UserList({
       username,
@@ -58,8 +73,6 @@ export default class App {
       username,
       $targetTodoCountContainer,
     });
-
-    this.render();
   }
 
   setState(selectedUsername) {
@@ -67,13 +80,5 @@ export default class App {
     this.userList.setState(this.username);
     this.todoList.setState(this.username);
     this.todoCount.setState(this.username);
-  }
-
-  async render() {
-    await api.fetchTodoPost(this.username, "makeUser")
-    const response = await api.fetchUserTodo(this.username);
-    const data = response.todoList;
-    await api.fetchTodoRemove(this.username, data[data.length-1]._id)
-    this.todoList.render();
   }
 }

@@ -1,5 +1,7 @@
 export const BASE_URL = 'https://blackcoffee-todolist.df.r.appspot.com';
 
+export const DEFAULT_USER = 'Black Coffee';
+export const WELCOME_MESSAGE = 'Here Comes a New Challenger!!';
 export const KEY_NAME = {
   ENTER: 'Enter',
   ESC: 'Escape',
