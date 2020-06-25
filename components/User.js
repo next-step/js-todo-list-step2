@@ -19,6 +19,7 @@ export default function User(props) {
         e.target.tagName === 'BUTTON' &&
         e.target.innerText !== this.currentUser
       ) {
+        this.currentUser = e.target.innerText
         onChangeUser(e.target.innerText)
       }
     }

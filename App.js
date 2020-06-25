@@ -10,7 +10,7 @@ export default function App() {
   this.init = async () => {
     const { postTodoItem, onChangeUser, onToggle, onDelete, onEdit } = this
     this.username = 'donguk'
-    this.todos = await this.getTodos(this.username)
+    this.todos = []
     this.users = await this.getUsers()
 
     this.$header = new Header({
@@ -41,28 +41,51 @@ export default function App() {
     })
 
     this.$todoCount = new TodoCount({
-      selector: '.todo-count',
-      count: this.todos.length
+      selector: '.count-container',
+      totalCount: this.todos.length,
+      completedCount: this.todos.filter(({isCompleted}) => isCompleted === true).length
     })
+
+    this.getTodos(this.username)
   }
 
   this.setState = (todos = []) => {
+    this.todos = todos
     this.$todoList.setState(todos)
-    this.$todoCount.setState(todos.length)
+    this.$todoCount.setState(
+      todos.length,
+      todos.filter(({isCompleted}) => isCompleted === true).length
+    )
   }
 
-  /* Event Handler Function Start */
   this.onChangeUser = (username) => {
     this.username = username
-    this.$user.currentUser = username
     this.$user.setState()
     this.getTodos(this.username)
   }
 
-  this.onToggle = (id) => {
-    const targetIndex = this.todos.findIndex((todo) => todo.id === id)
-    this.todos[targetIndex] = { ...this.todos[targetIndex], isCompleted: !this.todos[targetIndex].isCompleted }
-    this.setState(this.todos)
+  this.onToggle = async (username, itemId) => {
+   try {
+     await fetchManager({
+       path: `/api/u/${username}/item/${itemId}/toggle`,
+       method: httpMethod.PUT
+     })
+     this.getTodos(username)
+   } catch(e) {
+     console.error(e)
+   }
+  }
+
+  this.onDelete = async (username, itemId) => {
+    try {
+      await fetchManager({
+        path: `/api/u/${username}/item/${itemId}`,
+        method: httpMethod.DELETE
+      })
+      this.getTodos(this.username)
+    } catch(e) {
+      console.error(e)
+    }
   }
 
   this.onEdit = (id, text) => {
@@ -71,13 +94,6 @@ export default function App() {
     this.setState(this.todos)
   }
 
-  this.onDelete = (id) => {
-    this.todos = this.todos.filter((todo) => todo.id !== id)
-    this.setState(this.todos)
-  }
-  /* Event Handler Function End */
-
-  /* API Request Function Start */
   this.getUsers = async () => {
     try {
       return await fetchManager({
@@ -109,11 +125,11 @@ export default function App() {
         path: `/api/u/${username}/item`,
         body: { contents: text }
       })
+      this.getTodos(username)
     } catch (e) {
       console.error(e)
     }
   }
 
-  /* API Request Function End */
   this.init()
 }

@@ -1,7 +1,7 @@
 import {checkSelector} from "../utils/validations.js"
 
 export default function TodoList(props) {
-  const {selector, todos, onToggle, onDelete, onEdit} = props
+  const { selector, todos, username, onToggle, onDelete, onEdit } = props
   if (new.target !== TodoList) {
     return new TodoList(props)
   }
@@ -19,9 +19,9 @@ export default function TodoList(props) {
       const li = e.target.closest('li')
       const {id} = li.dataset
       if (e.target.tagName === 'INPUT' && e.target.className === 'toggle') {
-        onToggle(Number(id))
+        onToggle(username, id)
       } else if (e.target.tagName === 'BUTTON') {
-        onDelete(Number(id))
+        onDelete(username, id)
       }
     }
     const dblclickEventHandler = (e) => {
@@ -66,15 +66,15 @@ export default function TodoList(props) {
     this.$target.addEventListener('focusout', focusOutEventHandler)
   }
 
-  const todoItemHTMLTemplate = ({id, text, isCompleted}, index) => {
+  const todoItemHTMLTemplate = ({_id, contents, isCompleted}, index) => {
     return `
-      <li data-id=${id} data-index=${index} class=${isCompleted ? 'completed' : ''}>
+      <li data-id=${_id} data-index=${index} class=${isCompleted ? 'completed' : ''}>
           <div class="view">
             <input class="toggle" type="checkbox" />
-            <label class="label">${text}</label>
+            <label class="label">${contents}</label>
             <button class="destroy"></button>
           </div>
-          <input class="edit" value=${text} />
+          <input class="edit" value=${contents} />
       </li>`
   }
 

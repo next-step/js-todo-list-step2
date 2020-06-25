@@ -7,7 +7,7 @@ export const STORAGE_KEY = 'TODO'
 export const httpMethod = {
   GET: 'GET',
   POST: 'POST',
-  UPDATE: 'UPDATE',
+  PUT: 'PUT',
   DELETE: 'DELETE'
 }
 
