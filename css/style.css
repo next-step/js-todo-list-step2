@@ -2,14 +2,6 @@
   text-decoration: line-through;
 }
 
-#user-list {
-  list-style: none;
-}
-
-#user-list li {
-  position: relative;
-}
-
 html,
 body {
   margin: 0;
@@ -42,6 +34,8 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   font-weight: 300;
+  background-image: url(https://png2.cleanpng.com/sh/81b133092660b9c8df9e2669bb05948f/L0KzQYm3UsI3N5tnj5H0aYP2gLBuTfNwbpdqfZ9rZXHxPbTohvUue55mhN42Y4Lsg8G0gB9nbpZqRdRuYX72PYboWcNiO5Jqedg7N0S1Pom4VMI3QWI1Sac6OUa1RYK6VMcyP2UziNDw/kisspng-coffee-bean-cafe-small-crisp-coffee-beans-5a93a3aeaf2742.8142691015196251347174.png);
+  background-size: cover;
 }
 
 :focus {
@@ -52,9 +46,22 @@ body {
   display: none;
 }
 
+#user-list {
+  list-style: none;
+}
+
+#user-list li {
+  position: relative;
+}
+
+.user-container {
+  background-color: #F5F5F5;
+}
+
 .user-register-container {
   width: 100%;
   text-align: center;
+  background-color: #F5F5F5;
 }
 
 button.user-register {
@@ -99,6 +106,7 @@ button.user-register {
   color: #333;
   font-weight: 100;
   font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
+  background-color: #F5F5F5;
 }
 
 .new-todo,
