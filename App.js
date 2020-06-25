@@ -8,7 +8,7 @@ export default function App() {
   }
 
   this.init = async () => {
-    const { postTodoItem, onToggle, onDelete, onEdit } = this
+    const { postTodoItem, onChangeUser, onToggle, onDelete, onEdit } = this
     this.username = 'donguk'
     this.todos = await this.getTodos(this.username)
     this.users = await this.getUsers()
@@ -20,7 +20,9 @@ export default function App() {
 
     this.$user = new User({
       selector: '#user-list',
-      users: this.users
+      currentUser: this.username,
+      users: this.users,
+      onChangeUser,
     })
 
     new TodoInput({
@@ -50,6 +52,13 @@ export default function App() {
   }
 
   /* Event Handler Function Start */
+  this.onChangeUser = (username) => {
+    this.username = username
+    this.$user.currentUser = username
+    this.$user.setState()
+    this.getTodos(this.username)
+  }
+
   this.onToggle = (id) => {
     const targetIndex = this.todos.findIndex((todo) => todo.id === id)
     this.todos[targetIndex] = { ...this.todos[targetIndex], isCompleted: !this.todos[targetIndex].isCompleted }
