@@ -1,38 +1,38 @@
-import { TodoInput, TodoList, TodoCount, TodoFilter } from './components'
-import { ALL, ACTIVE, COMPLETED, STORAGE_KEY } from './utils/constants.js'
-import { storage } from './utils/storage.js'
-
-function getTodosByStatus(todos, status) {
-  switch (status) {
-    case ALL:
-      return todos
-    case ACTIVE:
-      return todos.filter((todo) => todo.isCompleted === false)
-    case COMPLETED:
-      return todos.filter((todo) => todo.isCompleted === true)
-    default:
-      throw new Error('Unhandled Case')
-  }
-}
+import { Header, User, TodoInput, TodoList, TodoCount } from './components'
+import { httpMethod } from './utils/constants.js'
+import fetchManager from "./api/api.js"
 
 export default function App() {
   if (new.target !== App) {
     return new App()
   }
 
-  this.init = () => {
-    const { onAddTodo, onToggle, onDelete, onEdit, onFilter } = this
-    this.todos = storage.get(STORAGE_KEY)
-    this.filterStatus = ALL
+  this.init = async () => {
+    const { postTodoItem, onToggle, onDelete, onEdit } = this
+    this.username = 'donguk'
+    this.todos = await this.getTodos(this.username)
+    this.users = await this.getUsers()
+
+    this.$header = new Header({
+      selector: '#user-title',
+      username: this.username
+    })
+
+    this.$user = new User({
+      selector: '#user-list',
+      users: this.users
+    })
 
     new TodoInput({
+      username: this.username,
       selector: '.new-todo',
-      onAddTodo
+      postTodoItem
     })
 
     this.$todoList = new TodoList({
       selector: '.todo-list',
       todos: this.todos,
+      username: this.username,
       onToggle,
       onDelete,
       onEdit,
@@ -42,50 +42,69 @@ export default function App() {
       selector: '.todo-count',
       count: this.todos.length
     })
-    new TodoFilter({
-      selector: '.filters',
-      onFilter
-    })
   }
 
-  this.setState = (todos) => {
-    storage.set(STORAGE_KEY, todos)
-    const renderTodos = getTodosByStatus(todos, this.filterStatus)
-    this.$todoList.setState(renderTodos)
-    this.$todoCount.setState(renderTodos.length)
+  this.setState = (todos = []) => {
+    this.$todoList.setState(todos)
+    this.$todoCount.setState(todos.length)
   }
 
-  this.onAddTodo = (text) => {
-    this.todos = [
-      ...this.todos, {
-      id: this.todos.length ? Math.max(...this.todos.map((todo) => todo.id)) + 1 : 0,
-      text,
-      isCompleted: false }
-      ]
-    this.setState(this.todos, this.filterStatus)
-  }
-
+  /* Event Handler Function Start */
   this.onToggle = (id) => {
     const targetIndex = this.todos.findIndex((todo) => todo.id === id)
     this.todos[targetIndex] = { ...this.todos[targetIndex], isCompleted: !this.todos[targetIndex].isCompleted }
-    this.setState(this.todos, this.filterStatus)
+    this.setState(this.todos)
   }
 
   this.onEdit = (id, text) => {
     const targetIndex = this.todos.findIndex((todo) => todo.id === id)
     this.todos[targetIndex] = { ...this.todos[targetIndex], text }
-    this.setState(this.todos, this.filterStatus)
+    this.setState(this.todos)
   }
 
   this.onDelete = (id) => {
     this.todos = this.todos.filter((todo) => todo.id !== id)
-    this.setState(this.todos, this.filterStatus)
-  }
-
-  this.onFilter = (status) => {
-    this.filterStatus = status
     this.setState(this.todos)
   }
+  /* Event Handler Function End */
 
+  /* API Request Function Start */
+  this.getUsers = async () => {
+    try {
+      return await fetchManager({
+        method: httpMethod.GET,
+        path: '/api/u'
+      })
+    } catch (e) {
+      console.error(e)
+    }
+  }
+
+  this.getTodos = async (username) => {
+    try {
+      const { todoList } = await fetchManager({
+        method: httpMethod.GET,
+        path: `/api/u/${username}/item`,
+      })
+      this.setState(todoList)
+    } catch (e) {
+      // 해당 유저의 Todo가 하나도 없는 경우도 여기로옴.
+      console.error(e)
+    }
+  }
+
+  this.postTodoItem = async (username, text) => {
+    try {
+      await fetchManager({
+        method: httpMethod.POST,
+        path: `/api/u/${username}/item`,
+        body: { contents: text }
+      })
+    } catch (e) {
+      console.error(e)
+    }
+  }
+
+  /* API Request Function End */
   this.init()
 }

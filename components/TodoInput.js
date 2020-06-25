@@ -1,10 +1,13 @@
 import {checkSelector} from "../utils/validations.js"
 
-export default function TodoInput({ selector, onAddTodo }) {
+export default function TodoInput(props) {
   if (new.target !== TodoInput) {
-    return new TodoInput({ selector, onAddTodo })
+    return new TodoInput(props)
   }
+  const { username, selector, postTodoItem }= props
   checkSelector(selector)
+  this.username = username
+
   this.init = () => {
     this.$target = document.querySelector(selector)
     this.bindEvent()
@@ -13,7 +16,7 @@ export default function TodoInput({ selector, onAddTodo }) {
   this.bindEvent = () => {
     this.$target.addEventListener('keypress', (e) => {
       if (e.key === 'Enter' && e.target.value.trim()) {
-        onAddTodo(e.target.value)
+        postTodoItem(this.username, e.target.value)
         e.target.value = ''
       }
     })
