@@ -48,6 +48,7 @@ export default class App {
     this.userList = new UserList({
       username,
       userArray,
+      storeClassType: '',
       $targetUserList,
       onClickUser: (selectedUsername) => {
         this.userTitle.setState(selectedUsername);

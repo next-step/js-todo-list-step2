@@ -4,8 +4,16 @@ import * as templates from './util/templates.js';
 import * as functions from './util/functions.js';
 
 export default class TodoList {
-  constructor({ username, $targetTodoList, onToggle, onRemove, onEdit }) {
+  constructor({
+    username,
+    storeClassType,
+    $targetTodoList,
+    onToggle,
+    onRemove,
+    onEdit,
+  }) {
     this.username = username;
+    this.storeClassType = storeClassType;
     this.$targetTodoList = $targetTodoList;
 
     this.$targetTodoList.addEventListener('click', (e) => {
@@ -24,8 +32,16 @@ export default class TodoList {
       const { className } = e.target;
       if (className === 'label') {
         const $targetLi = e.target.closest('li');
+        this.storeClassType = $targetLi.className;
         $targetLi.className = 'editing';
         $targetLi.querySelector('.edit').focus();
+      }
+    });
+
+    this.$targetTodoList.addEventListener('focusout', (e) => {
+      const { className } = e.target;
+      if (className === 'edit') {
+        e.target.closest('li').className = this.storeClassType;
       }
     });
 
