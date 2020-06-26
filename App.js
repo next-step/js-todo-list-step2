@@ -1,8 +1,16 @@
-import { Header, User, TodoInput, TodoList, TodoCount, Loading } from './components'
-import { httpMethod } from './utils/constants.js'
+import { Header, User, TodoInput, TodoList, TodoCount, TodoFilter, Loading } from './components'
+import { httpMethod, filterStatus } from './utils/constants.js'
 import fetchManager from "./api/api.js"
 
 const delay = (ms) => new Promise((resolve) => setTimeout(() => resolve(), ms))
+
+const getTodoHash = (todos) => {
+  return {
+    [filterStatus.ALL]: todos,
+    [filterStatus.ACTIVE]: todos.filter(({isCompleted}) => isCompleted === false),
+    [filterStatus.COMPLETED]: todos.filter(({isCompleted}) => isCompleted === true)
+  }
+}
 
 export default function App() {
   if (new.target !== App) {
@@ -10,10 +18,15 @@ export default function App() {
   }
 
   this.init = async () => {
-    const { postTodoItem, onChangeUser, onToggle, onDelete, onEdit } = this
-    this.username = '동욱'
+    const { postTodoItem, onChangeUser, onToggle, onDelete, onEdit, onFilter } = this
+    this.username = 'donguk'
     this.todos = []
-    this.users = await this.getUsers()
+    this.todoHash = {
+      [filterStatus.ALL]: this.todos,
+      [filterStatus.ACTIVE]: [],
+      [filterStatus.COMPLETED]: []
+    }
+    this.filterStatus = filterStatus.ALL
 
     this.$header = new Header({
       selector: '#user-title',
@@ -23,7 +36,7 @@ export default function App() {
     this.$user = new User({
       selector: '#user-list',
       currentUser: this.username,
-      users: this.users,
+      users: await this.getUsers(),
       onChangeUser,
     })
 
@@ -41,21 +54,34 @@ export default function App() {
     })
 
     this.$todoCount = new TodoCount({
-      selector: '.count-container',
+      selector: '.todo-counter',
       totalCount: this.todos.length,
       completedCount: this.todos.filter(({isCompleted}) => isCompleted === true).length
     })
 
-    this.$loading = new Loading({ selector: '.todo-list' })
+    new TodoFilter({
+      selector: '.filters',
+      onFilter
+    })
+
+    this.$loading = new Loading({
+      selector: '.todo-list'
+    })
 
     this.getTodos()
   }
 
+  this.onFilter = (status) => {
+    this.filterStatus = status
+    this.setState()
+  }
+
   this.setState = () => {
-    this.$todoList.setState(this.username, this.todos)
+    const renderTodos = this.todoHash[this.filterStatus]
+    this.$todoList.setState(this.username, renderTodos)
     this.$todoCount.setState(
-      this.todos.length,
-      this.todos.filter(({isCompleted}) => isCompleted === true).length
+      renderTodos.length,
+      renderTodos.filter(({isCompleted}) => isCompleted === true).length
     )
   }
 
@@ -79,6 +105,7 @@ export default function App() {
         path: `/api/u/${this.username}/item`,
       })
       this.todos = todoList
+      this.todoHash = getTodoHash(todoList)
       this.setState()
     } catch (e) {
       console.error(e)

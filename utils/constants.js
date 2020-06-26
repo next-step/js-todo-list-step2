@@ -24,3 +24,9 @@ export const keyName = {
   ESC: 'Escape',
   ENTER: 'Enter'
 }
+
+export const filterStatus = {
+  ALL: 'all selected',
+  ACTIVE: 'active',
+  COMPLETED: 'completed',
+}
