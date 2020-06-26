@@ -11,8 +11,7 @@ class App {
       $element: $TODO_INPUT,
       onEnter: async content => {
         await api.addNewTodoItem(USER_NAME, content);
-        const updatedData = await api.fetchTodoList(USER_NAME);
-        this.setState(updatedData.todoList);
+        this.setState();
       }
     });
     this.initTodoList();
@@ -26,8 +25,17 @@ class App {
       todoItems: this.todoItems.todoList,
       onToggleItem: async id => {
         await api.toggleItem(USER_NAME, id);
-        const updatedData = await api.fetchTodoList(USER_NAME);
-        this.setState(updatedData.todoList);
+        this.setState();
+      },
+      onDeleteItem: async id => {
+        await api.deleteItem(USER_NAME, id);
+        this.setState();
+      },
+      onEditItem: async (id, saveContent) => {
+        if (saveContent) {
+          await api.modifyItem(USER_NAME, id, saveContent);
+        }
+        this.setState();
       }
     });
   }
@@ -36,9 +44,10 @@ class App {
     await api.fetchUserList();
   }
 
-  setState(newItems) {
-    this.todoList.setState(newItems);
-    this.todoItems = newItems;
+  async setState() {
+    const { todoList } = await api.fetchTodoList(USER_NAME);
+    this.todoList.setState(todoList);
+    this.todoItems = todoList;
   }
 }
 
