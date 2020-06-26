@@ -1,5 +1,5 @@
 import { Header, User, TodoInput, TodoList, TodoCount, TodoFilter, Loading } from './components'
-import { httpMethod, filterStatus } from './utils/constants.js'
+import { httpMethod, filterStatus, className } from './utils/constants.js'
 import fetchManager from "./api/api.js"
 
 const delay = (ms) => new Promise((resolve) => setTimeout(() => resolve(), ms))
@@ -68,6 +68,11 @@ export default function App() {
       selector: '.todo-list'
     })
 
+    this.$removeAllBtn = document.querySelector(`.${className.REMOVE_ALL}`)
+    this.$removeAllBtn.addEventListener('click', () => {
+      this.onDeleteAll()
+    })
+
     this.getTodos()
   }
 
@@ -109,6 +114,8 @@ export default function App() {
       this.setState()
     } catch (e) {
       console.error(e)
+      this.todos = [] // 해당 유저의 todo가 없는 경우
+      this.setState()
     }
   }
 
@@ -149,6 +156,18 @@ export default function App() {
         method: httpMethod.PUT,
         path: `/api/u/${this.username}/item/${itemId}`,
         body: { contents }
+      })
+      this.getTodos()
+    } catch (e) {
+      console.error(e)
+    }
+  }
+
+  this.onDeleteAll = async () => {
+    try {
+      await fetchManager({
+        method: httpMethod.DELETE,
+        path: `/api/u/${this.username}/items`,
       })
       this.getTodos()
     } catch (e) {

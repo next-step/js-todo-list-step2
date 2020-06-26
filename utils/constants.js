@@ -11,13 +11,15 @@ export const httpMethod = {
 
 export const tagName = {
   INPUT: 'INPUT',
-  BUTTON: 'BUTTON'
+  BUTTON: 'BUTTON',
+  SELECT: 'SELECT'
 }
 
 export const className = {
   EDIT: 'edit',
   EDITING: 'editing',
-  TOGGLE: 'toggle'
+  TOGGLE: 'toggle',
+  REMOVE_ALL: 'clear-completed'
 }
 
 export const keyName = {

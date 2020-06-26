@@ -1,5 +1,5 @@
-import {checkSelector} from "../utils/validations.js"
-import {tagName, className, keyName} from "../utils/constants.js"
+import { checkSelector } from "../utils/validations.js"
+import { tagName, className, keyName } from "../utils/constants.js"
 
 export default function TodoList(props) {
   const {selector, todos, onToggle, onDelete, onEdit} = props
@@ -28,6 +28,7 @@ export default function TodoList(props) {
         onDelete(id)
       }
     }
+
     const dblclickEventHandler = (e) => {
       const li = e.target.closest('li')
       this.editInputValue = e.target.innerText // 수정 시작할 때 초기 상태의 value 저장
@@ -69,19 +70,40 @@ export default function TodoList(props) {
       }
     }
 
+    const changeEventHandler = (e) => {
+      if (e.target.tagName === tagName.SELECT) {
+
+      }
+    }
+
     this.$target.addEventListener('click', clickEventHandler)
     this.$target.addEventListener('dblclick', dblclickEventHandler)
     this.$target.addEventListener('keyup', keyUpEventHandler)
     this.$target.addEventListener('focusin', focusInEventHandler) // 맨 마지막 글자에 focus
     this.$target.addEventListener('focusout', focusOutEventHandler)
+    this.$target.addEventListener('change', changeEventHandler) // chip select
   }
 
-  const todoItemHTMLTemplate = ({_id, contents, isCompleted}, index) => {
+  const getPriorityHTML = (priority) => {
+    return priority ?
+      `<span class="chip primary">${priority}순위</span>`
+      :
+      `<select class="chip select">
+         <option value="0" selected>순위</option>
+         <option value="1">1순위</option>
+         <option value="2">2순위</option>
+      </select>`
+  }
+
+  const todoItemHTMLTemplate = ({_id, contents, priority, isCompleted}, index) => {
     return `
       <li data-id=${_id} data-index=${index} class=${isCompleted ? 'completed' : ''}>
           <div class="view">
             <input class="toggle" type="checkbox" ${isCompleted ? 'checked' : ''}/>
-            <label class="label">${contents}</label>
+            <label class="label">
+                ${getPriorityHTML(priority)}
+                ${contents}
+            </label>
             <button class="destroy"></button>
           </div>
           <input class="edit" value=${contents} />
