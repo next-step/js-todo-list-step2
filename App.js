@@ -18,7 +18,7 @@ export default function App() {
   }
 
   this.init = async () => {
-    const { postTodoItem, onChangeUser, onToggle, onDelete, onEdit, onFilter } = this
+    const { postTodoItem, onChangeUser, onToggle, onDelete, onEdit, onFilter, onSetPriority } = this
     this.username = 'donguk'
     this.todos = []
     this.todoHash = {
@@ -51,6 +51,7 @@ export default function App() {
       onToggle,
       onDelete,
       onEdit,
+      onSetPriority
     })
 
     this.$todoCount = new TodoCount({
@@ -156,6 +157,19 @@ export default function App() {
         method: httpMethod.PUT,
         path: `/api/u/${this.username}/item/${itemId}`,
         body: { contents }
+      })
+      this.getTodos()
+    } catch (e) {
+      console.error(e)
+    }
+  }
+
+  this.onSetPriority = async (itemId, priority) => {
+    try {
+      await fetchManager({
+        method: httpMethod.PUT,
+        path: `/api/u/${this.username}/item/${itemId}/priority`,
+        body: { priority }
       })
       this.getTodos()
     } catch (e) {

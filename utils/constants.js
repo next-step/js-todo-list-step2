@@ -19,7 +19,9 @@ export const className = {
   EDIT: 'edit',
   EDITING: 'editing',
   TOGGLE: 'toggle',
-  REMOVE_ALL: 'clear-completed'
+  REMOVE_ALL: 'clear-completed',
+  PRIORITY_FIRST: 'primary',
+  PRIORITY_SECOND: 'secondary'
 }
 
 export const keyName = {

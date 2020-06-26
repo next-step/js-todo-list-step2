@@ -2,7 +2,7 @@ import { checkSelector } from "../utils/validations.js"
 import { tagName, className, keyName } from "../utils/constants.js"
 
 export default function TodoList(props) {
-  const {selector, todos, onToggle, onDelete, onEdit} = props
+  const { selector, todos, onToggle, onDelete, onEdit, onSetPriority} = props
   if (new.target !== TodoList) {
     return new TodoList(props)
   }
@@ -72,7 +72,11 @@ export default function TodoList(props) {
 
     const changeEventHandler = (e) => {
       if (e.target.tagName === tagName.SELECT) {
-
+        const li = e.target.closest('li')
+        const id = li.dataset.id
+        if (e.target.value !== 0) { // option을 선택하지 않은 경우는 제외
+          onSetPriority(id, e.target.value)
+        }
       }
     }
 
@@ -84,9 +88,13 @@ export default function TodoList(props) {
     this.$target.addEventListener('change', changeEventHandler) // chip select
   }
 
+  const getPriorityClassName = (priority) => {
+    return priority === '1' ? className.PRIORITY_FIRST : className.PRIORITY_SECOND
+  }
+
   const getPriorityHTML = (priority) => {
     return priority ?
-      `<span class="chip primary">${priority}순위</span>`
+      `<span class="chip ${getPriorityClassName(priority)}">${priority}순위</span>`
       :
       `<select class="chip select">
          <option value="0" selected>순위</option>
