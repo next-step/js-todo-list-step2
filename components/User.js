@@ -1,5 +1,5 @@
 import { checkSelector } from "../utils/validations.js"
-import { tagName } from "../utils/constants"
+import { tagName } from "../utils/constants.js"
 
 export default function User(props) {
   const {selector, currentUser, users, onChangeUser} = props

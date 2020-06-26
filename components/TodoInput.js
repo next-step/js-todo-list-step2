@@ -1,5 +1,5 @@
 import { checkSelector } from "../utils/validations.js"
-import { tagName } from "../utils/constants.js"
+import { keyName } from "../utils/constants.js"
 
 export default function TodoInput(props) {
   if (new.target !== TodoInput) {
@@ -15,7 +15,7 @@ export default function TodoInput(props) {
 
   this.bindEvent = () => {
     const keyPressHandler = (e) => {
-      if (e.key === tagName.ENTER && e.target.value.trim()) {
+      if (e.key === keyName.ENTER && e.target.value.trim()) {
         postTodoItem(e.target.value)
         e.target.value = ''
       }

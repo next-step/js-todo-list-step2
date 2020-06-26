@@ -37,7 +37,7 @@ export default function TodoList(props) {
       }
     }
     const keyUpEventHandler = (e) => {
-      if (e.key === keyName.ESC) { // ESC
+      if (e.key === keyName.ESC) {
         const li = e.target.closest('li')
         li.classList.remove(className.EDITING)
       } else if (e.key === keyName.ENTER && e.target.value.trim()) {

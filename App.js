@@ -1,6 +1,8 @@
-import { Header, User, TodoInput, TodoList, TodoCount } from './components'
+import { Header, User, TodoInput, TodoList, TodoCount, Loading } from './components'
 import { httpMethod } from './utils/constants.js'
 import fetchManager from "./api/api.js"
+
+const delay = (ms) => new Promise((resolve) => setTimeout(() => resolve(), ms))
 
 export default function App() {
   if (new.target !== App) {
@@ -9,7 +11,7 @@ export default function App() {
 
   this.init = async () => {
     const { postTodoItem, onChangeUser, onToggle, onDelete, onEdit } = this
-    this.username = 'donguk2'
+    this.username = '동욱'
     this.todos = []
     this.users = await this.getUsers()
 
@@ -44,6 +46,8 @@ export default function App() {
       completedCount: this.todos.filter(({isCompleted}) => isCompleted === true).length
     })
 
+    this.$loading = new Loading({ selector: '.todo-list' })
+
     this.getTodos()
   }
 
@@ -67,6 +71,8 @@ export default function App() {
   }
 
   this.getTodos = async () => {
+    this.$loading.render() // loading on
+    // await delay(500) // delay 주고 싶다면 추가
     try {
       const { todoList } = await fetchManager({
         method: httpMethod.GET,
