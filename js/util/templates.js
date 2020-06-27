@@ -55,10 +55,8 @@ export const TODOLIST = (data) => {
 
 export const USERTITLE = (username) => {
   const result = `
-    <h1 id="user-title" data-username=${username}>
     <div><strong>${username}</strong>'s</div>
     <div>Todo List</div>
-    </h1>
   `;
   return result;
 };
