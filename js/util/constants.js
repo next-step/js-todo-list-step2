@@ -5,6 +5,12 @@ export const KEY_NAME = {
   ESC: 'Escape',
 };
 
+export const MEANING = {
+  NOTHING: '0',
+  PRIMARY: '1',
+  SECONDARY: '2'
+};
+
 export const MESSAGE = {
   WELCOME: 'Here Comes a New Challenger!!',
   TEMP: 'TEMP_TODO',

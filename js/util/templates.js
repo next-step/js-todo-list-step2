@@ -1,3 +1,5 @@
+import { MEANING } from './constants.js';
+
 export const TODOCOUNT = (data, filteredData) => {
   return `
       <span id="todo-count" class="todo-count">
@@ -14,20 +16,24 @@ const CHIP = (priority) => {
   return `
       <div class="chip-container">
         <span class="chip ${
-          priority === '1' ? 'primary' : priority === '2' ? 'secondary' : ''
+          priority === MEANING.PRIMARY
+            ? 'primary'
+            : priority === MEANING.SECONDARY
+            ? 'secondary'
+            : ''
         }">${priority}순위</span>
         <span class="delete">초기화</span>
       </div>`;
 };
 
 const PRIORITY = {
-  '0': `<select class="chip select">
-          <option value="0" selected>순위</option>
-          <option value="1">1순위</option>
-          <option value="2">2순위</option>
-        </select>`,
-  '1': CHIP('1'),
-  '2': CHIP('2'),
+  [MEANING.NOTHING]: `<select class="chip select">
+                        <option value="0" selected>순위</option>
+                        <option value="1">1순위</option>
+                        <option value="2">2순위</option>
+                      </select>`,
+  [MEANING.PRIMARY]: CHIP(MEANING.PRIMARY),
+  [MEANING.SECONDARY]: CHIP(MEANING.SECONDARY),
 };
 
 export const TODOLIST = (data) => {
