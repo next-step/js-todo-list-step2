@@ -1,11 +1,15 @@
+import Loading from './components/Loading.js';
 const BASE_URL = 'https://blackcoffee-todolist.df.r.appspot.com/api/u';
 
 const responseHandler = async request => {
+  Loading.setState(true);
   const response = await request();
   if (!response.ok) {
     // 200~299 코드 확인
     throw new Error('[api] API를 확인해주세요.');
   }
+
+  Loading.setState(false);
   return await response.json();
 };
 

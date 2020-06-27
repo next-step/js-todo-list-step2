@@ -105,6 +105,14 @@ body {
   border-top: 1px solid #e6e6e6;
 }
 
+.main .loading-view {
+  display: block;
+}
+
+.main .loading-hide {
+  display: none;
+}
+
 .toggle-all {
   width: 1px;
   height: 1px;

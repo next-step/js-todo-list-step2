@@ -16,18 +16,17 @@
       <section class="todoapp">
         <input id="todo-input" class="new-todo" placeholder="할 일을 추가해주세요" autofocus />
         <div class="main">
+          <div id="loading" class="loading-view">
+            <label class="label">
+              <div class="animated-background">
+                <div class="skel-mask-container">
+                  <div class="skel-mask"></div>
+                </div>
+              </div>
+            </label>
+          </div>
           <ul id="todo-list" class="todo-list">
-            <li>
-              <!-- <div class="view">
-                <label class="label">
-                  <div class="animated-background">
-                    <div class="skel-mask-container">
-                      <div class="skel-mask"></div>
-                    </div>
-                  </div>
-                </label>
-              </div> -->
-            </li>
+            <li></li>
           </ul>
         </div>
         <div class="count-container">
