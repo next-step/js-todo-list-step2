@@ -5,7 +5,7 @@ import TodoInput from './TodoInput.js';
 import api from './util/api.js';
 import TodoCount from './TodoCount.js';
 import UserRegister from './UserRegister.js';
-import { MESSAGE } from './util/constants.js';
+import { MESSAGE, MEANING } from './util/constants.js';
 
 export default class App {
   constructor({
@@ -85,9 +85,9 @@ export default class App {
         this.setState(this.username);
       },
       onInitializePriority: async (id) => {
-        await api.fetchTodoPriority(this.username, id, '0');
+        await api.fetchTodoPriority(this.username, id, MEANING.NOTHING);
         this.setState(this.username);
-      }
+      },
     });
 
     this.todoCount = new TodoCount({
