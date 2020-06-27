@@ -2,12 +2,25 @@ import api from './api.js';
 import TodoList from './components/TodoList.js';
 import TodoInput from './components/TodoInput.js';
 import TodoCount from './components/TodoCount.js';
-import { $TODO_LIST, $TODO_INPUT, $TODO_COUNT } from './config/config.js';
+import {
+  $TODO_HEADER,
+  $TODO_LIST,
+  $TODO_INPUT,
+  $TODO_COUNT,
+  $USER_LIST
+} from './config/htmlElement.js';
+import TodoHeader from './components/TodoHeader.js';
+import UserList from './components/UserList.js';
 
-const USER_NAME = 'jeesoo';
+let USER_NAME = 'jeesoo';
 
 class App {
   constructor() {
+    this.todoHeader = new TodoHeader({
+      $element: $TODO_HEADER,
+      name: USER_NAME
+    });
+
     new TodoInput({
       $element: $TODO_INPUT,
       onEnter: async content => {
@@ -24,7 +37,7 @@ class App {
       });
     });
 
-    // this.initUserList();
+    this.initUserList();
   }
 
   async initTodoList() {
@@ -51,7 +64,20 @@ class App {
   }
 
   async initUserList() {
-    await api.fetchUserList();
+    const userList = await api.fetchUserList();
+    this.userList = new UserList({
+      $element: $USER_LIST,
+      userList: userList,
+      activeUser: USER_NAME,
+      onSelectUser: name => {
+        if (USER_NAME !== name) {
+          USER_NAME = name;
+          this.userList.setState(name);
+          this.todoHeader.setState(name);
+          this.setState();
+        }
+      }
+    });
   }
 
   async setState() {
