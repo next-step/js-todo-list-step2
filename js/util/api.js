@@ -31,6 +31,17 @@ const options = {
       method: 'PUT',
     };
   },
+  PRIORITY: (priority) => {
+    return {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        priority,
+      }),
+    };
+  },
   PUT: (text) => {
     return {
       method: 'PUT',
@@ -66,10 +77,19 @@ const api = {
       options.DELETE(),
     );
   },
+  fetchTodoRemoveAll: (username) => {
+    return request(`${BASE_URL}/api/u/${username}/items`, options.DELETE());
+  },
   fetchTodoToggle: (username, id) => {
     return request(
       `${BASE_URL}/api/u/${username}/item/${id}/toggle`,
       options.TOGGLE(),
+    );
+  },
+  fetchTodoPriority: (username, id, priority) => {
+    return request(
+      `${BASE_URL}/api/u/${username}/item/${id}/priority`,
+      options.PRIORITY(priority),
     );
   },
 };

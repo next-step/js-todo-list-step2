@@ -1,11 +1,7 @@
-.completed {
-  text-decoration: line-through;
-}
-
 html,
 body {
   margin: 0;
-  padding: 10px;
+  padding: 0;
 }
 
 button {
@@ -26,6 +22,7 @@ button {
 
 body {
   font: 14px "Helvetica Neue", Helvetica, Arial, sans-serif;
+  line-height: 1.4em;
   background: #f5f5f5;
   color: #4d4d4d;
   min-width: 230px;
@@ -35,7 +32,7 @@ body {
   -moz-osx-font-smoothing: grayscale;
   font-weight: 300;
   background-image: url(https://png2.cleanpng.com/sh/81b133092660b9c8df9e2669bb05948f/L0KzQYm3UsI3N5tnj5H0aYP2gLBuTfNwbpdqfZ9rZXHxPbTohvUue55mhN42Y4Lsg8G0gB9nbpZqRdRuYX72PYboWcNiO5Jqedg7N0S1Pom4VMI3QWI1Sac6OUa1RYK6VMcyP2UziNDw/kisspng-coffee-bean-cafe-small-crisp-coffee-beans-5a93a3aeaf2742.8142691015196251347174.png);
-  background-size: cover;
+  background-size: 100%;
 }
 
 :focus {
@@ -44,6 +41,26 @@ body {
 
 .hidden {
   display: none;
+}
+
+#app {
+  margin-top: 100px;
+}
+
+#app h1 {
+  width: 100%;
+  font-size: 60px;
+  text-align: center;
+  color: #333;
+  font-weight: 100;
+  font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
+  padding-top: 5px;
+  margin-bottom: 50px;
+  background-color: #f5f5f5;
+}
+
+#app h1 div {
+  height: 65px;
 }
 
 #user-list {
@@ -55,13 +72,13 @@ body {
 }
 
 .user-container {
-  background-color: #F5F5F5;
+  background-color: #f5f5f5;
 }
 
 .user-register-container {
   width: 100%;
   text-align: center;
-  background-color: #F5F5F5;
+  background-color: #f5f5f5;
 }
 
 button.user-register {
@@ -82,8 +99,7 @@ button.user-register {
   transition: background 0.6s;
 }
 .user-register:hover {
-  background: #3f040e8e radial-gradient(circle, transparent 1%, #616161 1%)
-    center/15000%;
+  background: #3f040e8e radial-gradient(circle, transparent 1%, #616161 1%) center/15000%;
 }
 
 .todoapp {
@@ -99,14 +115,29 @@ button.user-register {
   color: #e6e6e6;
 }
 
-#app h1 {
+.todoapp input::-moz-placeholder {
+  font-style: italic;
+  font-weight: 300;
+  color: #e6e6e6;
+}
+
+.todoapp input::input-placeholder {
+  font-style: italic;
+  font-weight: 300;
+  color: #e6e6e6;
+}
+
+.todoapp h1 {
+  position: absolute;
+  top: -155px;
   width: 100%;
-  font-size: 60px;
-  text-align: center;
-  color: #333;
+  font-size: 100px;
   font-weight: 100;
-  font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
-  background-color: #F5F5F5;
+  text-align: center;
+  color: rgba(175, 47, 47, 0.15);
+  -webkit-text-rendering: optimizeLegibility;
+  -moz-text-rendering: optimizeLegibility;
+  text-rendering: optimizeLegibility;
 }
 
 .new-todo,
@@ -121,6 +152,7 @@ button.user-register {
   border: 0;
   color: inherit;
   padding: 6px;
+  border: 1px solid #999;
   box-shadow: inset 0 -1px 5px 0 rgba(0, 0, 0, 0.2);
   box-sizing: border-box;
   -webkit-font-smoothing: antialiased;
@@ -195,7 +227,7 @@ button.user-register {
 
 .todo-list li.editing .edit {
   display: block;
-  width: calc(100% - 43px);
+  width: 506px;
   padding: 12px 16px;
   margin: 0 0 0 43px;
 }
@@ -215,11 +247,11 @@ button.user-register {
   border: none;
   -webkit-appearance: none;
   appearance: none;
-  cursor: pointer;
 }
 
 .todo-list li .toggle {
   opacity: 0;
+  cursor: pointer;
 }
 
 .todo-list li .toggle + label {
@@ -246,7 +278,7 @@ button.user-register {
   text-decoration: line-through;
 }
 
-.todo-list li .delete {
+.todo-list li .destroy {
   display: none;
   position: absolute;
   top: 0;
@@ -262,15 +294,15 @@ button.user-register {
   cursor: pointer;
 }
 
-.todo-list li .delete:hover {
+.todo-list li .destroy:hover {
   color: #af5b5e;
 }
 
-.todo-list li .delete:after {
+.todo-list li .destroy:after {
   content: "×";
 }
 
-.todo-list li:hover .delete {
+.todo-list li:hover .destroy {
   display: block;
 }
 
@@ -298,18 +330,13 @@ button.user-register {
   left: 0;
   height: 50px;
   overflow: hidden;
-  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.2), 0 8px 0 -3px #f6f6f6,
-    0 9px 1px -3px rgba(0, 0, 0, 0.2), 0 16px 0 -6px #f6f6f6,
-    0 17px 2px -6px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.2), 0 8px 0 -3px #f6f6f6, 0 9px 1px -3px rgba(0, 0, 0, 0.2),
+    0 16px 0 -6px #f6f6f6, 0 17px 2px -6px rgba(0, 0, 0, 0.2);
 }
 
 .todo-count {
   float: left;
   text-align: left;
-}
-
-#completed-count.todo-count {
-  margin-left: 20px;
 }
 
 .todo-count strong {
@@ -340,14 +367,15 @@ button.user-register {
 
 .filters li a:hover {
   border-color: rgba(175, 47, 47, 0.1);
+  cursor: pointer;
 }
 
 .filters li a.selected {
   border-color: rgba(175, 47, 47, 0.2);
 }
 
-.clear-completed,
-html .clear-completed:active {
+.clear-all,
+html .clear-all:active {
   float: right;
   position: relative;
   line-height: 20px;
@@ -355,7 +383,7 @@ html .clear-completed:active {
   cursor: pointer;
 }
 
-.clear-completed:hover {
+.clear-all:hover {
   text-decoration: underline;
 }
 
@@ -381,13 +409,33 @@ html .clear-completed:active {
   text-decoration: underline;
 }
 
+@media screen and (-webkit-min-device-pixel-ratio: 0) {
+  .toggle-all,
+  .todo-list li .toggle {
+    background: none;
+  }
+
+  .todo-list li .toggle {
+    height: 40px;
+  }
+}
+
+@media (max-width: 430px) {
+  .count-container {
+    height: 50px;
+  }
+
+  .filters {
+    bottom: 10px;
+  }
+}
+
 .ripple {
   background-position: center;
   transition: background 0.6s;
 }
 .ripple:hover {
-  background: #616161 radial-gradient(circle, transparent 1%, #616161 1%)
-    center/15000%;
+  background: #616161 radial-gradient(circle, transparent 1%, #616161 1%) center/15000%;
 }
 .ripple:active {
   background-color: #9e9e9e;
@@ -417,12 +465,12 @@ button.ripple {
   0% {
     -webkit-transform: translateZ(0);
     transform: translateZ(0);
-    background-position: -468px 0;
+    background-position: -418px 0;
   }
   to {
     -webkit-transform: translateZ(0);
     transform: translateZ(0);
-    background-position: 468px 0;
+    background-position: 418px 0;
   }
 }
 
@@ -436,12 +484,40 @@ button.ripple {
   height: 100%;
   position: relative;
 }
+
 .skel-mask-container {
   position: relative;
   height: 20px;
 }
+
 .skel-mask {
   background: #fff;
   position: absolute;
   z-index: 200;
+}
+
+.chip {
+  width: 40px;
+  display: block;
+  font-size: 10px;
+  color: #fff;
+  font-weight: normal;
+  border-radius: 15px;
+  text-align: center;
+  left: 60px;
+  top: 3px;
+}
+
+.chip.primary {
+  background-color: #d63a49;
+}
+
+.chip.secondary {
+  background-color: #26c6da;
+}
+
+select.chip {
+  border-color: #e0e0e0;
+  color: #bdbdbd;
+  width: 55px;
 }

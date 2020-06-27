@@ -6,7 +6,18 @@ export const TODOCOUNT = (data, filteredData) => {
       <span id="completed-count" class="todo-count">
         <span class="count">${filteredData.length}</span> 개 완료
       </span>
+      <button class="clear-all">모두 삭제</button>
   `;
+};
+
+const PRIORITY = {
+  '0': `<select class="chip select">
+          <option value="0" selected>순위</option>
+          <option value="1">1순위</option>
+          <option value="2">2순위</option>
+        </select>`,
+  '1': '<span class="chip primary">1순위</span>',
+  '2': '<span class="chip secondary">2순위</span>',
 };
 
 export const TODOLIST = (data) => {
@@ -18,8 +29,11 @@ export const TODOLIST = (data) => {
             <input class="toggle" type="checkbox" ${
               todo.isCompleted ? 'checked' : ''
             } />
-            <label class="label">${todo.contents}</label>
-            <button class="delete"></button>
+            <label class="label">
+              ${PRIORITY[todo.priority]}
+              ${todo.contents}
+            </label>
+            <button class="destroy"></button>
           </div>
           <input class="edit" placeholder=${todo.contents} value="" />
         </li>
@@ -32,7 +46,8 @@ export const TODOLIST = (data) => {
 export const USERTITLE = (username) => {
   const result = `
     <h1 id="user-title" data-username=${username}>
-      <span><strong>${username}</strong>'s Todo List</span>
+    <div><strong>${username}</strong>'s</div>
+    <div>Todo List</div>
     </h1>
   `;
   return result;

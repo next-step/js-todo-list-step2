@@ -11,6 +11,7 @@ export default class TodoList {
     onToggle,
     onRemove,
     onEdit,
+    onPriority,
   }) {
     this.username = username;
     this.storeClassType = storeClassType;
@@ -19,17 +20,27 @@ export default class TodoList {
     this.$targetTodoList.addEventListener('click', (e) => {
       const { className } = e.target;
       const { id } = e.target.closest('li').dataset;
+      console.log(className);
       const selectAction = {
         toggle: (id) => onToggle(id),
-        delete: (id) => onRemove(id),
+        destroy: (id) => onRemove(id),
       };
       selectAction[className]
         ? selectAction[className](id)
         : console.error(ERROR_TYPE.NO_MATCH_CLASS);
     });
 
+    this.$targetTodoList.addEventListener('change', (e) => {
+      const { className } = e.target;
+      const { id } = e.target.closest('li').dataset;
+      if(className === 'chip select'){
+        onPriority(id, e.target.value)
+      }
+    })
+
     this.$targetTodoList.addEventListener('dblclick', (e) => {
       const { className } = e.target;
+      console.log(e.target);
       if (className === 'label') {
         const $targetLi = e.target.closest('li');
         this.storeClassType = $targetLi.className;

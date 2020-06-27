@@ -80,11 +80,19 @@ export default class App {
         await api.fetchTodoUpdate(this.username, id, text);
         this.setState(this.username);
       },
+      onPriority: async (id, priority) => {
+        await api.fetchTodoPriority(this.username, id, priority);
+        this.setState(this.username);
+      },
     });
 
     this.todoCount = new TodoCount({
       username,
       $targetTodoCountContainer,
+      onRemoveAll: async () => {
+        await api.fetchTodoRemoveAll(this.username);
+        this.setState(this.username);
+      },
     });
   }
 
