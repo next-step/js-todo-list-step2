@@ -1,13 +1,23 @@
 export const TODOCOUNT = (data, filteredData) => {
   return `
       <span id="todo-count" class="todo-count">
-        총 <span class="count">${data.length}</span> 개 중
+        총 <span class="count"><strong>${data.length}</strong></span> 개 중
       </span>
       <span id="completed-count" class="todo-count">
-        <span class="count">${filteredData.length}</span> 개 완료
+        <span class="count">&nbsp;&nbsp;${filteredData.length}</span> 개 완료
       </span>
       <button class="clear-all">모두 삭제</button>
   `;
+};
+
+const CHIP = (priority) => {
+  return `
+      <div class="chip-container">
+        <span class="chip ${
+          priority === '1' ? 'primary' : priority === '2' ? 'secondary' : ''
+        }">${priority}순위</span>
+        <span class="delete">초기화</span>
+      </div>`;
 };
 
 const PRIORITY = {
@@ -16,8 +26,8 @@ const PRIORITY = {
           <option value="1">1순위</option>
           <option value="2">2순위</option>
         </select>`,
-  '1': '<span class="chip primary">1순위</span>',
-  '2': '<span class="chip secondary">2순위</span>',
+  '1': CHIP('1'),
+  '2': CHIP('2'),
 };
 
 export const TODOLIST = (data) => {

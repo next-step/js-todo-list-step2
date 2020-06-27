@@ -12,6 +12,7 @@ export default class TodoList {
     onRemove,
     onEdit,
     onPriority,
+    onInitializePriority,
   }) {
     this.username = username;
     this.storeClassType = storeClassType;
@@ -24,6 +25,7 @@ export default class TodoList {
       const selectAction = {
         toggle: (id) => onToggle(id),
         destroy: (id) => onRemove(id),
+        delete: (id) => onInitializePriority(id),
       };
       selectAction[className]
         ? selectAction[className](id)
@@ -33,10 +35,10 @@ export default class TodoList {
     this.$targetTodoList.addEventListener('change', (e) => {
       const { className } = e.target;
       const { id } = e.target.closest('li').dataset;
-      if(className === 'chip select'){
-        onPriority(id, e.target.value)
+      if (className === 'chip select') {
+        onPriority(id, e.target.value);
       }
-    })
+    });
 
     this.$targetTodoList.addEventListener('dblclick', (e) => {
       const { className } = e.target;

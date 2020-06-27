@@ -497,7 +497,7 @@ button.ripple {
 }
 
 .chip {
-  width: 40px;
+  width: 50px;
   display: block;
   font-size: 10px;
   color: #fff;
@@ -506,6 +506,7 @@ button.ripple {
   text-align: center;
   left: 60px;
   top: 3px;
+  cursor: default;
 }
 
 .chip.primary {
@@ -519,5 +520,28 @@ button.ripple {
 select.chip {
   border-color: #e0e0e0;
   color: #bdbdbd;
-  width: 55px;
+  width: 50px;
+}
+
+span.delete {
+  display: none;
+  cursor: pointer;
+}
+
+span.delete:hover {
+  color: #ffffff;
+}
+
+.chip-container:hover span.delete {
+  position: absolute;
+  display: block;
+  width: 50px;
+  font-size: 10px;
+  color: #fff;
+  font-weight: normal;
+  border-radius: 15px;
+  text-align: center;
+  left: 120px;
+  top: 15px;
+  background-color: #000000;
 }

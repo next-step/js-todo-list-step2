@@ -84,6 +84,10 @@ export default class App {
         await api.fetchTodoPriority(this.username, id, priority);
         this.setState(this.username);
       },
+      onInitializePriority: async (id) => {
+        await api.fetchTodoPriority(this.username, id, '0');
+        this.setState(this.username);
+      }
     });
 
     this.todoCount = new TodoCount({
