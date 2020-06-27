@@ -1,6 +1,6 @@
 const BASE_URL = 'https://blackcoffee-todolist.df.r.appspot.com/api/u';
 
-const fetchTodoList = async userName => {
+const fetchTodoInfo = async userName => {
   const response = await fetch(`${BASE_URL}/${userName}/item`);
   try {
     if (!response.ok) {
@@ -75,7 +75,7 @@ const fetchUserList = async () => {
 };
 
 const api = {
-  fetchTodoList,
+  fetchTodoInfo,
   toggleItem,
   addNewTodoItem,
   deleteItem,
