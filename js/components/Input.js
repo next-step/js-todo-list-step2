@@ -1,4 +1,4 @@
-export default class TodoInput {
+export default class Input {
   constructor({ $element, onEnter }) {
     this.$element = $element;
     this.handleEnter = onEnter;

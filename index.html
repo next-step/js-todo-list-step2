@@ -7,7 +7,8 @@
   </head>
   <body>
     <div id="app">
-      <h1 id="user-title" data-username="eastjun">
+      <h1 id="user-title" data-username="">
+        <input class="register-input" autofocus />
         <span><strong></strong>'s Todo List</span>
       </h1>
       <div>
@@ -16,7 +17,7 @@
       <section class="todoapp">
         <input id="todo-input" class="new-todo" placeholder="할 일을 추가해주세요" autofocus />
         <div class="main">
-          <div id="loading" class="loading-view">
+          <div id="loading" class="loading-hide">
             <label class="label">
               <div class="animated-background">
                 <div class="skel-mask-container">

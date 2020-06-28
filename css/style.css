@@ -74,6 +74,15 @@ body {
   font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
 }
 
+#app .register-input {
+  width: 40%;
+  font-size: 60px;
+  text-align: center;
+  color: #333;
+  font-weight: 100;
+  font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
+}
+
 .new-todo,
 .edit {
   position: relative;
