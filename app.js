@@ -3,7 +3,7 @@ import TodoInput from './components/TodoInput.js';
 import TodoItem from './components/TodoItem.js';
 import TodoFilter from './components/TodoFilter.js';
 import { FILTER_TYPE } from './constants.js';
-import { getTodoList, postTodoItem } from './api/index.js';
+import { getTodoList, postTodoItem, deleteTodoItem } from './api/index.js';
 
 const USERNAME = 'soyoung';
 
@@ -37,10 +37,9 @@ function TodoApp() {
   }
 
   this.TodoList = new TodoList({
-    deleteTodo: id => {
-      const index = this.findIndexById(id);
-      this.todoList = [...this.todoList.slice(0, index), ...this.todoList.slice(index + 1)];
-      this.setState(this.todoList);
+    deleteTodo: async id => {
+      await deleteTodoItem(USERNAME, id);
+      setTimeout(() => this.setState(), 500);
     },
     toggleTodo: id => {
       const index = this.findIndexById(id);

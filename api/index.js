@@ -35,3 +35,21 @@ export function postTodoItem(username, contents) {
       console.log(error);
     });
 }
+
+export function deleteTodoItem(username, id) {
+  fetch(`https://blackcoffee-todolist.df.r.appspot.com/api/u/${username}/item/${id}`, {
+    method: 'DELETE'
+  })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error(response.status)
+      }
+      return response.json()
+    })
+    .then(data => {
+      return data;
+    })
+    .catch(error => {
+      console.log(error);
+    });
+}
