@@ -1,17 +1,13 @@
 import TodoList from './components/TodoList.js';
 import TodoInput from './components/TodoInput.js';
-import TodoItem from './components/TodoItem.js';
 import TodoFilter from './components/TodoFilter.js';
 import { FILTER_TYPE } from './constants.js';
-import { getTodoList, postTodoItem, deleteTodoItem } from './api/index.js';
+import { getTodoList, postTodoItem, deleteTodoItem, toggleTodoItem } from './api/index.js';
 
 const USERNAME = 'soyoung';
 
 function TodoApp() {
   this.todoList = [];
-  this.activeList = () => this.todoList.filter(item => !item.completed);
-  this.completedList = () => this.todoList.filter(item => item.completed);
-  this.mode = FILTER_TYPE.ALL;
 
   this.findIndexById = id => {
     return this.todoList.findIndex(item => item._id === id);
@@ -39,12 +35,11 @@ function TodoApp() {
   this.TodoList = new TodoList({
     deleteTodo: async id => {
       await deleteTodoItem(USERNAME, id);
-      setTimeout(() => this.setState(), 500);
+      this.setState();
     },
-    toggleTodo: id => {
-      const index = this.findIndexById(id);
-      this.todoList[index].completed = !this.todoList[index].completed;
-      this.setState(this.todoList);
+    toggleTodo: async id => {
+      await toggleTodoItem(USERNAME, id);
+      this.setState();
     },
     toggleEditMode: id => {
       const index = this.findIndexById(id);
@@ -59,23 +54,20 @@ function TodoApp() {
     }
   });
   this.TodoInput = new TodoInput({
-    addTodo: value => {
-      postTodoItem(USERNAME, value)
-        .then(() => this.setState());
-      // this.todoList = [new TodoItem(value), ...this.todoList];
-      // this.setState(this.todoList);
+    addTodo: async value => {
+      await postTodoItem(USERNAME, value);
+      this.setState();
     }
   });
   this.$todoCount = document.getElementsByClassName('todo-count')[0];
   this.TodoFilter = new TodoFilter({
     filterTodo: mode => {
-      this.mode = mode;
       const renderList = {
-        [FILTER_TYPE.ALL]: this.todoList,
-        [FILTER_TYPE.ACTIVE]: this.activeList(),
-        [FILTER_TYPE.COMPLETED]: this.completedList(),
+        [FILTER_TYPE.ALL]: () => this.todoList,
+        [FILTER_TYPE.ACTIVE]: () => this.todoList.filter(item => !item.isCompleted),
+        [FILTER_TYPE.COMPLETED]: () => this.todoList.filter(item => item.isCompleted)
       };
-      this.TodoList.setState(renderList[this.mode]);
+      this.TodoList.setState(renderList[mode]());
     }
   });
 }

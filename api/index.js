@@ -24,9 +24,9 @@ export function postTodoItem(username, contents) {
   })
     .then(response => {
       if (!response.ok) {
-        throw new Error(response.status)
+        throw new Error(response.status);
       }
-      return response.json()
+      return response.json();
     })
     .then(data => {
       return data;
@@ -42,9 +42,27 @@ export function deleteTodoItem(username, id) {
   })
     .then(response => {
       if (!response.ok) {
-        throw new Error(response.status)
+        throw new Error(response.status);
       }
-      return response.json()
+      return response.json();
+    })
+    .then(data => {
+      return data;
+    })
+    .catch(error => {
+      console.log(error);
+    });
+}
+
+export function toggleTodoItem(username, id) {
+  return fetch(`https://blackcoffee-todolist.df.r.appspot.com/api/u/${username}/item/${id}/toggle`, {
+    method: 'PUT'
+  })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error(response.status);
+      }
+      return response.json();
     })
     .then(data => {
       return data;
