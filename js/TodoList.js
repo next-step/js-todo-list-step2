@@ -21,7 +21,6 @@ export default class TodoList {
     this.$targetTodoList.addEventListener('click', (e) => {
       const { className } = e.target;
       const { id } = e.target.closest('li').dataset;
-      console.log(className);
       const selectAction = {
         toggle: (id) => onToggle(id),
         destroy: (id) => onRemove(id),
@@ -42,7 +41,6 @@ export default class TodoList {
 
     this.$targetTodoList.addEventListener('dblclick', (e) => {
       const { className } = e.target;
-      console.log(e.target);
       if (className === 'label') {
         const $targetLi = e.target.closest('li');
         this.storeClassType = $targetLi.className;
