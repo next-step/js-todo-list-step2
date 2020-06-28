@@ -2,7 +2,7 @@ import TodoList from './components/TodoList.js';
 import TodoInput from './components/TodoInput.js';
 import TodoFilter from './components/TodoFilter.js';
 import { FILTER_TYPE } from './constants.js';
-import { getTodoList, postTodoItem, deleteTodoItem, toggleTodoItem } from './api/index.js';
+import { getTodoList, postTodoItem, deleteTodoItem, toggleTodoItem, editTodoItem } from './api/index.js';
 
 const USERNAME = 'soyoung';
 
@@ -41,16 +41,9 @@ function TodoApp() {
       await toggleTodoItem(USERNAME, id);
       this.setState();
     },
-    toggleEditMode: id => {
-      const index = this.findIndexById(id);
-      this.todoList[index].editing = !this.todoList[index].editing;
-      this.setState(this.todoList);
-    },
-    editTodo: (id, value) => {
-      const index = this.findIndexById(id);
-      this.todoList[index].text = value;
-      this.toggleEditMode(id);
-      this.setState(this.todoList);
+    editTodo: async (id, value) => {
+      await editTodoItem(USERNAME, id, value);
+      this.setState();
     }
   });
   this.TodoInput = new TodoInput({

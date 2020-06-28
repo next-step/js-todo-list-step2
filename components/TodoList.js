@@ -1,7 +1,8 @@
 import { todoItemTemplate } from '../util.js';
 import { isValidContents } from '../util.js';
+import { KEYCODE_ESC, KEYCODE_ENTER } from '../constants.js';
 
-function TodoList({ deleteTodo, toggleTodo, toggleEditMode, editTodo }) {
+function TodoList({ deleteTodo, toggleTodo, editTodo }) {
   this.todoItems = [];
   this.$todoList = document.querySelector("#todo-list");
 
@@ -26,26 +27,28 @@ function TodoList({ deleteTodo, toggleTodo, toggleEditMode, editTodo }) {
   });
 
   this.$todoList.addEventListener('dblclick', event => {
-    const { id } = event.target.closest('li');
-    toggleEditMode(id);
+    const $li = event.target.closest('li');
+    $li.classList.add('editing');
 
-    // for focus input & set cursor position
-    const $list = document.getElementById(id);
-    const [$editInput] = Array.from($list.getElementsByClassName('edit'));
-    const size = $editInput.valuevent.length;
+    const [$editInput] = Array.from($li.getElementsByClassName('edit'));
+    const originValue = (this.todoItems.find(item => item._id === $li.id) || {}).contents;
+    $editInput.value = originValue;
     $editInput.focus();
-    $editInput.setSelectionRange(size, size);
+    const size = $editInput.value.length;
+    $editInput.setSelectionRange(size, size); // set cursor position
   });
 
-  this.$todoList.addEventListener('keyup', event => {
-    const { id } = event.target.closest('li');
+  this.$todoList.addEventListener('keypress', event => {
+    if (event.key !== KEYCODE_ESC && event.key !== KEYCODE_ENTER) return;
+
+    const $li = event.target.closest('li');
     if (event.key === KEYCODE_ESC) {
-      toggleEditMode(id);
+      $li.classList.remove('editing');
     }
     const newTodoContents = event.target.value;
-    if (isValidContents(newTodoContents)) return;
+    if (!isValidContents(newTodoContents)) return;
     if (event.key === KEYCODE_ENTER) {
-      editTodo(id, newTodoContents);
+      editTodo($li.id, newTodoContents);
     }
   });
 }
