@@ -6,13 +6,13 @@ export const httpMethod = {
   GET: 'GET',
   POST: 'POST',
   PUT: 'PUT',
-  DELETE: 'DELETE'
+  DELETE: 'DELETE',
 }
 
 export const tagName = {
   INPUT: 'INPUT',
   BUTTON: 'BUTTON',
-  SELECT: 'SELECT'
+  SELECT: 'SELECT',
 }
 
 export const className = {
@@ -21,12 +21,12 @@ export const className = {
   TOGGLE: 'toggle',
   REMOVE_ALL: 'clear-completed',
   PRIORITY_FIRST: 'primary',
-  PRIORITY_SECOND: 'secondary'
+  PRIORITY_SECOND: 'secondary',
 }
 
 export const keyName = {
   ESC: 'Escape',
-  ENTER: 'Enter'
+  ENTER: 'Enter',
 }
 
 export const filterStatus = {

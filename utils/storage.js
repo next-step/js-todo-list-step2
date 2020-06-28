@@ -8,5 +8,5 @@ export const storage = {
   },
   set: (KEY, value) => {
     window.localStorage.setItem(KEY, JSON.stringify(value))
-  }
+  },
 }

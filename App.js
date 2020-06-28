@@ -1,6 +1,6 @@
 import { Header, User, TodoInput, TodoList, TodoCount, TodoFilter, Loading } from './components'
 import { httpMethod, filterStatus, className } from './utils/constants.js'
-import fetchManager from "./api/api.js"
+import requestManager from "./api/api.js"
 
 const delay = (ms) => new Promise((resolve) => setTimeout(() => resolve(), ms))
 
@@ -93,7 +93,7 @@ export default function App() {
 
   this.getUsers = async () => {
     try {
-      return await fetchManager({
+      return await requestManager({
         method: httpMethod.GET,
         path: '/api/u'
       })
@@ -106,7 +106,7 @@ export default function App() {
     this.$loading.render() // loading on
     // await delay(500) // delay 주고 싶다면 추가
     try {
-      const { todoList } = await fetchManager({
+      const { todoList } = await requestManager({
         method: httpMethod.GET,
         path: `/api/u/${this.username}/item`,
       })
@@ -129,7 +129,7 @@ export default function App() {
 
   this.onToggle = async (itemId) => {
    try {
-     await fetchManager({
+     await requestManager({
        method: httpMethod.PUT,
        path: `/api/u/${this.username}/item/${itemId}/toggle`,
      })
@@ -141,7 +141,7 @@ export default function App() {
 
   this.onDelete = async (itemId) => {
     try {
-      await fetchManager({
+      await requestManager({
         method: httpMethod.DELETE,
         path: `/api/u/${this.username}/item/${itemId}`,
       })
@@ -153,7 +153,7 @@ export default function App() {
 
   this.onEdit = async (itemId, contents) => {
     try {
-      await fetchManager({
+      await requestManager({
         method: httpMethod.PUT,
         path: `/api/u/${this.username}/item/${itemId}`,
         body: { contents }
@@ -166,7 +166,7 @@ export default function App() {
 
   this.onSetPriority = async (itemId, priority) => {
     try {
-      await fetchManager({
+      await requestManager({
         method: httpMethod.PUT,
         path: `/api/u/${this.username}/item/${itemId}/priority`,
         body: { priority }
@@ -179,7 +179,7 @@ export default function App() {
 
   this.onDeleteAll = async () => {
     try {
-      await fetchManager({
+      await requestManager({
         method: httpMethod.DELETE,
         path: `/api/u/${this.username}/items`,
       })
@@ -191,7 +191,7 @@ export default function App() {
 
   this.postTodoItem = async (text) => {
     try {
-      await fetchManager({
+      await requestManager({
         method: httpMethod.POST,
         path: `/api/u/${this.username}/item`,
         body: { contents: text }

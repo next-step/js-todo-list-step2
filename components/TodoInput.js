@@ -1,11 +1,11 @@
-import { checkSelector } from "../utils/validations.js"
-import { keyName } from "../utils/constants.js"
+import { checkSelector } from '../utils/validations.js'
+import { keyName } from '../utils/constants.js'
 
 export default function TodoInput(props) {
   if (new.target !== TodoInput) {
     return new TodoInput(props)
   }
-  const { selector, postTodoItem }= props
+  const { selector, postTodoItem } = props
   checkSelector(selector)
 
   this.init = () => {

@@ -1,6 +1,6 @@
-import {checkSelector} from "../utils/validations.js"
+import { checkSelector } from '../utils/validations.js'
 
-export default function TodoFilter({ selector, onFilter }){
+export default function TodoFilter({ selector, onFilter }) {
   if (new.target !== TodoFilter) {
     return new TodoFilter({ selector, onFilter })
   }

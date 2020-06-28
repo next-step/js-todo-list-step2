@@ -1,4 +1,4 @@
-import { checkSelector } from "../utils/validations.js"
+import { checkSelector } from '../utils/validations.js'
 
 export default function TodoCount(props) {
   if (new.target !== TodoCount) {

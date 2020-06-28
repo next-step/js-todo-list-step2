@@ -1,8 +1,8 @@
-import { checkSelector } from "../utils/validations.js"
-import { tagName } from "../utils/constants.js"
+import { checkSelector } from '../utils/validations.js'
+import { tagName } from '../utils/constants.js'
 
 export default function User(props) {
-  const {selector, currentUser, users, onChangeUser} = props
+  const { selector, currentUser, users, onChangeUser } = props
   if (new.target !== User) {
     return new User(props)
   }
@@ -17,7 +17,7 @@ export default function User(props) {
   }
 
   this.setState = () => {
-    this.$target.innerHTML = this.users.map(({_id, name}) => {
+    this.$target.innerHTML = this.users.map(({ _id, name }) => {
       return `<button class="ripple ${this.currentUser === name ? 'active' : ''}">${name}</button>`
     }).join()
   }

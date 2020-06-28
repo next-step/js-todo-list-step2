@@ -1,8 +1,8 @@
-import { checkSelector } from "../utils/validations.js"
-import { tagName, className, keyName } from "../utils/constants.js"
+import { checkSelector } from '../utils/validations.js'
+import { tagName, className, keyName } from '../utils/constants.js'
 
 export default function TodoList(props) {
-  const { selector, todos, onToggle, onDelete, onEdit, onSetPriority} = props
+  const { selector, todos, onToggle, onDelete, onEdit, onSetPriority } = props
   if (new.target !== TodoList) {
     return new TodoList(props)
   }
@@ -18,7 +18,7 @@ export default function TodoList(props) {
   this.bindEvent = () => {
     const clickEventHandler = (e) => {
       const li = e.target.closest('li')
-      const {id} = li.dataset
+      const { id } = li.dataset
       if (
         e.target.tagName === tagName.INPUT &&
         e.target.className === className.TOGGLE
@@ -103,7 +103,7 @@ export default function TodoList(props) {
       </select>`
   }
 
-  const todoItemHTMLTemplate = ({_id, contents, priority, isCompleted}, index) => {
+  const todoItemHTMLTemplate = ({ _id, contents, priority, isCompleted }, index) => {
     return `
       <li data-id=${_id} data-index=${index} class=${isCompleted ? 'completed' : ''}>
           <div class="view">

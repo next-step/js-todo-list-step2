@@ -1,6 +1,6 @@
 import { API_URL } from "../utils/constants.js"
 
-export default async function fetchManager(args){
+export default async function requestManager(args){
   const { path, method='GET', body, headers } = args
   let url = API_URL + path
   const options = {

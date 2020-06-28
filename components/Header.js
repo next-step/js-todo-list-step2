@@ -1,6 +1,6 @@
-import {checkSelector} from "../utils/validations.js"
+import { checkSelector } from '../utils/validations.js'
 
-export default function Header({ selector, username }){
+export default function Header({ selector, username }) {
   if (new.target !== Header) {
     return new Header({ selector, username })
   }
