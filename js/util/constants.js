@@ -21,4 +21,5 @@ export const MESSAGE = {
 
 export const ERROR_TYPE = {
   NO_MATCH_CLASS: '버튼을 정확히 눌러주세요',
+  EXIST_USER: '존재하는 사용자입니다.'
 };

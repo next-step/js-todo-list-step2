@@ -5,7 +5,7 @@ import TodoInput from './TodoInput.js';
 import api from './util/api.js';
 import TodoCount from './TodoCount.js';
 import UserRegister from './UserRegister.js';
-import { MESSAGE, MEANING } from './util/constants.js';
+import { MESSAGE, MEANING, ERROR_TYPE } from './util/constants.js';
 
 export default class App {
   constructor({
@@ -36,6 +36,10 @@ export default class App {
       username,
       $targetUserRegister,
       onClickRegister: async (newUsername) => {
+        const existTodoList = await api.fetchUsers();
+        const existUserList = existTodoList.map((todo) => todo.name);
+        if (existUserList.includes(newUsername))
+          return alert(ERROR_TYPE.EXIST_USER);
         await api.fetchTodoPost(newUsername, MESSAGE.TEMP);
         const response = await api.fetchUserTodo(newUsername);
         const data = response.todoList;
