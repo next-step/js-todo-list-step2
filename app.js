@@ -3,6 +3,9 @@ import TodoInput from './components/TodoInput.js';
 import TodoItem from './components/TodoItem.js';
 import TodoFilter from './components/TodoFilter.js';
 import { FILTER_TYPE } from './constants.js';
+import { getTodoList, postTodoItem } from './api/index.js';
+
+const USERNAME = 'soyoung';
 
 function TodoApp() {
   this.todoList = [];
@@ -11,19 +14,26 @@ function TodoApp() {
   this.mode = FILTER_TYPE.ALL;
 
   this.findIndexById = id => {
-    return this.todoList.findIndex(item => item.id.toString() === id.toString());
+    return this.todoList.findIndex(item => item._id === id);
   };
 
-  this.setState = updatedItems => {
-    this.todoList = updatedItems;
+  this.setState = async () => {
+    await this.getTodoList();
     this.TodoList.setState(this.todoList);
     this.$todoCount.innerHTML = `총 <strong>${this.todoList.length}</strong> 개`;
   };
 
+  this.getTodoList = async () => {
+    try {
+      const { todoList } = await getTodoList(USERNAME);
+      this.todoList = todoList;
+    } catch (error) {
+      this.todoList = [];
+    }
+  }
+
   this.init = () => {
-    const list = localStorage.getItem('todo-list');
-    this.todoList = JSON.parse(list);
-    this.setState(this.todoList);
+    this.setState();
   }
 
   this.TodoList = new TodoList({
@@ -51,8 +61,10 @@ function TodoApp() {
   });
   this.TodoInput = new TodoInput({
     addTodo: value => {
-      this.todoList = [new TodoItem(value), ...this.todoList];
-      this.setState(this.todoList);
+      postTodoItem(USERNAME, value)
+        .then(() => this.setState());
+      // this.todoList = [new TodoItem(value), ...this.todoList];
+      // this.setState(this.todoList);
     }
   });
   this.$todoCount = document.getElementsByClassName('todo-count')[0];
@@ -69,4 +81,5 @@ function TodoApp() {
   });
 }
 
-new TodoApp();
+const app = new TodoApp();
+app.init();

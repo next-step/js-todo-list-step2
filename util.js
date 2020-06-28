@@ -1,5 +1,5 @@
 export const todoItemTemplate = item => (
-  `<li id="${item.id}" class="${item.completed ? 'completed' : ''} ${item.editing ? 'editing' : ''}">
+  `<li id="${item._id}" class="${item.completed ? 'completed' : ''} ${item.editing ? 'editing' : ''}">
     <div class="view">
       <input class="toggle" type="checkbox" ${item.completed ? 'checked' : ''}/>
       <label class="label">
