@@ -5,6 +5,7 @@ const filt_ul = document.querySelector(".filters")
 const all_a = filt_ul.querySelector(".all")
 const active_a = filt_ul.querySelector(".active")
 const complete_a = filt_ul.querySelector(".completed")
+const allDelBtn = document.querySelector(".clear-completed")
 const userDiv = document.querySelector("#user-list") 
 const userInput = document.querySelector(".adduser")
 const userH1 = document.querySelector("#user-title")
@@ -19,33 +20,112 @@ let todo_list = []
 let id = 0
 let userId = 0
 let currentUser = "guest"
+const selectUi = `
+<select class="chip select">
+    <option value="0" selected>순위</option>
+    <option value="1">1순위</option>
+    <option value="2">2순위</option>
+</select>
+`
+
+async function apiPriority(todo, priority) {
+    if (!(currentUser === "guest")) {
+        const resTodo = await fetch(APIURL + `${currentUser}/item/${todo._id}/priority/`, {
+            method: "PUT",
+            headers: {
+                'content-Type': 'application/json; charset=UTF-8'
+            },
+            body: JSON.stringify({
+                priority
+            })
+        }).then(function(res){
+            return res.json()
+        }).then(function(json){
+            return json
+        })
+        todo.priority = resTodo.priority
+    }
+}
+
+function clickPriority(event) {
+    if (event.target.nodeName === "SPAN") {
+        const label = event.target.closest("label")
+        label.innerHTML = selectUi + label.id
+    }
+}
+
+function changePriority(event) {
+    if (event.target.nodeName === "SELECT") {
+        const label = event.target.closest("label")
+        const li = event.target.closest("li")
+        const todo = findTodo(li)
+        const priorituUi = todoPriority(parseInt(event.target.value))   
+        label.innerHTML = priorituUi + label.id
+        apiPriority(todo, parseInt(event.target.value))
+    }
+}
+
+function apiDelAllTodo(event) {
+    if (!(currentUser === "guest")) {
+        fetch(APIURL + `${currentUser}/items/`, {
+            method: "DELETE"
+        })
+        todo_list = []
+        allClear()
+        countTodo()
+    } else {
+        todo_list = []
+        allClear()
+        countTodo()
+    }
+}
 
 function apiCheck(todoId) {
-    fetch(APIURL + `${currentUser}/item/${todoId}/toggle/`, {
-        method: "PUT"
-    })
+    if (!(currentUser === "guest")) {
+        fetch(APIURL + `${currentUser}/item/${todoId}/toggle/`, {
+            method: "PUT"
+        })
+    }
 }
 
 function apiEdit(todoId, editTodo) {
-    fetch(APIURL + `${currentUser}/item/${todoId}/`, {
-        method: "PUT",
-        headers: {
-            'content-Type': 'application/json; charset=UTF-8'
-        },
-        body: JSON.stringify({
-            contents: editTodo
+    if (!(currentUser === "guest")) {
+        fetch(APIURL + `${currentUser}/item/${todoId}/`, {
+            method: "PUT",
+            headers: {
+                'content-Type': 'application/json; charset=UTF-8'
+            },
+            body: JSON.stringify({
+                contents: editTodo
+            })
         })
-    })
+    }
 }
 
 function apiDelTodo(todoId) {
-    fetch(APIURL + `${currentUser}/item/${todoId}`, {
-        method: "DELETE"
-    })
-    countTodo()
+    if (!(currentUser === "guest")) {
+        fetch(APIURL + `${currentUser}/item/${todoId}`, {
+            method: "DELETE"
+        })
+        countTodo()
+    }
 }
 
 async function apiLoadUser() {
+    const waitUi = `
+        <li>
+            <div class="view">
+                <label class="label">
+                    <div class="animated-background">
+                      <div class="skel-mask-container">
+                        <div class="skel-mask"></div>
+                        </div>
+                    </div>
+                </label>
+            </div>
+        </li>
+        `
+    todo_ul.innerHTML = waitUi
     const user = await fetch(APIURL + `${currentUser}/item/`).then(function(res){
         return res.json()
     }).then(function(user){
@@ -57,6 +137,7 @@ async function apiLoadUser() {
 } 
 
 function loadTodo() {
+    todo_ul.innerHTML = ""
     todo_list.forEach(function(todo){
         drawTodo(todo)
     })
@@ -208,13 +289,15 @@ function editingTodo(event) {
         const label = li.querySelector(".label")
         if (event.key === ESC) {
             li.classList.remove("editing")
-            event.target.value = label.innerText
+            event.target.value = label.id
         } else if (event.key === ENTER) {
             if (!checkBlank(event.target.value)) {
-                todo = findTodo(li)
-                label.innerText = event.target.value
+                const todo = findTodo(li)
+                const priorityUi = todoPriority(todo.priority)
+                label.innerHTML = priorityUi + event.target.value
+                label.id = event.target.value
                 li.classList.remove("editing")
-                todo.contents = label.innerText
+                todo.contents = event.target.value
                 apiEdit(todo._id, todo.contents)
             }
         }
@@ -235,13 +318,17 @@ function findTodo(li) {
 function todoComplete(event) {
     if (event.target.nodeName === "INPUT" && event.target.classList[0] === "toggle") {
         const li = event.target.closest("li")
-        todo = findTodo(li)
+        const todo = findTodo(li)
+        const priorityUi = todoPriority(todo.priority)
+        const label = li.querySelector("label")
         if (event.target.checked) {
             li.classList.add("completed")
             todo.isCompleted = true
+            label.innerHTML = label.id
         } else {
             li.classList.remove("completed")
             todo.isCompleted = false
+            label.innerHTML = priorityUi + label.id
         }
         apiCheck(todo._id)
     }
@@ -251,7 +338,8 @@ function makeTodoObj(current_todo, boolean) {
     todo = {
         'contents': current_todo,
         "isCompleted": boolean,
-        '_id': id
+        '_id': id,
+        'priority': 0
     }
     id = id + 1
     todo_list.push(todo)
@@ -280,24 +368,42 @@ async function inputTodo(event) {
     }
 }
 
+function todoPriority(priority) {
+    if (priority === 0) {
+        return selectUi
+    } else if (priority === 1) {
+        return `
+        <span class="chip primary">1순위</span>
+        `
+    } else if(priority === 2) {
+        return `
+        <span class="chip secondary">2순위</span>
+        `
+    }
+}
+
 function drawTodo(todo) {
-    const todoItemTemplate = function(todo, complete, checked){
+    const todoPriorityUi = todoPriority(todo.priority)
+    const todoItemTemplate = function(todo, complete, checked, select){
         return `
         <li id=${todo._id} class=${complete}>
             <div class="view">
                 <input class="toggle" type="checkbox" ${checked} />
-                <label class="label">${todo.contents}</label>
-                <button class="delete"></button>
+                <label class="label" id="${todo.contents}">
+                    ${select}
+                    ${todo.contents}
+                </label>
+                <button class="destroy"></button>
             </div>
             <input class="edit" value="${todo.contents}" />
         </li>
         `
     }
     if (todo.isCompleted) {
-        const todoItem = todoItemTemplate(todo, "completed", "checked")
+        const todoItem = todoItemTemplate(todo, "completed", "checked", "")
         todo_ul.innerHTML += todoItem
     } else {
-        const todoItem = todoItemTemplate(todo, "", "")
+        const todoItem = todoItemTemplate(todo, "", "", todoPriorityUi)
         todo_ul.innerHTML += todoItem
     } 
 }
@@ -311,7 +417,10 @@ function init() {
     todo_ul.addEventListener("keyup", editingTodo)
     todo_ul.addEventListener("dblclick", editTodo)
     todo_ul.addEventListener("click", deleteTodo)
+    todo_ul.addEventListener("change", changePriority)
+    todo_ul.addEventListener("click", clickPriority)
     userInput.addEventListener("keyup", addNewUser)
+    allDelBtn.addEventListener("click", apiDelAllTodo)
     apiLoadUserList()
    
 }
