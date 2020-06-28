@@ -1,10 +1,10 @@
-import { todoItemTemplate } from '../util.js';
+import { todoItemTemplate } from '../template.js';
 import { isValidContents } from '../util.js';
 import { KEYCODE_ESC, KEYCODE_ENTER } from '../constants.js';
 
 function TodoList({ deleteTodo, toggleTodo, editTodo }) {
   this.todoItems = [];
-  this.$todoList = document.querySelector("#todo-list");
+  const $todoList = document.querySelector("#todo-list");
 
   this.setState = updatedTodoItems => {
     this.todoItems = updatedTodoItems;
@@ -13,10 +13,10 @@ function TodoList({ deleteTodo, toggleTodo, editTodo }) {
 
   this.render = items => {
     const template = items.map(todoItemTemplate);
-    this.$todoList.innerHTML = template.join("");
+    $todoList.innerHTML = template.join("");
   };
 
-  this.$todoList.addEventListener('click', event => {
+  $todoList.addEventListener('click', event => {
     const { className } = event.target;
     const { id } = event.target.closest('li');
     if (className === 'destroy') {
@@ -26,7 +26,7 @@ function TodoList({ deleteTodo, toggleTodo, editTodo }) {
     }
   });
 
-  this.$todoList.addEventListener('dblclick', event => {
+  $todoList.addEventListener('dblclick', event => {
     const $li = event.target.closest('li');
     $li.classList.add('editing');
 
@@ -38,7 +38,7 @@ function TodoList({ deleteTodo, toggleTodo, editTodo }) {
     $editInput.setSelectionRange(size, size); // set cursor position
   });
 
-  this.$todoList.addEventListener('keypress', event => {
+  $todoList.addEventListener('keypress', event => {
     if (event.key !== KEYCODE_ESC && event.key !== KEYCODE_ENTER) return;
 
     const $li = event.target.closest('li');

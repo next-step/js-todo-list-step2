@@ -95,3 +95,21 @@ export function editTodoItem(username, id, contents) {
       console.log(error);
     });
 }
+
+export function getUsers() {
+  return fetch(`https://blackcoffee-todolist.df.r.appspot.com/api/u`, {
+    method: 'GET'
+  })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error(response.status);
+      }
+      return response.json();
+    })
+    .then(data => {
+      return data;
+    })
+    .catch(error => {
+      console.log(error);
+    });
+}
