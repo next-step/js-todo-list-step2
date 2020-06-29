@@ -1,8 +1,9 @@
-import { userItemTemplate } from '../template.js';
+import { userItemTemplate, userTitleTemplate } from '../template.js';
 
 function UserList({ selectUser }) {
   this.userList = [];
   const $userList = document.querySelector('#user-list');
+  const $userTitle = document.querySelector('#user-title');
 
   this.setState = (updatedUserList) => {
     this.userList = updatedUserList;
@@ -14,16 +15,23 @@ function UserList({ selectUser }) {
     $userList.innerHTML = template.join('');
   };
 
-  $userList.addEventListener('click', (event) => this.selectUser(event));
+  $userList.addEventListener('click', (event) => this.onClickUser(event));
 
-  this.selectUser = (event) => {
+  this.selectUser = (id) => {
+    Array.from($userList.getElementsByTagName('button')).forEach((el) =>
+      el.classList.remove('active')
+    );
+    const $selectItem = document.getElementById(id);
+    $selectItem.classList.add('active');
+    const name = $selectItem.innerHTML;
+    $userTitle.innerHTML = userTitleTemplate(name);
+    selectUser(name);
+  };
+
+  this.onClickUser = (event) => {
     const $clickedItem = event.target;
     if ($clickedItem.tagName === 'BUTTON') {
-      Array.from($userList.getElementsByTagName('button')).forEach((el) =>
-        el.classList.remove('active')
-      );
-      $clickedItem.classList.add('active');
-      selectUser($clickedItem.innerHTML);
+      this.selectUser($clickedItem.id);
     }
   };
 }

@@ -26,4 +26,7 @@ export const todoItemTemplate = (item) =>
   </li>`;
 
 export const userItemTemplate = (item) =>
-  `<button class="ripple">${item.name}</button>`;
+  `<button id="${item._id}" class="ripple">${item.name}</button>`;
+
+export const userTitleTemplate = (name) =>
+  `<span><strong>${name}</strong>'s Todo List</span>`;
