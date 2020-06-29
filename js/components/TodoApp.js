@@ -1,5 +1,5 @@
 import api from '../api.js';
-import { TodoList, Input, TodoCount, TodoHeader, UserList } from '../components/index.js';
+import { TodoList, TodoInput, TodoCount, TodoHeader, UserList } from '../components/index.js';
 import {
   $TODO_HEADER,
   $TODO_LIST,
@@ -8,6 +8,7 @@ import {
   $USER_LIST
 } from '../config/htmlElement.js';
 
+// TodoApp: Todo 앱 전체의 상태를 관리
 export default class TodoApp {
   USER_NAME = '';
 
@@ -18,20 +19,36 @@ export default class TodoApp {
 
   async initTodoAppComponents() {
     if (this.USER_NAME) {
+      this.todoInfo = await api.fetchTodoInfo(this.USER_NAME);
+      this.todoItems = this.todoInfo.todoList;
+
       this.todoHeader = new TodoHeader({
         $element: $TODO_HEADER,
-        name: this.USER_NAME
+        userName: this.USER_NAME
       });
 
-      new Input({
+      new TodoInput({
+        userName: this.USER_NAME,
         $element: $TODO_INPUT,
-        onEnter: async content => {
-          await api.addNewTodoItem(this.USER_NAME, content);
+        onEnter: () => {
           this.setState();
         }
       });
 
-      await this.initTodoList();
+      this.todoList = new TodoList({
+        userName: this.USER_NAME,
+        $element: $TODO_LIST,
+        todoItems: this.todoItems,
+        onToggleItem: () => {
+          this.setState();
+        },
+        onDeleteItem: () => {
+          this.setState();
+        },
+        onEditItem: () => {
+          this.setState();
+        }
+      });
 
       this.todoCount = new TodoCount({
         $element: $TODO_COUNT,
@@ -41,29 +58,6 @@ export default class TodoApp {
 
       this.initUserList();
     }
-  }
-
-  async initTodoList() {
-    this.todoInfo = await api.fetchTodoInfo(this.USER_NAME);
-    this.todoItems = this.todoInfo.todoList;
-    this.todoList = new TodoList({
-      $element: $TODO_LIST,
-      todoItems: this.todoItems,
-      onToggleItem: async id => {
-        await api.toggleItem(this.USER_NAME, id);
-        this.setState();
-      },
-      onDeleteItem: async id => {
-        await api.deleteItem(this.USER_NAME, id);
-        this.setState();
-      },
-      onEditItem: async (id, saveContent) => {
-        if (saveContent) {
-          await api.modifyItem(this.USER_NAME, id, saveContent);
-        }
-        this.setState();
-      }
-    });
   }
 
   async initUserList() {

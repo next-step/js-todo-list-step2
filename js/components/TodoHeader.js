@@ -1,7 +1,7 @@
 export default class TodoHeader {
-  constructor({ $element, name }) {
+  constructor({ $element, userName }) {
     this.$element = $element;
-    this.name = name;
+    this.name = userName;
 
     this.render();
   }

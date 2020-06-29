@@ -1,6 +1,9 @@
+import api from '../api.js';
 import { itemTemplate } from '../config/template.js';
+
 export default class TodoList {
-  constructor({ $element, todoItems, onToggleItem, onDeleteItem, onEditItem }) {
+  constructor({ userName, $element, todoItems, onToggleItem, onDeleteItem, onEditItem }) {
+    this.userName = userName;
     this.$element = $element;
     this.todoItems = todoItems;
     this.isEditingItemId = -1; // 현재 편집 중인 아이템의 id 저장
@@ -10,10 +13,11 @@ export default class TodoList {
     this.render();
 
     // 마우스 클릭 이벤트
-    this.$element.addEventListener('click', e => {
+    this.$element.addEventListener('click', async e => {
       // 아이템 삭제
       if (e.target.nodeName === 'BUTTON' && e.target.className === 'delete') {
-        onDeleteItem(e.target.name);
+        await api.deleteItem(this.userName, e.target.name);
+        onDeleteItem();
         return;
       }
 
@@ -34,15 +38,16 @@ export default class TodoList {
         $targetInput.setAttribute('checked', '');
       }
 
-      onToggleItem(id);
+      await api.toggleItem(this.userName, id);
+      onToggleItem();
     });
 
-    const handleFinishEdit = saveContent => {
-      onEditItem(this.isEditingItemId, saveContent);
-
+    const handleFinishEdit = async saveContent => {
       if (saveContent) {
+        await api.modifyItem(this.userName, this.isEditingItemId, saveContent);
         this.isEditingItemId = -1;
       }
+      onEditItem();
     };
 
     // 마우스 더블 클릭 이벤트
