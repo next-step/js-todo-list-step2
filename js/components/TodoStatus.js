@@ -26,11 +26,12 @@ export default function TodoStatus({ $target, onSetTodoStatus }) {
       this.status = todoStatus.COMPLETED
     }
     onSetTodoStatus(this.status)
-    this.render()
   }
   this.$target.addEventListener('click', onClickHandler)
 
-  this.render = function () {
+  this.setState = function (nextData) {
+    this.status = nextData
+
     this.$target
       .querySelector(`.${todoClassName.SELECTED}`)
       .classList.remove(todoClassName.SELECTED)

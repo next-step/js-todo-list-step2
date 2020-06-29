@@ -134,6 +134,7 @@ export default function TodoApp() {
     this.todoCount.setState(this.filteredTodos)
     this.todoUserList.setState(this.username)
     this.todoAppTitle.setState(this.username)
+    this.todoStatus.setState(this.todoViewStatus)
   }
 
   this.init = async function () {
