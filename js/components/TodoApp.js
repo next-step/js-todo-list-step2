@@ -191,8 +191,8 @@ export default function TodoApp() {
     } catch (err) {
       console.log(err)
     }
+    this.setState(this.username)
   }
 
   this.init()
-  this.setState(this.username)
 }
