@@ -4,5 +4,5 @@ export const KEYCODE_ESC = 'Escape';
 export const FILTER_TYPE = {
   ALL: 'all',
   ACTIVE: 'active',
-  COMPLETED: 'completed'
-}
+  COMPLETED: 'completed',
+};
