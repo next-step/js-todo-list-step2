@@ -2,9 +2,9 @@ const $LOADING = document.getElementById('loading');
 const $TODO_HEADER = document.getElementById('user-title');
 const $TODO_LIST = document.getElementById('todo-list');
 const $TODO_INPUT = document.getElementById('todo-input');
-const $TODO_COUNT = document.getElementsByClassName('count-container')[0];
+const $TODO_COUNT = document.querySelector('.count-container');
 const $USER_LIST = document.getElementById('user-list');
-const $REGISTER_INPUT = document.getElementsByClassName('register-input')[0];
+const $REGISTER_INPUT = document.querySelector('.register-input');
 
 export {
   $LOADING,

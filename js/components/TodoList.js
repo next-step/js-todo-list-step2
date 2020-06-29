@@ -1,4 +1,4 @@
-const ContentWrapper = ({ _id, contents, isCompleted }) => {
+const contentWrapper = ({ _id, contents, isCompleted }) => {
   const checked = isCompleted ? 'checked' : '';
   return `<div class="view">
       <input class="toggle" type="checkbox" name="${_id}" ${checked}/>
@@ -7,15 +7,15 @@ const ContentWrapper = ({ _id, contents, isCompleted }) => {
     </div>`;
 };
 
-const EditInput = ({ _id, contents }) => {
+const editInput = ({ _id, contents }) => {
   return `<input class="edit" name="${_id}" value="${contents}" autofocus/>`;
 };
 
-const Item = props => {
+const item = props => {
   const { _id, isCompleted } = props;
   const completed = isCompleted ? 'completed' : '';
   return `<li id=${_id} class="${completed}">
-      ${ContentWrapper(props)}${EditInput(props)}
+      ${contentWrapper(props)}${editInput(props)}
     </li>`;
 };
 
@@ -23,7 +23,7 @@ export default class TodoList {
   constructor({ $element, todoItems, onToggleItem, onDeleteItem, onEditItem }) {
     this.$element = $element;
     this.todoItems = todoItems;
-    this.isEditing = -1; // 현재 편집 중인 아이템의 id 저장
+    this.isEditingItemId = -1; // 현재 편집 중인 아이템의 id 저장
 
     // TODO: validation
 
@@ -31,37 +31,37 @@ export default class TodoList {
 
     // 마우스 클릭 이벤트
     this.$element.addEventListener('click', e => {
-      // 아이템 완료/미완료 선택
-      if (e.target.nodeName === 'INPUT' && e.target.className === 'toggle') {
-        const id = e.target.name;
-
-        // 체크 애니메이션을 위해서 html 원소 직접 접근
-        const $targetLi = document.querySelector(`li[id=${id}]`);
-        const $targetInput = document.querySelector(`input[name="${id}"]`);
-        if ($targetInput.hasAttribute('checked')) {
-          $targetLi.classList.remove('completed');
-          $targetInput.removeAttribute('checked');
-        } else {
-          $targetLi.classList.add('completed');
-          $targetInput.setAttribute('checked', '');
-        }
-
-        onToggleItem(id);
-        return;
-      }
-
       // 아이템 삭제
       if (e.target.nodeName === 'BUTTON' && e.target.className === 'delete') {
         onDeleteItem(e.target.name);
         return;
       }
+
+      // 아이템 완료/미완료 선택
+      if (e.target.nodeName !== 'INPUT' || e.target.className !== 'toggle') {
+        return;
+      }
+
+      // 체크 애니메이션을 위해서 html 원소 직접 접근
+      const id = e.target.name;
+      const $targetLi = document.querySelector(`li[id=${id}]`);
+      const $targetInput = document.querySelector(`input[name="${id}"]`);
+      if ($targetInput.hasAttribute('checked')) {
+        $targetLi.classList.remove('completed');
+        $targetInput.removeAttribute('checked');
+      } else {
+        $targetLi.classList.add('completed');
+        $targetInput.setAttribute('checked', '');
+      }
+
+      onToggleItem(id);
     });
 
     const handleFinishEdit = saveContent => {
-      onEditItem(this.isEditing, saveContent);
+      onEditItem(this.isEditingItemId, saveContent);
 
       if (saveContent) {
-        this.isEditing = -1;
+        this.isEditingItemId = -1;
       }
     };
 
@@ -70,7 +70,7 @@ export default class TodoList {
       // 아이템 편집
       if (e.target.nodeName === 'LABEL') {
         const editId = e.target.htmlFor;
-        this.isEditing = editId;
+        this.isEditingItemId = editId;
 
         const $targetLi = document.querySelector(`li[id=${editId}]`);
         $targetLi.className = 'editing';
@@ -83,16 +83,18 @@ export default class TodoList {
 
     // 키보드 입력 이벤트
     this.$element.addEventListener('keydown', e => {
-      if (this.isEditing !== -1) {
-        if (e.key === 'Escape') {
-          handleFinishEdit();
-          return;
-        }
+      if (this.isEditingItemId === -1) {
+        return;
+      }
 
-        if (e.key === 'Enter') {
-          handleFinishEdit(e.target.value);
-          return;
-        }
+      if (e.key === 'Escape') {
+        handleFinishEdit();
+        return;
+      }
+
+      if (e.key === 'Enter') {
+        handleFinishEdit(e.target.value);
+        return;
       }
     });
 
@@ -104,7 +106,7 @@ export default class TodoList {
   }
 
   render() {
-    this.$element.innerHTML = `${this.todoItems.map(item => Item(item)).join('')}`;
+    this.$element.innerHTML = `${this.todoItems.map(todoItem => item(todoItem)).join('')}`;
   }
 
   setState(newItems) {

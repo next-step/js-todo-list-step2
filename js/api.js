@@ -15,19 +15,19 @@ const responseHandler = async request => {
 
 const fetchTodoInfo = async userName => {
   try {
-    return await responseHandler(() => {
-      return fetch(`${BASE_URL}/${userName}/item`);
-    });
+    return await responseHandler(() => fetch(`${BASE_URL}/${userName}/item`));
   } catch (e) {
     console.error(e);
-    return { todoList: [] };
+    return {
+      todoList: []
+    };
   }
 };
 
 const addNewTodoItem = async (userName, contents) => {
   try {
-    return await responseHandler(() => {
-      return fetch(`${BASE_URL}/${userName}/item`, {
+    return await responseHandler(() =>
+      fetch(`${BASE_URL}/${userName}/item`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -35,8 +35,8 @@ const addNewTodoItem = async (userName, contents) => {
         body: JSON.stringify({
           contents
         })
-      });
-    });
+      })
+    );
   } catch (e) {
     console.error(e);
   }
@@ -44,24 +44,26 @@ const addNewTodoItem = async (userName, contents) => {
 
 const toggleItem = async (userName, itemId) => {
   try {
-    return await responseHandler(() => {
-      return fetch(`${BASE_URL}/${userName}/item/${itemId}/toggle`, {
+    return await responseHandler(() =>
+      fetch(`${BASE_URL}/${userName}/item/${itemId}/toggle`, {
         method: 'PUT'
-      });
-    });
+      })
+    );
   } catch (e) {
     console.error(e);
-    return { todoList: [] };
+    return {
+      todoList: []
+    };
   }
 };
 
 const deleteItem = async (userName, itemId) => {
   try {
-    return await responseHandler(() => {
-      return fetch(`${BASE_URL}/${userName}/item/${itemId}`, {
+    return await responseHandler(() =>
+      fetch(`${BASE_URL}/${userName}/item/${itemId}`, {
         method: 'DELETE'
-      });
-    });
+      })
+    );
   } catch (e) {
     console.error(e);
   }
@@ -69,8 +71,8 @@ const deleteItem = async (userName, itemId) => {
 
 const modifyItem = async (userName, itemId, contents) => {
   try {
-    return await responseHandler(() => {
-      return fetch(`${BASE_URL}/${userName}/item/${itemId}`, {
+    return await responseHandler(() =>
+      fetch(`${BASE_URL}/${userName}/item/${itemId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json'
@@ -78,8 +80,8 @@ const modifyItem = async (userName, itemId, contents) => {
         body: JSON.stringify({
           contents
         })
-      });
-    });
+      })
+    );
   } catch (e) {
     console.error(e);
   }
@@ -87,9 +89,7 @@ const modifyItem = async (userName, itemId, contents) => {
 
 const fetchUserList = async () => {
   try {
-    return await responseHandler(() => {
-      return fetch(`${BASE_URL}`);
-    });
+    return await responseHandler(() => fetch(`${BASE_URL}`));
   } catch (e) {
     console.error(e);
     return [];

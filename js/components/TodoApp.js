@@ -13,6 +13,10 @@ export default class TodoApp {
 
   constructor(userName) {
     this.USER_NAME = userName;
+    this.initTodoAppComponents();
+  }
+
+  async initTodoAppComponents() {
     if (this.USER_NAME) {
       this.todoHeader = new TodoHeader({
         $element: $TODO_HEADER,
@@ -27,12 +31,12 @@ export default class TodoApp {
         }
       });
 
-      this.initTodoList().then(() => {
-        this.todoCount = new TodoCount({
-          $element: $TODO_COUNT,
-          totalCount: this.todoItems.length,
-          completeCount: this.todoItems.filter(item => item.isCompleted).length
-        });
+      await this.initTodoList();
+
+      this.todoCount = new TodoCount({
+        $element: $TODO_COUNT,
+        totalCount: this.todoItems.length,
+        completeCount: this.todoItems.filter(item => item.isCompleted).length
       });
 
       this.initUserList();
