@@ -1,24 +1,4 @@
-const contentWrapper = ({ _id, contents, isCompleted }) => {
-  const checked = isCompleted ? 'checked' : '';
-  return `<div class="view">
-      <input class="toggle" type="checkbox" name="${_id}" ${checked}/>
-      <label for="${_id}">${contents}</label>
-      <button class="delete" name="${_id}"></button>
-    </div>`;
-};
-
-const editInput = ({ _id, contents }) => {
-  return `<input class="edit" name="${_id}" value="${contents}" autofocus/>`;
-};
-
-const item = props => {
-  const { _id, isCompleted } = props;
-  const completed = isCompleted ? 'completed' : '';
-  return `<li id=${_id} class="${completed}">
-      ${contentWrapper(props)}${editInput(props)}
-    </li>`;
-};
-
+import { itemTemplate } from '../config/template.js';
 export default class TodoList {
   constructor({ $element, todoItems, onToggleItem, onDeleteItem, onEditItem }) {
     this.$element = $element;
@@ -106,7 +86,7 @@ export default class TodoList {
   }
 
   render() {
-    this.$element.innerHTML = `${this.todoItems.map(todoItem => item(todoItem)).join('')}`;
+    this.$element.innerHTML = `${this.todoItems.map(todoItem => itemTemplate(todoItem)).join('')}`;
   }
 
   setState(newItems) {
