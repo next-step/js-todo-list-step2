@@ -12,9 +12,11 @@ import {
   deleteAllTodo,
   changeTodo,
   getUsers,
+  sleep,
 } from '../api/api.js'
 import TodoUserList from './TodoUserList.js'
 import TodoAppTitle from './TodoAppTitle.js'
+import Loading from './Loading.js'
 
 export default function TodoApp() {
   const onAddTodo = async (text) => {
@@ -121,8 +123,11 @@ export default function TodoApp() {
   this.setState = async function (username) {
     this.username = username
 
+    this.loading.setState(true)
+    await sleep(200)
     const { todoList } = await getTodos(this.username)
     this.todos = todoList
+    this.loading.setState(false)
 
     this.filteredTodos = filteredTodosByStatus(this.todos, this.todoViewStatus)
     this.todoList.setState(this.filteredTodos)
@@ -139,6 +144,8 @@ export default function TodoApp() {
     this.todoViewStatus = todoStatus.ALL
 
     this.todoUserList = await getTodoUserList()
+
+    this.isLoading = false
 
     this.$todoInput = document.querySelector('.new-todo')
     this.$todoList = document.querySelector('.todo-list')
@@ -187,6 +194,11 @@ export default function TodoApp() {
       this.todoAppTitle = new TodoAppTitle({
         $target: this.$todoAppTitle,
         username: this.username,
+      })
+
+      this.loading = new Loading({
+        $target: this.$todoList,
+        isLoading: this.isLoading,
       })
     } catch (err) {
       console.log(err)

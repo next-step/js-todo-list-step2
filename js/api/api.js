@@ -92,3 +92,5 @@ export const getUsers = async () => {
     alert(ERROR_MESSAGE.NO_GET_TODOUSER_LIST)
   }
 }
+
+export const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
