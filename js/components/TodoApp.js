@@ -1,9 +1,5 @@
 import api from '../api.js';
-import TodoList from './TodoList.js';
-import Input from './Input.js';
-import TodoCount from './TodoCount.js';
-import TodoHeader from './TodoHeader.js';
-import UserList from './UserList.js';
+import { TodoList, Input, TodoCount, TodoHeader, UserList } from '../components/index.js';
 import {
   $TODO_HEADER,
   $TODO_LIST,
