@@ -1,12 +1,12 @@
 import { MEANING } from './constants.js';
 
-export const TODOCOUNT = (data, filteredData) => {
+export const TODOCOUNT = (todoCount, completedCount) => {
   return `
       <span id="todo-count" class="todo-count">
-        총 <span class="count"><strong>${data.length}</strong></span> 개 중
+        총 <span class="count"><strong>${todoCount}</strong></span> 개 중
       </span>
       <span id="completed-count" class="todo-count">
-        <span class="count">&nbsp;&nbsp;${filteredData.length}</span> 개 완료
+        <span class="count">&nbsp;&nbsp;${completedCount}</span> 개 완료
       </span>
       <button class="clear-all">모두 삭제</button>
   `;

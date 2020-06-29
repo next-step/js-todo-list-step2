@@ -8,11 +8,14 @@ export default class UserList {
     this.userArray = userArray;
     this.$targetUserList = $targetUserList;
 
-    this.$targetUserList.addEventListener('click', (e) => {
-      if (e.target.className === 'ripple') {
-        onClickUser(e.target.textContent);
-      }
-    });
+    this.$targetUserList.addEventListener(
+      'click',
+      ({ target: { className, textContent } }) => {
+        if (className === 'ripple') {
+          onClickUser(textContent);
+        }
+      },
+    );
     this.render();
   }
 
@@ -25,11 +28,11 @@ export default class UserList {
     this.userArray = await api.fetchUsers();
     if (this.userArray.length === 0) {
       this.$targetUserList.innerHTML = MESSAGE.REGISTER_USER;
-    } else {
-      this.$targetUserList.innerHTML = templates.USERLIST(
-        this.username,
-        this.userArray,
-      );
+      return;
     }
+    this.$targetUserList.innerHTML = templates.USERLIST(
+      this.username,
+      this.userArray,
+    );
   }
 }

@@ -2,8 +2,8 @@ import { BASE_URL } from './constants.js';
 
 const request = async (url, option) => {
   try {
-    const result = await fetch(url, option);
-    return result.json();
+    const response = await fetch(url, option);
+    return response.json();
   } catch (e) {
     console.error(e);
   }
