@@ -32,3 +32,8 @@ export const ERROR_MESSAGE = {
 
 export const BASE_URL = 'https://blackcoffee-todolist.df.r.appspot.com'
 export const USERNAME = 'oceanide'
+
+export const KEY = {
+  ENTER: 'Enter',
+  ESC: 'Escape',
+}
