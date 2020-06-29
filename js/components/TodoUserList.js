@@ -32,7 +32,7 @@ export default function TodoUserList({
       : `<button class="ripple">${todoUser}</button>`
 
   this.setState = function (nextData) {
-    this.users = nextData
+    this.activeUser = nextData
     this.render()
   }
 

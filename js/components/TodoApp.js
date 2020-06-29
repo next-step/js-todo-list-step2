@@ -45,24 +45,29 @@ export default function TodoApp() {
 
   const onToggleTodo = async (index) => {
     const id = findTodoIdByStatus(index)
-    if (id !== null) {
-      await toggleTodo(this.username, id)
-      this.todos[index].isCompleted = !this.todos[index].isCompleted
-      this.setState(this.username)
+    if (id === null) {
+      return
     }
+    await toggleTodo(this.username, id)
+    this.todos[index].isCompleted = !this.todos[index].isCompleted
+    this.setState(this.username)
   }
 
   const onDeleteTodo = async (index) => {
     const id = findTodoIdByStatus(index)
-    if (id !== null) {
-      await deleteTodo(this.username, id)
-      this.todos.splice(index, 1)
-      this.setState(this.username)
+    if (id === null) {
+      return
     }
+    await deleteTodo(this.username, id)
+    this.todos.splice(index, 1)
+    this.setState(this.username)
   }
 
   const onChangeTodo = async (text, index) => {
     const id = findTodoIdByStatus(index)
+    if (id === null) {
+      return
+    }
     await changeTodo(this.username, id, { contents: text })
     this.todos[index].contents = text
     this.setState(this.username)
@@ -122,6 +127,7 @@ export default function TodoApp() {
     this.filteredTodos = filteredTodosByStatus(this.todos, this.todoViewStatus)
     this.todoList.setState(this.filteredTodos)
     this.todoCount.setState(this.filteredTodos)
+    this.todoUserList.setState(this.username)
     this.todoAppTitle.setState(this.username)
   }
 

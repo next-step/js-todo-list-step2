@@ -8,7 +8,7 @@ export default function TodoAppTitle({ $target, username }) {
   }
 
   this.$target = $target
-  this.title = this.$target.querySelector('span > strong')
+  this.$username = this.$target.querySelector('#username')
   this.username = username
 
   this.setState = function (nextData) {
@@ -18,7 +18,7 @@ export default function TodoAppTitle({ $target, username }) {
 
   this.render = function () {
     this.$target.dataset.username = this.username
-    this.title.innerHTML = this.username
+    this.$username.innerHTML = this.username
   }
   this.render()
 }

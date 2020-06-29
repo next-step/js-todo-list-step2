@@ -28,28 +28,19 @@ export default function TodoList({
     </li>`
 
   const onClickHandler = (e) => {
-    if (
-      e.target.nodeName === 'INPUT' &&
-      e.target.classList.contains(todoClassName.TOGGLE)
-    ) {
+    if (e.target.classList.contains(todoClassName.TOGGLE)) {
       const id = e.target.closest('li').dataset.id
       onToggleTodo(Number(id))
     }
 
-    if (
-      e.target.nodeName === 'BUTTON' &&
-      e.target.classList.contains(todoClassName.DESTROY)
-    ) {
+    if (e.target.classList.contains(todoClassName.DESTROY)) {
       const id = e.target.closest('li').dataset.id
       onDeleteTodo(Number(id))
     }
   }
 
   const onKeydownHandler = (e) => {
-    if (
-      e.target.nodeName === 'INPUT' &&
-      e.target.classList.contains(todoClassName.EDIT)
-    ) {
+    if (e.target.classList.contains(todoClassName.EDIT)) {
       const li = e.target.closest('li')
 
       if (e.key === 'Enter' && e.target.value) {
@@ -66,10 +57,7 @@ export default function TodoList({
   }
 
   const onDbClickHandler = (e) => {
-    if (
-      e.target.nodeName === 'LABEL' &&
-      e.target.classList.contains(todoClassName.LABEL)
-    ) {
+    if (e.target.classList.contains(todoClassName.LABEL)) {
       const li = e.target.closest('li')
 
       li.classList.add(todoClassName.EDITING)
@@ -81,10 +69,7 @@ export default function TodoList({
   }
 
   const onFocusoutHandler = (e) => {
-    if (
-      e.target.nodeName === 'INPUT' &&
-      e.target.classList.contains(todoClassName.EDIT)
-    ) {
+    if (e.target.classList.contains(todoClassName.EDIT)) {
       e.target.value = this.todoInitialInputValue
 
       const li = e.target.closest('li')

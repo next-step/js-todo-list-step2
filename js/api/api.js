@@ -1,4 +1,4 @@
-import { BASE_URL } from '../utils/constant.js'
+import { BASE_URL, ERROR_MESSAGE } from '../utils/constant.js'
 
 const requestApi = async (path, { method = 'GET', header, body }) => {
   const option = {
@@ -28,7 +28,7 @@ export const getTodos = async (username) => {
     return await requestApi(`/${username}/item`, { method: 'GET' })
   } catch (err) {
     console.error(err)
-    console.error('Todo list를 가져오는데 실패했습니다.')
+    console.error(ERROR_MESSAGE.NO_GET_TODOLIST)
     return { todoList: [] }
   }
 }
@@ -41,7 +41,7 @@ export const addTodo = async (username, content) => {
     })
   } catch (err) {
     console.error(err)
-    alert('Todo를 추가하는데 실패했습니다.')
+    alert(ERROR_MESSAGE.NO_ADD_TODO)
   }
 }
 
@@ -50,7 +50,7 @@ export const toggleTodo = async (username, id) => {
     await requestApi(`/${username}/item/${id}/toggle`, { method: 'PUT' })
   } catch (err) {
     console.error(err)
-    alert('Todo 완료처리하는데 실패했습니다.')
+    alert(ERROR_MESSAGE.NO_COMPLETE_TODO)
   }
 }
 
@@ -59,7 +59,7 @@ export const deleteTodo = async (username, id) => {
     return await requestApi(`/${username}/item/${id}`, { method: 'DELETE' })
   } catch (err) {
     console.error(err)
-    alert('Todo를 삭제하는데 실패했습니다.')
+    alert(ERROR_MESSAGE.NO_DELETE_TODO)
   }
 }
 
@@ -68,7 +68,7 @@ export const deleteAllTodo = async (username) => {
     return await requestApi(`/${username}/items`, { method: 'DELETE' })
   } catch (err) {
     console.error(err)
-    alert('Todo를 모두 삭제하는데 실패했습니다.')
+    alert(ERROR_MESSAGE.NO_DELETE_TODOLIST)
   }
 }
 
@@ -80,7 +80,7 @@ export const changeTodo = async (username, id, content) => {
     })
   } catch (err) {
     console.error(err)
-    alert('Todo를 수정하는데 실패했습니다.')
+    alert(ERROR_MESSAGE.NO_CHANGE_TODO)
   }
 }
 
@@ -89,6 +89,6 @@ export const getUsers = async () => {
     return await requestApi(``, { method: 'GET' })
   } catch (err) {
     console.error(err)
-    alert('Todo User list를 가져오는데 실패했습니다')
+    alert(ERROR_MESSAGE.NO_GET_TODOUSER_LIST)
   }
 }
