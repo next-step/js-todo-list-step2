@@ -1,4 +1,5 @@
 import api from '../api.js';
+import { isEnterKey, isEscKey } from '../validator.js';
 import { itemTemplate } from '../config/template.js';
 
 export default class TodoList {
@@ -72,13 +73,13 @@ export default class TodoList {
         return;
       }
 
-      if (e.key === 'Escape') {
+      if (isEscKey(e)) {
         handleFinishEdit();
         return;
       }
 
-      if (e.key === 'Enter') {
-        handleFinishEdit(e.target.value);
+      if (isEnterKey(e)) {
+        handleFinishEdit(e.target.value.trim());
         return;
       }
     });

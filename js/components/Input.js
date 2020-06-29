@@ -1,3 +1,5 @@
+import { isEnterKey } from '../validator.js';
+
 export default class Input {
   constructor({ $element, onEnter }) {
     this.$element = $element;
@@ -5,7 +7,7 @@ export default class Input {
 
     this.$element.addEventListener('keypress', e => {
       const value = e.target.value.trim();
-      if (e.key === 'Enter' && value) {
+      if (isEnterKey(e) && value) {
         this.handleEnter(value);
         this.$element.value = '';
       }
