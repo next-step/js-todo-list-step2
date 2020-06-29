@@ -1,5 +1,5 @@
 export default function TodoDeleteAll({ $target, onDeleteAll }) {
-  if (!(this instanceof TodoDeleteAll)) {
+  if (!new.target) {
     throw new Error('TodoDeletAll must be called with new')
   }
 

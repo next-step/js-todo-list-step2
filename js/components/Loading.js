@@ -1,5 +1,5 @@
 export default function Loading({ $target, isLoading }) {
-  if (!(this instanceof Loading)) {
+  if (!new.target) {
     throw new Error('Loading must be called with new')
   }
 

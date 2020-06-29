@@ -1,5 +1,5 @@
 export default function TodoAppTitle({ $target, username }) {
-  if (!(this instanceof TodoAppTitle)) {
+  if (!new.target) {
     throw new Error('TodoAppTitle must be called with new')
   }
 

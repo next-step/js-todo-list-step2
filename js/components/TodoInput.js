@@ -1,5 +1,5 @@
 export default function TodoInput({ $target, onAddTodo }) {
-  if (!(this instanceof TodoInput)) {
+  if (!new.target) {
     throw new Error('TodoInput must be called with new')
   }
 

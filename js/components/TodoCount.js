@@ -1,5 +1,5 @@
 export default function TodoCount({ data, $target }) {
-  if (!(this instanceof TodoCount)) {
+  if (!new.target) {
     throw new Error('TodoCount must be called with new')
   }
 

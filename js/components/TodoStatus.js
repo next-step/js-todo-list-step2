@@ -2,7 +2,7 @@ import { todoStatus } from '../utils/constant.js'
 import { todoClassName } from '../utils/constant.js'
 
 export default function TodoStatus({ $target, onSetTodoStatus }) {
-  if (!(this instanceof TodoStatus)) {
+  if (!new.target) {
     throw new Error('TodoStatus must be called with new')
   }
 

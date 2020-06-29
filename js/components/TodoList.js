@@ -7,7 +7,7 @@ export default function TodoList({
   onDeleteTodo,
   onChangeTodo,
 }) {
-  if (!(this instanceof TodoList)) {
+  if (!new.target) {
     throw new Error('TodoList must be called with new')
   }
 
@@ -49,7 +49,8 @@ export default function TodoList({
 
         li.classList.remove(todoClassName.EDITING)
         onChangeTodo(text, Number(id))
-      } else if (e.key === 'Escape') {
+      }
+      if (e.key === 'Escape') {
         e.target.value = this.todoInitialInputValue
         li.classList.remove(todoClassName.EDITING)
       }

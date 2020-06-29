@@ -6,7 +6,7 @@ export default function TodoUserList({
   activeUser,
   onSetActiveUser,
 }) {
-  if (!(this instanceof TodoUserList)) {
+  if (!new.target) {
     throw new Error('TodoUsers must be called with new')
   }
 
@@ -27,9 +27,9 @@ export default function TodoUserList({
   }
 
   const todoUserTemplate = (todoUser) =>
-    todoUser === this.activeUser
-      ? `<button class="ripple active">${todoUser}</button>`
-      : `<button class="ripple">${todoUser}</button>`
+    `<button class="${
+      todoUser === this.activeUser ? 'ripple active' : 'ripple'
+    }">${todoUser}</button>`
 
   this.setState = function (nextData) {
     this.activeUser = nextData
