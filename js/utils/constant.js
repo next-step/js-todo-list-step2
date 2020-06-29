@@ -30,5 +30,5 @@ export const ERROR_MESSAGE = {
   NO_GET_TODOUSER_LIST: 'Todo User List를 가져오는데 실패했습니다',
 }
 
-export const BASE_URL = 'https://blackcoffee-todolist.df.r.appspot.com/api/u'
+export const BASE_URL = 'https://blackcoffee-todolist.df.r.appspot.com'
 export const USERNAME = 'oceanide'

@@ -25,7 +25,7 @@ const requestApi = async (path, { method = 'GET', header, body }) => {
 
 export const getTodos = async (username) => {
   try {
-    return await requestApi(`/${username}/item`, { method: 'GET' })
+    return await requestApi(`/api/u/${username}/item`, { method: 'GET' })
   } catch (err) {
     console.error(err)
     console.error(ERROR_MESSAGE.NO_GET_TODOLIST)
@@ -35,7 +35,7 @@ export const getTodos = async (username) => {
 
 export const addTodo = async (username, content) => {
   try {
-    return await requestApi(`/${username}/item`, {
+    return await requestApi(`/api/u/${username}/item`, {
       method: 'POST',
       body: JSON.stringify(content),
     })
@@ -47,7 +47,7 @@ export const addTodo = async (username, content) => {
 
 export const toggleTodo = async (username, id) => {
   try {
-    await requestApi(`/${username}/item/${id}/toggle`, { method: 'PUT' })
+    await requestApi(`/api/u/${username}/item/${id}/toggle`, { method: 'PUT' })
   } catch (err) {
     console.error(err)
     alert(ERROR_MESSAGE.NO_COMPLETE_TODO)
@@ -56,7 +56,9 @@ export const toggleTodo = async (username, id) => {
 
 export const deleteTodo = async (username, id) => {
   try {
-    return await requestApi(`/${username}/item/${id}`, { method: 'DELETE' })
+    return await requestApi(`/api/u/${username}/item/${id}`, {
+      method: 'DELETE',
+    })
   } catch (err) {
     console.error(err)
     alert(ERROR_MESSAGE.NO_DELETE_TODO)
@@ -65,7 +67,7 @@ export const deleteTodo = async (username, id) => {
 
 export const deleteAllTodo = async (username) => {
   try {
-    return await requestApi(`/${username}/items`, { method: 'DELETE' })
+    return await requestApi(`/api/u/${username}/items`, { method: 'DELETE' })
   } catch (err) {
     console.error(err)
     alert(ERROR_MESSAGE.NO_DELETE_TODOLIST)
@@ -74,7 +76,7 @@ export const deleteAllTodo = async (username) => {
 
 export const changeTodo = async (username, id, content) => {
   try {
-    return await requestApi(`/${username}/item/${id}`, {
+    return await requestApi(`/api/u/${username}/item/${id}`, {
       method: 'PUT',
       body: JSON.stringify(content),
     })
@@ -86,7 +88,7 @@ export const changeTodo = async (username, id, content) => {
 
 export const getUsers = async () => {
   try {
-    return await requestApi(``, { method: 'GET' })
+    return await requestApi(`/api/u`, { method: 'GET' })
   } catch (err) {
     console.error(err)
     alert(ERROR_MESSAGE.NO_GET_TODOUSER_LIST)
