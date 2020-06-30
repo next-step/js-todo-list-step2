@@ -1,4 +1,5 @@
 import { todoClassName } from '../utils/constant.js'
+import { isEnterKey, isEscKey, isNotEmptyString } from '../utils/validator.js'
 
 export default function TodoList({
   data,
@@ -45,14 +46,14 @@ export default function TodoList({
     }
     const li = e.target.closest('li')
 
-    if (e.key === 'Enter' && e.target.value) {
+    if (isEnterKey(e) && isNotEmptyString(e.target.value)) {
       const text = e.target.value
       const id = li.dataset.id
 
       li.classList.remove(todoClassName.EDITING)
       onChangeTodo(text, Number(id))
     }
-    if (e.key === 'Escape') {
+    if (isEscKey(e)) {
       e.target.value = this.todoInitialInputValue
       li.classList.remove(todoClassName.EDITING)
     }
