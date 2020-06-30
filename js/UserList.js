@@ -1,6 +1,6 @@
 import api from './util/api.js';
 import { UserListTemplate, LoadingTemplate } from './util/templates.js';
-import { MESSAGE } from './util/constants.js';
+import { MESSAGE, ERROR_TYPE } from './util/constants.js';
 
 export default class UserList {
   constructor({ username, userArray, $targetUserList, onClickUser }) {
@@ -25,14 +25,19 @@ export default class UserList {
   }
   async render() {
     this.$targetUserList.innerHTML = LoadingTemplate;
-    this.userArray = await api.fetchUsers();
-    if (this.userArray.length === 0) {
-      this.$targetUserList.innerHTML = MESSAGE.REGISTER_USER;
-      return;
+    try {
+      this.userArray = await api.fetchUsers();
+      if (this.userArray.length === 0) {
+        this.$targetUserList.innerHTML = MESSAGE.REGISTER_USER;
+        return;
+      }
+      this.$targetUserList.innerHTML = UserListTemplate(
+        this.username,
+        this.userArray,
+      );
+    } catch (e) {
+      this.$targetUserList.innerHTML = '';
+      console.error(ERROR_TYPE.CAN_NOT_LOAD_USER_LIST);
     }
-    this.$targetUserList.innerHTML = UserListTemplate(
-      this.username,
-      this.userArray,
-    );
   }
 }
