@@ -18,6 +18,7 @@ export const todoClassName = {
   EDIT: 'edit',
   LABEL: 'label',
   RIPPLE: 'ripple',
+  CHIP: 'chip',
 }
 
 export const ERROR_MESSAGE = {
@@ -27,6 +28,7 @@ export const ERROR_MESSAGE = {
   NO_DELETE_TODO: 'Todo를 삭제하는데 실패했습니다',
   NO_DELETE_TODOLIST: 'Todo를 모두 삭제하는데 실패했습니다',
   NO_CHANGE_TODO: 'Todo를 수정하는데 실패했습니다',
+  NO_CHANGE_TODO_PRIORITY: 'Todo Priority를 수정하는데 실패했습니다',
   NO_GET_TODOUSER_LIST: 'Todo User List를 가져오는데 실패했습니다',
 }
 

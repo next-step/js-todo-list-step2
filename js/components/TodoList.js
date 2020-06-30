@@ -7,6 +7,7 @@ export default function TodoList({
   onToggleTodo,
   onDeleteTodo,
   onChangeTodo,
+  onChangeTodoPriority,
 }) {
   if (!new.target) {
     throw new Error('TodoList must be called with new')
@@ -16,13 +17,27 @@ export default function TodoList({
     throw new Error('$target must be injected')
   }
 
+  const todoPriorityTemplate = (priority) =>
+    priority
+      ? `<span class="chip ${
+          priority === 1 ? 'primary' : 'secondary'
+        }">${priority}순위</span>`
+      : `<select class="chip select">
+          <option value="0" selected>순위</option>
+          <option value="1">1순위</option>
+          <option value="2">2순위</option>
+        </select>`
+
   const todoItemTemplate = (todoItem, index) => `
     <li data-id="${index}" class="${todoItem.isCompleted ? 'completed' : ''}">
       <div class="view">
         <input class="toggle" type="checkbox" ${
           todoItem.isCompleted ? 'checked' : ''
         }>
-        <label class="label">${todoItem.contents}</label>
+        <label class="label">
+          ${todoPriorityTemplate(todoItem.priority)}
+          ${todoItem.contents}
+        </label>
         <button class="destroy"></button>
       </div>
       <input class="edit" value="${todoItem.contents}">
@@ -86,6 +101,15 @@ export default function TodoList({
     }
   }
 
+  const onChangeEventHandler = (e) => {
+    if (!e.target.classList.contains(todoClassName.CHIP)) {
+      return
+    }
+    const li = e.target.closest('li')
+    const id = li.dataset.id
+    onChangeTodoPriority(Number(id), Number(e.target.value))
+  }
+
   this.setState = function (nextData) {
     this.todos = nextData
     this.render()
@@ -100,6 +124,7 @@ export default function TodoList({
     this.$target.addEventListener('dblclick', onDbClickHandler)
     this.$target.addEventListener('keydown', onKeydownHandler)
     this.$target.addEventListener('focusout', onFocusoutHandler)
+    this.$target.addEventListener('change', onChangeEventHandler)
   }
 
   this.init = function () {

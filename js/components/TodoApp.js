@@ -11,6 +11,7 @@ import {
   deleteTodo,
   deleteAllTodo,
   changeTodo,
+  changeTodoPriority,
   getUsers,
   sleep,
 } from '../api/api.js'
@@ -72,6 +73,16 @@ export default function TodoApp() {
     }
     await changeTodo(this.username, id, { contents: text })
     this.todos[index].contents = text
+    this.setState(this.username)
+  }
+
+  const onChangeTodoPriority = async (index, priority) => {
+    const id = findTodoIdByStatus(index)
+    if (id === null) {
+      return
+    }
+    await changeTodoPriority(this.username, id, { priority: priority })
+    this.todos[index].priority = priority
     this.setState(this.username)
   }
 
@@ -168,6 +179,7 @@ export default function TodoApp() {
         onToggleTodo,
         onDeleteTodo,
         onChangeTodo,
+        onChangeTodoPriority,
       })
 
       this.todoCount = new TodoCount({

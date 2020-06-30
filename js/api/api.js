@@ -86,6 +86,18 @@ export const changeTodo = async (username, id, content) => {
   }
 }
 
+export const changeTodoPriority = async (username, id, content) => {
+  try {
+    return await requestApi(`/api/u/${username}/item/${id}/priority`, {
+      method: 'PUT',
+      body: JSON.stringify(content),
+    })
+  } catch (err) {
+    console.error(err)
+    alert(ERROR_MESSAGE.NO_CHANGE_TODO_PRIORITY)
+  }
+}
+
 export const getUsers = async () => {
   try {
     return await requestApi(`/api/u`, { method: 'GET' })
