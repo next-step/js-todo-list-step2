@@ -81,7 +81,7 @@ export default function TodoApp() {
     if (id === null) {
       return
     }
-    await changeTodoPriority(this.username, id, { priority: priority })
+    await changeTodoPriority(this.username, id, { priority })
     this.todos[index].priority = priority
     this.setState(this.username)
   }

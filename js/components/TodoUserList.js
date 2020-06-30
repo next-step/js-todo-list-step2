@@ -21,7 +21,7 @@ export default function TodoUserList({
     if (!e.target.classList.contains(todoClassName.RIPPLE)) {
       return
     }
-    onSetActiveUser(e.target.innerHTML)
+    onSetActiveUser(e.target.textContent)
   }
 
   const todoUserTemplate = (todoUser) =>
