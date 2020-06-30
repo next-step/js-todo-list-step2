@@ -102,23 +102,14 @@ export default function TodoApp() {
     return userList.map((user) => user.name)
   }
 
-  const filteredTodosByStatus = (todos, status) => {
-    let filteredTodos = []
-
-    switch (status) {
-      case todoStatus.ALL:
-        filteredTodos = todos
-        break
-
-      case todoStatus.ACTIVE:
-        filteredTodos = todos.filter((todo) => todo.isCompleted === false)
-        break
-
-      case todoStatus.COMPLETED:
-        filteredTodos = todos.filter((todo) => todo.isCompleted === true)
-        break
+  const filteredTodosByStatus = (status) => {
+    const filteredTodos = {
+      [todoStatus.ALL]: this.todos,
+      [todoStatus.ACTIVE]: this.todos.filter((todo) => !todo.isCompleted),
+      [todoStatus.COMPLETED]: this.todos.filter((todo) => todo.isCompleted),
     }
-    return filteredTodos
+
+    return filteredTodos[status]
   }
 
   const onSetTodoStatus = (status) => {
@@ -135,7 +126,7 @@ export default function TodoApp() {
     this.todos = todoList
     this.loading.setState(false)
 
-    this.filteredTodos = filteredTodosByStatus(this.todos, this.todoViewStatus)
+    this.filteredTodos = filteredTodosByStatus(this.todoViewStatus)
     this.todoList.setState(this.filteredTodos)
     this.todoCount.setState(this.filteredTodos)
     this.todoUserList.setState(this.username)
