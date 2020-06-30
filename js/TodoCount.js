@@ -23,6 +23,10 @@ export default class TodoCount {
     if (this.username) {
       const response = await api.fetchUserTodo(this.username);
       const data = response.todoList;
+      if (!data) {
+        this.$targetTodoCountContainer.innerHTML = TodoCountTemplate(0, 0);
+        return;
+      }
       const completedData =
         data && data.filter((todo) => todo.isCompleted === true);
       this.$targetTodoCountContainer.innerHTML = TodoCountTemplate(

@@ -12,28 +12,20 @@ export const TodoCountTemplate = (todoCount, completedCount) => {
   `;
 };
 
-const CHIP = (priority) => {
-  return `
-      <div class="chip-container">
-        <span class="chip ${
-          priority === MEANING.PRIMARY
-            ? 'primary'
-            : priority === MEANING.SECONDARY
-            ? 'secondary'
-            : ''
-        }">${priority}순위</span>
-        <span class="delete">초기화</span>
-      </div>`;
-};
-
 const PRIORITY = {
   [MEANING.NOTHING]: `<select class="chip select">
                         <option value="0" selected>순위</option>
                         <option value="1">1순위</option>
                         <option value="2">2순위</option>
                       </select>`,
-  [MEANING.PRIMARY]: CHIP(MEANING.PRIMARY),
-  [MEANING.SECONDARY]: CHIP(MEANING.SECONDARY),
+  [MEANING.PRIMARY]: `<div class="chip-container">
+                        <span class="chip primary">1순위</span>
+                        <span class="delete">초기화</span>
+                      </div>`,
+  [MEANING.SECONDARY]: `<div class="chip-container">
+                          <span class="chip secondary">2순위</span>
+                          <span class="delete">초기화</span>
+                        </div>`,
 };
 
 export const TodoListTemplate = (todoList) => {

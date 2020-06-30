@@ -58,15 +58,21 @@ export default class TodoList {
       const { className } = e.target;
       if (className === 'edit') {
         const $targetLi = e.target.closest('li');
-        if (e.key === KEY_NAME.ESC) {
-          e.target.value = '';
-          functions.backToOriginalToggle($targetLi);
-        } else if (e.key === KEY_NAME.ENTER && e.target.value !== '') {
-          const { id } = $targetLi.dataset;
-          const text = e.target.value;
-          onEdit(id, text);
-          functions.backToOriginalToggle($targetLi);
-        }
+        const selectAction = {
+          Escape: () => {
+            e.target.value = '';
+            functions.backToOriginalToggle($targetLi);
+          },
+          Enter: () => {
+            const { id } = $targetLi.dataset;
+            const text = e.target.value;
+            text && onEdit(id, text);
+            functions.backToOriginalToggle($targetLi);
+          },
+        };
+        selectAction[e.key]
+          ? selectAction[e.key]()
+          : console.error(ERROR_TYPE.NO_MATCH_KEY);
       }
     });
   }
@@ -78,8 +84,13 @@ export default class TodoList {
 
   async render() {
     this.$targetTodoList.insertAdjacentHTML('beforeend', LoadingTemplate);
-    const response = await api.fetchUserTodo(this.username);
-    const data = response.todoList;
-    this.$targetTodoList.innerHTML = TodoListTemplate(data);
+    try {
+      const response = await api.fetchUserTodo(this.username);
+      const data = response.todoList;
+      this.$targetTodoList.innerHTML = TodoListTemplate(data);
+    } catch (e) {
+      this.$targetTodoList.innerHTML = '';
+      console.error(ERROR_TYPE.CAN_NOT_LOAD);
+    }
   }
 }
