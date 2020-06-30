@@ -7,9 +7,8 @@ export default class TodoList {
     this.userName = userName;
     this.$element = $element;
     this.todoItems = todoItems;
-    this.isEditingItemId = -1; // 현재 편집 중인 아이템의 id 저장
-
-    // TODO: validation
+    this.editingItemId = -1; // 현재 편집 중인 아이템의 id 저장
+    this.editingItemCompleted = ''; // 현재 편집 중인 아이템의 완료 상태 임시 저장
 
     this.render();
 
@@ -29,8 +28,8 @@ export default class TodoList {
 
       // 체크 애니메이션을 위해서 html 원소 직접 접근
       const id = e.target.name;
-      const $targetLi = document.querySelector(`li[id=${id}]`);
-      const $targetInput = document.querySelector(`input[name="${id}"]`);
+      const $targetLi = e.target.closest('li');
+      const $targetInput = e.target.closest('input');
       if ($targetInput.hasAttribute('checked')) {
         $targetLi.classList.remove('completed');
         $targetInput.removeAttribute('checked');
@@ -45,10 +44,11 @@ export default class TodoList {
 
     const handleFinishEdit = async saveContent => {
       if (saveContent) {
-        await api.modifyItem(this.userName, this.isEditingItemId, saveContent);
-        this.isEditingItemId = -1;
+        await api.modifyItem(this.userName, this.editingItemId, saveContent);
+        this.editingItemId = -1;
+        onEditItem();
       }
-      onEditItem();
+      this.editingItemCompleted = '';
     };
 
     // 마우스 더블 클릭 이벤트
@@ -56,24 +56,41 @@ export default class TodoList {
       // 아이템 편집
       if (e.target.nodeName === 'LABEL') {
         const editId = e.target.htmlFor;
-        this.isEditingItemId = editId;
+        this.editingItemId = editId;
 
-        const $targetLi = document.querySelector(`li[id=${editId}]`);
-        $targetLi.className = 'editing';
+        const $targetLi = e.target.closest('li');
+        this.editingItemCompleted = $targetLi.className;
+        $targetLi.className = 'editing'; // 아이템 완료/미완료 상관없이 editing으로 설정
 
         // 편집 아이템으로 포커스
         const editInputElement = document.querySelector(`input.edit[name="${editId}"]`);
+        editInputElement.value = e.target.innerText;
         editInputElement.focus();
+      }
+    });
+
+    this.$element.addEventListener('focusin', e => {
+      if (e.target.className === 'edit') {
+        e.target.selectionStart = e.target.value.length;
+      }
+    });
+
+    this.$element.addEventListener('focusout', e => {
+      if (e.target.className === 'edit') {
+        e.target.closest('li').className = this.editingItemCompleted;
+        e.target.value = e.target.value;
+        handleFinishEdit();
       }
     });
 
     // 키보드 입력 이벤트
     this.$element.addEventListener('keydown', e => {
-      if (this.isEditingItemId === -1) {
+      if (this.editingItemId === -1) {
         return;
       }
 
       if (isEscKey(e)) {
+        e.target.closest('li').className = this.editingItemCompleted;
         handleFinishEdit();
         return;
       }
@@ -81,12 +98,6 @@ export default class TodoList {
       if (isEnterKey(e)) {
         handleFinishEdit(e.target.value.trim());
         return;
-      }
-    });
-
-    this.$element.addEventListener('focusout', e => {
-      if (e.target.className === 'edit') {
-        handleFinishEdit();
       }
     });
   }

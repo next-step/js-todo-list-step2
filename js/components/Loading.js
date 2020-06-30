@@ -1,13 +1,13 @@
 import { $LOADING, $TODO_LIST } from '../config/htmlElement.js';
 class Loading {
   constructor() {
-    this.loadingView = true;
+    this.isLoading = true;
     $LOADING.className = 'loading-view';
     $TODO_LIST.classList.add('loading-hide');
   }
 
   render() {
-    if (this.loadingView) {
+    if (this.isLoading) {
       $LOADING.className = 'loading-view';
       $TODO_LIST.classList.remove('loading-view');
       $TODO_LIST.classList.add('loading-hide');
@@ -19,7 +19,7 @@ class Loading {
   }
 
   setState(view) {
-    this.loadingView = view;
+    this.isLoading = view;
     this.render();
   }
 }
