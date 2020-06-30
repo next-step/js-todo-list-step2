@@ -1,5 +1,5 @@
 import api from './util/api.js';
-import { KEY_NAME, ERROR_TYPE } from './util/constants.js';
+import { ERROR_TYPE } from './util/constants.js';
 import { TodoListTemplate, LoadingTemplate } from './util/templates.js';
 import * as functions from './util/functions.js';
 
