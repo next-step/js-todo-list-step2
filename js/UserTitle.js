@@ -1,4 +1,4 @@
-import * as templates from './util/templates.js';
+import { UserTitleTemplate } from './util/templates.js';
 
 export default class UserTitle {
   constructor({ username, $targetUserTitle }) {
@@ -12,6 +12,8 @@ export default class UserTitle {
   }
 
   render() {
-    this.$targetUserTitle.innerHTML = templates.USERTITLE(this.username);
+    this.$targetUserTitle.innerHTML = UserTitleTemplate(
+      this.username,
+    );
   }
 }

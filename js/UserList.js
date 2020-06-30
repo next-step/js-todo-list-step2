@@ -1,5 +1,5 @@
 import api from './util/api.js';
-import * as templates from './util/templates.js';
+import { UserListTemplate, LoadingTemplate } from './util/templates.js';
 import { MESSAGE } from './util/constants.js';
 
 export default class UserList {
@@ -24,13 +24,13 @@ export default class UserList {
     this.render();
   }
   async render() {
-    this.$targetUserList.innerHTML = templates.LOADING;
+    this.$targetUserList.innerHTML = LoadingTemplate;
     this.userArray = await api.fetchUsers();
     if (this.userArray.length === 0) {
       this.$targetUserList.innerHTML = MESSAGE.REGISTER_USER;
       return;
     }
-    this.$targetUserList.innerHTML = templates.USERLIST(
+    this.$targetUserList.innerHTML = UserListTemplate(
       this.username,
       this.userArray,
     );

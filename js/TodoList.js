@@ -1,12 +1,11 @@
 import api from './util/api.js';
 import { KEY_NAME, ERROR_TYPE } from './util/constants.js';
-import * as templates from './util/templates.js';
+import { TodoListTemplate, LoadingTemplate } from './util/templates.js';
 import * as functions from './util/functions.js';
 
 export default class TodoList {
   constructor({
     username,
-    storeClassType,
     $targetTodoList,
     onToggle,
     onRemove,
@@ -15,7 +14,6 @@ export default class TodoList {
     onInitializePriority,
   }) {
     this.username = username;
-    this.storeClassType = storeClassType;
     this.$targetTodoList = $targetTodoList;
 
     this.$targetTodoList.addEventListener('click', (e) => {
@@ -43,7 +41,6 @@ export default class TodoList {
       const { className } = e.target;
       if (className === 'label') {
         const $targetLi = e.target.closest('li');
-        this.storeClassType = $targetLi.className;
         $targetLi.className = 'editing';
         $targetLi.querySelector('.edit').focus();
       }
@@ -52,7 +49,8 @@ export default class TodoList {
     this.$targetTodoList.addEventListener('focusout', (e) => {
       const { className } = e.target;
       if (className === 'edit') {
-        e.target.closest('li').className = this.storeClassType;
+        const $targetLi = e.target.closest('li');
+        functions.backToOriginalToggle($targetLi);
       }
     });
 
@@ -62,12 +60,12 @@ export default class TodoList {
         const $targetLi = e.target.closest('li');
         if (e.key === KEY_NAME.ESC) {
           e.target.value = '';
-          functions.toggleTarget($targetLi);
+          functions.backToOriginalToggle($targetLi);
         } else if (e.key === KEY_NAME.ENTER && e.target.value !== '') {
           const { id } = $targetLi.dataset;
           const text = e.target.value;
           onEdit(id, text);
-          functions.toggleTarget($targetLi);
+          functions.backToOriginalToggle($targetLi);
         }
       }
     });
@@ -79,9 +77,9 @@ export default class TodoList {
   }
 
   async render() {
-    this.$targetTodoList.insertAdjacentHTML('beforeend', templates.LOADING);
+    this.$targetTodoList.insertAdjacentHTML('beforeend', LoadingTemplate);
     const response = await api.fetchUserTodo(this.username);
     const data = response.todoList;
-    this.$targetTodoList.innerHTML = templates.TODOLIST(data);
+    this.$targetTodoList.innerHTML = TodoListTemplate(data);
   }
 }

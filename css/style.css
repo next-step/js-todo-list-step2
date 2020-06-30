@@ -343,6 +343,10 @@ button.user-register {
   font-weight: 300;
 }
 
+#completed-count {
+  margin-left: 10px;
+}
+
 .filters {
   margin: 0;
   padding: 0;

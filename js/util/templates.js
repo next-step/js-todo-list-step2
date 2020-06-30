@@ -1,12 +1,12 @@
 import { MEANING } from './constants.js';
 
-export const TODOCOUNT = (todoCount, completedCount) => {
+export const TodoCountTemplate = (todoCount, completedCount) => {
   return `
       <span id="todo-count" class="todo-count">
         총 <span class="count"><strong>${todoCount}</strong></span> 개 중
       </span>
       <span id="completed-count" class="todo-count">
-        <span class="count">&nbsp;&nbsp;${completedCount}</span> 개 완료
+        <span class="count">${completedCount}</span> 개 완료
       </span>
       <button class="clear-all">모두 삭제</button>
   `;
@@ -36,49 +36,46 @@ const PRIORITY = {
   [MEANING.SECONDARY]: CHIP(MEANING.SECONDARY),
 };
 
-export const TODOLIST = (data) => {
-  const result = data
+export const TodoListTemplate = (todoList) => {
+  return todoList
     .map((todo) => {
       return `
-        <li ${todo.isCompleted ? 'class=completed' : ''} data-id=${todo._id}>
-          <div class="view">
-            <input class="toggle" type="checkbox" ${
-              todo.isCompleted ? 'checked' : ''
-            } />
-            <label class="label">
-              ${PRIORITY[todo.priority]}
-              ${todo.contents}
-            </label>
-            <button class="destroy"></button>
-          </div>
-          <input class="edit" placeholder=${todo.contents} value="" />
-        </li>
-  `;
+      <li ${todo.isCompleted ? 'class=completed' : ''} data-id=${todo._id}>
+        <div class="view">
+          <input class="toggle" type="checkbox" ${
+            todo.isCompleted ? 'checked' : ''
+          } />
+          <label class="label">
+            ${PRIORITY[todo.priority]}
+            ${todo.contents}
+          </label>
+          <button class="destroy"></button>
+        </div>
+        <input class="edit" placeholder=${todo.contents} value="" />
+      </li>
+`;
     })
     .join('');
-  return result;
 };
 
-export const USERTITLE = (username) => {
-  const result = `
-    <div><strong>${username}</strong>'s</div>
-    <div>Todo List</div>
-  `;
-  return result;
+export const UserTitleTemplate = (username) => {
+  return `
+  <div><strong>${username}</strong>'s</div>
+  <div>Todo List</div>
+`;
 };
 
-export const USERLIST = (username, userArray) => {
-  const result = userArray
+export const UserListTemplate = (username, userArray) => {
+  return userArray
     .map((user) => {
       return `<button class="${
         user.name === username ? 'ripple active' : 'ripple'
       }">${user.name}</button>`;
     })
     .join('');
-  return result;
 };
 
-export const LOADING = `
+export const LoadingTemplate = `
   <li>
     <div class="view">
       <label class="label">

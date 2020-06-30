@@ -1,5 +1,5 @@
 import api from './util/api.js';
-import * as templates from './util/templates.js';
+import { TodoCountTemplate } from './util/templates.js';
 import { MESSAGE } from './util/constants.js';
 export default class TodoCount {
   constructor({ username, $targetTodoCountContainer, onRemoveAll }) {
@@ -25,7 +25,7 @@ export default class TodoCount {
       const data = response.todoList;
       const completedData =
         data && data.filter((todo) => todo.isCompleted === true);
-      this.$targetTodoCountContainer.innerHTML = templates.TODOCOUNT(
+      this.$targetTodoCountContainer.innerHTML = TodoCountTemplate(
         data.length,
         completedData.length,
       );

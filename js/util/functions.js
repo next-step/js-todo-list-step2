@@ -1,7 +1,7 @@
-export const toggleTarget = (target) => {
+export const backToOriginalToggle = (target) => {
+  target.classList.remove('editing');
   if (target.querySelector('.toggle').checked) {
     target.classList.add('completed');
     return;
   }
-  target.classList.remove('completed');
 };
