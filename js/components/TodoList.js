@@ -40,43 +40,48 @@ export default function TodoList({
   }
 
   const onKeydownHandler = (e) => {
-    if (e.target.classList.contains(todoClassName.EDIT)) {
-      const li = e.target.closest('li')
+    if (!e.target.classList.contains(todoClassName.EDIT)) {
+      return
+    }
+    const li = e.target.closest('li')
 
-      if (e.key === 'Enter' && e.target.value) {
-        const text = e.target.value
-        const id = li.dataset.id
+    if (e.key === 'Enter' && e.target.value) {
+      const text = e.target.value
+      const id = li.dataset.id
 
-        li.classList.remove(todoClassName.EDITING)
-        onChangeTodo(text, Number(id))
-      }
-      if (e.key === 'Escape') {
-        e.target.value = this.todoInitialInputValue
-        li.classList.remove(todoClassName.EDITING)
-      }
+      li.classList.remove(todoClassName.EDITING)
+      onChangeTodo(text, Number(id))
+    }
+    if (e.key === 'Escape') {
+      e.target.value = this.todoInitialInputValue
+      li.classList.remove(todoClassName.EDITING)
     }
   }
 
   const onDbClickHandler = (e) => {
-    if (e.target.classList.contains(todoClassName.LABEL)) {
-      const li = e.target.closest('li')
-
-      li.classList.add(todoClassName.EDITING)
-      const input = li.querySelector(`.${todoClassName.EDIT}`)
-      input.focus()
-      input.setSelectionRange(input.value.length, input.value.length)
-      this.todoInitialInputValue = input.value
+    if (!e.target.classList.contains(todoClassName.LABEL)) {
+      return
     }
+
+    const li = e.target.closest('li')
+    li.classList.add(todoClassName.EDITING)
+
+    const input = li.querySelector(`.${todoClassName.EDIT}`)
+    input.focus()
+    input.setSelectionRange(input.value.length, input.value.length)
+    this.todoInitialInputValue = input.value
   }
 
   const onFocusoutHandler = (e) => {
-    if (e.target.classList.contains(todoClassName.EDIT)) {
-      e.target.value = this.todoInitialInputValue
+    if (!e.target.classList.contains(todoClassName.EDIT)) {
+      return
+    }
 
-      const li = e.target.closest('li')
-      if (li.classList.contains(todoClassName.EDITING)) {
-        li.classList.remove(todoClassName.EDITING)
-      }
+    e.target.value = this.todoInitialInputValue
+
+    const li = e.target.closest('li')
+    if (li.classList.contains(todoClassName.EDITING)) {
+      li.classList.remove(todoClassName.EDITING)
     }
   }
 

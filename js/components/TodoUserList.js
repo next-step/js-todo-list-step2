@@ -18,12 +18,10 @@ export default function TodoUserList({
   this.activeUser = activeUser
 
   const onClickHandler = (e) => {
-    if (
-      e.target.nodeName === 'BUTTON' &&
-      e.target.classList.contains(todoClassName.RIPPLE)
-    ) {
-      onSetActiveUser(e.target.innerHTML)
+    if (!e.target.classList.contains(todoClassName.RIPPLE)) {
+      return
     }
+    onSetActiveUser(e.target.innerHTML)
   }
 
   const todoUserTemplate = (todoUser) =>
