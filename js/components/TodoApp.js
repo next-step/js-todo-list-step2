@@ -87,7 +87,7 @@ export default function TodoApp() {
   }
 
   const onDeleteAll = async () => {
-    this.todoViewStatus = todoStatus.DELETEALL
+    this.todos = []
     await deleteAllTodo(this.username)
     this.setState(this.username)
   }
@@ -116,11 +116,6 @@ export default function TodoApp() {
 
       case todoStatus.COMPLETED:
         filteredTodos = todos.filter((todo) => todo.isCompleted === true)
-        break
-
-      case todoStatus.DELETEALL:
-        filteredTodos = []
-        this.todoViewStatus = todoStatus.ALL
         break
     }
     return filteredTodos
