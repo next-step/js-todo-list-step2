@@ -17,7 +17,10 @@ const request = async (uri, method) => {
 };
 
 const api = {
-  getTodos: async (username) => request(`${API_URL}/${username}/item`),
+  getTodos: async (username) => {
+    const data = await request(`${API_URL}/${username}/item`);
+    return data.todoList;
+  },
   postTodo: async (username, todoText) => {
     return request(`${API_URL}/${username}/item`, {
       method: "POST",
