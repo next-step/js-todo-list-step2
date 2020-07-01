@@ -38,3 +38,16 @@ export const todoFilterTemplate = (filter) => {
       <a class="completed${completedSelected}" href="#/completed">완료한 일</a>
     </li>`;
 };
+
+export const userListTemplate = (users, userName) => {
+  return users
+    .map((user) => {
+      const active = user.name === userName ? "active" : "";
+      return `<button class="ripple ${active}">${user.name}</button>`;
+    })
+    .join("");
+};
+
+export const userTitleTemplate = (userName) => {
+  return `<span><strong>${userName}</strong>'s Todo List</span>`;
+};
