@@ -1,9 +1,10 @@
 import { checkSelector } from '../utils/validations.js'
 import { tagName, className, keyName, httpMethod } from '../utils/constants.js'
 import requestManager from '../api/api.js'
+import { todoItemHTMLTemplate } from '../utils/templates.js'
 
 export default function TodoList(props) {
-  const { selector, todos, username, getTodos, onSetPriority } = props
+  const { selector, todos, username, getTodos } = props
   if (new.target !== TodoList) {
     return new TodoList(props)
   }
@@ -115,36 +116,6 @@ export default function TodoList(props) {
     this.$target.addEventListener('keyup', keyUpEventHandler)
     this.$target.addEventListener('focusout', focusOutEventHandler)
     this.$target.addEventListener('change', changeEventHandler) // chip select
-  }
-
-  const getPriorityClassName = (priority) => {
-    return priority === '1' ? className.PRIORITY_FIRST : className.PRIORITY_SECOND
-  }
-
-  const getPriorityHTML = (priority) => {
-    return priority ?
-      `<span class="chip ${getPriorityClassName(priority)}">${priority}순위</span>`
-      :
-      `<select class="chip select">
-         <option value="0" selected>순위</option>
-         <option value="1">1순위</option>
-         <option value="2">2순위</option>
-      </select>`
-  }
-
-  const todoItemHTMLTemplate = ({ _id, contents, priority, isCompleted }, index) => {
-    return `
-      <li data-id=${_id} data-index=${index} class=${isCompleted ? 'completed' : ''}>
-          <div class="view">
-            <input class="toggle" type="checkbox" ${isCompleted ? 'checked' : ''}/>
-            <label class="label">
-                ${getPriorityHTML(priority)}
-                ${contents}
-            </label>
-            <button class="destroy"></button>
-          </div>
-          <input class="edit" value=${contents} />
-      </li>`
   }
 
   this.render = () => {

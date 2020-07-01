@@ -1,4 +1,5 @@
 import { checkSelector } from '../utils/validations.js'
+import { todoCountComponentTemplate } from '../utils/templates.js'
 
 export default function TodoCount(props) {
   if (new.target !== TodoCount) {
@@ -13,10 +14,7 @@ export default function TodoCount(props) {
   }
 
   this.setState = (totalCount, completedCount) => {
-    this.$target.innerHTML = `
-          <span id="todo-count" class="todo-count">총 <span class="count">${totalCount}</span> 개 중</span>
-          <span id="completed-count" class="todo-count"><span class="count">${completedCount}</span> 개 완료</span>
-     `
+    this.$target.innerHTML = todoCountComponentTemplate(totalCount, completedCount)
   }
 
   this.init()

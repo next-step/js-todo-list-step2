@@ -19,7 +19,7 @@ export default function App() {
 
   this.init = async () => {
     const { getTodos, onChangeUser, onFilter } = this
-    this.username = 'donguk'
+    this.username = 'donguk3'
     this.todos = []
     this.todoHash = {
       [filterStatus.ALL]: this.todos,
@@ -95,8 +95,8 @@ export default function App() {
         method: httpMethod.GET,
         path: `/api/u/${this.username}/item`,
       })
-      this.todos = todoList
-      this.todoHash = getTodoHash(todoList)
+      this.todos = todoList ? todoList : []
+      this.todoHash = getTodoHash(this.todos)
       this.setState()
     } catch (e) {
       console.error(e)
