@@ -7,6 +7,8 @@ export const errorMessageMap = {
   ZERO_LENGTH: "It Should not be 0 length",
   NOT_BOOLEAN: "It Should be Boolean",
   NOT_FUNCTION: "It Shold be Function",
+  FETCH_FAIL: (status) => `fetch fail. status : ${status}`,
+  FETCH_ERROR: (error) => `fetch error. error : ${error}`,
 };
 
 export const classNameMap = {
