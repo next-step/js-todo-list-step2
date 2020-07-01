@@ -1,7 +1,6 @@
 import { MEANING } from './constants.js';
 
-export const TodoCountTemplate = (todoCount, completedCount) => {
-  return `
+export const TodoCountTemplate = (todoCount, completedCount) => `
       <span id="todo-count" class="todo-count">
         총 <span class="count"><strong>${todoCount}</strong></span> 개 중
       </span>
@@ -10,7 +9,6 @@ export const TodoCountTemplate = (todoCount, completedCount) => {
       </span>
       <button class="clear-all">모두 삭제</button>
   `;
-};
 
 const PRIORITY = {
   [MEANING.NOTHING]: `<select class="chip select">
@@ -28,10 +26,10 @@ const PRIORITY = {
                         </div>`,
 };
 
-export const TodoListTemplate = (todoList) => {
-  return todoList
-    .map((todo) => {
-      return `
+export const TodoListTemplate = (todoList) =>
+  todoList
+    .map(
+      (todo) => `
       <li ${todo.isCompleted ? 'class=completed' : ''} data-id=${todo._id}>
         <div class="view">
           <input class="toggle" type="checkbox" ${
@@ -45,27 +43,23 @@ export const TodoListTemplate = (todoList) => {
         </div>
         <input class="edit" placeholder=${todo.contents} value="" />
       </li>
-`;
-    })
+`,
+    )
     .join('');
-};
 
-export const UserTitleTemplate = (username) => {
-  return `
+export const UserTitleTemplate = (username) => `
   <div><strong>${username}</strong>'s</div>
   <div>Todo List</div>
 `;
-};
 
-export const UserListTemplate = (username, userArray) => {
-  return userArray
+export const UserListTemplate = (username, userArray) =>
+  userArray
     .map((user) => {
       return `<button class="${
         user.name === username ? 'ripple active' : 'ripple'
       }">${user.name}</button>`;
     })
     .join('');
-};
 
 export const LoadingTemplate = `
   <li>

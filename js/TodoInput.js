@@ -10,22 +10,19 @@ export default class TodoInput {
     });
 
     this.$targetTodoInput.addEventListener('keyup', (e) => {
-      if (e.key === KEY_NAME.ENTER && e.target.value !== '') {
-        const userList = this.$targetUserList.querySelector('.ripple');
-        if (!userList) {
-          alert(MESSAGE.REGISTER_USER);
-          return;
-        }
-        const selectedUser = this.$targetUserList.querySelector(
-          '.ripple.active',
-        );
-        if (!selectedUser) {
-          alert(MESSAGE.SELECT_USER);
-          return;
-        }
-        e.target.value && onInput(e.target.value);
-        e.target.value = '';
+      if (e.key !== KEY_NAME.ENTER || e.target.value === '') return;
+      const userList = this.$targetUserList.querySelector('.ripple');
+      if (!userList) {
+        alert(MESSAGE.REGISTER_USER);
+        return;
       }
+      const selectedUser = this.$targetUserList.querySelector('.ripple.active');
+      if (!selectedUser) {
+        alert(MESSAGE.SELECT_USER);
+        return;
+      }
+      e.target.value && onInput(e.target.value);
+      e.target.value = '';
     });
   }
 }
