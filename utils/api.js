@@ -42,7 +42,7 @@ const api = {
   },
   modifyTodo: async (username, id, nextTodo) => {
     return request(`${API_URL}/${username}/item/${id}`, {
-      method: "POST",
+      method: "PUT",
       headers: {
         "Content-type": "application/json",
       },
