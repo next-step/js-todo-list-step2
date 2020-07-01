@@ -1,14 +1,14 @@
 import { Header, User, TodoInput, TodoList, TodoCount, TodoFilter, Loading } from './components/index.js'
-import { httpMethod, filterStatus, className } from './utils/constants.js'
+import { HTTP_METHOD, FILTER_STATUS, CLASS_NAME } from './utils/constants.js'
 import requestManager from "./api/api.js"
 
 const delay = (ms) => new Promise((resolve) => setTimeout(() => resolve(), ms))
 
 const getTodoHash = (todos) => {
   return {
-    [filterStatus.ALL]: todos,
-    [filterStatus.ACTIVE]: todos.filter(({isCompleted}) => !isCompleted),
-    [filterStatus.COMPLETED]: todos.filter(({isCompleted}) => isCompleted)
+    [FILTER_STATUS.ALL]: todos,
+    [FILTER_STATUS.ACTIVE]: todos.filter(({isCompleted}) => !isCompleted),
+    [FILTER_STATUS.COMPLETED]: todos.filter(({isCompleted}) => isCompleted)
   }
 }
 
@@ -22,11 +22,11 @@ export default function App() {
     this.username = 'donguk3'
     this.todos = []
     this.todoHash = {
-      [filterStatus.ALL]: this.todos,
-      [filterStatus.ACTIVE]: [],
-      [filterStatus.COMPLETED]: []
+      [FILTER_STATUS.ALL]: this.todos,
+      [FILTER_STATUS.ACTIVE]: [],
+      [FILTER_STATUS.COMPLETED]: []
     }
-    this.filterStatus = filterStatus.ALL
+    this.filterStatus = FILTER_STATUS.ALL
 
     this.$header = new Header({
       selector: '#user-title',
@@ -67,7 +67,7 @@ export default function App() {
       selector: '.todo-list'
     })
 
-    this.$removeAllBtn = document.querySelector(`.${className.REMOVE_ALL}`)
+    this.$removeAllBtn = document.querySelector(`.${CLASS_NAME.REMOVE_ALL}`)
     this.$removeAllBtn.addEventListener('click', this.onDeleteAll)
 
     this.getTodos()
@@ -92,7 +92,7 @@ export default function App() {
     // await delay(500) // delay 주고 싶다면 추가
     try {
       const { todoList } = await requestManager({
-        method: httpMethod.GET,
+        method: HTTP_METHOD.GET,
         path: `/api/u/${this.username}/item`,
       })
       this.todos = todoList ? todoList : []
@@ -117,7 +117,7 @@ export default function App() {
   this.onDeleteAll = async () => {
     try {
       await requestManager({
-        method: httpMethod.DELETE,
+        method: HTTP_METHOD.DELETE,
         path: `/api/u/${this.username}/items`,
       })
       this.getTodos()

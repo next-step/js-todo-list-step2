@@ -1,4 +1,4 @@
-import { className } from './constants.js'
+import { CLASS_NAME } from './constants.js'
 
 export const loadingComponentTemplate = ` 
                 <li>
@@ -20,7 +20,7 @@ export const todoCountComponentTemplate = (totalCount, completedCount) => {
 }
 
 const getPriorityClassName = (priority) => {
-  return priority === '1' ? className.PRIORITY_FIRST : className.PRIORITY_SECOND
+  return priority === '1' ? CLASS_NAME.PRIORITY_FIRST : CLASS_NAME.PRIORITY_SECOND
 }
 
 const getPriorityHTML = (priority) => {

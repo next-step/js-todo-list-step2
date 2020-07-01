@@ -1,5 +1,4 @@
-import { checkSelector } from '../utils/validations.js'
-import { keyName, httpMethod } from '../utils/constants.js'
+import { KEY_NAME, HTTP_METHOD } from '../utils/constants.js'
 import requestManager from '../api/api.js'
 
 export default function TodoInput(props) {
@@ -7,7 +6,6 @@ export default function TodoInput(props) {
     return new TodoInput(props)
   }
   const { selector, username, getTodos } = props
-  checkSelector(selector)
 
   this.init = () => {
     this.$target = document.querySelector(selector)
@@ -17,10 +15,10 @@ export default function TodoInput(props) {
 
   this.bindEvent = () => {
     const keyPressHandler = async (e) => {
-      if (e.key === keyName.ENTER && e.target.value.trim()) {
+      if (e.key === KEY_NAME.ENTER && e.target.value.trim()) {
         try {
           await requestManager({
-            method: httpMethod.POST,
+            method: HTTP_METHOD.POST,
             path: `/api/u/${this.username}/item`,
             body: { contents: e.target.value }
           })

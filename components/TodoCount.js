@@ -1,4 +1,3 @@
-import { checkSelector } from '../utils/validations.js'
 import { todoCountComponentTemplate } from '../utils/templates.js'
 
 export default function TodoCount(props) {
@@ -6,7 +5,6 @@ export default function TodoCount(props) {
     return new TodoCount(props)
   }
   const { selector, totalCount, completedCount } = props
-  checkSelector(selector)
 
   this.init = () => {
     this.$target = document.querySelector(selector)

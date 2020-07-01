@@ -1,20 +1,20 @@
 export const API_URL = 'https://blackcoffee-todolist.df.r.appspot.com'
 
-export const httpMethod = {
+export const HTTP_METHOD = {
   GET: 'GET',
   POST: 'POST',
   PUT: 'PUT',
   DELETE: 'DELETE',
 }
 
-export const tagName = {
+export const TAG_NAME = {
   A: 'A',
   INPUT: 'INPUT',
   BUTTON: 'BUTTON',
   SELECT: 'SELECT',
 }
 
-export const className = {
+export const CLASS_NAME = {
   EDIT: 'edit',
   EDITING: 'editing',
   TOGGLE: 'toggle',
@@ -23,12 +23,12 @@ export const className = {
   PRIORITY_SECOND: 'secondary',
 }
 
-export const keyName = {
+export const KEY_NAME = {
   ESC: 'Escape',
   ENTER: 'Enter',
 }
 
-export const filterStatus = {
+export const FILTER_STATUS = {
   ALL: 'all selected',
   ACTIVE: 'active',
   COMPLETED: 'completed',
