@@ -1,4 +1,4 @@
-import { errorMessageMap } from "./constants";
+import { errorMessageMap } from "./constants.js";
 
 const API_URL = "https://blackcoffee-todolist.df.r.appspot.com/api/u";
 
@@ -17,7 +17,7 @@ const request = async (uri, method) => {
 };
 
 const api = {
-  getTodos: async (username) => request(`${API_URL}/u/${username}/item`),
+  getTodos: async (username) => request(`${API_URL}/${username}/item`),
   postTodo: async (username, todoText) => {
     return request(`${API_URL}/${username}/item`, {
       method: "POST",
