@@ -123,7 +123,6 @@ export default function TodoList(props) {
   }
 
   this.setState = (username, todos) => {
-    this.username = username
     this.todos = todos
     this.render()
   }

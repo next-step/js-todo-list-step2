@@ -1,7 +1,5 @@
 export const API_URL = 'https://blackcoffee-todolist.df.r.appspot.com'
 
-export const STORAGE_KEY = 'TODO' //for localstorage
-
 export const httpMethod = {
   GET: 'GET',
   POST: 'POST',
@@ -10,6 +8,7 @@ export const httpMethod = {
 }
 
 export const tagName = {
+  A: 'A',
   INPUT: 'INPUT',
   BUTTON: 'BUTTON',
   SELECT: 'SELECT',

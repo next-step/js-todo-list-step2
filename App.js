@@ -1,4 +1,4 @@
-import { Header, User, TodoInput, TodoList, TodoCount, TodoFilter, Loading } from './components'
+import { Header, User, TodoInput, TodoList, TodoCount, TodoFilter, Loading } from './components/index.js'
 import { httpMethod, filterStatus, className } from './utils/constants.js'
 import requestManager from "./api/api.js"
 
@@ -7,8 +7,8 @@ const delay = (ms) => new Promise((resolve) => setTimeout(() => resolve(), ms))
 const getTodoHash = (todos) => {
   return {
     [filterStatus.ALL]: todos,
-    [filterStatus.ACTIVE]: todos.filter(({isCompleted}) => isCompleted === false),
-    [filterStatus.COMPLETED]: todos.filter(({isCompleted}) => isCompleted === true)
+    [filterStatus.ACTIVE]: todos.filter(({isCompleted}) => !isCompleted),
+    [filterStatus.COMPLETED]: todos.filter(({isCompleted}) => isCompleted)
   }
 }
 
@@ -57,7 +57,7 @@ export default function App() {
     this.$todoCount = new TodoCount({
       selector: '.todo-counter',
       totalCount: this.todos.length,
-      completedCount: this.todos.filter(({isCompleted}) => isCompleted === true).length
+      completedCount: this.todos.filter(({isCompleted}) => isCompleted).length
     })
 
     new TodoFilter({
@@ -70,9 +70,7 @@ export default function App() {
     })
 
     this.$removeAllBtn = document.querySelector(`.${className.REMOVE_ALL}`)
-    this.$removeAllBtn.addEventListener('click', () => {
-      this.onDeleteAll()
-    })
+    this.$removeAllBtn.addEventListener('click', this.onDeleteAll)
 
     this.getTodos()
   }
@@ -115,7 +113,7 @@ export default function App() {
       this.setState()
     } catch (e) {
       console.error(e)
-      this.todos = [] // 해당 유저의 todo가 없는 경우
+      this.todos = [] // 없는 유저인 경
       this.setState()
     }
   }

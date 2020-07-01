@@ -1,4 +1,5 @@
 import { checkSelector } from '../utils/validations.js'
+import { tagName } from '../utils/constants.js'
 
 export default function TodoFilter({ selector, onFilter }) {
   if (new.target !== TodoFilter) {
@@ -13,7 +14,7 @@ export default function TodoFilter({ selector, onFilter }) {
 
   this.bindEvent = () => {
     this.$target.addEventListener('click', (e) => {
-      if (e.target.tagName.toLowerCase() === 'a') {
+      if (e.target.tagName === tagName.A) {
         e.preventDefault()
         onFilter(e.target.className)
       }
