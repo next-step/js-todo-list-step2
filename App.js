@@ -18,7 +18,7 @@ export default function App() {
   }
 
   this.init = async () => {
-    const { postTodoItem, onChangeUser, onToggle, onDelete, onEdit, onFilter, onSetPriority } = this
+    const { getTodos, onChangeUser, onFilter } = this
     this.username = 'donguk'
     this.todos = []
     this.todoHash = {
@@ -36,22 +36,20 @@ export default function App() {
     this.$user = new User({
       selector: '#user-list',
       currentUser: this.username,
-      users: await this.getUsers(),
       onChangeUser,
     })
 
-    new TodoInput({
+    this.$todoInput = new TodoInput({
       selector: '.new-todo',
-      postTodoItem
+      username: this.username,
+      getTodos
     })
 
     this.$todoList = new TodoList({
       selector: '.todo-list',
       todos: this.todos,
-      onToggle,
-      onDelete,
-      onEdit,
-      onSetPriority
+      username: this.username,
+      getTodos,
     })
 
     this.$todoCount = new TodoCount({
@@ -89,17 +87,6 @@ export default function App() {
     )
   }
 
-  this.getUsers = async () => {
-    try {
-      return await requestManager({
-        method: httpMethod.GET,
-        path: '/api/u'
-      })
-    } catch (e) {
-      console.error(e)
-    }
-  }
-
   this.getTodos = async () => {
     this.$loading.render() // loading on
     // await delay(500) // delay 주고 싶다면 추가
@@ -113,7 +100,7 @@ export default function App() {
       this.setState()
     } catch (e) {
       console.error(e)
-      this.todos = [] // 없는 유저인 경
+      this.todos = [] // 없는 유저인 경우
       this.setState()
     }
   }
@@ -122,57 +109,9 @@ export default function App() {
     this.username = username
     this.$header.setState(username)
     this.$user.setState()
+    this.$todoInput.setState(username)
+    this.$todoList.setState(username)
     this.getTodos()
-  }
-
-  this.onToggle = async (itemId) => {
-   try {
-     await requestManager({
-       method: httpMethod.PUT,
-       path: `/api/u/${this.username}/item/${itemId}/toggle`,
-     })
-     this.getTodos()
-   } catch(e) {
-     console.error(e)
-   }
-  }
-
-  this.onDelete = async (itemId) => {
-    try {
-      await requestManager({
-        method: httpMethod.DELETE,
-        path: `/api/u/${this.username}/item/${itemId}`,
-      })
-      this.getTodos()
-    } catch(e) {
-      console.error(e)
-    }
-  }
-
-  this.onEdit = async (itemId, contents) => {
-    try {
-      await requestManager({
-        method: httpMethod.PUT,
-        path: `/api/u/${this.username}/item/${itemId}`,
-        body: { contents }
-      })
-      this.getTodos()
-    } catch (e) {
-      console.error(e)
-    }
-  }
-
-  this.onSetPriority = async (itemId, priority) => {
-    try {
-      await requestManager({
-        method: httpMethod.PUT,
-        path: `/api/u/${this.username}/item/${itemId}/priority`,
-        body: { priority }
-      })
-      this.getTodos()
-    } catch (e) {
-      console.error(e)
-    }
   }
 
   this.onDeleteAll = async () => {
@@ -180,19 +119,6 @@ export default function App() {
       await requestManager({
         method: httpMethod.DELETE,
         path: `/api/u/${this.username}/items`,
-      })
-      this.getTodos()
-    } catch (e) {
-      console.error(e)
-    }
-  }
-
-  this.postTodoItem = async (text) => {
-    try {
-      await requestManager({
-        method: httpMethod.POST,
-        path: `/api/u/${this.username}/item`,
-        body: { contents: text }
       })
       this.getTodos()
     } catch (e) {

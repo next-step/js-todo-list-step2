@@ -1,8 +1,9 @@
 import { checkSelector } from '../utils/validations.js'
-import { tagName, className, keyName } from '../utils/constants.js'
+import { tagName, className, keyName, httpMethod } from '../utils/constants.js'
+import requestManager from '../api/api.js'
 
 export default function TodoList(props) {
-  const { selector, todos, onToggle, onDelete, onEdit, onSetPriority } = props
+  const { selector, todos, username, getTodos, onSetPriority } = props
   if (new.target !== TodoList) {
     return new TodoList(props)
   }
@@ -11,49 +12,69 @@ export default function TodoList(props) {
   this.init = () => {
     this.$target = document.querySelector(selector)
     this.todos = todos
+    this.username = username
     this.render()
     this.bindEvent()
   }
 
   this.bindEvent = () => {
-    const clickEventHandler = (e) => {
+    const clickEventHandler = async (e) => {
       const li = e.target.closest('li')
       const { id } = li.dataset
       if (
         e.target.tagName === tagName.INPUT &&
         e.target.className === className.TOGGLE
       ) {
-        onToggle(id)
+        try {
+          await requestManager({
+            method: httpMethod.PUT,
+            path: `/api/u/${this.username}/item/${id}/toggle`,
+          })
+          getTodos()
+        } catch(e) {
+          console.error(e)
+        }
       } else if (e.target.tagName === tagName.BUTTON) {
-        onDelete(id)
+        try {
+          await requestManager({
+            method: httpMethod.DELETE,
+            path: `/api/u/${this.username}/item/${id}`,
+          })
+          getTodos()
+        } catch(e) {
+          console.error(e)
+        }
       }
     }
 
     const dblclickEventHandler = (e) => {
       const li = e.target.closest('li')
-      this.editInputValue = e.target.innerText // 수정 시작할 때 초기 상태의 value 저장
+      this.editInputValue = e.target.childNodes[2].textContent.trim() // 수정 시작할 때 초기 상태의 value 저장
       if (!li.classList.contains(className.EDITING)) {
         li.classList.add(className.EDITING)
-        li.querySelector(`.${className.EDIT}`).focus()
+        const $editInput = li.querySelector(`.${className.EDIT}`)
+        $editInput.focus()
+        $editInput.selectionStart = this.editInputValue.length
       }
     }
-    const keyUpEventHandler = (e) => {
+    const keyUpEventHandler = async (e) => {
       if (e.key === keyName.ESC) {
         const li = e.target.closest('li')
         li.classList.remove(className.EDITING)
       } else if (e.key === keyName.ENTER && e.target.value.trim()) {
         const li = e.target.closest('li')
         li.classList.remove(className.EDITING)
-        onEdit(li.dataset.id, e.target.value.trim())
-      }
-    }
-
-    const focusInEventHandler = (e) => {
-      if (
-        e.target.tagName === tagName.INPUT &&
-        e.target.className === className.EDIT
-      ) {
-        e.target.selectionStart = e.target.value.length
+        const { id } = li.dataset
+        try {
+          await requestManager({
+            method: httpMethod.PUT,
+            path: `/api/u/${this.username}/item/${id}`,
+            body: { contents: e.target.value.trim() }
+          })
+          getTodos()
+        } catch (e) {
+          console.error(e)
+        }
       }
     }
 
@@ -70,12 +91,21 @@ export default function TodoList(props) {
       }
     }
 
-    const changeEventHandler = (e) => {
+    const changeEventHandler = async (e) => {
       if (e.target.tagName === tagName.SELECT) {
         const li = e.target.closest('li')
-        const id = li.dataset.id
+        const { id } = li.dataset
         if (e.target.value !== 0) { // option을 선택하지 않은 경우는 제외
-          onSetPriority(id, e.target.value)
+          try {
+            await requestManager({
+              method: httpMethod.PUT,
+              path: `/api/u/${this.username}/item/${id}/priority`,
+              body: { priority: e.target.value }
+            })
+            getTodos()
+          } catch (e) {
+            console.error(e)
+          }
         }
       }
     }
@@ -83,7 +113,6 @@ export default function TodoList(props) {
     this.$target.addEventListener('click', clickEventHandler)
     this.$target.addEventListener('dblclick', dblclickEventHandler)
     this.$target.addEventListener('keyup', keyUpEventHandler)
-    this.$target.addEventListener('focusin', focusInEventHandler) // 맨 마지막 글자에 focus
     this.$target.addEventListener('focusout', focusOutEventHandler)
     this.$target.addEventListener('change', changeEventHandler) // chip select
   }
@@ -119,12 +148,15 @@ export default function TodoList(props) {
   }
 
   this.render = () => {
-    this.$target.innerHTML = this.todos.map(todoItemHTMLTemplate).join()
+    this.$target.innerHTML = this.todos.map(todoItemHTMLTemplate).join('')
   }
 
   this.setState = (username, todos) => {
-    this.todos = todos
-    this.render()
+    this.username = username
+    if (todos) { // username 만 update 하는 경우를 생각해서 조건문 처리하였습니당
+      this.todos = todos
+      this.render()
+    }
   }
 
   this.init()
