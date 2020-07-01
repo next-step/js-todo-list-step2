@@ -11,7 +11,7 @@ export default function UserList(params) {
 
   this.setState = (nextUsers, nextUserName) => {
     this.users = nextUsers;
-    this.nextUserName = nextUserName;
+    this.userName = nextUserName;
     this.render();
   };
 
