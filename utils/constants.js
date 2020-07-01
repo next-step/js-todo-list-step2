@@ -17,6 +17,7 @@ export const classNameMap = {
   LABEL: "label",
   FOCUS: "editing",
   ON_EDIT: "edit",
+  SELECT: "select",
 };
 
 export const keyMap = {

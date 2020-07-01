@@ -53,20 +53,26 @@ export default function TodoList(params) {
     }
   };
 
-  $target.addEventListener("click", (e) => {
+  this.controlPriority = (id, priority) => {
+    if (priority !== 0) {
+      this.onSelect(id, priority);
+    }
+  };
+
+  this.onClick = (e) => {
     const { id } = e.target.closest("li").dataset;
+
     if (e.target.classList.contains(classNameMap.TOGGLE)) {
       this.onToggle(id);
     } else if (e.target.classList.contains(classNameMap.REMOVE)) {
       this.onRemove(id);
-    } else if (e.target.classList.contains("select")) {
-      const priority = Number(e.target.value);
-      if (priority === 0) {
-        return;
-      } else {
-        this.onSelect(id, priority);
-      }
+    } else if (e.target.classList.contains(classNameMap.SELECT)) {
+      this.controlPriority(id, Number(e.target.value));
     }
+  };
+
+  $target.addEventListener("click", (e) => {
+    this.onClick(e);
   });
 
   $target.addEventListener("dblclick", ({ target }) => {
