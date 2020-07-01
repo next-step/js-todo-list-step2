@@ -57,6 +57,15 @@ const api = {
     });
   },
   getUsers: async () => request(API_URL),
+  changePriority: async (username, id, priority) => {
+    return request(`${API_URL}/${username}/item/${id}/priority`, {
+      method: "PUT",
+      headers: {
+        "Content-type": "application/json",
+      },
+      body: JSON.stringify({ priority }),
+    });
+  },
 };
 
 export default api;

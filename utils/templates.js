@@ -1,14 +1,33 @@
 import { filterMap } from "./constants.js";
 
 export const todoListTemplate = (todos) => {
+  const notSelectedPriority = `
+    <select class="chip select">
+      <option value="0" selected>순위</option>
+      <option value="1">1순위</option>
+      <option value="2">2순위</option>
+    </select>`;
+  const primaryPriority = `<span class="chip primary">1순위</span>`;
+  const secondaryPriority = `<span class="chip secondary">2순위</span>`;
+
   return todos
     .map((todo) => {
+      const priorityHTMLString =
+        todo.priority === 0
+          ? notSelectedPriority
+          : todo.priority === 1
+          ? primaryPriority
+          : secondaryPriority;
+
       const contentHtmlString = `
       <div class="view"> 
         <input class="toggle" type="checkbox" ${
           todo.isCompleted ? "checked" : ""
         }>
-        <label class="label">${todo.contents}</label>
+        <label class="label">
+          ${priorityHTMLString}
+          ${todo.contents}
+        </label>
         <button class="destroy"></button>
       </div>
       <input class="edit" value="${todo.contents}">`;
@@ -54,13 +73,13 @@ export const userTitleTemplate = (userName) => {
 
 export const loadingBarTemplate = () => {
   return `
-  <div class="view">
-    <label class="label">
-      <div class="animated-background">
-        <div class="skel-mask-container">
-          <div class="skel-mask"></div>
+    <div class="view">
+      <label class="label">
+        <div class="animated-background">
+          <div class="skel-mask-container">
+            <div class="skel-mask"></div>
+          </div>
         </div>
-      </div>
-    </label>
-  </div>`;
+      </label>
+    </div>`;
 };

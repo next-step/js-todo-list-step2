@@ -41,6 +41,12 @@ export default function TodoApp(params) {
     this.setState(nextData, this.filter);
   };
 
+  const onSelect = async (id, priority) => {
+    await api.changePriority(this.userName, id, priority);
+    const nextData = await api.getTodos(this.userName);
+    this.setState(nextData, this.filter);
+  };
+
   const onKeyEnter = async (content) => {
     await api.postTodo(this.username, content);
     const nextData = await api.getTodos(this.userName);
@@ -78,6 +84,7 @@ export default function TodoApp(params) {
     onToggle,
     onRemove,
     onModify,
+    onSelect,
   });
 
   this.todoCount = new TodoCount({

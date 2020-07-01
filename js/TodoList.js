@@ -29,6 +29,7 @@ export default function TodoList(params) {
   this.onToggle = params.onToggle;
   this.onRemove = params.onRemove;
   this.onModify = params.onModify;
+  this.onSelect = params.onSelect;
 
   this.onFocus = ($edit) => $edit.classList.toggle(classNameMap.FOCUS);
   this.onKeyDown = (e) => {
@@ -58,6 +59,13 @@ export default function TodoList(params) {
       this.onToggle(id);
     } else if (e.target.classList.contains(classNameMap.REMOVE)) {
       this.onRemove(id);
+    } else if (e.target.classList.contains("select")) {
+      const priority = Number(e.target.value);
+      if (priority === 0) {
+        return;
+      } else {
+        this.onSelect(id, priority);
+      }
     }
   });
 
