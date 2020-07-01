@@ -8,14 +8,14 @@ export const todoListTemplate = (todos) => {
         <input class="toggle" type="checkbox" ${
           todo.isCompleted ? "checked" : ""
         }>
-        <label class="label">${todo.content}</label>
+        <label class="label">${todo.contents}</label>
         <button class="destroy"></button>
       </div>
-      <input class="edit" value="${todo.content}">`;
+      <input class="edit" value="${todo.contents}">`;
 
       const completedClassName = todo.isCompleted ? 'class = "completed"' : "";
 
-      return `<li ${completedClassName} data-id="${todo.id}">${contentHtmlString}</li>`;
+      return `<li ${completedClassName} data-id="${todo._id}">${contentHtmlString}</li>`;
     })
     .join("");
 };

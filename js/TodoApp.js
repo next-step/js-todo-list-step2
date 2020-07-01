@@ -4,6 +4,7 @@ import TodoCount from "./TodoCount.js";
 import { filterMap } from "../utils/constants.js";
 import TodoFilter from "./TodoFilter.js";
 import { loadTodos, saveTodos } from "../utils/localStorage.js";
+import api from "../utils/api.js";
 
 export default function TodoApp(params) {
   const {
@@ -12,35 +13,32 @@ export default function TodoApp(params) {
     $targetTodoCount,
     $targetTodoFilter,
   } = params;
-  this.data = loadTodos() || [];
+  this.data = params.data || loadTodos();
   this.filter = filterMap.ALL;
   this.nextId = this.data.length + 1;
+  this.username = params.username;
 
-  const onToggle = (id) => {
-    const nextData = this.data.map((todo) =>
-      todo.id === id ? { ...todo, isCompleted: !todo.isCompleted } : todo
-    );
+  const onToggle = async (id) => {
+    await api.toggleTodo(this.username, id);
+    const nextData = await api.getTodos(this.username);
     this.setState(nextData, this.filter);
   };
 
-  const onRemove = (id) => {
-    const nextData = this.data.filter((todo) => todo.id !== id);
+  const onRemove = async (id) => {
+    await api.removeTodo(this.username, id);
+    const nextData = await api.getTodos(this.username);
     this.setState(nextData, this.filter);
   };
 
-  const onModify = (id, nextContent) => {
-    const nextData = this.data.map((todo) =>
-      todo.id == id ? { ...todo, content: nextContent } : todo
-    );
+  const onModify = async (id, nextContent) => {
+    await api.modifyTodo(this.username, id, nextContent);
+    const nextData = await api.getTodos(this.username);
     this.setState(nextData, this.filter);
   };
 
-  const onKeyEnter = (content) => {
-    const nextData = this.data.concat({
-      id: this.nextId++,
-      content,
-      isCompleted: false,
-    });
+  const onKeyEnter = async (content) => {
+    await api.postTodo(this.username, content);
+    const nextData = await api.getTodos(this.username);
     this.setState(nextData, this.filter);
   };
 

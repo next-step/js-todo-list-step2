@@ -15,8 +15,8 @@ const validateTodoList = (context, params) => {
   validator.isFunction(onModify);
 
   data.forEach((todo) => {
-    validator.isString(todo.content);
-    validator.isNotZeroLengthString(todo.content);
+    validator.isString(todo.contents);
+    validator.isNotZeroLengthString(todo.contents);
     validator.isBoolean(todo.isCompleted);
   });
 };
@@ -38,7 +38,7 @@ export default function TodoList(params) {
     switch (e.key) {
       case keyMap.ESC:
         {
-          const index = this.data.findIndex((todo) => todo.id === Number(id));
+          const index = this.data.findIndex((todo) => todo._id === id);
           e.target.value = this.data[index].content;
           this.onFocus($edit);
         }
@@ -55,9 +55,9 @@ export default function TodoList(params) {
   $target.addEventListener("click", (e) => {
     const { id } = e.target.closest("li").dataset;
     if (e.target.classList.contains(classNameMap.TOGGLE)) {
-      this.onToggle(Number(id));
+      this.onToggle(id);
     } else if (e.target.classList.contains(classNameMap.REMOVE)) {
-      this.onRemove(Number(id));
+      this.onRemove(id);
     }
   });
 
