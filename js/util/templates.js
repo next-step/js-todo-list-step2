@@ -54,11 +54,12 @@ export const UserTitleTemplate = (username) => `
 
 export const UserListTemplate = (username, userArray) =>
   userArray
-    .map((user) => {
-      return `<button class="${
-        user.name === username ? 'ripple active' : 'ripple'
-      }">${user.name}</button>`;
-    })
+    .map(
+      (user) =>
+        `<button class="${
+          user.name === username ? 'ripple active' : 'ripple'
+        }">${user.name}</button>`,
+    )
     .join('');
 
 export const LoadingTemplate = `
