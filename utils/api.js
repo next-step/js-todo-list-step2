@@ -1,9 +1,16 @@
 import { errorMessageMap } from "./constants.js";
+import { loadingBarTemplate } from "./templates.js";
 
 const API_URL = "https://blackcoffee-todolist.df.r.appspot.com/api/u";
 
+const displayLoadingBarDuringRequest = () => {
+  const $target = document.querySelector(".todo-list");
+  $target.innerHTML = loadingBarTemplate();
+};
+
 const request = async (uri, method) => {
   try {
+    displayLoadingBarDuringRequest();
     const response = await fetch(uri, method);
 
     // @sunivers 코드 참고

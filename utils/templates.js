@@ -51,3 +51,16 @@ export const userListTemplate = (users, userName) => {
 export const userTitleTemplate = (userName) => {
   return `<span><strong>${userName}</strong>'s Todo List</span>`;
 };
+
+export const loadingBarTemplate = () => {
+  return `
+  <div class="view">
+    <label class="label">
+      <div class="animated-background">
+        <div class="skel-mask-container">
+          <div class="skel-mask"></div>
+        </div>
+      </div>
+    </label>
+  </div>`;
+};
