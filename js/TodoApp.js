@@ -111,11 +111,11 @@ export default function TodoApp(params) {
   });
 
   this.setState = (nextData, nextFilter, nextUserName = this.userName) => {
-    this.data = nextData;
+    this.data = nextData || [];
     this.filter = nextFilter;
     this.userName = nextUserName;
 
-    const filteredTodos = filterTodos(this.data, this.filter);
+    const filteredTodos = filterTodos(this.data, this.filter) || [];
 
     this.userTitle.setState(this.userName);
     this.userList.setState(this.users, this.userName);

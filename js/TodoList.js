@@ -25,7 +25,7 @@ export default function TodoList(params) {
   validateTodoList(this, params);
 
   const { $target } = params;
-  this.data = params.data;
+  this.data = params.data || [];
   this.onToggle = params.onToggle;
   this.onRemove = params.onRemove;
   this.onModify = params.onModify;
@@ -91,7 +91,7 @@ export default function TodoList(params) {
   });
 
   this.setState = (nextData) => {
-    this.data = nextData;
+    this.data = nextData || [];
     this.render();
   };
 
