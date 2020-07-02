@@ -24,19 +24,19 @@ export default function TodoApp(params) {
   this.users = params.users;
 
   const onToggle = async (id) => {
-    await api.toggleTodo(this.username, id);
+    await api.toggleTodo(this.userName, id);
     const nextData = await api.getTodos(this.userName);
     this.setState(nextData, this.filter);
   };
 
   const onRemove = async (id) => {
-    await api.removeTodo(this.username, id);
+    await api.removeTodo(this.userName, id);
     const nextData = await api.getTodos(this.userName);
     this.setState(nextData, this.filter);
   };
 
   const onModify = async (id, nextContent) => {
-    await api.modifyTodo(this.username, id, nextContent);
+    await api.modifyTodo(this.userName, id, nextContent);
     const nextData = await api.getTodos(this.userName);
     this.setState(nextData, this.filter);
   };
@@ -48,7 +48,7 @@ export default function TodoApp(params) {
   };
 
   const onKeyEnter = async (content) => {
-    await api.postTodo(this.username, content);
+    await api.postTodo(this.userName, content);
     const nextData = await api.getTodos(this.userName);
     this.setState(nextData, this.filter);
   };
