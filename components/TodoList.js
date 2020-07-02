@@ -1,5 +1,5 @@
-import { TAG_NAME, CLASS_NAME, KEY_NAME, HTTP_METHOD } from '../utils/constants.js'
-import requestManager from '../api/api.js'
+import { TAG_NAME, CLASS_NAME, KEY_NAME } from '../utils/constants.js'
+import api from '../api/api.js'
 import { todoItemHTMLTemplate } from '../utils/templates.js'
 
 export default function TodoList(props) {
@@ -17,7 +17,7 @@ export default function TodoList(props) {
   }
 
   this.bindEvent = () => {
-    const clickEventHandler = async ({target}) => {
+    const onClickTodoItemHandler = async ({ target }) => {
       const li = target.closest('li')
       const { id } = li.dataset
       if (
@@ -25,28 +25,22 @@ export default function TodoList(props) {
         target.className === CLASS_NAME.TOGGLE
       ) {
         try {
-          await requestManager({
-            method: HTTP_METHOD.PUT,
-            path: `/api/u/${this.username}/item/${id}/toggle`,
-          })
+          await api.toggleTodo(this.username, id)
           getTodos()
-        } catch(e) {
+        } catch (e) {
           console.error(e)
         }
       } else if (target.tagName === TAG_NAME.BUTTON) {
         try {
-          await requestManager({
-            method: HTTP_METHOD.DELETE,
-            path: `/api/u/${this.username}/item/${id}`,
-          })
+          await api.deleteTodo(this.username, id)
           getTodos()
-        } catch(e) {
+        } catch (e) {
           console.error(e)
         }
       }
     }
 
-    const dblclickEventHandler = (e) => {
+    const onDblclickTodoItemHandler = (e) => {
       const li = e.target.closest('li')
       this.editInputValue = e.target.childNodes[2].textContent.trim() // 수정 시작할 때 초기 상태의 value 저장
       if (!li.classList.contains(CLASS_NAME.EDITING)) {
@@ -56,19 +50,20 @@ export default function TodoList(props) {
         $editInput.selectionStart = this.editInputValue.length
       }
     }
-    const keyUpEventHandler = async (e) => {
-      if (e.key === KEY_NAME.ESC) {
-        const li = e.target.closest('li')
-        li.classList.remove(CLASS_NAME.EDITING)
-      } else if (e.key === KEY_NAME.ENTER && e.target.value.trim()) {
-        const li = e.target.closest('li')
+    const onEditTodoItemHandler = async (e) => {
+      if (e.key !== KEY_NAME.ESC && e.key !== KEY_NAME.ENTER) {
+        return
+      }
+      const li = e.target.closest('li')
+      li.classList.remove(CLASS_NAME.EDITING)
+      if (e.key === KEY_NAME.ENTER && e.target.value.trim()) {
         li.classList.remove(CLASS_NAME.EDITING)
         const { id } = li.dataset
         try {
-          await requestManager({
-            method: HTTP_METHOD.PUT,
-            path: `/api/u/${this.username}/item/${id}`,
-            body: { contents: e.target.value.trim() }
+          await api.updateTodoContent({
+            username: this.username,
+            id,
+            data: { contents: e.target.value.trim() },
           })
           getTodos()
         } catch (e) {
@@ -77,7 +72,7 @@ export default function TodoList(props) {
       }
     }
 
-    const focusOutEventHandler = (e) => {
+    const onFocusOutTodoItemHandler = (e) => {
       if (
         e.target.tagName === TAG_NAME.INPUT &&
         e.target.className === CLASS_NAME.EDIT
@@ -90,7 +85,7 @@ export default function TodoList(props) {
       }
     }
 
-    const changeEventHandler = async (e) => {
+    const onChangePriorityHandler = async (e) => {
       if (e.target.tagName !== TAG_NAME.SELECT) {
         return
       }
@@ -98,10 +93,10 @@ export default function TodoList(props) {
       const { id } = li.dataset
       if (e.target.value !== 0) { // option을 선택하지 않은 경우는 제외
         try {
-          await requestManager({
-            method: HTTP_METHOD.PUT,
-            path: `/api/u/${this.username}/item/${id}/priority`,
-            body: { priority: e.target.value }
+          await api.updateTodoPriority({
+            username: this.username,
+            id,
+            data: { priority: e.target.value },
           })
           getTodos()
         } catch (e) {
@@ -110,15 +105,15 @@ export default function TodoList(props) {
       }
     }
 
-    this.$target.addEventListener('click', clickEventHandler)
-    this.$target.addEventListener('dblclick', dblclickEventHandler)
-    this.$target.addEventListener('keyup', keyUpEventHandler)
-    this.$target.addEventListener('focusout', focusOutEventHandler)
-    this.$target.addEventListener('change', changeEventHandler) // chip select
+    this.$target.addEventListener('click', onClickTodoItemHandler)
+    this.$target.addEventListener('dblclick', onDblclickTodoItemHandler)
+    this.$target.addEventListener('keyup', onEditTodoItemHandler)
+    this.$target.addEventListener('focusout', onFocusOutTodoItemHandler)
+    this.$target.addEventListener('change', onChangePriorityHandler) // chip select
   }
 
   this.render = () => {
-    this.$target.innerHTML = this.todos.map(todoItemHTMLTemplate).join("")
+    this.$target.innerHTML = this.todos.map(todoItemHTMLTemplate).join('')
   }
 
   this.setState = (username, todos) => {

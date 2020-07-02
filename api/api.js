@@ -1,25 +1,69 @@
-import { API_URL } from "../utils/constants.js"
+import { API_URL } from '../utils/constants.js'
 
-export default async function requestManager(args){
-  const { path, method='GET', body, headers } = args
-  let url = API_URL + path
-  const options = {
-    method,
-    headers: {
-      'content-type': 'application/json'
+const METHOD = {
+  PUT(data) {
+    return {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        ...data,
+      }),
     }
-  }
-  if (body) {
-    options.body = JSON.stringify(body)
-  }
-  if (headers) {
-    options.headers = { ...options.headers, ...headers }
-  }
-  console.log('[REQUEST]') // 로그 확인용
-  console.log(JSON.stringify({ url, ...options}, null, 2))
-  const result = await fetch(url, options)
-  const res = await result.json() // 로그를 찍기위해 res 변수에 할당
-  console.log('[RESPONSE]')
-  console.log(JSON.stringify(res, null, 2))
-  return res
+  },
+  POST(data) {
+    return {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        ...data,
+      }),
+    }
+  },
+  DELETE() {
+    return {
+      method: 'DELETE',
+    }
+  },
 }
+
+
+const api = (() => {
+  const request = (url, config) => {
+    console.log('[REQUEST]')
+    console.log(JSON.stringify({ url, ...config }, null, 2))
+    return fetch(url, config)
+  }
+  const requestWithReturn = (url, config) => request(url, config).then((data) => data.json())
+  return {
+    getUsers() {
+      return requestWithReturn(API_URL + '/api/u')
+    },
+    getTodos(username) {
+      return requestWithReturn(API_URL + `/api/u/${username}/item`)
+    },
+    createTodo(username, data) {
+      return request(API_URL + `/api/u/${username}/item`, METHOD.POST(data))
+    },
+    toggleTodo(username, id) {
+      return request(API_URL + `/api/u/${username}/item/${id}/toggle`, METHOD.PUT())
+    },
+    updateTodoContent({ username, id, data }) {
+      return request(API_URL + `/api/u/${username}/item/${id}`, METHOD.PUT(data))
+    },
+    updateTodoPriority({ username, id, data }) {
+      return request(API_URL + `/api/u/${username}/item/${id}/priority`, METHOD.PUT(data))
+    },
+    deleteTodo(username, id) {
+      return request(API_URL + `/api/u/${username}/item/${id}`, METHOD.DELETE())
+    },
+    deleteTodoAll(username) {
+      return request(API_URL + `/api/u/${username}/items`, METHOD.DELETE())
+    },
+  }
+})()
+
+export default api

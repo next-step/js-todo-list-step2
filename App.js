@@ -1,6 +1,6 @@
 import { Header, User, TodoInput, TodoList, TodoCount, TodoFilter, Loading } from './components/index.js'
-import { HTTP_METHOD, FILTER_STATUS, CLASS_NAME } from './utils/constants.js'
-import requestManager from "./api/api.js"
+import { FILTER_STATUS, CLASS_NAME } from './utils/constants.js'
+import api from './api/api.js'
 
 const delay = (ms) => new Promise((resolve) => setTimeout(() => resolve(), ms))
 
@@ -91,10 +91,7 @@ export default function App() {
     this.$loading.render() // loading on
     // await delay(500) // delay 주고 싶다면 추가
     try {
-      const { todoList } = await requestManager({
-        method: HTTP_METHOD.GET,
-        path: `/api/u/${this.username}/item`,
-      })
+      const { todoList } = await api.getTodos(this.username)
       this.todos = todoList ? todoList : []
       this.todoHash = getTodoHash(this.todos)
       this.setState()
@@ -116,10 +113,7 @@ export default function App() {
 
   this.onDeleteAll = async () => {
     try {
-      await requestManager({
-        method: HTTP_METHOD.DELETE,
-        path: `/api/u/${this.username}/items`,
-      })
+      await api.deleteTodoAll(this.username)
       this.getTodos()
     } catch (e) {
       console.error(e)

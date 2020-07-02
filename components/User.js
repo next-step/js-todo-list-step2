@@ -1,5 +1,5 @@
-import { TAG_NAME, HTTP_METHOD } from '../utils/constants.js'
-import requestManager from '../api/api.js'
+import { TAG_NAME } from '../utils/constants.js'
+import api from '../api/api.js'
 
 export default function User(props) {
   const { selector, currentUser, onChangeUser } = props
@@ -11,10 +11,7 @@ export default function User(props) {
     this.$target = document.querySelector(selector)
     this.currentUser = currentUser
     try {
-      this.users = await requestManager({
-        method: HTTP_METHOD.GET,
-        path: '/api/u',
-      })
+      this.users = await api.getUsers()
     } catch (e) {
       console.error(e)
     }

@@ -1,12 +1,5 @@
 export const API_URL = 'https://blackcoffee-todolist.df.r.appspot.com'
 
-export const HTTP_METHOD = {
-  GET: 'GET',
-  POST: 'POST',
-  PUT: 'PUT',
-  DELETE: 'DELETE',
-}
-
 export const TAG_NAME = {
   A: 'A',
   INPUT: 'INPUT',

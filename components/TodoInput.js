@@ -1,5 +1,5 @@
-import { KEY_NAME, HTTP_METHOD } from '../utils/constants.js'
-import requestManager from '../api/api.js'
+import { KEY_NAME } from '../utils/constants.js'
+import api from '../api/api.js'
 
 export default function TodoInput(props) {
   if (new.target !== TodoInput) {
@@ -14,14 +14,10 @@ export default function TodoInput(props) {
   }
 
   this.bindEvent = () => {
-    const keyPressHandler = async (e) => {
+    const onAddTodoItemHandler = async (e) => {
       if (e.key === KEY_NAME.ENTER && e.target.value.trim()) {
         try {
-          await requestManager({
-            method: HTTP_METHOD.POST,
-            path: `/api/u/${this.username}/item`,
-            body: { contents: e.target.value }
-          })
+          await api.createTodo(this.username, { contents: e.target.value })
           getTodos()
         } catch (e) {
           console.error(e)
@@ -30,7 +26,7 @@ export default function TodoInput(props) {
       }
     }
 
-    this.$target.addEventListener('keypress', keyPressHandler)
+    this.$target.addEventListener('keypress', onAddTodoItemHandler)
   }
 
   this.setState = (username) => {
