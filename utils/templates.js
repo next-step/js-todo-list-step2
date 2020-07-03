@@ -1,4 +1,4 @@
-import { filterMap } from "./constants.js";
+import { FILTER_MAP } from "./constants.js";
 
 export const todoListTemplate = (todos) => {
   const notSelectedPriority = `
@@ -42,9 +42,9 @@ export const todoListTemplate = (todos) => {
 export const todoCountTemplate = (count) => `총 <strong>${count}</strong> 개`;
 
 export const todoFilterTemplate = (filter) => {
-  const allSelected = filter === filterMap.ALL ? " selected" : "";
-  const activeSelected = filter === filterMap.ACTIVE ? " selected" : "";
-  const completedSelected = filter === filterMap.COMPLETED ? " selected" : "";
+  const allSelected = filter === FILTER_MAP.ALL ? " selected" : "";
+  const activeSelected = filter === FILTER_MAP.ACTIVE ? " selected" : "";
+  const completedSelected = filter === FILTER_MAP.COMPLETED ? " selected" : "";
 
   return `
     <li>

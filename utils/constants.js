@@ -1,4 +1,4 @@
-export const errorMessageMap = {
+export const ERROR_MESSAGE_MAP = {
   NOT_ELEMENT: "It Should be Element.",
   NOT_ARRAY: "It Should be Array",
   NOT_CREATED_BY_NEW: "It Should be created by new",
@@ -11,7 +11,7 @@ export const errorMessageMap = {
   FETCH_ERROR: (error) => `fetch error. error : ${error}`,
 };
 
-export const classNameMap = {
+export const CLASS_NAME_MAP = {
   TOGGLE: "toggle",
   REMOVE: "destroy",
   LABEL: "label",
@@ -20,12 +20,12 @@ export const classNameMap = {
   SELECT: "select",
 };
 
-export const keyMap = {
+export const KEY_MAP = {
   ESC: "Escape",
   ENTER: "Enter",
 };
 
-export const filterMap = {
+export const FILTER_MAP = {
   ALL: "all",
   ACTIVE: "active",
   COMPLETED: "completed",

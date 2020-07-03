@@ -1,4 +1,4 @@
-import { errorMessageMap } from "./constants.js";
+import { ERROR_MESSAGE_MAP } from "./constants.js";
 import { loadingBarTemplate } from "./templates.js";
 
 const API_URL = "https://blackcoffee-todolist.df.r.appspot.com/api/u";
@@ -15,11 +15,11 @@ const request = async (uri, method) => {
 
     // @sunivers 코드 참고
     if (!response.ok) {
-      throw new Error(errorMessageMap.FETCH_FAIL(response.status));
+      throw new Error(ERROR_MESSAGE_MAP.FETCH_FAIL(response.status));
     }
     return await response.json();
   } catch (error) {
-    throw new Error(errorMessageMap.FETCH_ERROR(error));
+    throw new Error(ERROR_MESSAGE_MAP.FETCH_ERROR(error));
   }
 };
 

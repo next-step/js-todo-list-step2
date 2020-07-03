@@ -1,6 +1,6 @@
 import { validator } from "../utils/validator.js";
 import { todoListTemplate } from "../utils/templates.js";
-import { classNameMap, keyMap } from "../utils/constants.js";
+import { CLASS_NAME_MAP, KEY_MAP } from "../utils/constants.js";
 
 const validateTodoList = (context, params) => {
   validator.isNewInstance(context, TodoList);
@@ -31,20 +31,20 @@ export default function TodoList(params) {
   this.onModify = params.onModify;
   this.onSelect = params.onSelect;
 
-  this.onFocus = ($edit) => $edit.classList.toggle(classNameMap.FOCUS);
+  this.onFocus = ($edit) => $edit.classList.toggle(CLASS_NAME_MAP.FOCUS);
   this.onKeyDown = (e) => {
     const $edit = e.target.closest("li");
     const { id } = e.target.closest("li").dataset;
 
     switch (e.key) {
-      case keyMap.ESC:
+      case KEY_MAP.ESC:
         {
           const index = this.data.findIndex((todo) => todo._id === id);
           e.target.value = this.data[index].content;
           this.onFocus($edit);
         }
         break;
-      case keyMap.ENTER:
+      case KEY_MAP.ENTER:
         {
           const content = e.target.value;
           this.onModify(id, content);
@@ -62,11 +62,11 @@ export default function TodoList(params) {
   this.onClick = (e) => {
     const { id } = e.target.closest("li").dataset;
 
-    if (e.target.classList.contains(classNameMap.TOGGLE)) {
+    if (e.target.classList.contains(CLASS_NAME_MAP.TOGGLE)) {
       this.onToggle(id);
-    } else if (e.target.classList.contains(classNameMap.REMOVE)) {
+    } else if (e.target.classList.contains(CLASS_NAME_MAP.REMOVE)) {
       this.onRemove(id);
-    } else if (e.target.classList.contains(classNameMap.SELECT)) {
+    } else if (e.target.classList.contains(CLASS_NAME_MAP.SELECT)) {
       this.controlPriority(id, Number(e.target.value));
     }
   };
@@ -76,14 +76,14 @@ export default function TodoList(params) {
   });
 
   $target.addEventListener("dblclick", ({ target }) => {
-    if (target.classList.contains(classNameMap.LABEL)) {
+    if (target.classList.contains(CLASS_NAME_MAP.LABEL)) {
       const $edit = target.closest("li");
       this.onFocus($edit);
     }
   });
 
   $target.addEventListener("keydown", (e) => {
-    if (!e.target.classList.contains(classNameMap.ON_EDIT)) {
+    if (!e.target.classList.contains(CLASS_NAME_MAP.ON_EDIT)) {
       return;
     }
 

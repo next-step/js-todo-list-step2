@@ -1,7 +1,7 @@
 import TodoList from "./TodoList.js";
 import TodoInput from "./TodoInput.js";
 import TodoCount from "./TodoCount.js";
-import { filterMap } from "../utils/constants.js";
+import { FILTER_MAP } from "../utils/constants.js";
 import TodoFilter from "./TodoFilter.js";
 import { loadTodos, saveTodos } from "../utils/localStorage.js";
 import api from "../utils/api.js";
@@ -18,7 +18,7 @@ export default function TodoApp(params) {
     $targetUserTitle,
   } = params;
   this.data = params.data || loadTodos();
-  this.filter = filterMap.ALL;
+  this.filter = FILTER_MAP.ALL;
   this.nextId = this.data.length + 1;
   this.userName = params.userName;
   this.users = params.users;
@@ -59,9 +59,9 @@ export default function TodoApp(params) {
 
   const filterTodos = (todos, filter) => {
     switch (filter) {
-      case filterMap.ACTIVE:
+      case FILTER_MAP.ACTIVE:
         return todos.filter((todo) => !todo.isCompleted);
-      case filterMap.COMPLETED:
+      case FILTER_MAP.COMPLETED:
         return todos.filter((todo) => todo.isCompleted);
       default:
         return todos;
