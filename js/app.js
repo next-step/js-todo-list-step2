@@ -70,14 +70,10 @@ function apiDelAllTodo(event) {
         fetch(APIURL + `${currentUser}/items/`, {
             method: "DELETE"
         })
-        todo_list = []
-        allClear()
-        countTodo()
-    } else {
-        todo_list = []
-        allClear()
-        countTodo()
     }
+    todo_list = []
+    allClear()
+    countTodo()
 }
 
 function apiCheck(todoId) {
@@ -107,7 +103,6 @@ function apiDelTodo(todoId) {
         fetch(APIURL + `${currentUser}/item/${todoId}`, {
             method: "DELETE"
         })
-        countTodo()
     }
 }
 
@@ -131,7 +126,9 @@ async function apiLoadUser() {
     }).then(function(user){
         return user
     })
-    todo_list = user.todoList
+    todo_list = user.todoList == null
+    ? []
+    : user.todoList
     loadTodo()
     countTodo()
 } 
@@ -154,6 +151,7 @@ function clickUser(event){
     delActiveUser()
     allClear()
     apiLoadUser()
+    all_a.classList.add("selected")
     btn.classList.add("active")
     userH1.innerHTML = `<span><strong>${currentUser}</strong>'s Todo List</span>`
 }
@@ -238,10 +236,9 @@ async function apiSaveTodo(todo) {
 }
 
 function allClear() {
+    const selectedList = [all_a, active_a, complete_a]
     todo_ul.innerHTML = ""
-    all_a.classList.remove("selected")
-    active_a.classList.remove("selected")
-    complete_a.classList.remove("selected")
+    selectedList.forEach((el) => el.classList.remove("selected"))
 }
 
 function viewFilter(event) {
@@ -280,6 +277,7 @@ function deleteTodo(event) {
         todo_list.splice(todo_list.indexOf(todo), 1)
         todo_ul.removeChild(li)
         apiDelTodo(todo._id)
+        countTodo()
     }
 }
 
@@ -290,16 +288,14 @@ function editingTodo(event) {
         if (event.key === ESC) {
             li.classList.remove("editing")
             event.target.value = label.id
-        } else if (event.key === ENTER) {
-            if (!checkBlank(event.target.value)) {
-                const todo = findTodo(li)
-                const priorityUi = todoPriority(todo.priority)
-                label.innerHTML = priorityUi + event.target.value
-                label.id = event.target.value
-                li.classList.remove("editing")
-                todo.contents = event.target.value
-                apiEdit(todo._id, todo.contents)
-            }
+        } if (event.key === ENTER && !checkBlank(event.target.value)) {
+            const todo = findTodo(li)
+            const priorityUi = todoPriority(todo.priority)
+            label.innerHTML = priorityUi + event.target.value
+            label.id = event.target.value
+            li.classList.remove("editing")
+            todo.contents = event.target.value
+            apiEdit(todo._id, todo.contents)
         }
     }
 }
@@ -321,15 +317,10 @@ function todoComplete(event) {
         const todo = findTodo(li)
         const priorityUi = todoPriority(todo.priority)
         const label = li.querySelector("label")
-        if (event.target.checked) {
-            li.classList.add("completed")
-            todo.isCompleted = true
-            label.innerHTML = label.id
-        } else {
-            li.classList.remove("completed")
-            todo.isCompleted = false
-            label.innerHTML = priorityUi + label.id
-        }
+        const isChecked = event.target.checked
+        li.classList.toggle("completed")
+        todo.isCompleted = isChecked
+        label.innerHTML = isChecked ? label.id : priorityUi + label.id
         apiCheck(todo._id)
     }
 }
@@ -354,17 +345,14 @@ async function inputTodo(event) {
     if (event.key === ENTER) {
         current_todo = todo_input.value
         todo_input.value = ""
-        if (!checkBlank(current_todo)) {
-            if (currentUser === "guest") {
-                const todo = makeTodoObj(current_todo, false)
-                drawTodo(todo)
-                countTodo()
-            } else {
-                const todo = await apiSaveTodo(current_todo)
-                drawTodo(todo)
-                countTodo()
-            }
+        if (checkBlank(current_todo)) {
+            return;
         }
+        const todo = currentUser === "guest"
+            ? makeTodoObj(current_todo, false)
+            : await apiSaveTodo(current_todo)
+        drawTodo(todo)
+        countTodo()
     }
 }
 
@@ -399,13 +387,9 @@ function drawTodo(todo) {
         </li>
         `
     }
-    if (todo.isCompleted) {
-        const todoItem = todoItemTemplate(todo, "completed", "checked", "")
-        todo_ul.innerHTML += todoItem
-    } else {
-        const todoItem = todoItemTemplate(todo, "", "", todoPriorityUi)
-        todo_ul.innerHTML += todoItem
-    } 
+    todo_ul.innerHTML += todo.isCompleted
+    ? todoItemTemplate(todo, "completed", "checked", "")
+    : todoItemTemplate(todo, "", "", todoPriorityUi);
 }
 
 function init() {
