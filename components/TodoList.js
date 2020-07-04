@@ -12,6 +12,7 @@ function TodoList({ deleteTodo, toggleTodo, editTodo }) {
   };
 
   this.render = items => {
+    if (!Array.isArray(items)) return;
     const template = items.map(todoItemTemplate);
     $todoList.innerHTML = template.join("");
   };

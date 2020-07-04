@@ -22,6 +22,7 @@ function TodoApp() {
   this.getTodoList = async () => {
     try {
       const { todoList } = await getTodoList(this.user);
+      if (!todoList) throw Error('This user do not have todo list');
       this.todoList = todoList;
     } catch (error) {
       this.todoList = [];
