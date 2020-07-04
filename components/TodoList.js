@@ -1,8 +1,8 @@
 import { todoItemTemplate } from '../template.js';
-import { isValidContents } from '../util.js';
+import { isValidContent } from '../util.js';
 import { KEYCODE_ESC, KEYCODE_ENTER } from '../constants.js';
 
-function TodoList({ deleteTodo, toggleTodo, editTodo }) {
+function TodoList({ deleteTodo, toggleTodo, editTodo, setRootState }) {
   this.todoItems = [];
   const $todoList = document.querySelector('#todo-list');
 
@@ -22,9 +22,11 @@ function TodoList({ deleteTodo, toggleTodo, editTodo }) {
     const { id } = event.target.closest('li');
     if (className === 'destroy') {
       deleteTodo(id);
+      setRootState();
     }
     if (className === 'toggle') {
       toggleTodo(id);
+      setRootState();
     }
   });
 
@@ -36,7 +38,7 @@ function TodoList({ deleteTodo, toggleTodo, editTodo }) {
     const originValue = (
       this.todoItems.find((item) => item._id === $li.id) || {}
     ).contents;
-    $editInput.value = originValue;
+    $editInput.value = originValue || '';
     $editInput.focus();
     const size = $editInput.value.length;
     $editInput.setSelectionRange(size, size); // set cursor position
@@ -50,9 +52,10 @@ function TodoList({ deleteTodo, toggleTodo, editTodo }) {
       $li.classList.remove('editing');
     }
     const newTodoContents = event.target.value;
-    if (!isValidContents(newTodoContents)) return;
+    if (!isValidContent(newTodoContents)) return;
     if (event.key === KEYCODE_ENTER) {
       editTodo($li.id, newTodoContents);
+      setRootState();
     }
   });
 }

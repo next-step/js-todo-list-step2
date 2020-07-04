@@ -49,16 +49,14 @@ function TodoApp() {
   this.TodoList = new TodoList({
     deleteTodo: async (id) => {
       await deleteTodoItem(this.user, id);
-      this.setState();
     },
     toggleTodo: async (id) => {
       await toggleTodoItem(this.user, id);
-      this.setState();
     },
     editTodo: async (id, value) => {
       await editTodoItem(this.user, id, value);
-      this.setState();
     },
+    setRootState: this.setState
   });
   this.TodoInput = new TodoInput({
     addTodo: async (value) => {
