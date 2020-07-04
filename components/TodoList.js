@@ -22,7 +22,8 @@ function TodoList({ deleteTodo, toggleTodo, editTodo }) {
     const { id } = event.target.closest('li');
     if (className === 'destroy') {
       deleteTodo(id);
-    } else if (className === 'toggle') {
+    }
+    if (className === 'toggle') {
       toggleTodo(id);
     }
   });

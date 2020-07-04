@@ -5,8 +5,8 @@ function TodoFilter({ filterTodo }) {
     Array.from($filters.getElementsByTagName('a')).forEach((el) =>
       el.classList.remove('selected')
     );
-    const [_, mode] = e.target.href.split('#/');
-    filterTodo(mode === '' ? 'all' : mode);
+    const [_, mode = 'all'] = e.target.href.split('#/');
+    filterTodo(mode);
     e.target.classList.add('selected');
   });
 }

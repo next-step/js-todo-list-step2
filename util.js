@@ -1,5 +1,7 @@
-export const isValidContents = (contents) => {
-  if (typeof contents !== 'string') return false;
-  if (contents.trim() === '') return false;
-  return true;
+export const isValidContent = (content) => {
+  if (typeof content === 'string' && content.trim()) {
+    return true;
+  } 
+
+  return false;
 };

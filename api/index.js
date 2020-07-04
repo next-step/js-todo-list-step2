@@ -5,8 +5,7 @@ export async function getTodoList(username) {
     if (!response.ok) {
       throw new Error(response.status);
     }
-    const data = await response.json();
-    return data;
+    return await response.json();
   } catch (error) {
     console.log(error);
   }
@@ -24,8 +23,7 @@ export async function postTodoItem(username, contents) {
     if (!response.ok) {
       throw new Error(response.status);
     }
-    const data = await response.json();
-    return data;
+    return await response.json();
   } catch (error) {
     console.log(error);
   }
@@ -39,8 +37,7 @@ export async function deleteTodoItem(username, id) {
     if (!response.ok) {
       throw new Error(response.status);
     }
-    const data = await response.json();
-    return data;
+    return await response.json();
   } catch (error) {
     console.log(error);
   }
@@ -54,8 +51,7 @@ export async function toggleTodoItem(username, id) {
     if (!response.ok) {
       throw new Error(response.status);
     }
-    const data = await response.json();
-    return data;
+    return await response.json();
   } catch (error) {
     console.log(error);
   }
@@ -75,8 +71,7 @@ export async function editTodoItem(username, id, contents) {
     if (!response.ok) {
       throw new Error(response.status);
     }
-    const data = await response.json();
-    return data;
+    return await response.json();
   } catch (error) {
     console.log(error);
   }
@@ -90,8 +85,7 @@ export async function getUsers() {
     if (!response.ok) {
       throw new Error(response.status);
     }
-    const data = await response.json();
-    return data;
+    return await response.json();
   } catch (error) {
     console.log(error);
   }
