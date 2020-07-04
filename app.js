@@ -3,14 +3,21 @@ import TodoInput from './components/TodoInput.js';
 import TodoFilter from './components/TodoFilter.js';
 import UserList from './components/UserList.js';
 import { FILTER_TYPE } from './constants.js';
-import { getTodoList, postTodoItem, deleteTodoItem, toggleTodoItem, editTodoItem, getUsers } from './api/index.js';
+import {
+  getTodoList,
+  postTodoItem,
+  deleteTodoItem,
+  toggleTodoItem,
+  editTodoItem,
+  getUsers,
+} from './api/index.js';
 
 function TodoApp() {
   this.todoList = [];
   this.user = '';
 
-  this.findIndexById = id => {
-    return this.todoList.findIndex(item => item._id === id);
+  this.findIndexById = (id) => {
+    return this.todoList.findIndex((item) => item._id === id);
   };
 
   this.setState = async () => {
@@ -27,51 +34,56 @@ function TodoApp() {
     } catch (error) {
       this.todoList = [];
     }
-  }
+  };
 
   this.init = async () => {
     const list = await getUsers();
-    this.UserList.setState(list);
+    if (list && list.length) {
+      this.UserList.setState(list);
+      this.UserList.selectUser(list[0]._id);
+    }
     if (!this.user) return;
     this.setState();
-  }
+  };
 
   this.TodoList = new TodoList({
-    deleteTodo: async id => {
+    deleteTodo: async (id) => {
       await deleteTodoItem(this.user, id);
       this.setState();
     },
-    toggleTodo: async id => {
+    toggleTodo: async (id) => {
       await toggleTodoItem(this.user, id);
       this.setState();
     },
     editTodo: async (id, value) => {
       await editTodoItem(this.user, id, value);
       this.setState();
-    }
+    },
   });
   this.TodoInput = new TodoInput({
-    addTodo: async value => {
+    addTodo: async (value) => {
       await postTodoItem(this.user, value);
       this.setState();
-    }
+    },
   });
-  this.$todoCount = document.getElementsByClassName('todo-count')[0];
+  this.$todoCount = document.querySelector('.todo-count');
   this.TodoFilter = new TodoFilter({
-    filterTodo: mode => {
+    filterTodo: (mode) => {
       const renderList = {
         [FILTER_TYPE.ALL]: () => this.todoList,
-        [FILTER_TYPE.ACTIVE]: () => this.todoList.filter(item => !item.isCompleted),
-        [FILTER_TYPE.COMPLETED]: () => this.todoList.filter(item => item.isCompleted)
+        [FILTER_TYPE.ACTIVE]: () =>
+          this.todoList.filter((item) => !item.isCompleted),
+        [FILTER_TYPE.COMPLETED]: () =>
+          this.todoList.filter((item) => item.isCompleted),
       };
       this.TodoList.setState(renderList[mode]());
-    }
+    },
   });
   this.UserList = new UserList({
-    selectUser: user => {
+    selectUser: (user) => {
       this.user = user;
       this.setState();
-    }
+    },
   });
 }
 
