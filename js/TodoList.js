@@ -58,9 +58,11 @@ export default function TodoList($todoList, data, removeItem) {
 
   this.get = () => {
     fetch(`${ADDRESS.BASE_URL}/api/u/${USER.ID}/item`)
-      .then(n => {
-        console.log(n)
-      })
+    .then(response => response.json())
+    .then(data => {
+      this.data = data.todoList
+      this.render()
+    });
   }
 
   this.post = (text) => {
@@ -94,4 +96,6 @@ export default function TodoList($todoList, data, removeItem) {
 
     this.$todoList.innerHTML = result
   }
+
+  this.get()
 }
