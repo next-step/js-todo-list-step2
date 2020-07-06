@@ -71,9 +71,7 @@ export default function TodoList(params) {
     }
   };
 
-  $target.addEventListener("click", (e) => {
-    this.onClick(e);
-  });
+  $target.addEventListener("click", this.onClick);
 
   $target.addEventListener("dblclick", ({ target }) => {
     if (target.classList.contains(CLASS_NAME_MAP.LABEL)) {
