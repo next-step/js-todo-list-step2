@@ -30,3 +30,18 @@ export const FILTER_MAP = {
   ACTIVE: "active",
   COMPLETED: "completed",
 };
+
+export const API_METHOD = {
+  PUT: "PUT",
+  POST: "POST",
+  DELETE: "DELETE",
+};
+
+export const API_HEADERS = {
+  JSON: { "Content-type": "application/json" },
+};
+
+export const API_BODY = {
+  TODO_JSON: (contents) => JSON.stringify({ contents }),
+  PRIORITY_JSON: (priority) => JSON.stringify({ priority }),
+};
