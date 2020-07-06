@@ -31,6 +31,7 @@ export default function TodoList(params) {
   this.onModify = params.onModify;
   this.onSelect = params.onSelect;
 
+  this.hasClassName = (classList, className) => classList.contains(className);
   this.onFocus = ($edit) => $edit.classList.toggle(CLASS_NAME_MAP.FOCUS);
   this.onKeyDown = (e) => {
     const $edit = e.target.closest("li");
@@ -61,12 +62,13 @@ export default function TodoList(params) {
 
   this.onClick = (e) => {
     const { id } = e.target.closest("li").dataset;
+    const { classList } = e.target;
 
-    if (e.target.classList.contains(CLASS_NAME_MAP.TOGGLE)) {
+    if (this.hasClassName(classList, CLASS_NAME_MAP.TOGGLE)) {
       this.onToggle(id);
-    } else if (e.target.classList.contains(CLASS_NAME_MAP.REMOVE)) {
+    } else if (this.hasClassName(classList, CLASS_NAME_MAP.REMOVE)) {
       this.onRemove(id);
-    } else if (e.target.classList.contains(CLASS_NAME_MAP.SELECT)) {
+    } else if (this.hasClassName(classList, CLASS_NAME_MAP.SELECT)) {
       this.controlPriority(id, Number(e.target.value));
     }
   };
@@ -74,14 +76,16 @@ export default function TodoList(params) {
   $target.addEventListener("click", this.onClick);
 
   $target.addEventListener("dblclick", ({ target }) => {
-    if (target.classList.contains(CLASS_NAME_MAP.LABEL)) {
+    const { classList } = target;
+    if (this.hasClassName(classList, CLASS_NAME_MAP.LABEL)) {
       const $edit = target.closest("li");
       this.onFocus($edit);
     }
   });
 
   $target.addEventListener("keydown", (e) => {
-    if (!e.target.classList.contains(CLASS_NAME_MAP.ON_EDIT)) {
+    const { classList } = e.target;
+    if (!this.hasClassName(classList, CLASS_NAME_MAP.ON_EDIT)) {
       return;
     }
 
