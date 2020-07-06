@@ -40,7 +40,7 @@ export default function TodoList(params) {
       case KEY_MAP.ESC:
         {
           const index = this.data.findIndex((todo) => todo._id === id);
-          e.target.value = this.data[index].content;
+          e.target.value = this.data[index].contents;
           this.onFocus($edit);
         }
         break;
