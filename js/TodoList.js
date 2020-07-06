@@ -34,7 +34,7 @@ export default function TodoList(params) {
   this.onFocus = ($edit) => $edit.classList.toggle(CLASS_NAME_MAP.FOCUS);
   this.onKeyDown = (e) => {
     const $edit = e.target.closest("li");
-    const { id } = e.target.closest("li").dataset;
+    const { id } = $edit.closest("li").dataset;
 
     switch (e.key) {
       case KEY_MAP.ESC:
