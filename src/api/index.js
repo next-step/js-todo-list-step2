@@ -1,8 +1,8 @@
 export default function (model) {
-	return function (url) {
+	return function (url, options) {
 		model.isLoading = true;
 
-		return fetch(url)
+		return fetch(url, options)
 			.then((res) => {
 				if (res.ok) {
 					return res.json();
