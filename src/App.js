@@ -63,11 +63,23 @@ export default function App() {
 		});
 	};
 
+	const fetchDeleteTodo = ({ todoId, userName }) => {
+		return useFetch(`${BASE_URL}/${userName}/item/${todoId}`, {
+			method: 'DELETE',
+		});
+	};
+
 	const getUserById = (userId) => {
 		return model.users.find(({ _id }) => _id === userId);
 	};
 
-	const handleTodoList = async (userName) => {
+	const getUser = (user) => {
+		return user ? model[user] : model.selectedUser;
+	};
+
+	const handleTodoList = async () => {
+		const { name: userName } = getUser();
+
 		const { _id, name, todoList = [] } = await fetchTodoList(userName);
 
 		model.byId = {
@@ -81,10 +93,10 @@ export default function App() {
 	};
 
 	const handleSelectUser = async (userId) => {
-		const selectedUser = userId ? getUserById(userId) : model.selectedUser;
+		const selectedUser = userId ? getUserById(userId) : getUser();
 		model.selectedUser = selectedUser;
 
-		await handleTodoList(selectedUser.name);
+		await handleTodoList();
 	};
 
 	const handleAddTodo = async (e) => {
@@ -97,16 +109,27 @@ export default function App() {
 			return;
 		}
 
-		const userName = model.selectedUser.name;
-
 		const response = await fetchPostTodo({
 			content,
 			userName,
 		});
 
 		if (response._id) {
-			await handleTodoList(userName);
+			await handleTodoList();
 			e.target.value = '';
+		}
+	};
+
+	const handleDeleteTodo = async (todoId) => {
+		const { name: userName } = getUser();
+
+		const response = await fetchDeleteTodo({
+			todoId,
+			userName,
+		});
+
+		if (response) {
+			await handleTodoList();
 		}
 	};
 
@@ -121,6 +144,7 @@ export default function App() {
 		},
 		bindEvent: function () {
 			document.handleSelectUser = handleSelectUser;
+			document.handleDeleteTodo = handleDeleteTodo;
 
 			$('.todoapp > .input-container > .new-todo').addEventListener('keyup', handleAddTodo);
 		},

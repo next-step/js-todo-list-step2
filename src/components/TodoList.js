@@ -20,7 +20,7 @@ export default function TodoList({ $wrapper, isLoading, todoList }) {
 	}
 
 	setTimeout(() => {
-		$wrapper.innerHTML = todoList.reduce((totalEl, { contents, isCompleted, priority }, index, { length }) => {
+		$wrapper.innerHTML = todoList.reduce((totalEl, { _id, contents, isCompleted, priority }, index, { length }) => {
 			const isCheck = isCompleted ? 'completed' : '';
 
 			return (totalEl += `<li class="${isCheck}" data-todo-id="${index}">
@@ -29,7 +29,7 @@ export default function TodoList({ $wrapper, isLoading, todoList }) {
             <label class="label">
               ${contents}
             </label>
-            <button class="destroy"></button>
+            <button class="destroy" onClick="handleDeleteTodo('${_id}')"></button>
           </div>
           <input class="edit" value="${contents}" />
         </li>`);
