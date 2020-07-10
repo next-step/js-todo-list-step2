@@ -1,6 +1,10 @@
 export default function TodoList({ $wrapper, isLoading, todoList }) {
 	const skeletonCount = todoList ? todoList.length : 5;
 
+	if (!todoList) {
+		return;
+	}
+
 	if (isLoading) {
 		$wrapper.innerHTML = `<li>
         <div class="view">
@@ -13,10 +17,6 @@ export default function TodoList({ $wrapper, isLoading, todoList }) {
           </label>
         </div>
       </li>`.repeat(skeletonCount);
-	}
-
-	if (!todoList) {
-		return;
 	}
 
 	setTimeout(() => {
