@@ -51,14 +51,14 @@ export default function App() {
 		return useFetch(`${BASE_URL}/${userName}/item`).then((res) => res);
 	};
 
-	const fetchPostTodo = (newContent) => {
+	const fetchPostTodo = ({ content, userName }) => {
 		return useFetch(`${BASE_URL}/${userName}/item`, {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json',
 			},
 			body: JSON.stringify({
-				contents: newContent,
+				contents: content,
 			}),
 		});
 	};
@@ -87,6 +87,29 @@ export default function App() {
 		await handleTodoList(selectedUser.name);
 	};
 
+	const handleAddTodo = async (e) => {
+		e.preventDefault();
+
+		const isEnter = e.key === 'Enter';
+		const { value: content } = e.target;
+
+		if (!isEnter || !content) {
+			return;
+		}
+
+		const userName = model.selectedUser.name;
+
+		const response = await fetchPostTodo({
+			content,
+			userName,
+		});
+
+		if (response._id) {
+			await handleTodoList(userName);
+			e.target.value = '';
+		}
+	};
+
 	return {
 		init: async function () {
 			const userList = await fetchUserList();
@@ -98,6 +121,8 @@ export default function App() {
 		},
 		bindEvent: function () {
 			document.handleSelectUser = handleSelectUser;
+
+			$('.todoapp > .input-container > .new-todo').addEventListener('keyup', handleAddTodo);
 		},
 	};
 }
