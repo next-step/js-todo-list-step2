@@ -1,5 +1,5 @@
 import { todoItemTemplate } from '../template.js';
-import { isValidContent } from '../util.js';
+import { isValidContent, isArray } from '../util.js';
 import { KEYCODE_ESC, KEYCODE_ENTER } from '../constants.js';
 
 function TodoList({ deleteTodo, toggleTodo, editTodo, setRootState }) {
@@ -12,25 +12,27 @@ function TodoList({ deleteTodo, toggleTodo, editTodo, setRootState }) {
   };
 
   this.render = (items) => {
-    if (!Array.isArray(items)) return;
+    if (!isArray(items)) return;
     const template = items.map(todoItemTemplate);
     $todoList.innerHTML = template.join('');
   };
 
-  $todoList.addEventListener('click', (event) => {
-    const { className } = event.target;
+  const onClickTodoItem = (event) => {
+    const { classList } = event.target;
     const { id } = event.target.closest('li');
-    if (className === 'destroy') {
+    if (classList.contains('destroy')) {
       deleteTodo(id);
       setRootState();
     }
-    if (className === 'toggle') {
+    if (classList.contains('toggle')) {
       toggleTodo(id);
       setRootState();
     }
-  });
+  }
 
-  $todoList.addEventListener('dblclick', (event) => {
+  $todoList.addEventListener('click', onClickTodoItem);
+
+  const onDoubleClickTodoItem = (event) => {
     const $li = event.target.closest('li');
     $li.classList.add('editing');
 
@@ -40,11 +42,13 @@ function TodoList({ deleteTodo, toggleTodo, editTodo, setRootState }) {
     ).contents;
     $editInput.value = originValue || '';
     $editInput.focus();
-    const size = $editInput.value.length;
-    $editInput.setSelectionRange(size, size); // set cursor position
-  });
+    const { length } = $editInput.value;
+    $editInput.setSelectionRange(length, length); // set cursor position
+  }
 
-  $todoList.addEventListener('keyup', (event) => {
+  $todoList.addEventListener('dblclick', onDoubleClickTodoItem);
+
+  const onEditTodoItem = (event) => {
     if (event.key !== KEYCODE_ESC && event.key !== KEYCODE_ENTER) return;
 
     const $li = event.target.closest('li');
@@ -57,7 +61,9 @@ function TodoList({ deleteTodo, toggleTodo, editTodo, setRootState }) {
       editTodo($li.id, newTodoContents);
       setRootState();
     }
-  });
+  }
+
+  $todoList.addEventListener('keyup', onEditTodoItem);
 }
 
 export default TodoList;

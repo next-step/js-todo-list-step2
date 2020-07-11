@@ -16,10 +16,6 @@ function TodoApp() {
   this.todoList = [];
   this.user = '';
 
-  this.findIndexById = (id) => {
-    return this.todoList.findIndex((item) => item._id === id);
-  };
-
   this.setState = async () => {
     await this.getTodoList();
     this.TodoList.setState(this.todoList);
