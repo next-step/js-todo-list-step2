@@ -44,7 +44,7 @@ function TodoList({ deleteTodo, toggleTodo, editTodo, setRootState }) {
     $editInput.setSelectionRange(size, size); // set cursor position
   });
 
-  $todoList.addEventListener('keypress', (event) => {
+  $todoList.addEventListener('keyup', (event) => {
     if (event.key !== KEYCODE_ESC && event.key !== KEYCODE_ENTER) return;
 
     const $li = event.target.closest('li');
