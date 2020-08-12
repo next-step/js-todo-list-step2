@@ -1,19 +1,7 @@
-.completed {
-  text-decoration: line-through;
-}
-
-#user-list {
-  list-style: none;
-}
-
-#user-list li {
-  display: inline-block;
-}
-
 html,
 body {
   margin: 0;
-  padding: 10px;
+  padding: 0;
 }
 
 button {
@@ -34,6 +22,7 @@ button {
 
 body {
   font: 14px "Helvetica Neue", Helvetica, Arial, sans-serif;
+  line-height: 1.4em;
   background: #f5f5f5;
   color: #4d4d4d;
   min-width: 230px;
@@ -52,6 +41,20 @@ body {
   display: none;
 }
 
+#app {
+  margin-top: 100px;
+}
+
+#app h1 {
+  width: 100%;
+  font-size: 60px;
+  text-align: center;
+  color: #333;
+  font-weight: 100;
+  font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
+  margin-bottom: 50px;
+}
+
 .todoapp {
   background: #fff;
   margin: 30px 0 40px 0;
@@ -65,13 +68,29 @@ body {
   color: #e6e6e6;
 }
 
-#app h1 {
+.todoapp input::-moz-placeholder {
+  font-style: italic;
+  font-weight: 300;
+  color: #e6e6e6;
+}
+
+.todoapp input::input-placeholder {
+  font-style: italic;
+  font-weight: 300;
+  color: #e6e6e6;
+}
+
+.todoapp h1 {
+  position: absolute;
+  top: -155px;
   width: 100%;
-  font-size: 60px;
-  text-align: center;
-  color: #333;
+  font-size: 100px;
   font-weight: 100;
-  font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
+  text-align: center;
+  color: rgba(175, 47, 47, 0.15);
+  -webkit-text-rendering: optimizeLegibility;
+  -moz-text-rendering: optimizeLegibility;
+  text-rendering: optimizeLegibility;
 }
 
 .new-todo,
@@ -86,6 +105,7 @@ body {
   border: 0;
   color: inherit;
   padding: 6px;
+  border: 1px solid #999;
   box-shadow: inset 0 -1px 5px 0 rgba(0, 0, 0, 0.2);
   box-sizing: border-box;
   -webkit-font-smoothing: antialiased;
@@ -160,7 +180,7 @@ body {
 
 .todo-list li.editing .edit {
   display: block;
-  width: calc(100% - 43px);
+  width: 506px;
   padding: 12px 16px;
   margin: 0 0 0 43px;
 }
@@ -196,6 +216,33 @@ body {
   background-image: url("data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%2240%22%20height%3D%2240%22%20viewBox%3D%22-10%20-18%20100%20135%22%3E%3Ccircle%20cx%3D%2250%22%20cy%3D%2250%22%20r%3D%2250%22%20fill%3D%22none%22%20stroke%3D%22%23bddad5%22%20stroke-width%3D%223%22/%3E%3Cpath%20fill%3D%22%235dc2af%22%20d%3D%22M72%2025L42%2071%2027%2056l-4%204%2020%2020%2034-52z%22/%3E%3C/svg%3E");
 }
 
+.todo-list li .destroy {
+  display: none;
+  position: absolute;
+  top: 0;
+  right: 10px;
+  bottom: 0;
+  width: 40px;
+  height: 40px;
+  margin: auto 0;
+  font-size: 30px;
+  color: #cc9a9a;
+  transition: color 0.2s ease-out;
+  cursor: pointer;
+}
+
+.todo-list li .destroy:hover {
+  color: #af5b5e;
+}
+
+.todo-list li .destroy:after {
+  content: '×';
+}
+
+.todo-list li:hover .destroy {
+  display: block;
+}
+
 .todo-list li label {
   word-break: break-all;
   padding: 15px 15px 15px 60px;
@@ -209,7 +256,7 @@ body {
   text-decoration: line-through;
 }
 
-.todo-list li .delete {
+.todo-list li .destroy {
   display: none;
   position: absolute;
   top: 0;
@@ -222,18 +269,17 @@ body {
   color: #cc9a9a;
   margin-bottom: 11px;
   transition: color 0.2s ease-out;
-  cursor: pointer;
 }
 
-.todo-list li .delete:hover {
+.todo-list li .destroy:hover {
   color: #af5b5e;
 }
 
-.todo-list li .delete:after {
+.todo-list li .destroy:after {
   content: "×";
 }
 
-.todo-list li:hover .delete {
+.todo-list li:hover .destroy {
   display: block;
 }
 
@@ -269,10 +315,6 @@ body {
 .todo-count {
   float: left;
   text-align: left;
-}
-
-#completed-count.todo-count {
-  margin-left: 20px;
 }
 
 .todo-count strong {
@@ -344,6 +386,27 @@ html .clear-completed:active {
   text-decoration: underline;
 }
 
+@media screen and (-webkit-min-device-pixel-ratio: 0) {
+  .toggle-all,
+  .todo-list li .toggle {
+    background: none;
+  }
+
+  .todo-list li .toggle {
+    height: 40px;
+  }
+}
+
+@media (max-width: 430px) {
+  .count-container {
+    height: 50px;
+  }
+
+  .filters {
+    bottom: 10px;
+  }
+}
+
 .ripple {
   background-position: center;
   transition: background 0.6s;
@@ -380,12 +443,12 @@ button.ripple {
   0% {
     -webkit-transform: translateZ(0);
     transform: translateZ(0);
-    background-position: -468px 0;
+    background-position: -418px 0;
   }
   to {
     -webkit-transform: translateZ(0);
     transform: translateZ(0);
-    background-position: 468px 0;
+    background-position: 418px 0;
   }
 }
 
@@ -399,12 +462,40 @@ button.ripple {
   height: 100%;
   position: relative;
 }
+
 .skel-mask-container {
   position: relative;
   height: 20px;
 }
+
 .skel-mask {
   background: #fff;
   position: absolute;
   z-index: 200;
+}
+
+.chip {
+  width: 40px;
+  display: block;
+  font-size: 10px;
+  color: #fff;
+  font-weight: normal;
+  border-radius: 15px;
+  text-align: center;
+  left: 60px;
+  top: 3px;
+}
+
+.chip.primary {
+  background-color: #d63a49;
+}
+
+.chip.secondary {
+  background-color: #26c6da;
+}
+
+select.chip {
+  border-color: #e0e0e0;
+  color: #bdbdbd;
+  width: 45px;
 }
