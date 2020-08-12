@@ -33,7 +33,7 @@ button {
 }
 
 body {
-  font: 14px "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font: 14px 'Helvetica Neue', Helvetica, Arial, sans-serif;
   background: #f5f5f5;
   color: #4d4d4d;
   min-width: 230px;
@@ -74,6 +74,15 @@ body {
   font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
 }
 
+#app .register-input {
+  width: 40%;
+  font-size: 60px;
+  text-align: center;
+  color: #333;
+  font-weight: 100;
+  font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
+}
+
 .new-todo,
 .edit {
   position: relative;
@@ -105,6 +114,14 @@ body {
   border-top: 1px solid #e6e6e6;
 }
 
+.main .loading-view {
+  display: block;
+}
+
+.main .loading-hide {
+  display: none;
+}
+
 .toggle-all {
   width: 1px;
   height: 1px;
@@ -127,7 +144,7 @@ body {
 }
 
 .toggle-all + label:before {
-  content: "❯";
+  content: '❯';
   font-size: 22px;
   color: #e6e6e6;
   padding: 10px 27px 10px 27px;
@@ -187,13 +204,13 @@ body {
 }
 
 .todo-list li .toggle + label {
-  background-image: url("data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%2240%22%20height%3D%2240%22%20viewBox%3D%22-10%20-18%20100%20135%22%3E%3Ccircle%20cx%3D%2250%22%20cy%3D%2250%22%20r%3D%2250%22%20fill%3D%22none%22%20stroke%3D%22%23ededed%22%20stroke-width%3D%223%22/%3E%3C/svg%3E");
+  background-image: url('data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%2240%22%20height%3D%2240%22%20viewBox%3D%22-10%20-18%20100%20135%22%3E%3Ccircle%20cx%3D%2250%22%20cy%3D%2250%22%20r%3D%2250%22%20fill%3D%22none%22%20stroke%3D%22%23ededed%22%20stroke-width%3D%223%22/%3E%3C/svg%3E');
   background-repeat: no-repeat;
   background-position: center left;
 }
 
 .todo-list li .toggle:checked + label {
-  background-image: url("data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%2240%22%20height%3D%2240%22%20viewBox%3D%22-10%20-18%20100%20135%22%3E%3Ccircle%20cx%3D%2250%22%20cy%3D%2250%22%20r%3D%2250%22%20fill%3D%22none%22%20stroke%3D%22%23bddad5%22%20stroke-width%3D%223%22/%3E%3Cpath%20fill%3D%22%235dc2af%22%20d%3D%22M72%2025L42%2071%2027%2056l-4%204%2020%2020%2034-52z%22/%3E%3C/svg%3E");
+  background-image: url('data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%2240%22%20height%3D%2240%22%20viewBox%3D%22-10%20-18%20100%20135%22%3E%3Ccircle%20cx%3D%2250%22%20cy%3D%2250%22%20r%3D%2250%22%20fill%3D%22none%22%20stroke%3D%22%23bddad5%22%20stroke-width%3D%223%22/%3E%3Cpath%20fill%3D%22%235dc2af%22%20d%3D%22M72%2025L42%2071%2027%2056l-4%204%2020%2020%2034-52z%22/%3E%3C/svg%3E');
 }
 
 .todo-list li label {
@@ -230,7 +247,7 @@ body {
 }
 
 .todo-list li .delete:after {
-  content: "×";
+  content: '×';
 }
 
 .todo-list li:hover .delete {
@@ -254,16 +271,15 @@ body {
 }
 
 .count-container:before {
-  content: "";
+  content: '';
   position: absolute;
   right: 0;
   bottom: 0;
   left: 0;
   height: 50px;
   overflow: hidden;
-  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.2), 0 8px 0 -3px #f6f6f6,
-    0 9px 1px -3px rgba(0, 0, 0, 0.2), 0 16px 0 -6px #f6f6f6,
-    0 17px 2px -6px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.2), 0 8px 0 -3px #f6f6f6, 0 9px 1px -3px rgba(0, 0, 0, 0.2),
+    0 16px 0 -6px #f6f6f6, 0 17px 2px -6px rgba(0, 0, 0, 0.2);
 }
 
 .todo-count {
@@ -349,8 +365,7 @@ html .clear-completed:active {
   transition: background 0.6s;
 }
 .ripple:hover {
-  background: #616161 radial-gradient(circle, transparent 1%, #616161 1%)
-    center/15000%;
+  background: #616161 radial-gradient(circle, transparent 1%, #616161 1%) center/15000%;
 }
 .ripple:active {
   background-color: #9e9e9e;
@@ -367,7 +382,7 @@ button.ripple {
   border: none;
   border-radius: 2px;
   padding: 6px 9px;
-  margin: 3px 0;
+  margin: 3px 5px 3px 0px;
   font-size: 12px;
   cursor: pointer;
   color: #333;
