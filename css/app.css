@@ -119,6 +119,11 @@ body {
   box-shadow: inset 0 -2px 1px rgba(0, 0, 0, 0.03);
 }
 
+.new-todo.disabled {
+  pointer-events: none;
+  background-color: #ddd;
+}
+
 .main {
   position: relative;
   z-index: 2;
@@ -471,4 +476,27 @@ select.chip {
   border-color: #e0e0e0;
   color: #bdbdbd;
   width: 45px;
+}
+
+.display-none {
+  display: none;
+}
+
+.page-loading {
+  margin: 5% auto;
+  height: 100px;
+  width: 100px;
+  border: 6px solid #fff;
+  border-radius: 100%;
+  border-right-color: #ddd;
+  animation: spin 800ms infinite linear;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(359deg);
+  }
 }
