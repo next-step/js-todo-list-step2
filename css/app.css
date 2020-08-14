@@ -190,6 +190,11 @@ body {
   margin: 0 0 0 43px;
 }
 
+.todo-list li.editing .edit-select {
+  display: block;
+  margin: 0 0 0 43px;
+}
+
 .todo-list li.editing .view {
   display: none;
 }
@@ -237,6 +242,7 @@ body {
 .todo-list li .destroy {
   display: none;
   position: absolute;
+  cursor: pointer;
   top: 0;
   right: 10px;
   bottom: 0;
@@ -262,6 +268,10 @@ body {
 }
 
 .todo-list li .edit {
+  display: none;
+}
+
+.todo-list li .edit-select {
   display: none;
 }
 

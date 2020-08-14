@@ -1,6 +1,6 @@
 import { SELECTOR } from "../utils/constants.js";
 
-export default function TodoCount($todoCount, { setFilter }) {
+export default function TodoCount($todoCount, { setFilter, deleteAllTodo }) {
   this.changeSelected = (filter) => {
     if (!filter) {
       return;
@@ -14,7 +14,7 @@ export default function TodoCount($todoCount, { setFilter }) {
       .classList.add(`${SELECTOR.SELECTED}`);
   };
 
-  const onClickFilter = (event) => {
+  const onClickTodoCount = (event) => {
     const $target = event.target;
 
     if ($target.classList.contains(SELECTOR.TODO_FILTER)) {
@@ -22,10 +22,14 @@ export default function TodoCount($todoCount, { setFilter }) {
       this.changeSelected(filter);
       setFilter(filter);
     }
+
+    if ($target.classList.contains(SELECTOR.CLEAR_COMPLETED)) {
+      deleteAllTodo();
+    }
   };
 
   this.bindEvent = () => {
-    $todoCount.addEventListener("click", onClickFilter);
+    $todoCount.addEventListener("click", onClickTodoCount);
   };
 
   this.render = (count) => {

@@ -35,8 +35,9 @@ export default function App($app) {
     {
       setUsername: (username) => {
         this.setState({ username, loading: false });
+        todoApp.setUsername(username);
         // loadTodosByUsername 이후 todoApp의 render 실행
-        todoApp.loadTodosByUsername(username);
+        todoApp.loadTodosByUsername();
         this.toggleLoading();
       },
     }
@@ -45,7 +46,6 @@ export default function App($app) {
   const todoApp = new TodoApp(document.querySelector(`.${SELECTOR.TODO_APP}`));
 
   this.render = () => {
-    console.log("app render");
     if (this.state.loading) {
       return;
     }

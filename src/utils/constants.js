@@ -7,19 +7,33 @@ export const SELECTOR = {
   USER_TITLE: "user-title",
   NEW_TODO: "new-todo",
   DISABLED: "disabled",
+  EDITING: "editing",
+  EDIT: "edit",
+  LABEL: "label",
+  VIEW: "view",
+  COMPLETED: "completed",
+  CONTENTS: "contents",
   TODO_LIST: "todo-list",
   USER_NAME: "user-name",
   COUNT_CONTAINER: "count-container",
   TODO_FILTER: "todo-filter",
+  SELECT: "select",
   SELECTED: "selected",
   TODO_COUNT_TEXT: "todo-count strong",
+  CLEAR_COMPLETED: "clear-completed",
+  TOGGLE: "toggle",
+  DESTROY: "destroy",
 };
 
 export const VALUE = {
-  // todo: 처음 생성할 때 들어가는 0이 int이니 변경
   NON_PRIORITY: "0",
   PRIMARY_PRIORITY: "1",
   SECONDARY_PRIORITY: "2",
+};
+
+export const KEY = {
+  ENTER: "Enter",
+  ESCAPE: "Escape",
 };
 
 export const FILTER = {

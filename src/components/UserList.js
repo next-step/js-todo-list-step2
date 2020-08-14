@@ -26,9 +26,13 @@ export default function UserList($userList, { setUsername }) {
   };
 
   this.init = async () => {
-    this.users = await getUserList();
-    setUsername(this.activeUser);
-    $userList.addEventListener("click", onClickUsername);
+    try {
+      this.users = await getUserList();
+      setUsername(this.activeUser);
+      $userList.addEventListener("click", onClickUsername);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   this.init();
