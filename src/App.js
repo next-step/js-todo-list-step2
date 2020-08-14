@@ -43,7 +43,7 @@ export default function App($app) {
     }
   );
 
-  const todoApp = new TodoApp(document.querySelector(`.${SELECTOR.TODO_APP}`));
+  const todoApp = new TodoApp($app.querySelector(`.${SELECTOR.TODO_APP}`));
 
   this.render = () => {
     if (this.state.loading) {
