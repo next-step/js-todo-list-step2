@@ -1,8 +1,10 @@
 export const todoTitleHTML = (userName) => `
   <span><strong>${userName}</strong>'s Todo List</span>`;
 
-export const userButtonHTML = (userName) => `
-  <button class="ripple active">${userName}</button>`;
+export const userButtonHTML = (userName, selectedName) => `
+  <button class="ripple ${userName === selectedName ? 'active' : ''}">
+    ${userName}
+  </button>`;
 
 export const todoItemHTML = (todo) => `
   <li id=${todo._id}>
