@@ -22,8 +22,8 @@ export default class UserList {
     this.render();
   }
 
-  selectUser(username) {
-    this.selectedUser = username;
+  selectUser(userName) {
+    this.selectedUser = userName;
     this.activateUserButton();
   }
 
