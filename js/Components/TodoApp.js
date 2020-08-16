@@ -1,40 +1,40 @@
 import TodoInput from "./TodoInput.js";
 import TodoList from "./TodoList.js";
-import { isValidTodoItems, createUniqueId } from "../utils.js";
+import { validateUserName } from "../utils.js";
 import TodoCount from "./TodoCount.js";
 import TodoFilter from "./Todofilter.js";
 import { FilterType } from "../constants.js";
 import {
-  fetchTodoItmesFromLocalStorage,
-  saveTodoItmes2LocalStorage,
-} from "../todoLocalStorage.js";
+  fetchTodoItemsByUserNameFromServer,
+  addTodoItem2Server,
+  toggleTodoItmeByIdFromServer,
+  deleteTodoItemByIdFromServer,
+  editTodoItemByIdFromServer,
+} from "../api.js";
 
-function TodoApp($target) {
+function TodoApp($target, activeUser) {
   if (!new.target) {
     throw new Error("Create instance with 'new'");
   }
 
-  this.todoItems = fetchTodoItmesFromLocalStorage();
-  this.filterType = FilterType.ALL;
+  validateUserName(activeUser);
 
-  this.setState = (newTodoItems) => {
-    if (!isValidTodoItems(newTodoItems)) {
-      throw Error("Wrong todoItems");
-    }
-    this.todoItems = newTodoItems;
+  this.activeUser = activeUser;
+  this.filterType = FilterType.ALL;
+  this.todoItems = [];
+
+  this.setState = (newActiveUser) => {
+    validateUserName(newActiveUser);
+    this.activeUser = newActiveUser;
     this.init();
   };
 
-  this.addTodo = (contentText) => {
-    this.todoItems.push({
-      _id: createUniqueId(),
-      content: contentText,
-      isCompleted: false,
-    });
+  this.addTodo = async (contentText) => {
+    const newTodo = await addTodoItem2Server(this.activeUser, contentText);
+    this.todoItems.push(newTodo);
     const filteredTodoItems = this.getFilteredTodoItems();
     this.todoList.setState(filteredTodoItems);
     this.todoCount.setState(filteredTodoItems.length);
-    saveTodoItmes2LocalStorage(this.todoItems);
   };
 
   this.deleteTodoById = (id) => {
@@ -47,14 +47,16 @@ function TodoApp($target) {
     const filteredTodoItems = this.getFilteredTodoItems();
     this.todoList.setState(filteredTodoItems);
     this.todoCount.setState(filteredTodoItems.length);
-    saveTodoItmes2LocalStorage(this.todoItems);
+    deleteTodoItemByIdFromServer(this.activeUser, id);
   };
 
   this.deleteAllTodo = () => {
+    this.todoItems.forEach(({ _id }) =>
+      deleteTodoItemByIdFromServer(this.activeUser, _id)
+    );
     this.todoItems = [];
     this.todoList.setState(this.todoItems);
     this.todoCount.setState(this.todoItems.length);
-    saveTodoItmes2LocalStorage(this.todoItems);
   };
 
   this.toggleTodoById = (id) => {
@@ -66,21 +68,21 @@ function TodoApp($target) {
     todoItem.isCompleted = !todoItem.isCompleted;
     const filteredTodoItems = this.getFilteredTodoItems();
     this.todoList.setState(filteredTodoItems);
-    saveTodoItmes2LocalStorage(this.todoItems);
+    toggleTodoItmeByIdFromServer(this.activeUser, id);
   };
 
-  this.editTodoById = (id, content) => {
+  this.editTodoById = (id, contents) => {
     const todoItem = this.todoItems.find(({ _id }) => _id === id);
     if (!todoItem) {
       console.log(`Can't find todoItem with id : ${id}`);
       return;
     }
-    if (content !== "") {
-      todoItem.content = content;
+    if (contents !== "") {
+      todoItem.contents = contents;
     }
     const filteredTodoItems = this.getFilteredTodoItems();
     this.todoList.setState(filteredTodoItems);
-    saveTodoItmes2LocalStorage(this.todoItems);
+    editTodoItemByIdFromServer(this.activeUser, id, contents);
   };
 
   this.setFilterType = (newFilterType) => {
@@ -122,23 +124,27 @@ function TodoApp($target) {
     `;
   };
 
-  this.init = () => {
+  this.init = async () => {
     this.render();
+
+    this.todoItems = await fetchTodoItemsByUserNameFromServer(this.activeUser);
+    const filteredTodoItems = this.getFilteredTodoItems();
+
     this.todoInput = new TodoInput(document.getElementById("todo-input"), {
       onSubmit: (contentText) => this.addTodo(contentText),
     });
     this.todoList = new TodoList(
       document.getElementById("todo-list"),
-      this.todoItems,
+      filteredTodoItems,
       {
         deleteTodoById: (id) => this.deleteTodoById(id),
         toggleTodoById: (id) => this.toggleTodoById(id),
-        editTodoById: (id, content) => this.editTodoById(id, content),
+        editTodoById: (id, contents) => this.editTodoById(id, contents),
       }
     );
     this.todoCount = new TodoCount(
       document.getElementById("todo-count"),
-      this.todoItems.length
+      filteredTodoItems.length
     );
     this.todoFilter = new TodoFilter(
       document.getElementById("todo-filter"),

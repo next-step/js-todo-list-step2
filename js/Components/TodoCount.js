@@ -3,7 +3,7 @@ function TodoCount($target, count) {
     throw new Error("Create instance with 'new'");
   }
 
-  this.count = count | 0;
+  this.count = count || 0;
 
   this.setState = (nextCount) => {
     this.count = nextCount;

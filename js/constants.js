@@ -3,3 +3,5 @@ export const FilterType = Object.freeze({
   ACTIVE: "active",
   COMPLETED: "completed",
 });
+
+export const DEFAULT_USER = "lettuce";

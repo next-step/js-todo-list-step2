@@ -37,8 +37,8 @@ function TodoList($target, todoItems, eventHandler) {
 
       if (event.target.classList.contains("edit")) {
         const id = event.target.closest("li").id;
-        const content = event.target.value;
-        eventHandler.editTodoById(id, content);
+        const contents = event.target.value;
+        eventHandler.editTodoById(id, contents);
       }
     });
 
@@ -83,23 +83,23 @@ function TodoList($target, todoItems, eventHandler) {
 
   this.render = () => {
     const todoItemsHTML = this.todoItems
-      .map(({ content, isCompleted, _id }) =>
+      .map(({ contents, isCompleted, _id }) =>
         isCompleted
           ? `<li id="${_id}" class="completed"> 
                 <div class="view">
                   <input class="toggle" type="checkbox" checked/>
-                  <label class="label">${content}</label> 
+                  <label class="label">${contents}</label> 
                   <button class="destroy"></button>
                 </div>
-                <input class="edit" value="${content}" />
+                <input class="edit" value="${contents}" />
              </li>`
           : `<li id="${_id}">
                 <div class="view">
                   <input class="toggle" type="checkbox"/>
-                  <label class="label">${content}</label>
+                  <label class="label">${contents}</label>
                   <button class="destroy"></button>
                 </div>
-                <input class="edit" value="${content}" />
+                <input class="edit" value="${contents}" />
             </li>`
       )
       .join(" ");
