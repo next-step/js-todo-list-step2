@@ -9,7 +9,7 @@ export const userButtonHTML = (userName, selectedName) => `
   </button>`;
 
 export const todoItemHTML = (todo) => `
-  <li id=${todo._id}>
+  <li id=${todo._id} class=${todo.isCompleted && 'completed'}>
     <div class="view">
       <input class="toggle" type="checkbox" ${todo.isCompleted && 'checked'}/>
       <label class="label">
