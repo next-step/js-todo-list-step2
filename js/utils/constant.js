@@ -12,3 +12,9 @@ export const SELECTOR = {
 export const NODE = {
   BUTTON: 'BUTTON',
 };
+
+export const PRIORITY = {
+  NONE: 0,
+  PRIMARY: 1,
+  SECONDARY: 2,
+};
