@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Mission 2 Todo List</title>
+    <title>2SOOY | 2WEEK</title>
     <meta charset="utf-8" />
     <link href="./css/app.css" rel="stylesheet" />
     <link
@@ -12,7 +12,7 @@
   <body>
     <div id="app">
       <h1 id="user-title" data-username="eastjun">
-        <span><strong>eastjun</strong>'s Todo List</span>
+        <span><strong>2SOOY</strong>'s Todo List</span>
       </h1>
       <section>
         <div id="user-list">
@@ -24,8 +24,8 @@
         </div>
       </section>
 
-      <section class="todoapp">
-        <section class="input-container">
+      <section class="todo-body">
+        <section class="todo-input">
           <input
             class="new-todo"
             placeholder="할 일을 입력해주세요."
@@ -50,7 +50,7 @@
                 <input class="toggle" type="checkbox" />
                 <label class="label">
                   <select class="chip select">
-                    <option value="0" selected>순위</option>
+                    <option value="0" selected>0순위</option>
                     <option value="1">1순위</option>
                     <option value="2">2순위</option>
                   </select>
@@ -80,7 +80,7 @@
                 </label>
                 <button class="destroy"></button>
               </div>
-              <input class="edit" value="완료된 타이틀" />
+              <input class="edit" value="완료된 타이틀1" />
             </li>
             <li class="completed">
               <div class="view">
@@ -105,7 +105,7 @@
         </section>
         <div class="count-container">
           <span class="todo-count">총 <strong>0</strong> 개</span>
-          <ul class="filters">
+          <ul class="todo-tab">
             <li>
               <a href="#/" class="selected">전체보기</a>
             </li>
@@ -116,9 +116,10 @@
               <a href="#/completed">완료한 일</a>
             </li>
           </ul>
-          <button class="clear-completed">모두 삭제</button>
+          <button class="clear-all">모두 삭제</button>
         </div>
       </section>
     </div>
+    <script type="module" src="js/index.js"></script>
   </body>
 </html>
