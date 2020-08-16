@@ -8,3 +8,7 @@ export const SELECTOR = {
   TODO_TAB: 'todo-tab',
   TODO_CLEAR_BUTTON: '.clear-all',
 };
+
+export const NODE = {
+  BUTTON: 'BUTTON',
+};
