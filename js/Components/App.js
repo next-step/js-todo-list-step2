@@ -4,6 +4,7 @@ import TodoList from './TodoList.js';
 
 import { SELECTOR } from '../utils/constant.js';
 import { api } from '../utils/api.js';
+import TodoInput from './TodoInput.js';
 
 function App($target) {
   this.init = async () => {
@@ -33,6 +34,12 @@ function App($target) {
       onChangeUser: this.onChangeUser,
     });
 
+    this.todoInput = new TodoInput({
+      $target: document.querySelector(SELECTOR.TODO_INPUT),
+      userName: this.state.user.name,
+      onAddTodo: this.onAddTodo,
+    });
+
     this.todoList = new TodoList({
       $target: document.querySelector(SELECTOR.TODO_LIST),
       todoListState: {
@@ -47,18 +54,14 @@ function App($target) {
   };
 
   this.onChangeUser = async (userName) => {
-    const users = await api.fetchUserList();
-    const userInfo = await api.fetchUserTodo(userName);
-    const newUser = {
-      name: userName,
-      todos: userInfo.todoList || [],
-    };
+    const newState = await this.fetchState(userName);
 
-    const newState = {
-      ...this.state,
-      user: newUser,
-      users,
-    };
+    this.setState(newState);
+  };
+
+  this.onAddTodo = async (userName, contents) => {
+    await api.addTodo(userName, contents);
+    const newState = await this.fetchState(userName);
 
     this.setState(newState);
   };
@@ -87,14 +90,14 @@ function App($target) {
   this.fetchState = async (userName) => {
     const users = await api.fetchUserList();
     const userInfo = await api.fetchUserTodo(userName);
-    const newUser = {
+    const user = {
       name: userName,
       todos: userInfo.todoList || [],
     };
 
     const newState = {
       ...this.state,
-      user: newUser,
+      user,
       users,
     };
 
@@ -109,6 +112,7 @@ function App($target) {
       users: this.state.users,
       name: this.state.user.name,
     });
+    this.todoInput.setState(this.state.user.name);
     this.todoList.setState({
       name: this.state.user.name,
       todos: this.state.user.todos,
