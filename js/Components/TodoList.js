@@ -7,6 +7,7 @@ function TodoList({
   onToggleTodo,
   onRemoveTodo,
   onEditTodo,
+  onChangePriority,
 }) {
   this.init = () => {
     this.$target = $target;
@@ -110,7 +111,12 @@ function TodoList({
     this.isEditing = false;
   };
 
-  this.onChange = (e) => {};
+  this.onChange = (e) => {
+    if (e.target.nodeName !== 'SELECT') return;
+
+    const todoItem = e.target.closest('li');
+    onChangePriority(this.name, todoItem.id, e.target.value);
+  };
 
   this.getSelectedTodos = (selectedTab) => {
     switch (selectedTab) {

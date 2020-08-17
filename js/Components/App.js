@@ -52,6 +52,7 @@ function App($target) {
       onToggleTodo: this.onToggleTodo,
       onRemoveTodo: this.onRemoveTodo,
       onEditTodo: this.onEditTodo,
+      onChangePriority: this.onChangePriority,
     });
 
     this.todoCount = new TodoCount({
@@ -79,7 +80,7 @@ function App($target) {
     this.setState(newState);
   };
 
-  // TodoList
+  // TodoInput
   this.onAddTodo = async (userName, contents) => {
     await api.addTodo(userName, contents);
     const newState = await this.fetchState(userName);
@@ -87,6 +88,7 @@ function App($target) {
     this.setState(newState);
   };
 
+  // TodoList
   this.onToggleTodo = async (userName, todoId) => {
     await api.toggleTodo(userName, todoId);
     const newState = await this.fetchState(userName);
@@ -103,6 +105,13 @@ function App($target) {
 
   this.onEditTodo = async (userName, todoId, contents) => {
     await api.editTodoContent(userName, todoId, contents);
+    const newState = await this.fetchState(userName);
+
+    this.setState(newState);
+  };
+
+  this.onChangePriority = async (userName, todoId, priority) => {
+    await api.editTodoPriority(userName, todoId, priority);
     const newState = await this.fetchState(userName);
 
     this.setState(newState);
