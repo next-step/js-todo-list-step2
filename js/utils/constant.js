@@ -14,6 +14,9 @@ export const CLASS_NAME = {
   TOGGLE: 'toggle',
   DESTROY: 'destroy',
   EDITING: 'editing',
+  ALL: 'all',
+  ACTIVE: 'active',
+  COMPLETED: 'completed',
 };
 
 export const NODE = {
