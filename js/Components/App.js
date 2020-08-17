@@ -1,10 +1,11 @@
 import TodoTitle from './TodoTitle.js';
 import UserList from './UserList.js';
 import TodoList from './TodoList.js';
+import TodoInput from './TodoInput.js';
+import TodoCount from './TodoCount.js';
 
 import { SELECTOR } from '../utils/constant.js';
 import { api } from '../utils/api.js';
-import TodoInput from './TodoInput.js';
 
 function App($target) {
   this.init = async () => {
@@ -50,6 +51,14 @@ function App($target) {
       onToggleTodo: this.onToggleTodo,
       onRemoveTodo: this.onRemoveTodo,
       onEditTodo: this.onEditTodo,
+    });
+
+    this.todoCount = new TodoCount({
+      $target: document.querySelector(SELECTOR.TODO_COUNT),
+      todoCountState: {
+        todos: this.state.user.todos,
+        selectedTab: this.state.selectedTab,
+      },
     });
   };
 
@@ -115,6 +124,10 @@ function App($target) {
     this.todoInput.setState(this.state.user.name);
     this.todoList.setState({
       name: this.state.user.name,
+      todos: this.state.user.todos,
+      selectedTab: this.state.selectedTab,
+    });
+    this.todoCount.setState({
       todos: this.state.user.todos,
       selectedTab: this.state.selectedTab,
     });
