@@ -5,7 +5,8 @@ import TodoUser from './TodoUser.js'
 function App () {
   const $todoInput = document.querySelector('.new-todo')
   const $todoList = document.querySelector('.todo-list')
-  const $todoUser = document.querySelector('#user-title')
+  const $userTitle = document.querySelector('#user-title')
+  const $userList = document.querySelector('#user-list')
   const data = []
 
   function addItem (text) {
@@ -30,7 +31,7 @@ function App () {
   const todoInput = new TodoInput($todoInput, (text) => {
     addItem(text)
   })
-  const todoUser = new TodoUser($todoUser)
+  const todoUser = new TodoUser($userTitle, $userList)
 }
 
 new App()
