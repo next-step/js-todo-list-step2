@@ -4,6 +4,8 @@ import TodoList from './TodoList.js';
 import TodoInput from './TodoInput.js';
 import TodoCount from './TodoCount.js';
 import TodoTab from './TodoTab.js';
+import TodoClearButton from './TodoClearButton.js';
+import LoadingView from './LoadingView.js';
 
 import { SELECTOR, CLASS_NAME } from '../utils/constant.js';
 import { api } from '../utils/api.js';
@@ -71,6 +73,16 @@ function App($target) {
       },
       onChangeTab: this.onChangeTab,
     });
+
+    this.todoClearButton = new TodoClearButton({
+      $target: document.querySelector(SELECTOR.TODO_CLEAR_BUTTON),
+      userName: this.state.user.name,
+      onDeleteAllTodo: this.onDeleteAllTodo,
+    });
+
+    this.loadingView = new LoadingView({
+      $target: document.querySelector(SELECTOR.LOADING_VIEW),
+    });
   };
 
   // UserList
@@ -127,10 +139,23 @@ function App($target) {
     this.setState(newState);
   };
 
+  // TodoClearButton
+  this.onDeleteAllTodo = async (userName) => {
+    await api.deleteAllTodo(userName);
+    const newState = await this.fetchState(userName);
+
+    this.setState(newState);
+  };
+
   // 공통
   this.fetchState = async (userName) => {
+    this.loadingView.setState(true);
+
     const users = await api.fetchUserList();
     const userInfo = await api.fetchUserTodo(userName);
+
+    this.loadingView.setState(false);
+
     const user = {
       name: userName,
       todos: userInfo.todoList || [],
@@ -164,6 +189,7 @@ function App($target) {
       selectedTab: this.state.selectedTab,
     });
     this.todoTab.setState(this.state.selectedTab);
+    this.todoClearButton.setState(this.state.user.name);
   };
 
   this.init();
