@@ -5,7 +5,7 @@ export const SELECTOR = {
   TODO_INPUT: '.todo-input',
   TODO_LIST: '.todo-list',
   TODO_COUNT: '.todo-count',
-  TODO_TAB: 'todo-tab',
+  TODO_TAB: '.todo-tab',
   TODO_CLEAR_BUTTON: '.clear-all',
   EDIT: '.edit',
 };
@@ -17,11 +17,13 @@ export const CLASS_NAME = {
   ALL: 'all',
   ACTIVE: 'active',
   COMPLETED: 'completed',
+  SELECTED: 'selected',
 };
 
 export const NODE = {
   BUTTON: 'BUTTON',
   LABEL: 'LABEL',
+  A: 'A',
 };
 
 export const PRIORITY = {
