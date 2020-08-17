@@ -29,7 +29,6 @@ const option = {
     }),
   }),
 
-  // fixme - 500 error
   editPriority: (priority) => ({
     method: 'PUT',
     headers: {
@@ -83,10 +82,9 @@ export const api = {
     );
   },
 
-  // fixme - 500 error
   editTodoPriority: (userName, todoId, priority) => {
     return request(
-      `${BASE_URL}/${userName}/item/${todoId}`,
+      `${BASE_URL}/${userName}/item/${todoId}/priority`,
       option.editPriority(priority),
     );
   },
