@@ -58,7 +58,7 @@ export default function TodoList ($todoList, data, removeItem) {
   }
 
   this.get = () => {
-    fetch(`${ADDRESS.BASE_URL}/api/u/${USER.ID}/item`)
+    fetch(`${ADDRESS.BASE_URL}/api/u/${USER.Name}/item`)
       .then((response) => response.json())
       .then((data) => {
         this.data = data.todoList
@@ -67,7 +67,7 @@ export default function TodoList ($todoList, data, removeItem) {
   }
 
   this.post = (text) => {
-    fetch(`${ADDRESS.BASE_URL}/api/u/${USER.ID}/item/`, {
+    fetch(`${ADDRESS.BASE_URL}/api/u/${USER.Name}/item/`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -82,13 +82,15 @@ export default function TodoList ($todoList, data, removeItem) {
 
   this.render = () => {
     let result = ''
-    this.data.map(({ contents, isCompleted, priority }, index) => {
+    this.data.map(({ id, contents, isCompleted, priority }, index) => {
       result += `<li class="todo-item ${isCompleted ? 'completed' : ''}" data-index="${index}">
       <div class="view">
       <input class="toggle" type="checkbox" ${isCompleted ? 'checked' : ''} />
       <label class="label">
       <select class="chip select">
-        <option value="${priority}" selected>순위</option>
+        <option value="0" ${priority == 0 ? 'selected' : ''}>순위</option>
+        <option value="1" ${priority == 1 ? 'selected' : ''}>1순위</option>
+        <option value="2" ${priority == 2 ? 'selected' : ''}>2순위</option>
       </select>
       ${contents}</label>
       <button class="destroy"></button>

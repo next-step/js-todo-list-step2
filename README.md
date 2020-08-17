@@ -13,3 +13,7 @@
 - [ ] fetch api 사용하는 부분을 async await을 사용하여 리팩토링합니다.
 - [ ] github issue에서 라벨을 붙이는 것처럼, 우선순위에 따라서 badge를 추가합니다.
 - [x] ES6 impot & export를 이용해 자바스크립트 파일을 리팩토링한다.
+
+## 2기
+### 🐞 버그
+- [ ] Todo user list가 이상하게 겹쳐짐
