@@ -7,6 +7,7 @@ export const SELECTOR = {
   TODO_COUNT: '.todo-count',
   TODO_TAB: '.todo-tab',
   TODO_CLEAR_BUTTON: '.clear-all',
+  LOADING_VIEW: '.loading-view',
   EDIT: '.edit',
 };
 
