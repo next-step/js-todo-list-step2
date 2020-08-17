@@ -1,15 +1,45 @@
 export default class TodoList {
-  constructor() {
+  constructor(toggleTodo, editTodo, removeTodo) {
     this.todoListElement = document.querySelector('.todo-list');
     this.todos = [];
+    this.toggleTodo = toggleTodo;
+    this.editTodo = editTodo;
+    this.removeTodo = removeTodo;
 
     this.applyEvent();
   }
 
   applyEvent() {
     this.todoListElement.addEventListener('click', ({ target }) => {
-      console.log(target, target.closest('li'));
+      let todoId = target.closest('li').id;
+      console.log('TodoList -> applyEvent -> todoId', todoId);
+
+      if (target.className === 'destroy') {
+        this.removeTodo(todoId);
+      } else if (target.className === 'edit') {
+        this.editEvent(todoId);
+      } else if (target.className === 'toggle') {
+        this.toggleTodo(todoId);
+      }
     });
+  }
+
+  findEditText(todoId) {
+    const target = document.querySelector(`#edit-${todoId}`);
+    return target.value;
+  }
+
+  findTodoItem(targetId) {
+    return this.todos.find((todo) => todo._id === targetId);
+  }
+
+  editEvent(todoId) {
+    const targetTodo = this.findTodoItem(todoId);
+    let changeValue = '';
+    if (targetTodo.isCompleted) {
+      changeValue = this.findEditText(todoId);
+    }
+    this.editTodo(todoId, changeValue);
   }
 
   setTodos(todos) {
@@ -50,9 +80,11 @@ export default class TodoList {
   render() {
     const todoListElementsText = this.todos.map((todo) => {
       return `
-        <li>
+        <li id="${todo._id}">
           <div class="view">
-            <input class="toggle" type="checkbox" />
+            <input class="toggle" type="checkbox" ${
+              todo.isCompleted ? 'checked' : ''
+            }/>
             <label class="label">
               ${this.priorityTemplate(todo.priority)}
               ${todo.contents}

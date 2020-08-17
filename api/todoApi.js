@@ -37,19 +37,23 @@ export const updateTodoItem = async (userName, itemId, contents) => {
 };
 
 export const deleteTodoItem = async (userName, itemId) => {
-  await fetch(
+  const response = await fetch(
     `https://blackcoffee-todolist.df.r.appspot.com/api/u/${userName}/item/${itemId}`,
     {
       method: 'DELETE',
     }
-  ).then((res) => res.json());
+  );
+  const todo = await response.json();
+  return todo;
 };
 
 export const toggleTodo = async (userName, itemId) => {
-  await fetch(
+  const response = await fetch(
     `https://blackcoffee-todolist.df.r.appspot.com/api/u/${userName}/item/${itemId}/toggle`,
     {
       method: 'PUT',
     }
   );
+  const todo = await response.json();
+  return todo;
 };
