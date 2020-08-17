@@ -112,6 +112,23 @@ function TodoList({
 
   this.onChange = (e) => {};
 
+  this.getSelectedTodos = (selectedTab) => {
+    switch (selectedTab) {
+      case CLASS_NAME.ALL:
+        return this.todos;
+
+      case CLASS_NAME.ACTIVE:
+        return this.todos.filter(({ isCompleted }) => !isCompleted);
+
+      case CLASS_NAME.COMPLETED:
+        return this.todos.filter(({ isCompleted }) => isCompleted);
+
+      default:
+        console.error(`TodoList Render Error : ${MESSAGE.UNDEFINED_TAB}`);
+        return;
+    }
+  };
+
   this.createTodoListHTML = (todos) => {
     return todos.reduce((html, todo) => {
       html += todoItemHTML(todo);
@@ -120,7 +137,8 @@ function TodoList({
   };
 
   this.render = () => {
-    this.$target.innerHTML = this.createTodoListHTML(this.todos);
+    const selectedTodos = this.getSelectedTodos(this.selectedTab);
+    this.$target.innerHTML = this.createTodoListHTML(selectedTodos);
   };
 
   this.init();
