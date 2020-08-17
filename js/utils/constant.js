@@ -34,6 +34,7 @@ export const KEY = {
 
 export const MESSAGE = {
   NO_INPUT_KEYWORD: '🔥할일을 입력해주세요 !',
+  NO_SELECTED_USER: '🔥유저를 선택해주세요 !',
   UNDEFINED_TAB: '올바르지 않은 TAB이름입니다.',
   UNDEFINED_KEY: '등록되지 않은 KEY 입력입니다.',
   NOT_HTML_ELEMENT: 'HTML Element가 존재하지 않습니다.',
