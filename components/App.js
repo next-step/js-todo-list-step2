@@ -1,9 +1,15 @@
 import TodoHeader from './todo-header.js';
 import UserList from './user-list.js';
 import TodoList from './todo-list.js';
+import TodoInput from './todo-input.js';
 
 import { getUsers } from '../api/users.js';
-import { getTodoItems, toggleTodo, deleteTodoItem } from '../api/todoApi.js';
+import {
+  getTodoItems,
+  toggleTodo,
+  addTodoItem,
+  deleteTodoItem,
+} from '../api/todoApi.js';
 
 export default class App {
   constructor() {
@@ -14,6 +20,7 @@ export default class App {
       this.editTodo.bind(this),
       this.removeTodo.bind(this)
     );
+    this.todoInput = new TodoInput(this.addTodo.bind(this));
 
     this.selectedUserName = '';
     this.users = [];
@@ -29,12 +36,7 @@ export default class App {
     this.userList.selectUser(defaultUserName);
     this.todoHeader.setState(defaultUserName);
 
-    this.todos = await getTodoItems(defaultUserName);
-    this.todoList.setTodos(this.todos.todoList);
-  }
-
-  render() {
-    console.log(this.todos.todoList);
+    this.todos = await getTodoItems(this.selectedUserName);
     this.todoList.setTodos(this.todos.todoList);
   }
 
@@ -43,20 +45,30 @@ export default class App {
       this.userList.selectUser(selectedUser);
       this.selectedUserName = selectedUser;
       this.todoHeader.setState(selectedUser);
-      const todos = await getTodoItems(selectedUser);
-      this.setTodoState(todos);
-      this.todoList.setTodos(this.todos.todoList);
+      const todos = await getTodoItems(this.selectedUserName);
+      this.setTodoState(todos.todoList);
     } catch (error) {
       alert(error);
     }
   }
 
   setTodoState(todoList) {
-    this.todos = {
-      ...this.todos,
-      todoList,
-    };
-    this.render();
+    try {
+      this.todos = {
+        ...this.todos,
+        todoList,
+      };
+      this.todoList.setTodos(todoList);
+    } catch (error) {
+      alert(error);
+    }
+  }
+
+  async addTodo(contents) {
+    const newTodoItem = await addTodoItem(this.selectedUserName, contents);
+    const todoList = this.todos.todoList || [];
+    todoList.push(newTodoItem);
+    this.setTodoState(todoList);
   }
 
   async toggleTodo(targetId) {

@@ -10,9 +10,20 @@ export default class TodoList {
   }
 
   applyEvent() {
+    this.todoListElement.addEventListener('dblclick', ({ target }) => {
+      const parentEl = target.closest('li');
+      console.dir(parentEl);
+      Array.from(parentEl.children).forEach((el) => {
+        console.log(el);
+        if (el.classList.contains('hidden')) {
+          el.classList.remove('hidden');
+        } else {
+          el.classList.add('hidden');
+        }
+      });
+    });
     this.todoListElement.addEventListener('click', ({ target }) => {
       let todoId = target.closest('li').id;
-      console.log('TodoList -> applyEvent -> todoId', todoId);
 
       if (target.className === 'destroy') {
         this.removeTodo(todoId);
@@ -43,11 +54,11 @@ export default class TodoList {
   }
 
   setTodos(todos) {
+    this.todos = todos || [];
+    this.render();
     if (!todos) {
       throw new Error('Exist not todo list.');
     }
-    this.todos = todos;
-    this.render();
   }
 
   loadingTemplate() {
@@ -91,7 +102,7 @@ export default class TodoList {
             </label>
             <button class="destroy"></button>
           </div>
-          <input class="edit hidden" value="완료된 타이틀" />
+          <input class="edit hidden" value="${todo.contents}" />
         </li>
       `;
     });

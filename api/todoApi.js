@@ -6,8 +6,8 @@ export const getTodoItems = async (userName) => {
   return todos;
 };
 
-export const addTodoItems = async (userName, contents) => {
-  await fetch(
+export const addTodoItem = async (userName, contents) => {
+  const response = await fetch(
     `https://blackcoffee-todolist.df.r.appspot.com/api/u/${userName}/item/`,
     {
       method: 'POST',
@@ -18,7 +18,9 @@ export const addTodoItems = async (userName, contents) => {
         contents,
       }),
     }
-  ).then((res) => res.json());
+  );
+  const todo = await response.json();
+  return todo;
 };
 
 export const updateTodoItem = async (userName, itemId, contents) => {
