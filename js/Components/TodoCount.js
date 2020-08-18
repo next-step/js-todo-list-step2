@@ -1,8 +1,10 @@
 import { todoCountHTML } from '../utils/template.js';
 import { CLASS_NAME, MESSAGE } from '../utils/constant.js';
+import { checkTarget } from '../utils/validator.js';
 
 function TodoCount({ $target, todoCountState }) {
   this.init = () => {
+    checkTarget($target);
     this.$target = $target;
 
     const { todos, selectedTab } = todoCountState;

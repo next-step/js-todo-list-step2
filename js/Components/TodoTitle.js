@@ -1,7 +1,9 @@
 import { todoTitleHTML } from '../utils/template.js';
+import { checkTarget } from '../utils/validator.js';
 
 function TodoTitle({ $target, name }) {
   this.init = () => {
+    checkTarget($target);
     this.$target = $target;
     this.name = name;
 

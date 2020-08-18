@@ -1,7 +1,9 @@
 import { KEY, MESSAGE } from '../utils/constant.js';
+import { checkTarget } from '../utils/validator.js';
 
 function TodoInput({ $target, userName, onAddTodo }) {
   this.init = () => {
+    checkTarget($target);
     this.$target = $target;
     this.name = userName;
 

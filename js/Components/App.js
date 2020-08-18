@@ -9,10 +9,13 @@ import LoadingView from './LoadingView.js';
 
 import { SELECTOR, CLASS_NAME } from '../utils/constant.js';
 import { api } from '../utils/api.js';
+import { checkTarget, checkAppState } from '../utils/validator.js';
 
 function App($target) {
   this.init = async () => {
+    checkTarget($target);
     this.$target = $target;
+
     this.state = {
       user: {
         name: '',
@@ -23,6 +26,7 @@ function App($target) {
     };
 
     this.state.users = await api.fetchUserList();
+    checkAppState(this.state);
 
     this.todoTitle = new TodoTitle({
       $target: document.querySelector(SELECTOR.TODO_TITLE),
@@ -171,6 +175,7 @@ function App($target) {
   };
 
   this.setState = (nextState) => {
+    checkAppState(nextState);
     this.state = nextState;
 
     this.todoTitle.setState(this.state.user.name);

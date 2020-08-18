@@ -1,5 +1,6 @@
 import { todoItemHTML } from '../utils/template.js';
 import { CLASS_NAME, NODE, SELECTOR, KEY, MESSAGE } from '../utils/constant.js';
+import { checkTarget } from '../utils/validator.js';
 
 function TodoList({
   $target,
@@ -10,6 +11,7 @@ function TodoList({
   onChangePriority,
 }) {
   this.init = () => {
+    checkTarget($target);
     this.$target = $target;
 
     const { name, todos, selectedTab } = todoListState;

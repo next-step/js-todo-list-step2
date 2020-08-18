@@ -1,7 +1,9 @@
 import { loadingViewHTML } from '../utils/template.js';
+import { checkTarget } from '../utils/validator.js';
 
 function LoadingView({ $target }) {
   this.init = () => {
+    checkTarget($target);
     this.$target = $target;
     this.isLoading = false;
 

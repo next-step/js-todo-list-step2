@@ -1,7 +1,9 @@
 import { NODE, MESSAGE } from '../utils/constant.js';
+import { checkTarget } from '../utils/validator.js';
 
 function TodoClearButton({ $target, userName, onDeleteAllTodo }) {
   this.init = () => {
+    checkTarget($target);
     this.$target = $target;
     this.name = userName;
 
