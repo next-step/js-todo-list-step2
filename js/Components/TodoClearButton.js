@@ -1,4 +1,4 @@
-import { NODE } from '../utils/constant.js';
+import { NODE, MESSAGE } from '../utils/constant.js';
 
 function TodoClearButton({ $target, userName, onDeleteAllTodo }) {
   this.init = () => {
@@ -14,6 +14,10 @@ function TodoClearButton({ $target, userName, onDeleteAllTodo }) {
 
   this.onClick = (e) => {
     if (e.target.nodeName !== NODE.BUTTON) return;
+    if (!this.name) {
+      alert(MESSAGE.NO_SELECTED_USER);
+      return;
+    }
 
     onDeleteAllTodo(this.name);
   };
