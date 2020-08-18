@@ -8,6 +8,7 @@ function App($target) {
 
   this.setActiveUser = (newActiveUser) => {
     this.userList.setState(newActiveUser);
+    this.userTitle.setState(newActiveUser);
   };
 
   this.render = () => {
@@ -21,7 +22,10 @@ function App($target) {
   };
 
   this.render();
-  this.userTitle = new UserTitle(document.querySelector("#user-title"));
+  this.userTitle = new UserTitle(
+    document.querySelector("#user-title"),
+    this.activeUser,
+  );
   this.userList = new UserList(
     document.querySelector("#user-list"),
     this.activeUser,

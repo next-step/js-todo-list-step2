@@ -1,9 +1,15 @@
-function UserTitle($target) {
+function UserTitle($target, activeUser) {
   this.$target = $target;
+  this.activeUser = activeUser;
+
+  this.setState = (newActiveUser) => {
+    this.activeUser = newActiveUser;
+    this.render();
+  };
 
   this.render = () => {
     this.$target.innerHTML = `
-      <span><strong>eastjun</strong>'s Todo List</span>
+      <span><strong>${this.activeUser}</strong>'s Todo List</span>
     `;
   };
 
