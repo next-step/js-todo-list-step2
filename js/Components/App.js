@@ -2,6 +2,7 @@ import UserTitle from "../Components/UserTitle.js";
 import UserList from "./UserList.js";
 import TodoInput from "./TodoInput.js";
 import { DEFAULT_ACTIVE_USER } from "../constants.js";
+import TodoApp from "./TodoApp.js";
 
 function App($target) {
   this.$target = $target;
@@ -19,7 +20,8 @@ function App($target) {
         <div id="user-list">
         </div>
        </section>
-       <section class="input-container"></section>
+
+       <section id="todoapp" class="todoapp"></section>
     `;
   };
 
@@ -33,7 +35,10 @@ function App($target) {
     this.activeUser,
     { setActiveUser: (newActiveUser) => this.setActiveUser(newActiveUser) }
   );
-  this.todoInput = new TodoInput(document.querySelector(".input-container"));
+  this.todoApp = new TodoApp(
+    document.querySelector("#todoapp"),
+    this.activeUser
+  );
 }
 
 export default App;
