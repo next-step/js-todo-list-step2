@@ -5,7 +5,7 @@ export default function TodoInput({ elementId, addTodos }) {
     if (!(this instanceof TodoInput)) {
       throw new Error(`Invalid function call ${this}`);
     }
-    this.$todoInput = document.getElementById(elementId);
+    this.$todoInput = document.querySelector(`.${elementId}`);
     this.addTodos = addTodos;
   };
   this.enterHandler = (evt) => {

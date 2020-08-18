@@ -12,7 +12,7 @@ export default function TodoList({
       throw new Error(`Invalid function call ${this}`);
     }
     this.todoList = todoList;
-    this.$todoList = document.getElementById(elementId);
+    this.$todoList = document.querySelector(`.${elementId}`);
     this.deleteTodo = deleteTodo;
     this.toggleTodo = toggleTodo;
     this.editTodo = editTodo;

@@ -18,10 +18,10 @@ import TodoFilter from "./TodoFilter.js";
 import { getTodoListFromAPI } from '../utils/api.js';
 
 export default function App() {
-  this.init = () => {
+  this.init = async () => {
     this.state = {
-      todoList: getTodosFromLocalStorage(),
-      todoCount: getTodosFromLocalStorage().length,
+      todoList: [],
+      todoCount: 0,
       todoFilter: ALL,
     };
     this.todoInput = new TodoInput({
@@ -119,6 +119,5 @@ export default function App() {
       throw new Error(`Invalid function call ${this}`);
     }
     this.init();
-    getTodoListFromAPI();
   } catch {}
 }

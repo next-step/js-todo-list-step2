@@ -1,7 +1,7 @@
 import { createUniqueID } from "./util.js";
 
 export const TODO_LIST_ID = "todo-list";
-export const TODO_INPUT_ID = "new-todo-title";
+export const TODO_INPUT_ID = "new-todo";
 export const TODO_COUNT_ID = "todo-count";
 export const TODO_FILTER_ID = "filters";
 export const TODOS = "todoList";
