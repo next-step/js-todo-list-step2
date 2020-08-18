@@ -24,7 +24,7 @@ function App($target) {
   this.render();
   this.userTitle = new UserTitle(
     document.querySelector("#user-title"),
-    this.activeUser,
+    this.activeUser
   );
   this.userList = new UserList(
     document.querySelector("#user-list"),

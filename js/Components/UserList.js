@@ -1,4 +1,5 @@
 import { fetchUserListFromServer } from "../api.js";
+import Loader from "../Components/Loader.js";
 
 function UserList($target, activeUser, { setActiveUser }) {
   this.$target = $target;
@@ -11,7 +12,7 @@ function UserList($target, activeUser, { setActiveUser }) {
   };
 
   this.render = () => {
-    this.$target.innerHTML = this.userList
+    const userListHTML = this.userList
       .map(
         ({ name }) =>
           `<button class="ripple user-button ${
@@ -19,6 +20,11 @@ function UserList($target, activeUser, { setActiveUser }) {
           }"> ${name} </button>`
       )
       .join("");
+
+    this.$target.innerHTML = `
+      <div class="loader"></div>
+      ${userListHTML}
+    `;
   };
 
   this.initEventListeners = () => {
@@ -33,18 +39,24 @@ function UserList($target, activeUser, { setActiveUser }) {
     setActiveUser(clickedUser);
   };
 
-  this.init = async () => {
+  this.fetchUserList = async () => {
     try {
+      this.loader.setState(true);
       this.userList = await fetchUserListFromServer();
       this.render();
-      this.initEventListeners();
     } catch (e) {
       alert("유저리스트를 불러오는데 에러가 발생했습니다.");
       console.error(e);
+    } finally {
+      this.loader.setState(false);
     }
   };
 
-  this.init();
+  this.render();
+  this.initEventListeners();
+  this.loader = new Loader(document.querySelector(".loader"));
+
+  this.fetchUserList();
 }
 
 export default UserList;
