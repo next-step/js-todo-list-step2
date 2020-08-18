@@ -35,12 +35,10 @@ function UserList({ $target, userListState, onChangeUser }) {
   };
 
   this.createUserListHTML = (users, selectedName) => {
-    return (
-      users.reduce((html, user) => {
-        html += userButtonHTML(user.name, selectedName);
-        return html;
-      }, '') + ''
-    );
+    return users.reduce((html, user) => {
+      html += userButtonHTML(user.name, selectedName);
+      return html;
+    }, '');
   };
 
   this.render = () => {

@@ -25,14 +25,14 @@ export const todoItemHTML = (todo) => `
     <input class="edit" value=${todo.contents} />
   </li>`;
 
-export const prioritySelectHTML = () => `
+const prioritySelectHTML = () => `
   <select class="chip select">
     <option value="0" selected>선택</option>
     <option value="1">1순위</option>
     <option value="2">2순위</option>
   </select>`;
 
-export const priorityLabelHTML = (priority) => {
+const priorityLabelHTML = (priority) => {
   return priority === PRIORITY.PRIMARY
     ? `<span class="chip primary">1순위</span>`
     : `<span class="chip secondary">2순위</span>`;

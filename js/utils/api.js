@@ -42,7 +42,7 @@ const option = {
 
 const isSuccessResponse = (status) => !!(status >= 200 && status < 300);
 
-export const request = async (url, option = {}) => {
+const request = async (url, option = {}) => {
   const response = await fetch(url, option);
   if (!isSuccessResponse(response.status)) {
     throw new Error(`http request Error : ${response.status}`);
