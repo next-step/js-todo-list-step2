@@ -38,6 +38,14 @@ export const KEY = {
   ENTER: 'Enter',
 };
 
+export const APP_STATE = {
+  USER: 'user',
+  NAME: 'name',
+  TODOS: 'todos',
+  USERS: 'users',
+  SELECTED_TAB: 'selectedTab',
+};
+
 export const MESSAGE = {
   NO_INPUT_KEYWORD: '🔥할일을 입력해주세요 !',
   NO_SELECTED_USER: '🔥유저를 선택해주세요 !',
@@ -46,4 +54,10 @@ export const MESSAGE = {
   NOT_HTML_ELEMENT: 'HTML Element가 존재하지 않습니다.',
   NOT_TYPE_ARRAY: 'type이 Array가 아닙니다.',
   NOT_TYPE_FUNCTION: 'type이 function이 아닙니다.',
+
+  NO_USER_PROPERTY: `${APP_STATE.USER} 프로퍼티가 존재하지 않습니다.`,
+  NO_NAME_PROPERTY: `${APP_STATE.NAME} 프로퍼티가 존재하지 않습니다.`,
+  NO_TODOS_PROPERTY: `${APP_STATE.TODOS} 프로퍼티가 존재하지 않습니다.`,
+  NO_USERS_PROPERTY: `${APP_STATE.USERS} 프로퍼티가 존재하지 않습니다.`,
+  NO_SELECTED_TAB_PROPERTY: `${APP_STATE.SELECTED_TAB} 프로퍼티가 존재하지 않습니다.`,
 };
