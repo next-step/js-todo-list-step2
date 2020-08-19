@@ -2,53 +2,65 @@ import { fetchTodoUsersFromServer } from "../api.js";
 import { validateUserName, isFunction } from "../utils.js";
 import Loader from "../Components/Loader.js";
 
-function UserList($target, activeUser, eventHandler) {
+function UserList($target, activeUser, { onClickUser }) {
   if (!new.target) {
     throw new Error("Create instance with 'new'");
   }
 
-  if (!eventHandler || !isFunction(eventHandler.onClickUser)) {
-    throw new Error("Wrong EventHandler");
+  if (!isFunction(onClickUser)) {
+    throw new Error("Wrong onClickUser");
   }
 
   validateUserName(activeUser);
   this.activeUser = activeUser;
   this.users = [];
+  this.isLoading = false;
 
-  this.setState = (newActiveUser) => {
-    validateUserName(newActiveUser);
-    this.activeUser = newActiveUser;
+  this.setState = ({ activeUser, isLoading }) => {
+    if (activeUser) {
+      validateUserName(activeUser);
+      this.activeUser = activeUser;
+    }
+    if (typeof isLoading === "boolean") {
+      this.isLoading = isLoading;
+    }
+    console.log(this.activeUser, "setState");
     this.render();
   };
 
   this.render = () => {
-    $target.innerHTML = `
-        <div class="loader"></div>
-        ${this.users
-          .map(
-            ({ name }) =>
-              `<button class="ripple ${
-                this.activeUser === name ? "active" : ""
-              }">${name}</button>`
-          )
-          .join(" ")}
-        `;
+    console.log(this.activeUser, "render");
+    $target.innerHTML = `${
+      this.isLoading
+        ? Loader
+        : this.users
+            .map(
+              ({ name }) =>
+                `<button class="ripple ${
+                  this.activeUser === name ? "active" : ""
+                }">${name}</button>`
+            )
+            .join(" ")
+    }`;
   };
 
   this.bindEvent = () => {
     $target.addEventListener("click", (event) => {
       if (event.target.classList.contains("ripple")) {
-        eventHandler.onClickUser(event.target.textContent);
+        onClickUser(event.target.textContent);
       }
     });
   };
 
   this.fetchUserListWithLoader = async () => {
-    this.loader = new Loader($target.querySelector(".loader"));
-    this.loader.setState(true);
-    this.users = await fetchTodoUsersFromServer();
-    this.loader.setState(false);
-    this.render();
+    try {
+      this.setState({ isLoading: true });
+      this.users = await fetchTodoUsersFromServer();
+    } catch (error) {
+      throw new Error(`${error.message}`);
+    } finally {
+      this.setState({ isLoading: false });
+    }
   };
 
   this.bindEvent();

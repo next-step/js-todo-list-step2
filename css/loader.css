@@ -1,11 +1,7 @@
-.loading {
+.loader {
   display: flex;
   justify-content: center;
   align-items: center;
-}
-
-.loaded {
-  display: none;
 }
 
 @keyframes ldio-2h4zz00rk2p {

@@ -30,7 +30,7 @@ function App($target) {
     validateUserName(newActiveUser);
     this.activeUser = newActiveUser;
     this.userTitle.setState(this.activeUser);
-    this.userList.setState(this.activeUser);
+    this.userList.setState({ activeUser: this.activeUser });
     this.todoApp.setState(this.activeUser);
   };
 
