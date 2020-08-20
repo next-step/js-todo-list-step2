@@ -30,15 +30,22 @@ function TodoApp($target, activeUser) {
     });
     this.todoList = new TodoList(
       document.querySelector("#todo-list"),
-      this.state.todoItems
+      this.state.todoItems,
+      this.deleteTodo.bind(this)
     );
   };
 
   this.addTodo = async (textContents) => {
-    const todo = API.addTodoFromAPI(this.state.activeUser, textContents);
+    const todo = await API.addTodoFromAPI(this.state.activeUser, textContents);
     this.state.todoItems = [...this.state.todoItems, todo];
     this.setState();
   };
+
+  this.deleteTodo = async (_id) => {
+    const {todoList} = await API.deleteTodoFromAPI(this.state.activeUser, _id);
+    this.state.todoItems = todoList;
+    this.setState();
+  }
 
   this.setState = () => {
     this.todoList.setState(this.state.todoItems);

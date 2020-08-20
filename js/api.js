@@ -30,6 +30,11 @@ const options = {
       }),
     };
   },
+  DELETE: () => {
+    return {
+      method: "DELETE",
+    }
+  }
 };
 
 const api = {
@@ -44,6 +49,10 @@ const api = {
     );
     return res.todoList || [];
   },
+  deleteTodoFromAPI: async (username, _id) => 
+    request(
+      `https://blackcoffee-todolist.df.r.appspot.com/api/u/${username}/item/${_id}`, options.DELETE()
+    )
 };
 
 export default api;
