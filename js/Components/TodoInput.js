@@ -1,5 +1,9 @@
-export default function TodoInput($target) {
+export default function TodoInput({
+  $target,
+  addTodo
+}) {
   this.$target = $target;
+  this.addTodo = addTodo;
 
   this.onSubmit = (e) => {
     e.preventDefault();

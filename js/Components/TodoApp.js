@@ -4,11 +4,13 @@ import TodoList from "./TodoList.js";
 function TodoApp($target, activeUser) {
   this.$target = $target;
   this.activeUser = activeUser;
-  this.todoItems = [
-    { _id: "1234", contents: "hello", isCompleted: false },
-    { _id: "12345", contents: "world", isCompleted: true },
-    { _id: "12346", contents: "js", isCompleted: false },
-  ];
+  this.state = {
+    todoItems: [
+      { _id: "1234", contents: "hello", isCompleted: false },
+      { _id: "12345", contents: "world", isCompleted: true },
+      { _id: "12346", contents: "js", isCompleted: false },
+    ],
+  }
 
   this.render = () => {
     this.$target.innerHTML = `
@@ -21,12 +23,24 @@ function TodoApp($target, activeUser) {
   };
 
   this.initComponents = () => {
-    this.todoInput = new TodoInput(document.querySelector("#todo-input"));
+    this.todoInput = new TodoInput({
+      $target: document.querySelector("#todo-input"),
+      addTodo: this.addTodo.bind(this),
+  });
     this.todoList = new TodoList(
       document.querySelector("#todo-list"),
-      this.todoItems
+      this.state.todoItems
     );
   };
+
+  this.addTodo = (todo) => {
+    this.state.todoItems = [...this.state.todoItems, todo];
+    this.setState();
+  }
+
+  this.setState = () => {
+    this.todoList.setState(this.state.todoItems);
+  }
 
   this.render();
   this.initComponents();

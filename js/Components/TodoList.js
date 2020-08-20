@@ -1,8 +1,13 @@
 function TodoList($target, todoItems) {
   this.$target = $target;
-  this.todoItems = todoItems;
+  this.state = {
+    todoItems
+  }
 
-  this.setState = () => {};
+  this.setState = (todoItems) => {
+      this.state.todoItems = todoItems;
+      this.render();
+  };
 
   this.render = () => {
     this.$target.innerHTML = `
@@ -20,7 +25,7 @@ function TodoList($target, todoItems) {
     ${this.todoItems.map(({ _id, contents, isCompleted }) =>
       isCompleted
         ? `
-            <li>
+            <li data-id=${_id}>
                 <div class="view">
                     <input class="toggle" type="checkbox" checked/>
                     <label class="label">${contents}</label>
@@ -29,7 +34,7 @@ function TodoList($target, todoItems) {
                 <input class="edit" value="완료된 타이틀" />
             </li>`
         : `
-            <li>
+            <li data-id=${_id}>
                 <div class="view">
                     <input class="toggle" type="checkbox" />
                     <label class="label">${contents}</label>
