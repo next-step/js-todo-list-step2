@@ -5,7 +5,7 @@ const request = async (url, option) => {
     const response = await fetch(url, option);
     return response.json();
   } catch (err) {
-    console.log(err);
+    throw new Error(err);
   }
 };
 
@@ -26,7 +26,7 @@ const options = {
       method: "DELETE",
     };
   },
-  PUT: () => {
+  TOGGLE: () => {
     return {
       method: "PUT",
     };
@@ -61,12 +61,15 @@ const api = {
   },
   toggleTodoFromAPI: (username, _id) => {
     return request(
-      `${BASE_URL}/api/u/${username}/item/${_id}`,
+      `${BASE_URL}/api/u/${username}/item/${_id}/toggle`,
       options.TOGGLE()
     );
   },
-  editTodoFromAPI: (username, _id) => {
-    return request(`${BASE_URL}/api/u/${username}/item/${_id}`, options.EDIT());
+  editTodoFromAPI: (username, _id, contents) => {
+    return request(
+      `${BASE_URL}/api/u/${username}/item/${_id}`,
+      options.EDIT(contents)
+    );
   },
 };
 export default api;

@@ -6,6 +6,7 @@ export const TODO_INPUT_ID = "new-todo";
 export const TODO_COUNT_ID = "todo-count";
 export const TODO_FILTER_ID = "filters";
 export const USERS_ID = "user-list";
+export const TODO_MAIN_ID = "main";
 export const TODOS = "todoList";
 export const ALL = "all";
 export const COMPLETED = "completed";

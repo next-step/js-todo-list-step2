@@ -23,8 +23,8 @@ export default function TodoList({
     this.$todoList.innerHTML = `
         ${this.state.todoList
           .map(
-            ({ contents, isCompleted, id }) => `
-              <li data-id=${id} class=${isCompleted ? COMPLETED : ""}>
+            ({ contents, isCompleted, _id }) => `
+              <li data-id=${_id} class=${isCompleted ? COMPLETED : ""}>
                   <div class="view">
                       <input class=${TOGGLE} type="checkbox" ${
               isCompleted ? "checked" : ""
@@ -58,6 +58,8 @@ export default function TodoList({
     if (evt.target.tagName === "LABEL") {
       evt.target.closest("li").classList.toggle(EDITING);
       evt.target.closest("li").childNodes[3].focus();
+      const input = evt.target.closest("li").querySelector("input.edit");
+      input.setSelectionRange(input.value.length, input.value.length);
     }
   };
   this.keydownHandler = (evt) => {
@@ -67,10 +69,10 @@ export default function TodoList({
       evt.key === ESC
     ) {
       evt.target.parentNode.classList.toggle(EDITING);
-    } else if (evt.key === ENTER) {
+    } else if (evt.target.tagName === "INPUT" && evt.key === ENTER) {
       this.editTodo({
-        content: evt.target.value,
-        id: evt.target.parentNode.dataset.id,
+        contents: evt.target.value,
+        _id: evt.target.parentNode.dataset.id,
       });
     }
   };

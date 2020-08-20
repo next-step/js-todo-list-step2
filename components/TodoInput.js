@@ -11,7 +11,7 @@ export default function TodoInput({ elementId, addTodos }) {
   this.enterHandler = (evt) => {
     if (evt.key === ENTER) {
       this.addTodos({
-        content: evt.target.value,
+        contents: evt.target.value,
       });
       evt.target.value = "";
       evt.target.focus();

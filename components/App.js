@@ -4,17 +4,19 @@ import {
   TODO_INPUT_ID,
   TODO_COUNT_ID,
   TODO_FILTER_ID,
+  TODO_MAIN_ID,
   ALL,
   COMPLETED,
-  USER,
   USERS_ID,
 } from "../utils/data.js";
 import TodoList from "./TodoList.js";
 import TodoInput from "./TodoInput.js";
 import TodoCount from "./TodoCount.js";
 import TodoFilter from "./TodoFilter.js";
-import API from "../utils/api.js";
 import Users from "./Users.js";
+import TodoError from "./TodoError.js";
+import API from "../utils/api.js";
+import { validateUserData, validateTodoList } from "../utils/util.js";
 
 export default function App() {
   this.init = async () => {
@@ -28,6 +30,7 @@ export default function App() {
       todoCount: 0,
       todoFilter: ALL,
     };
+    await this.loadUsers();
     this.users = new Users({
       usersId: USERS_ID,
       userTitleId: CURRENT_USER_ID,
@@ -56,7 +59,11 @@ export default function App() {
       filterType: this.state.todoFilter,
       filterTodo: this.filterTodo,
     });
-    await this.loadUsers();
+    this.todoError = new TodoError({
+      elementId: TODO_MAIN_ID,
+      error: null,
+    });
+    this.loadTodos();
   };
   this.filterTodo = ({ type }) => {
     if (type === ALL) {
@@ -77,47 +84,84 @@ export default function App() {
       });
     }
   };
-  this.toggleTodo = ({ id }) => {
-    this.setState(
-      this.state.todoList.map((todo) => {
-        if (todo.id === id) {
+  this.toggleTodo = async ({ id }) => {
+    try {
+      const { name } = this.state.currentUser;
+      const { _id } = await API.toggleTodoFromAPI(name, id);
+      const todos = this.state.todoList.map((todo) => {
+        if (todo._id === _id) {
           todo.isCompleted = !todo.isCompleted;
         }
         return todo;
-      })
-    );
+      });
+      validateTodoList(todos) ? this.setState(todos) : null;
+    } catch (err) {
+      console.log(`Cannot toggle todo..${err}`);
+      this.todoError.setState(`Cannot toggle todo..${err}`);
+    }
   };
-  this.deleteTodo = ({ id }) => {
-    this.setState(this.state.todoList.filter((todo) => todo.id !== id));
+  this.deleteTodo = async ({ id }) => {
+    try {
+      const { name } = this.state.currentUser;
+      const { todoList } = await API.deleteTodoFromAPI(name, id);
+      validateTodoList(todoList) ? this.setState(todoList) : null;
+    } catch (err) {
+      console.log(`Cannot delete todo..${err}`);
+      this.todoError.setState(`Cannot delete todo..${err}`);
+    }
   };
-  this.addTodo = async ({ content }) => {
-    const todos = await API.addTodoListFromAPI(USER, content);
-    this.setState([...this.state.todoList, todos]);
+  this.addTodo = async ({ contents }) => {
+    try {
+      const { name } = this.state.currentUser;
+      const todo = await API.addTodoListFromAPI(name, contents);
+      const todos = [...this.state.todoList, todo];
+      validateTodoList(todos) ? this.setState(todos) : null;
+    } catch (err) {
+      console.log(`Cannot add todo..${err}`);
+      this.todoError.setState(`Cannot add todo..${err}`);
+    }
   };
-  this.editTodo = ({ content, id }) => {
-    this.setState(
-      this.state.todoList.map((todo) => {
-        if (todo.id === id) {
-          todo.content = content;
+  this.editTodo = async ({ contents, _id }) => {
+    try {
+      const { name } = this.state.currentUser;
+      const editedTodo = await API.editTodoFromAPI(name, _id, contents);
+      const todos = this.state.todoList.map((todo) => {
+        if (todo._id === editedTodo._id) {
+          todo.contents = editedTodo.contents;
         }
         return todo;
-      })
-    );
+      });
+      this.setState(todos);
+    } catch (err) {
+      console.log(`Cannot add todo..${err}`);
+      this.todoError.setState(`Cannot add todo..${err}`);
+    }
   };
   this.loadUsers = async () => {
-    this.state.users = await API.getUserListFromAPI();
-    this.setUser(this.state.users[0]);
+    try {
+      this.state.users = await API.getUserListFromAPI();
+      const currentUser = validateUserData(this.state.currentUser)
+        ? this.state.currentUser
+        : this.state.users[0];
+      this.setUser(currentUser);
+    } catch (err) {
+      console.log(`Cannot read UserList..${err}`);
+      this.todoError.setState(`Cannot read UserList..${err}`);
+    }
   };
   this.loadTodos = async () => {
-    const { name } = this.state.currentUser;
-    const { todoList } = await API.getTodoListFromAPI(name);
-    this.setState(todoList);
+    try {
+      const { name } = this.state.currentUser;
+      const { todoList } = await API.getTodoListFromAPI(name);
+      validateTodoList(todoList) ? this.setState(todoList) : null;
+    } catch (err) {
+      console.log(`Cannot read todoList from user..${err}`);
+      this.todoError.setState(`Cannot read todoList from user..${err}`);
+    }
   };
   this.setUser = (user) => {
-    user.hasOwnProperty("name") || user.hasOwnProperty("_id")
-      ? (this.state.currentUser = user)
-      : this.state.currentUser;
-    this.loadTodos();
+    this.state.currentUser = user;
+    this.todoList ? this.loadTodos() : null;
   };
   this.setState = (todoList) => {
     this.state.todoList = todoList;
