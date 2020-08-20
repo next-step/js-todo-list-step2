@@ -1,9 +1,14 @@
 import TodoInput from "./TodoInput.js";
+import TodoList from "./TodoList.js";
 
 function TodoApp($target, activeUser) {
   this.$target = $target;
   this.activeUser = activeUser;
-  this.todoItems = [];
+  this.todoItems = [
+    { _id: "1234", contents: "hello", isCompleted: false },
+    { _id: "12345", contents: "world", isCompleted: true },
+    { _id: "12346", contents: "js", isCompleted: false },
+  ];
 
   this.render = () => {
     this.$target.innerHTML = `
@@ -15,9 +20,16 @@ function TodoApp($target, activeUser) {
     `;
   };
 
-  this.render();
+  this.initComponents = () => {
+    this.todoInput = new TodoInput(document.querySelector("#todo-input"));
+    this.todoList = new TodoList(
+      document.querySelector("#todo-list"),
+      this.todoItems
+    );
+  };
 
-  this.todoInput = new TodoInput(document.querySelector("#todo-input"));
+  this.render();
+  this.initComponents();
 }
 
 export default TodoApp;
