@@ -2,6 +2,7 @@ import TodoHeader from './todo-header.js';
 import UserList from './user-list.js';
 import TodoList from './todo-list.js';
 import TodoInput from './todo-input.js';
+import TodoFilter from './todo-filter.js';
 
 import { getUsers } from '../api/users.js';
 import {
@@ -17,6 +18,10 @@ export default class App {
     this.todoHeader = new TodoHeader();
     this.userList = new UserList(this.changeUser.bind(this));
     this.todoInput = new TodoInput(this.addTodo.bind(this));
+    this.todoFilter = new TodoFilter(
+      this.allRemoveTodo.bind(this),
+      this.updateFilteredTodoList.bind(this)
+    );
     this.todoList = new TodoList(
       this.toggleTodo.bind(this),
       this.editTodo.bind(this),
@@ -25,6 +30,7 @@ export default class App {
 
     this.users = [];
     this.todos = [];
+    this.filterdTodos = [];
     this.selectedUserName = '';
     this.init();
   }
@@ -33,16 +39,22 @@ export default class App {
     try {
       this.users = await getUsers();
       this.userList.setUsers(this.users);
-      const defaultUserName = this.users[this.users.length - 4].name;
+      const defaultUserName = this.users[this.users.length - 4].name; // test용 값입니다.
       this.selectedUserName = defaultUserName;
       this.userList.selectUser(defaultUserName);
       this.todoHeader.setState(defaultUserName);
 
       this.todos = await getTodoItems(defaultUserName);
-      this.todoList.setTodoList(this.todos.todoList);
+      this.updateFilteredTodoList();
     } catch (error) {
-      alert(error);
+      alert(error.message);
     }
+  }
+
+  updateFilteredTodoList() {
+    this.filterdTodos = this.getFiteredTodoList();
+    this.todoList.setTodoList(this.filterdTodos);
+    this.todoFilter.setState(this.filterdTodos.length);
   }
 
   async changeUser(selectedUser) {
@@ -63,10 +75,22 @@ export default class App {
         ...this.todos,
         todoList,
       };
-      this.todoList.setTodoList(todoList);
+      this.updateFilteredTodoList();
     } catch (error) {
       alert(error);
     }
+  }
+
+  getFiteredTodoList() {
+    return this.todos.todoList.filter((todo) => {
+      if (location.hash === '#/active') {
+        return !todo.isCompleted;
+      }
+      if (location.hash === '#/completed') {
+        return todo.isCompleted;
+      }
+      return true;
+    });
   }
 
   makeNewTodoList(property, targetId, newValue) {
@@ -117,6 +141,23 @@ export default class App {
         (todo) => todo._id !== targetId
       );
       this.setTodoState(newTodos);
+    } catch (error) {
+      alert(error.message);
+    }
+  }
+
+  allRemoveTodo() {
+    try {
+      console.log(this.todos);
+      if (this.todos.todoList.length === 0) {
+        throw new Error('삭제할 todo가 없습니다.');
+      }
+      if (confirm('정말로 전부 삭제하시겠습니까?')) {
+        this.todos.todoList.forEach((todo) => {
+          deleteTodoItem(this.selectedUserName, todo._id);
+        });
+        this.setTodoState([]);
+      }
     } catch (error) {
       alert(error.message);
     }

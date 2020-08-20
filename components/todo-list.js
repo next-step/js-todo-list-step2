@@ -65,7 +65,7 @@ export default class TodoList {
     this.todoList = todoList || [];
     this.render();
     if (!todoList) {
-      throw new Error('Exist not todo list.');
+      throw new Error('Todo List가 없습니다.');
     }
   }
 
