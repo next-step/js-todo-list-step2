@@ -43,7 +43,7 @@ function TodoList($target, todoItems) {
                 <input class="edit" value="완료된 타이틀" />
             </li>
         `
-    )}
+    ).join('')}
     `;
   };
 
