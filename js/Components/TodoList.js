@@ -1,12 +1,12 @@
 function TodoList($target, todoItems) {
   this.$target = $target;
   this.state = {
-    todoItems
-  }
+    todoItems,
+  };
 
   this.setState = (todoItems) => {
-      this.state.todoItems = todoItems;
-      this.render();
+    this.state.todoItems = todoItems;
+    this.render();
   };
 
   this.render = () => {
@@ -22,7 +22,7 @@ function TodoList($target, todoItems) {
                 </label>
             </div>
         </li>
-    ${this.todoItems.map(({ _id, contents, isCompleted }) =>
+    ${this.state.todoItems.map(({ _id, contents, isCompleted }) =>
       isCompleted
         ? `
             <li data-id=${_id}>

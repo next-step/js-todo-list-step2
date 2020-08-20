@@ -9,7 +9,21 @@ export const fetchUserListFromServer = async () => {
     const userList = await res.json();
     return userList;
   } catch (e) {
-    return []
-    console.error(e)
+    return [];
+    console.error(e);
   }
+};
+
+const request = (url, option) => {
+  try {
+  } catch (error) {}
+};
+
+const options = {
+  POST: (text) => {
+    return {
+      method: "POST",
+      headers: "",
+    };
+  },
 };

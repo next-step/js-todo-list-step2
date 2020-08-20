@@ -1,7 +1,4 @@
-export default function TodoInput({
-  $target,
-  addTodo
-}) {
+export default function TodoInput({ $target, addTodo }) {
   this.$target = $target;
   this.addTodo = addTodo;
 
@@ -11,6 +8,7 @@ export default function TodoInput({
     if (inputElem.value === "") {
       console.log("empty");
     }
+    addTodo(inputElem.value);
     console.log(inputElem.value);
     inputElem.value = "";
   };
