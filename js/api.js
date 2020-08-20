@@ -23,21 +23,27 @@ const options = {
     return {
       method: "POST",
       headers: {
-        'Content-Type': 'application/json'
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        contents: text
-      })
+        contents: text,
+      }),
     };
   },
 };
 
 const api = {
-  addTodoFromAPI: async (username, text) => {
-    return request
-    const result = await fetch(`https://blackcoffee-todolist.df.r.appspot.com/api/u/${username}/item/`, options.POST(text));
-    return await result.json();
-  }
-}
+  addTodoFromAPI: async (username, text) =>
+    request(
+      `https://blackcoffee-todolist.df.r.appspot.com/api/u/${username}/item/`,
+      options.POST(text)
+    ),
+  fetchTodoItemsFromAPI: async (username) => {
+    const res = await request(
+      `https://blackcoffee-todolist.df.r.appspot.com/api/u/${username}/item/`
+    );
+    return res.todoList || [];
+  },
+};
 
 export default api;

@@ -1,16 +1,12 @@
 import TodoInput from "./TodoInput.js";
 import TodoList from "./TodoList.js";
-import API from '../api.js';
+import API from "../api.js";
 
 function TodoApp($target, activeUser) {
   this.$target = $target;
   this.state = {
     activeUser,
-    todoItems: [
-      { _id: "1234", contents: "hello", isCompleted: false },
-      { _id: "12345", contents: "world", isCompleted: true },
-      { _id: "12346", contents: "js", isCompleted: false },
-    ],
+    todoItems: [],
   };
 
   this.render = () => {
@@ -23,7 +19,11 @@ function TodoApp($target, activeUser) {
     `;
   };
 
-  this.initComponents = () => {
+  this.initComponents = async () => {
+    this.state.todoItems = await API.fetchTodoItemsFromAPI(
+      this.state.activeUser
+    );
+    console.log(this.state.todoItems);
     this.todoInput = new TodoInput({
       $target: document.querySelector("#todo-input"),
       addTodo: this.addTodo.bind(this),
