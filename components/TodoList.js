@@ -11,7 +11,9 @@ export default function TodoList({
     if (!(this instanceof TodoList)) {
       throw new Error(`Invalid function call ${this}`);
     }
-    this.todoList = todoList;
+    this.state = {
+      todoList: todoList,
+    };
     this.$todoList = document.querySelector(`.${elementId}`);
     this.deleteTodo = deleteTodo;
     this.toggleTodo = toggleTodo;
@@ -19,26 +21,26 @@ export default function TodoList({
   };
   this.render = () => {
     this.$todoList.innerHTML = `
-        ${this.todoList
+        ${this.state.todoList
           .map(
-            ({ content, isCompleted, id }) => `
+            ({ contents, isCompleted, id }) => `
               <li data-id=${id} class=${isCompleted ? COMPLETED : ""}>
                   <div class="view">
                       <input class=${TOGGLE} type="checkbox" ${
               isCompleted ? "checked" : ""
             } />
-                      <label class="label">${content}</label>
+                      <label class="label">${contents}</label>
                       <button class="destroy"></button>
                   </div>
-                  <input class=${EDIT} value="${content}" />
+                  <input class=${EDIT} value="${contents}" />
               </li>
             `
           )
           .join("")}
     `;
   };
-  this.setState = (todos) => {
-    this.todoList = todos;
+  this.setState = (todoList) => {
+    this.state.todoList = todoList;
     this.render();
   };
   this.clickHandler = (evt) => {
