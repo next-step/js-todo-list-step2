@@ -1,7 +1,7 @@
 export default class TodoList {
   constructor(toggleTodo, editTodo, removeTodo) {
     this.todoListElement = document.querySelector('.todo-list');
-    this.todos = [];
+    this.todoList = [];
     this.toggleTodo = toggleTodo;
     this.editTodo = editTodo;
     this.removeTodo = removeTodo;
@@ -9,66 +9,64 @@ export default class TodoList {
     this.applyEvent();
   }
 
+  changeTodoMode(parentElement) {
+    Array.from(parentElement.children).forEach((el) => {
+      if (el.classList.contains('hidden')) {
+        el.classList.remove('hidden');
+      } else {
+        el.classList.add('hidden');
+      }
+    });
+  }
+
+  findOriginTodo(targetId) {
+    return this.todoList.find((todo) => todo._id === targetId);
+  }
+
   applyEvent() {
     this.todoListElement.addEventListener('dblclick', ({ target }) => {
+      if (
+        !target.classList.contains('label') &&
+        !target.classList.contains('edit')
+      ) {
+        return;
+      }
+
       const parentEl = target.closest('li');
-      console.dir(parentEl);
-      Array.from(parentEl.children).forEach((el) => {
-        console.log(el);
-        if (el.classList.contains('hidden')) {
-          el.classList.remove('hidden');
-        } else {
-          el.classList.add('hidden');
-        }
-      });
+      this.changeTodoMode(parentEl);
     });
+
+    this.todoListElement.addEventListener('keypress', ({ code, target }) => {
+      if (!target.classList.contains('edit') || code != 'Enter') {
+        return;
+      }
+      const parentEl = target.closest('li');
+      this.changeTodoMode(parentEl);
+
+      const targetId = parentEl.id;
+      const originTodo = this.findOriginTodo(targetId);
+      if (originTodo && originTodo.contents === target.value) {
+        this.editTodo(targetId, target.value);
+      }
+    });
+
     this.todoListElement.addEventListener('click', ({ target }) => {
       let todoId = target.closest('li').id;
 
       if (target.className === 'destroy') {
         this.removeTodo(todoId);
-      } else if (target.className === 'edit') {
-        this.editEvent(todoId);
       } else if (target.className === 'toggle') {
         this.toggleTodo(todoId);
       }
     });
   }
 
-  findEditText(todoId) {
-    const target = document.querySelector(`#edit-${todoId}`);
-    return target.value;
-  }
-
-  findTodoItem(targetId) {
-    return this.todos.find((todo) => todo._id === targetId);
-  }
-
-  editEvent(todoId) {
-    const targetTodo = this.findTodoItem(todoId);
-    let changeValue = '';
-    if (targetTodo.isCompleted) {
-      changeValue = this.findEditText(todoId);
-    }
-    this.editTodo(todoId, changeValue);
-  }
-
-  setTodos(todos) {
-    this.todos = todos || [];
+  setTodoList(todoList) {
+    this.todoList = todoList || [];
     this.render();
-    if (!todos) {
+    if (!todoList) {
       throw new Error('Exist not todo list.');
     }
-  }
-
-  loadingTemplate() {
-    return `
-      <div class="animated-background">
-        <div class="skel-mask-container">
-          <div class="skel-mask"></div>
-        </div>
-      </div>
-    `;
   }
 
   priorityTemplate(priority) {
@@ -89,7 +87,7 @@ export default class TodoList {
   }
 
   render() {
-    const todoListElementsText = this.todos.map((todo) => {
+    const todoListElementsText = this.todoList.map((todo) => {
       return `
         <li id="${todo._id}">
           <div class="view">

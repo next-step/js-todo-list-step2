@@ -24,7 +24,7 @@ export const addTodoItem = async (userName, contents) => {
 };
 
 export const updateTodoItem = async (userName, itemId, contents) => {
-  await fetch(
+  const response = await fetch(
     `https://blackcoffee-todolist.df.r.appspot.com/api/u/${userName}/item/${itemId}`,
     {
       method: 'PUT',
@@ -35,7 +35,9 @@ export const updateTodoItem = async (userName, itemId, contents) => {
         contents,
       }),
     }
-  ).then((res) => res.json());
+  );
+  const todo = await response.json();
+  return todo;
 };
 
 export const deleteTodoItem = async (userName, itemId) => {
