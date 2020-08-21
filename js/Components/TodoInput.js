@@ -9,6 +9,10 @@ function TodoInput($target, eventHandler) {
     throw new Error("Wrong eventHandler");
   }
 
+  this.focusInputElem = () => {
+    this.$inputElem.focus();
+  };
+
   this.bindEvent = () => {
     $target.addEventListener("submit", (event) => {
       event.preventDefault();

@@ -31,7 +31,7 @@ function App($target) {
     this.activeUser = newActiveUser;
     this.userTitle.setState(this.activeUser);
     this.userList.setState({ activeUser: this.activeUser });
-    this.todoApp.setState(this.activeUser);
+    this.todoApp.setState({ activeUser: this.activeUser });
   };
 
   this.render();

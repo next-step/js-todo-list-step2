@@ -4,6 +4,7 @@ import { validateUserName } from "../utils.js";
 import TodoCount from "./TodoCount.js";
 import TodoFilter from "./Todofilter.js";
 import { FilterType } from "../constants.js";
+import Loader from "../Components/Loader.js";
 import {
   fetchTodoItemsByUserNameFromServer,
   addTodoItem2Server,
@@ -21,20 +22,35 @@ function TodoApp($target, activeUser) {
 
   this.activeUser = activeUser;
   this.filterType = FilterType.ALL;
+  this.isLoading = false;
   this.todoItems = [];
 
-  this.setState = (newActiveUser) => {
-    validateUserName(newActiveUser);
-    this.activeUser = newActiveUser;
-    this.init();
+  this.setState = ({ activeUser, isLoading }) => {
+    if (activeUser) {
+      validateUserName(activeUser);
+      this.activeUser = activeUser;
+      this.fetchTodoItems();
+    }
+    if (typeof isLoading === "boolean") {
+      this.isLoading = isLoading;
+    }
+    this.render();
+    if (this.isLoading) {
+      return;
+    }
+    this.initComponents();
   };
 
   this.addTodo = async (contentText) => {
-    const newTodo = await addTodoItem2Server(this.activeUser, contentText);
-    this.todoItems.push(newTodo);
-    const filteredTodoItems = this.getFilteredTodoItems();
-    this.todoList.setState(filteredTodoItems);
-    this.todoCount.setState(filteredTodoItems.length);
+    try {
+      this.setState({ isLoading: true });
+      const newTodo = await addTodoItem2Server(this.activeUser, contentText);
+      this.todoItems = [...this.todoItems, newTodo];
+    } catch {
+    } finally {
+      this.setState({ isLoading: false });
+      this.todoInput.focusInputElem();
+    }
   };
 
   this.deleteTodoById = (id) => {
@@ -68,6 +84,7 @@ function TodoApp($target, activeUser) {
     todoItem.isCompleted = !todoItem.isCompleted;
     const filteredTodoItems = this.getFilteredTodoItems();
     this.todoList.setState(filteredTodoItems);
+    this.todoCount.setState(filteredTodoItems.length);
     toggleTodoItmeByIdFromServer(this.activeUser, id);
   };
 
@@ -108,28 +125,51 @@ function TodoApp($target, activeUser) {
   };
 
   this.render = () => {
-    $target.innerHTML = `
-      <section id="todo-input" class="input-container">
-      </section>
+    $target.innerHTML = this.isLoading
+      ? Loader
+      : `
+        <section id="todo-input" class="input-container">
+        </section>
 
-      <section class="main">
-        <div id="todo-list"></div>
-      </section>
+        <section class="main">
+          <div id="todo-list"></div>
+        </section>
 
-      <div class="count-container">
-        <div id="todo-count"></div>
-        <div id="todo-filter"></div>
-        <button class="clear-completed">모두 삭제</button>
-      </div>
+        <div class="count-container">
+          <div id="todo-count"></div>
+          <div id="todo-filter"></div>
+          <button class="clear-completed">모두 삭제</button>
+        </div>
     `;
   };
 
-  this.init = async () => {
-    this.render();
+  this.initEventListeners = () => {
+    $target.addEventListener("click", this.onClickDeleteAllBtn.bind(this));
+  };
 
-    this.todoItems = await fetchTodoItemsByUserNameFromServer(this.activeUser);
+  this.onClickDeleteAllBtn = (event) => {
+    if (!event.target.classList.contains("clear-completed")) {
+      return;
+    }
+    this.deleteAllTodo();
+  };
+
+  this.fetchTodoItems = async () => {
+    try {
+      this.setState({ isLoading: true });
+      this.todoItems = await fetchTodoItemsByUserNameFromServer(
+        this.activeUser
+      );
+    } catch (error) {
+      console.log(error);
+      throw new Error(error.message);
+    } finally {
+      this.setState({ isLoading: false });
+    }
+  };
+
+  this.initComponents = () => {
     const filteredTodoItems = this.getFilteredTodoItems();
-
     this.todoInput = new TodoInput(document.getElementById("todo-input"), {
       onSubmit: (contentText) => this.addTodo(contentText),
     });
@@ -151,13 +191,12 @@ function TodoApp($target, activeUser) {
       this.filterType,
       { onChangeType: (newFilterType) => this.setFilterType(newFilterType) }
     );
-
-    document
-      .querySelector(".clear-completed")
-      .addEventListener("click", () => this.deleteAllTodo());
   };
 
-  this.init();
+  this.initEventListeners();
+  this.render();
+  this.initComponents();
+  this.fetchTodoItems();
 }
 
 export default TodoApp;

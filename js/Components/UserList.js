@@ -24,12 +24,10 @@ function UserList($target, activeUser, { onClickUser }) {
     if (typeof isLoading === "boolean") {
       this.isLoading = isLoading;
     }
-    console.log(this.activeUser, "setState");
     this.render();
   };
 
   this.render = () => {
-    console.log(this.activeUser, "render");
     $target.innerHTML = `${
       this.isLoading
         ? Loader
