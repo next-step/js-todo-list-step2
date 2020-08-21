@@ -1,9 +1,10 @@
 export default class TodoList {
-  constructor(toggleTodo, editTodo, removeTodo) {
+  constructor(toggleTodo, editTodo, changePriority, removeTodo) {
     this.todoListElement = document.querySelector('.todo-list');
     this.todoList = [];
     this.toggleTodo = toggleTodo;
     this.editTodo = editTodo;
+    this.changePriority = changePriority;
     this.removeTodo = removeTodo;
 
     this.applyEvent();
@@ -14,6 +15,7 @@ export default class TodoList {
       if (el.classList.contains('hidden')) {
         el.classList.remove('hidden');
       } else {
+        parentElement.classList.add('editing');
         el.classList.add('hidden');
       }
     });
@@ -24,6 +26,25 @@ export default class TodoList {
   }
 
   applyEvent() {
+    this.changeTodoModeEvent();
+    this.updateEvent();
+    this.selectChangeEvent();
+
+    this.todoListElement.addEventListener('click', async ({ target }) => {
+      const parentEl = target.closest('li');
+      const todoId = parentEl.id;
+
+      if (target.className === 'destroy') {
+        this.removeTodo(todoId);
+      } else if (target.className === 'toggle') {
+        this.toggleTodo(todoId);
+      } else if (target.classList.contains('chip')) {
+        // this.changePriority(todoId, )
+      }
+    });
+  }
+
+  changeTodoModeEvent() {
     this.todoListElement.addEventListener('dblclick', ({ target }) => {
       if (
         !target.classList.contains('label') &&
@@ -35,7 +56,9 @@ export default class TodoList {
       const parentEl = target.closest('li');
       this.changeTodoMode(parentEl);
     });
+  }
 
+  updateEvent() {
     this.todoListElement.addEventListener('keypress', ({ code, target }) => {
       if (!target.classList.contains('edit') || code != 'Enter') {
         return;
@@ -49,15 +72,14 @@ export default class TodoList {
         this.editTodo(targetId, target.value);
       }
     });
+  }
 
-    this.todoListElement.addEventListener('click', ({ target }) => {
-      let todoId = target.closest('li').id;
-
-      if (target.className === 'destroy') {
-        this.removeTodo(todoId);
-      } else if (target.className === 'toggle') {
-        this.toggleTodo(todoId);
-      }
+  selectChangeEvent() {
+    this.todoListElement.addEventListener('change', ({ target }) => {
+      const parentEl = target.closest('li');
+      const targetId = parentEl.id;
+      const selectedValue = target.value;
+      this.changePriority(targetId, selectedValue);
     });
   }
 
@@ -79,17 +101,24 @@ export default class TodoList {
 
     return `
       <select class="chip select">
-        <option value="0" selected>순위</option>
+        <option value="0">순위</option>
         <option value="1">1순위</option>
         <option value="2">2순위</option>
       </select>
     `;
   }
 
+  getTodoClassState(todo) {
+    if (todo.isCompleted) {
+      return 'completed';
+    }
+    return '';
+  }
+
   render() {
     const todoListElementsText = this.todoList.map((todo) => {
       return `
-        <li id="${todo._id}">
+        <li id="${todo._id}" class="${this.getTodoClassState(todo)}">
           <div class="view">
             <input class="toggle" type="checkbox" ${
               todo.isCompleted ? 'checked' : ''

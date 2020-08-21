@@ -10,6 +10,7 @@ import {
   toggleTodo,
   addTodoItem,
   updateTodoItem,
+  updateTodoPriority,
   deleteTodoItem,
 } from '../api/todoApi.js';
 
@@ -25,6 +26,7 @@ export default class App {
     this.todoList = new TodoList(
       this.toggleTodo.bind(this),
       this.editTodo.bind(this),
+      this.changePriority.bind(this),
       this.removeTodo.bind(this)
     );
 
@@ -39,7 +41,7 @@ export default class App {
     try {
       this.users = await getUsers();
       this.userList.setUsers(this.users);
-      const defaultUserName = this.users[this.users.length - 4].name; // test용 값입니다.
+      const defaultUserName = this.users[this.users.length - 4].name;
       this.selectedUserName = defaultUserName;
       this.userList.selectUser(defaultUserName);
       this.todoHeader.setState(defaultUserName);
@@ -131,6 +133,17 @@ export default class App {
     );
     const targetId = updatedTodo._id;
     const newTodos = this.makeNewTodoList('contents', targetId, contents);
+    this.setTodoState(newTodos);
+  }
+
+  async changePriority(itemId, priority) {
+    const updatedTodo = await updateTodoPriority(
+      this.selectedUserName,
+      itemId,
+      priority
+    );
+    const targetId = updatedTodo._id;
+    const newTodos = this.makeNewTodoList('priority', targetId, priority);
     this.setTodoState(newTodos);
   }
 
