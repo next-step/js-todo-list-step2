@@ -1,3 +1,5 @@
+import { ACTIVE } from "../utils/data.js";
+
 export default function Users({
   usersId,
   userTitleId,
@@ -22,7 +24,7 @@ export default function Users({
               .map(
                 ({ _id, name }) =>
                   `<button data-id=${_id} class="ripple ${
-                    _id === this.state.currentUserId ? "active" : ""
+                    _id === this.state.currentUserId ? ACTIVE : ""
                   }">${name}</button>`
               )
               .join("")}

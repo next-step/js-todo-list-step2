@@ -4,7 +4,6 @@ import {
   TODO_INPUT_ID,
   TODO_COUNT_ID,
   TODO_FILTER_ID,
-  TODO_MAIN_ID,
   ALL,
   COMPLETED,
   USERS_ID,
@@ -16,9 +15,15 @@ import TodoFilter from "./TodoFilter.js";
 import Users from "./Users.js";
 import TodoError from "./TodoError.js";
 import API from "../utils/api.js";
-import { validateUserData, validateTodoList } from "../utils/util.js";
+import {
+  validateUserData,
+  validateTodoList,
+  urlHrefClear,
+} from "../utils/util.js";
+import Skeleton from "./Skeleton.js";
 
 export default function App() {
+  urlHrefClear();
   this.init = async () => {
     this.state = {
       users: [],
@@ -60,8 +65,11 @@ export default function App() {
       filterTodo: this.filterTodo,
     });
     this.todoError = new TodoError({
-      elementId: TODO_MAIN_ID,
+      elementId: TODO_LIST_ID,
       error: null,
+    });
+    this.skeleton = new Skeleton({
+      elementId: TODO_LIST_ID,
     });
     this.loadTodos();
   };
@@ -151,8 +159,10 @@ export default function App() {
   };
   this.loadTodos = async () => {
     try {
+      this.skeleton.render(true);
       const { name } = this.state.currentUser;
       const { todoList } = await API.getTodoListFromAPI(name);
+      this.skeleton.render(false);
       validateTodoList(todoList) ? this.setState(todoList) : null;
     } catch (err) {
       console.log(`Cannot read todoList from user..${err}`);
@@ -169,12 +179,10 @@ export default function App() {
     this.render();
   };
   this.setStateForRendering = ({
-    users: users,
     todoList: todoList,
     todoCount: todoCount,
     todoFilter: todoFilter,
   }) => {
-    this.users.setState(users);
     this.todoList.setState(todoList);
     this.todoCount.setState(todoCount);
     this.todoFilter.setState(todoFilter);

@@ -10,13 +10,14 @@ export default function TodoFilter({ elementId, filterType, filterTodo }) {
     };
     this.$todoFilter = document.querySelector(`.${elementId}`);
     this.filterTodo = filterTodo;
+    this.bindEventListener();
   };
   this.switchFilter = (type) => {
-    if (type === `#${ACTIVE}`) {
+    if (type === ACTIVE) {
       this.filterTodo({
         type: ACTIVE,
       });
-    } else if (type === `#${COMPLETED}`) {
+    } else if (type === COMPLETED) {
       this.filterTodo({
         type: COMPLETED,
       });
@@ -28,14 +29,19 @@ export default function TodoFilter({ elementId, filterType, filterTodo }) {
   };
   this.render = () => {
     [...this.$todoFilter.childNodes].forEach((el) => {
+      const currentHash = el.childNodes[1]
+        ? el.childNodes[1].hash.split("/")[1]
+        : null;
       if (
         el.tagName === "LI" &&
-        !el.childNodes[1].classList.contains(this.state.filterType)
+        currentHash &&
+        currentHash !== this.state.filterType
       ) {
         el.childNodes[1].classList.remove(SELECTED);
       } else if (
         el.tagName === "LI" &&
-        el.childNodes[1].classList.contains(this.state.filterType) &&
+        currentHash &&
+        currentHash === ("" || this.state.filterType) &&
         !el.childNodes[1].classList.contains(SELECTED)
       ) {
         el.childNodes[1].classList.add(SELECTED);
@@ -47,7 +53,7 @@ export default function TodoFilter({ elementId, filterType, filterTodo }) {
       evt.target.tagName === "A" &&
       !evt.target.classList.contains(SELECTED)
     ) {
-      this.switchFilter(evt.target.hash);
+      this.switchFilter(evt.target.hash.split("/")[1]);
     }
   };
   this.bindEventListener = () => {
@@ -58,5 +64,4 @@ export default function TodoFilter({ elementId, filterType, filterTodo }) {
     this.render();
   };
   this.init();
-  this.bindEventListener();
 }
