@@ -17,15 +17,16 @@ export default class TodoFilter {
   }
 
   updateSelectedClass() {
+    const locationHash = location.hash;
     Array.from(this.filtersElement.children).forEach((liEl) => {
       const anchorElement = liEl.children[0];
       const type = anchorElement.hash;
 
-      if (type === location.hash && type === '#/') {
+      if ((type === locationHash && type === '#/') || !locationHash) {
         anchorElement.classList.add('selected');
-      } else if (type === location.hash && type === '#/active') {
+      } else if (type === locationHash && type === '#/active') {
         anchorElement.classList.add('selected');
-      } else if (type === location.hash && type === '#/completed') {
+      } else if (type === locationHash && type === '#/completed') {
         anchorElement.classList.add('selected');
       } else {
         anchorElement.classList.remove('selected');
@@ -35,6 +36,9 @@ export default class TodoFilter {
 
   selectFilterEvent() {
     this.filtersElement.addEventListener('click', ({ target }) => {
+      if (location.hash === target.hash) {
+        return;
+      }
       location.hash = target.hash;
       this.updateTodoList();
     });
@@ -54,9 +58,7 @@ export default class TodoFilter {
   }
 
   render() {
-    console.log(location.hash);
     this.updateSelectedClass();
-    console.dir(this.todoFilterElement);
     if (this.todoFilterElement.childNodes[0].className === 'todo-count') {
       this.todoFilterElement.childNodes[0].remove();
     }
