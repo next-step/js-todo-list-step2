@@ -1,14 +1,9 @@
 import { USER, KEY, ADDRESS } from './constants.js'
 
-export default function TodoList ($todoList, data, removeItem) {
+export default function TodoList ($todoList) {
   this.$todoList = $todoList
-  this.data = data
-
-  this.updateItem = (nextData) => {
-    this.data = [...nextData]
-    this.render()
-    this.bindEvents()
-  }
+  this.userName = USER.Name
+  this.data = []
 
   this.editItem = (index, text) => {
     this.data[index].text = text
@@ -34,8 +29,8 @@ export default function TodoList ($todoList, data, removeItem) {
 
       $item.querySelector('button.destroy').addEventListener('click', (e) => {
         e.stopPropagation()
-        const { index } = e.target.closest('.todo-item').dataset
-        removeItem(index)
+        const _id = e.target.closest('.todo-item').id
+        this.delete(_id)
       })
 
       $item.querySelector('label').addEventListener('dblclick', (e) => {
@@ -58,16 +53,18 @@ export default function TodoList ($todoList, data, removeItem) {
   }
 
   this.get = () => {
-    fetch(`${ADDRESS.BASE_URL}/api/u/${USER.Name}/item`)
+    fetch(`${ADDRESS.BASE_URL}/api/u/${this.userName}/item`)
       .then((response) => response.json())
       .then((data) => {
         this.data = data.todoList
+
         this.render()
+        this.bindEvents()
       })
   }
 
   this.post = (text) => {
-    fetch(`${ADDRESS.BASE_URL}/api/u/${USER.Name}/item/`, {
+    fetch(`${ADDRESS.BASE_URL}/api/u/${this.userName}/item/`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -77,27 +74,39 @@ export default function TodoList ($todoList, data, removeItem) {
       })
     }).then((response) => {
       console.log(response)
+      this.get()
+    })
+  }
+
+  this.delete = (_id) => {
+    fetch(`${ADDRESS.BASE_URL}/api/u/${this.userName}/item/${_id}`, {
+      method: 'DELETE'
+    }).then(() => {
+      this.get()
     })
   }
 
   this.render = () => {
     let result = ''
-    this.data.map(({ id, contents, isCompleted, priority }, index) => {
-      result += `<li class="todo-item ${isCompleted ? 'completed' : ''}" data-index="${index}">
-      <div class="view">
-      <input class="toggle" type="checkbox" ${isCompleted ? 'checked' : ''} />
-      <label class="label">
-      <select class="chip select">
-        <option value="0" ${priority == 0 ? 'selected' : ''}>순위</option>
-        <option value="1" ${priority == 1 ? 'selected' : ''}>1순위</option>
-        <option value="2" ${priority == 2 ? 'selected' : ''}>2순위</option>
-      </select>
-      ${contents}</label>
-      <button class="destroy"></button>
-      </div>
-      <input class="edit" value="${contents}" />
-      </li>`
-    }).join('')
+
+    if (this.data) {
+      this.data.map(({ _id, contents, isCompleted, priority }, index) => {
+        result += `<li class="todo-item ${isCompleted ? 'completed' : ''}" data-index="${index}" id="${_id}">
+          <div class="view">
+          <input class="toggle" type="checkbox" ${isCompleted ? 'checked' : ''} />
+          <label class="label">
+          <select class="chip select">
+            <option value="0" ${priority == 0 ? 'selected' : ''}>순위</option>
+            <option value="1" ${priority == 1 ? 'selected' : ''}>1순위</option>
+            <option value="2" ${priority == 2 ? 'selected' : ''}>2순위</option>
+          </select>
+          ${contents}</label>
+          <button class="destroy"></button>
+          </div>
+          <input class="edit" value="${contents}" />
+          </li>`
+      }).join('')
+    }
 
     this.$todoList.innerHTML = result
   }
