@@ -41,7 +41,7 @@ export default class App {
     try {
       this.users = await getUsers();
       this.userList.setUsers(this.users);
-      const defaultUserName = this.users[this.users.length - 4].name;
+      const defaultUserName = this.users[0].name;
       this.selectedUserName = defaultUserName;
       this.userList.selectUser(defaultUserName);
       this.todoHeader.setState(defaultUserName);
@@ -71,7 +71,7 @@ export default class App {
     }
   }
 
-  setTodoState(todoList) {
+  setTodoState(todoList = []) {
     try {
       this.todos = {
         ...this.todos,
@@ -79,7 +79,7 @@ export default class App {
       };
       this.updateFilteredTodoList();
     } catch (error) {
-      alert(error);
+      alert(`setTodoState error: ${error.message}`);
     }
   }
 
@@ -111,7 +111,7 @@ export default class App {
       const todoList = this.todos.todoList || [];
       this.setTodoState(todoList.concat(newTodoItem));
     } catch (error) {
-      alert(error.message);
+      alert(`addTodo error: ${error.message}`);
     }
   }
 
@@ -155,7 +155,7 @@ export default class App {
       );
       this.setTodoState(newTodos);
     } catch (error) {
-      alert(error.message);
+      alert(`removeTodo error: ${error.message}`);
     }
   }
 
@@ -172,7 +172,7 @@ export default class App {
         this.setTodoState([]);
       }
     } catch (error) {
-      alert(error.message);
+      alert(`allRemoveTodo error: ${error.message}`);
     }
   }
 }
