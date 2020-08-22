@@ -1,4 +1,10 @@
 export default class TodoList {
+  priorityList = ['0', '1', '2'];
+  priorityState = {
+    '1': 'primary',
+    '2': 'secondary',
+  };
+
   constructor(toggleTodo, editTodo, changePriority, removeTodo) {
     this.todoListElement = document.querySelector('.todo-list');
     this.todoList = [];
@@ -15,8 +21,8 @@ export default class TodoList {
       if (el.classList.contains('hidden')) {
         el.classList.remove('hidden');
       } else {
-        parentElement.classList.add('editing');
         el.classList.add('hidden');
+        parentElement.classList.add('editing');
       }
     });
   }
@@ -38,8 +44,6 @@ export default class TodoList {
         this.removeTodo(todoId);
       } else if (target.className === 'toggle') {
         this.toggleTodo(todoId);
-      } else if (target.classList.contains('chip')) {
-        // this.changePriority(todoId, )
       }
     });
   }
@@ -54,7 +58,9 @@ export default class TodoList {
       }
 
       const parentEl = target.closest('li');
-      this.changeTodoMode(parentEl);
+      if (!parentEl.classList.contains('completed')) {
+        this.changeTodoMode(parentEl);
+      }
     });
   }
 
@@ -68,7 +74,7 @@ export default class TodoList {
 
       const targetId = parentEl.id;
       const originTodo = this.findOriginTodo(targetId);
-      if (originTodo && originTodo.contents === target.value) {
+      if (originTodo && originTodo.contents !== target.value) {
         this.editTodo(targetId, target.value);
       }
     });
@@ -92,33 +98,36 @@ export default class TodoList {
   }
 
   priorityTemplate(priority) {
-    if (priority === '1') {
-      return `<span class="chip primary">1순위</span>`;
-    }
-    if (priority === '2') {
-      return `<span class="chip secondary">2순위</span>`;
+    let classNames = ['chip', 'select'];
+    const state = this.priorityState[priority];
+    if (state) {
+      classNames.push(state);
     }
 
+    const priorityValue = this.priorityList.includes(priority) ? priority : '0';
+    const optionElements = this.priorityList.map((value) => {
+      return `
+        <option value="${value}" ${value === priorityValue ? 'selected' : ''}>
+          ${value === '0' ? '' : value}순위
+        </option>
+      `;
+    });
+
     return `
-      <select class="chip select">
-        <option value="0">순위</option>
-        <option value="1">1순위</option>
-        <option value="2">2순위</option>
+      <select class="${classNames.join(' ')}" value="${priorityValue}">
+        ${optionElements.join('')}
       </select>
     `;
   }
 
   getTodoClassState(todo) {
-    if (todo.isCompleted) {
-      return 'completed';
-    }
-    return '';
+    return todo.isCompleted ? 'class="completed"' : '';
   }
 
   render() {
     const todoListElementsText = this.todoList.map((todo) => {
       return `
-        <li id="${todo._id}" class="${this.getTodoClassState(todo)}">
+        <li id="${todo._id}" ${this.getTodoClassState(todo)}>
           <div class="view">
             <input class="toggle" type="checkbox" ${
               todo.isCompleted ? 'checked' : ''

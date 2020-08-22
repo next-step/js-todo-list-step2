@@ -456,15 +456,20 @@ button.ripple {
 }
 
 .chip.primary {
+  color: #fff;
   background-color: #d63a49;
 }
 
 .chip.secondary {
+  color: #fff;
   background-color: #26c6da;
 }
 
 select.chip {
+  padding: 2px 4px;
   border-color: #e0e0e0;
   color: #bdbdbd;
-  width: 45px;
+  width: auto;
+  height: 20px;
+  line-height: 20px;
 }

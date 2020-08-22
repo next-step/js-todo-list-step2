@@ -22,7 +22,7 @@ export default class TodoFilter {
       const anchorElement = liEl.children[0];
       const type = anchorElement.hash;
 
-      if ((type === locationHash && type === '#/') || !locationHash) {
+      if (type === locationHash || (type === '#/' && locationHash === '')) {
         anchorElement.classList.add('selected');
       } else if (type === locationHash && type === '#/active') {
         anchorElement.classList.add('selected');
