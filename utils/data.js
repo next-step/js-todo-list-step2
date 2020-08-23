@@ -18,6 +18,7 @@ export const ESC = "Escape";
 export const ENTER = "Enter";
 export const KEYDOWN = "keydown";
 export const USER = "eastjun";
+export const NOTLI = "notLI";
 export const BASE_URL = "https://blackcoffee-todolist.df.r.appspot.com";
 export const goalList = [
   {

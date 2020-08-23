@@ -1,4 +1,4 @@
-import { ALL, COMPLETED, ACTIVE, SELECTED } from "../utils/data.js";
+import { ALL, COMPLETED, ACTIVE, SELECTED, NOTLI } from "../utils/data.js";
 
 export default function TodoFilter({ elementId, filterType, filterTodo }) {
   this.init = () => {
@@ -27,27 +27,6 @@ export default function TodoFilter({ elementId, filterType, filterTodo }) {
       });
     }
   };
-  this.render = () => {
-    [...this.$todoFilter.childNodes].forEach((el) => {
-      const currentHash = el.childNodes[1]
-        ? el.childNodes[1].hash.split("/")[1]
-        : null;
-      if (
-        el.tagName === "LI" &&
-        currentHash &&
-        currentHash !== this.state.filterType
-      ) {
-        el.childNodes[1].classList.remove(SELECTED);
-      } else if (
-        el.tagName === "LI" &&
-        currentHash &&
-        currentHash === ("" || this.state.filterType) &&
-        !el.childNodes[1].classList.contains(SELECTED)
-      ) {
-        el.childNodes[1].classList.add(SELECTED);
-      }
-    });
-  };
   this.clickHandler = (evt) => {
     if (
       evt.target.tagName === "A" &&
@@ -58,6 +37,21 @@ export default function TodoFilter({ elementId, filterType, filterTodo }) {
   };
   this.bindEventListener = () => {
     this.$todoFilter.addEventListener("click", this.clickHandler);
+  };
+  this.render = () => {
+    [...this.$todoFilter.childNodes].forEach((el) => {
+      const currentHash =
+        el.tagName === "LI" ? el.childNodes[1].hash.split("/")[1] : NOTLI;
+      if (currentHash !== NOTLI && currentHash !== this.state.filterType) {
+        el.childNodes[1].classList.remove(SELECTED);
+      } else if (
+        currentHash !== NOTLI &&
+        currentHash === ("" || this.state.filterType) &&
+        !el.childNodes[1].classList.contains(SELECTED)
+      ) {
+        el.childNodes[1].classList.add(SELECTED);
+      }
+    });
   };
   this.setState = (type) => {
     this.state.filterType = type;
