@@ -1,5 +1,6 @@
-import { validateUserName } from "../utils.js";
+import { validateUserName, validateInstance } from "../utils.js";
 function UserTitle($target, activeUser) {
+  validateInstance(UserTitle, this);
   this.activeUser = activeUser;
 
   this.setState = (newActiveUser) => {

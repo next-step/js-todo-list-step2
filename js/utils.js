@@ -2,6 +2,12 @@ export function isFunction(func) {
   return typeof func === "function";
 }
 
+export function validateInstance(object, instance) {
+  if (!(instance instanceof object)) {
+    throw new Error("Create instance with 'new'");
+  }
+}
+
 export function validateTodoItems(todoItems) {
   if (!Array.isArray(todoItems)) throw new Error("todoItems is not an array");
   todoItems.forEach((todoItem) => validateTodoItem(todoItem));
@@ -20,26 +26,6 @@ export function validateTodoItem(todoItem) {
     return;
   }
   throw new Error("Wrong todoItem");
-}
-
-export function isValidTodoItems(todoItems) {
-  if (!Array.isArray(todoItems)) return false;
-  return todoItems.every((todoItems) => isValidTodoItem(todoItems));
-}
-
-export function isValidTodoItem(todoItem) {
-  if (
-    todoItem &&
-    "_id" in todoItem &&
-    typeof todoItem._id === "string" &&
-    "contents" in todoItem &&
-    typeof todoItem.contents === "string" &&
-    "isCompleted" in todoItem &&
-    typeof todoItem.isCompleted === "boolean"
-  )
-    return true;
-
-  return false;
 }
 
 export function validateUserName(userName) {

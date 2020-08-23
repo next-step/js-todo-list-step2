@@ -1,10 +1,8 @@
 import { FilterType } from "../constants.js";
-import { isFunction } from "../utils.js";
+import { isFunction, validateInstance } from "../utils.js";
 
 function TodoFilter($target, type, eventHandler) {
-  if (!new.target) {
-    throw new Error("Create instance with 'new'");
-  }
+  validateInstance(TodoFilter, this);
 
   if (!eventHandler || !isFunction(eventHandler.onChangeType)) {
     throw new Error("Wrong eventHandler");

@@ -1,8 +1,6 @@
+import { validateInstance } from "../utils.js";
 function TodoCount($target, count) {
-  if (!new.target) {
-    throw new Error("Create instance with 'new'");
-  }
-
+  validateInstance(TodoCount, this);
   this.count = count || 0;
 
   this.setState = (nextCount) => {

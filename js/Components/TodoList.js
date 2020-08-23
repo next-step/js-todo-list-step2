@@ -1,13 +1,13 @@
-import { isValidTodoItems, isFunction, ESC_KEY } from "../utils.js";
+import {
+  isFunction,
+  ESC_KEY,
+  validateTodoItems,
+  validateInstance,
+} from "../utils.js";
 
 function TodoList($target, todoItems, eventHandler) {
-  if (!new.target) {
-    throw new Error("Create instance with 'new'");
-  }
-
-  if (!isValidTodoItems(todoItems)) {
-    throw new Error("wrong data");
-  }
+  validateInstance(TodoList, this);
+  validateTodoItems(todoItems);
 
   if (
     !eventHandler ||
@@ -21,9 +21,7 @@ function TodoList($target, todoItems, eventHandler) {
   this.todoItems = todoItems;
 
   this.setState = (newTodoItems) => {
-    if (!isValidTodoItems(newTodoItems)) {
-      throw new Error("wrong data");
-    }
+    validateTodoItems(newTodoItems);
     this.todoItems = newTodoItems;
     this.render();
   };

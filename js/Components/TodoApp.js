@@ -1,6 +1,6 @@
 import TodoInput from "./TodoInput.js";
 import TodoList from "./TodoList.js";
-import { validateUserName } from "../utils.js";
+import { validateUserName, validateInstance } from "../utils.js";
 import TodoCount from "./TodoCount.js";
 import TodoFilter from "./Todofilter.js";
 import { FilterType } from "../constants.js";
@@ -14,10 +14,7 @@ import {
 } from "../api.js";
 
 function TodoApp($target, activeUser) {
-  if (!new.target) {
-    throw new Error("Create instance with 'new'");
-  }
-
+  validateInstance(TodoApp, this);
   validateUserName(activeUser);
 
   this.activeUser = activeUser;

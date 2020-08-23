@@ -1,13 +1,17 @@
-import { validateTodoItems, isValidTodoItems } from "../js/utils.js";
+import { validateTodoItems } from "../js/utils.js";
 
 const API_URL = "https://blackcoffee-todolist.df.r.appspot.com/api/u";
 
 export const fetchTodoUsersFromServer = async () => {
   try {
     const res = await fetch(API_URL);
+    if (res.status !== 200) {
+      throw new Error(`Error status code : ${res.status}`);
+    }
     return await res.json();
   } catch (error) {
-    throw new Error(error.message);
+    console.log(error);
+    return [];
   }
 };
 

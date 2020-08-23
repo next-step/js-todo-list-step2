@@ -2,13 +2,10 @@ import TodoApp from "./TodoApp.js";
 import UserTitle from "./UserTitle.js";
 import UserList from "./UserList.js";
 import { DEFAULT_USER } from "../constants.js";
-import { validateUserName } from "../utils.js";
+import { validateUserName, validateInstance } from "../utils.js";
 
 function App($target) {
-  if (!new.target) {
-    throw new Error("Create instance with 'new'");
-  }
-
+  validateInstance(App, this);
   this.activeUser = DEFAULT_USER;
 
   this.render = () => {

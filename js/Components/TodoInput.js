@@ -1,9 +1,7 @@
-import { isFunction } from "../utils.js";
+import { isFunction, validateInstance } from "../utils.js";
 
 function TodoInput($target, eventHandler) {
-  if (!new.target) {
-    throw new Error("Create instance with 'new'");
-  }
+  validateInstance(TodoInput, this);
 
   if (!eventHandler || !isFunction(eventHandler.onSubmit)) {
     throw new Error("Wrong eventHandler");
