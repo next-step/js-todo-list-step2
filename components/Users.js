@@ -1,4 +1,8 @@
-import { ACTIVE } from "../utils/data.js";
+import {
+  todoUsersTemplate,
+  userTemplate,
+  errorCallTemplate,
+} from "../utils/template.js";
 
 export default function Users({
   usersId,
@@ -8,27 +12,26 @@ export default function Users({
   currentUserId,
   setUser,
 }) {
-  this.$users = document.getElementById(usersId);
-  this.$todoUser = document.getElementById(userTitleId);
   this.state = {
-    users: users,
-    currentUser: currentUser,
-    currentUserId: currentUserId,
+    users,
+    currentUser,
+    currentUserId,
   };
-  this.setUser = setUser;
+  this.init = () => {
+    if (!(this instanceof Users)) {
+      throw new Error(errorCallTemplate);
+    }
+    this.$users = document.getElementById(usersId);
+    this.$todoUser = document.getElementById(userTitleId);
+    this.setUser = setUser;
+  };
 
   this.render = () => {
-    this.$todoUser.querySelector("strong").textContent = this.state.currentUser;
-    this.$users.innerHTML = `
-            ${this.state.users
-              .map(
-                ({ _id, name }) =>
-                  `<button data-id=${_id} class="ripple ${
-                    _id === this.state.currentUserId ? ACTIVE : ""
-                  }">${name}</button>`
-              )
-              .join("")}
-        `;
+    this.$todoUser.innerHTML = userTemplate(this.state.currentUser);
+    this.$users.innerHTML = todoUsersTemplate(
+      this.state.users,
+      this.state.currentUserId
+    );
   };
 
   this.setState = ({ users, currentUser, currentUserId }) => {
@@ -53,6 +56,7 @@ export default function Users({
     this.$users.addEventListener("click", (evt) => this.clickHandler(evt));
   };
 
+  this.init();
   this.render();
   this.bindEventListener();
 }

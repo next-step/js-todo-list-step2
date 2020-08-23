@@ -1,13 +1,14 @@
 import { ALL, COMPLETED, ACTIVE, SELECTED, NOTLI } from "../utils/data.js";
+import { errorCallTemplate } from "../utils/template.js";
 
 export default function TodoFilter({ elementId, filterType, filterTodo }) {
+  this.state = {
+    filterType: filterType,
+  };
   this.init = () => {
     if (!(this instanceof TodoFilter)) {
-      throw new Error(`Invalid function call ${this}`);
+      throw new Error(errorCallTemplate);
     }
-    this.state = {
-      filterType: filterType,
-    };
     this.$todoFilter = document.querySelector(`.${elementId}`);
     this.filterTodo = filterTodo;
     this.bindEventListener();

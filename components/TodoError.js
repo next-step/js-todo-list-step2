@@ -1,7 +1,14 @@
+import { errorCallTemplate, todoErrorTemplate } from "../utils/template.js";
+
 export default function TodoError({ elementId, error }) {
-  this.$todoError = document.querySelector(`.${elementId}`);
   this.state = {
     error,
+  };
+  this.init = () => {
+    if (!(this instanceof TodoError)) {
+      throw new Error(errorCallTemplate);
+    }
+    this.$todoError = document.querySelector(`.${elementId}`);
   };
 
   this.setState = (err) => {
@@ -10,9 +17,8 @@ export default function TodoError({ elementId, error }) {
   };
 
   this.render = () => {
-    this.$todoError.innerHTML = `
-            <h3>Error occured..Something is wrong with the user's data</h3>
-            <p>${this.state.error}</p>
-        `;
+    this.$todoError.innerHTML = todoErrorTemplate(this.state.error);
   };
+
+  this.init();
 }

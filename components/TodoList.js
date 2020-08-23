@@ -1,4 +1,5 @@
-import { COMPLETED, TOGGLE, EDIT, EDITING, ESC, ENTER } from "../utils/data.js";
+import { TOGGLE, EDIT, EDITING, ESC, ENTER } from "../utils/data.js";
+import { errorCallTemplate, todoListTemplate } from "../utils/template.js";
 
 export default function TodoList({
   todoList,
@@ -6,10 +7,11 @@ export default function TodoList({
   deleteTodo,
   toggleTodo,
   editTodo,
+  setPriority,
 }) {
   this.init = () => {
     if (!(this instanceof TodoList)) {
-      throw new Error(`Invalid function call ${this}`);
+      throw new Error(errorCallTemplate);
     }
     this.state = {
       todoList: todoList,
@@ -18,26 +20,10 @@ export default function TodoList({
     this.deleteTodo = deleteTodo;
     this.toggleTodo = toggleTodo;
     this.editTodo = editTodo;
+    this.setPriority = setPriority;
   };
   this.render = () => {
-    this.$todoList.innerHTML = `
-        ${this.state.todoList
-          .map(
-            ({ contents, isCompleted, _id }) => `
-              <li data-id=${_id} class=${isCompleted ? COMPLETED : ""}>
-                  <div class="view">
-                      <input class=${TOGGLE} type="checkbox" ${
-              isCompleted ? "checked" : ""
-            } />
-                      <label class="label">${contents}</label>
-                      <button class="destroy"></button>
-                  </div>
-                  <input class=${EDIT} value="${contents}" />
-              </li>
-            `
-          )
-          .join("")}
-    `;
+    this.$todoList.innerHTML = todoListTemplate(this.state.todoList);
   };
   this.setState = (todoList) => {
     this.state.todoList = todoList;
@@ -76,11 +62,18 @@ export default function TodoList({
       });
     }
   };
+  this.changeHandler = (evt) => {
+    if (evt.target.tagName === "SELECT") {
+      const priority = evt.target.value;
+      this.setPriority({ _id: evt.target.closest("li").dataset.id, priority });
+    }
+  };
   this.bindEventListener = () => {
     this.$todoList.addEventListener("click", this.clickHandler);
     this.$todoList.addEventListener("dblclick", this.dblClickHandler);
     this.$todoList.addEventListener("keydown", this.keydownHandler);
     this.$todoList.addEventListener("keydown", this.enterHandler);
+    this.$todoList.addEventListener("change", this.changeHandler);
   };
   this.init();
   this.render();

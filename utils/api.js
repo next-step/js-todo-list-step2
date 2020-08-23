@@ -42,6 +42,17 @@ const options = {
       }),
     };
   },
+  PRIORITY: (priority) => {
+    return {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        priority,
+      }),
+    };
+  },
 };
 const api = {
   getUserListFromAPI: () => {
@@ -69,6 +80,12 @@ const api = {
     return request(
       `${BASE_URL}/api/u/${username}/item/${_id}`,
       options.EDIT(contents)
+    );
+  },
+  setPriorityFromAPI: (username, _id, priority) => {
+    return request(
+      `${BASE_URL}/api/u/${username}/item/${_id}/priority`,
+      options.PRIORITY(priority)
     );
   },
 };

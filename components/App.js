@@ -21,8 +21,12 @@ import {
   urlHrefClear,
 } from "../utils/util.js";
 import Skeleton from "./Skeleton.js";
+import { errorCallTemplate } from "../utils/template.js";
 
 export default function App() {
+  if (!new.target) {
+    throw new Error(errorCallTemplate);
+  }
   urlHrefClear();
   this.init = async () => {
     this.state = {
@@ -54,6 +58,7 @@ export default function App() {
       deleteTodo: this.deleteTodo,
       toggleTodo: this.toggleTodo,
       editTodo: this.editTodo,
+      setPriority: this.setPriority,
     });
     this.todoCount = new TodoCount({
       elementId: TODO_COUNT_ID,
@@ -145,6 +150,22 @@ export default function App() {
       this.todoError.setState(`Cannot add todo..${err}`);
     }
   };
+  this.setPriority = async ({ _id, priority }) => {
+    try {
+      const { name } = this.state.currentUser;
+      const setPriorityTodo = await API.setPriorityFromAPI(name, _id, priority);
+      const todos = this.state.todoList.map((todo) => {
+        if (todo._id === setPriorityTodo._id) {
+          todo.priority = setPriorityTodo.priority;
+        }
+        return todo;
+      });
+      validateTodoList(todos) ? this.setState(todos) : null;
+    } catch (err) {
+      console.log(`Cannot read UserList..${err}`);
+      this.todoError.setState(`Cannot read UserList..${err}`);
+    }
+  };
   this.loadUsers = async () => {
     try {
       this.state.users = await API.getUserListFromAPI();
@@ -198,9 +219,6 @@ export default function App() {
     this.todoFilter.setState(this.state.todoFilter);
   };
   try {
-    if (!new.target) {
-      throw new Error(`Invalid function call ${this}`);
-    }
     this.init();
   } catch {}
 }

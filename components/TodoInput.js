@@ -1,9 +1,10 @@
 import { ENTER, KEYDOWN } from "../utils/data.js";
+import { errorCallTemplate } from "../utils/template.js";
 
 export default function TodoInput({ elementId, addTodos }) {
   this.init = () => {
     if (!(this instanceof TodoInput)) {
-      throw new Error(`Invalid function call ${this}`);
+      throw new Error(errorCallTemplate);
     }
     this.$todoInput = document.querySelector(`.${elementId}`);
     this.addTodos = addTodos;
