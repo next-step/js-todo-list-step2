@@ -7,7 +7,7 @@ export default function TodoList(
 ) {
   this.render = (todos, loading) => {
     const template = todos.length ? todos.map(todoTemplate) : [];
-    $todoList.innerHTML = loading ? loadingTemplate : template.join("");
+    $todoList.innerHTML = loading ? loadingTemplate() : template.join("");
   };
 
   const onClickTodo = ({ target }) => {
