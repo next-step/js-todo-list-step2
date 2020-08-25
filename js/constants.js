@@ -1,6 +1,6 @@
 export const USER = {
   ID: 'hMcY95AGf',
-  Name: 'wooooooood'
+  NAME: 'wooooooood'
 }
 
 export const KEY = {

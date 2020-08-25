@@ -9,13 +9,19 @@ function App () {
   const $userTitle = document.querySelector('#user-title')
   const $userList = document.querySelector('#user-list')
 
+  this.userName = USER.NAME
+
+  this.setState = (newUser) => {
+    this.userName = newUser
+  }
+
   this.addItem = (text) => {
     todoList.post(text)
   }
 
-  const todoList = new TodoList($todoList)
+  const todoList = new TodoList($todoList, this.userName)
   const todoInput = new TodoInput($todoInput, (text) => { this.addItem(text) })
-  const todoUser = new TodoUser($userTitle, $userList)
+  const todoUser = new TodoUser($userTitle, $userList, this.userName)
 }
 
 new App()

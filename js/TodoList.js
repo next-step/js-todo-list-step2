@@ -1,8 +1,8 @@
-import { USER, KEY, ADDRESS } from './constants.js'
+import { KEY, ADDRESS } from './constants.js'
 
-export default function TodoList ($todoList) {
+export default function TodoList ($todoList, userName) {
   this.$todoList = $todoList
-  this.userName = USER.Name
+  this.userName = userName
   this.data = []
 
   this.editItem = (index, text) => {
@@ -21,10 +21,12 @@ export default function TodoList ($todoList) {
         if ($todoItem.classList.contains('completed')) {
           $todoItem.classList.remove('completed')
           this.data[index].isCompleted = false
+          
         } else {
           $todoItem.classList.add('completed')
           this.data[index].isCompleted = true
         }
+        this.toggle($todoItem.id)
       })
 
       $item.querySelector('button.destroy').addEventListener('click', (e) => {
@@ -46,6 +48,8 @@ export default function TodoList ($todoList) {
             e.target.value = oldValue
           } else if (e.keyCode === KEY.ENTER_KEY) {
             this.editItem(index, e.target.value)
+
+            this.edit($todoItem.id, e.target.value)
           }
         })
       })
@@ -81,6 +85,27 @@ export default function TodoList ($todoList) {
   this.delete = (_id) => {
     fetch(`${ADDRESS.BASE_URL}/api/u/${this.userName}/item/${_id}`, {
       method: 'DELETE'
+    }).then(() => {
+      this.get()
+    })
+  }
+
+  this.toggle = (_id) => {
+    fetch(`${ADDRESS.BASE_URL}/api/u/${this.userName}/item/${_id}/toggle`, {
+      method: 'PUT'
+    }).then(() => {
+    })
+  }
+
+  this.edit = (_id, text) => {
+    fetch(`${ADDRESS.BASE_URL}/api/u/${this.userName}/item/${_id}/`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        contents: text
+      })
     }).then(() => {
       this.get()
     })
