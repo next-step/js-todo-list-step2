@@ -9,8 +9,12 @@ function App($target) {
   this.activeUser = DEFAULT_ACTIVE_USER;
 
   this.setActiveUser = (newActiveUser) => {
+    this.todoApp.setState({
+      activeUser: newActiveUser,
+    })
     this.userList.setState(newActiveUser);
     this.userTitle.setState(newActiveUser);
+    this.todoApp.fetchTodoList();
   };
 
   this.render = () => {

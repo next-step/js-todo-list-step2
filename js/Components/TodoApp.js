@@ -23,7 +23,6 @@ function TodoApp($target, activeUser) {
     this.state.todoItems = await API.fetchTodoItemsFromAPI(
       this.state.activeUser
     );
-    console.log(this.state.todoItems);
     this.todoInput = new TodoInput({
       $target: document.querySelector("#todo-input"),
       addTodo: this.addTodo.bind(this),
@@ -35,6 +34,7 @@ function TodoApp($target, activeUser) {
         deleteTodo: this.deleteTodo.bind(this),
         toggleTodo: this.toggleTodo.bind(this),
         editTodoContents: this.editTodoContents.bind(this),
+        setPriority: this.setPriority.bind(this),
       }
     );
   };
@@ -54,7 +54,18 @@ function TodoApp($target, activeUser) {
     this.setState();
   };
 
-  this.toggleTodo = (_id) => API.toggleTodoFromAPI(this.state.activeUser, _id);
+  this.toggleTodo = async (_id) => {
+    const todoItem = this.state.todoItems.find(
+      (todoItem) => todoItem._id === _id
+    );
+    if (!todoItem) {
+      console.log(`Can not find todoItem with Id ${_id}`);
+      return;
+    }
+    const todo = await API.toggleTodoFromAPI(this.state.activeUser, _id);
+    todoItem.isCompleted = todo.isCompleted;
+    this.setState();
+  };
 
   this.editTodoContents = async (_id, contents) => {
     const todoItem = this.state.todoItems.find(
@@ -73,7 +84,25 @@ function TodoApp($target, activeUser) {
     this.setState();
   };
 
-  this.setState = () => {
+  this.setPriority = async (_id, priority) => {
+    await API.setPriorityFromAPI(this.state.activeUser, _id, priority);
+    // 여기서부터 심화 구현 작업 진행 필요
+  }
+
+  this.fetchTodoList = async () => {
+    this.state.todoItems = await API.fetchTodoItemsFromAPI(
+      this.state.activeUser
+    );
+    this.todoList.setState(this.state.todoItems);
+  }
+
+  this.setState = (state) => {
+    if(state && state.activeUser) {
+      this.state.activeUser = state.activeUser;
+    }
+    if(state && state.todoItems) {
+      this.state.todoItems = state.todoItems;
+    }
     this.todoList.setState(this.state.todoItems);
   };
 

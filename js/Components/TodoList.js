@@ -15,29 +15,28 @@ function TodoList(
   };
 
   this.render = () => {
+    const selectTemplate = (priority) => `
+      <select class="chip select">
+        <option value="0" ${priority === 0 ? "selected" : ""}>순위</option>
+        <option value="1" ${priority === 1 ? "selected" : ""}>1순위</option>
+        <option value="2" ${priority === 2 ? "selected" : ""}>2순위</option>
+      </select>
+    `
     this.$target.innerHTML = `
     ${this.state.todoItems
-      .map(({ _id, contents, isCompleted }) =>
-        isCompleted
-          ? `
-            <li data-id=${_id}>
+      .map(({ _id, contents, isCompleted, priority }) =>
+           `
+            <li data-id=${_id} class=${isCompleted ? "completed" : ""}>
                 <div class="view">
-                    <input class="toggle" type="checkbox" checked/>
-                    <label class="label"><span class="contents">${contents}</span></label>
+                    <input class="toggle" type="checkbox" ${isCompleted ? "checked": ""}/>
+                    <label class="label">
+                      ${selectTemplate(priority)}
+                      <span class="contents">${contents}</span>
+                    </label>
                     <button class="destroy"></button>
                 </div>
-                <input class="edit" value="완료된 타이틀" />
+                <input class="edit"/>
             </li>`
-          : `
-            <li data-id=${_id}>
-                <div class="view">
-                    <input class="toggle" type="checkbox" />
-                    <label class="label"><span class="contents">${contents}</span></label>
-                    <button class="destroy"></button>
-                </div>
-                <input class="edit" value="완료된 타이틀" />
-            </li>
-        `
       )
       .join("")}
     `;
@@ -51,26 +50,16 @@ function TodoList(
     };
 
     const onChangeHandler = (evt) => {
+      console.log(evt);
       if (
         evt.target.tagName === "INPUT" &&
         evt.target.classList.contains("toggle")
       ) {
         toggleTodo(evt.target.closest("li").dataset.id);
       }
-
-      if (
-        evt.target.tagName === "INPUT" &&
-        evt.target.classList.contains("edit")
-      ) {
-        console.log(evt);
-        const id = evt.target.closest("li").dataset.id;
-        const textContents = evt.target.value;
-        editTodoContents(id, textContents);
-      }
     };
 
     const onDblclickHandler = (evt) => {
-      console.log(evt);
       if (
         evt.target.classList.contains("label") ||
         evt.target.classList.contains("contents")
@@ -89,8 +78,34 @@ function TodoList(
       }
     };
 
+    const keyDownHandler = (evt) => {
+      if (
+        evt.target.tagName === "INPUT" &&
+        evt.target.classList.contains("edit") &&
+        evt.key === "Enter"
+      ) {
+        const id = evt.target.closest("li").dataset.id;
+        const textContents = evt.target.value;
+        editTodoContents(id, textContents);
+      } else if(
+        evt.target.tagName === "INPUT" &&
+        evt.target.classList.contains("edit") &&
+        evt.key === "Escape") {
+          evt.target.closest("li").classList.remove("editing");
+        }
+    }
+
+    const focusoutHandler = (evt) => {
+      if(evt.target.tagName === "INPUT" &&
+      evt.target.classList.contains("edit")) {
+        evt.target.closest("li").classList.remove("editing");
+      }
+    }
+
     this.$target.addEventListener("click", clickHandler);
+    this.$target.addEventListener("keydown", keyDownHandler);
     this.$target.addEventListener("change", onChangeHandler);
+    this.$target.addEventListener("focusout", focusoutHandler);
     this.$target.addEventListener("dblclick", onDblclickHandler);
   };
   this.initEventListeners();

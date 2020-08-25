@@ -49,6 +49,17 @@ const options = {
       body: JSON.stringify({ contents }),
     };
   },
+  SET_PRIORITY: (priority) => {
+    return {
+        method: 'PUT',
+        headers: {
+        'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+        priority,
+      })
+    }
+  }
 };
 
 const api = {
@@ -79,6 +90,11 @@ const api = {
       `https://blackcoffee-todolist.df.r.appspot.com/api/u/${username}/item/${_id}`,
       options.EDIT_CONTENTS(contents)
     ),
+  setPriorityFromAPI: async (username, _id, priority) =>
+    request(
+      `https://blackcoffee-todolist.df.r.appspot.com/api/u/${username}/item/${_id}/priority`,
+      options.SET_PRIORITY(priority)
+    )
 };
 
 export default api;
