@@ -11,8 +11,9 @@ function App () {
 
   this.userName = USER.NAME
 
-  this.setState = (newUser) => {
-    this.userName = newUser
+  this.setState = (activeUserName) => {
+    this.userName = activeUserName
+    todoList.setState(this.userName)
   }
 
   this.addItem = (text) => {
@@ -21,7 +22,7 @@ function App () {
 
   const todoList = new TodoList($todoList, this.userName)
   const todoInput = new TodoInput($todoInput, (text) => { this.addItem(text) })
-  const todoUser = new TodoUser($userTitle, $userList, this.userName)
+  const todoUser = new TodoUser($userTitle, $userList, this.userName, (activeUserName) => { this.setState(activeUserName) })
 }
 
 new App()

@@ -1,6 +1,6 @@
 import { ADDRESS } from './constants.js'
 
-export default function TodoUser ($userTitle, $userList, userName) {
+export default function TodoUser ($userTitle, $userList, userName, setActiveUser) {
   this.$userTitle = $userTitle
   this.$userList = $userList
   this.userName = userName
@@ -17,9 +17,10 @@ export default function TodoUser ($userTitle, $userList, userName) {
       })
   }
 
-  this.setState = (newUser) => {
-    this.userName = newUser
+  this.setState = (activeUserName) => {
+    this.userName = activeUserName
     this.getUsers()
+    setActiveUser(this.userName)
   }
 
   this.bindEvents = () => {

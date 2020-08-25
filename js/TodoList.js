@@ -11,6 +11,11 @@ export default function TodoList ($todoList, userName) {
     this.bindEvents()
   }
 
+  this.setState = (activeUserName) => {
+    this.userName = activeUserName
+    this.get()
+  }
+
   this.bindEvents = () => {
     document.querySelectorAll('.todo-item').forEach(($item) => {
       $item.querySelector('input.toggle').addEventListener('click', (e) => {
@@ -77,7 +82,6 @@ export default function TodoList ($todoList, userName) {
         contents: text
       })
     }).then((response) => {
-      console.log(response)
       this.get()
     })
   }

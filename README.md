@@ -3,10 +3,10 @@
 ## 🎯 요구사항
 - [x] todoItem 불러오기
 - [x] todoItem 추가하기
-- [ ] todoItem 삭제하기
-- [ ] todoItem complete하기
-- [ ] todoItem contents 내용 수정하기
-- [ ] user별 투두리스트 불러오기
+- [x] todoItem 삭제하기
+- [x] todoItem complete하기
+- [x] todoItem contents 내용 수정하기
+- [x] user별 투두리스트 불러오기
 
 ## 🎯🎯 심화 요구사항
 - [ ] 데이터를 불러오기전 로딩바를 이용해, 사용자가 데이터가 불러와지고 있다는 것을 보여줍니다.
@@ -16,4 +16,4 @@
 
 ## 2기
 ### 🐞 버그
-- [ ] Todo user list가 이상하게 겹쳐짐
+- [ ] 엔터를 한번 눌렀는데 TodoInput 이벤트가 두번 호출되는 경우?
