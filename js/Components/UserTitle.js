@@ -1,17 +1,21 @@
 import { validateUserName, validateInstance } from "../utils.js";
 function UserTitle($target, activeUser) {
   validateInstance(UserTitle, this);
-  this.activeUser = activeUser;
+  this.state = {
+    activeUser,
+  };
 
-  this.setState = (newActiveUser) => {
-    validateUserName(newActiveUser);
-    this.activeUser = newActiveUser;
+  this.setState = (state) => {
+    if (state && state.activeUser) {
+      validateUserName(state.activeUser);
+      this.state.activeUser = state.activeUser;
+    }
     this.render();
   };
 
   this.render = () => {
     $target.innerHTML = `
-        <span><strong>${this.activeUser}</strong>'s Todo List</span>
+        <span><strong>${this.state.activeUser}</strong>'s Todo List</span>
       `;
   };
 

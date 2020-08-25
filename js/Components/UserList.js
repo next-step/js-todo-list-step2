@@ -8,29 +8,32 @@ function UserList($target, activeUser, { onClickUser }) {
     throw new Error("Wrong onClickUser");
   }
   validateUserName(activeUser);
-  this.activeUser = activeUser;
-  this.users = [];
-  this.isLoading = false;
 
-  this.setState = ({ activeUser, isLoading }) => {
-    if (activeUser) {
+  this.state = {
+    activeUser,
+    users: [],
+    isLoading: false,
+  };
+
+  this.setState = (state) => {
+    if (state && state.activeUser) {
       validateUserName(activeUser);
-      this.activeUser = activeUser;
+      this.state.activeUser = state.activeUser;
     }
-    if (typeof isLoading === "boolean") {
-      this.isLoading = isLoading;
+    if (state && typeof state.isLoading === "boolean") {
+      this.state.isLoading = state.isLoading;
     }
     this.render();
   };
 
   this.render = () => {
-    $target.innerHTML = this.isLoading
+    $target.innerHTML = this.state.isLoading
       ? Loader
-      : this.users
+      : this.state.users
           .map(
             ({ name }) =>
               `<button class="ripple ${
-                this.activeUser === name ? "active" : ""
+                this.state.activeUser === name ? "active" : ""
               }">${name}</button>`
           )
           .join(" ");
@@ -47,7 +50,7 @@ function UserList($target, activeUser, { onClickUser }) {
   this.fetchUserListWithLoader = async () => {
     try {
       this.setState({ isLoading: true });
-      this.users = await fetchTodoUsersFromServer();
+      this.state.users = await fetchTodoUsersFromServer();
     } catch (error) {
       throw new Error(`${error.message}`);
     } finally {

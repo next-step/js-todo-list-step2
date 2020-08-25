@@ -26,7 +26,7 @@ function App($target) {
   this.setActiveUser = (newActiveUser) => {
     validateUserName(newActiveUser);
     this.activeUser = newActiveUser;
-    this.userTitle.setState(this.activeUser);
+    this.userTitle.setState({ activeUser: this.activeUser });
     this.userList.setState({ activeUser: this.activeUser });
     this.todoApp.setState({ activeUser: this.activeUser });
   };
