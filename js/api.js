@@ -33,8 +33,22 @@ const options = {
   DELETE: () => {
     return {
       method: "DELETE",
-    }
-  }
+    };
+  },
+  TOGGLE: () => {
+    return {
+      method: "PUT",
+    };
+  },
+  EDIT_CONTENTS: (contents) => {
+    return {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ contents }),
+    };
+  },
 };
 
 const api = {
@@ -49,10 +63,22 @@ const api = {
     );
     return res.todoList || [];
   },
-  deleteTodoFromAPI: async (username, _id) => 
+  deleteTodoFromAPI: async (username, _id) =>
     request(
-      `https://blackcoffee-todolist.df.r.appspot.com/api/u/${username}/item/${_id}`, options.DELETE()
-    )
+      `https://blackcoffee-todolist.df.r.appspot.com/api/u/${username}/item/${_id}`,
+      options.DELETE()
+    ),
+  toggleTodoFromAPI: async (username, _id) =>
+    request(
+      `https://blackcoffee-todolist.df.r.appspot.com/api/u/${username}/item/${_id}/toggle`,
+      options.TOGGLE()
+    ),
+
+  editTodoContentsFromAPI: async (username, _id, contents) =>
+    request(
+      `https://blackcoffee-todolist.df.r.appspot.com/api/u/${username}/item/${_id}`,
+      options.EDIT_CONTENTS(contents)
+    ),
 };
 
 export default api;

@@ -31,7 +31,11 @@ function TodoApp($target, activeUser) {
     this.todoList = new TodoList(
       document.querySelector("#todo-list"),
       this.state.todoItems,
-      this.deleteTodo.bind(this)
+      {
+        deleteTodo: this.deleteTodo.bind(this),
+        toggleTodo: this.toggleTodo.bind(this),
+        editTodoContents: this.editTodoContents.bind(this),
+      }
     );
   };
 
@@ -42,10 +46,32 @@ function TodoApp($target, activeUser) {
   };
 
   this.deleteTodo = async (_id) => {
-    const {todoList} = await API.deleteTodoFromAPI(this.state.activeUser, _id);
+    const { todoList } = await API.deleteTodoFromAPI(
+      this.state.activeUser,
+      _id
+    );
     this.state.todoItems = todoList;
     this.setState();
-  }
+  };
+
+  this.toggleTodo = (_id) => API.toggleTodoFromAPI(this.state.activeUser, _id);
+
+  this.editTodoContents = async (_id, contents) => {
+    const todoItem = this.state.todoItems.find(
+      (todoItem) => todoItem._id === _id
+    );
+    if (!todoItem) {
+      console.log(`Can not find todoItem with Id ${_id}`);
+      return;
+    }
+    const res = await API.editTodoContentsFromAPI(
+      this.state.activeUser,
+      _id,
+      contents
+    );
+    todoItem.contents = res.contents;
+    this.setState();
+  };
 
   this.setState = () => {
     this.todoList.setState(this.state.todoItems);
