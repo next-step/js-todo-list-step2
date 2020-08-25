@@ -226,7 +226,7 @@ body {
   transition: color 0.4s;
 }
 
-.todo-list li.completed label {
+.todo-list li.completed .label__contents {
   color: #d9d9d9;
   text-decoration: line-through;
 }
@@ -450,15 +450,25 @@ button.ripple {
 }
 
 .chip {
-  width: 40px;
   display: block;
-  font-size: 10px;
+  font-size: 13px;
   color: #fff;
   font-weight: normal;
   border-radius: 15px;
   text-align: center;
   left: 60px;
   top: 3px;
+}
+
+.chip.primary,
+.chip.secondary {
+  color: #fff;
+}
+
+.chip.primary option,
+.chip.secondary option {
+  background-color: white;
+  color: #bdbdbd;
 }
 
 .chip.primary {
@@ -472,5 +482,5 @@ button.ripple {
 select.chip {
   border-color: #e0e0e0;
   color: #bdbdbd;
-  width: 45px;
+  height: 23px;
 }

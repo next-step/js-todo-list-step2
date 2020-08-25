@@ -64,7 +64,7 @@ export const toggleTodoItmeByIdFromServer = async (userName, todoId) => {
   }
 };
 
-export const editTodoItemByIdFromServer = async (
+export const editTodoItemContentsByIdFromServer = async (
   userName,
   todoId,
   textContext
@@ -77,6 +77,27 @@ export const editTodoItemByIdFromServer = async (
       },
       body: JSON.stringify({
         contents: textContext,
+      }),
+    });
+    return await res.json();
+  } catch (error) {
+    return { error: error.message };
+  }
+};
+
+export const changeTodoItemPriorityByIdFromServer = async (
+  userName,
+  todoId,
+  priority
+) => {
+  try {
+    const res = await fetch(`${API_URL}/${userName}/item/${todoId}/priority`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        priority,
       }),
     });
     return await res.json();

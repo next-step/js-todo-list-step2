@@ -10,7 +10,8 @@ import {
   addTodoItem2Server,
   toggleTodoItmeByIdFromServer,
   deleteTodoItemByIdFromServer,
-  editTodoItemByIdFromServer,
+  editTodoItemContentsByIdFromServer,
+  changeTodoItemPriorityByIdFromServer,
 } from "../api.js";
 
 function TodoApp($target, activeUser) {
@@ -96,7 +97,19 @@ function TodoApp($target, activeUser) {
     }
     const filteredTodoItems = this.getFilteredTodoItems();
     this.todoList.setState(filteredTodoItems);
-    editTodoItemByIdFromServer(this.activeUser, id, contents);
+    editTodoItemContentsByIdFromServer(this.activeUser, id, contents);
+  };
+
+  this.changeTodoPriorityById = (id, priority) => {
+    const todoItem = this.todoItems.find(({ _id }) => _id === id);
+    if (!todoItem) {
+      console.log(`Can't find todoItem with id : ${id}`);
+      return;
+    }
+    todoItem.priority = priority;
+    const filteredTodoItems = this.getFilteredTodoItems();
+    this.todoList.setState(filteredTodoItems);
+    changeTodoItemPriorityByIdFromServer(this.activeUser, id, priority);
   };
 
   this.setFilterType = (newFilterType) => {
@@ -177,6 +190,8 @@ function TodoApp($target, activeUser) {
         deleteTodoById: (id) => this.deleteTodoById(id),
         toggleTodoById: (id) => this.toggleTodoById(id),
         editTodoById: (id, contents) => this.editTodoById(id, contents),
+        changeTodoPriorityById: (id, priority) =>
+          this.changeTodoPriorityById(id, priority),
       }
     );
     this.todoCount = new TodoCount(
