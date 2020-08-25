@@ -138,13 +138,11 @@ export default function TodoApp($todoApp) {
       deleteAllTodo: async () => {
         const failedTodoIds = [];
 
-        await Promise.all(
-          this.state.todos.map((todo) =>
-            todoApi.deleteTodo(this.username, todo._id).catch((error) => {
-              failedTodoIds.push(todo._id);
-              console.log(error);
-            })
-          )
+        await this.state.todos.map((todo) =>
+          todoApi.deleteTodo(this.username, todo._id).catch((error) => {
+            failedTodoIds.push(todo._id);
+            console.log(error);
+          })
         );
 
         this.setState({

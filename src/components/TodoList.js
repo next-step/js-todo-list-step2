@@ -1,84 +1,17 @@
 import { VALUE, SELECTOR, KEY } from "../utils/constants.js";
+import { loadingTemplate, todoTemplate } from "../utils/templates.js";
 
 export default function TodoList(
   $todoList,
   { deleteTodo, toggleTodo, editTodo, changePriorityTodo }
 ) {
-  this.todoContentsTemplate = (contents) => `
-    <span class="${SELECTOR.CONTENTS}">${contents}</span>
-  `;
-
-  this.todoLabelTemplate = (todo) => {
-    switch (`${todo.priority}`) {
-      case VALUE.NON_PRIORITY:
-        return `
-            <select class="chip ${SELECTOR.SELECT}">
-              <option value="0" selected>순위</option>
-              <option value="1">1순위</option>
-              <option value="2">2순위</option>
-            </select>
-            ${this.todoContentsTemplate(todo.contents)}            
-          `;
-      case VALUE.PRIMARY_PRIORITY:
-        return `
-            <span class="chip primary">1순위</span>
-            ${this.todoContentsTemplate(todo.contents)}
-          `;
-      case VALUE.SECONDARY_PRIORITY:
-        return `
-            <span class="chip secondary">2순위</span>
-            ${this.todoContentsTemplate(todo.contents)}
-          `;
-    }
-  };
-
-  this.todoTemplate = (todo) => `
-    <li id="${todo._id}" class=${
-    todo.isCompleted ? SELECTOR.COMPLETED : SELECTOR.VIEW
-  }>
-        <div class="${SELECTOR.VIEW}">
-            <input class="${SELECTOR.TOGGLE}" type="checkbox" ${
-    todo.isCompleted ? "checked" : ""
-  }/>
-            <label class="${SELECTOR.LABEL}">
-            ${
-              todo.isCompleted
-                ? this.todoContentsTemplate(todo.contents)
-                : this.todoLabelTemplate(todo)
-            }
-            </label>
-            <button class="${SELECTOR.DESTROY}"></button>
-        </div>
-        <select class="chip ${SELECTOR.SELECT} edit-select">
-              <option value="0" selected>순위</option>
-              <option value="1">1순위</option>
-              <option value="2">2순위</option>
-            </select>
-        <input class="${SELECTOR.EDIT}" value="${todo.contents}" />
-    </li>    
-  `;
-
-  this.loadingTemplate = () => `
-    <li>
-        <div class="${SELECTOR.VIEW}">
-            <label class="${SELECTOR.LABEL}">
-                <div class="animated-background">
-                    <div class="skel-mask-container">
-                        <div class="skel-mask"></div>
-                    </div>
-                </div>
-            </label>
-        </div>
-    </li>
-  `;
-
   this.render = (todos, loading) => {
-    const template = todos.length ? todos.map(this.todoTemplate) : [];
-    $todoList.innerHTML = loading ? this.loadingTemplate() : template.join("");
+    const template = todos.length ? todos.map(todoTemplate) : [];
+    $todoList.innerHTML = loading ? loadingTemplate : template.join("");
   };
 
-  const onClickTodo = (event) => {
-    const $target = event.target;
+  const onClickTodo = ({ target }) => {
+    const $target = target;
     const $li = $target.closest("li");
 
     if ($target.classList.contains(SELECTOR.TOGGLE)) {
@@ -92,8 +25,8 @@ export default function TodoList(
     }
   };
 
-  const onDblclickTodo = (event) => {
-    const $target = event.target;
+  const onDblclickTodo = ({ target }) => {
+    const $target = target;
     const $li = $target.closest("li");
 
     if ($li.classList.contains(SELECTOR.VIEW)) {
@@ -101,12 +34,12 @@ export default function TodoList(
     }
   };
 
-  const onKeydownTodo = (event) => {
-    const $target = event.target;
+  const onKeydownTodo = ({ target, key }) => {
+    const $target = target;
     const $li = $target.closest("li");
 
     const onEditKeydown = () => {
-      if ($target.value && event.key === KEY.ENTER) {
+      if ($target.value && key === KEY.ENTER) {
         editTodo($li.id, $target.value);
         return;
       }
@@ -122,8 +55,8 @@ export default function TodoList(
     }
   };
 
-  const onSelectPriorityChange = (event) => {
-    const $target = event.target;
+  const onSelectPriorityChange = ({ target }) => {
+    const $target = target;
     const $li = $target.closest("li");
 
     if ($target.classList.contains(SELECTOR.SELECT)) {

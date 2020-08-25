@@ -14,8 +14,8 @@ export default function TodoCount($todoCount, { setFilter, deleteAllTodo }) {
       .classList.add(`${SELECTOR.SELECTED}`);
   };
 
-  const onClickTodoCount = (event) => {
-    const $target = event.target;
+  const onClickTodoCount = ({ target }) => {
+    const $target = target;
 
     if ($target.classList.contains(SELECTOR.TODO_FILTER)) {
       const filter = $target.dataset.filter;

@@ -5,8 +5,8 @@ export default function UserList($userList, { setUsername }) {
   this.users = [];
   this.activeUser = INITIAL_VALUE.USERNAME;
 
-  const onClickUsername = (event) => {
-    const $target = event.target;
+  const onClickUsername = ({ target }) => {
+    const $target = target;
 
     if ($target.classList.contains(SELECTOR.USER_NAME)) {
       this.activeUser = $target.textContent;

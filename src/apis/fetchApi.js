@@ -6,7 +6,7 @@ const fetchApi = async (url, option) => {
       throw Error(json.message);
     }
 
-    return response;
+    return response.json();
   } catch (error) {
     throw Error(error);
   }
