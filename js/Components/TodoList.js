@@ -23,8 +23,6 @@ function TodoList({
     this.render();
   };
 
-  this.bindEvents = () => {};
-
   this.setState = (nextState) => {
     const { name, todos, selectedTab } = nextState;
 
