@@ -1,4 +1,4 @@
-import { NODE, MESSAGE } from '../utils/constant.js';
+import { NODE, MESSAGE, SELECTOR } from '../utils/constant.js';
 import { checkTarget } from '../utils/validator.js';
 
 function TodoClearButton({ $target, userName, onDeleteAllTodo }) {
@@ -15,7 +15,11 @@ function TodoClearButton({ $target, userName, onDeleteAllTodo }) {
   };
 
   this.onClick = (e) => {
-    if (e.target.nodeName !== NODE.BUTTON) return;
+    if (
+      e.target.nodeName !== NODE.BUTTON &&
+      e.target.classList.contains(SELECTOR.TODO_CLEAR_BUTTON)
+    )
+      return;
     if (!this.name) {
       alert(MESSAGE.NO_SELECTED_USER);
       return;
