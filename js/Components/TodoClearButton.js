@@ -18,8 +18,10 @@ function TodoClearButton({ $target, userName, onDeleteAllTodo }) {
     if (
       e.target.nodeName !== NODE.BUTTON &&
       e.target.classList.contains(SELECTOR.TODO_CLEAR_BUTTON)
-    )
+    ) {
       return;
+    }
+
     if (!this.name) {
       alert(MESSAGE.NO_SELECTED_USER);
       return;
