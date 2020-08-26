@@ -144,7 +144,7 @@ function TodoApp($target, activeUser) {
   };
 
   this.render = () => {
-    $target.innerHTML = this.isLoading
+    $target.innerHTML = this.state.isLoading
       ? Loader
       : `
         <section id="todo-input" class="input-container">
