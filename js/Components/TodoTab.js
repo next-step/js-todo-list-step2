@@ -10,7 +10,6 @@ function TodoTab({ $target, selectedTab, onChangeTab }) {
     this.selectedTab = selectedTab;
 
     this.bindEvents();
-    this.render();
   };
 
   this.bindEvents = () => {
@@ -24,25 +23,19 @@ function TodoTab({ $target, selectedTab, onChangeTab }) {
     const clickedTab = e.target.className;
     if (clickedTab.includes(CLASS_NAME.SELECTED)) return;
 
+    this.changeTabsClassList(e.target);
     onChangeTab(clickedTab);
+  };
+
+  this.changeTabsClassList = ($target) => {
+    for (const tab of this.$tabs) {
+      tab.classList.remove(CLASS_NAME.SELECTED);
+    }
+    $target.classList.add(CLASS_NAME.SELECTED);
   };
 
   this.setState = (nextState) => {
     this.selectedTab = nextState;
-
-    this.render();
-  };
-
-  this.render = () => {
-    for (const tab of this.$tabs) {
-      if (tab.classList.contains(CLASS_NAME.SELECTED)) {
-        tab.classList.remove(CLASS_NAME.SELECTED);
-      }
-
-      if (tab.classList.contains(this.selectedTab)) {
-        tab.classList.add(CLASS_NAME.SELECTED);
-      }
-    }
   };
 
   this.init();
