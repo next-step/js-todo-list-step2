@@ -44,22 +44,24 @@ function TodoList({
   };
 
   this.onClick = (e) => {
-    const clickedClassName = e.target.className;
+    const clickedClassList = e.target.classList;
     if (
-      clickedClassName !== CLASS_NAME.TOGGLE &&
-      clickedClassName !== CLASS_NAME.DESTROY
+      !(
+        clickedClassList.contains(CLASS_NAME.TOGGLE) ||
+        clickedClassList.contains(CLASS_NAME.DESTROY)
+      )
     ) {
       return;
     }
 
     const todoItemId = e.target.closest('li').id;
 
-    if (clickedClassName == CLASS_NAME.TOGGLE) {
+    if (clickedClassList.contains(CLASS_NAME.TOGGLE)) {
       onToggleTodo(this.name, todoItemId);
       return;
     }
 
-    if (clickedClassName == CLASS_NAME.DESTROY) {
+    if (clickedClassList.contains(CLASS_NAME.DESTROY)) {
       onRemoveTodo(this.name, todoItemId);
       return;
     }
