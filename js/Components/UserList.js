@@ -1,5 +1,5 @@
 import { userButtonHTML } from '../utils/template.js';
-import { NODE } from '../utils/constant.js';
+import { NODE } from '../utils/constants.js';
 import { checkTarget } from '../utils/validator.js';
 
 function UserList({ $target, userListState, onChangeUser }) {

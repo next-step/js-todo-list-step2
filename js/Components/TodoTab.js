@@ -1,4 +1,4 @@
-import { NODE, CLASS_NAME } from '../utils/constant.js';
+import { NODE, CLASS_NAME } from '../utils/constants.js';
 import { checkTarget } from '../utils/validator.js';
 
 function TodoTab({ $target, selectedTab, onChangeTab }) {

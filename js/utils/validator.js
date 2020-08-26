@@ -1,4 +1,4 @@
-import { MESSAGE, APP_STATE } from './constant.js';
+import { MESSAGE, APP_STATE } from './constants.js';
 
 export const checkTarget = ($target) => {
   if (!$target instanceof HTMLElement) {

@@ -1,5 +1,5 @@
 import App from './Components/App.js';
-import { SELECTOR } from './utils/constant.js';
+import { SELECTOR } from './utils/constants.js';
 
 try {
   document.addEventListener('DOMContentLoaded', () => {

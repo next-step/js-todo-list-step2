@@ -1,4 +1,4 @@
-import { KEY, MESSAGE } from '../utils/constant.js';
+import { KEY, MESSAGE } from '../utils/constants.js';
 import { checkTarget } from '../utils/validator.js';
 
 function TodoInput({ $target, userName, onAddTodo }) {

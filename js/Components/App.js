@@ -7,7 +7,7 @@ import TodoTab from './TodoTab.js';
 import TodoClearButton from './TodoClearButton.js';
 import LoadingView from './LoadingView.js';
 
-import { SELECTOR, CLASS_NAME } from '../utils/constant.js';
+import { SELECTOR, CLASS_NAME } from '../utils/constants.js';
 import { api } from '../utils/api.js';
 import { checkTarget, checkAppState } from '../utils/validator.js';
 

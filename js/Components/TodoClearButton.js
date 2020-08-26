@@ -1,4 +1,4 @@
-import { NODE, MESSAGE, SELECTOR } from '../utils/constant.js';
+import { NODE, MESSAGE, SELECTOR } from '../utils/constants.js';
 import { checkTarget } from '../utils/validator.js';
 
 function TodoClearButton({ $target, userName, onDeleteAllTodo }) {

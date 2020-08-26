@@ -1,4 +1,4 @@
-import { PRIORITY } from '../utils/constant.js';
+import { PRIORITY } from './constants.js';
 
 export const todoTitleHTML = (userName) => `
   <span><strong>${userName}</strong>'s Todo List</span>`;

@@ -1,5 +1,5 @@
 import { todoCountHTML } from '../utils/template.js';
-import { CLASS_NAME, MESSAGE } from '../utils/constant.js';
+import { CLASS_NAME, MESSAGE } from '../utils/constants.js';
 import { checkTarget } from '../utils/validator.js';
 
 function TodoCount({ $target, todoCountState }) {
