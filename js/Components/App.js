@@ -25,7 +25,11 @@ function App($target) {
       selectedTab: CLASS_NAME.ALL,
     };
 
-    this.state.users = await api.fetchUserList();
+    try {
+      this.state.users = await api.fetchUserList();
+    } catch (err) {
+      console.error(err);
+    }
     checkAppState(this.state);
 
     this.todoTitle = new TodoTitle({
@@ -89,51 +93,65 @@ function App($target) {
     });
   };
 
-  // UserList
   this.onChangeUser = async (userName) => {
-    const newState = await this.fetchState(userName);
-
-    this.setState(newState);
+    try {
+      const newState = await this.fetchState(userName);
+      this.setState(newState);
+    } catch (err) {
+      console.error(err);
+    }
   };
 
-  // TodoInput
   this.onAddTodo = async (userName, contents) => {
-    await api.addTodo(userName, contents);
-    const newState = await this.fetchState(userName);
-
-    this.setState(newState);
+    try {
+      await api.addTodo(userName, contents);
+      const newState = await this.fetchState(userName);
+      this.setState(newState);
+    } catch (err) {
+      console.error(err);
+    }
   };
 
-  // TodoList
   this.onToggleTodo = async (userName, todoId) => {
-    await api.toggleTodo(userName, todoId);
-    const newState = await this.fetchState(userName);
-
-    this.setState(newState);
+    try {
+      await api.toggleTodo(userName, todoId);
+      const newState = await this.fetchState(userName);
+      this.setState(newState);
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   this.onRemoveTodo = async (userName, todoId) => {
-    await api.deleteTodo(userName, todoId);
-    const newState = await this.fetchState(userName);
-
-    this.setState(newState);
+    try {
+      await api.deleteTodo(userName, todoId);
+      const newState = await this.fetchState(userName);
+      this.setState(newState);
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   this.onEditTodo = async (userName, todoId, contents) => {
-    await api.editTodoContent(userName, todoId, contents);
-    const newState = await this.fetchState(userName);
-
-    this.setState(newState);
+    try {
+      await api.editTodoContent(userName, todoId, contents);
+      const newState = await this.fetchState(userName);
+      this.setState(newState);
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   this.onChangePriority = async (userName, todoId, priority) => {
-    await api.editTodoPriority(userName, todoId, priority);
-    const newState = await this.fetchState(userName);
-
-    this.setState(newState);
+    try {
+      await api.editTodoPriority(userName, todoId, priority);
+      const newState = await this.fetchState(userName);
+      this.setState(newState);
+    } catch (err) {
+      console.error(err);
+    }
   };
 
-  // TodoTab
   this.onChangeTab = (selectedTab) => {
     const newState = {
       ...this.state,
@@ -143,15 +161,16 @@ function App($target) {
     this.setState(newState);
   };
 
-  // TodoClearButton
   this.onDeleteAllTodo = async (userName) => {
-    await api.deleteAllTodo(userName);
-    const newState = await this.fetchState(userName);
-
-    this.setState(newState);
+    try {
+      await api.deleteAllTodo(userName);
+      const newState = await this.fetchState(userName);
+      this.setState(newState);
+    } catch (err) {
+      console.error(err);
+    }
   };
 
-  // 공통
   this.fetchState = async (userName) => {
     this.loadingView.setState(true);
 
