@@ -10,8 +10,7 @@ export default function TodoList(
     $todoList.innerHTML = loading ? loadingTemplate() : template.join("");
   };
 
-  const onClickTodo = ({ target }) => {
-    const $target = target;
+  const onClickTodo = ({ target: $target }) => {
     const $li = $target.closest("li");
 
     if ($target.classList.contains(SELECTOR.TOGGLE)) {
@@ -25,17 +24,26 @@ export default function TodoList(
     }
   };
 
-  const onDblclickTodo = ({ target }) => {
-    const $target = target;
+  const onDblclickTodo = ({ target: $target }) => {
     const $li = $target.closest("li");
 
     if ($li.classList.contains(SELECTOR.VIEW)) {
+      $todoList.querySelectorAll(".view.editing").forEach(($edit) => {
+        $edit.classList.remove(SELECTOR.EDITING);
+      });
+
       $li.classList.add(SELECTOR.EDITING);
+      const $edit = $li.querySelector(`.${SELECTOR.EDIT}`);
+      const textLenth = $edit.value.length;
+
+      if (!$target.classList.contains(SELECTOR.EDIT)) {
+        $edit.focus();
+        $edit.setSelectionRange(textLenth, textLenth);
+      }
     }
   };
 
-  const onKeydownTodo = ({ target, key }) => {
-    const $target = target;
+  const onKeydownTodo = ({ target: $target, key }) => {
     const $li = $target.closest("li");
 
     const onEditKeydown = () => {
@@ -55,8 +63,7 @@ export default function TodoList(
     }
   };
 
-  const onSelectPriorityChange = ({ target }) => {
-    const $target = target;
+  const onSelectPriorityChange = ({ target: $target }) => {
     const $li = $target.closest("li");
 
     if ($target.classList.contains(SELECTOR.SELECT)) {

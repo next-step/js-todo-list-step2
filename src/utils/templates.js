@@ -1,5 +1,11 @@
 import { VALUE, SELECTOR } from "../utils/constants.js";
 
+export const userListTemplate = (user, activeUser) => `
+    <button class="user-name ripple ${activeUser === user.name && "active"}">${
+  user.name
+}</button>
+  `;
+
 export const todoContentsTemplate = (contents) => `
     <span class="${SELECTOR.CONTENTS}">${contents}</span>
   `;
@@ -34,7 +40,7 @@ export const todoTemplate = (todo) => `
 }>
         <div class="${SELECTOR.VIEW}">
             <input class="${SELECTOR.TOGGLE}" type="checkbox" ${
-  todo.isCompleted ? "checked" : ""
+  todo.isCompleted && "checked"
 }/>
             <label class="${SELECTOR.LABEL}">
             ${

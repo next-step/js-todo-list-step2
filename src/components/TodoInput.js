@@ -1,12 +1,10 @@
 import { SELECTOR, KEY } from "../utils/constants.js";
 
 export default function TodoInput($todoInput, { onAdd }) {
-  const onKeydownInput = ({ target, key }) => {
-    const $newTodoTarget = target;
-
-    if ($newTodoTarget.value.trim() && key === KEY.ENTER) {
-      onAdd($newTodoTarget.value);
-      $newTodoTarget.value = "";
+  const onKeydownInput = ({ target: $target, key }) => {
+    if ($target.value.trim() && key === KEY.ENTER) {
+      onAdd($target.value);
+      $target.value = "";
     }
   };
 

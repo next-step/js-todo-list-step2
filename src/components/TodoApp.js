@@ -3,6 +3,7 @@ import TodoCount from "./TodoCount.js";
 import TodoInput from "./TodoInput.js";
 import { SELECTOR, FILTER } from "../utils/constants.js";
 import * as todoApi from "../apis/todo.js";
+import { isBoolean } from "../utils/validator.js";
 
 export default function TodoApp($todoApp) {
   this.state = {
@@ -25,7 +26,7 @@ export default function TodoApp($todoApp) {
       this.state.filter = filter;
     }
 
-    if (typeof loading === "boolean") {
+    if (isBoolean(loading)) {
       this.state.loading = loading;
     }
 
@@ -136,25 +137,16 @@ export default function TodoApp($todoApp) {
         this.setState({ filter });
       },
       deleteAllTodo: async () => {
-        const failedTodoIds = [];
-
-        await this.state.todos.map((todo) =>
-          todoApi.deleteTodo(this.username, todo._id).catch((error) => {
-            failedTodoIds.push(todo._id);
-            console.log(error);
-          })
-        );
+        todoApi.deleteAllTodo(this.username);
 
         this.setState({
-          todos: this.state.todos.filter((todo) =>
-            failedTodoIds.includes(todo._id)
-          ),
+          todos: [],
         });
       },
     }
   );
 
-  const prioritySort = (a, b) => {
+  const sortPriority = (a, b) => {
     if (a.isCompleted) {
       return 1;
     }
@@ -175,7 +167,7 @@ export default function TodoApp($todoApp) {
 
   this.render = () => {
     const filteredTodos = this.getFilteredTodos(this.state.filter);
-    filteredTodos.sort(prioritySort);
+    filteredTodos.sort(sortPriority);
     todoInput.toggleLoading(this.state.loading);
     todoList.render(filteredTodos, this.state.loading);
     todoCount.render(this.state.loading ? 0 : filteredTodos.length);

@@ -14,13 +14,12 @@ export default function TodoCount($todoCount, { setFilter, deleteAllTodo }) {
       .classList.add(`${SELECTOR.SELECTED}`);
   };
 
-  const onClickTodoCount = ({ target }) => {
-    const $target = target;
-
+  const onClickTodoCount = ({ target: $target }) => {
     if ($target.classList.contains(SELECTOR.TODO_FILTER)) {
       const filter = $target.dataset.filter;
       this.changeSelected(filter);
       setFilter(filter);
+      return;
     }
 
     if ($target.classList.contains(SELECTOR.CLEAR_COMPLETED)) {

@@ -2,6 +2,7 @@ import UserList from "./components/UserList.js";
 import UserTitle from "./components/UserTitle.js";
 import TodoApp from "./components/TodoApp.js";
 import { SELECTOR } from "./utils/constants.js";
+import { isBoolean } from "./utils/validator.js";
 
 export default function App($app) {
   this.state = {
@@ -14,7 +15,7 @@ export default function App($app) {
       this.state.username = username;
     }
 
-    if (typeof loading === "boolean") {
+    if (isBoolean(loading)) {
       this.state.loading = loading;
     }
 
