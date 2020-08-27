@@ -12,6 +12,7 @@ import {
   updateTodoItem,
   updateTodoPriority,
   deleteTodoItem,
+  allDeleteTodoItem,
 } from '../api/todoApi.js';
 
 export default class App {
@@ -117,9 +118,9 @@ export default class App {
 
   async toggleTodo(targetId) {
     await toggleTodo(this.selectedUserName, targetId);
-    const targetTodo = this.todos.todoList.find((todo) => {
-      return todo._id === targetId;
-    });
+    const targetTodo = this.todos.todoList.find(
+      (todo) => todo._id === targetId
+    );
     const newValue = !targetTodo.isCompleted;
     const newTodos = this.makeNewTodoList('isCompleted', targetId, newValue);
     this.setTodoState(newTodos);
@@ -149,11 +150,8 @@ export default class App {
 
   removeTodo(targetId) {
     try {
-      deleteTodoItem(this.selectedUserName, targetId);
-      const newTodos = this.todos.todoList.filter(
-        (todo) => todo._id !== targetId
-      );
-      this.setTodoState(newTodos);
+      allDeleteTodoItem(this.selectedUserName, targetId);
+      this.setTodoState([]);
     } catch (error) {
       alert(`removeTodo error: ${error.message}`);
     }

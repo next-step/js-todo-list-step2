@@ -1,8 +1,8 @@
 export default class TodoList {
   priorityList = ['0', '1', '2'];
   priorityState = {
-    '1': 'primary',
-    '2': 'secondary',
+    1: 'primary',
+    2: 'secondary',
   };
 
   constructor(toggleTodo, editTodo, changePriority, removeTodo) {
@@ -22,7 +22,6 @@ export default class TodoList {
         el.classList.remove('hidden');
       } else {
         el.classList.add('hidden');
-        parentElement.classList.add('editing');
       }
     });
   }
@@ -33,9 +32,12 @@ export default class TodoList {
 
   applyEvent() {
     this.changeTodoModeEvent();
-    this.updateEvent();
-    this.selectChangeEvent();
+    this.updateTodoEvent();
+    this.changePriorityEvent();
+    this.controlTodoEvent();
+  }
 
+  controlTodoEvent() {
     this.todoListElement.addEventListener('click', async ({ target }) => {
       const parentEl = target.closest('li');
       const todoId = parentEl.id;
@@ -49,6 +51,15 @@ export default class TodoList {
   }
 
   changeTodoModeEvent() {
+    this.todoListElement.addEventListener('keyup', ({ code, target }) => {
+      if (code !== 'Escape') {
+        return;
+      }
+      const parentEl = target.closest('li');
+      if (!parentEl.classList.contains('completed')) {
+        this.changeTodoMode(parentEl);
+      }
+    });
     this.todoListElement.addEventListener('dblclick', ({ target }) => {
       if (
         !target.classList.contains('label') &&
@@ -56,7 +67,6 @@ export default class TodoList {
       ) {
         return;
       }
-
       const parentEl = target.closest('li');
       if (!parentEl.classList.contains('completed')) {
         this.changeTodoMode(parentEl);
@@ -64,7 +74,7 @@ export default class TodoList {
     });
   }
 
-  updateEvent() {
+  updateTodoEvent() {
     this.todoListElement.addEventListener('keypress', ({ code, target }) => {
       if (!target.classList.contains('edit') || code != 'Enter') {
         return;
@@ -80,7 +90,7 @@ export default class TodoList {
     });
   }
 
-  selectChangeEvent() {
+  changePriorityEvent() {
     this.todoListElement.addEventListener('change', ({ target }) => {
       const parentEl = target.closest('li');
       const targetId = parentEl.id;
@@ -98,7 +108,7 @@ export default class TodoList {
   }
 
   priorityTemplate(priority) {
-    let classNames = ['chip', 'select'];
+    const classNames = ['chip', 'select'];
     const state = this.priorityState[priority];
     if (state) {
       classNames.push(state);
