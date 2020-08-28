@@ -15,5 +15,8 @@
 - [x] ES6 impot & export를 이용해 자바스크립트 파일을 리팩토링한다.
 
 ## 2기
+### 🙏 피드백
+- https://github.com/next-step/js-todo-list-step2/pull/13#discussion_r476359352
+
 ### 🐞 버그
 - [ ] 엔터를 한번 눌렀는데 TodoInput 이벤트가 두번 호출되는 경우?

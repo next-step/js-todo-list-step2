@@ -48,10 +48,10 @@ export default function TodoList ($todoList, userName) {
 
         $todoItem.classList.add('editing')
         $todoItem.addEventListener('keyup', (e) => {
-          if (e.keyCode === KEY.ESC_KEY) {
+          if (e.key === KEY.ESC) {
             $todoItem.classList.remove('editing')
             e.target.value = oldValue
-          } else if (e.keyCode === KEY.ENTER_KEY) {
+          } else if (e.key === KEY.ENTER) {
             this.editItem(index, e.target.value)
 
             this.edit($todoItem.id, e.target.value)
