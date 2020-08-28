@@ -13,7 +13,7 @@ export default function TodoList ($todoList, userName) {
 
   this.setState = (activeUserName) => {
     this.userName = activeUserName
-    this.get()
+    this.getTodoItems()
   }
 
   this.bindEvents = () => {
@@ -61,7 +61,7 @@ export default function TodoList ($todoList, userName) {
     })
   }
 
-  this.get = () => {
+  this.getTodoItems = () => {
     fetch(`${ADDRESS.BASE_URL}/api/u/${this.userName}/item`)
       .then((response) => response.json())
       .then((data) => {
@@ -81,23 +81,18 @@ export default function TodoList ($todoList, userName) {
       body: JSON.stringify({
         contents: text
       })
-    }).then((response) => {
-      this.get()
-    })
+    }).then(() => this.getTodoItems())
   }
 
   this.delete = (_id) => {
     fetch(`${ADDRESS.BASE_URL}/api/u/${this.userName}/item/${_id}`, {
       method: 'DELETE'
-    }).then(() => {
-      this.get()
-    })
+    }).then(() => this.getTodoItems())
   }
 
   this.toggle = (_id) => {
     fetch(`${ADDRESS.BASE_URL}/api/u/${this.userName}/item/${_id}/toggle`, {
       method: 'PUT'
-    }).then(() => {
     })
   }
 
@@ -110,9 +105,7 @@ export default function TodoList ($todoList, userName) {
       body: JSON.stringify({
         contents: text
       })
-    }).then(() => {
-      this.get()
-    })
+    }).then(() => this.getTodoItems())
   }
 
   this.render = () => {
@@ -140,5 +133,5 @@ export default function TodoList ($todoList, userName) {
     this.$todoList.innerHTML = result
   }
 
-  this.get()
+  this.getTodoItems()
 }

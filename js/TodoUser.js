@@ -26,14 +26,7 @@ export default function TodoUser ($userTitle, $userList, userName, setActiveUser
   this.bindEvents = () => {
     document.querySelectorAll('.ripple').forEach(($item) => {
       $item.addEventListener('click', (e) => {
-        e.stopPropagation()
-        const $oldUser = e.currentTarget.parentNode.querySelector('.active')
-        $oldUser.classList.remove('active')
-
-        const $selectedUser = e.target
-        this.userName = $selectedUser.innerText
-        $selectedUser.classList.add('active')
-
+        this.userName = e.target.innerText
         this.setState(this.userName)
       })
     })
@@ -43,8 +36,8 @@ export default function TodoUser ($userTitle, $userList, userName, setActiveUser
     this.$userTitle.innerHTML = `<span><strong>${this.userName}</strong>'s Todo List</span>`
 
     let result = ''
-    this.userList.map(({ _id, name }) => {
-      result += `<button class="ripple ${this.userName == name ? 'active' : ''}">${name}</button>`
+    this.userList.map(({ name }) => {
+      result += `<button class="ripple ${this.userName === name && 'active'}">${name}</button>`
     }).join('')
     this.$userList.innerHTML = result
   }
