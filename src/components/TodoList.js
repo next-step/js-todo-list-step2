@@ -1,4 +1,4 @@
-import { VALUE, SELECTOR, KEY } from "../utils/constants.js";
+import { SELECTOR, KEY } from "../utils/constants.js";
 import { loadingTemplate, todoTemplate } from "../utils/templates.js";
 
 export default function TodoList(
@@ -27,19 +27,22 @@ export default function TodoList(
   const onDblclickTodo = ({ target: $target }) => {
     const $li = $target.closest("li");
 
-    if ($li.classList.contains(SELECTOR.VIEW)) {
-      $todoList.querySelectorAll(".view.editing").forEach(($edit) => {
-        $edit.classList.remove(SELECTOR.EDITING);
-      });
-
-      $li.classList.add(SELECTOR.EDITING);
-      const $edit = $li.querySelector(`.${SELECTOR.EDIT}`);
+    const liEditFocus = ($edit) => {
       const textLenth = $edit.value.length;
 
       if (!$target.classList.contains(SELECTOR.EDIT)) {
         $edit.focus();
         $edit.setSelectionRange(textLenth, textLenth);
       }
+    };
+
+    if ($li.classList.contains(SELECTOR.VIEW)) {
+      $todoList.querySelectorAll(`.${SELECTOR.EDITING}`).forEach(($edit) => {
+        $edit.classList.remove(SELECTOR.EDITING);
+      });
+
+      $li.classList.add(SELECTOR.EDITING);
+      liEditFocus($li.querySelector(`.${SELECTOR.EDIT}`));
     }
   };
 
