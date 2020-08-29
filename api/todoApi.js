@@ -1,85 +1,56 @@
 import config from '../config/index.js';
+import http from '../utils/apiRequest.js';
 
 export const getTodoItems = async (userName) => {
-  const response = await fetch(`${config.baseUrl}/u/${userName}/item`);
-  const todos = await response.json();
+  const todos = await http.get(`${config.baseUrl}/u/${userName}/item`);
   return todos;
 };
 
 export const addTodoItem = async (userName, contents) => {
-  const response = await fetch(`${config.baseUrl}/u/${userName}/item/`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
+  const todo = await http.post(
+    `${config.baseUrl}/u/${userName}/item`,
+    JSON.stringify({
       contents,
-    }),
-  });
-  const todo = await response.json();
+    })
+  );
   return todo;
 };
 
 export const updateTodoItem = async (userName, itemId, contents) => {
-  const response = await fetch(
+  const todo = await http.put(
     `${config.baseUrl}/u/${userName}/item/${itemId}`,
-    {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        contents,
-      }),
-    }
+    JSON.stringify({
+      contents,
+    })
   );
-  const todo = await response.json();
   return todo;
 };
 
 export const updateTodoPriority = async (userName, itemId, priority) => {
-  const response = await fetch(
+  const todo = await http.put(
     `${config.baseUrl}/u/${userName}/item/${itemId}/priority`,
-    {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        priority,
-      }),
-    }
+    JSON.stringify({
+      priority,
+    })
   );
-  const todo = await response.json();
   return todo;
 };
 
 export const deleteTodoItem = async (userName, itemId) => {
-  const response = await fetch(
-    `${config.baseUrl}/u/${userName}/item/${itemId}`,
-    {
-      method: 'DELETE',
-    }
+  const todo = await http.delete(
+    `${config.baseUrl}/u/${userName}/item/${itemId}`
   );
-  const todo = await response.json();
   return todo;
 };
 
 export const allDeleteTodoItem = async (userName, itemId) => {
-  const response = await fetch(`${config.baseUrl}/u/${userName}/items`, {
-    method: 'DELETE',
-  });
-  const todo = await response.json();
+  const todo = await http.delete(`${config.baseUrl}/u/${userName}/items`);
   return todo;
 };
 
 export const toggleTodo = async (userName, itemId) => {
-  const response = await fetch(
-    `${config.baseUrl}/u/${userName}/item/${itemId}/toggle`,
-    {
-      method: 'PUT',
-    }
+  const todo = await http.put(
+    `${config.baseUrl}/u/${userName}/item/${itemId}/toggle`
   );
-  const todo = await response.json();
   return todo;
 };
