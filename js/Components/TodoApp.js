@@ -82,15 +82,13 @@ function TodoApp($target, activeUser) {
     api.toggleTodoItemById(this.state.activeUser, id);
   };
 
-  this.editTodoById = (id, contents) => {
+  this.editTodoContentsById = (id, contents) => {
     const todoItem = this.state.todoItems.find(({ _id }) => _id === id);
     if (!todoItem) {
       console.log(`Can't find todoItem with id : ${id}`);
       return;
     }
-    if (contents !== "") {
-      todoItem.contents = contents;
-    }
+    todoItem.contents = contents;
     const filteredTodoItems = this.getFilteredTodoItems();
     this.todoList.setState(filteredTodoItems);
     api.editTodoItemContentsById(this.state.activeUser, id, contents);
@@ -150,14 +148,14 @@ function TodoApp($target, activeUser) {
   };
 
   this.initEventListeners = () => {
-    $target.addEventListener("click", this.onClickDeleteAllBtn.bind(this));
-  };
+    const onClickHandler = (event) => {
+      if (!event.target.classList.contains("clear-completed")) {
+        return;
+      }
+      this.deleteAllTodo();
+    };
 
-  this.onClickDeleteAllBtn = (event) => {
-    if (!event.target.classList.contains("clear-completed")) {
-      return;
-    }
-    this.deleteAllTodo();
+    $target.addEventListener("click", onClickHandler);
   };
 
   this.fetchTodoItems = async () => {
@@ -184,7 +182,8 @@ function TodoApp($target, activeUser) {
       {
         deleteTodoById: (id) => this.deleteTodoById(id),
         toggleTodoById: (id) => this.toggleTodoById(id),
-        editTodoById: (id, contents) => this.editTodoById(id, contents),
+        editTodoContentsById: (id, contents) =>
+          this.editTodoContentsById(id, contents),
         changeTodoPriorityById: (id, priority) =>
           this.changeTodoPriorityById(id, priority),
       }

@@ -4,7 +4,7 @@ import { isFunction, validateInstance } from "../utils.js";
 function TodoFilter($target, type, eventHandler) {
   validateInstance(TodoFilter, this);
 
-  if (!eventHandler || !isFunction(eventHandler.onChangeType)) {
+  if (!isFunction(eventHandler?.onChangeType)) {
     throw new Error("Wrong eventHandler");
   }
 
@@ -15,8 +15,8 @@ function TodoFilter($target, type, eventHandler) {
     this.render();
   };
 
-  this.bindEvnet = () => {
-    $target.addEventListener("click", (event) => {
+  this.initEventListeners = () => {
+    const onClickHandler = (event) => {
       if (event.target.classList.contains(FilterType.ALL)) {
         eventHandler.onChangeType(FilterType.ALL);
       } else if (event.target.classList.contains(FilterType.ACTIVE)) {
@@ -24,7 +24,9 @@ function TodoFilter($target, type, eventHandler) {
       } else if (event.target.classList.contains(FilterType.COMPLETED)) {
         eventHandler.onChangeType(FilterType.COMPLETED);
       }
-    });
+    };
+
+    $target.addEventListener("click", onClickHandler);
   };
 
   this.render = () => {
@@ -52,7 +54,7 @@ function TodoFilter($target, type, eventHandler) {
   };
 
   this.render();
-  this.bindEvnet();
+  this.initEventListeners();
 }
 
 export default TodoFilter;

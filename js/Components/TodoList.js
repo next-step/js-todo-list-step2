@@ -4,18 +4,17 @@ import {
   validateInstance,
   isEmptyString,
 } from "../utils.js";
-import { ESC_KEY } from "../constants.js";
+import { ESC_KEY, ENTER_KEY } from "../constants.js";
 
 function TodoList($target, todoItems, eventHandler) {
   validateInstance(TodoList, this);
   validateTodoItems(todoItems);
 
   if (
-    !eventHandler ||
-    !isFunction(eventHandler.toggleTodoById) ||
-    !isFunction(eventHandler.deleteTodoById) ||
-    !isFunction(eventHandler.editTodoById) ||
-    !isFunction(eventHandler.changeTodoPriorityById)
+    !isFunction(eventHandler?.toggleTodoById) ||
+    !isFunction(eventHandler?.deleteTodoById) ||
+    !isFunction(eventHandler?.editTodoContentsById) ||
+    !isFunction(eventHandler?.changeTodoPriorityById)
   ) {
     throw new Error("Wrong eventHandler");
   }
@@ -28,8 +27,8 @@ function TodoList($target, todoItems, eventHandler) {
     this.render();
   };
 
-  this.bindEvents = () => {
-    $target.addEventListener("change", (event) => {
+  this.initEventListenerss = () => {
+    const onChangeHandler = (event) => {
       if (event.target.classList.contains("toggle")) {
         const id = event.target.closest("li").id;
         eventHandler.toggleTodoById(id);
@@ -42,59 +41,67 @@ function TodoList($target, todoItems, eventHandler) {
         eventHandler.changeTodoPriorityById(id, priority);
         return;
       }
+    };
 
-      if (event.target.classList.contains("edit")) {
-        const id = event.target.closest("li").id;
-        const contents = event.target.value;
-        if (isEmptyString(contents)) {
-          this.stopEditing();
-          return;
-        }
-        eventHandler.editTodoById(id, contents);
+    const onFocusoutHandler = (event) => {
+      if (!event.target.classList.contains("edit")) {
+        return;
       }
-    });
 
-    $target.addEventListener("click", (event) => {
+      const $itemElem = event.target.closest("li");
+      $itemElem.classList.remove("editing");
+    };
+
+    const onClickHandler = (event) => {
       if (event.target.classList.contains("destroy")) {
         const id = event.target.closest("li").id;
         eventHandler.deleteTodoById(id);
       }
-    });
+    };
 
-    $target.addEventListener("keydown", (event) => {
-      if (event.key === ESC_KEY) {
-        this.stopEditing();
-      }
-    });
-
-    $target.addEventListener("dblclick", (event) => {
-      const itemElem = event.target.closest("li");
-      if (!itemElem) {
+    const onKeydownHandler = (event) => {
+      if (!event.target.classList.contains("edit")) {
         return;
       }
-      this.stopEditing();
-      itemElem.classList.add("editing");
-      const textContent = itemElem.querySelector(".label__contents")
-        .textContent;
-      const editElem = itemElem.querySelector(".edit");
-      editElem.value = textContent;
-      editElem.focus();
-      editElem.selectionStart = editElem.selectionEnd = editElem.value.length;
-    });
-  };
 
-  this.stopEditing = () => {
-    const editingItems = $target.querySelectorAll(".editing");
-    if (!editingItems) {
-      return;
-    }
-    editingItems.forEach((itemElem) => {
-      const prevContent = itemElem.querySelector(".label__contents")
+      const $itemElem = event.target.closest("li");
+
+      if (event.key === ESC_KEY) {
+        $itemElem.classList.remove("editing");
+      }
+
+      if (event.key === ENTER_KEY) {
+        const contents = event.target.value;
+        if (isEmptyString(contents)) {
+          console.log("Empty contents");
+          return;
+        }
+        eventHandler.editTodoContentsById($itemElem.id, contents);
+      }
+    };
+
+    const onDbclickHandler = (event) => {
+      const $itemElem = event.target.closest("li");
+      if (!$itemElem) {
+        return;
+      }
+      $itemElem.classList.add("editing");
+      const textContent = $itemElem.querySelector(".label__contents")
         .textContent;
-      const editElem = itemElem.querySelector(".edit");
-      editElem.value = prevContent;
-      itemElem.classList.remove("editing");
-    });
+      const $editElem = $itemElem.querySelector(".edit");
+      $editElem.value = textContent;
+      $editElem.focus();
+      $editElem.setSelectionRange(
+        $editElem.value.length,
+        $editElem.value.length
+      );
+    };
+
+    $target.addEventListener("change", onChangeHandler);
+    $target.addEventListener("click", onClickHandler);
+    $target.addEventListener("keydown", onKeydownHandler);
+    $target.addEventListener("dblclick", onDbclickHandler);
+    $target.addEventListener("focusout", onFocusoutHandler);
   };
 
   const getPriorityHTML = (priority) => `
@@ -137,7 +144,7 @@ function TodoList($target, todoItems, eventHandler) {
   };
 
   this.render();
-  this.bindEvents();
+  this.initEventListenerss();
 }
 
 export default TodoList;

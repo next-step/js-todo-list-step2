@@ -1,5 +1,10 @@
 import api from "../api.js";
-import { validateUserName, isFunction, validateInstance } from "../utils.js";
+import {
+  validateUserName,
+  isFunction,
+  validateInstance,
+  isBoolean,
+} from "../utils.js";
 import Loader from "../Components/Loader.js";
 
 function UserList($target, activeUser, { onClickUser }) {
@@ -16,11 +21,11 @@ function UserList($target, activeUser, { onClickUser }) {
   };
 
   this.setState = (state) => {
-    if (state && state.activeUser) {
+    if (state?.activeUser) {
       validateUserName(activeUser);
       this.state.activeUser = state.activeUser;
     }
-    if (state && typeof state.isLoading === "boolean") {
+    if (isBoolean(state?.isLoading)) {
       this.state.isLoading = state.isLoading;
     }
     this.render();
@@ -39,12 +44,14 @@ function UserList($target, activeUser, { onClickUser }) {
           .join(" ");
   };
 
-  this.bindEvent = () => {
-    $target.addEventListener("click", (event) => {
+  this.initEventListeners = () => {
+    const onClickHandler = (event) => {
       if (event.target.classList.contains("ripple")) {
         onClickUser(event.target.textContent);
       }
-    });
+    };
+
+    $target.addEventListener("click", onClickHandler);
   };
 
   this.fetchUserListWithLoader = async () => {
@@ -58,7 +65,7 @@ function UserList($target, activeUser, { onClickUser }) {
     }
   };
 
-  this.bindEvent();
+  this.initEventListeners();
   this.render();
   this.fetchUserListWithLoader();
 }

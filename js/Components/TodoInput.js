@@ -3,7 +3,7 @@ import { isFunction, validateInstance, isEmptyString } from "../utils.js";
 function TodoInput($target, eventHandler) {
   validateInstance(TodoInput, this);
 
-  if (!eventHandler || !isFunction(eventHandler.onSubmit)) {
+  if (!isFunction(eventHandler?.onSubmit)) {
     throw new Error("Wrong eventHandler");
   }
 
@@ -11,8 +11,8 @@ function TodoInput($target, eventHandler) {
     this.$inputElem.focus();
   };
 
-  this.bindEvent = () => {
-    $target.addEventListener("submit", (event) => {
+  this.initEventListeners = () => {
+    const onSubmitHandler = (event) => {
       event.preventDefault();
 
       const contentText = this.$inputElem.value.trim();
@@ -23,7 +23,9 @@ function TodoInput($target, eventHandler) {
       }
       eventHandler.onSubmit(contentText);
       this.$inputElem.value = "";
-    });
+    };
+
+    $target.addEventListener("submit", onSubmitHandler);
   };
 
   this.render = () => {
@@ -42,7 +44,7 @@ function TodoInput($target, eventHandler) {
   };
 
   this.render();
-  this.bindEvent();
+  this.initEventListeners();
 }
 
 export default TodoInput;

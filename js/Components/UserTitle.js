@@ -6,7 +6,7 @@ function UserTitle($target, activeUser) {
   };
 
   this.setState = (state) => {
-    if (state && state.activeUser) {
+    if (state?.activeUser) {
       validateUserName(state.activeUser);
       this.state.activeUser = state.activeUser;
     }
