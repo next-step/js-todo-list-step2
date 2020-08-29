@@ -1,4 +1,4 @@
-import { fetchTodoUsersFromServer } from "../api.js";
+import api from "../api.js";
 import { validateUserName, isFunction, validateInstance } from "../utils.js";
 import Loader from "../Components/Loader.js";
 
@@ -50,7 +50,7 @@ function UserList($target, activeUser, { onClickUser }) {
   this.fetchUserListWithLoader = async () => {
     try {
       this.setState({ isLoading: true });
-      this.state.users = await fetchTodoUsersFromServer();
+      this.state.users = await api.fetchTodoUsers();
     } catch (error) {
       throw new Error(`${error.message}`);
     } finally {

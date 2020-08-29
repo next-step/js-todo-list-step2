@@ -38,7 +38,7 @@ function TodoList($target, todoItems, eventHandler) {
 
       if (event.target.classList.contains("chip")) {
         const id = event.target.closest("li").id;
-        const priority = parseInt(event.target.value);
+        const priority = event.target.value;
         eventHandler.changeTodoPriorityById(id, priority);
         return;
       }
@@ -99,15 +99,15 @@ function TodoList($target, todoItems, eventHandler) {
 
   const getPriorityHTML = (priority) => `
               <select class="chip select 
-              ${priority === 1 ? "primary" : ""} 
-              ${priority === 2 ? "secondary" : ""}">	
+              ${priority === "1" ? "primary" : ""} 
+              ${priority === "2" ? "secondary" : ""}">	
                 <option value="0" 
-                  ${priority !== 1 && priority !== 2 ? "selected" : ""}>
+                  ${priority !== "1" && priority !== "2" ? "selected" : ""}>
                   순위</option>	
                 <option value="1" 
-                  ${priority === 1 ? "selected" : ""}>1순위</option>	
+                  ${priority === "1" ? "selected" : ""}>1순위</option>	
                 <option value="2" 
-                  ${priority === 2 ? "selected" : ""}>2순위</option>	
+                  ${priority === "2" ? "selected" : ""}>2순위</option>	
               </select>`;
 
   this.render = () => {

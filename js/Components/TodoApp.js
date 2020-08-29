@@ -5,14 +5,7 @@ import TodoCount from "./TodoCount.js";
 import TodoFilter from "./TodoFilter.js";
 import { FilterType } from "../constants.js";
 import Loader from "../Components/Loader.js";
-import {
-  fetchTodoItemsByUserNameFromServer,
-  addTodoItem2Server,
-  toggleTodoItemByIdFromServer,
-  deleteTodoItemByIdFromServer,
-  editTodoItemContentsByIdFromServer,
-  changeTodoItemPriorityByIdFromServer,
-} from "../api.js";
+import api from "../api.js";
 
 function TodoApp($target, activeUser) {
   validateInstance(TodoApp, this);
@@ -48,10 +41,7 @@ function TodoApp($target, activeUser) {
   this.addTodo = async (contentText) => {
     try {
       this.setState({ isLoading: true });
-      const newTodo = await addTodoItem2Server(
-        this.state.activeUser,
-        contentText
-      );
+      const newTodo = await api.addTodoItem(this.state.activeUser, contentText);
       this.state.todoItems = [...this.state.todoItems, newTodo];
     } finally {
       this.setState({ isLoading: false });
@@ -69,16 +59,14 @@ function TodoApp($target, activeUser) {
     const filteredTodoItems = this.getFilteredTodoItems();
     this.todoList.setState(filteredTodoItems);
     this.todoCount.setState(filteredTodoItems.length);
-    deleteTodoItemByIdFromServer(this.state.activeUser, id);
+    api.deleteTodoItemById(this.state.activeUser, id);
   };
 
   this.deleteAllTodo = () => {
-    this.state.todoItems.forEach(({ _id }) =>
-      deleteTodoItemByIdFromServer(this.state.activeUser, _id)
-    );
     this.state.todoItems = [];
-    this.state.todoList.setState(this.state.todoItems);
-    this.state.todoCount.setState(this.state.todoItems.length);
+    this.todoList.setState(this.state.todoItems);
+    this.todoCount.setState(this.state.todoItems.length);
+    api.deleteAllTodoItems(this.state.activeUser);
   };
 
   this.toggleTodoById = (id) => {
@@ -91,7 +79,7 @@ function TodoApp($target, activeUser) {
     const filteredTodoItems = this.getFilteredTodoItems();
     this.todoList.setState(filteredTodoItems);
     this.todoCount.setState(filteredTodoItems.length);
-    toggleTodoItemByIdFromServer(this.state.activeUser, id);
+    api.toggleTodoItemById(this.state.activeUser, id);
   };
 
   this.editTodoById = (id, contents) => {
@@ -105,7 +93,7 @@ function TodoApp($target, activeUser) {
     }
     const filteredTodoItems = this.getFilteredTodoItems();
     this.todoList.setState(filteredTodoItems);
-    editTodoItemContentsByIdFromServer(this.state.activeUser, id, contents);
+    api.editTodoItemContentsById(this.state.activeUser, id, contents);
   };
 
   this.changeTodoPriorityById = (id, priority) => {
@@ -117,7 +105,7 @@ function TodoApp($target, activeUser) {
     todoItem.priority = priority;
     const filteredTodoItems = this.getFilteredTodoItems();
     this.todoList.setState(filteredTodoItems);
-    changeTodoItemPriorityByIdFromServer(this.state.activeUser, id, priority);
+    api.changeTodoItemPriorityById(this.state.activeUser, id, priority);
   };
 
   this.setFilterType = (newFilterType) => {
@@ -175,11 +163,10 @@ function TodoApp($target, activeUser) {
   this.fetchTodoItems = async () => {
     try {
       this.setState({ isLoading: true });
-      this.state.todoItems = await fetchTodoItemsByUserNameFromServer(
+      this.state.todoItems = await api.fetchTodoItemsByUserName(
         this.state.activeUser
       );
     } catch (error) {
-      console.log(error);
       throw new Error(error.message);
     } finally {
       this.setState({ isLoading: false });

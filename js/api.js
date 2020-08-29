@@ -1,24 +1,65 @@
 import { validateTodoItems } from "../js/utils.js";
 
-const API_URL = "https://blackcoffee-todolist.df.r.appspot.com/api/u";
+const BASE_URL = "https://blackcoffee-todolist.df.r.appspot.com/api/u";
 
-export const fetchTodoUsersFromServer = async () => {
+const request = async (url, option) => {
   try {
-    const res = await fetch(API_URL);
+    const res = await fetch(url, option);
     if (res.status !== 200) {
       throw new Error(`Error status code : ${res.status}`);
     }
     return await res.json();
+  } catch (error) {
+    throw Error(error.message);
+  }
+};
+
+const options = {
+  POST: (contents) => {
+    return {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ contents }),
+    };
+  },
+  DELETE: () => {
+    return {
+      method: "DELETE",
+    };
+  },
+  TOGGLE: () => {
+    return {
+      method: "PUT",
+    };
+  },
+  EDIT_CONTENTS: (contents) => {
+    return {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ contents }),
+    };
+  },
+  SET_PRIORITY: (priority) => {
+    return {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ priority }),
+    };
+  },
+};
+
+const fetchTodoUsers = async () => {
+  try {
+    return await request(BASE_URL);
   } catch (error) {
     console.log(error);
     return [];
   }
 };
 
-export const fetchTodoItemsByUserNameFromServer = async (userName) => {
+const fetchTodoItemsByUserName = async (userName) => {
   try {
-    const res = await fetch(`${API_URL}/${userName}/item`);
-    const user = await res.json();
+    const user = await request(`${BASE_URL}/${userName}/item`);
     validateTodoItems(user.todoList);
     return user.todoList;
   } catch (error) {
@@ -27,81 +68,69 @@ export const fetchTodoItemsByUserNameFromServer = async (userName) => {
   }
 };
 
-export const addTodoItem2Server = async (userName, textContext) => {
+const addTodoItem = async (userName, textContents) => {
   try {
-    const res = await fetch(`${API_URL}/${userName}/item`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        contents: textContext,
-      }),
-    });
-    return await res.json();
+    const url = `${BASE_URL}/${userName}/item`;
+    return await request(url, options.POST(textContents));
   } catch (error) {
     return { error: error.message };
   }
 };
 
-export const deleteTodoItemByIdFromServer = async (userName, todoId) => {
+const deleteTodoItemById = async (userName, todoId) => {
   try {
-    const res = await fetch(`${API_URL}/${userName}/item/${todoId}`, {
-      method: "DELETE",
-    });
-    return await res.json();
+    const url = `${BASE_URL}/${userName}/item/${todoId}`;
+    return await request(url, options.DELETE());
   } catch (error) {
     return { error: error.message };
   }
 };
 
-export const toggleTodoItemByIdFromServer = async (userName, todoId) => {
+const deleteAllTodoItems = async (userName) => {
   try {
-    const res = await fetch(`${API_URL}/${userName}/item/${todoId}/toggle`, {
-      method: "PUT",
-    });
-    return await res.json();
+    const url = `${BASE_URL}/${userName}/items`;
+    return await request(url, options.DELETE());
   } catch (error) {
     return { error: error.message };
   }
 };
 
-export const editTodoItemContentsByIdFromServer = async (
-  userName,
-  todoId,
-  textContext
-) => {
+const toggleTodoItemById = async (userName, todoId) => {
   try {
-    const res = await fetch(`${API_URL}/${userName}/item/${todoId}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        contents: textContext,
-      }),
-    });
-    return await res.json();
+    const url = `${BASE_URL}/${userName}/item/${todoId}/toggle`;
+    return await request(url, options.TOGGLE());
   } catch (error) {
     return { error: error.message };
   }
 };
 
-export const changeTodoItemPriorityByIdFromServer = async (
-  userName,
-  todoId,
-  priority
-) => {
+const editTodoItemContentsById = async (userName, todoId, textContents) => {
   try {
-    const res = await fetch(`${API_URL}/${userName}/item/${todoId}/priority`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        priority,
-      }),
-    });
-    return await res.json();
+    const url = `${BASE_URL}/${userName}/item/${todoId}`;
+    return await request(url, options.EDIT_CONTENTS(textContents));
   } catch (error) {
     return { error: error.message };
   }
 };
+
+const changeTodoItemPriorityById = async (userName, todoId, priority) => {
+  try {
+    const url = `${BASE_URL}/${userName}/item/${todoId}/priority`;
+    return await request(url, options.SET_PRIORITY(priority));
+  } catch (error) {
+    return { error: error.message };
+  }
+};
+
+const api = {
+  fetchTodoUsers,
+  fetchTodoItemsByUserName,
+  addTodoItem,
+  deleteTodoItemById,
+  deleteAllTodoItems,
+  toggleTodoItemById,
+  editTodoItemContentsById,
+  changeTodoItemPriorityById,
+};
+
+export default api;
