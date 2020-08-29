@@ -1,14 +1,14 @@
 import TodoInput from "./TodoInput.js";
 import TodoList from "./TodoList.js";
-import { validateUserName, validateInstance } from "../utils.js";
+import { validateUserName, validateInstance, isBoolean } from "../utils.js";
 import TodoCount from "./TodoCount.js";
-import TodoFilter from "./Todofilter.js";
+import TodoFilter from "./TodoFilter.js";
 import { FilterType } from "../constants.js";
 import Loader from "../Components/Loader.js";
 import {
   fetchTodoItemsByUserNameFromServer,
   addTodoItem2Server,
-  toggleTodoItmeByIdFromServer,
+  toggleTodoItemByIdFromServer,
   deleteTodoItemByIdFromServer,
   editTodoItemContentsByIdFromServer,
   changeTodoItemPriorityByIdFromServer,
@@ -26,13 +26,13 @@ function TodoApp($target, activeUser) {
   };
 
   this.setState = (state) => {
-    if (state && state.activeUser) {
+    if (state?.activeUser) {
       validateUserName(state.activeUser);
       this.state.activeUser = state.activeUser;
       this.fetchTodoItems();
     }
 
-    if (state && typeof state.isLoading === "boolean") {
+    if (isBoolean(state?.isLoading)) {
       this.state.isLoading = state.isLoading;
     }
 
@@ -53,7 +53,6 @@ function TodoApp($target, activeUser) {
         contentText
       );
       this.state.todoItems = [...this.state.todoItems, newTodo];
-    } catch {
     } finally {
       this.setState({ isLoading: false });
       this.todoInput.focusInputElem();
@@ -92,7 +91,7 @@ function TodoApp($target, activeUser) {
     const filteredTodoItems = this.getFilteredTodoItems();
     this.todoList.setState(filteredTodoItems);
     this.todoCount.setState(filteredTodoItems.length);
-    toggleTodoItmeByIdFromServer(this.state.activeUser, id);
+    toggleTodoItemByIdFromServer(this.state.activeUser, id);
   };
 
   this.editTodoById = (id, contents) => {
@@ -209,7 +208,7 @@ function TodoApp($target, activeUser) {
     );
     this.todoFilter = new TodoFilter(
       document.getElementById("todo-filter"),
-      this.filterType,
+      this.state.filterType,
       { onChangeType: (newFilterType) => this.setFilterType(newFilterType) }
     );
   };

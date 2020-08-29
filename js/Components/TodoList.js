@@ -1,4 +1,9 @@
-import { isFunction, validateTodoItems, validateInstance } from "../utils.js";
+import {
+  isFunction,
+  validateTodoItems,
+  validateInstance,
+  isEmptyString,
+} from "../utils.js";
 import { ESC_KEY } from "../constants.js";
 
 function TodoList($target, todoItems, eventHandler) {
@@ -41,7 +46,7 @@ function TodoList($target, todoItems, eventHandler) {
       if (event.target.classList.contains("edit")) {
         const id = event.target.closest("li").id;
         const contents = event.target.value;
-        if (contents === "") {
+        if (isEmptyString(contents)) {
           this.stopEditing();
           return;
         }

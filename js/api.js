@@ -53,7 +53,7 @@ export const deleteTodoItemByIdFromServer = async (userName, todoId) => {
   }
 };
 
-export const toggleTodoItmeByIdFromServer = async (userName, todoId) => {
+export const toggleTodoItemByIdFromServer = async (userName, todoId) => {
   try {
     const res = await fetch(`${API_URL}/${userName}/item/${todoId}/toggle`, {
       method: "PUT",

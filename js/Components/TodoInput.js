@@ -1,4 +1,4 @@
-import { isFunction, validateInstance } from "../utils.js";
+import { isFunction, validateInstance, isEmptyString } from "../utils.js";
 
 function TodoInput($target, eventHandler) {
   validateInstance(TodoInput, this);
@@ -16,7 +16,8 @@ function TodoInput($target, eventHandler) {
       event.preventDefault();
 
       const contentText = this.$inputElem.value.trim();
-      if (contentText === "") {
+
+      if (isEmptyString(contentText)) {
         console.log("Empty input");
         return;
       }
