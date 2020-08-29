@@ -117,35 +117,47 @@ export default class App {
   }
 
   async toggleTodo(targetId) {
-    await toggleTodo(this.selectedUserName, targetId);
-    const targetTodo = this.todos.todoList.find(
-      (todo) => todo._id === targetId
-    );
-    const newValue = !targetTodo.isCompleted;
-    const newTodos = this.makeNewTodoList('isCompleted', targetId, newValue);
-    this.setTodoState(newTodos);
+    try {
+      const updatedTodo = await toggleTodo(this.selectedUserName, targetId);
+      const targetTodo = this.todos.todoList.find(
+        (todo) => todo._id === updatedTodo._id
+      );
+      const newValue = !targetTodo.isCompleted;
+      const newTodos = this.makeNewTodoList('isCompleted', targetId, newValue);
+      this.setTodoState(newTodos);
+    } catch (error) {
+      alert(`toggleTodo error: ${error.message}`);
+    }
   }
 
   async editTodo(itemId, contents) {
-    const updatedTodo = await updateTodoItem(
-      this.selectedUserName,
-      itemId,
-      contents
-    );
-    const targetId = updatedTodo._id;
-    const newTodos = this.makeNewTodoList('contents', targetId, contents);
-    this.setTodoState(newTodos);
+    try {
+      const updatedTodo = await updateTodoItem(
+        this.selectedUserName,
+        itemId,
+        contents
+      );
+      const targetId = updatedTodo._id;
+      const newTodos = this.makeNewTodoList('contents', targetId, contents);
+      this.setTodoState(newTodos);
+    } catch (error) {
+      alert(`editTodo error: ${error.message}`);
+    }
   }
 
   async changePriority(itemId, priority) {
-    const updatedTodo = await updateTodoPriority(
-      this.selectedUserName,
-      itemId,
-      priority
-    );
-    const targetId = updatedTodo._id;
-    const newTodos = this.makeNewTodoList('priority', targetId, priority);
-    this.setTodoState(newTodos);
+    try {
+      const updatedTodo = await updateTodoPriority(
+        this.selectedUserName,
+        itemId,
+        priority
+      );
+      const targetId = updatedTodo._id;
+      const newTodos = this.makeNewTodoList('priority', targetId, priority);
+      this.setTodoState(newTodos);
+    } catch (error) {
+      alert(`changePriority error: ${error.message}`);
+    }
   }
 
   removeTodo(targetId) {

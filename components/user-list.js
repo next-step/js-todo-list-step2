@@ -11,7 +11,7 @@ export default class UserList {
   applyEvent() {
     this.userListElement.addEventListener('click', ({ target }) => {
       if (target.classList.contains('ripple')) {
-        const targetUser = target.textContent;
+        const targetUser = target.textContent.trim();
         this.changeUser(targetUser);
       }
     });
@@ -24,22 +24,18 @@ export default class UserList {
 
   selectUser(userName) {
     this.selectedUser = userName;
-    this.activateUserButton();
-  }
-
-  activateUserButton() {
-    Array.from(this.userListElement.children).forEach((userButton) => {
-      if (userButton.textContent === this.selectedUser) {
-        userButton.classList.add('active');
-      } else {
-        userButton.classList.remove('active');
-      }
-    });
+    this.render();
   }
 
   render() {
     const usersElementsText = this.users.map((user) => {
-      return `<button class="ripple">${user.name}</button>`;
+      return `
+        <button class="${
+          user.name === this.selectedUser ? 'ripple active' : 'ripple'
+        }">
+          ${user.name}
+        </button>
+      `;
     });
     this.userListElement.innerHTML = usersElementsText.join('');
   }

@@ -1,4 +1,8 @@
 export default class TodoFilter {
+  filterTypes = {
+    '#/': 'all',
+  };
+
   constructor(allRemoveTodo, updateTodoList) {
     this.todoFilterElement = document.querySelector('.count-container');
     this.filtersElement = document.querySelector('.filters');
@@ -18,8 +22,7 @@ export default class TodoFilter {
 
   updateSelectedClass() {
     const locationHash = location.hash;
-    Array.from(this.filtersElement.children).forEach((liEl) => {
-      const anchorElement = liEl.children[0];
+    this.filtersElement.querySelectorAll('a').forEach((anchorElement) => {
       const type = anchorElement.hash;
 
       if (type === locationHash || (type === '#/' && locationHash === '')) {
