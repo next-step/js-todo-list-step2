@@ -29,14 +29,14 @@ function TodoList($target, todoItems, eventHandler) {
 
   this.initEventListenerss = () => {
     const onChangeHandler = (event) => {
+      const id = event.target.closest("li")?.id;
+
       if (event.target.classList.contains("toggle")) {
-        const id = event.target.closest("li").id;
         eventHandler.toggleTodoById(id);
         return;
       }
 
       if (event.target.classList.contains("chip")) {
-        const id = event.target.closest("li").id;
         const priority = event.target.value;
         eventHandler.changeTodoPriorityById(id, priority);
         return;
