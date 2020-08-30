@@ -48,10 +48,12 @@ export default function TodoApp($todoApp) {
     this.setState({ loading: true });
     try {
       const todos = await todoApi.getTodosByUsername(this.username);
-      this.setState({ todos: todos || [], loading: false });
+      this.setState({ todos: todos || [] });
       todoCount.changeSelected(this.state.filter);
     } catch (error) {
       console.log(error);
+    } finally {
+      this.setState({ loading: false });
     }
   };
 

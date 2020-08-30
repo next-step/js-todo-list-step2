@@ -1,6 +1,6 @@
 const fetchApi = (() => {
   const run = async (url, option) => {
-    option = option ? option : {};
+    option = option || {};
     option.headers = {
       "Content-Type": "application/json",
     };
