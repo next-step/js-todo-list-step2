@@ -43,7 +43,7 @@ export default function TodoList({
   this.dblClickHandler = (evt) => {
     if (evt.target.tagName === "LABEL") {
       evt.target.closest("li").classList.toggle(EDITING);
-      evt.target.closest("li").childNodes[3].focus();
+      evt.target.closest("li").querySelector("input").focus();
       const input = evt.target.closest("li").querySelector("input.edit");
       input.setSelectionRange(input.value.length, input.value.length);
     }

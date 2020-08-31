@@ -100,14 +100,14 @@ export default function App() {
   this.toggleTodo = async ({ id }) => {
     try {
       const { name } = this.state.currentUser;
-      const { _id } = await API.toggleTodoFromAPI(name, id);
+      const { _id } = await API.toggleTodo(name, id);
       const todos = this.state.todoList.map((todo) => {
         if (todo._id === _id) {
           todo.isCompleted = !todo.isCompleted;
         }
         return todo;
       });
-      validateTodoList(todos) ? this.setState(todos) : null;
+      validateTodoList(todos) && this.setTodos(todos);
     } catch (err) {
       console.log(`Cannot toggle todo..${err}`);
       this.todoError.setState(`Cannot toggle todo..${err}`);
@@ -116,8 +116,8 @@ export default function App() {
   this.deleteTodo = async ({ id }) => {
     try {
       const { name } = this.state.currentUser;
-      const { todoList } = await API.deleteTodoFromAPI(name, id);
-      validateTodoList(todoList) ? this.setState(todoList) : null;
+      const { todoList } = await API.deleteTodo(name, id);
+      validateTodoList(todoList) && this.setTodos(todoList);
     } catch (err) {
       console.log(`Cannot delete todo..${err}`);
       this.todoError.setState(`Cannot delete todo..${err}`);
@@ -126,9 +126,9 @@ export default function App() {
   this.addTodo = async ({ contents }) => {
     try {
       const { name } = this.state.currentUser;
-      const todo = await API.addTodoListFromAPI(name, contents);
+      const todo = await API.addTodoList(name, contents);
       const todos = [...this.state.todoList, todo];
-      validateTodoList(todos) ? this.setState(todos) : null;
+      validateTodoList(todos) && this.setTodos(todos);
     } catch (err) {
       console.log(`Cannot add todo..${err}`);
       this.todoError.setState(`Cannot add todo..${err}`);
@@ -137,14 +137,14 @@ export default function App() {
   this.editTodo = async ({ contents, _id }) => {
     try {
       const { name } = this.state.currentUser;
-      const editedTodo = await API.editTodoFromAPI(name, _id, contents);
+      const editedTodo = await API.editTodo(name, _id, contents);
       const todos = this.state.todoList.map((todo) => {
         if (todo._id === editedTodo._id) {
           todo.contents = editedTodo.contents;
         }
         return todo;
       });
-      this.setState(todos);
+      this.setTodos(todos);
     } catch (err) {
       console.log(`Cannot add todo..${err}`);
       this.todoError.setState(`Cannot add todo..${err}`);
@@ -153,14 +153,14 @@ export default function App() {
   this.setPriority = async ({ _id, priority }) => {
     try {
       const { name } = this.state.currentUser;
-      const setPriorityTodo = await API.setPriorityFromAPI(name, _id, priority);
+      const setPriorityTodo = await API.setPriority(name, _id, priority);
       const todos = this.state.todoList.map((todo) => {
         if (todo._id === setPriorityTodo._id) {
           todo.priority = setPriorityTodo.priority;
         }
         return todo;
       });
-      validateTodoList(todos) ? this.setState(todos) : null;
+      validateTodoList(todos) && this.setTodos(todos);
     } catch (err) {
       console.log(`Cannot read UserList..${err}`);
       this.todoError.setState(`Cannot read UserList..${err}`);
@@ -168,7 +168,7 @@ export default function App() {
   };
   this.loadUsers = async () => {
     try {
-      this.state.users = await API.getUserListFromAPI();
+      this.state.users = await API.getUserList();
       const currentUser = validateUserData(this.state.currentUser)
         ? this.state.currentUser
         : this.state.users[0];
@@ -182,9 +182,9 @@ export default function App() {
     try {
       this.skeleton.render(true);
       const { name } = this.state.currentUser;
-      const { todoList } = await API.getTodoListFromAPI(name);
+      const { todoList } = await API.getTodoList(name);
       this.skeleton.render(false);
-      validateTodoList(todoList) ? this.setState(todoList) : null;
+      validateTodoList(todoList) && this.setTodos(todoList);
     } catch (err) {
       console.log(`Cannot read todoList from user..${err}`);
       this.todoError.setState(`Cannot read todoList from user..${err}`);
@@ -194,16 +194,12 @@ export default function App() {
     this.state.currentUser = user;
     this.todoList ? this.loadTodos() : null;
   };
-  this.setState = (todoList) => {
+  this.setTodos = (todoList) => {
     this.state.todoList = todoList;
     this.state.todoCount = this.state.todoList.length;
     this.render();
   };
-  this.setStateForRendering = ({
-    todoList: todoList,
-    todoCount: todoCount,
-    todoFilter: todoFilter,
-  }) => {
+  this.setStateForRendering = ({ todoList, todoCount, todoFilter }) => {
     this.todoList.setState(todoList);
     this.todoCount.setState(todoCount);
     this.todoFilter.setState(todoFilter);
@@ -220,5 +216,8 @@ export default function App() {
   };
   try {
     this.init();
-  } catch {}
+  } catch (err) {
+    console.log(`Cannot initialize component..${err}`);
+    this.todoError.setState(`Cannot initialize component..${err}`);
+  }
 }

@@ -55,34 +55,34 @@ const options = {
   },
 };
 const api = {
-  getUserListFromAPI: () => {
+  getUserList: () => {
     return request(`${BASE_URL}/api/u/`);
   },
-  getTodoListFromAPI: (username) => {
+  getTodoList: (username) => {
     return request(`${BASE_URL}/api/u/${username}/item`);
   },
-  addTodoListFromAPI: (username, text) => {
+  addTodoList: (username, text) => {
     return request(`${BASE_URL}/api/u/${username}/item`, options.POST(text));
   },
-  deleteTodoFromAPI: (username, _id) => {
+  deleteTodo: (username, _id) => {
     return request(
       `${BASE_URL}/api/u/${username}/item/${_id}`,
       options.DELETE()
     );
   },
-  toggleTodoFromAPI: (username, _id) => {
+  toggleTodo: (username, _id) => {
     return request(
       `${BASE_URL}/api/u/${username}/item/${_id}/toggle`,
       options.TOGGLE()
     );
   },
-  editTodoFromAPI: (username, _id, contents) => {
+  editTodo: (username, _id, contents) => {
     return request(
       `${BASE_URL}/api/u/${username}/item/${_id}`,
       options.EDIT(contents)
     );
   },
-  setPriorityFromAPI: (username, _id, priority) => {
+  setPriority: (username, _id, priority) => {
     return request(
       `${BASE_URL}/api/u/${username}/item/${_id}/priority`,
       options.PRIORITY(priority)
