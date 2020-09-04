@@ -1,3 +1,9 @@
+import { UserTitle } from "./components/UserTitle";
+import { UserList } from "./components/UserList";
+import { TodoInput } from "./components/TodoInput";
+import { TodoList } from "./components/TodoList";
+import { TodoFooter } from "./components/TodoFooter";
+
 const TodoApp = class {
 
   constructor({
