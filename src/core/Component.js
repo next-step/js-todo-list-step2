@@ -1,3 +1,5 @@
+import { debounceOneFrame } from "../utils/index.js";
+
 export const Component = class {
 
   $target; $state = {}; $props; #debounceRender;
