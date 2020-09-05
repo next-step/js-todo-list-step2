@@ -6,6 +6,7 @@ import LoadingTypes from "../constants/LoadingTypes.js";
 export const SET_TODO_ITEMS = 'SET_TODO_ITEMS';
 export const SET_EDITING = 'SET_EDITING';
 export const SET_LOADING = 'SET_LOADING';
+export const SET_ADD_LOADING_ITEM = 'SET_ADD_LOADING_ITEM';
 export const FETCH_ITEMS = 'FETCH_ITEMS';
 export const ADD_ITEM = 'ADD_ITEM';
 export const PUT_ITEM = 'PUT_ITEM';
@@ -28,6 +29,9 @@ export const todoStore = new Store({
     [SET_EDITING] (state, editingIndex) {
       state.editingIndex = editingIndex;
     },
+    [SET_ADD_LOADING_ITEM] (state) {
+      state.todoItems = [ ...state.todoItems, { isLoading: true } ];
+    },
     [SET_LOADING] (state, loading) {
       state.loading = loading;
     },
@@ -48,8 +52,9 @@ export const todoStore = new Store({
       }
     },
 
-    async [ADD_ITEM] ({ dispatch }, { user, items }) {
-      await TodoService.addItem(user, items);
+    async [ADD_ITEM] ({ dispatch, commit }, { user, contents }) {
+      commit(SET_ADD_LOADING_ITEM);
+      await TodoService.addItem(user, contents);
       return dispatch(FETCH_ITEMS, user);
     },
 
