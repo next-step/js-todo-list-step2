@@ -17,7 +17,7 @@ export const todoStore = new Store({
     todoItems: [],
     editingIndex: -1,
     filterType: FilterTypes.ALL,
-    loading: false
+    loading: null
   },
 
   mutations: {
@@ -38,9 +38,7 @@ export const todoStore = new Store({
 
   actions: {
     async [FETCH_ITEMS] ({ commit }, user) {
-      commit(SET_LOADING, true);
       commit(SET_TODO_ITEMS, await TodoService.fetchItems(user));
-      commit(SET_LOADING, false);
     },
 
     async [ADD_ITEM] ({ dispatch }, { user, items }) {

@@ -11,6 +11,10 @@ export const userStore = new Store({
     selectedIndex: -1,
   },
 
+  getters: {
+    selectedUser: ({ users, selectedIndex }) => users[selectedIndex] || { name: 'junil' },
+  },
+
   mutations: {
     [SET_USERS] (state, users) {
       state.users = users;
@@ -18,10 +22,6 @@ export const userStore = new Store({
     [SET_USER] (state, selectedIndex) {
       state.selectedIndex = selectedIndex;
     },
-  },
-
-  getters: {
-    selectedUser: ({ users, selectedIndex }) => users[selectedIndex] || 'junil',
   },
 
   actions: {

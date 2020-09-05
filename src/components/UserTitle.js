@@ -4,9 +4,8 @@ import { userStore } from "../store/userStore.js";
 export const UserTitle = class extends Component {
 
   render () {
-    const title = userStore.$getters.selectedUser;
     return `
-      <span><strong>${title}</strong>'s Todo List</span>
+      <span><strong>${userStore.$getters.selectedUser.name}</strong>'s Todo List</span>
     `;
   }
 
