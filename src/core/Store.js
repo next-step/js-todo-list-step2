@@ -11,7 +11,7 @@ export const Store = class {
     this.$getters = Object.entries(getters)
                           .reduce((getters, [key, getter]) => {
                             Object.defineProperty(getters, key, {
-                              get: () => getter(state)
+                              get: () => getter(this.$state)
                             })
                             return getters;
                           }, {});
