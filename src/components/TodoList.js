@@ -1,5 +1,5 @@
 import { Component } from "../core/Component.js";
-import {REMOVE_ITEM, todoStore, TOGGLE_ITEM} from "../store/todoStore.js";
+import {PUT_ITEM, REMOVE_ITEM, SET_EDITING, todoStore, TOGGLE_ITEM} from "../store/todoStore.js";
 import LoadingTypes from "../constants/LoadingTypes.js";
 import { userStore } from "../store/userStore.js";
 
@@ -17,10 +17,11 @@ const progressTemplate = `
     </div>
   </li>
 `;
+
 const getItemClass = (completed, editing) =>
   editing ? ' class="editing"' :
-  completed ? ' class="completed"' :
-  '';
+    completed ? ' class="completed"' :
+      '';
 
 export const TodoList = class extends Component {
 
@@ -39,8 +40,7 @@ export const TodoList = class extends Component {
         <div class="view">
           <input class="toggle" type="checkbox" ${isCompleted ? 'checked' : ''} />
           <label class="label">
-            ${
-              !isCompleted ? `
+            ${ false ? `
                 <select class="chip select">
                   <option value="0" selected>순위</option>
                   <option value="1">1순위</option>
@@ -48,8 +48,7 @@ export const TodoList = class extends Component {
                 </select>
                 <span class="chip primary">1순위</span>
                 <span class="chip secondary">2순위</span>
-              ` : ''
-            }
+              ` : ''}
             ${contents}
           </label>
           <button class="destroy"></button>
@@ -60,13 +59,26 @@ export const TodoList = class extends Component {
   }
 
   setEvent (componentTarget) {
+    const getIndex = target => Number(target.closest('[data-index]').dataset.index);
     componentTarget.addEventListener('click', ({ target }) => {
       if (!target.classList.contains('destroy')) return;
-      this.#removeItem(Number(target.closest('[data-index]').dataset.index));
+      this.#removeItem(getIndex(target));
     })
     componentTarget.addEventListener('change', ({ target }) => {
       if (!target.classList.contains('toggle')) return;
-      this.#toggleItem(Number(target.closest('[data-index]').dataset.index));
+      this.#toggleItem(getIndex(target));
+    })
+    componentTarget.addEventListener('dblclick', ({ target }) => {
+      if (!target.classList.contains('label')) return;
+      todoStore.commit(SET_EDITING, getIndex(target));
+    })
+    componentTarget.addEventListener('keydown', ({ target, key }) => {
+      if (!target.classList.contains('edit') || key !== 'Escape') return;
+      todoStore.commit(SET_EDITING, -1);
+    })
+    componentTarget.addEventListener('keypress', ({ target, key }) => {
+      if (!target.classList.contains('edit') || key !== 'Enter') return;
+      this.#updateItem(target.value);
     })
   }
 
@@ -84,5 +96,14 @@ export const TodoList = class extends Component {
       user: this.user,
       id: todoItems[index]._id,
     });
+  }
+
+  #updateItem (contents) {
+    const { editingItem } = todoStore.$getters;
+    editingItem.contents = contents;
+    todoStore.dispatch(PUT_ITEM, {
+      user: this.user,
+      item: editingItem
+    })
   }
 }
