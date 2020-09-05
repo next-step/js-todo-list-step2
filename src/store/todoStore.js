@@ -44,9 +44,10 @@ export const todoStore = new Store({
   actions: {
     async [FETCH_ITEMS] ({ commit }, user) {
       const result = await TodoService.fetchItems(user);
+      console.log(result);
       try {
         if (result.message) throw `${result.message}: ${user}`;
-        return commit(SET_TODO_ITEMS, result);
+        return commit(SET_TODO_ITEMS, result.todoList);
       } catch (e) {
         console.error(e);
       }

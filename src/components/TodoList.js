@@ -42,6 +42,6 @@ export const TodoList = class extends Component {
         </div>
         <input class="edit" value="${contents}" />
       </li>
-    `);
+    `).join('');
   }
 }
