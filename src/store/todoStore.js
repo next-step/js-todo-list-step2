@@ -60,7 +60,7 @@ export const todoStore = new Store({
     async [ADD_ITEM] ({ dispatch, commit }, { user, contents }) {
       commit(SET_ADD_LOADING_ITEM);
       await TodoService.addItem(user, contents);
-      return dispatch(FETCH_ITEMS, user);
+      return await dispatch(FETCH_ITEMS, user);
     },
 
     async [PUT_ITEM] ({ dispatch, commit }, { user, item }) {
@@ -82,7 +82,7 @@ export const todoStore = new Store({
       return dispatch(FETCH_ITEMS, user);
     },
 
-    async [REMOVE_ALL_ITEM] ({ dispatch }, user) {
+    async [REMOVE_ALL_ITEM] ({ dispatch, commit }, user) {
       await TodoService.removeAllItem(user);
       return dispatch(FETCH_ITEMS, user);
     }
