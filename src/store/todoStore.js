@@ -12,6 +12,7 @@ export const SET_LOADING_ITEM = 'SET_LOADING_ITEM';
 export const FETCH_ITEMS = 'FETCH_ITEMS';
 export const ADD_ITEM = 'ADD_ITEM';
 export const PUT_ITEM = 'PUT_ITEM';
+export const PUT_PRIORITY_ITEM = 'PUT_PRIORITY_ITEM';
 export const TOGGLE_ITEM = 'TOGGLE_ITEM';
 export const REMOVE_ITEM = 'REMOVE_ITEM';
 export const REMOVE_ALL_ITEM = 'REMOVE_ALL_ITEM';
@@ -55,7 +56,8 @@ export const todoStore = new Store({
       const result = await TodoService.fetchItems(user);
       try {
         if (result.message) throw `${result.message}: ${user}`;
-        return commit(SET_TODO_ITEMS, result.todoList || []);
+        const todoItems = result.todoList || [];
+        return commit(SET_TODO_ITEMS, todoItems);
       } catch (e) {
         console.error(e);
       }
@@ -71,6 +73,13 @@ export const todoStore = new Store({
       commit(SET_LOADING_ITEM, item._id);
       commit(SET_EDITING, -1);
       await TodoService.putItem(user, item);
+      return dispatch(FETCH_ITEMS, user);
+    },
+
+    async [PUT_PRIORITY_ITEM] ({ dispatch, commit }, { user, item }) {
+      console.log(item);
+      commit(SET_LOADING_ITEM, item._id);
+      await TodoService.putPriorityItem(user, item);
       return dispatch(FETCH_ITEMS, user);
     },
 
