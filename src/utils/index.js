@@ -7,3 +7,5 @@ export const debounceOneFrame = callback => {
     timer = setTimeout(() => callback(props), ONE_FRAME);
   }
 }
+
+export const lazyFrame = () => new Promise(resolve => setTimeout(resolve, ONE_FRAME))
