@@ -1,19 +1,27 @@
 import { Component } from "../core/Component.js";
+import { todoStore } from "../store/todoStore.js";
+
+const loadingArray = [ ...Array(5).keys() ];
 
 export const TodoList = class extends Component {
   render () {
-    return `
-      <li>
-        <div class="view">
-          <label class="label">
-            <div class="animated-background">
-              <div class="skel-mask-container">
-                <div class="skel-mask"></div>
+    const { loading, todoItems } = todoStore.$state;
+    if (loading && todoItems.length === 0) {
+      return loadingArray.map(() => `
+        <li>
+          <div class="view">
+            <label class="label">
+              <div class="animated-background">
+                <div class="skel-mask-container">
+                  <div class="skel-mask"></div>
+                </div>
               </div>
-            </div>
-          </label>
-        </div>
-      </li>
+            </label>
+          </div>
+        </li>
+      `).join('')
+    }
+    return `
       <li>
         <div class="view">
           <input class="toggle" type="checkbox" />

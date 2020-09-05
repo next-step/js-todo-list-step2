@@ -4,6 +4,7 @@ import FilterTypes from '../constants/FilterTypes.js';
 
 export const SET_TODO_ITEMS = 'SET_TODO_ITEMS';
 export const SET_EDITING = 'SET_EDITING';
+export const SET_LOADING = 'SET_LOADING';
 export const FETCH_ITEMS = 'FETCH_ITEMS';
 export const ADD_ITEM = 'ADD_ITEM';
 export const PUT_ITEM = 'PUT_ITEM';
@@ -16,6 +17,7 @@ export const todoStore = new Store({
     todoItems: [],
     editingIndex: -1,
     filterType: FilterTypes.ALL,
+    loading: false
   },
 
   mutations: {
@@ -25,6 +27,9 @@ export const todoStore = new Store({
     [SET_EDITING] (state, editingIndex) {
       state.editingIndex = editingIndex;
     },
+    [SET_LOADING] (state, loading) {
+      state.loading = loading;
+    },
   },
 
   getters: {
@@ -33,7 +38,9 @@ export const todoStore = new Store({
 
   actions: {
     async [FETCH_ITEMS] ({ commit }, user) {
+      commit(SET_LOADING, true);
       commit(SET_TODO_ITEMS, await TodoService.fetchItems(user));
+      commit(SET_LOADING, false);
     },
 
     async [ADD_ITEM] ({ dispatch }, { user, items }) {

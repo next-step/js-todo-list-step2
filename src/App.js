@@ -4,7 +4,7 @@ import { TodoInput } from "./components/TodoInput.js";
 import { TodoList } from "./components/TodoList.js";
 import { TodoFooter } from "./components/TodoFooter.js";
 import { FETCH_USERS, userStore } from "./store/userStore.js";
-import { todoStore } from "./store/todoStore.js";
+import {FETCH_ITEMS, todoStore} from "./store/todoStore.js";
 
 const TodoApp = class {
 
