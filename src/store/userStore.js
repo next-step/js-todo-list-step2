@@ -21,7 +21,7 @@ export const userStore = new Store({
   },
 
   getters: {
-    selectedUser: ({ users, selectedIndex }) => users[selectedIndex],
+    selectedUser: ({ users, selectedIndex }) => users[selectedIndex] || 'junil',
   },
 
   actions: {
