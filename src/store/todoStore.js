@@ -1,13 +1,13 @@
 import { Store } from '../core/Store.js';
 import TodoService from "../services/TodoService.js";
 
-const SET_TODO_ITEMS = 'SET_TODO_ITEMS';
-const FETCH_ITEMS = 'FETCH_ITEMS';
-const ADD_ITEM = 'ADD_ITEM';
-const PUT_ITEM = 'PUT_ITEM';
-const TOGGLE_ITEM = 'TOGGLE_ITEM';
-const REMOVE_ITEM = 'REMOVE_ITEM';
-const REMOVE_ALL_ITEM = 'REMOVE_ALL_ITEM';
+export const SET_TODO_ITEMS = 'SET_TODO_ITEMS';
+export const FETCH_ITEMS = 'FETCH_ITEMS';
+export const ADD_ITEM = 'ADD_ITEM';
+export const PUT_ITEM = 'PUT_ITEM';
+export const TOGGLE_ITEM = 'TOGGLE_ITEM';
+export const REMOVE_ITEM = 'REMOVE_ITEM';
+export const REMOVE_ALL_ITEM = 'REMOVE_ALL_ITEM';
 
 export const todoStore = new Store({
   state: {
