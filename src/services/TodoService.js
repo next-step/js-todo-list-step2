@@ -31,6 +31,7 @@ export default Object.freeze({
   toggleItem (user, id) {
     const path = `${API_PATH}/${user}/item/${id}/toggle`;
     const option = { method: HttpMethod.PUT, headers };
+    console.log(path);
     return fetch(path, option).then(response => response.json());
   },
 

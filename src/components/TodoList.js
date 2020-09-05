@@ -1,5 +1,5 @@
 import { Component } from "../core/Component.js";
-import { REMOVE_ITEM, todoStore } from "../store/todoStore.js";
+import {REMOVE_ITEM, todoStore, TOGGLE_ITEM} from "../store/todoStore.js";
 import LoadingTypes from "../constants/LoadingTypes.js";
 import { userStore } from "../store/userStore.js";
 
@@ -33,7 +33,7 @@ export const TodoList = class extends Component {
       isLoading ? progressTemplate : `
       <li data-index="${index}">
         <div class="view">
-          <input class="toggle" ${isCompleted ? 'checked' : ''} />
+          <input class="toggle" type="checkbox" ${isCompleted ? 'checked' : ''} />
           <label class="label">
             <select class="chip select">
               <option value="0" selected>순위</option>
@@ -54,12 +54,27 @@ export const TodoList = class extends Component {
   setEvent (componentTarget) {
     componentTarget.addEventListener('click', ({ target }) => {
       if (!target.classList.contains('destroy')) return;
-      const { todoItems } = todoStore.$state;
-      const index = Number(target.closest('[data-index]').dataset.index);
-      todoStore.dispatch(REMOVE_ITEM, {
-        user: this.user,
-        id: todoItems[index]._id,
-      });
+      this.#removeItem(Number(target.closest('[data-index]').dataset.index));
     })
+    componentTarget.addEventListener('change', ({ target }) => {
+      if (!target.classList.contains('toggle')) return;
+      this.#toggleItem(Number(target.closest('[data-index]').dataset.index));
+    })
+  }
+
+  #removeItem (index) {
+    const { todoItems } = todoStore.$state;
+    todoStore.dispatch(REMOVE_ITEM, {
+      user: this.user,
+      id: todoItems[index]._id,
+    });
+  }
+
+  #toggleItem (index) {
+    const { todoItems } = todoStore.$state;
+    todoStore.dispatch(TOGGLE_ITEM, {
+      user: this.user,
+      id: todoItems[index]._id,
+    });
   }
 }
