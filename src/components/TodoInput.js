@@ -19,12 +19,18 @@ export const TodoInput = class extends Component {
 
   setEvent (componentTarget) {
     componentTarget.addEventListener('keypress', ({ key, target }) => {
-      if (!target.classList.contains("new-todo")) return;
-      if (['Enter'].includes(key)) {
-        const user = this.userName;
-        const contents = target.value;
-        todoStore.dispatch(ADD_ITEM, { user, contents });
-      }
+      if (!target.classList.contains("new-todo")
+          || key !== 'Enter'
+          || target.value.length === 0) return;
+
+      const user = this.userName;
+      const contents = target.value;
+      todoStore.dispatch(ADD_ITEM, { user, contents });
+      target.value = '';
     })
+  }
+
+  #addItem () {
+
   }
 }

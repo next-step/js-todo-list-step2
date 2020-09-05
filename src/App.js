@@ -23,8 +23,8 @@ const TodoApp = class {
     const todoList = new TodoList(todoListTarget);
     const todoFooter = new TodoFooter(todoFooterTarget);
 
-    userStore.addObserve(userTitle, userList);
-    todoStore.addObserve(todoInput, todoList, todoFooter);
+    userStore.addObserve(userTitle, userList, todoList, todoFooter);
+    todoStore.addObserve(todoList, todoFooter);
 
     this.load();
   }
