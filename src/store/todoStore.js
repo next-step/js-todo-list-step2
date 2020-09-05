@@ -31,12 +31,22 @@ export const todoStore = new Store({
     },
 
     async [PUT_ITEM] ({ dispatch }, { user, item }) {
-      await TodoService.(user, items);
+      await TodoService.putItem(user, item);
       return dispatch(FETCH_ITEMS, user);
     },
 
-    async [REMOVE_ITEM] ({ dispatch }, { user, items }) {
-      await TodoService.addItem(user, items);
+    async [TOGGLE_ITEM] ({ dispatch }, { user, id }) {
+      await TodoService.toggleItem(user, id);
+      return dispatch(FETCH_ITEMS, user);
+    },
+
+    async [REMOVE_ITEM] ({ dispatch }, { user, id }) {
+      await TodoService.removeItem(user, id);
+      return dispatch(FETCH_ITEMS, user);
+    },
+
+    async [REMOVE_ALL_ITEM] ({ dispatch }, user) {
+      await TodoService.removeAllItem(user);
       return dispatch(FETCH_ITEMS, user);
     }
   }
