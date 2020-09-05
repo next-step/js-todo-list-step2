@@ -2,21 +2,23 @@ import { debounceOneFrame } from "../utils/index.js";
 
 export const Component = class {
 
-  $target; $state = {}; $props; #debounceRender;
+  $state = {}; $props; #debounceRender
 
   constructor(target, state, props) {
-    this.$target = target;
     this.$props = props;
+    this.#debounceRender = debounceOneFrame(() => {
+      target.innerHTML = this.render();
+    });
+    this.setEvent(target);
     this.setState(state);
-    this.setEvent();
-    this.#debounceRender = debounceOneFrame(() => this.render());
   }
+
+  setEvent (target) {}
+  render () { return '' }
 
   setState (payload) {
     this.$state = { ...this.$state, ...payload };
     this.#debounceRender();
   }
 
-  setEvent () {}
-  render () {}
 }

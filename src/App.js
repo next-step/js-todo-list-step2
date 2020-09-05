@@ -1,8 +1,8 @@
-import { UserTitle } from "./components/UserTitle";
-import { UserList } from "./components/UserList";
-import { TodoInput } from "./components/TodoInput";
-import { TodoList } from "./components/TodoList";
-import { TodoFooter } from "./components/TodoFooter";
+import { UserTitle } from "./components/UserTitle.js";
+import { UserList } from "./components/UserList.js";
+import { TodoInput } from "./components/TodoInput.js";
+import { TodoList } from "./components/TodoList.js";
+import { TodoFooter } from "./components/TodoFooter.js";
 
 const TodoApp = class {
 
@@ -24,8 +24,8 @@ const TodoApp = class {
 
 new TodoApp({
   userTitleTarget: document.querySelector('#user-title'),
-  userListTarget: document.querySelector('#user-List'),
-  todoInputTarget: document.querySelector('.new-todo'),
+  userListTarget: document.querySelector('#user-list'),
+  todoInputTarget: document.querySelector('.input-container'),
   todoListTarget: document.querySelector('.todo-list'),
   todoFooterTarget: document.querySelector('.count-container'),
 })
