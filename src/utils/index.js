@@ -1,5 +1,4 @@
-import { ONE_FRAME } from "../constants/index.js";
-
+export const ONE_FRAME = 1000 / 60;
 export const debounceOneFrame = callback => {
   let timer = null;
   return props => {
@@ -8,4 +7,4 @@ export const debounceOneFrame = callback => {
   }
 }
 
-export const lazyFrame = () => new Promise(resolve => setTimeout(resolve, ONE_FRAME))
+export const lazyFrame = () => new Promise(resolve => setTimeout(resolve, ONE_FRAME * 10))

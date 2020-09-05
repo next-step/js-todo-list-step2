@@ -6,7 +6,7 @@ import { TodoFooter } from "./components/TodoFooter.js";
 import { FETCH_USERS, userStore } from "./store/userStore.js";
 import { FETCH_ITEMS, SET_LOADING_TYPE, todoStore } from "./store/todoStore.js";
 import LoadingTypes from "./constants/LoadingTypes.js";
-import { lazyFrame } from "../utils/index.js";
+import { lazyFrame } from "./utils/index.js";
 
 const TodoApp = class {
 

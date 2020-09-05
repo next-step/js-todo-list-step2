@@ -5,7 +5,7 @@ import LoadingTypes from "../constants/LoadingTypes.js";
 
 export const SET_TODO_ITEMS = 'SET_TODO_ITEMS';
 export const SET_EDITING = 'SET_EDITING';
-export const SET_LOADING = 'SET_LOADING';
+export const SET_LOADING_TYPE = 'SET_LOADING_TYPE';
 export const SET_ADD_LOADING_ITEM = 'SET_ADD_LOADING_ITEM';
 export const SET_LOADING_ITEM = 'SET_LOADING_ITEM';
 export const FETCH_ITEMS = 'FETCH_ITEMS';
@@ -37,7 +37,7 @@ export const todoStore = new Store({
       const index = state.todoItems.findIndex(item => item._id === id);
       state.todoItems[index] = { isLoading: true };
     },
-    [SET_LOADING] (state, loading) {
+    [SET_LOADING_TYPE] (state, loading) {
       state.loading = loading;
     },
   },
