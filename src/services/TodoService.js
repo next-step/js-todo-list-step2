@@ -1,6 +1,6 @@
 import * as HttpMethod from '../domain/httpMethod.js';
 
-const API_PATH = user => `https://blackcoffee-todolist.df.r.appspot.com/api/u`;
+const API_PATH = 'https://blackcoffee-todolist.df.r.appspot.com/api/u';
 const headers = { 'Content-Type': 'application/json' };
 
 export default Object.freeze({
@@ -16,11 +16,8 @@ export default Object.freeze({
 
   async addItem (user, contents) {
     const path = `${API_PATH}/${user}/item`;
-    const option = {
-      method: HttpMethod.POST,
-      headers,
-      body: JSON.stringify({ contents }),
-    }
+    const body = JSON.stringify({ contents });
+    const option = { method: HttpMethod.POST, headers, body };
     return await fetch(path, option).then(response => response.json());
   },
 
@@ -37,8 +34,8 @@ export default Object.freeze({
   },
 
   async toggleItem (user, id) {
-    const path = `${API_PATH}/${user}/item/toggle`;
-    const option = { method: HttpMethod.PUT };
+    const path = `${API_PATH}/${user}/item/${id}/toggle`;
+    const option = { method: HttpMethod.PUT, headers };
     return await fetch(path, option).then(response => response.json());
   },
 })

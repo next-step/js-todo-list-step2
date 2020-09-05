@@ -3,6 +3,7 @@ import { UserList } from "./components/UserList.js";
 import { TodoInput } from "./components/TodoInput.js";
 import { TodoList } from "./components/TodoList.js";
 import { TodoFooter } from "./components/TodoFooter.js";
+import TodoService from "./services/TodoService.js";
 
 const TodoApp = class {
 

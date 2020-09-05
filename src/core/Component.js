@@ -2,11 +2,11 @@ import { debounceOneFrame } from "../utils/index.js";
 
 export const Component = class {
 
-  $state = {}; $props; #debounceRender
+  $state = {}; $props; $render;
 
   constructor(target, state, props) {
     this.$props = props;
-    this.#debounceRender = debounceOneFrame(() => {
+    this.$render = debounceOneFrame(() => {
       target.innerHTML = this.render();
     });
     this.setEvent(target);
@@ -18,7 +18,7 @@ export const Component = class {
 
   setState (payload) {
     this.$state = { ...this.$state, ...payload };
-    this.#debounceRender();
+    this.$render();
   }
 
 }
