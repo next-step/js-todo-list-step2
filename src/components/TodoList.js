@@ -1,6 +1,7 @@
 import { Component } from "../core/Component.js";
-import { todoStore } from "../store/todoStore.js";
+import { REMOVE_ITEM, todoStore } from "../store/todoStore.js";
 import LoadingTypes from "../constants/LoadingTypes.js";
+import { userStore } from "../store/userStore.js";
 
 const loadingArray = [ ...Array(5).keys() ];
 const progressTemplate = `
@@ -18,14 +19,19 @@ const progressTemplate = `
 `;
 
 export const TodoList = class extends Component {
+
+  get user () {
+    return userStore.$getters.selectedUser.name;
+  }
+
   render () {
     const { loading, todoItems } = todoStore.$state;
     if (loading === LoadingTypes.INIT) {
       return loadingArray.map(() => progressTemplate).join('')
     }
-    return todoItems.map(({ _id, contents, isCompleted, isLoading = false }) =>
+    return todoItems.map(({ _id, contents, isCompleted, isLoading = false }, index) =>
       isLoading ? progressTemplate : `
-      <li>
+      <li data-index="${index}">
         <div class="view">
           <input class="toggle" ${isCompleted ? 'checked' : ''} />
           <label class="label">
@@ -43,5 +49,17 @@ export const TodoList = class extends Component {
         <input class="edit" value="${contents}" />
       </li>
     `).join('');
+  }
+
+  setEvent (componentTarget) {
+    componentTarget.addEventListener('click', ({ target }) => {
+      if (!target.classList.contains('destroy')) return;
+      const { todoItems } = todoStore.$state;
+      const index = Number(target.closest('[data-index]').dataset.index);
+      todoStore.dispatch(REMOVE_ITEM, {
+        user: this.user,
+        id: todoItems[index]._id,
+      });
+    })
   }
 }
