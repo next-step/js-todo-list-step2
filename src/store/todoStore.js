@@ -1,6 +1,7 @@
 import { Store } from '../core/Store.js';
 import TodoService from "../services/TodoService.js";
 import FilterTypes from '../constants/FilterTypes.js';
+import LoadingTypes from "../constants/LoadingTypes.js";
 
 export const SET_TODO_ITEMS = 'SET_TODO_ITEMS';
 export const SET_EDITING = 'SET_EDITING';
@@ -17,7 +18,7 @@ export const todoStore = new Store({
     todoItems: [],
     editingIndex: -1,
     filterType: FilterTypes.ALL,
-    loading: null
+    loading: LoadingTypes.INIT
   },
 
   mutations: {

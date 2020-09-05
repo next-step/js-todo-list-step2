@@ -1,4 +1,5 @@
-const ONE_FRAME = 1000 / 60;
+import { ONE_FRAME } from "../constants/index.js";
+
 export const debounceOneFrame = callback => {
   let timer = null;
   return props => {

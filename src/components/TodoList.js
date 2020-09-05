@@ -1,25 +1,28 @@
 import { Component } from "../core/Component.js";
 import { todoStore } from "../store/todoStore.js";
+import LoadingTypes from "../constants/LoadingTypes.js";
 
 const loadingArray = [ ...Array(5).keys() ];
+const progressTemplate = `
+  <li>
+    <div class="view">
+      <label class="label">
+        <div class="animated-background">
+          <div class="skel-mask-container">
+            <div class="skel-mask"></div>
+          </div>
+        </div>
+      </label>
+    </div>
+  </li>
+`;
 
 export const TodoList = class extends Component {
   render () {
     const { loading, todoItems } = todoStore.$state;
-    if (loading && todoItems.length === 0) {
-      return loadingArray.map(() => `
-        <li>
-          <div class="view">
-            <label class="label">
-              <div class="animated-background">
-                <div class="skel-mask-container">
-                  <div class="skel-mask"></div>
-                </div>
-              </div>
-            </label>
-          </div>
-        </li>
-      `).join('')
+    console.log(loading);
+    if (loading === LoadingTypes.INIT) {
+      return loadingArray.map(() => progressTemplate).join('')
     }
     return `
       <li>
