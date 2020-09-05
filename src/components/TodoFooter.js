@@ -1,7 +1,7 @@
 import { Component } from "../core/Component.js";
 import FilterTypes from "../constants/FilterTypes.js";
 import LoadingTypes from "../constants/LoadingTypes.js";
-import { REMOVE_ALL_ITEM, SET_LOADING_TYPE, todoStore } from "../store/todoStore.js";
+import { REMOVE_ALL_ITEM, SET_FILTER_TYPE, SET_LOADING_TYPE, todoStore } from "../store/todoStore.js";
 import { userStore } from "../store/userStore.js";
 import { lazyFrame } from "../utils/index.js";
 
@@ -16,7 +16,7 @@ export const TodoFooter = class extends Component {
   get #itemCount () {
     const { todoItems, filterType } = todoStore.$state;
     return todoItems.filter(({ isCompleted }) =>
-      FilterTypes.ALL ||
+      filterType === FilterTypes.ALL ||
       (isCompleted && filterType === FilterTypes.COMPLETED) ||
       (!isCompleted && filterType === FilterTypes.ACTIVE)
     ).length;
@@ -66,5 +66,9 @@ export const TodoFooter = class extends Component {
       lazyFrame()
     ]);
     todoStore.commit(SET_LOADING_TYPE, LoadingTypes.LOADED);
+  }
+
+  #selectFilter (filterType) {
+    todoStore.commit(SET_FILTER_TYPE, filterType);
   }
 }

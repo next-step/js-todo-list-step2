@@ -5,6 +5,7 @@ import LoadingTypes from "../constants/LoadingTypes.js";
 
 export const SET_TODO_ITEMS = 'SET_TODO_ITEMS';
 export const SET_EDITING = 'SET_EDITING';
+export const SET_FILTER_TYPE = 'SET_FILTER_TYPE';
 export const SET_LOADING_TYPE = 'SET_LOADING_TYPE';
 export const SET_ADD_LOADING_ITEM = 'SET_ADD_LOADING_ITEM';
 export const SET_LOADING_ITEM = 'SET_LOADING_ITEM';
@@ -29,6 +30,9 @@ export const todoStore = new Store({
     },
     [SET_EDITING] (state, editingIndex) {
       state.editingIndex = editingIndex;
+    },
+    [SET_FILTER_TYPE] (state, filterType) {
+      state.filterType = filterType;
     },
     [SET_ADD_LOADING_ITEM] (state) {
       state.todoItems.push({ isLoading: true });
