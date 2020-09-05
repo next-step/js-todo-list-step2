@@ -32,7 +32,7 @@ const TodoApp = class {
   async load () {
     await Promise.all([
       userStore.dispatch(FETCH_USERS),
-      todoStore.dispatch(FETCH_ITEMS, userStore.$getters.selectedUser.name),
+      todoStore.dispatch(FETCH_ITEMS, userStore.$getters.selectedUserName),
       lazyFrame(),
     ]);
     todoStore.commit(SET_LOADING_TYPE, LoadingTypes.LOADED);

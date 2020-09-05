@@ -27,7 +27,7 @@ export const TodoFooter = class extends Component {
   }
 
   get #user () {
-    return userStore.$getters.selectedUser.name;
+    return userStore.$getters.selectedUserName;
   }
 
   async #removeAllItem () {

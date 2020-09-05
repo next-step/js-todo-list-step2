@@ -4,8 +4,8 @@ import { userStore } from "../store/userStore.js";
 
 export const TodoInput = class extends Component {
 
-  get userName () {
-    return userStore.$getters.selectedUser.name;
+  get #user () {
+    return userStore.$getters.selectedUserName;
   }
 
   render () {
@@ -22,9 +22,10 @@ export const TodoInput = class extends Component {
       if (!target.classList.contains("new-todo")
           || key !== 'Enter'
           || target.value.length === 0) return;
-      const user = this.userName;
-      const contents = target.value;
-      todoStore.dispatch(ADD_ITEM, { user, contents });
+      todoStore.dispatch(ADD_ITEM, {
+        user: this.#user,
+        contents: target.value
+      });
       target.value = '';
     })
   }

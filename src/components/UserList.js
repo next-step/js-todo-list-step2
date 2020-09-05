@@ -10,7 +10,7 @@ export const UserList = class extends Component {
     userStore.commit(SET_USER, index);
     todoStore.commit(SET_LOADING_TYPE, LoadingTypes.INIT);
     await Promise.all([
-      todoStore.dispatch(FETCH_ITEMS, userStore.$getters.selectedUser.name),
+      todoStore.dispatch(FETCH_ITEMS, userStore.$getters.selectedUserName),
       lazyFrame(),
     ])
     todoStore.commit(SET_LOADING_TYPE, LoadingTypes.LOADED);
