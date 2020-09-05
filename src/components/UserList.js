@@ -6,6 +6,16 @@ import { lazyFrame } from "../utils/index.js";
 
 export const UserList = class extends Component {
 
+  async #loadItemsByUser (index) {
+    userStore.commit(SET_USER, index);
+    todoStore.commit(SET_LOADING_TYPE, LoadingTypes.INIT);
+    await Promise.all([
+      todoStore.dispatch(FETCH_ITEMS, userStore.$getters.selectedUser.name),
+      lazyFrame(),
+    ])
+    todoStore.commit(SET_LOADING_TYPE, LoadingTypes.LOADED);
+  }
+
   render () {
     const { users, selectedIndex } = userStore.$state;
     return users.map(({ name }, index) => `
@@ -18,15 +28,5 @@ export const UserList = class extends Component {
       if (!target.classList.contains('ripple')) return;
       this.#loadItemsByUser(Number(target.dataset.index));
     })
-  }
-
-  async #loadItemsByUser (index) {
-    userStore.commit(SET_USER, index);
-    todoStore.commit(SET_LOADING_TYPE, LoadingTypes.INIT);
-    await Promise.all([
-      todoStore.dispatch(FETCH_ITEMS, userStore.$getters.selectedUser.name),
-      lazyFrame(),
-    ])
-    todoStore.commit(SET_LOADING_TYPE, LoadingTypes.LOADED);
   }
 }

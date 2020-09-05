@@ -5,6 +5,7 @@ import { userStore } from "../store/userStore.js";
 import FilterTypes from "../constants/FilterTypes.js";
 
 const loadingArray = [ ...Array(5).keys() ];
+
 const progressTemplate = `
   <li>
     <div class="view">
@@ -19,15 +20,47 @@ const progressTemplate = `
   </li>
 `;
 
-const getItemClass = (completed, editing) =>
-  editing ? ' class="editing"' :
-    completed ? ' class="completed"' :
-      '';
+const getItemClass = (completed, editing) => editing   ? ' class="editing"'   :
+                                             completed ? ' class="completed"' : '';
 
 export const TodoList = class extends Component {
 
   get #user () {
     return userStore.$getters.selectedUser.name;
+  }
+
+  #removeItem (index) {
+    const { todoItems } = todoStore.$state;
+    todoStore.dispatch(REMOVE_ITEM, {
+      user: this.#user,
+      id: todoItems[index]._id,
+    });
+  }
+
+  #toggleItem (index) {
+    const { todoItems } = todoStore.$state;
+    todoStore.dispatch(TOGGLE_ITEM, {
+      user: this.#user,
+      id: todoItems[index]._id,
+    });
+  }
+
+  #updateItem (contents) {
+    const { editingItem } = todoStore.$getters;
+    editingItem.contents = contents;
+    todoStore.dispatch(PUT_ITEM, {
+      user: this.#user,
+      item: editingItem
+    })
+  }
+
+  #selectPriority (index, priority) {
+    const { todoItems } = todoStore.$state;
+    todoItems[index].priority = Number(priority);
+    todoStore.dispatch(PUT_PRIORITY_ITEM, {
+      user: this.#user,
+      item: todoItems[index]
+    })
   }
 
   render () {
@@ -83,40 +116,6 @@ export const TodoList = class extends Component {
     componentTarget.addEventListener('keypress', ({ target, key }) => {
       if (!target.classList.contains('edit') || key !== 'Enter') return;
       this.#updateItem(target.value);
-    })
-  }
-
-  #removeItem (index) {
-    const { todoItems } = todoStore.$state;
-    todoStore.dispatch(REMOVE_ITEM, {
-      user: this.#user,
-      id: todoItems[index]._id,
-    });
-  }
-
-  #toggleItem (index) {
-    const { todoItems } = todoStore.$state;
-    todoStore.dispatch(TOGGLE_ITEM, {
-      user: this.#user,
-      id: todoItems[index]._id,
-    });
-  }
-
-  #updateItem (contents) {
-    const { editingItem } = todoStore.$getters;
-    editingItem.contents = contents;
-    todoStore.dispatch(PUT_ITEM, {
-      user: this.#user,
-      item: editingItem
-    })
-  }
-
-  #selectPriority (index, priority) {
-    const { todoItems } = todoStore.$state;
-    todoItems[index].priority = Number(priority);
-    todoStore.dispatch(PUT_PRIORITY_ITEM, {
-      user: this.#user,
-      item: todoItems[index]
     })
   }
 }

@@ -30,6 +30,15 @@ export const TodoFooter = class extends Component {
     return userStore.$getters.selectedUser.name;
   }
 
+  async #removeAllItem () {
+    todoStore.commit(SET_LOADING_TYPE, LoadingTypes.INIT);
+    await Promise.all([
+      todoStore.dispatch(REMOVE_ALL_ITEM, this.#user),
+      lazyFrame()
+    ]);
+    todoStore.commit(SET_LOADING_TYPE, LoadingTypes.LOADED);
+  }
+
   render () {
     return `
       <span class="todo-count">총 <strong>${this.#itemCount}</strong> 개</span>
@@ -52,23 +61,10 @@ export const TodoFooter = class extends Component {
   setEvent (componentTarget) {
     componentTarget.addEventListener('click', ({ target }) => {
       const contain = className => target.classList.contains(className);
+      if (contain('filter-button'))
+        todoStore.commit(SET_FILTER_TYPE, target.dataset.filterType);
       if (contain('clear-completed'))
         this.#removeAllItem();
-      if (contain('filter-button'))
-        this.#selectFilter(target.dataset.filterType);
     })
-  }
-
-  async #removeAllItem () {
-    todoStore.commit(SET_LOADING_TYPE, LoadingTypes.INIT);
-    await Promise.all([
-      todoStore.dispatch(REMOVE_ALL_ITEM, this.#user),
-      lazyFrame()
-    ]);
-    todoStore.commit(SET_LOADING_TYPE, LoadingTypes.LOADED);
-  }
-
-  #selectFilter (filterType) {
-    todoStore.commit(SET_FILTER_TYPE, filterType);
   }
 }
