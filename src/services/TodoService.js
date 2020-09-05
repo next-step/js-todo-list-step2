@@ -31,7 +31,6 @@ export default Object.freeze({
   toggleItem (user, id) {
     const path = `${API_PATH}/${user}/item/${id}/toggle`;
     const option = { method: HttpMethod.PUT, headers };
-    console.log(path);
     return fetch(path, option).then(response => response.json());
   },
 
@@ -44,6 +43,13 @@ export default Object.freeze({
   removeAllItem (user) {
     const path = `${API_PATH}/${user}/items`;
     const option = { method: HttpMethod.DELETE };
+    return fetch(path, option).then(response => response.json());
+  },
+
+  putPriorityItem (user, { _id, priority }) {
+    const path = `${API_PATH}/${user}/item/${_id}/priority`;
+    const body = JSON.stringify({ priority });
+    const option = { method: HttpMethod.PUT, headers, body };
     return fetch(path, option).then(response => response.json());
   },
 })
