@@ -21,8 +21,8 @@ export default Object.freeze({
     return fetch(path, option).then(response => response.json());
   },
 
-  putItem (user, { id, contents }) {
-    const path = `${API_PATH}/${user}/item/${id}/toggle`;
+  putItem (user, { _id, contents }) {
+    const path = `${API_PATH}/${user}/item/${_id}`;
     const body = JSON.stringify({ contents });
     const option = { method: HttpMethod.PUT, headers, body };
     return fetch(path, option).then(response => response.json());
