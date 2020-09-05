@@ -4,9 +4,9 @@ import { TodoInput } from "./components/TodoInput.js";
 import { TodoList } from "./components/TodoList.js";
 import { TodoFooter } from "./components/TodoFooter.js";
 import { FETCH_USERS, userStore } from "./store/userStore.js";
-import { FETCH_ITEMS, SET_LOADING, todoStore } from "./store/todoStore.js";
+import { FETCH_ITEMS, SET_LOADING_TYPE, todoStore } from "./store/todoStore.js";
 import LoadingTypes from "./constants/LoadingTypes.js";
-import { ONE_FRAME } from "./constants/index.js";
+import { lazyFrame } from "../utils/index.js";
 
 const TodoApp = class {
 
@@ -23,7 +23,7 @@ const TodoApp = class {
     const todoList = new TodoList(todoListTarget);
     const todoFooter = new TodoFooter(todoFooterTarget);
 
-    userStore.addObserve(userTitle, userList, todoList, todoFooter);
+    userStore.addObserve(userTitle, userList);
     todoStore.addObserve(todoList, todoFooter);
 
     this.load();
@@ -33,9 +33,9 @@ const TodoApp = class {
     await Promise.all([
       userStore.dispatch(FETCH_USERS),
       todoStore.dispatch(FETCH_ITEMS, userStore.$getters.selectedUser.name),
-      new Promise(resolve => setTimeout(resolve, ONE_FRAME)),
+      lazyFrame(),
     ]);
-    todoStore.commit(SET_LOADING, LoadingTypes.LOADED);
+    todoStore.commit(SET_LOADING_TYPE, LoadingTypes.LOADED);
   }
 
 }
