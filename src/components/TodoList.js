@@ -17,6 +17,10 @@ const progressTemplate = `
     </div>
   </li>
 `;
+const getItemClass = (completed, editing) =>
+  editing ? ' class="editing"' :
+  completed ? ' class="completed"' :
+  '';
 
 export const TodoList = class extends Component {
 
@@ -25,23 +29,27 @@ export const TodoList = class extends Component {
   }
 
   render () {
-    const { loading, todoItems } = todoStore.$state;
+    const { loading, todoItems, editingIndex } = todoStore.$state;
     if (loading === LoadingTypes.INIT) {
       return loadingArray.map(() => progressTemplate).join('')
     }
     return todoItems.map(({ _id, contents, isCompleted, isLoading = false }, index) =>
       isLoading ? progressTemplate : `
-      <li data-index="${index}">
+      <li ${getItemClass(isCompleted, editingIndex === index)} data-index="${index}">
         <div class="view">
           <input class="toggle" type="checkbox" ${isCompleted ? 'checked' : ''} />
           <label class="label">
-            <select class="chip select">
-              <option value="0" selected>순위</option>
-              <option value="1">1순위</option>
-              <option value="2">2순위</option>
-            </select>
-            <span class="chip primary">1순위</span>
-            <span class="chip secondary">2순위</span>
+            ${
+              !isCompleted ? `
+                <select class="chip select">
+                  <option value="0" selected>순위</option>
+                  <option value="1">1순위</option>
+                  <option value="2">2순위</option>
+                </select>
+                <span class="chip primary">1순위</span>
+                <span class="chip secondary">2순위</span>
+              ` : ''
+            }
             ${contents}
           </label>
           <button class="destroy"></button>
