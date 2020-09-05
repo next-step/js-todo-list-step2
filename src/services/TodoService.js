@@ -1,4 +1,4 @@
-import * as HttpMethod from '../domain/httpMethod.js';
+import HttpMethod from '../constants/HttpMethod.js';
 
 const API_PATH = 'https://blackcoffee-todolist.df.r.appspot.com/api/u';
 const headers = { 'Content-Type': 'application/json' };

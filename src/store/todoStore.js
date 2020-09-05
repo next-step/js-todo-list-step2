@@ -1,7 +1,9 @@
 import { Store } from '../core/Store.js';
 import TodoService from "../services/TodoService.js";
+import FilterTypes from '../constants/FilterTypes.js';
 
 export const SET_TODO_ITEMS = 'SET_TODO_ITEMS';
+export const SET_EDITING = 'SET_EDITING';
 export const FETCH_ITEMS = 'FETCH_ITEMS';
 export const ADD_ITEM = 'ADD_ITEM';
 export const PUT_ITEM = 'PUT_ITEM';
@@ -12,12 +14,21 @@ export const REMOVE_ALL_ITEM = 'REMOVE_ALL_ITEM';
 export const todoStore = new Store({
   state: {
     todoItems: [],
+    editingIndex: -1,
+    filterType: FilterTypes.ALL,
   },
 
   mutations: {
     [SET_TODO_ITEMS] (state, todoItems) {
       state.todoItems = todoItems;
-    }
+    },
+    [SET_EDITING] (state, editingIndex) {
+      state.editingIndex = editingIndex;
+    },
+  },
+
+  getters: {
+    editingItem: ({ todoItems, editingIndex }) => todoItems[editingIndex],
   },
 
   actions: {
