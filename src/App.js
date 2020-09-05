@@ -3,6 +3,8 @@ import { UserList } from "./components/UserList.js";
 import { TodoInput } from "./components/TodoInput.js";
 import { TodoList } from "./components/TodoList.js";
 import { TodoFooter } from "./components/TodoFooter.js";
+import { FETCH_USERS, userStore } from "./store/userStore.js";
+import { todoStore } from "./store/todoStore.js";
 
 const TodoApp = class {
 
@@ -13,11 +15,16 @@ const TodoApp = class {
     todoListTarget,
     todoFooterTarget
   }) {
-    new UserTitle(userTitleTarget);
-    new UserList(userListTarget);
-    new TodoInput(todoInputTarget);
-    new TodoList(todoListTarget);
-    new TodoFooter(todoFooterTarget);
+    const userTitle = new UserTitle(userTitleTarget);
+    const userList = new UserList(userListTarget);
+    const todoInput = new TodoInput(todoInputTarget);
+    const todoList = new TodoList(todoListTarget);
+    const todoFooter = new TodoFooter(todoFooterTarget);
+
+    userStore.addObserve(userTitle, userList);
+    todoStore.addObserve(todoInput, todoList, todoFooter);
+
+    userStore.dispatch(FETCH_USERS);
   }
 
 }
