@@ -21,6 +21,19 @@ export default Object.freeze({
     return await fetch(path, option).then(response => response.json());
   },
 
+  async putItem (user, { id, contents }) {
+    const path = `${API_PATH}/${user}/item/${id}/toggle`;
+    const body = JSON.stringify({ contents });
+    const option = { method: HttpMethod.PUT, headers, body };
+    return await fetch(path, option).then(response => response.json());
+  },
+
+  async toggleItem (user, id) {
+    const path = `${API_PATH}/${user}/item/${id}/toggle`;
+    const option = { method: HttpMethod.PUT, headers };
+    return await fetch(path, option).then(response => response.json());
+  },
+
   async removeItem (user, id) {
     const path = `${API_PATH}/${user}/item/${id}`;
     const option = { method: HttpMethod.DELETE };
@@ -30,12 +43,6 @@ export default Object.freeze({
   async removeAllItem (user) {
     const path = `${API_PATH}/${user}/items`;
     const option = { method: HttpMethod.DELETE };
-    return await fetch(path, option).then(response => response.json());
-  },
-
-  async toggleItem (user, id) {
-    const path = `${API_PATH}/${user}/item/${id}/toggle`;
-    const option = { method: HttpMethod.PUT, headers };
     return await fetch(path, option).then(response => response.json());
   },
 })
