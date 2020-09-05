@@ -7,7 +7,7 @@ export const SET_TODO_ITEMS = 'SET_TODO_ITEMS';
 export const SET_EDITING = 'SET_EDITING';
 export const SET_LOADING = 'SET_LOADING';
 export const SET_ADD_LOADING_ITEM = 'SET_ADD_LOADING_ITEM';
-export const SET_REMOVE_LOADING_ITEM = 'SET_REMOVE_LOADING_ITEM';
+export const SET_LOADING_ITEM = 'SET_LOADING_ITEM';
 export const FETCH_ITEMS = 'FETCH_ITEMS';
 export const ADD_ITEM = 'ADD_ITEM';
 export const PUT_ITEM = 'PUT_ITEM';
@@ -33,7 +33,7 @@ export const todoStore = new Store({
     [SET_ADD_LOADING_ITEM] (state) {
       state.todoItems.push({ isLoading: true });
     },
-    [SET_REMOVE_LOADING_ITEM] (state, id) {
+    [SET_LOADING_ITEM] (state, id) {
       const index = state.todoItems.findIndex(item => item._id === id);
       state.todoItems[index] = { isLoading: true };
     },
@@ -63,18 +63,21 @@ export const todoStore = new Store({
       return dispatch(FETCH_ITEMS, user);
     },
 
-    async [PUT_ITEM] ({ dispatch }, { user, item }) {
+    async [PUT_ITEM] ({ dispatch, commit }, { user, item }) {
+      commit(SET_LOADING_ITEM, item._id);
+      commit(SET_EDITING, -1);
       await TodoService.putItem(user, item);
       return dispatch(FETCH_ITEMS, user);
     },
 
-    async [TOGGLE_ITEM] ({ dispatch }, { user, id }) {
+    async [TOGGLE_ITEM] ({ dispatch, commit }, { user, id }) {
+      commit(SET_LOADING_ITEM, id);
       await TodoService.toggleItem(user, id);
       return dispatch(FETCH_ITEMS, user);
     },
 
     async [REMOVE_ITEM] ({ dispatch, commit }, { user, id }) {
-      commit(SET_REMOVE_LOADING_ITEM, id);
+      commit(SET_LOADING_ITEM, id);
       await TodoService.removeItem(user, id);
       return dispatch(FETCH_ITEMS, user);
     },
