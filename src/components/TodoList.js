@@ -1,5 +1,5 @@
 import { Component } from "../core/Component.js";
-import { PUT_ITEM, REMOVE_ITEM, SET_EDITING, todoStore, TOGGLE_ITEM } from "../store/todoStore.js";
+import {PUT_ITEM, PUT_PRIORITY_ITEM, REMOVE_ITEM, SET_EDITING, todoStore, TOGGLE_ITEM} from "../store/todoStore.js";
 import LoadingTypes from "../constants/LoadingTypes.js";
 import { userStore } from "../store/userStore.js";
 import FilterTypes from "../constants/FilterTypes.js";
@@ -26,7 +26,7 @@ const getItemClass = (completed, editing) =>
 
 export const TodoList = class extends Component {
 
-  get user () {
+  get #user () {
     return userStore.$getters.selectedUser.name;
   }
 
@@ -35,7 +35,7 @@ export const TodoList = class extends Component {
     if (loading === LoadingTypes.INIT) {
       return loadingArray.map(() => progressTemplate).join('')
     }
-    return todoItems.map(({ _id, contents, isCompleted, isLoading = false }, index) =>
+    return todoItems.map(({ _id, contents, isCompleted, priority, isLoading = false }, index) =>
       isLoading ? progressTemplate :
       (filterType === FilterTypes.ALL) ||
       (isCompleted && filterType === FilterTypes.COMPLETED) ||
@@ -44,15 +44,13 @@ export const TodoList = class extends Component {
         <div class="view">
           <input class="toggle" type="checkbox" ${isCompleted ? 'checked' : ''} />
           <label class="label">
-            ${ false ? `
-                <select class="chip select">
-                  <option value="0" selected>순위</option>
-                  <option value="1">1순위</option>
-                  <option value="2">2순위</option>
-                </select>
-                <span class="chip primary">1순위</span>
-                <span class="chip secondary">2순위</span>
-              ` : ''}
+            ${ priority === 1 ? `<span class="chip primary">1순위</span>` :
+               priority === 2 ? `<span class="chip secondary">2순위</span>` : `
+              <select class="chip select">
+                <option value="0" selected>순위</option>
+                <option value="1">1순위</option>
+                <option value="2">2순위</option>
+              </select>`}
             ${contents}
           </label>
           <button class="destroy"></button>
@@ -69,8 +67,10 @@ export const TodoList = class extends Component {
       this.#removeItem(getIndex(target));
     })
     componentTarget.addEventListener('change', ({ target }) => {
-      if (!target.classList.contains('toggle')) return;
-      this.#toggleItem(getIndex(target));
+      if (target.classList.contains('toggle'))
+        this.#toggleItem(getIndex(target));
+      if (target.classList.contains('chip'))
+        this.#selectPriority(getIndex(target), target.value);
     })
     componentTarget.addEventListener('dblclick', ({ target }) => {
       if (!target.classList.contains('label')) return;
@@ -89,7 +89,7 @@ export const TodoList = class extends Component {
   #removeItem (index) {
     const { todoItems } = todoStore.$state;
     todoStore.dispatch(REMOVE_ITEM, {
-      user: this.user,
+      user: this.#user,
       id: todoItems[index]._id,
     });
   }
@@ -97,7 +97,7 @@ export const TodoList = class extends Component {
   #toggleItem (index) {
     const { todoItems } = todoStore.$state;
     todoStore.dispatch(TOGGLE_ITEM, {
-      user: this.user,
+      user: this.#user,
       id: todoItems[index]._id,
     });
   }
@@ -106,8 +106,17 @@ export const TodoList = class extends Component {
     const { editingItem } = todoStore.$getters;
     editingItem.contents = contents;
     todoStore.dispatch(PUT_ITEM, {
-      user: this.user,
+      user: this.#user,
       item: editingItem
+    })
+  }
+
+  #selectPriority (index, priority) {
+    const { todoItems } = todoStore.$state;
+    todoItems[index].priority = Number(priority);
+    todoStore.dispatch(PUT_PRIORITY_ITEM, {
+      user: this.#user,
+      item: todoItems[index]
     })
   }
 }
