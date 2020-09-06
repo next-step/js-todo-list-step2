@@ -14,12 +14,7 @@ const filterButtons = [
 export const TodoFooter = class extends Component {
 
   get #itemCount () {
-    const { todoItems, filterType } = todoStore.$state;
-    return todoItems.filter(({ isCompleted }) =>
-      filterType === FilterTypes.ALL ||
-      (isCompleted && filterType === FilterTypes.COMPLETED) ||
-      (!isCompleted && filterType === FilterTypes.ACTIVE)
-    ).length;
+    return todoStore.$getters.filteredItems.length;
   }
 
   get #filterType () {
