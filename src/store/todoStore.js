@@ -49,6 +49,11 @@ export const todoStore = new Store({
 
   getters: {
     editingItem: ({ todoItems, editingIndex }) => todoItems[editingIndex],
+    filteredItems: ({ todoItems, filterType }) =>
+      Object.entries(todoItems)
+            .filter(([ , { isCompleted } ]) => (filterType === FilterTypes.ALL) ||
+                                               (isCompleted && filterType === FilterTypes.COMPLETED) ||
+                                               (!isCompleted && filterType === FilterTypes.ACTIVE))
   },
 
   actions: {
