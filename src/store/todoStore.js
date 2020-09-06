@@ -9,6 +9,7 @@ export const SET_FILTER_TYPE = 'SET_FILTER_TYPE';
 export const SET_LOADING_TYPE = 'SET_LOADING_TYPE';
 export const SET_ADD_LOADING_ITEM = 'SET_ADD_LOADING_ITEM';
 export const SET_LOADING_ITEM = 'SET_LOADING_ITEM';
+export const SET_LOADING_ALL = 'SET_LOADING_ALL';
 export const FETCH_ITEMS = 'FETCH_ITEMS';
 export const ADD_ITEM = 'ADD_ITEM';
 export const PUT_ITEM = 'PUT_ITEM';
@@ -41,6 +42,12 @@ export const todoStore = new Store({
     [SET_LOADING_ITEM] (state, id) {
       const index = state.todoItems.findIndex(item => item._id === id);
       state.todoItems[index] = { isLoading: true };
+    },
+    [SET_LOADING_ALL] (state) {
+      state.todoItems = state.todoItems.map(item => ({
+        ...item,
+        isLoading: true
+      }));
     },
     [SET_LOADING_TYPE] (state, loading) {
       state.loading = loading;
@@ -101,6 +108,7 @@ export const todoStore = new Store({
     },
 
     async [REMOVE_ALL_ITEM] ({ dispatch, commit }, user) {
+      commit(SET_LOADING_ALL);
       await TodoService.removeAllItem(user);
       return dispatch(FETCH_ITEMS, user);
     }

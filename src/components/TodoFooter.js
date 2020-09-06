@@ -25,15 +25,6 @@ export const TodoFooter = class extends Component {
     return userStore.$getters.selectedUserName;
   }
 
-  async #removeAllItem () {
-    todoStore.commit(SET_LOADING_TYPE, LoadingTypes.INIT);
-    await Promise.all([
-      todoStore.dispatch(REMOVE_ALL_ITEM, this.#user),
-      lazyFrame()
-    ]);
-    todoStore.commit(SET_LOADING_TYPE, LoadingTypes.LOADED);
-  }
-
   render () {
     return `
       <span class="todo-count">총 <strong>${this.#itemCount}</strong> 개</span>
@@ -59,7 +50,7 @@ export const TodoFooter = class extends Component {
       if (contain('filter-button'))
         todoStore.commit(SET_FILTER_TYPE, target.dataset.filterType);
       if (contain('clear-completed'))
-        this.#removeAllItem();
+        todoStore.dispatch(REMOVE_ALL_ITEM, this.#user);
     })
   }
 }
