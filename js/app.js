@@ -1,36 +1,28 @@
+import { USER, KEY, ADDRESS } from './constants.js'
 import TodoList from './TodoList.js'
 import TodoInput from './TodoInput.js'
 import TodoUser from './TodoUser.js'
 
-function App() {
-    const $todoInput = document.querySelector('#todo-input')
-    const $todoList = document.querySelector('#todo-list')
-    const $todoUser = document.querySelector('#user-title')
-    let data = []
+function App () {
+  const $todoInput = document.querySelector('.new-todo')
+  const $todoList = document.querySelector('.todo-list')
+  const $userTitle = document.querySelector('#user-title')
+  const $userList = document.querySelector('#user-list')
 
-    function addItem(text) {
-        data.push({
-            contents: text,
-            isCompleted: false
-        })
-        
-        todoList.post(text)
-        todoList.updateItem(data)
-    }
+  this.userName = USER.NAME
 
-    function removeItem(index) {
-        data.splice(index, 1)
+  this.setState = (activeUserName) => {
+    this.userName = activeUserName
+    todoList.setState(this.userName)
+  }
 
-        todoList.updateItem(data)
-    }
+  this.addItem = (text) => {
+    todoList.post(text)
+  }
 
-    const todoList = new TodoList($todoList, data, (index) => {
-        removeItem(index)
-    })
-    const todoInput = new TodoInput($todoInput, (text) => {
-        addItem(text)
-    })
-    const todoUser = new TodoUser($todoUser)
+  const todoList = new TodoList($todoList, this.userName)
+  const todoInput = new TodoInput($todoInput, (text) => { this.addItem(text) })
+  const todoUser = new TodoUser($userTitle, $userList, this.userName, (activeUserName) => { this.setState(activeUserName) })
 }
 
-new App();
+new App()

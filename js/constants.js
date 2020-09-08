@@ -1,13 +1,13 @@
-const USER = {
-    ID: 'wooooooood',
-    Name: '나무'
+export const USER = {
+  ID: 'hMcY95AGf',
+  NAME: 'wooooooood'
 }
 
-const KEY = {
-    ENTER_KEY: 13,
-    ESC_KEY: 27
+export const KEY = {
+  ENTER: 'Enter',
+  ESC: 'Esc'
 }
 
-const ADDRESS = {
-    BASE_URL: 'https://blackcoffee-todolist.df.r.appspot.com'
+export const ADDRESS = {
+  BASE_URL: 'https://blackcoffee-todolist.df.r.appspot.com'
 }

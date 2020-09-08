@@ -1,15 +1,19 @@
-export default function TodoInput($todoInput, onAdd){
-    this.$todoInput = $todoInput
-    this.$todoInput.addEventListener('keyup', (e) => {
-        if (e.keyCode === KEY.ENTER_KEY){
-            if (!/\S/.test(this.$todoInput.value) || this.$todoInput === null){
-                alert('할일을 입력하세요!')
-                return
-            }
+import { KEY } from './constants.js'
+import { isEmptyOrWhitespace } from './validation.js'
 
-            onAdd(this.$todoInput.value)
+export default function TodoInput ($todoInput, onAdd) {
+  this.$todoInput = $todoInput
+  this.$todoInput.addEventListener('keyup', (e) => {
+    e.stopPropagation()
+    if (e.key === KEY.ENTER) {
+      if (isEmptyOrWhitespace(this.$todoInput.value)) {
+        alert('할일을 입력하세요!')
+        return
+      }
 
-            this.$todoInput.value = ''
-        }
-    })
+      onAdd(this.$todoInput.value)
+
+      this.$todoInput.value = ''
+    }
+  })
 }
