@@ -12,7 +12,7 @@ export const userStore = new Store({
   },
 
   getters: {
-    selectedUserName: ({ users, selectedIndex }) => (users[selectedIndex] || { name: 'junil' }).name,
+    selectedUserName: ({ users, selectedIndex }) => users[selectedIndex],
   },
 
   mutations: {
