@@ -95,11 +95,7 @@
 |GET|/api/users/:userId/items/|
 ```javascript
 {
- response: {
-   "_id": "string",
-   "name": "string",
-   "todoList": [...]
-  }
+ response: [...]
 }
 ```
 
