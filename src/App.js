@@ -1,8 +1,8 @@
-import { UserTitle } from "./components/UserTitle.js";
-import { UserList } from "./components/UserList.js";
-import { TodoInput } from "./components/TodoInput.js";
-import { TodoList } from "./components/TodoList.js";
-import { TodoFooter } from "./components/TodoFooter.js";
+import { UserTitle } from "./components/User/UserTitle.js";
+import { UserList } from "./components/User/UserList.js";
+import { TodoInput } from "./components/Todo/TodoInput.js";
+import { TodoList } from "./components/Todo/TodoList.js";
+import { TodoFooter } from "./components/Todo/TodoFooter.js";
 import { FETCH_USERS, userStore } from "./store/userStore.js";
 import { FETCH_ITEMS, SET_LOADING_TYPE, todoStore } from "./store/todoStore.js";
 import LoadingTypes from "./constants/LoadingTypes.js";
