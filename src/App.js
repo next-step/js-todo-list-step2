@@ -24,7 +24,10 @@ class App extends Component {
     const $userContainer = document.querySelector('#UserContainer');
     const $todoContainer = document.querySelector('#TodoContainer');
 
-    new UserContainer($userContainer, {...this.$state});
+    new UserContainer($userContainer, {
+      ...this.$state,
+      selectUser: selectedIndex => this.setState({ selectedIndex }),
+    });
     new TodoContainer($todoContainer, {
       selectedUser: this.$state.users[this.$state.selectedIndex]
     });

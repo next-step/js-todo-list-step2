@@ -29,7 +29,7 @@ export const TodoList = class extends Component {
           </select>`: 
           (priority === 1) ? `<span class="chip primary">1순위</span>` :
           (priority === 2) ? `<span class="chip secondary">2순위</span>` : ``}
-            ${contents}
+          ${contents}
           </label>
           <button class="destroy"></button>
         </div>

@@ -13,12 +13,21 @@ export const UserContainer = class extends Component {
       <section>
         <div id="user-list">
           ${users.map(({ name }, index) => `
-            <button class="ripple ${index === selectedIndex ? 'active' : ''}">${name}</button>
+            <button data-index="${index}" class="ripple user ${index === selectedIndex ? 'active' : ''}">
+              ${name}
+            </button>
           `).join('')}
           <button class="ripple user-create-button">+ 유저 생성</button>
         </div>
       </section>
     `;
+  }
+
+  setEvent () {
+    this.$target.addEventListener('click', ({ target }) => {
+      if (!target.classList.contains('user')) return;
+      this.$props.selectUser(Number(target.dataset.index));
+    })
   }
 
 }
