@@ -3,7 +3,13 @@ import {Component} from "../core/Component.js";
 export const TodoContainer = class extends Component {
 
   render () {
-    console.log('TodoContainer', this.$props.users);
+    console.log(this.$props);
+    console.log(this.$props.selectedUser.todoList);
+
+    const todoList = this.$props.selectedUser.todoList;
+
+  
+    
     return `
       <section class="input-container">
         <input class="new-todo" placeholder="할 일을 입력해주세요." autofocus />
@@ -21,6 +27,29 @@ export const TodoContainer = class extends Component {
               </label>
             </div>
           </li>
+          ${
+            todoList.map(({contents, priority}) => 
+        `<li>
+        <div class="view">
+          <input class="toggle" type="checkbox" />
+          <label class="label"> 
+          ${
+            (priority === "NONE" || priority === 0) ? `<select class="chip select">
+            <option value="0" selected>순위</option>
+            <option value="1">1순위</option>
+            <option value="2">2순위</option>
+          </select>`: 
+          (priority === 1) ? `<span class="chip primary">1순위</span>` : 
+          (priority === 2) ? `<span class="chip secondary">2순위</span>` : ``
+          }
+            ${contents}
+          </label>
+          <button class="destroy"></button>
+        </div>
+        <input class="edit" value="${contents}" />
+      </li>`
+      ).join(' ')
+          }
            <li>
             <div class="view">
               <input class="toggle" type="checkbox" />
