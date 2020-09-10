@@ -1,31 +1,36 @@
 export const Component = class {
 
-  #target; #state; #props;
+  $target; $state; $props;
 
   constructor (target, state = {}, props = {}) {
-    this.#target = target;
-    this.#props = props;
-    this.#state = state;
-    this.setEvent();
-    this.setState(this.#state);
+    this.$target = target;
+    this.$props = props;
+    this.$state = state;
+    this.#setup();
   }
 
-  #render () {
-    this.#target.innerHTML = this.render();
+  async #setup () {
+    this.setEvent();
+    await this.init();
+    this.setState(this.$state);
     this.componentDidMount();
+  }
+
+  init () {};
+
+  #render () {
+    this.$target.innerHTML = this.render();
   }
 
   render () {
     return '';
   }
 
-  componentDidMount () {
-
-  }
+  componentDidMount () {}
 
   setState (payload) {
-    this.#state = { ...this.#state, ...payload };
-    this.#render(this.#props);
+    this.$state = { ...this.$state, ...payload };
+    this.#render();
   }
 
   setEvent () {}
