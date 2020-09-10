@@ -13,10 +13,6 @@ class App extends Component {
     }
   }
 
-  getUser(){
-
-  }
-
   render () {
     return `
       <div id="UserContainer"></div>
