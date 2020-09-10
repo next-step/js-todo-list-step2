@@ -3,23 +3,12 @@ import TodoService from "../services/TodoService.js";
 
 export const UserContainer = class extends Component {
 
-  async init () {
-    this.$state = {
-      selectedIndex: 0,
-      users: await TodoService.fetchUsers()
-    }
-  }
-
-  get #selectedUser () {
-    const { selectedIndex, users } = this.$state;
-    return users[selectedIndex];
-  }
-
   render () {
-    const { users, selectedIndex } = this.$state;
+    const { users, selectedIndex } = this.$props;
+    const selectedUser = users[selectedIndex];
     return `
       <h1 id="user-title" data-username="eastjun">
-        <span><strong>${this.#selectedUser.name}</strong>'s Todo List</span>
+        <span><strong>${selectedUser.name}</strong>'s Todo List</span>
       </h1>
       <section>
         <div id="user-list">

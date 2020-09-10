@@ -3,6 +3,7 @@ import {Component} from "../core/Component.js";
 export const TodoContainer = class extends Component {
 
   render () {
+    console.log('TodoContainer', this.$props.users);
     return `
       <section class="input-container">
         <input class="new-todo" placeholder="할 일을 입력해주세요." autofocus />

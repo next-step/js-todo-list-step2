@@ -6,6 +6,13 @@ import {TodoContainer} from "./containers/TodoContainer.js";
 
 class App extends Component {
 
+  async init () {
+    this.$state = {
+      selectedIndex: 0,
+      users: await TodoService.fetchUsers()
+    }
+  }
+
   render () {
     return `
       <div id="UserContainer"></div>
@@ -17,8 +24,14 @@ class App extends Component {
     const $userContainer = document.querySelector('#UserContainer');
     const $todoContainer = document.querySelector('#TodoContainer');
 
-    new UserContainer($userContainer);
-    new TodoContainer($todoContainer);
+    new UserContainer($userContainer, {
+      users: this.$state.users,
+      selectedIndex: this.$state.selectedIndex,
+    });
+
+    new TodoContainer($todoContainer, {
+      users: this.$state.users,
+    });
   }
 
 }
