@@ -1,0 +1,1 @@
+export const userTemplate = ({name}) => `<button class="ripple">${name}</button>`;
