@@ -1,4 +1,4 @@
-import {todoAdapter} from "../adapter/todoAdapter";
+import {todoAdapter} from "../adapter/todoAdapter.js";
 
 
 export default Object.freeze({

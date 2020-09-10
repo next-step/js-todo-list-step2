@@ -9,7 +9,8 @@ export const RestClient = class {
   }
 
   #getUrlOf (uri) {
-    return `${this.#baseURL}/${uri}`;
+    const isSlash = uri[0] === '/' ? '' : '/'
+    return `${this.#baseURL}${isSlash}${uri}`;
   }
 
   #request (uri, method) {
