@@ -10,9 +10,8 @@ function App($target) {
     const init = async () => {
         checkTarget($target)
         this.$target = $target;
-        this.state = {
-            users : await fetchUsers(),
-        }
+        this.state = await fetchUsers(),
+        
     
         this.userList = new UserList({
             $target: document.querySelector(SELECTOR.USER_LIST),
