@@ -1,13 +1,15 @@
 import { CLASS, EVENT, SELECTOR } from "../utils/constant.js";
 import { userButtonDOM, userCreateButtonDOM } from "../utils/templates.js";
-import { checkTarget } from "../utils/validator.js";
+import { checkFunction, checkTarget } from "../utils/validator.js";
 
 class UserList {
-    constructor({$target, users}) {
-
+    constructor({$target, state, onChangeUser}) {
         checkTarget($target)
+        checkFunction(onChangeUser);
+        
         this.$target = $target;
-        this.users = users;
+        this.state = state;
+        this.onChangeUser = onChangeUser;
 
         this.bindEvents()
         this.render();
@@ -18,15 +20,33 @@ class UserList {
     }
 
     onClick = (e) => {
-        if(!e.target.className.includes(CLASS.USER_CREATE_BUTTON)) return;
-        // TODO : API 확인 후 구현 완료
-        prompt("사용자 이름을 입력해주세요")
+        if(this.isUserButton(e)) {
+            const selectedName = e.target.innerText;
+            this.onChangeUser(selectedName);
+        }
+        if(this.isUserCreateButton(e)) {
+            // TODO : API 확인 후 구현 완료
+            prompt("사용자 이름을 입력해주세요")
+        }
+    }
+
+    isUserCreateButton = (e) => {
+        return e.target.className.includes(CLASS.USER_CREATE_BUTTON)
+    }
+
+    isUserButton = (e) => {
+        return e.target.className.trim() == CLASS.RIPPLE
     }
 
     createUserListDOM = () => {
-        return this.users.reduce((html, user) => 
-            html + userButtonDOM(user)
+        return this.state.users.reduce((html, user) => 
+            html + userButtonDOM(user.name, this.state.user)
         ,"") + userCreateButtonDOM();
+    }
+
+    setState = (newState) => {
+        this.state = newState;
+        this.render();
     }
 
     render() {

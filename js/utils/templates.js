@@ -1,6 +1,6 @@
-export const userButtonDOM = (user) => 
-    `<button class="ripple">
-        ${user.name}
+export const userButtonDOM = (username, activeUser) => 
+    `<button class="ripple ${username == activeUser.name ? 'active' : ''}">
+        ${username}
     </button>`
 
 export const userCreateButtonDOM = () => 

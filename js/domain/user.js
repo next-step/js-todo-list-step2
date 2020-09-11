@@ -13,6 +13,10 @@ class User {
     static of({_id, name, todoList}) {
         return new User(_id, name, todoList)
     }
+
+    static init() {
+        return new User("","",[])
+    }
 }
 
 export default User;
