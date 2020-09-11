@@ -16,6 +16,8 @@ export const MESSAGE = {
     INVALID_TYPE : "올바른 타입이 아닙니다.",
     NOT_ARRAY : "배열이 아닙니다.",
     NOT_FUNCTION : "함수가 아닙니다",
+
+    INVALID_USERNAME : "User의 이름은 최소 2글자 이상이어야 합니다."
 }
 
 // local

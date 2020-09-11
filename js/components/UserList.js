@@ -1,4 +1,4 @@
-import { CLASS, EVENT, SELECTOR } from "../utils/constant.js";
+import { CLASS, EVENT, MESSAGE, SELECTOR } from "../utils/constant.js";
 import { userButtonDOM, userCreateButtonDOM } from "../utils/templates.js";
 import { checkFunction, checkTarget } from "../utils/validator.js";
 
@@ -32,10 +32,16 @@ class UserList {
             this.onChangeUser(selectedName);
         }
         if(this.isUserCreateButton(e)) {
-            // TODO : API 확인 후 구현 완료
             const username = prompt("사용자 이름을 입력해주세요")
+            if(!this.isValidUsername(username)) {
+                throw new Error(MESSAGE.INVALID_USERNAME)
+            }
             this.onAddUser(username)
         }
+    }
+
+    isValidUsername = (username) => {
+        return username.length >= 2
     }
 
     isUserCreateButton = (e) => {
