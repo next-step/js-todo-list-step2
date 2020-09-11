@@ -1,11 +1,13 @@
+// global
 export const EVENT = {
     DOM_LOADED : "DOMContentLoaded",
+    CLICK: "click"
 }
 
-export const SELECTOR = {
-    TODO_APP : "#app",
-    USER_LIST : "#user-list"
+export const TYPE = {
+    STRING : "string"
 }
+
 
 export const MESSAGE = {
     INVALID_HTML_ELEMENT : "올바른 HTML Element가 아닙니다.",
@@ -14,6 +16,14 @@ export const MESSAGE = {
     NOT_ARRAY : "배열이 아닙니다."
 }
 
-export const TYPE = {
-    STRING : "string"
+// local
+export const SELECTOR = {
+    TODO_APP : "#app",
+    USER_LIST : "#user-list",
 }
+
+export const CLASS = {
+    USER_CREATE_BUTTON: "user-create-button"
+
+}
+

@@ -12,7 +12,6 @@ function App($target) {
         this.$target = $target;
         this.state = await fetchUsers(),
         
-    
         this.userList = new UserList({
             $target: document.querySelector(SELECTOR.USER_LIST),
             users: this.state.users
