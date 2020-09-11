@@ -4,23 +4,23 @@ import User from "./user.js";
 class State {
     constructor(users, user) {
         checkArray(users);
-        checkInstance(user, User)
+        checkInstance(user, User);
 
-        this.users = users
-        this.user = user
-    }
-
-    static of(users) {
-        const newUser = users.map(user => User.of(user))
-        return new State(newUser, User.init());
-    }
-
-    setActiveUser = (user) => {
+        this.users = users;
         this.user = user;
     }
 
-    setUser = (username) => {
-        this.users = [...this.users, User.name(username)]
+    static of(users) {
+        const newUser = users.map((user) => User.of(user));
+        return new State(newUser, User.init());
+    }
+
+    setActiveUser(user) {
+        this.user = user;
+    }
+
+    setUser(username) {
+        this.users = [...this.users, User.name(username)];
     }
 }
 
