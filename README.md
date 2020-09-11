@@ -22,9 +22,11 @@ components
     TodoInput.js
     TodoList.js
     TodoTitle.js
+    UserList.js
 utils
     constant.js
     validator.js
+    templates.js
     api.js
 domain
     todo
@@ -39,7 +41,7 @@ index.js
 
 ## 🎯 요구사항
 
-- [ ] 1. User 추가하기
+- [x] 1. User 추가하기
 - [ ] 2. User의 투두리스트 불러오기
 - [ ] 3. User 삭제하기
 - [ ] 3. todoItem 추가하기
