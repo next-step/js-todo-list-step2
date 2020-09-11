@@ -2,6 +2,41 @@
 
 이번 미션은 Ajax를 이용하여 TodoList를 발전시키는 미션입니다. 비동기 통신으로 데이터를 관리할 경우 자바스크립트의 비동기라는 특성을 더욱 깊이있게 이해할 수 있습니다
 
+## Convention
+- Class : CamelCase
+- Directory : CamelCase
+- Components : start with Uppercase
+- DOM variable : use prefix "$"
+- Method
+    - CamelCase
+    - DOM Method : use prefix "on"
+    - Other Methods : start with verb
+
+<br>
+
+## Directory Structure
+```
+components
+    App.js
+    TodoCount.js
+    TodoInput.js
+    TodoList.js
+    TodoTitle.js
+utils
+    constant.js
+    validator.js
+    api.js
+domain
+    todo
+      todo.js
+      todos.js
+      todoApi.js
+    user
+      user
+      userApi.js
+index.js
+``` 
+
 ## 🎯 요구사항
 
 - [ ] 1. User 추가하기
