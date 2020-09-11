@@ -14,6 +14,15 @@ export const fetchUser = async (name) => {
     const user = await new Api()
         .get(`/api/users/${name}`)
         .build();
+        
+    return User.of(user);
+}
+
+export const addUser = async (name) => {
+    const user = await new Api()
+        .post("/api/users")
+        .data({name})
+        .build();
 
     return User.of(user);
 }

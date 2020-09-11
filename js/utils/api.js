@@ -1,7 +1,8 @@
 const BASE_URL = "https://js-todo-list-9ca3a.df.r.appspot.com"
 
 const METHOD = {
-    GET : 'get'
+    GET : 'get',
+    POST : 'post',
 }
 
 class Api {
@@ -10,14 +11,28 @@ class Api {
         this.method = method;
     }
 
-    get = (url) => {
+    get(url) {
         this.url = BASE_URL + url
         this.method = METHOD.GET;
         return this;
     }
 
-    headers = (headers) => {
+    post(url) {
+        this.url = BASE_URL + url;
+        this.method = METHOD.POST;
+        this.headers = {
+            'Content-Type': 'application/json',
+        }
+        return this;
+    }
+
+    headers(headers) {
         this.headers = headers
+        return this;
+    }
+
+    data(body) {
+        this.body = body
         return this;
     }
 

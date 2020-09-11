@@ -18,6 +18,10 @@ class State {
     setActiveUser = (user) => {
         this.user = user;
     }
+
+    setUser = (username) => {
+        this.users = [...this.users, User.name(username)]
+    }
 }
 
 export default State;

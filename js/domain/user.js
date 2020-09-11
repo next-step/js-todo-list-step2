@@ -15,7 +15,11 @@ class User {
     }
 
     static init() {
-        return new User("","",[])
+        return new User("", "", [])
+    }
+
+    static name(username) {
+        return new User("", username, [])
     }
 }
 

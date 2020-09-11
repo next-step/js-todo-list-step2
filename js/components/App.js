@@ -1,5 +1,5 @@
 import User from "../domain/user.js";
-import { fetchUser, fetchUsers } from "../domain/userApi.js";
+import { addUser, fetchUser, fetchUsers } from "../domain/userApi.js";
 import Api from "../utils/api.js";
 import { SELECTOR } from "../utils/constant.js";
 import { checkTarget } from "../utils/validator.js";
@@ -16,6 +16,7 @@ function App($target) {
             $target: document.querySelector(SELECTOR.USER_LIST),
             state: this.state,
             onChangeUser : this.onChangeUser,
+            onAddUser : this.onAddUser,
         })
     }
 
@@ -23,6 +24,12 @@ function App($target) {
         const user = await fetchUser(username)
         this.state.setActiveUser(user)
         this.setState();
+    }
+
+    this.onAddUser = async (username) => {
+        const newUser = await addUser(username);
+        this.state.addUser(newUser);
+        this.setState()
     }
 
     this.setState = () => {

@@ -3,13 +3,20 @@ import { userButtonDOM, userCreateButtonDOM } from "../utils/templates.js";
 import { checkFunction, checkTarget } from "../utils/validator.js";
 
 class UserList {
-    constructor({$target, state, onChangeUser}) {
+    constructor({
+        $target, 
+        state, 
+        onChangeUser, 
+        onAddUser
+    }) {
         checkTarget($target)
         checkFunction(onChangeUser);
+        checkFunction(onAddUser);
         
         this.$target = $target;
         this.state = state;
         this.onChangeUser = onChangeUser;
+        this.onAddUser = onAddUser;
 
         this.bindEvents()
         this.render();
@@ -26,7 +33,8 @@ class UserList {
         }
         if(this.isUserCreateButton(e)) {
             // TODO : API 확인 후 구현 완료
-            prompt("사용자 이름을 입력해주세요")
+            const username = prompt("사용자 이름을 입력해주세요")
+            this.onAddUser(username)
         }
     }
 
