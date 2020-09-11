@@ -7,6 +7,7 @@ export const EVENT = {
 export const TYPE = {
     STRING : "string",
     FUNCTION : "function",
+    BOOLEAN : "boolean",
 }
 
 
@@ -23,7 +24,10 @@ export const MESSAGE = {
 // local
 export const SELECTOR = {
     TODO_APP : "#app",
+    TODO_LIST : ".todo-list",
+
     USER_LIST : "#user-list",
+    
 }
 
 export const CLASS = {

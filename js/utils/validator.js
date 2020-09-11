@@ -24,13 +24,18 @@ export const checkArray = (target) => {
     }
 }
 
+export const checkFunction = (func) => {
+    if(!func || checkType(func, TYPE.FUNCTION)) {
+        throw new TypeError(`${func} : ${MESSAGE.NOT_FUNCTION}`)
+    }
+}
+
 export const checkString = (...target) => {
     checkArray(target);
     target.forEach(each => checkType(each, TYPE.STRING))
 }
 
-export const checkFunction = (func) => {
-    if(!func || checkType(func, TYPE.FUNCTION)) {
-        throw new TypeError(`${func} : ${MESSAGE.NOT_FUNCTION}`)
-    }
+export const checkBoolean = (...target) => {
+    checkArray(target);
+    target.forEach(each => checkType(each, TYPE.BOOLEAN))
 }

@@ -1,6 +1,7 @@
 import { addUser, fetchUser, fetchUsers } from "../domain/userApi.js";
 import { SELECTOR } from "../utils/constant.js";
 import { checkTarget } from "../utils/validator.js";
+import TodoList from "./TodoList.js";
 import UserList from "./UserList.js";
 
 function App($target) {
@@ -15,6 +16,11 @@ function App($target) {
             state: this.state,
             onChangeUser : this.onChangeUser,
             onAddUser : this.onAddUser,
+        })
+
+        this.todoList = new TodoList({
+            $target: document.querySelector(SELECTOR.TODO_LIST),
+            todos : this.state.user.todoList
         })
     }
 

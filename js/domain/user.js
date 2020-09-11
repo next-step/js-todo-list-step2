@@ -1,4 +1,5 @@
 import { checkArray, checkString } from "../utils/validator.js";
+import Todo from "./todo.js";
 
 class User {
     constructor(_id, name, todoList) {
@@ -11,7 +12,8 @@ class User {
     }
 
     static of({_id, name, todoList}) {
-        return new User(_id, name, todoList)
+        const newList = todoList.map(todo => Todo.of(todo))
+        return new User(_id, name, newList)
     }
 
     static init() {
