@@ -92,11 +92,10 @@ export const TodoList = class extends Component {
   }
 
   setEvent () {
-    const indexOf = target => Number(target.closest('[data-index]').dataset.index);
-    this.addEvent('click', 'destroy', ({ target }) => this.#removeItem(indexOf(target)));
-    this.addEvent('change', 'toggle', ({ target }) => this.#toggleItem(indexOf(target)));
-    this.addEvent('change', 'chip', ({ target }) => this.#selectPriority(indexOf(target), target.value));
-    this.addEvent('dblclick', 'contents', ({ target }) => todoStore.commit(SET_EDITING, indexOf(target)));
+    this.addEvent('click', 'destroy', ({  index }) => this.#removeItem(index));
+    this.addEvent('change', 'toggle', ({  index }) => this.#toggleItem(index));
+    this.addEvent('change', 'chip', ({ target, index }) => this.#selectPriority(index, target.value));
+    this.addEvent('dblclick', 'contents', ({ index }) => todoStore.commit(SET_EDITING, index));
     this.addEvent('keydown', 'editor', ({ key }) => {
       if (key !== 'Escape') return;
       todoStore.commit(SET_EDITING, -1);
