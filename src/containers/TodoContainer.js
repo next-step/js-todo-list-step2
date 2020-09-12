@@ -1,12 +1,21 @@
 import {Component} from "../core/Component.js";
+import {TodoAppender} from "../components/Todo/TodoAppender.js";
 
 export const TodoContainer = class extends Component {
+
+  componentInit () {
+    this.$children = {
+      TodoAppender: {
+        constructor: TodoAppender
+      }
+    }
+
+  }
+
   template () {
     return `
       <section class="todoapp">
-        <section class="input-container">
-          <input class="new-todo" placeholder="할 일을 입력해주세요." autofocus />
-        </section>
+        <section data-component="TodoAppender" class="input-container"></section>
         <section class="main">
           <ul class="todo-list">
             <li>

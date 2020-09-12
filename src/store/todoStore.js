@@ -64,10 +64,10 @@ export const todoStore = new Store({
   },
 
   actions: {
-    async [FETCH_ITEMS] ({ commit }, user) {
-      const result = await TodoService.fetchItems(user);
+    async [FETCH_ITEMS] ({ commit }, userId) {
+      const result = await TodoService.fetchItems(userId);
       try {
-        if (result.message) throw `${result.message}: ${user}`;
+        if (result.message) throw `${result.message}: ${userId}`;
         const todoItems = result || [];
         return commit(SET_TODO_ITEMS, todoItems);
       } catch (e) {
@@ -75,41 +75,41 @@ export const todoStore = new Store({
       }
     },
 
-    async [ADD_ITEM] ({ dispatch, commit }, { user, contents }) {
+    async [ADD_ITEM] ({ dispatch, commit }, { userId, contents }) {
       commit(SET_ADD_LOADING_ITEM);
-      await TodoService.addItem(user, contents);
-      return await dispatch(FETCH_ITEMS, user);
+      await TodoService.addItem(userId, contents);
+      return await dispatch(FETCH_ITEMS, userId);
     },
 
-    async [PUT_ITEM] ({ dispatch, commit }, { user, item }) {
+    async [PUT_ITEM] ({ dispatch, commit }, { userId, item }) {
       commit(SET_LOADING_ITEM, item._id);
       commit(SET_EDITING, -1);
-      await TodoService.putItem(user, item);
-      return dispatch(FETCH_ITEMS, user);
+      await TodoService.putItem(userId, item);
+      return dispatch(FETCH_ITEMS, userId);
     },
 
-    async [PUT_PRIORITY_ITEM] ({ dispatch, commit }, { user, item }) {
+    async [PUT_PRIORITY_ITEM] ({ dispatch, commit }, { userId, item }) {
       console.log(item);
       commit(SET_LOADING_ITEM, item._id);
-      await TodoService.putPriorityItem(user, item);
-      return dispatch(FETCH_ITEMS, user);
+      await TodoService.putPriorityItem(userId, item);
+      return dispatch(FETCH_ITEMS, userId);
     },
 
-    async [TOGGLE_ITEM] ({ dispatch, commit }, { user, id }) {
-      commit(SET_LOADING_ITEM, id);
-      await TodoService.toggleItem(user, id);
-      return dispatch(FETCH_ITEMS, user);
+    async [TOGGLE_ITEM] ({ dispatch, commit }, { userId, itemId }) {
+      commit(SET_LOADING_ITEM, itemId);
+      await TodoService.toggleItem(userId, itemId);
+      return dispatch(FETCH_ITEMS, userId);
     },
 
-    async [REMOVE_ITEM] ({ dispatch, commit }, { user, id }) {
-      commit(SET_LOADING_ITEM, id);
-      await TodoService.removeItem(user, id);
-      return dispatch(FETCH_ITEMS, user);
+    async [REMOVE_ITEM] ({ dispatch, commit }, { userId, itemId }) {
+      commit(SET_LOADING_ITEM, itemId);
+      await TodoService.removeItem(userId, itemId);
+      return dispatch(FETCH_ITEMS, userId);
     },
 
-    async [REMOVE_ALL_ITEM] ({ dispatch, commit }, user) {
+    async [REMOVE_ALL_ITEM] ({ dispatch, commit }, userId) {
       commit(SET_LOADING_ALL);
-      await TodoService.removeAllItem(user);
+      await TodoService.removeAllItem(userId);
       return dispatch(FETCH_ITEMS, user);
     }
   }
