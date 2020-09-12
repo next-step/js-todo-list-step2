@@ -76,7 +76,6 @@ export const TodoList = class extends Component {
     return items.map(([ index, { _id, contents, isCompleted, priority, isLoading = false } ]) =>
       isLoading ? progressTemplate : `
       <li ${getItemClass(isCompleted, editingIndex === Number(index))} data-index="${index}">
-        ${getItemClass(isCompleted, editingIndex === index)}
         <div class="view">
           <input data-ref="toggle" class="toggle" type="checkbox" ${isCompleted ? 'checked' : ''} />
           <label data-ref="contents" class="label">
