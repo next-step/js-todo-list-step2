@@ -1,21 +1,28 @@
 import UserTitle from "./UserTitle.js";
 import { DEFAULT_USER } from "../constants.js";
-import {getUserList} from "../api/users.js";
+import { getUserList } from "../api/users.js";
 
 class App {
-	#user
-	#userList
+  #state;
 
   constructor($target) {
     this.$target = $target;
-    this.state = { username };
+    this.#state = {
+      user: null,
+      userList: [],
+    };
     this.initComponents();
   }
 
-  render() {}
-
   initComponents() {
-	console.log(getUserList());
+    this.userTitle = new UserTitle(
+      this.$target.querySelector("#user-title"),
+      this.#state.user
+    );
+  }
+
+  fetchUserList() {
+    getUserList();
   }
 }
 
