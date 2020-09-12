@@ -1,4 +1,5 @@
 import { createStore } from "./redux.js";
+import {getUserList} from "./api/users.js";
 
 const $app = document.querySelector("#app");
 
@@ -7,6 +8,5 @@ const onUserCreateHandler = () => {
 };
 
 const userCreateButton = document.querySelector(".user-create-button");
-userCreateButton.addEventListener("click", onUserCreateHandler);
 
 const store = createStore();
