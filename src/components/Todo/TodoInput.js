@@ -5,7 +5,7 @@ import { userStore } from "../store/userStore.js";
 export const TodoInput = class extends Component {
 
   get #user () {
-    return userStore.$getters.selectedUserName;
+    return userStore.$getters.selectedUser?._id;
   }
 
   render () {

@@ -25,7 +25,7 @@ const getItemClass = (completed, editing) => editing   ? ' class="editing"'   :
 export const TodoList = class extends Component {
 
   get #user () {
-    return userStore.$getters.selectedUserName;
+    return userStore.$getters.selectedUser?._id;
   }
 
   #removeItem (index) {

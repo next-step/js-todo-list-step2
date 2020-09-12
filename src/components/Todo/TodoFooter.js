@@ -22,7 +22,7 @@ export const TodoFooter = class extends Component {
   }
 
   get #user () {
-    return userStore.$getters.selectedUserName;
+    return userStore.$getters.selectedUser?._id;
   }
 
   render () {

@@ -11,21 +11,19 @@ export const Component = class {
   constructor($target, $props = {}) {
     this.$target = $target;
     this.$props = $props;
-    this.componentInit();
+    this.#setup();
+  }
+
+  async #setup () {
+    await this.componentInit();
+    this.$stores.forEach(store => store.addObserver(this));
     this.render();
     this.componentDidMount();
     this.setEvent();
   }
 
-  componentInit () {}
-  componentDidUpdate () {}
-  componentDidMount () {}
-  setEvent () {}
-  template () { return '' }
-
   render = debounceOneFrame(() => {
     this.$target.innerHTML = this.template();
-    this.$stores.forEach(store => store.addObserver(this));
     this.#childrenBuild();
     this.componentDidUpdate()
   });
@@ -47,4 +45,9 @@ export const Component = class {
     })
   }
 
+  componentInit () {}
+  componentDidUpdate () {}
+  componentDidMount () {}
+  setEvent () {}
+  template () { return '' }
 }

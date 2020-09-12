@@ -8,11 +8,11 @@ export const FETCH_USERS = 'FETCH_USERS';
 export const userStore = new Store({
   state: {
     users: [],
-    selectedIndex: -1,
+    selectedIndex: 0,
   },
 
   getters: {
-    selectedUserName: ({ users, selectedIndex }) => users[selectedIndex],
+    selectedUser: ({ users, selectedIndex }) => users[selectedIndex],
   },
 
   mutations: {
