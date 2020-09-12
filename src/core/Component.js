@@ -11,6 +11,11 @@ export const Component = class {
   constructor($target, $props = {}) {
     this.$target = $target;
     this.$props = $props;
+    this.render = debounceOneFrame(() => {
+      this.$target.innerHTML = this.template();
+      this.#childrenBuild();
+      this.componentDidUpdate()
+    });
     this.#setup();
   }
 
@@ -21,12 +26,6 @@ export const Component = class {
     this.componentDidMount();
     this.setEvent();
   }
-
-  render = debounceOneFrame(() => {
-    this.$target.innerHTML = this.template();
-    this.#childrenBuild();
-    this.componentDidUpdate()
-  });
 
   setState (payload) {
     this.$state = { ...this.$state, ...payload };

@@ -9,7 +9,7 @@ import {lazyFrame} from "../utils/index.js";
 export const UserContainer = class extends Component {
 
   componentInit () {
-    this.$stores = [userStore, todoStore];
+    this.$stores = [userStore];
     this.$children = {
       UserTitle: {
         constructor: UserTitle
@@ -18,12 +18,12 @@ export const UserContainer = class extends Component {
         constructor: UserList,
         props: {
           async loadItemsByUser (index) {
-            userStore.commit(SET_USER, index);
             todoStore.commit(SET_LOADING_TYPE, LoadingTypes.INIT);
             await Promise.all([
               todoStore.dispatch(FETCH_ITEMS, userStore.$getters.selectedUser._id),
               lazyFrame(),
-            ])
+            ]);
+            userStore.commit(SET_USER, index);
             todoStore.commit(SET_LOADING_TYPE, LoadingTypes.LOADED);
           }
         }

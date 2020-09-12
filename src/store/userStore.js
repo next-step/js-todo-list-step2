@@ -25,8 +25,11 @@ export const userStore = new Store({
   },
 
   actions: {
-    async [FETCH_USERS] ({ commit }) {
-      commit(SET_USERS, await TodoService.fetchUsers());
+    [FETCH_USERS] ({ commit }) {
+      return new Promise(async resolve => {
+        commit(SET_USERS, await TodoService.fetchUsers());
+        resolve();
+      })
     },
   }
 })

@@ -7,7 +7,6 @@ const App = class extends Component{
 
   async componentInit () {
     await userStore.dispatch(FETCH_USERS);
-    console.log('APP componentInit')
 
     this.$children = {
       UserContainer: { constructor: UserContainer },
@@ -16,7 +15,6 @@ const App = class extends Component{
   }
 
   template () {
-    console.log('APP template');
     return `
       <div data-component="UserContainer"></div>
       <section data-component="TodoContainer" class="todoapp"></section>
