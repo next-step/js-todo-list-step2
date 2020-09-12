@@ -1,7 +1,7 @@
-import { Component } from "../core/Component.js";
-import {PUT_ITEM, PUT_PRIORITY_ITEM, REMOVE_ITEM, SET_EDITING, todoStore, TOGGLE_ITEM} from "../store/todoStore.js";
-import LoadingTypes from "../constants/LoadingTypes.js";
-import { userStore } from "../store/userStore.js";
+import {Component} from "../../core/Component.js";
+import {PUT_ITEM, PUT_PRIORITY_ITEM, REMOVE_ITEM, SET_EDITING, todoStore, TOGGLE_ITEM} from "../../store/todoStore.js";
+import {userStore} from "../../store/userStore.js";
+import LoadingTypes from "../../constants/LoadingTypes.js";
 
 const loadingArray = [ ...Array(5).keys() ];
 
