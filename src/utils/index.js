@@ -8,3 +8,12 @@ export const debounceOneFrame = callback => {
 }
 
 export const lazyFrame = () => new Promise(resolve => setTimeout(resolve, ONE_FRAME * 10));
+
+export const addEventBubblingListener = (eventType, currentTarget, selector, callback) => {
+  const isChild = target => [ ...currentTarget.querySelectorAll(selector) ].includes(target) ||
+                            target.closest(selector);
+  currentTarget.addEventListener(eventType, event => {
+    if (!isChild(event.target)) return;
+    callback(event);
+  })
+}
