@@ -6,26 +6,23 @@ import { lazyFrame } from "../utils/index.js";
 
 export const UserList = class extends Component {
 
-  async #loadItemsByUser (index) {
-    userStore.commit(SET_USER, index);
-    todoStore.commit(SET_LOADING_TYPE, LoadingTypes.INIT);
-    await Promise.all([
-      todoStore.dispatch(FETCH_ITEMS, userStore.$getters.selectedUserName),
-      lazyFrame(),
-    ])
-    todoStore.commit(SET_LOADING_TYPE, LoadingTypes.LOADED);
-  }
-
-  render () {
+  template () {
     const { users, selectedIndex } = userStore.$state;
-    return users.map(({ name }, index) => `
-      <button class="ripple ${index === selectedIndex ? 'active' : ''}" data-index="${index}">${name}</button>
-    `).join('');
+    return `
+      ${users.map(({ name }, index) => `
+        <button
+          data-ref="select"
+          data-index="${index}"
+          class="ripple ${index === selectedIndex ? 'active' : ''}">
+          ${name}
+        </button>
+      `).join('')}
+      <button class="ripple user-create-button">+ 유저 생성</button>
+    `;
   }
 
-  setEvent (componentTarget) {
-    componentTarget.addEventListener('click', ({ target }) => {
-      if (!target.classList.contains('ripple')) return;
+  setEvent () {
+    this.addEvent('click', 'select', ({ target }) => {
       this.#loadItemsByUser(Number(target.dataset.index));
     })
   }
