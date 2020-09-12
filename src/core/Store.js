@@ -33,8 +33,8 @@ export const Store = class {
     }, payload);
   }
 
-  addObserve (...components) {
-    components.forEach(component => this.#observes.add(component));
+  addObserver (component) {
+    this.#observes.add(component);
   }
 
   #setState (newState) {

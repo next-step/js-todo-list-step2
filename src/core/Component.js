@@ -2,7 +2,11 @@ import {addEventBubblingListener, debounceOneFrame} from "../utils/index.js";
 
 export const Component = class {
 
-  $target; $state = {}; $props = {}; $children = {};
+  $target;
+  $state = {}
+  $props = {};
+  $children = {};
+  $stores = {}
 
   constructor($target, $props = {}) {
     this.$target = $target;
@@ -21,6 +25,7 @@ export const Component = class {
 
   render = debounceOneFrame(() => {
     this.$target.innerHTML = this.template();
+    this.$stores.forEach(store => store.addObserver(this));
     this.#childrenBuild();
     this.componentDidUpdate()
   });
