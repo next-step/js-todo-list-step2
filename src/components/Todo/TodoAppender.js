@@ -4,9 +4,7 @@ import { userStore } from "../../store/userStore.js";
 
 export const TodoAppender = class extends Component {
 
-  get #user () {
-    return userStore.$getters.selectedUser?._id;
-  }
+  get #user () { return userStore.$getters.selectedUser?._id; }
 
   template () {
     return `
@@ -21,7 +19,6 @@ export const TodoAppender = class extends Component {
   setEvent () {
     this.addEvent('keypress', 'append', ({ key, target }) => {
       if (key !== 'Enter') return;
-      console.log('test');
       todoStore.dispatch(ADD_ITEM, {
         userId: this.#user,
         contents: target.value

@@ -25,9 +25,7 @@ const getItemClass = (completed, editing) => editing   ? ' class="editing"'   :
 
 export const TodoList = class extends Component {
 
-  get #user () {
-    return userStore.$getters.selectedUser?._id;
-  }
+  get #user () { return userStore.$getters.selectedUser?._id; }
 
   #removeItem (index) {
     const { todoItems } = todoStore.$state;
@@ -55,11 +53,11 @@ export const TodoList = class extends Component {
   }
 
   #selectPriority (index, priority) {
-    const { todoItems } = todoStore.$state;
-    todoItems[index].priority = priority;
+    const item = todoStore.$state.todoItems[index];
+    item.priority = priority;
     todoStore.dispatch(PUT_PRIORITY_ITEM, {
       userId: this.#user,
-      item: todoItems[index]
+      item
     })
   }
 

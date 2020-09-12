@@ -11,21 +11,13 @@ const filterButtons = [
 
 export const TodoFooter = class extends Component {
 
-  get #itemCount () {
-    return todoStore.$getters.filteredItems.length;
-  }
-
-  get #filterType () {
-    return todoStore.$state.filterType;
-  }
-
-  get #user () {
-    return userStore.$getters.selectedUser?._id;
-  }
-
   componentInit () {
     this.$stores = [ todoStore ];
   }
+
+  get #itemCount () { return todoStore.$getters.filteredItems.length; }
+  get #filterType () { return todoStore.$state.filterType; }
+  get #user () { return userStore.$getters.selectedUser?._id; }
 
   template () {
     return `
