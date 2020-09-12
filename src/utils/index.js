@@ -17,3 +17,19 @@ export const addEventBubblingListener = (eventType, currentTarget, selector, cal
     callback(event);
   })
 }
+
+export const parseQuery = uri => {
+  const startIndex = uri.indexOf('?');
+  if (startIndex === -1) return {};
+  return uri.substr(startIndex)
+            .split('&')
+            .reduce((query, str) => {
+              const [ key, value ] = str.split('=')
+              obj[key] = value;
+              return obj;
+            }, {});
+}
+
+export const getQuery = key => {
+  return parseQuery(location.search)[key];
+}

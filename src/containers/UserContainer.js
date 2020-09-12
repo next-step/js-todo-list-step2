@@ -20,11 +20,13 @@ export const UserContainer = class extends Component {
           async loadItemsByUser (index) {
             todoStore.commit(SET_LOADING_TYPE, LoadingTypes.INIT);
             userStore.commit(SET_USER, index);
+            const userId = userStore.$getters.selectedUser._id;
             await Promise.all([
-              todoStore.dispatch(FETCH_ITEMS, userStore.$getters.selectedUser._id),
+              todoStore.dispatch(FETCH_ITEMS, userId),
               lazyFrame(),
             ]);
             todoStore.commit(SET_LOADING_TYPE, LoadingTypes.LOADED);
+            history.pushState({ user_id: userId }, null, `./?user_id=${userId}`);
           }
         }
       }
