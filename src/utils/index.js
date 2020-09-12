@@ -21,12 +21,12 @@ export const addEventBubblingListener = (eventType, currentTarget, selector, cal
 export const parseQuery = uri => {
   const startIndex = uri.indexOf('?');
   if (startIndex === -1) return {};
-  return uri.substr(startIndex)
+  return uri.substr(startIndex + 1)
             .split('&')
             .reduce((query, str) => {
               const [ key, value ] = str.split('=')
-              obj[key] = value;
-              return obj;
+              query[key] = value;
+              return query;
             }, {});
 }
 
