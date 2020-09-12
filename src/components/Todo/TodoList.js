@@ -2,7 +2,7 @@ import {Component} from "../../core/Component.js";
 import {PUT_ITEM, PUT_PRIORITY_ITEM, REMOVE_ITEM, SET_EDITING, todoStore, TOGGLE_ITEM} from "../../store/todoStore.js";
 import {userStore} from "../../store/userStore.js";
 import LoadingTypes from "../../constants/LoadingTypes.js";
-import Priority from "../../constants/Priority.js";
+import PriorityTypes from "../../constants/PriorityTypes.js";
 
 const loadingArray = [ ...Array(5).keys() ];
 
@@ -56,10 +56,10 @@ export const TodoList = class extends Component {
 
   #selectPriority (index, priority) {
     const { todoItems } = todoStore.$state;
-    todoItems[index].priority = Number(priority);
+    todoItems[index].priority = priority;
     todoStore.dispatch(PUT_PRIORITY_ITEM, {
       userId: this.#user,
-      priority: todoItems[index]
+      item: todoItems[index]
     })
   }
 
@@ -75,16 +75,17 @@ export const TodoList = class extends Component {
     }
     return items.map(([ index, { _id, contents, isCompleted, priority, isLoading = false } ]) =>
       isLoading ? progressTemplate : `
-      <li ${getItemClass(isCompleted, editingIndex === index)} data-index="${index}">
+      <li ${getItemClass(isCompleted, editingIndex === Number(index))} data-index="${index}">
+        ${getItemClass(isCompleted, editingIndex === index)}
         <div class="view">
           <input data-ref="toggle" class="toggle" type="checkbox" ${isCompleted ? 'checked' : ''} />
           <label data-ref="contents" class="label">
-            ${ priority === Priority.PRIMARY ? `<span class="chip primary">1순위</span>` :
-               priority === Priority.SECONDARY ? `<span class="chip secondary">2순위</span>` : `
+            ${ priority === PriorityTypes.FIRST ? `<span class="chip primary">1순위</span>` :
+               priority === PriorityTypes.SECOND ? `<span class="chip secondary">2순위</span>` : `
               <select data-ref="priority" class="chip select">
-                <option value="${Priority.NONE}" selected>순위</option>
-                <option value="${Priority.SECONDARY}">1순위</option>
-                <option value="${Priority.PRIMARY}">2순위</option>
+                <option value="${PriorityTypes.NONE}" selected>순위</option>
+                <option value="${PriorityTypes.FIRST}">1순위</option>
+                <option value="${PriorityTypes.SECOND}">2순위</option>
               </select>`}
             ${contents}
           </label>
@@ -98,7 +99,9 @@ export const TodoList = class extends Component {
   setEvent () {
     this.addEvent('click', 'destroy', ({  index }) => this.#removeItem(index));
     this.addEvent('change', 'toggle', ({  index }) => this.#toggleItem(index));
-    this.addEvent('change', 'chip', ({ target, index }) => this.#selectPriority(index, target.value));
+    this.addEvent('change', 'priority', ({ target, index }) => {
+      this.#selectPriority(index, target.value);
+    });
     this.addEvent('dblclick', 'contents', ({ index }) => todoStore.commit(SET_EDITING, index));
     this.addEvent('keydown', 'editor', ({ key }) => {
       if (key !== 'Escape') return;

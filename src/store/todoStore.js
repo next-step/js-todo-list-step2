@@ -90,6 +90,7 @@ export const todoStore = new Store({
     },
 
     async [PUT_PRIORITY_ITEM] ({ dispatch, commit }, { userId, item }) {
+      console.log(item);
       commit(SET_LOADING_ITEM, item._id);
       await TodoService.putPriorityItem(userId, item);
       return dispatch(FETCH_ITEMS, userId);
