@@ -68,7 +68,7 @@ export const todoStore = new Store({
       const result = await TodoService.fetchItems(user);
       try {
         if (result.message) throw `${result.message}: ${user}`;
-        const todoItems = result.todoList || [];
+        const todoItems = result || [];
         return commit(SET_TODO_ITEMS, todoItems);
       } catch (e) {
         console.error(e);
