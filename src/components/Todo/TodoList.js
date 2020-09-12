@@ -2,6 +2,7 @@ import {Component} from "../../core/Component.js";
 import {PUT_ITEM, PUT_PRIORITY_ITEM, REMOVE_ITEM, SET_EDITING, todoStore, TOGGLE_ITEM} from "../../store/todoStore.js";
 import {userStore} from "../../store/userStore.js";
 import LoadingTypes from "../../constants/LoadingTypes.js";
+import Priority from "../../constants/Priority";
 
 const loadingArray = [ ...Array(5).keys() ];
 
@@ -62,7 +63,7 @@ export const TodoList = class extends Component {
     })
   }
 
-  render () {
+  template () {
     const { loading, editingIndex } = todoStore.$state;
     const items = todoStore.$getters.filteredItems;
     if (loading === LoadingTypes.INIT) {
@@ -72,47 +73,37 @@ export const TodoList = class extends Component {
       isLoading ? progressTemplate : `
       <li ${getItemClass(isCompleted, editingIndex === index)} data-index="${index}">
         <div class="view">
-          <input class="toggle" type="checkbox" ${isCompleted ? 'checked' : ''} />
-          <label class="label">
-            ${ priority === 1 ? `<span class="chip primary">1순위</span>` :
-               priority === 2 ? `<span class="chip secondary">2순위</span>` : `
-              <select class="chip select">
-                <option value="0" selected>순위</option>
-                <option value="1">1순위</option>
-                <option value="2">2순위</option>
+          <input data-ref="toggle" class="toggle" type="checkbox" ${isCompleted ? 'checked' : ''} />
+          <label data-ref="contents" class="label">
+            ${ priority === Priority.PRIMARY ? `<span class="chip primary">1순위</span>` :
+               priority === Priority.SECONDARY ? `<span class="chip secondary">2순위</span>` : `
+              <select data-ref="priority" class="chip select">
+                <option value="${Priority.NONE}" selected>순위</option>
+                <option value="${Priority.SECONDARY}">1순위</option>
+                <option value="${Priority.PRIMARY}">2순위</option>
               </select>`}
             ${contents}
           </label>
-          <button class="destroy"></button>
+          <button data-ref="destroy" class="destroy"></button>
         </div>
-        <input class="edit" value="${contents}" />
+        <input data-ref="editor" class="edit" value="${contents}" />
       </li>
     `).join('');
   }
 
-  setEvent (componentTarget) {
-    const getIndex = target => Number(target.closest('[data-index]').dataset.index);
-    componentTarget.addEventListener('click', ({ target }) => {
-      if (!target.classList.contains('destroy')) return;
-      this.#removeItem(getIndex(target));
-    })
-    componentTarget.addEventListener('change', ({ target }) => {
-      if (target.classList.contains('toggle'))
-        this.#toggleItem(getIndex(target));
-      if (target.classList.contains('chip'))
-        this.#selectPriority(getIndex(target), target.value);
-    })
-    componentTarget.addEventListener('dblclick', ({ target }) => {
-      if (!target.classList.contains('label')) return;
-      todoStore.commit(SET_EDITING, getIndex(target));
-    })
-    componentTarget.addEventListener('keydown', ({ target, key }) => {
-      if (!target.classList.contains('edit') || key !== 'Escape') return;
+  setEvent () {
+    const indexOf = target => Number(target.closest('[data-index]').dataset.index);
+    this.addEvent('click', 'destroy', ({ target }) => this.#removeItem(indexOf(target)));
+    this.addEvent('change', 'toggle', ({ target }) => this.#toggleItem(indexOf(target)));
+    this.addEvent('change', 'chip', ({ target }) => this.#selectPriority(indexOf(target), target.value));
+    this.addEvent('dblclick', 'contents', ({ target }) => todoStore.commit(SET_EDITING, indexOf(target)));
+    this.addEvent('keydown', 'editor', ({ key }) => {
+      if (key !== 'Escape') return;
       todoStore.commit(SET_EDITING, -1);
-    })
-    componentTarget.addEventListener('keypress', ({ target, key }) => {
-      if (!target.classList.contains('edit') || key !== 'Enter') return;
+    });
+    this.addEvent('keypress', 'editor', ({ key, target }) => {
+      if (key !== 'Enter') return;
       this.#updateItem(target.value);
-    })
+    });
   }
 }

@@ -1,9 +1,7 @@
-import { Component } from "../core/Component.js";
-import FilterTypes from "../constants/FilterTypes.js";
-import LoadingTypes from "../constants/LoadingTypes.js";
-import { REMOVE_ALL_ITEM, SET_FILTER_TYPE, SET_LOADING_TYPE, todoStore } from "../store/todoStore.js";
-import { userStore } from "../store/userStore.js";
-import { lazyFrame } from "../utils/index.js";
+import { Component } from "../../core/Component.js";
+import FilterTypes from "../../constants/FilterTypes.js";
+import { REMOVE_ALL_ITEM, SET_FILTER_TYPE, todoStore } from "../../store/todoStore.js";
+import { userStore } from "../../store/userStore.js";
 
 const filterButtons = [
   { type: FilterTypes.ALL, text: '전체보기' },
@@ -25,32 +23,31 @@ export const TodoFooter = class extends Component {
     return userStore.$getters.selectedUser?._id;
   }
 
-  render () {
+  template () {
     return `
       <span class="todo-count">총 <strong>${this.#itemCount}</strong> 개</span>
       <ul class="filters">
         ${filterButtons.map(({ type, text }) => `
           <li>
             <a href="#"
-              class="filter-button ${type} ${type === this.#filterType ? 'selected' : ''}"
-              data-filter-type="${type}"
-            >
+               class="${type} ${type === this.#filterType ? 'selected' : ''}"
+               data-filter-type="${type}"
+               data-ref="filter">
               ${text}
             </a>
           </li>
         `).join('')}
       </ul>
-      <button class="clear-completed">모두 삭제</button>
+      <button data-ref="clear" class="clear-completed">모두 삭제</button>
     `;
   }
 
-  setEvent (componentTarget) {
-    componentTarget.addEventListener('click', ({ target }) => {
-      const contain = className => target.classList.contains(className);
-      if (contain('filter-button'))
-        todoStore.commit(SET_FILTER_TYPE, target.dataset.filterType);
-      if (contain('clear-completed'))
-        todoStore.dispatch(REMOVE_ALL_ITEM, this.#user);
-    })
+  setEvent () {
+    this.addEvent('click', 'filter', ({ target }) => {
+      todoStore.commit(SET_FILTER_TYPE, target.dataset.filterType);
+    });
+    this.addEvent('click', 'clear', () => {
+      todoStore.dispatch(REMOVE_ALL_ITEM, this.#user);
+    });
   }
 }
