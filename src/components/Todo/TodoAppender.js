@@ -19,9 +19,11 @@ export const TodoAppender = class extends Component {
   }
 
   setEvent () {
-    this.addEvent('keypress', 'append', target => {
+    this.addEvent('keypress', 'append', ({ key, target }) => {
+      if (key !== 'Enter') return;
+      console.log('test');
       todoStore.dispatch(ADD_ITEM, {
-        user: this.#user,
+        userId: this.#user,
         contents: target.value
       });
       target.value = '';

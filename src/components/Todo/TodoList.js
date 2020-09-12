@@ -32,16 +32,16 @@ export const TodoList = class extends Component {
   #removeItem (index) {
     const { todoItems } = todoStore.$state;
     todoStore.dispatch(REMOVE_ITEM, {
-      user: this.#user,
-      id: todoItems[index]._id,
+      userId: this.#user,
+      itemId: todoItems[index]._id,
     });
   }
 
   #toggleItem (index) {
     const { todoItems } = todoStore.$state;
     todoStore.dispatch(TOGGLE_ITEM, {
-      user: this.#user,
-      id: todoItems[index]._id,
+      userId: this.#user,
+      itemId: todoItems[index]._id,
     });
   }
 
@@ -49,7 +49,7 @@ export const TodoList = class extends Component {
     const { editingItem } = todoStore.$getters;
     editingItem.contents = contents;
     todoStore.dispatch(PUT_ITEM, {
-      user: this.#user,
+      userId: this.#user,
       item: editingItem
     })
   }
@@ -58,8 +58,8 @@ export const TodoList = class extends Component {
     const { todoItems } = todoStore.$state;
     todoItems[index].priority = Number(priority);
     todoStore.dispatch(PUT_PRIORITY_ITEM, {
-      user: this.#user,
-      item: todoItems[index]
+      userId: this.#user,
+      priority: todoItems[index]
     })
   }
 
@@ -73,7 +73,6 @@ export const TodoList = class extends Component {
     if (loading === LoadingTypes.INIT) {
       return loadingArray.map(() => progressTemplate).join('')
     }
-    console.log(editingIndex);
     return items.map(([ index, { _id, contents, isCompleted, priority, isLoading = false } ]) =>
       isLoading ? progressTemplate : `
       <li ${getItemClass(isCompleted, editingIndex === index)} data-index="${index}">

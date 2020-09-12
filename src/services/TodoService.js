@@ -24,7 +24,7 @@ export default Object.freeze({
   },
 
   addItem (userId, contents) {
-    return todoAdapter.get(`/users/${userId}/items`, { contents });
+    return todoAdapter.post(`/users/${userId}/items`, { contents });
   },
 
   putItem (userId, { _id: itemId, contents }) {
