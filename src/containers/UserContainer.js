@@ -1,7 +1,7 @@
 import {Component} from "../core/Component.js";
 
 export const UserContainer = class extends Component {
-  render () {
+  template () {
     return `      
       <h1 id="user-title" data-username="eastjun">
         <span><strong>eastjun</strong>'s Todo List</span>

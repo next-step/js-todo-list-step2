@@ -15,10 +15,10 @@ const App = class extends Component{
     }
   }
 
-  render () {
+  template () {
     return `
       <div data-component="UserContainer"></div>
-      <section data-component="UserContainer" class="todoapp"></section>
+      <section data-component="TodoContainer" class="todoapp"></section>
     `;
   }
 

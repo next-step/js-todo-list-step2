@@ -1,7 +1,7 @@
 import {Component} from "../core/Component.js";
 
 export const TodoContainer = class extends Component {
-  render () {
+  template () {
     return `
       <section class="todoapp">
         <section class="input-container">
