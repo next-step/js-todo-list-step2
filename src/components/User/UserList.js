@@ -14,7 +14,7 @@ export const UserList = class extends Component {
           ${name}
         </button>
       `).join('')}
-      <button class="ripple user-create-button">+ 유저 생성</button>
+      <button data-ref="appender" class="ripple user-create-button">+ 유저 생성</button>
     `;
   }
 
@@ -22,5 +22,10 @@ export const UserList = class extends Component {
     this.addEvent('click', 'select', ({ index }) => {
       this.$props.loadItemsByUser(index);
     })
+    this.addEvent('click', 'appender', () => {
+      const userName = prompt("추가하고 싶은 이름을 입력해주세요.");
+
+    })
+
   }
 }

@@ -5,6 +5,7 @@ import {getQuery} from "../utils/index.js";
 export const SET_USERS = 'SET_USERS';
 export const SET_USER = 'SET_USER';
 export const FETCH_USERS = 'FETCH_USERS';
+export const ADD_USER = 'ADD_USER';
 
 export const userStore = new Store({
   state: {
@@ -26,17 +27,13 @@ export const userStore = new Store({
   },
 
   actions: {
-    [FETCH_USERS] ({ commit }) {
-      return new Promise(async resolve => {
-        const users = await TodoService.fetchUsers();
-        const userId = getQuery('user_id');
-        console.log(userId);
-        const selectedIndex = users.findIndex(({ _id }) => _id === userId);
-        console.log(selectedIndex);
-        commit(SET_USERS, users);
-        commit(SET_USER, selectedIndex);
-        resolve();
-      })
+    async [FETCH_USERS] ({ commit }) {
+      const users = await TodoService.fetchUsers();
+      commit(SET_USERS, users);
+      return users;
+    },
+    [ADD_USER] ({ commit }) {
+
     },
   }
 })

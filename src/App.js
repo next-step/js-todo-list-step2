@@ -1,12 +1,19 @@
 import {Component} from "./core/Component.js";
 import {UserContainer} from "./containers/UserContainer.js";
 import {TodoContainer} from "./containers/TodoContainer.js";
-import {FETCH_USERS, userStore} from "./store/userStore.js";
+import {FETCH_USERS, SET_USER, SET_USERS, userStore} from "./store/userStore.js";
+import {getQuery} from "./utils/index.js";
+import {SET_TODO_ITEMS, todoStore} from "./store/todoStore.js";
 
 const App = class extends Component{
 
   async componentInit () {
-    await userStore.dispatch(FETCH_USERS);
+    const users = await userStore.dispatch(FETCH_USERS);
+    const userId = getQuery('user_id');
+    const selectedIndex = users.findIndex(({ _id }) => _id === userId);
+    userStore.commit(SET_USERS, users);
+    userStore.commit(SET_USER, selectedIndex);
+    todoStore.commit(SET_TODO_ITEMS, users[selectedIndex].todoList);
 
     this.$children = {
       UserContainer: { constructor: UserContainer },
