@@ -2,23 +2,43 @@ import { debounceOneFrame } from "../utils/index.js";
 
 export const Component = class {
 
-  $state = {}; $props; $render;
+  $target; $state = {}; $props = {}; $children;
 
   constructor(target, state, props) {
     this.$props = props;
-    this.$render = debounceOneFrame(() => {
-      target.innerHTML = this.render();
-    });
-    this.setEvent(target);
-    this.setState(state);
+    this.componentInit();
+    this.render();
+    this.componentDidMount();
+    this.setEvent();
   }
 
-  setEvent (target) {}
-  render () { return '' }
+  componentInit () {}
+  componentDidUpdate () {}
+  componentDidMount () {}
+  setEvent () {}
+  template () { return '' }
+
+  render = debounceOneFrame(() => {
+    this.$target.innerHTML = this.template();
+    this.#childrenBuild();
+    this.componentDidUpdate()
+  });
 
   setState (payload) {
     this.$state = { ...this.$state, ...payload };
-    this.$render();
+    this.render();
+  }
+
+  addEvent () {
+
+  }
+
+
+  #childrenBuild () {
+    this.$target.querySelectorAll('[data-component]').forEach(({ target}) => {
+      const { constructor, props } = this.$children[target.dataset.component];
+      new constructor(target, props);
+    })
   }
 
 }
