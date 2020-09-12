@@ -2,7 +2,7 @@ import {Component} from "../../core/Component.js";
 import {PUT_ITEM, PUT_PRIORITY_ITEM, REMOVE_ITEM, SET_EDITING, todoStore, TOGGLE_ITEM} from "../../store/todoStore.js";
 import {userStore} from "../../store/userStore.js";
 import LoadingTypes from "../../constants/LoadingTypes.js";
-import Priority from "../../constants/Priority";
+import Priority from "../../constants/Priority.js";
 
 const loadingArray = [ ...Array(5).keys() ];
 
@@ -61,6 +61,10 @@ export const TodoList = class extends Component {
       user: this.#user,
       item: todoItems[index]
     })
+  }
+
+  componentInit () {
+    this.$stores = [ todoStore, userStore ];
   }
 
   template () {

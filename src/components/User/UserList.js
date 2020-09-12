@@ -19,8 +19,8 @@ export const UserList = class extends Component {
   }
 
   setEvent () {
-    this.addEvent('click', 'select', ({ target }) => {
-      this.$props.loadItemsByUser(Number(target.dataset.index));
+    this.addEvent('click', 'select', ({ index }) => {
+      this.$props.loadItemsByUser(index);
     })
   }
 }

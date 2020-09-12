@@ -23,7 +23,7 @@ export const todoStore = new Store({
     todoItems: [],
     editingIndex: -1,
     filterType: FilterTypes.ALL,
-    loading: LoadingTypes.INIT
+    loading: LoadingTypes.LOADED
   },
 
   mutations: {
@@ -69,8 +69,9 @@ export const todoStore = new Store({
       try {
         if (result.message) throw `${result.message}: ${userId}`;
         const todoItems = result || [];
-        return commit(SET_TODO_ITEMS, todoItems);
+        commit(SET_TODO_ITEMS, todoItems);
       } catch (e) {
+        commit(SET_TODO_ITEMS, []);
         console.error(e);
       }
     },
