@@ -6,7 +6,7 @@ export const Component = class {
   $state = {}
   $props = {};
   $children = {};
-  $stores = {}
+  $stores = [];
 
   constructor($target, $props = {}) {
     this.$target = $target;

@@ -1,7 +1,7 @@
 import {Component} from "../core/Component.js";
 import {UserTitle} from "../components/User/UserTitle.js";
 import {UserList} from "../components/User/UserList.js";
-import {SET_USER, userStore} from "../store/userStore";
+import {SET_USER, userStore} from "../store/userStore.js";
 import {FETCH_ITEMS, SET_LOADING_TYPE, todoStore} from "../store/todoStore.js";
 import LoadingTypes from "../constants/LoadingTypes.js";
 import {lazyFrame} from "../utils/index.js";
