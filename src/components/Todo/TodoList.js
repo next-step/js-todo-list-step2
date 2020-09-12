@@ -73,6 +73,7 @@ export const TodoList = class extends Component {
     if (loading === LoadingTypes.INIT) {
       return loadingArray.map(() => progressTemplate).join('')
     }
+    console.log(editingIndex);
     return items.map(([ index, { _id, contents, isCompleted, priority, isLoading = false } ]) =>
       isLoading ? progressTemplate : `
       <li ${getItemClass(isCompleted, editingIndex === index)} data-index="${index}">

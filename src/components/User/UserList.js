@@ -1,5 +1,5 @@
 import {Component} from "../../core/Component.js";
-import {userStore} from "../../store/userStore.js";
+import {ADD_USER, userStore} from "../../store/userStore.js";
 
 export const UserList = class extends Component {
 
@@ -24,7 +24,7 @@ export const UserList = class extends Component {
     })
     this.addEvent('click', 'appender', () => {
       const userName = prompt("추가하고 싶은 이름을 입력해주세요.");
-
+      userStore.dispatch(ADD_USER, userName);
     })
 
   }

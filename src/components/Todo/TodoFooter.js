@@ -23,6 +23,10 @@ export const TodoFooter = class extends Component {
     return userStore.$getters.selectedUser?._id;
   }
 
+  componentInit () {
+    this.$stores = [ todoStore ];
+  }
+
   template () {
     return `
       <span class="todo-count">총 <strong>${this.#itemCount}</strong> 개</span>

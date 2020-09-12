@@ -32,8 +32,9 @@ export const userStore = new Store({
       commit(SET_USERS, users);
       return users;
     },
-    [ADD_USER] ({ commit }) {
-
+    async [ADD_USER] ({ dispatch }, name) {
+      await TodoService.addUser(name);
+      dispatch(FETCH_USERS);
     },
   }
 })
