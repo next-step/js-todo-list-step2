@@ -1,9 +1,9 @@
-const BASE_URL = "https://js-todo-list-9ca3a.df.r.appspot.com"
+const BASE_URL = "https://js-todo-list-9ca3a.df.r.appspot.com/api";
 
 const METHOD = {
-    GET : 'get',
-    POST : 'post',
-}
+    GET: "get",
+    POST: "post",
+};
 
 class Api {
     constructor(url, method) {
@@ -12,7 +12,7 @@ class Api {
     }
 
     get(url) {
-        this.url = BASE_URL + url
+        this.url = BASE_URL + url;
         this.method = METHOD.GET;
         return this;
     }
@@ -21,41 +21,41 @@ class Api {
         this.url = BASE_URL + url;
         this.method = METHOD.POST;
         this.headers = {
-            'Content-Type': 'application/json',
-        }
+            "Content-Type": "application/json",
+        };
         return this;
     }
 
     headers(headers) {
-        this.headers = headers
+        this.headers = headers;
         return this;
     }
 
     data(body) {
-        this.body = body
+        this.body = JSON.stringify(body);
         return this;
     }
 
     build = async () => {
         try {
-            const {url, ...option} = this;
-            const response = await fetch(url, option)
-            checkSuccess(response.status)
+            const { url, ...option } = this;
+            const response = await fetch(url, option);
+            checkSuccess(response.status);
             return await response.json();
-        } catch(e) {
-            console.error(e)
+        } catch (e) {
+            console.error(e);
         }
-    }
+    };
 }
 
 const checkSuccess = (status) => {
-    if(!isSuccess(status)) {
-        throw new Error(`http request error : status code ${status}`)
+    if (!isSuccess(status)) {
+        throw new Error(`http request error : status code ${status}`);
     }
-}
+};
 
 const isSuccess = (status) => {
-    return status >= 200
-}
+    return status >= 200;
+};
 
 export default Api;
