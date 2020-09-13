@@ -1,8 +1,8 @@
 //  <button class="ripple active">eastjun</button>
 
 export const createUserButton = (id, user, isActive) => `
-  <button class="ripple ${
-    isActive && 'active'
+  <button class="ripple${
+    isActive ? ' active' : ''
   }" data-user-id="${id}">${user}</button>
 `;
 

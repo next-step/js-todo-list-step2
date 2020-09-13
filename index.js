@@ -6,6 +6,7 @@ new App(
   $target,
   {},
   {
+    $userTitle: $target.querySelector('#user-title'),
     $userList: $target.querySelector('#user-list'),
   }
 );

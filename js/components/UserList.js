@@ -1,6 +1,7 @@
 import Component from '../core/Component.js';
-import { API_BASE_URL } from '../constant/index.js';
+import { API_BASE_URL, POST } from '../constant/index.js';
 import State from '../core/State.js';
+import { createFetchOption } from '../util/index.js';
 import {
   createUserButton,
   createUserCreateButton,
@@ -30,19 +31,17 @@ export default class UserList extends Component {
 
     name = name ? name.toString() : '';
 
-    const option = {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ name }),
-    };
-    await fetch(`${API_BASE_URL}/api/users`, option);
-    this.loadUsers();
+    if (1 < name.length) {
+      const option = createFetchOption(POST, { name });
+      await fetch(`${API_BASE_URL}/api/users`, option);
+      this.loadUsers();
+    }
   };
 
   selectUser = (userId) => {
-    this.props.selectUser.value = userId;
+    this.props.activeUser.value = this.#users.value.find(
+      (user) => user._id === userId
+    );
   };
 
   initEventListener = ($target) => {

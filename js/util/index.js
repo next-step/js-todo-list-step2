@@ -3,3 +3,13 @@ export const convert2Html = (str) => {
   $div.innerHTML = str;
   return $div.children[0];
 };
+
+export const createFetchOption = (method, payload) => {
+  return {
+    method: method,
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(payload),
+  };
+};
