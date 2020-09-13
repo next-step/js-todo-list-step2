@@ -8,6 +8,7 @@ function App () {
   const $todoList = document.querySelector('.todo-list')
   const $userTitle = document.querySelector('#user-title')
   const $userList = document.querySelector('#user-list')
+  const $userCreateButton = document.querySelector('.user-create-button')
 
   this.userName = USER.NAME
 
@@ -22,7 +23,7 @@ function App () {
 
   const todoList = new TodoList($todoList, this.userName)
   const todoInput = new TodoInput($todoInput, (text) => { this.addItem(text) })
-  const todoUser = new TodoUser($userTitle, $userList, this.userName, (activeUserName) => { this.setState(activeUserName) })
+  const todoUser = new TodoUser($userTitle, $userCreateButton, $userList, this.userName, (activeUserName) => { this.setState(activeUserName) })
 }
 
 new App()

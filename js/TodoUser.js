@@ -1,8 +1,9 @@
 import { ADDRESS } from './constants.js'
 
-export default function TodoUser ($userTitle, $userList, userName, setActiveUser) {
+export default function TodoUser ($userTitle, $userCreateButton, $userList, userName, setActiveUser) {
   this.$userTitle = $userTitle
   this.$userList = $userList
+  this.$userCreateButton = $userCreateButton
   this.userName = userName
   this.userList = []
 
@@ -16,6 +17,10 @@ export default function TodoUser ($userTitle, $userList, userName, setActiveUser
         this.bindEvents()
       })
   }
+  
+  const onUserCreateHandler = () => {
+    const userName = prompt("추가하고 싶은 이름을 입력해주세요.");
+  }
 
   this.setState = (activeUserName) => {
     this.userName = activeUserName
@@ -25,9 +30,14 @@ export default function TodoUser ($userTitle, $userList, userName, setActiveUser
 
   this.bindEvents = () => {
     document.querySelectorAll('.ripple').forEach(($item) => {
-      $item.addEventListener('click', (e) => {
-        this.userName = e.target.innerText
-        this.setState(this.userName)
+      $item.addEventListener('click', ({target}) => {
+        if (target.classList.contains('user-create-button')){
+          onUserCreateHandler();
+        }
+        else{
+          this.userName = target.innerText
+          this.setState(this.userName)
+        }  
       })
     })
   }
@@ -39,7 +49,7 @@ export default function TodoUser ($userTitle, $userList, userName, setActiveUser
     this.userList.map(({ name }) => {
       result += `<button class="ripple ${this.userName === name && 'active'}">${name}</button>`
     }).join('')
-    this.$userList.innerHTML = result
+    this.$userList.innerHTML = result + `<button class="ripple user-create-button">+ 유저 생성</button>`
   }
 
   this.getUsers()

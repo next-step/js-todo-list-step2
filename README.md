@@ -258,10 +258,13 @@ live-server 폴더명
 This project is [MIT](https://github.com/next-step/js-todo-list-step3/blob/master/LICENSE) licensed.
 
 
-
+---
 ## 2기
 ### 🙏 피드백
 - https://github.com/next-step/js-todo-list-step2/pull/13#discussion_r476359352
 
 ### 🐞 버그
-- [ ] 엔터를 한번 눌렀는데 TodoInput 이벤트가 두번 호출되는 경우?
+- 엔터를 한번 눌렀는데 TodoInput 이벤트가 두번 호출되는 경우?
+
+## 3기
+

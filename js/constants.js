@@ -5,7 +5,7 @@ export const USER = {
 
 export const KEY = {
   ENTER: 'Enter',
-  ESC: 'Esc'
+  ESC: 'Escape'
 }
 
 export const ADDRESS = {
