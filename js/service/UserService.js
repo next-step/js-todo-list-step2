@@ -93,9 +93,9 @@ export const UserService = class {
     let findItem = todoList.find((item) => item._id === itemId);
     findItem.isCompleted = !findItem.isCompleted;
     await this.#todoRepository.modifyTodoItemComplete(
-      _id,
-      itemId,
-      findItem.isCompleted
+        _id,
+        itemId,
+        findItem.isCompleted
     );
     this.#subject.notify();
   };

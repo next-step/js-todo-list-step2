@@ -1,7 +1,5 @@
 export const templates = {
-
     todoItem({ _id, contents, isCompleted, priority }) {
-        debugger
         return `<li data-todo-idx="${_id}" class="${isCompleted ? "completed" : ""}">
           <div class="view">
             <input class="toggle" type="checkbox" ${isCompleted ? "checked" : ""} />
