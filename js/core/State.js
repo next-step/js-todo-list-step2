@@ -2,9 +2,9 @@ export default class State {
   #renders;
   #value;
 
-  constructor(initialValue) {
+  constructor(initialValue, render) {
     this.#value = initialValue;
-    this.#renders = [];
+    this.#renders = [render];
   }
 
   subscribe = (render) => {

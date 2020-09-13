@@ -9,8 +9,8 @@ export default class App extends Component {
 
     super($target, $props);
 
-    this.selectedUser = new State('');
+    this.activeUser = new State('', this.render);
 
-    new UserList($userList, { selectedUser: this.selectedUser });
+    new UserList($userList, { activeUser: this.activeUser });
   }
 }
