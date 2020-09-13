@@ -154,6 +154,9 @@
 |PUT|/api/users/:userId/items/:itemId|
 ```javascript
 {
+ requestBody: {
+   "contents": "string"
+ },
  response: {
   "_id": "string",
    "contents": "string",
@@ -170,6 +173,9 @@
 |PUT|/api/users/:userId/items/:itemId/priority|
 ```javascript
 {
+ requestBody: {
+   "priority": "string" // 'NONE', 'FIRST', 'SECOND'
+ },
  response: {
    "_id": "string",
    "contents": "string",
