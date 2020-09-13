@@ -1,6 +1,8 @@
 import Component from '../core/Component.js';
 import { API_BASE_URL } from '../constant/index.js';
 import State from '../core/State.js';
+import { createUserButton } from '../templates/userButton.js';
+import { convert2Html } from '../util/index.js';
 
 export default class UserList extends Component {
   #users;
@@ -12,12 +14,12 @@ export default class UserList extends Component {
 
     this.initEventListener($target);
     this.loadUsers();
-    this.render();
   }
 
   loadUsers = async () => {
     const data = await (await fetch(`${API_BASE_URL}/api/users`)).json();
     if (data instanceof Array) this.#users.value = data;
+    this.render();
   };
 
   createUser = () => {
@@ -32,5 +34,13 @@ export default class UserList extends Component {
     });
   };
 
-  render = () => {};
+  render = () => {
+    const users = this.#users.value;
+    console.log(users);
+
+    users.forEach(({ name }) => {
+      const $userBtn = convert2Html(createUserButton(name));
+      this.$target.prepend($userBtn);
+    });
+  };
 }
