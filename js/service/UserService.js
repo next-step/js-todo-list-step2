@@ -1,4 +1,4 @@
-import constant from "../data/constant";
+import constant from "../data/constant.js";
 
 /**
  * 1. 유저생성 메서드 = addUser
@@ -123,17 +123,24 @@ export const UserService = class {
 
   getTodoListCount = () => {
     let todoList = this.#selectedUser.todoList;
+    let cnt = 0;
     //all, active, complete
     let footertab = constant.FOOTER_TAB;
     switch (this.#filterTab) {
       case footertab.ACTIVE:{
-        break;
-      }
-      case footertab.COMPLETED:{
-        break;
+        todoList.forEach(todo => {
+            if (!todo.isCompleted) cnt++;
+        })
+        return cnt;
+    }
+    case footertab.COMPLETED:{
+        todoList.forEach(todo => {
+            if (todo.isCompleted) cnt++;
+        })
+        return cnt;
       }
       default:{
-        break;
+        return todoList.length;
       }
     }
   };
