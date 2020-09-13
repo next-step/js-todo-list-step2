@@ -1,14 +1,15 @@
 export const templates = {
 
     todoItem({ _id, contents, isCompleted, priority }) {
+        debugger
         return `<li data-todo-idx="${_id}" class="${isCompleted ? "completed" : ""}">
           <div class="view">
             <input class="toggle" type="checkbox" ${isCompleted ? "checked" : ""} />
             <label class="label">
-              <select class="chip ${priority === "FIRST" ? "primary" : priority === "SECOND" ? "secondary" : "select"}">
-                <option value="0" ${priority === "NONE" ? "selected" : ""}>순위</option>
-                <option value="1" ${priority === "FIRST" ? "selected" : ""}>1순위</option>
-                <option value="2" ${priority === "SECOND" ? "selected" : ""}>2순위</option>
+              <select class="chip ${(priority === "FIRST") ? "primary" : (priority === "SECOND") ? "secondary" : "select"}">
+                <option value="0" ${(priority === "NONE") ? "selected" : ""}>순위</option>
+                <option value="1" ${(priority === "FIRST") ? "selected" : ""}>1순위</option>
+                <option value="2" ${(priority === "SECOND") ? "selected" : ""}>2순위</option>
               </select>
               <span class="label-content">${contents}</span>
             </label>
