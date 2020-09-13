@@ -24,5 +24,4 @@ export const Repository = class {
         if(after)after();
         return response;
     }
-
 }

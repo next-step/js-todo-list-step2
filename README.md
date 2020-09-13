@@ -13,7 +13,6 @@
 - [ ] 6. todoItem 삭제하기
 - [ ] 7. todoItem contents 내용 수정하기
 
-
 ## 🎯🎯 심화 요구사항
 
 - [ ] 1. 데이터를 불러오기전 로딩바를 이용해, 사용자가 데이터가 불러와지고 있다는 것을 보여줍니다.
@@ -31,9 +30,9 @@
 
 ### User list 불러오기
 
-| method | uri |
-|---|---|
-|GET|/api/users|
+| method | uri        |
+| ------ | ---------- |
+| GET    | /api/users |
 
 ```javascript
 {
@@ -43,9 +42,9 @@
 
 ### User 추가하기
 
-| method | uri |
-|---|---|
-|POST|/api/users|
+| method | uri        |
+| ------ | ---------- |
+| POST   | /api/users |
 
 ```javascript
 {
@@ -62,9 +61,9 @@
 
 ### User 불러오기
 
-| method | uri |
-|---|---|
-|GET|/api/users/:userId|
+| method | uri                |
+| ------ | ------------------ |
+| GET    | /api/users/:userId |
 
 ```javascript
 {
@@ -78,37 +77,35 @@
 
 ### User 삭제하기
 
-| method | uri |
-|---|---|
-|DELETE|/api/users/:userId|
+| method | uri                |
+| ------ | ------------------ |
+| DELETE | /api/users/:userId |
 
 ```javascript
 {
- response: {}
+  response: {
+  }
 }
 ```
 
 ### User의 Todo Item 불러오기
 
-| method | uri |
-|---|---|
-|GET|/api/users/:userId/items/|
+| method | uri                       |
+| ------ | ------------------------- |
+| GET    | /api/users/:userId/items/ |
+
 ```javascript
 {
- response: {
-   "_id": "string",
-   "name": "string",
-   "todoList": [...]
-  }
+ response: [...]
 }
 ```
 
-
 ### User의 Todo Item 추가하기
 
-| method | uri |
-|---|---|
-|POST|/api/users/:userId/items/|
+| method | uri                       |
+| ------ | ------------------------- |
+| POST   | /api/users/:userId/items/ |
+
 ```javascript
 {
  requestBody: {
@@ -122,12 +119,12 @@
 }
 ```
 
-
 ### User의 Todo Item 전부 삭제하기
 
-| method | uri |
-|---|---|
-|DELETE|/api/users/:userId/items/|
+| method | uri                       |
+| ------ | ------------------------- |
+| DELETE | /api/users/:userId/items/ |
+
 ```javascript
 {
  response: {
@@ -140,9 +137,10 @@
 
 ### User의 Todo Item 1개 삭제하기
 
-| method | uri |
-|---|---|
-|DELETE|/api/users/:userId/items/:itemId|
+| method | uri                              |
+| ------ | -------------------------------- |
+| DELETE | /api/users/:userId/items/:itemId |
+
 ```javascript
 {
  response: {
@@ -155,11 +153,15 @@
 
 ### User의 Todo Item 내용 수정하기
 
-| method | uri |
-|---|---|
-|PUT|/api/users/:userId/items/:itemId|
+| method | uri                              |
+| ------ | -------------------------------- |
+| PUT    | /api/users/:userId/items/:itemId |
+
 ```javascript
 {
+ requestBody: {
+   "contents": "string"
+ },
  response: {
   "_id": "string",
    "contents": "string",
@@ -171,11 +173,15 @@
 
 ### User의 Todo Item 우선순위 수정하기
 
-| method | uri |
-|---|---|
-|PUT|/api/users/:userId/items/:itemId/priority|
+| method | uri                                       |
+| ------ | ----------------------------------------- |
+| PUT    | /api/users/:userId/items/:itemId/priority |
+
 ```javascript
 {
+ requestBody: {
+   "priority": "string" // 'NONE', 'FIRST', 'SECOND'
+ },
  response: {
    "_id": "string",
    "contents": "string",
@@ -184,13 +190,13 @@
   }
 }
 ```
-
 
 ### User의 Todo Item complete toggle
 
-| method | uri |
-|---|---|
-|PUT|/api/users/:userId/items/:itemId/toggle|
+| method | uri                                     |
+| ------ | --------------------------------------- |
+| PUT    | /api/users/:userId/items/:itemId/toggle |
+
 ```javascript
 {
  response: {
@@ -201,18 +207,18 @@
   }
 }
 ```
-
 
 <br/><br/>
 
 # ☕️ 코드리뷰 모임 - Black Coffee
+
 <br>
 
 > '훌륭한 의사소통은 블랙커피처럼 자극적이며, 후에 잠들기가 어렵다'. <br> A.M. 린드버그(미국의 작가, 수필가) -
 
 <br>
 
-블랙커피처럼 서로를 자극해주고, 동기부여 해주며, 그 성장과정으로 인해 의미있는 가치를 만들어내고자 하는   
+블랙커피처럼 서로를 자극해주고, 동기부여 해주며, 그 성장과정으로 인해 의미있는 가치를 만들어내고자 하는  
 **프론트엔드 코드리뷰 모임** ☕️ **Black Coffee**입니다.
 
 <br>
@@ -236,14 +242,17 @@ live-server 폴더명
 <br>
 
 ## 👨‍💻 Code Review 👩‍💻
-아래 링크들에 있는 리뷰 가이드를 보고, 좋은 코드 리뷰 문화를 만들어 나가려고 합니다.  
+
+아래 링크들에 있는 리뷰 가이드를 보고, 좋은 코드 리뷰 문화를 만들어 나가려고 합니다.
+
 - [코드리뷰 가이드1](https://edykim.com/ko/post/code-review-guide/)
 - [코드리뷰 가이드2](https://wiki.lucashan.space/code-review/01.intro.html#_1-code%EB%A5%BC-%EB%A6%AC%EB%B7%B0%ED%95%98%EB%8A%94-%EC%82%AC%EB%9E%8C%EB%93%A4%EC%9D%80-%EC%96%B4%EB%96%A4%EA%B2%83%EC%9D%84-%EC%A4%91%EC%A0%90%EC%A0%81%EC%9C%BC%EB%A1%9C-%EC%82%B4%ED%8E%B4%EC%95%BC%ED%95%98%EB%8A%94%EA%B0%80)
 
 <br>
 
 ## 👏 Contributing
-만약 미션 수행 중에 개선사항이 보인다면, 언제든 자유롭게 PR을 보내주세요. 
+
+만약 미션 수행 중에 개선사항이 보인다면, 언제든 자유롭게 PR을 보내주세요.
 
 <br>
 
@@ -256,6 +265,3 @@ live-server 폴더명
 ## 📝 License
 
 This project is [MIT](https://github.com/next-step/js-todo-list-step3/blob/master/LICENSE) licensed.
-
-
-

@@ -1,0 +1,22 @@
+{
+  "name": "js-todo-list-step2-pair",
+  "version": "1.0.0",
+  "description": "이번 미션은 Ajax를 이용하여 TodoList를 발전시키는 미션입니다. 비동기 통신으로 데이터를 관리할 경우 자바스크립트의 비동기라는 특성을 더욱 깊이있게 이해할 수 있습니다",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/next-step/js-todo-list-step2.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/next-step/js-todo-list-step2/issues"
+  },
+  "homepage": "https://github.com/next-step/js-todo-list-step2#readme",
+  "dependencies": {
+    "prettier": "^2.1.1"
+  }
+}
