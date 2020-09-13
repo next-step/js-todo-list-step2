@@ -15,9 +15,11 @@ export const TodoFooter = class extends Observer{
     }
 
     setState(){
-        /*super.setState({
-            count:this._service.getTodoListCount(), type:
-        })*/
+        debugger;
+        super.setState({
+            count: this._service.getTodoListCount(),
+            // type: this._service.getFilterType()
+        })
     }
     render(){
 

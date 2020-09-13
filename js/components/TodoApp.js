@@ -65,5 +65,5 @@ const todoapp = new TodoApp({
     userListTarget: document.querySelector("#user-list"),
     todoInputTarget: document.querySelector(".input-container"),
     todoListTarget: document.querySelector(".todo-list"),
-    todoFooterTarget: document.getElementById(".count-container")
+    todoFooterTarget: document.querySelector(".count-container")
 });
