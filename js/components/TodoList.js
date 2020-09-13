@@ -16,7 +16,7 @@ export const TodoList = class extends Observer {
             }
         });
         this._target.addEventListener('change', ({ target }) => {
-            if (target) {
+            if (target && target.tagName==="SELECT") {
                 this.#changePriority(target);
             }
         });

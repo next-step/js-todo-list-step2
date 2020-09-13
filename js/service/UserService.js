@@ -1,3 +1,5 @@
+import constant from "../data/constant";
+
 /**
  * 1. 유저생성 메서드 = addUser
  * 2. 유저삭제 메서드 = deleteUser
@@ -13,6 +15,7 @@ export const UserService = class {
   #userList;
   #selectedUser;
   #subject;
+  #filterTab=constant.FOOTER_TAB.ALL;
 
   constructor(repository, subject) {
     if (repository) {
@@ -116,6 +119,23 @@ export const UserService = class {
   findTodoItem = (itemId) => {
     let todoList = this.#selectedUser.todoList;
     return todoList.find((item) => item._id === itemId);
+  };
+
+  getTodoListCount = () => {
+    let todoList = this.#selectedUser.todoList;
+    //all, active, complete
+    let footertab = constant.FOOTER_TAB;
+    switch (this.#filterTab) {
+      case footertab.ACTIVE:{
+        break;
+      }
+      case footertab.COMPLETED:{
+        break;
+      }
+      default:{
+        break;
+      }
+    }
   };
 
   #decodePriority(priority) {

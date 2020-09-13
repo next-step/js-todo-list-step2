@@ -12,7 +12,6 @@ import constant from "../data/constant.js";
 export const TodoApp = class extends Subject {
     #todoRepository;
     #userService;
-    #filterTab=constant.FOOTER_TAB.ALL;
 
     constructor({
                     userTitleTarget,
