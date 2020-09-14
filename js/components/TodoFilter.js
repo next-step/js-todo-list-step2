@@ -24,7 +24,9 @@ export default class TodoFilter extends Component {
   };
 
   initEventListener = () => {
-    this.$target.addEventListener('click', ({ target }) => {
+    this.$target.addEventListener('click', (e) => {
+      e.preventDefault();
+      const { target } = e;
       this.$filters.forEach(($filter) => {
         if (target === $filter) {
           this.props.filterType.value = $filter.dataset.type;
