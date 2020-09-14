@@ -52,7 +52,9 @@ export default class App extends Component {
       activeUser: this.activeUser,
       addTodo: this.addTodo,
     });
-    new TodoCount($todoCount);
+    new TodoCount($todoCount, {
+      todoList: this.todoList,
+    });
     new TodoFilter($todoFilter, {
       filterType: this.filterType,
     });
@@ -103,7 +105,6 @@ export default class App extends Component {
   filterTodoList = () => {
     const todoList = this.activeUser.value.todoList || [];
 
-    console.log(this.filterType.value);
     return todoList.filter((todoItem) => {
       if (todoItem.isCompleted && this.filterType.value === COMPLETED)
         return true;
