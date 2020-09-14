@@ -47,6 +47,7 @@ export default class App extends Component {
     new UserTitle($userTitle, { activeUser: this.activeUser });
     new TodoList($todoList, {
       todoList: this.todoList,
+      editTodo: this.editTodo,
       completeTodo: this.completeTodo,
       deleteTodo: this.deleteTodo,
     });
@@ -74,6 +75,21 @@ export default class App extends Component {
     this.activeUser.value = {
       ...this.activeUser.value,
       todoList: this.activeUser.value.todoList.concat(await data.json()),
+    };
+  };
+
+  editTodo = async (targetItemId, contents) => {
+    const option = createFetchOption(PUT, { contents });
+    const data = await fetch(
+      `${API_BASE_URL}/api/users/${this.activeUser.value._id}/items/${targetItemId}`,
+      option
+    );
+    this.activeUser.value = {
+      ...this.activeUser.value,
+      todoList: this.activeUser.value.todoList.map((todoItem) => {
+        if (todoItem._id === targetItemId) todoItem.contents = contents;
+        return todoItem;
+      }),
     };
   };
 

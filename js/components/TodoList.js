@@ -23,6 +23,18 @@ export default class TodoList extends Component {
       else if (target.classList.contains('destroy'))
         this.props.deleteTodo($li.dataset.key);
     });
+    this.$target.addEventListener('dblclick', ({ target }) => {
+      if (target.classList.contains('label')) {
+        const $li = target.closest('li');
+        $li.classList.add('editing');
+      }
+    });
+    this.$target.addEventListener('keyup', ({ target, key }) => {
+      const $li = target.closest('li');
+      if (key === 'Enter' && $li.classList.contains('editing')) {
+        this.props.editTodo($li.dataset.key, target.value);
+      }
+    });
   }
 
   render = () => {
