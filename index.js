@@ -8,5 +8,6 @@ new App(
   {
     $userTitle: $target.querySelector('#user-title'),
     $userList: $target.querySelector('#user-list'),
+    $todoList: $target.querySelector('.todo-list'),
   }
 );

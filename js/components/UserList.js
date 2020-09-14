@@ -30,7 +30,6 @@ export default class UserList extends Component {
     let name = prompt('추가하고 싶은 이름을 입력해주세요.');
 
     name = name ? name.toString() : '';
-
     if (1 < name.length) {
       const option = createFetchOption(POST, { name });
       await fetch(`${API_BASE_URL}/api/users`, option);
@@ -38,9 +37,9 @@ export default class UserList extends Component {
     }
   };
 
-  selectUser = (userId) => {
+  selectUser = (targetId) => {
     this.props.activeUser.value = this.#users.value.find(
-      (user) => user._id === userId
+      (user) => user._id === targetId
     );
   };
 

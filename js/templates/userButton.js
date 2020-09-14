@@ -1,5 +1,3 @@
-//  <button class="ripple active">eastjun</button>
-
 export const createUserButton = (id, user, isActive) => `
   <button class="ripple${
     isActive ? ' active' : ''

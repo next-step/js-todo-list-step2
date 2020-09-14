@@ -6,7 +6,7 @@ export const convert2Html = (str) => {
 
 export const createFetchOption = (method, payload) => {
   return {
-    method: method,
+    method,
     headers: {
       'Content-Type': 'application/json',
     },
