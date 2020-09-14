@@ -26,3 +26,22 @@ export default class State {
     }
   }
 }
+
+export class ComputedState extends State {
+  #value;
+
+  constructor(value, render, dependencies) {
+    super(value(), render);
+
+    const handler = () => {
+      this.#value = value();
+      this.renderAll();
+    };
+
+    dependencies.forEach((dependency) => dependency.subscribe(handler));
+  }
+
+  get value() {
+    return this.#value;
+  }
+}

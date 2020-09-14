@@ -11,5 +11,6 @@ new App(
     $todoList: $target.querySelector('.todo-list'),
     $todoInput: $target.querySelector('.new-todo'),
     $todoCount: $target.querySelector('.todo-count'),
+    $todoFilter: $target.querySelector('.filters'),
   }
 );

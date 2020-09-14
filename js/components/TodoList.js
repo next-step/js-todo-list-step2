@@ -5,7 +5,7 @@ import createLoadingBar from '../templates/loadingBar.js';
 export default class TodoList extends Component {
   constructor($target, props) {
     super($target, props);
-    this.props.activeUser.subscribe(this.render);
+    this.props.todoList.subscribe(this.render);
     this.initEventListener();
     this.render();
   }
@@ -26,8 +26,8 @@ export default class TodoList extends Component {
   }
 
   render = () => {
-    if (this.props.activeUser.value._id) {
-      const { todoList } = this.props.activeUser.value;
+    if (!!this.props.todoList.value) {
+      const todoList = this.props.todoList.value;
 
       this.$target.innerHTML = '';
       todoList.forEach(

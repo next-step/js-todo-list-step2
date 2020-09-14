@@ -1,15 +1,26 @@
-import { API_BASE_URL } from '../constant/index.js';
+import {
+  ALL,
+  ACTIVE,
+  COMPLETED,
+  API_BASE_URL,
+  DELETE,
+  POST,
+  PUT,
+} from '../constant/index.js';
 import { createFetchOption } from '../util/index.js';
 import Component from '../core/Component.js';
-import State from '../core/State.js';
+import State, { ComputedState } from '../core/State.js';
 import UserList from './UserList.js';
 import UserTitle from './UserTitle.js';
 import TodoList from './TodoList.js';
 import TodoInput from './TodoInput.js';
 import TodoCount from './TodoCount.js';
+import TodoFilter from './TodoFilter.js';
 
 export default class App extends Component {
   activeUser;
+  filterType;
+  todoLIst;
 
   constructor($target, $props, $children) {
     const {
@@ -18,17 +29,22 @@ export default class App extends Component {
       $todoList,
       $todoInput,
       $todoCount,
+      $todoFilter,
     } = $children;
 
     super($target, $props);
 
     this.activeUser = new State({}, this.render);
-    // this.computedTodoList = new ComputedState();
+    this.filterType = new State(ALL, this.render);
+    this.todoList = new ComputedState(this.filterTodoList, this.render, [
+      this.activeUser,
+      this.filterType,
+    ]);
 
     new UserList($userList, { activeUser: this.activeUser });
     new UserTitle($userTitle, { activeUser: this.activeUser });
     new TodoList($todoList, {
-      activeUser: this.activeUser,
+      todoList: this.todoList,
       completeTodo: this.completeTodo,
       deleteTodo: this.deleteTodo,
     });
@@ -37,10 +53,13 @@ export default class App extends Component {
       addTodo: this.addTodo,
     });
     new TodoCount($todoCount);
+    new TodoFilter($todoFilter, {
+      filterType: this.filterType,
+    });
   }
 
   addTodo = async (contents) => {
-    const option = createFetchOption('POST', { contents });
+    const option = createFetchOption(POST, { contents });
     const data = await fetch(
       `${API_BASE_URL}/api/users/${this.activeUser.value._id}/items/`,
       option
@@ -52,7 +71,7 @@ export default class App extends Component {
   };
 
   completeTodo = async (targetItemId) => {
-    const option = createFetchOption('PUT');
+    const option = createFetchOption(PUT);
     await fetch(
       `${API_BASE_URL}/api/users/${this.activeUser.value._id}/items/${targetItemId}/toggle`,
       option
@@ -68,7 +87,7 @@ export default class App extends Component {
   };
 
   deleteTodo = async (targetItemId) => {
-    const option = createFetchOption('DELETE');
+    const option = createFetchOption(DELETE);
     await fetch(
       `${API_BASE_URL}/api/users/${this.activeUser.value._id}/items/${targetItemId}`,
       option
@@ -79,5 +98,18 @@ export default class App extends Component {
         (todoItem) => todoItem._id !== targetItemId
       ),
     };
+  };
+
+  filterTodoList = () => {
+    const todoList = this.activeUser.value.todoList || [];
+
+    console.log(this.filterType.value);
+    return todoList.filter((todoItem) => {
+      if (todoItem.isCompleted && this.filterType.value === COMPLETED)
+        return true;
+      else if (!todoItem.isCompleted && this.filterType.value === ACTIVE)
+        return true;
+      else if (this.filterType.value === ALL) return true;
+    });
   };
 }
