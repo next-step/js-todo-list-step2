@@ -1,7 +1,10 @@
-const onUserCreateHandler = () => {
-    const userName = prompt('추가하고 싶은 이름을 입력해주세요.');
+const events = [];
+
+export const registerEvent = (event) => {
+  events.push(event);
 };
 
-const userCreateButton = document.querySelector('.user-create-button');
-userCreateButton.addEventListener('click', onUserCreateHandler);
-
+export const setEvent = () => {
+    for (const event of events)
+        event();
+};
