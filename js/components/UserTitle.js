@@ -1,5 +1,4 @@
 import { Observer } from "../observer/Observer.js";
-import { templates } from "../data/templates.js";
 
 export const UserTitle = class extends Observer {
 
@@ -7,9 +6,9 @@ export const UserTitle = class extends Observer {
         super.setState({name: this._service.getSelectedUser().name});
     }
 
-    render() {
+    template() {
         const { name } = this._state;
-        this._target.innerHTML = templates.userTitle(name);
+        return `<span><strong>${name}</strong>'s Todo List</span>`;
     }
 }
 

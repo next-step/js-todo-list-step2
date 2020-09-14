@@ -1,5 +1,5 @@
 import { Observer } from "../observer/Observer.js";
-import templates from "../data/templates.js";
+import { Priorities } from "../data/constant.js";
 
 export const TodoList = class extends Observer {
 
@@ -16,7 +16,7 @@ export const TodoList = class extends Observer {
             }
         });
         this._target.addEventListener('change', ({ target }) => {
-            if (target) {
+            if (target && target.tagName==="SELECT") {
                 this.#changePriority(target);
             }
         });
@@ -38,27 +38,27 @@ export const TodoList = class extends Observer {
     }
 
     #getItem(target) {
-        let $li = target.closest("li");
+        const $li = target.closest("li");
         return { $li, itemId: $li.dataset["todoIdx"] }
     }
 
     #destroy(target) {
-        let { itemId } = this.#getItem(target);
+        const { itemId } = this.#getItem(target);
         this._service.deleteItem(itemId);
     }
 
     #toggle(target) {
-        let { itemId } = this.#getItem(target);
+        const { itemId } = this.#getItem(target);
         this._service.toggleItem(itemId)
     }
 
     #modifyStart(target) {
-        let { $li } = this.#getItem(target);
+        const { $li } = this.#getItem(target);
         $li.classList.add("editing");
     }
 
     #undo(target) {
-        let { $li } = this.#getItem(target);
+        const { $li } = this.#getItem(target);
         target.value = $li.querySelector(".label-content").textContent;
         $li.classList.remove("editing");
     }
@@ -79,15 +79,35 @@ export const TodoList = class extends Observer {
     }
 
     setState() {
-        let { todoList } = this._service.getSelectedUser();
+        const todoList = this._service.currentFilteredTodoList();
         super.setState({ todoList });
     }
 
 
-    render() {
+    /*render() {
         const { todoList } = this._state;
         if (todoList)
             this._target.innerHTML = todoList.map(item => templates.todoItem(item))
+    }*/
+    template() {
+        const { todoList } = this._state;
+        return todoList.map(({ _id, contents, isCompleted, priority })=> {
+            return `<li data-todo-idx="${_id}" class="${isCompleted ? "completed" : ""}">
+                      <div class="view">
+                        <input class="toggle" type="checkbox" ${isCompleted ? "checked" : ""} />
+                        <label class="label">
+                          <select class="chip ${priority === Priorities.FIRST ? "primary" : priority === Priorities.SECOND ? "secondary" : "select"}">
+                            <option value="0" ${priority === Priorities.NONE ? "selected" : ""}>순위</option>
+                            <option value="1" ${priority === Priorities.FIRST ? "selected" : ""}>1순위</option>
+                            <option value="2" ${priority === Priorities.SECOND ? "selected" : ""}>2순위</option>
+                          </select>
+                          <span class="label-content">${contents}</span>
+                        </label>
+                        <button class="destroy"></button>
+                      </div>
+                      <input class="edit" value="${contents}" />
+                    </li>`;
+        })
     }
 }
 

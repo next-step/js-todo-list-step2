@@ -4,15 +4,14 @@ import { UserList } from "./UserList.js";
 import { TodoInput } from "./TodoInput.js";
 import { TodoList } from "./TodoList.js";
 import { TodoFooter } from "./TodoFooter.js";
-import { TodoRepository } from "../repository/TodoRepository.js";
+import { TodoHttpClient } from "../repository/TodoHttpClient.js";
 import { UserService } from "../service/UserService.js";
-import constant from "../data/constant.js";
+import { FooterTab } from "../data/constant.js";
 
 
 export const TodoApp = class extends Subject {
     #todoRepository;
     #userService;
-    #filterTab=constant.FOOTER_TAB.ALL;
 
     constructor({
                     userTitleTarget,
@@ -22,7 +21,7 @@ export const TodoApp = class extends Subject {
                     todoFooterTarget,
                 }) {
         super();
-        this.#todoRepository = new TodoRepository();
+        this.#todoRepository = new TodoHttpClient();
         this.#userService = new UserService(this.#todoRepository, this);
         this.init({
             userTitleTarget,
@@ -35,29 +34,18 @@ export const TodoApp = class extends Subject {
     }
     init = async (_) => {
         await this.#userService.setup();
-        let userTitle = new UserTitle(_.userTitleTarget, this);
-        let userList = new UserList(_.userListTarget, this);
-        let todoInput = new TodoInput(_.todoInputTarget, this);
-        let todoList = new TodoList(_.todoListTarget, this);
-        let todoFooter = new TodoFooter(_.todoFooterTarget, this);
-
         this.addObservers(
-            userTitle,
-            userList,
-            todoInput,
-            todoList,
-            todoFooter
+            new UserTitle(_.userTitleTarget, this),
+            new UserList(_.userListTarget, this),
+            new TodoInput(_.todoInputTarget, this),
+            new TodoList(_.todoListTarget, this),
+            new TodoFooter(_.todoFooterTarget, this)
         );
         this.notify();
     }
 
-    getRepository = () => {
-        return this.#todoRepository;
-    }
-
-    getService = () =>{
-        return this.#userService;
-    }
+    get repository(){return this.#todoRepository;}
+    get service() {return this.#userService;}
 
 };
 
@@ -66,5 +54,5 @@ const todoapp = new TodoApp({
     userListTarget: document.querySelector("#user-list"),
     todoInputTarget: document.querySelector(".input-container"),
     todoListTarget: document.querySelector(".todo-list"),
-    todoFooterTarget: document.getElementById(".count-container")
+    todoFooterTarget: document.querySelector(".count-container")
 });

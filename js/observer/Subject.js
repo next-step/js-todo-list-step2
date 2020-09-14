@@ -6,10 +6,10 @@ export const Subject = class {
     }
 
     addObservers(...observers) {
-        observers.forEach(this.addObserver);
+        observers.forEach(this.#addObserver);
     }
 
-    addObserver = (observer) => {
+    #addObserver = (observer) => {
         this.#observers.add(observer);
     };
 

@@ -7,17 +7,21 @@
  * 6. 유저의 todoList에 todoItem 수정하기(완료|수정|우선순위)= updateItem
  *
  */
+import { FooterTab, Priorities } from "../data/constant.js";
 
 
 export const UserService = class {
-    #todoRepository;
+    #todoHttpClient;
     #userList;
     #selectedUser;
     #subject
+    #filterTab=FooterTab.ALL;
+    #filteredTodoList = []
 
-    constructor(repository, subject) {
-        if (repository) {
-            this.#todoRepository = repository;
+
+    constructor(httpClient, subject) {
+        if (httpClient) {
+            this.#todoHttpClient = httpClient;
         }
         this.#subject = subject;
     }
@@ -26,8 +30,29 @@ export const UserService = class {
         await this.updateUserList();
     }
 
+    currentFilterTab = () => this.#filterTab;
+    currentFilteredTodoList = () => this.#filteredTodoList;
+
+    #filtering(){
+        const condition = this.#filterTab === "active"
+            ? (item)=>item.isCompleted === false
+            : this.#filterTab === "completed"
+                ? (item)=>item.isCompleted === true
+                : ()=>true;
+        this.#filteredTodoList = this.#selectedUser.todoList.filter(condition);
+
+    }
+
+    switchTap(type) {
+        if (this.#filterTab !== type) {
+            this.#filterTab = type;
+            this.#filtering();
+            this.#subject.notify();
+        }
+    }
+
     updateUserList = async () => {
-        this.#userList = await this.#todoRepository.findUsers();
+        this.#userList = await this.#todoHttpClient.findUsers();
         if (this.#userList.length > 0) {
             this.changeSelectedUser(this.#userList[0]);
         }
@@ -35,10 +60,11 @@ export const UserService = class {
 
     changeSelectedUser = (user) => {
         this.#selectedUser = user;
+        this.#filtering();
         this.#subject.notify();
     }
     changeSelectedUserById = (userId) => {
-        let findUser = this.#userList.find(user => user._id === userId);
+        const findUser = this.#userList.find(user => user._id === userId);
         if (findUser)
             this.changeSelectedUser(findUser);
     }
@@ -52,64 +78,76 @@ export const UserService = class {
     }
 
     addUser = async (name) => {
-        let savedUser = await this.#todoRepository.saveUser(name);
+        const savedUser = await this.#todoHttpClient.saveUser(name);
         this.#userList.push(savedUser);
         this.#selectedUser = savedUser;
         this.#subject.notify();
     };
     deleteUser = async (userId) => {
-        return this.#todoRepository.deleteUser(userId);
+        return this.#todoHttpClient.deleteUser(userId);
     }
     getTodoList = async (userId) => {
     }
 
     addItem = async (contents) => {
-        let todoItem = await this.#todoRepository.saveTodoItem(this.#selectedUser._id, contents);
+        const todoItem = await this.#todoHttpClient.saveTodoItem(this.#selectedUser._id, contents);
         this.#selectedUser.todoList.push(todoItem);
+        this.#filtering();
         this.#subject.notify();
     }
     deleteItem = async (itemId) => {
-        let todoList = this.#selectedUser.todoList;
-        let findIndex = todoList.findIndex(item => item._id === itemId);
+        const todoList = this.#selectedUser.todoList;
+        const findIndex = todoList.findIndex(item => item._id === itemId);
         if (findIndex < 0) return;
         todoList.splice(findIndex, 1);
-        await this.#todoRepository.deleteTodoItem(this.#selectedUser._id, itemId);
+        await this.#todoHttpClient.deleteTodoItem(this.#selectedUser._id, itemId);
+        this.#filtering();
+        this.#subject.notify();
+    }
+
+    deleteItems = async () =>{
+        const { _id } = this.#selectedUser;
+        await this.#todoHttpClient.deleteTodoItemsAll(_id);
+        this.#selectedUser.todoList = [];
+        this.#filtering();
         this.#subject.notify();
     }
 
     updateItem = async (itemId, contents) => {
-        let findItem = this.findTodoItem(itemId);
+        const findItem = this.findTodoItem(itemId);
         findItem.contents = contents;
-        await this.#todoRepository.modifyTodoItem(this.#selectedUser._id, itemId, contents);
+        await this.#todoHttpClient.modifyTodoItem(this.#selectedUser._id, itemId, contents);
         this.#subject.notify();
     };
 
     toggleItem = async (itemId) => {
-        let { _id, todoList } = this.#selectedUser;
-        let findItem = todoList.find(item => item._id === itemId);
+        const { _id, todoList } = this.#selectedUser;
+        const findItem = todoList.find(item => item._id === itemId);
         findItem.isCompleted = !findItem.isCompleted;
-        await this.#todoRepository.modifyTodoItemComplete(_id, itemId, findItem.isCompleted);
+        await this.#todoHttpClient.modifyTodoItemComplete(_id, itemId, findItem.isCompleted);
+        this.#filtering();
         this.#subject.notify();
     }
 
     updateItemPriority = async (itemId, priority) => {
-        let decodedPriority = this.#decodePriority(priority);
-        let findItem = this.findTodoItem(itemId);
+        const decodedPriority = this.#decodePriority(priority);
+        const findItem = this.findTodoItem(itemId);
         if (findItem.priority === decodedPriority) return;
         findItem.priority = decodedPriority;
-        await this.#todoRepository.modifyTodoItemPriority(this.#selectedUser._id, itemId, decodedPriority);
+        await this.#todoHttpClient.modifyTodoItemPriority(this.#selectedUser._id, itemId, decodedPriority);
+        this.#filtering();
         this.#subject.notify();
     }
 
     findTodoItem = (itemId) => {
-        let todoList = this.#selectedUser.todoList;
+        const todoList = this.#selectedUser.todoList;
         return todoList.find(item => item._id === itemId);
     };
 
     #decodePriority(priority) {
         return priority === "0"
-            ? "NONE" : priority === "1"
-                ? "FIRST" : "SECOND"
+            ? Priorities.NONE : priority === "1"
+                ? Priorities.FIRST : Priorities.SECOND
     }
 
 }
