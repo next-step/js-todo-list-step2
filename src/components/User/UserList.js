@@ -1,7 +1,9 @@
 import { registerEvent } from '../../event.js';
 import { postUser } from '../../endpoint/api.js';
+import { setter, getter } from '../../store/index.js';
 
-const UserList = ({ users }) => {
+const UserList = ({ }) => {
+  const userId = getter.userId();
 
   const onUserCreateHandler = async () => {
     const name = prompt('추가하고 싶은 이름을 입력해주세요.');
@@ -10,6 +12,7 @@ const UserList = ({ users }) => {
 
     try {
       await postUser({ name });
+      await setter.userList();
     } catch (err) {
       console.log(err);
     }
@@ -30,15 +33,22 @@ const UserList = ({ users }) => {
 
   registerEvent(userCreate);
 
+  const userList = getter.userList();
+
+  const btnStyle = (id) => userId === id ? 'active' : '';
+
   return `
     <section>
       <div id="user-list">
-        <button class="ripple active">eastjun</button>
-        <button class="ripple">hojun</button>
+        ${ userList.map((user) => `<button data-index="${ user._id }" 
+                                            class="ripple ${btnStyle(user._id)}">
+                                            ${ user.name }
+                                            </button>`).join('')
+  }
         <button class="ripple user-create-button">+ 유저 생성</button>
       </div>
     </section>
-    `;
+    `; // ripple active
 };
 
 export default UserList;

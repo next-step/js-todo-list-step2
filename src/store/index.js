@@ -2,16 +2,21 @@ import { getUserList } from '../endpoint/api.js';
 
 const store = {
   userList: [],
-  name: 'eyabc',
+  user: undefined,
 };
 export const setter = {
   async userList () {
     try {
-      store.userList = await getUserList();
+      const result = await getUserList();
+      store.userList = result;
+      result[0] && this.user(result[0]);
     } catch (err) {
       console.log(err);
     }
   },
+  user (value) {
+    store.user = value;
+  }
 };
 
 export const initStore = async () => {
@@ -22,9 +27,15 @@ export const getter = {
   userList () {
     return store.userList;
   },
-  name () {
-    return store.name;
+  user () {
+    return store.user;
   },
+  userName () {
+    return store.user.name;
+  },
+  userId () {
+    return store.user._id;
+  }
 };
 
 
