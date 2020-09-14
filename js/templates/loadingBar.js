@@ -12,3 +12,5 @@ const createLoadingBar = () =>
       </div>
     </li>
 `;
+
+export default createLoadingBar;
