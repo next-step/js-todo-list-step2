@@ -10,7 +10,7 @@ const App = class extends Component{
   async componentInit () {
     const users = await userStore.dispatch(FETCH_USERS);
     const userId = getQuery('user_id');
-    const selectedIndex = users.findIndex(({ _id }) => _id === userId);
+    const selectedIndex = Math.max(users.findIndex(({ _id }) => _id === userId), 0);
     userStore.commit(SET_USERS, users);
     userStore.commit(SET_USER, selectedIndex);
     todoStore.commit(SET_TODO_ITEMS, users[selectedIndex].todoList);
