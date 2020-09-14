@@ -16,6 +16,7 @@ import TodoList from './TodoList.js';
 import TodoInput from './TodoInput.js';
 import TodoCount from './TodoCount.js';
 import TodoFilter from './TodoFilter.js';
+import TodoClearBtn from './TodoClearBtn.js';
 
 export default class App extends Component {
   activeUser;
@@ -30,6 +31,7 @@ export default class App extends Component {
       $todoInput,
       $todoCount,
       $todoFilter,
+      $todoClearBtn,
     } = $children;
 
     super($target, $props);
@@ -57,6 +59,9 @@ export default class App extends Component {
     });
     new TodoFilter($todoFilter, {
       filterType: this.filterType,
+    });
+    new TodoClearBtn($todoClearBtn, {
+      clearTodo: this.clearTodo,
     });
   }
 
@@ -99,6 +104,18 @@ export default class App extends Component {
       todoList: this.activeUser.value.todoList.filter(
         (todoItem) => todoItem._id !== targetItemId
       ),
+    };
+  };
+
+  clearTodo = async () => {
+    const option = createFetchOption(DELETE);
+    await fetch(
+      `${API_BASE_URL}/api/users/${this.activeUser.value._id}/items`,
+      option
+    );
+    this.activeUser.value = {
+      ...this.activeUser.value,
+      todoList: [],
     };
   };
 
