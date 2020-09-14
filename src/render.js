@@ -1,6 +1,7 @@
 import UserTitle from './components/User/UserTitle.js';
 import UserList from './components/User/UserList.js';
 import TodoApp from './components/Todo/TodoApp.js';
+import { setEvent } from './event.js';
 
 const $app = document.getElementById('app');
 
@@ -15,6 +16,8 @@ const template = `
 `;
 
 $app.innerHTML = template;
+
+setEvent();
 
 
 

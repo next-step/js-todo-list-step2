@@ -1,39 +1,44 @@
 import HttpMethod from '../constants/HttpMethod.js';
 
-const RestApi = (baseURL) => {
+let _baseURL;
 
-  const request = async ({ uri, method, body }, timeout = 5000) => {
-    const config = { method };
-    const url = baseURL + uri;
+export const setBaseURL = (baseURL) => _baseURL = baseURL;
 
-    if (body) {
-      config.body = JSON.stringify(body);
-      config.headers = { 'Content-Type': 'application/json' };
-    }
+// TODO 호출시 error 가 catch 되지 않음
+const request = async (uri, method, body = undefined, timeout = 5000) => {
+  const config = { method };
+  const url = _baseURL + uri;
 
-    let id = -1;
-    const race = await Promise.race([
-      new Promise(res => id = window.setTimeout(_ => res(), timeout)),
-      fetch(url, config).then(response => response),
-    ]);
+  if (body) {
+    config.body = JSON.stringify(body);
+    config.headers = { 'Content-Type': 'application/json' };
+  }
 
-    if (race instanceof Response) {
-      clearTimeout(id);
-      if (race.status === 404) new Error('404');
-      return await race.json();
-    }
-    new Error('timeout');
-  };
+  let id = -1;
+  const race = await Promise.race([
+    new Promise(res => id = window.setTimeout(_ => res(), timeout)),
+    fetch(url, config).then(response => response),
+  ]);
 
-  const GET = (uri) => request({ uri, method: HttpMethod.GET });
+  if (race instanceof Response) {
+    clearTimeout(id);
+    const contents = await race.json();
 
-  const POST = (uri, body) => request({ uri, method: HttpMethod.POST, body });
-
-  const PUT = (uri, body) => request({ uri, method: HttpMethod.PUT, body });
-
-  const PATCH = (uri, body) => request({ uri, method: HttpMethod.PATCH, body });
-
-  const DELETE = (uri) => request({ uri, method: HttpMethod.DELETE });
+    if (race.status === 500) return new Error(contents.message);
+    return race.status === 404 ? new Error('404') : contents;
+  }
+  else return new Error('timeout');
 };
 
-export default RestApi;
+const GET = (uri) => request(uri, HttpMethod.GET);
+
+const POST = (uri, body) => request(uri, HttpMethod.POST, body);
+
+const PUT = (uri, body) => request(uri, HttpMethod.PUT, body);
+
+const PATCH = (uri, body) => request(uri, HttpMethod.PATCH, body);
+
+const DELETE = (uri) => request(uri, HttpMethod.DELETE);
+
+export default { GET, POST, PUT, PATCH, DELETE };
+
