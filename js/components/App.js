@@ -68,6 +68,7 @@ export default class App extends Component {
   }
 
   addTodo = async (contents) => {
+    contents += ' ';
     const option = createFetchOption(POST, { contents });
     const data = await fetch(
       `${API_BASE_URL}/api/users/${this.activeUser.value._id}/items/`,
@@ -159,12 +160,18 @@ export default class App extends Component {
   computeTodoList = () => {
     const todoList = this.activeUser.value.todoList || [];
 
-    return todoList.filter((todoItem) => {
-      if (todoItem.isCompleted && this.filterType.value === COMPLETED)
-        return true;
-      else if (!todoItem.isCompleted && this.filterType.value === ACTIVE)
-        return true;
-      else if (this.filterType.value === ALL) return true;
-    });
+    return todoList
+      .filter((todoItem) => {
+        if (todoItem.isCompleted && this.filterType.value === COMPLETED)
+          return true;
+        else if (!todoItem.isCompleted && this.filterType.value === ACTIVE)
+          return true;
+        else if (this.filterType.value === ALL) return true;
+      })
+      .sort((todoItem) => {
+        if (todoItem.priority === 'FIRST') return -1;
+        if (todoItem.priority === 'SECOND') return 0;
+        if (todoItem.priority === 'NONE') return +1;
+      });
   };
 }
