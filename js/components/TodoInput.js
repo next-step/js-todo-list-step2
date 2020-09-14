@@ -10,7 +10,7 @@ export default class TodoInput extends Component {
   initEventListener = () => {
     this.$target.addEventListener('keyup', ({ key, target }) => {
       if (key === 'Enter') {
-        this.props.addTodo(target.value);
+        this.props.addTodo(target.value.toString());
         this.$target.value = '';
       }
     });
