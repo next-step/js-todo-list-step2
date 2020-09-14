@@ -28,7 +28,7 @@ export default class UserList extends Component {
   };
 
   createUser = async () => {
-    let name = prompt('추가하고 싶은 이름을 입력해주세요.');
+    let name = prompt(' 추가하고 싶은 이름을 입력해주세요.');
 
     name = name ? name.toString() : '';
     if (1 < name.length) {
