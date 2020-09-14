@@ -33,7 +33,8 @@ export default class UserList extends Component {
     name = name ? name.toString() : '';
     if (1 < name.length) {
       const option = createFetchOption(POST, { name });
-      await fetch(`${API_BASE_URL}/api/users`, option);
+      const data = await fetch(`${API_BASE_URL}/api/users`, option);
+      this.props.activeUser.value = await data.json();
       this.loadUsers();
     }
   };
