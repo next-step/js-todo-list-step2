@@ -168,10 +168,12 @@ export default class App extends Component {
           return true;
         else if (this.filterType.value === ALL) return true;
       })
-      .sort((todoItem) => {
-        if (todoItem.priority === 'FIRST') return -1;
-        if (todoItem.priority === 'SECOND') return 0;
-        if (todoItem.priority === 'NONE') return +1;
+      .sort((a, b) => {
+        if (a.priority === b.priority) return 0;
+        if (a.priority === 'FIRST') return -1;
+        if (b.priority === 'FIRST') return 1;
+        if (a.priority === 'SECOND' && b.priority === 'NONE') return -1;
+        if (b.priority === 'SECOND' && a.priority === 'NONE') return 1;
       });
   };
 }

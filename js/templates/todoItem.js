@@ -30,7 +30,7 @@ const createPrioritySelect = (priority) => {
           <select class="chip select secondary">
             <option value="2" selected>2순위</option>
             <option value="1">1순위</option>
-            <option value="2">미지정</option>
+            <option value="0">미지정</option>
           </select>
         `;
 
