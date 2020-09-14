@@ -26,7 +26,8 @@ export default class App extends Component {
     });
   }
 
-  addTodo = async (activeUser, contents) => {
+  addTodo = async (contents) => {
+    const activeUser = this.activeUser;
     const option = createFetchOption('POST', { contents });
     const data = await fetch(
       `${API_BASE_URL}/api/users/${activeUser.value._id}/items/`,

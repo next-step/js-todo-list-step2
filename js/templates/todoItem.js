@@ -9,7 +9,7 @@ const createTodoItem = (_id, contents, isCompleted, priority) => `
       <button class="destroy"></button>
     </div>
     <input class="edit" value="${contents}" />
-  </li>;
+  </li>
 `;
 
 const createPrioritySelect = (priority) => {
