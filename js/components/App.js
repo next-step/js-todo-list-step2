@@ -38,7 +38,7 @@ export default class App extends Component {
 
     this.activeUser = new State({}, this.render);
     this.filterType = new State(ALL, this.render);
-    this.todoList = new ComputedState(this.filterTodoList, this.render, [
+    this.todoList = new ComputedState(this.computeTodoList, this.render, [
       this.activeUser,
       this.filterType,
     ]);
@@ -50,6 +50,7 @@ export default class App extends Component {
       editTodo: this.editTodo,
       completeTodo: this.completeTodo,
       deleteTodo: this.deleteTodo,
+      changeTodoPriority: this.changeTodoPriority,
     });
     new TodoInput($todoInput, {
       activeUser: this.activeUser,
@@ -80,7 +81,7 @@ export default class App extends Component {
 
   editTodo = async (targetItemId, contents) => {
     const option = createFetchOption(PUT, { contents });
-    const data = await fetch(
+    await fetch(
       `${API_BASE_URL}/api/users/${this.activeUser.value._id}/items/${targetItemId}`,
       option
     );
@@ -135,7 +136,27 @@ export default class App extends Component {
     };
   };
 
-  filterTodoList = () => {
+  changeTodoPriority = async (targetItemId, priorityId) => {
+    const priority =
+      priorityId === '1' ? 'FIRST' : priorityId === '2' ? 'SECOND' : 'NONE';
+    const option = createFetchOption(PUT, {
+      priority,
+    });
+
+    await fetch(
+      `${API_BASE_URL}/api/users/${this.activeUser.value._id}/items/${targetItemId}/priority`,
+      option
+    );
+    this.activeUser.value = {
+      ...this.activeUser.value,
+      todoList: this.activeUser.value.todoList.map((todoItem) => {
+        if (todoItem._id === targetItemId) todoItem.priority = priority;
+        return todoItem;
+      }),
+    };
+  };
+
+  computeTodoList = () => {
     const todoList = this.activeUser.value.todoList || [];
 
     return todoList.filter((todoItem) => {
