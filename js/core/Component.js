@@ -7,6 +7,6 @@ export default class Component {
     this.props = props;
   }
 
-  initEventListener($target) {}
+  initEventListener() {}
   render() {}
 }

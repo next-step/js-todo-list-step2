@@ -19,7 +19,11 @@ export default class App extends Component {
 
     new UserList($userList, { activeUser: this.activeUser });
     new UserTitle($userTitle, { activeUser: this.activeUser });
-    new TodoList($todoList, { activeUser: this.activeUser });
+    new TodoList($todoList, {
+      activeUser: this.activeUser,
+      completeTodo: this.completeTodo,
+      deleteTodo: this.deleteTodo,
+    });
     new TodoInput($todoInput, {
       activeUser: this.activeUser,
       addTodo: this.addTodo,
@@ -27,15 +31,44 @@ export default class App extends Component {
   }
 
   addTodo = async (contents) => {
-    const activeUser = this.activeUser;
     const option = createFetchOption('POST', { contents });
     const data = await fetch(
-      `${API_BASE_URL}/api/users/${activeUser.value._id}/items/`,
+      `${API_BASE_URL}/api/users/${this.activeUser.value._id}/items/`,
       option
     );
-    activeUser.value = {
-      ...activeUser.value,
-      todoList: activeUser.value.todoList.concat(await data.json()),
+    this.activeUser.value = {
+      ...this.activeUser.value,
+      todoList: this.activeUser.value.todoList.concat(await data.json()),
+    };
+  };
+
+  completeTodo = async (targetItemId) => {
+    const option = createFetchOption('PUT');
+    await fetch(
+      `${API_BASE_URL}/api/users/${this.activeUser.value._id}/items/${targetItemId}/toggle`,
+      option
+    );
+    this.activeUser.value = {
+      ...this.activeUser.value,
+      todoList: this.activeUser.value.todoList.map((todoItem) => {
+        if (todoItem._id === targetItemId)
+          todoItem.isCompleted = !todoItem.isCompleted;
+        return todoItem;
+      }),
+    };
+  };
+
+  deleteTodo = async (targetItemId) => {
+    const option = createFetchOption('DELETE');
+    await fetch(
+      `${API_BASE_URL}/api/users/${this.activeUser.value._id}/items/${targetItemId}`,
+      option
+    );
+    this.activeUser.value = {
+      ...this.activeUser.value,
+      todoList: this.activeUser.value.todoList.filter(
+        (todoItem) => todoItem._id !== targetItemId
+      ),
     };
   };
 }

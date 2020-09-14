@@ -55,29 +55,7 @@ export default createTodoItem;
 {
   /*
 
-<li>
-<div class="view">
-  <input class="toggle" type="checkbox" />
-  <label class="label">
-    <span class="chip primary">1순위</span>
-    해야할 아이템
-  </label>
-  <button class="destroy"></button>
-</div>
-<input class="edit" value="완료된 타이틀" />
-</li>
 
-<li>
-<div class="view">
-  <input class="toggle" type="checkbox" />
-  <label class="label">
-    <span class="chip secondary">2순위</span>
-    해야할 아이템
-  </label>
-  <button class="destroy"></button>
-</div>
-<input class="edit" value="완료된 타이틀" />
-</li>
 
 <li class="completed">
 <div class="view">

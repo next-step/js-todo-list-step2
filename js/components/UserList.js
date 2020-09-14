@@ -17,7 +17,7 @@ export default class UserList extends Component {
     this.#users = new State([], this.render);
     this.props.activeUser.subscribe(this.render);
 
-    this.initEventListener($target);
+    this.initEventListener();
     this.loadUsers();
   }
 
@@ -53,8 +53,8 @@ export default class UserList extends Component {
     );
   };
 
-  initEventListener = ($target) => {
-    $target.addEventListener('click', ({ target }) => {
+  initEventListener = () => {
+    this.$target.addEventListener('click', ({ target }) => {
       if (target.classList.contains('user-create-button')) this.createUser();
       else if (target.classList.contains('user-delete-button')) {
         this.deleteUser(this.props.activeUser.value._id);
