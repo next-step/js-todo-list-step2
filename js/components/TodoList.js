@@ -9,7 +9,6 @@ export default class TodoList extends Component {
 
   render = () => {
     const { todoList } = this.props.activeUser.value;
-    console.log(todoList);
 
     this.$target.innerHTML = '';
     todoList.forEach(

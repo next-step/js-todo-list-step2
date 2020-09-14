@@ -15,17 +15,19 @@ const createTodoItem = (_id, contents, isCompleted, priority) => `
 const createPrioritySelect = (priority) => {
   switch (priority) {
     case 'FIRST':
+    case '1':
       return `
-        <select class="chip select primary">
-          <option value="1" selected >
-            1순위
-          </option>
-          <option value="2">2순위</option>
-          <option value="0">미지정</option>
-        </select>
+      <select class="chip select primary">
+      <option value="1" selected >
+      1순위
+      </option>
+      <option value="2">2순위</option>
+      <option value="0">미지정</option>
+      </select>
       `;
 
     case 'SECOND':
+    case '2':
       return `
           <select class="chip select secondary">
             <option value="2" selected >
@@ -47,8 +49,6 @@ const createPrioritySelect = (priority) => {
         </select>
       `;
   }
-
-  return;
 };
 
 export default createTodoItem;

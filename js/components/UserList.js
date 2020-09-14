@@ -1,10 +1,11 @@
 import Component from '../core/Component.js';
-import { API_BASE_URL, POST } from '../constant/index.js';
+import { API_BASE_URL, POST, DELETE } from '../constant/index.js';
 import State from '../core/State.js';
 import { createFetchOption } from '../util/index.js';
 import {
   createUserButton,
   createUserCreateButton,
+  createUserDeleteButton,
 } from '../templates/userButton.js';
 
 export default class UserList extends Component {
@@ -37,6 +38,14 @@ export default class UserList extends Component {
     }
   };
 
+  deleteUser = async (targetId) => {
+    if (confirm('정말 삭제하시겠습니까?')) {
+      const option = createFetchOption(DELETE);
+      await fetch(`${API_BASE_URL}/api/users/${targetId}`, option);
+      this.loadUsers();
+    }
+  };
+
   selectUser = (targetId) => {
     this.props.activeUser.value = this.#users.value.find(
       (user) => user._id === targetId
@@ -46,7 +55,10 @@ export default class UserList extends Component {
   initEventListener = ($target) => {
     $target.addEventListener('click', ({ target }) => {
       if (target.classList.contains('user-create-button')) this.createUser();
-      if (target.className === 'ripple') this.selectUser(target.dataset.userId);
+      else if (target.classList.contains('user-delete-button')) {
+        this.deleteUser(this.props.activeUser.value._id);
+      } else if (target.className === 'ripple')
+        this.selectUser(target.dataset.userId);
     });
   };
 
@@ -63,5 +75,6 @@ export default class UserList extends Component {
         ))
     );
     this.$target.innerHTML += createUserCreateButton();
+    this.$target.innerHTML += createUserDeleteButton();
   };
 }

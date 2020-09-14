@@ -5,11 +5,14 @@ export const convert2Html = (str) => {
 };
 
 export const createFetchOption = (method, payload) => {
-  return {
+  const option = {
     method,
     headers: {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify(payload),
   };
+
+  if (!payload) option.body = '';
+  return option;
 };
