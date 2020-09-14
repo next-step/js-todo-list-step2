@@ -49,6 +49,7 @@ export default class UserList extends Component {
   };
 
   selectUser = (targetId) => {
+    this.loadUsers();
     this.props.activeUser.value = this.#users.value.find(
       (user) => user._id === targetId
     );
