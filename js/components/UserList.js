@@ -24,7 +24,7 @@ export default class UserList extends Component {
   loadUsers = async () => {
     const data = await (await fetch(`${API_BASE_URL}/api/users`)).json();
     if (data instanceof Array) this.#users.value = data;
-    if (!this.props.activeUser.value) this.props.activeUser.value = data[0];
+    if (!this.props.activeUser.value._id) this.props.activeUser.value = data[0];
   };
 
   createUser = async () => {
@@ -42,6 +42,7 @@ export default class UserList extends Component {
     if (confirm('정말 삭제하시겠습니까?')) {
       const option = createFetchOption(DELETE);
       await fetch(`${API_BASE_URL}/api/users/${targetId}`, option);
+      this.props.activeUser.value = { ...this.props.activeUser.value, _id: '' };
       this.loadUsers();
     }
   };

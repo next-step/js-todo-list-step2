@@ -15,7 +15,7 @@ export default class App extends Component {
 
     super($target, $props);
 
-    this.activeUser = new State('', this.render);
+    this.activeUser = new State({}, this.render);
 
     new UserList($userList, { activeUser: this.activeUser });
     new UserTitle($userTitle, { activeUser: this.activeUser });
