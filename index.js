@@ -10,5 +10,6 @@ new App(
     $userList: $target.querySelector('#user-list'),
     $todoList: $target.querySelector('.todo-list'),
     $todoInput: $target.querySelector('.new-todo'),
+    $todoCount: $target.querySelector('.todo-count'),
   }
 );

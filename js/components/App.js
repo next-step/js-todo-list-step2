@@ -6,16 +6,24 @@ import UserList from './UserList.js';
 import UserTitle from './UserTitle.js';
 import TodoList from './TodoList.js';
 import TodoInput from './TodoInput.js';
+import TodoCount from './TodoCount.js';
 
 export default class App extends Component {
   activeUser;
 
   constructor($target, $props, $children) {
-    const { $userList, $userTitle, $todoList, $todoInput } = $children;
+    const {
+      $userList,
+      $userTitle,
+      $todoList,
+      $todoInput,
+      $todoCount,
+    } = $children;
 
     super($target, $props);
 
     this.activeUser = new State({}, this.render);
+    // this.computedTodoList = new ComputedState();
 
     new UserList($userList, { activeUser: this.activeUser });
     new UserTitle($userTitle, { activeUser: this.activeUser });
@@ -28,6 +36,7 @@ export default class App extends Component {
       activeUser: this.activeUser,
       addTodo: this.addTodo,
     });
+    new TodoCount($todoCount);
   }
 
   addTodo = async (contents) => {
