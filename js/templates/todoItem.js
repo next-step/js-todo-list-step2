@@ -8,7 +8,7 @@ const createTodoItem = (_id, contents, isCompleted, priority) => `
       </label>
       <button class="destroy"></button>
     </div>
-    <input class="edit" value="${contents}" />
+    <input class="edit" value="${contents}"/>
   </li>
 `;
 
