@@ -1,8 +1,7 @@
 import {request , options} from "./core.js";
-import {API_URL} from "../utils/constants";
+const API_URL = 'https://js-todo-list-9ca3a.df.r.appspot.com';
 
-
-const userApi = {
+export const userApi = {
     getUserList : () => {
         return request(`${API_URL}/api/users/`);
     },

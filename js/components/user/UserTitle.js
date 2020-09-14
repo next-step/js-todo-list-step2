@@ -5,9 +5,9 @@ const template = (userName) => {
 }
 
 export class UserTitle {
-    constructor({username , $userTitle}) {
-        this.username = username;
+    constructor($userTitle,username ) {
         this.$userTitle = $userTitle;
+        this.username = username;
     }
 
     setState(selectUsername){

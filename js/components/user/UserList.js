@@ -23,19 +23,26 @@ const loadingTemplate = () => `
         </div>
     </li>    
     `
-
+const createUserTemplate = () => `
+    <button class="user-create-button">유저 생성</button>
+`
+const deleteUserTemplate = () => `
+    <button class="user-delete-button">유저 삭제</button>
+`
 
 export class UserList {
     constructor({
+                    $userList,
                     username,
                     userList,
-                    $userList,
-                    onClickUserHandler
+                    onClickUserHandler,
+                    onClickUserAddHandler,
+                    onClickUSerDeleteHandler
                 }) {
 
+        this.$userList = $userList;
         this.username = username;
         this.userList = userList;
-        this.$userList = $userList;
         this.$userList.addEventListener('click', (e) => {
             if (e.target.className === 'ripple') {
                 onClickUserHandler(e.target.textContent);
@@ -58,7 +65,10 @@ export class UserList {
                 return;
             } else {
                 this.$userList.innerHTML = template(this.username, this.userList);
+
             }
+            this.$userList.innerHTML += createUserTemplate();
+            this.$userList.innerHTML += deleteUserTemplate();
         } catch (error) {
 
         }

@@ -1,6 +1,14 @@
+import {userApi} from "../../service/UserApi.js";
+
+const onClickAddHandler = (user)=>{
+    const userList =  userApi.getUserList().then(response => response);
+
+}
+
+
 export class UserAdd {
 
-    constructor({$userAdd, onClickAddHandler}) {
+    constructor({$userAdd}) {
 
         this.$userAdd = $userAdd;
         this.$userAdd.addEventListener('click', () => {

@@ -10,7 +10,7 @@ export const request =  (url, option) => {
         .catch(error => {
             console.log(`error : ${error} `)
         });
-    return response.json();
+    return response;
 }
 
 
