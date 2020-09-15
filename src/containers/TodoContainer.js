@@ -65,6 +65,7 @@ export const TodoContainer = class extends Component {
   }
 
   componentInit () {
+
     this.$children = {
       TodoAppender: {
         constructor: TodoAppender,
@@ -80,15 +81,18 @@ export const TodoContainer = class extends Component {
           updateItem: this.updateItem.bind(this),
           selectPriority: this.selectPriority.bind(this),
           editingItem: this.editingItem.bind(this),
+          get loading () { return todoStore.$state.loading },
+          get editingIndex () { return todoStore.$state.editingIndex },
+          get items () { return todoStore.$getters.filteredItems }
         }
       },
       TodoFooter: {
         constructor: TodoFooter,
         props: {
-          filterItem: this.filterItem(this),
-          removeAll: this.removeAll(this),
-          itemCount: todoStore.$getters.filteredItems.length,
-          filterType: todoStore.$state.filterType,
+          filterItem: this.filterItem.bind(this),
+          removeAll: this.removeAll.bind(this),
+          get itemCount () { return todoStore.$getters.filteredItems.length },
+          get filterType () { return todoStore.$state.filterType },
         }
       },
     }

@@ -15,13 +15,14 @@ export const TodoFooter = class extends Component {
   }
 
   template () {
+    const { itemCount, filterType } = this.$props;
     return `
-      <span class="todo-count">총 <strong>${this.$props.itemCount}</strong> 개</span>
+      <span class="todo-count">총 <strong>${itemCount}</strong> 개</span>
       <ul class="filters">
         ${filterButtons.map(({ type, text }) => `
           <li>
             <a href="#"
-               class="${type} ${type === this.$props.filterType ? 'selected' : ''}"
+               class="${type} ${type === filterType ? 'selected' : ''}"
                data-filter-type="${type}"
                data-ref="filter">
               ${text}
@@ -35,6 +36,7 @@ export const TodoFooter = class extends Component {
 
   setEvent () {
     const { filterItem, removeAll } = this.$props;
+    console.log(this.$props);
     this.addEvent('click', 'filter', ({ target }) => filterItem(target.dataset.filterType));
     this.addEvent('click', 'clear', () => removeAll());
   }

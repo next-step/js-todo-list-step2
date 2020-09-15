@@ -30,8 +30,7 @@ export const TodoList = class extends Component {
   }
 
   template () {
-    const { loading, editingIndex } = todoStore.$state;
-    const items = todoStore.$getters.filteredItems;
+    const { loading, editingIndex, items } = this.$props
     if (loading === LoadingTypes.INIT) {
       return loadingArray.map(() => progressTemplate).join('')
     }
