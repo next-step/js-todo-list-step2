@@ -1,91 +1,48 @@
-import {UserTitle} from './components/user/Usertitle.js'
-import {UserList} from './components/user/UserList.js'
-import {UserAdd} from './components/user/UserAdd.js'
-import {TodoList} from './components/todo/TodoList.js'
-import {TodoCount} from './components/todo/TodoCount.js'
-import {TodoInput} from './components/todo/TodoInput.js'
-import {userApi} from "./service/UserApi.js";
+import {TodoClearButton} from "./components/todo/TodoClearButton.js";
+import {TodoCount} from "./components/todo/TodoCount.js";
+import {TodoFilter} from "./components/todo/TodoFilter.js";
+import {TodoInput} from "./components/todo/TodoInput.js";
+import {TodoList} from "./components/todo/TodoList.js";
+import {UserList} from "./components/user/UserList.js";
+import {UserTitle} from "./components/user/UserTitle.js";
 
-const $todoList = document.querySelector('.todo-list');
-const $todoInput = document.querySelector('.new-todo');
-const $todoCounter = document.querySelector('.count-container');
 const $userList = document.querySelector('#user-list');
 const $userTitle = document.querySelector('#user-title');
-const $userAdd = document.querySelector('.user-register');
+const $todoList = document.querySelector('.todo-list');
+const $todoInput = document.querySelector('.new-todo');
+const $todoCounter = document.querySelector('.todo-count');
+const $todoFilter = document.querySelector('.filters');
+const $todoClear = document.querySelector('.clear-completed');
+class App{
 
-class App {
-    constructor({
-                    $todoList,
-                    $todoInput,
-                    $todoCounter,
-                    $userList,
-                    $userTitle,
-                    $userAdd,
-                    username,
-                    userArray,
-                }) {
-        this.$todoInput = $todoInput;
-        this.$todoList = $todoList;
-        this.$todoCounter = $todoCounter;
-        this.$userTitle = $userTitle;
-        this.$userList = $userList;
-        this.$userAdd = $userAdd;
-        this.username = username;
-        this.userArray = userArray;
+    $target ;
+    $filter_type;
+    constructor($target = {} ) {
+        this.$target = $target;
+        console.log(this.$target);
 
+        new TodoClearButton(this.$target.$todoClear , {});
+        new TodoCount(this.$target.$todoCounter , {});
+        new TodoFilter(this.$target.$todoFilter , {});
+        new TodoInput(this.$target.$todoInput , {});
+        new TodoList(this.$target.$todoList , {});
 
-        this.todoList = new TodoList({
-            username,
-            $todoList,
-            onToggleHandler,
-            onRemoveHandler,
-        })
-        this.userTitle = new UserTitle()
-        const userCreateButton = document.querySelector('.user-create-button')
-        userCreateButton.addEventListener('click', onUserCreateHandler)
+        new UserList(this.$target.$userList , {});
+        new UserTitle(this.$target.$userTitle , {});
 
 
     }
 
-
-    setState(selectedUsername) {
-        this.username = selectedUsername;
-        this.userList.setState(this.username);
-        this.todoList.setState(this.username);
-        this.todoCount.setState(this.username);
-
-    }
 }
 
-const onUserCreateHandler = () => {
-    const userName = prompt("추가하고 싶은 이름을 입력해주세요.");
-}
-const onToggleHandler = (id) => {
-
-    userApi.putUserTodoItemCompleteToggle(this.username, id);
-    this.setState(this.username);
-}
-const onRemoveHandler = (id) => {
-    userApi.deleteUserOneTodoItem(this.username , id);
-    this.setState(this.username);
-}
-const onEditHandler = (id, contents) => {
-    userApi.putUserTodoItem(id ,contents );
-    this.setState(this.username);
-}
-
-const username = '';
-const userArrayResponse = userApi.getUserList();
-const userArray = userArrayResponse.then(response => response);
 
 new App({
     $todoList,
     $todoInput,
     $todoCounter,
+    $todoFilter,
+    $todoClear,
     $userList,
     $userTitle,
-    $userAdd,
-    username,
-    userArray
-})
+} , {})
 

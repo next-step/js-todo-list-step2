@@ -28,25 +28,20 @@ export const options = {
     },
     DELETE: () => {
         return {
+            headers: {
+                'Content-Type': 'application/json',
+            },
             method: 'DELETE',
 
         };
     },
-    PUT_TOGGLE: () => {
-        return {
-            method: 'PUT',
-        };
-    },
-    PUT_PRIORITY: (priority) => {
-        return {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                priority
-            })
-        }
+    PUT_NOTHING : () =>{
+      return {
+          headers: {
+              'Content-Type': 'application/json',
+          },
+          method : 'PUT',
+      }
     },
     PUT: (contents) => {
         return {

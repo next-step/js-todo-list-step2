@@ -1,4 +1,5 @@
 import {userApi} from '../../service/UserApi.js'
+import {Component} from "../../core/Component.js";
 
 
 const template = (completeCounter, todoCounter) => {
@@ -25,48 +26,10 @@ const template = (completeCounter, todoCounter) => {
     `;
 }
 
-export class TodoCount {
-    constructor({
-                    $todoCounter, username,
-                    onRemoveAllHandler
+export class TodoCount extends Component{
+    constructor($target , props) {
+        super($target , props)
 
-                }) {
-        this.$todoCounter = $todoCounter;
-        this.username = username;
-
-        this.$todoCounter.addEventListener('click', (e) => {
-            if (e.target.className === 'clear-all') {
-                onRemoveAllHandler();
-            }
-            if( e.target.className === 'all selected'){
-                console.log('all seletec');
-            }
-            if(e.target.className === 'active'){
-                console.log('active');
-            }
-            if(e.target.className === 'completed'){
-                console.log('completed');
-            }
-        })
-        this.render();
     }
 
-    setState(selectUsername) {
-        this.username = selectUsername;
-        this.render();
-    }
-
-    async render() {
-        if (this.username) {
-            const apiResponse = await userApi.getUserTodoItem(this.username);
-            const responseArray = apiResponse.then(response => {
-                return response;
-            });
-            const completedTodoArray = responseArray.filter(
-                todo => todo.isCompleted === true
-            );
-            this.$todoCounter.innerHTML = template(completedTodoArray.length, responseArray.length);
-
-        }
-    }
 }

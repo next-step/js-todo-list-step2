@@ -1,4 +1,5 @@
 import {userApi} from "../../service/UserApi.js";
+import {Component} from "../../core/Component.js";
 const priority= {
     NONE : '0',
     FIRST : '1',
@@ -70,80 +71,10 @@ const onToggle = (target) => {
         return;
     }
 };
-export class TodoList {
-    constructor({
-                    $todoList,
-                    username,
-                    onToggleHandler,
-                    onRemoveHandler,
-                    onEditHandler,
-                    onPriorityHandler,
-                    onDeleteHandler
-                }) {
-        this.$todoList = $todoList;
-        this.username = username;
-
-        this.$todoList.addEventListener('dblclick' , e=>{
-            if(e.target.className === 'label'){
-                const $li = e.target.closest('li');
-                $li.className = 'editing';
-                $li.querySelector('.edit').focus();
-            }
-        })
-
-        this.$todoList.addEventListener('click' , e=>{
-            const id = e.target.closest('li').dataset.id;
-            if(e.target.className === 'toggle' ){
-                onToggleHandler(id);
-            }
-            if(e.target.className === 'destroy'){
-                onRemoveHandler(id);
-            }
-            if(e.target.className === 'delete'){
-                onDeleteHandler(id);
-            }
-
-        });
-        this.$todoList.addEventListener('focusout' , e=>{
-            if(e.target.className === 'edit'){
-
-            }
-        });
-        this.$todoList.addEventListener('keyup' , e=>{
-            if(e.target.className === 'edit'){
-                const $li = e.target.closest('li');
-                if(e.key === 'Enter'){
-                    if(e.target.value){
-                        onEditHandler($li.dataset , e.target.value);
-
-                    }
-                }
-                if(e.key === 'Escape'){
-                    e.target.value ='';
-                }
-            }
-        })
-
+export class TodoList extends Component{
+    constructor($target , props) {
+        super($target , props);
     }
 
-    setState(selectUser) {
-        this.username = selectUser;
-        this.render();
-    }
-
-    render() {
-        this.renderLoading();
-        try {
-            const response = userApi.getUserTodoItem(this.username).then(data => data);
-            this.$todoList.innerHTML = todoListTemplate(response);
-        } catch (e) {
-            this.$todoList.innerHTML = '';
-            console.log(`error : ${e}`)
-        }
-    }
-
-    renderLoading() {
-        this.$todoList.insertAdjacentHTML('beforeend', loadingTemplate())
-    }
 
 }
