@@ -4,12 +4,13 @@ import {Component} from "../../core/Component.js";
 
 const template = (userName, userList) => {
 
-    userList.map(
+    console.log(userList);
+    return userList.map(
         (user) =>
-            `<button class="${
+            `<button data-id="${user._id}" class="${
                 user.name === userName ? 'ripple active' : 'ripple'
             }">${user.name}</button>`
-    ).join('');
+    ).join(' ');
 }
 const loadingTemplate = () => `
     <li>
@@ -25,17 +26,53 @@ const loadingTemplate = () => `
     </li>    
     `
 const createUserTemplate = () => `
-    <button class="user-create-button">유저 생성</button>
+    <button class="ripple user-create-button">+ 유저 생성</button>
 `
 const deleteUserTemplate = () => `
-    <button class="user-delete-button">유저 삭제</button>
+    <button class="ripple user-delete-button">- 유저 삭제</button>
 `
 
 export class UserList extends Component{
 
-
+    userList;
+    username;
     constructor($target , event ,  props) {
         super($target , event ,  props);
+        this.$target.addEventListener('click' , e=>{
+            if(e.target.className ==='ripple user-delete-button'){
+                const userName = prompt('추가하고 싶은 이름을 입력해주세요');
+                if(userName && userName !== '' && userName.length > 1){
+                    this.event.addUser(userName);
+                    return;
+                }
+            }
+            if(e.target.className === 'ripple user-create-button'){
+                const userName = prompt('삭제 하고 싶은 이름을 입력해주세요');
+                if(userName&& userName !== '' && userName.length > 1){
+                   // this.event.deleteUser(userName);
+                    return;
+                }
+            }
+        })
+
     }
 
+    setUsername(username){
+        this.username = username;
+        this.render();
+    }
+    setUserList(userList){
+        this.userList = userList;
+        this.render();
+    }
+    render(){
+
+        this.$target.innerHTML = template(this.username , this.userList);
+        this.$target.innerHTML += createUserTemplate();
+        this.$target.innerHTML += deleteUserTemplate();
+
+        console.log(this.$target);
+
+
+    }
 }

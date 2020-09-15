@@ -21,52 +21,47 @@ class App{
         this.$target = $target;
 
         this.liveUser = 'test' ;
-        this.userList = '';
         this.filterType = '';
-
         this.userTitle = new UserTitle(this.$target.$userTitle ,{addUser:this.addUser} ,{ liveUser : this.liveUser});
         this.userList = new UserList(this.$target.$userList , {} , {});
         new TodoClearButton(this.$target.$todoClear , {clearTodo :this.clearTodo} , {});
         this.TodoCount = new TodoCount(this.$target.$todoCounter , {} , {});
         new TodoFilter(this.$target.$todoFilter , {} , {});
-        new TodoInput(this.$target.$todoInput , {} , {});
-        this.TodoList = new TodoList(this.$target.$todoList , {} , {});
+        new TodoInput(this.$target.$todoInput , {addTodo : this.addTodo , editTodo : this.editTodo} , {});
+        this.TodoList = new TodoList(this.$target.$todoList , {isCompleteTodo : this.isCompleteTodo} , {});
 
+
+        this.getUserList();
+    }
+    addTodo = (userId , contents) => {
 
     }
-    addTodo = (contents) => {
+    editTodo = (userId , contents) =>{
 
     }
-    editTodo = (id , contents) =>{
+    isCompleteTodo = (userId , todoItemId)=>{
 
     }
-    completeTodo = (id)=>{
+    deleteTodo =(userId , todoItemId) =>{
 
     }
-    deleteTodo =(id) =>{
-
-    }
-    clearTodo = () => {
+    clearTodo = (userId) => {
 
     }
     changeTodoPriority = (id , priorityId) => {
 
     }
-    getTodoList = () => {
+    getTodoList = (userId) => {
 
     }
-    getUserList = () => {
-
+    getUserList = async () => {
+        const userList = await userApi.getUserList();
+        this.setUserList(userList);
+        this.setUsername(userList[0].name);
     }
     addUser = async (username) => {
-        if(username.length < 2) return alert('유저 네임은 2자 이상 지어주십시오.');
-        const userList = await userApi.getUserList();
-        console.log(userList);
-        const userNameList = userList.map(userInfo=> name);
-        if(userNameList.includes(username)) return alert('이미 등록된 유저입니다.');
-        await userApi.postUser(username);
-        const newUserList = await userApi.getUserList();
-        console.log(newUserList);
+        console.log(isCreated);
+        const isCreated = await userApi.postUser(username);
     }
     deleteUser = (userId) => {
 
@@ -75,9 +70,17 @@ class App{
 
 
     setUsername(username){
-        this.userTitle.setState();
+        this.userTitle.setUsername(username);
+        this.userList.setUsername(username);
     }
     setFilter(filterType){
+        this.filterType = filterType;
+    }
+    setTodoList(todoList){
+
+    }
+    setUserList(userList){
+        this.userList.setUserList(userList);
     }
 
 }

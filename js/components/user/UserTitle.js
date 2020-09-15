@@ -1,18 +1,25 @@
 import {Component} from "../../core/Component.js";
 
 const template = (userName) => {
-    return `<div><storng>${userName}</storng></div>
-            <div>Todo LIST</div>
+    return `<span><strong>${userName}</strong>'s Todo List</span>
 `;
 }
 
 export class UserTitle extends Component{
+    username = '';
     constructor($target , event , props) {
         super($target,event , props);
 
-        $target.addEventListener('click' , e=>{
-            this.event.addUser('종완새이름');
-        })
+
+
     }
 
+    setUsername(username){
+        this.username = username;
+        this.render();
+    }
+
+    render(){
+        this.$target.innerHTML = template(this.username);
+    }
 }
