@@ -3,11 +3,15 @@ import {TodoAppender} from "../components/Todo/TodoAppender.js";
 import {TodoList} from "../components/Todo/TodoList.js";
 import {TodoFooter} from "../components/Todo/TodoFooter.js";
 import {userStore} from "../store/userStore.js";
-import {PUT_ITEM, PUT_PRIORITY_ITEM, REMOVE_ITEM, todoStore, TOGGLE_ITEM} from "../store/todoStore.js";
+import {ADD_ITEM, PUT_ITEM, PUT_PRIORITY_ITEM, REMOVE_ITEM, todoStore, TOGGLE_ITEM} from "../store/todoStore.js";
 
 export const TodoContainer = class extends Component {
 
   get #user () { return userStore.$getters.selectedUser?._id; }
+
+  appendItem (contents) {
+    todoStore.dispatch(ADD_ITEM, { userId: this.#user, contents });
+  }
 
   removeItem (index) {
     const { todoItems } = todoStore.$state;
@@ -45,7 +49,12 @@ export const TodoContainer = class extends Component {
 
   componentInit () {
     this.$children = {
-      TodoAppender: { constructor: TodoAppender },
+      TodoAppender: {
+        constructor: TodoAppender,
+        props: {
+          appendItem: this.appendItem.bind(this)
+        }
+      },
       TodoList: {
         constructor: TodoList,
         props: {
