@@ -7,8 +7,12 @@ const template = (userName) => {
 }
 
 export class UserTitle extends Component{
-    constructor($target , props) {
-        super($target, props);
+    constructor($target , event , props) {
+        super($target,event , props);
+
+        $target.addEventListener('click' , e=>{
+            this.event.addUser('종완새이름');
+        })
     }
 
 }

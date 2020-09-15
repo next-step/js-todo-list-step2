@@ -1,38 +1,89 @@
-import {request , options} from "./core.js";
+import {request, options} from "./core.js";
+
 const API_URL = 'https://js-todo-list-9ca3a.df.r.appspot.com';
 
 export const userApi = {
-    getUserList : () => {
+    getUserList: () => {
         return request(`${API_URL}/api/users/`);
     },
-    postUser : (contents) => {
-        return request(`${API_URL}/api/users/` ,options.POST(contents) );
+    postUser: (name) => {
+        const apiOption = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                name: name,
+            }),
+        }
+        return request(`${API_URL}/api/users/`, apiOption);
     },
-    getUser : (userId) =>{
-        return request(`${API_URL}/api/users/${userId}/` );
+    getUser: (userId) => {
+        return request(`${API_URL}/api/users/${userId}/`);
     },
-    deleteUser : (userId) => {
-        return request(`${API_URL}/api/users/${userId}/` , options.DELETE());
+    deleteUser: (userId) => {
+        const apiOption = {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            method: 'DELETE',
+
+        };
+        return request(`${API_URL}/api/users/${userId}/`, apiOption);
     },
-    getUserTodoItem : (userId) =>{
+    getUserTodoItem: (userId) => {
         return request(`${API_URL}/api/users/${userId}/items/`);
     },
-    postUserTodoItem : (userId , contents) =>{
-        return request(`${API_URL}/api/users/${userId}/items/` , options.POST(contents));
+    postUserTodoItem: (userId, contents) => {
+        const apiOptions = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                contents: contents,
+            }),
+        }
+        return request(`${API_URL}/api/users/${userId}/items/`, options.POST(contents));
     },
-    deleteUserAllTodoItem : (userId ) =>{
-        return request(`${API_URL}/api/users/${userId}/items/` , options.DELETE());
+    deleteUserAllTodoItem: (userId) => {
+        const apiOption = {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            method: 'DELETE',
+
+        };
+        return request(`${API_URL}/api/users/${userId}/items/`, apiOption);
     },
-    deleteUserOneTodoItem : (userId , todoItem) => {
-        return request(`${API_URL}/api/users/${userId}/items/${todoItem}` , options.DELETE());
+    deleteUserOneTodoItem: (userId, todoItemId) => {
+        return request(`${API_URL}/api/users/${userId}/items/${todoItemId}`, options.DELETE());
     },
-    putUserTodoItem : (userId, todoItem) => {
-        return request(`${API_URL}/api/users/${userId}/items/${todoItem}` , options.PUT());
+    putUserTodoItem: (userId, todoItemId , contents) => {
+        const apiOptions = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                contents: contents,
+            }),
+        }
+        return request(`${API_URL}/api/users/${userId}/items/${todoItemId}`, options.PUT());
     },
-    putUserTodoItemPriority : (userId , todoItem , priority) => {
-        return request(`${API_URL}/api/users/${userId}/items/${todoItem}/priority` , options.PUT_PRIORITY(priority));
+    putUserTodoItemPriority: (userId, todoItemId, priority) => {
+        const apiOptions = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                priority: priority,
+            }),
+        }
+        return request(`${API_URL}/api/users/${userId}/items/${todoItemId}/priority`, options.PUT(priority));
     },
-    putUserTodoItemCompleteToggle : (userId , todoItem) => {
-        return request(`${API_URL}/api/users/${userId}/items/${todoItem}/toggle` , options.PUT_TOGGLE());
+    putUserTodoItemCompleteToggle: (userId, todoItemId) => {
+        return request(`${API_URL}/api/users/${userId}/items/${todoItemId}/toggle`, options.PUT());
     }
 }

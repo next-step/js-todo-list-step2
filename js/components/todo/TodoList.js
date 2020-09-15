@@ -72,8 +72,8 @@ const onToggle = (target) => {
     }
 };
 export class TodoList extends Component{
-    constructor($target , props) {
-        super($target , props);
+    constructor($target , event ,  props) {
+        super($target , event ,  props);
     }
 
 

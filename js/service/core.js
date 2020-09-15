@@ -1,23 +1,17 @@
 
-export const request =  (url, option) => {
-    const response =  fetch(url, option)
-        .then(data => {
-            if (!data.ok) {
-                throw new Error(data.status);
-            }
-            return data;
-        })
-        .catch(error => {
-            console.log(`error : ${error} `)
-        });
-    return response;
-}
 
-
+export const request = async (url, option) => {
+    try {
+        const response = await fetch(url, option);
+        return response.json();
+    } catch (e) {
+        console.error(e);
+    }
+};
 export const options = {
-    POST: (contents) => {
+    GET: (contents) => {
         return {
-            method: 'POST',
+            method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
             },
@@ -26,14 +20,11 @@ export const options = {
             }),
         };
     },
+    POST: (name) => {
+        return ;
+    },
     DELETE: () => {
-        return {
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            method: 'DELETE',
-
-        };
+        return;
     },
     PUT_NOTHING : () =>{
       return {

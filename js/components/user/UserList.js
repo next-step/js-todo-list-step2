@@ -34,8 +34,8 @@ const deleteUserTemplate = () => `
 export class UserList extends Component{
 
 
-    constructor($target , props) {
-        super($target , props);
+    constructor($target , event ,  props) {
+        super($target , event ,  props);
     }
 
 }

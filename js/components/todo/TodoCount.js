@@ -27,8 +27,8 @@ const template = (completeCounter, todoCounter) => {
 }
 
 export class TodoCount extends Component{
-    constructor($target , props) {
-        super($target , props)
+    constructor($target ,  event , props) {
+        super($target ,  event , props)
 
     }
 
