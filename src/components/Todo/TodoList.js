@@ -27,7 +27,6 @@ export const TodoList = class extends Component {
 
   componentInit () {
     this.$stores = [ todoStore, userStore ];
-    console.log(this.$props);
   }
 
   template () {
@@ -59,19 +58,18 @@ export const TodoList = class extends Component {
   }
 
   setEvent () {
-    this.addEvent('click', 'destroy', ({  index }) => this.$props.removeItem(index));
-    this.addEvent('change', 'toggle', ({  index }) => this.$props.toggleItem(index));
-    this.addEvent('change', 'priority', ({ target, index }) => {
-      this.$props.selectPriority(index, target.value);
-    });
-    this.addEvent('dblclick', 'contents', ({ index }) => todoStore.commit(SET_EDITING, index));
+    const { removeItem, toggleItem, selectPriority, updateItem, editingItem } = this.$props;
+    this.addEvent('click', 'destroy', ({  index }) => removeItem(index));
+    this.addEvent('change', 'toggle', ({  index }) => toggleItem(index));
+    this.addEvent('change', 'priority', ({ target, index }) => selectPriority(index, target.value));
+    this.addEvent('dblclick', 'contents', ({ index }) => editingItem(index));
     this.addEvent('keydown', 'editor', ({ key }) => {
       if (key !== 'Escape') return;
-      todoStore.commit(SET_EDITING, -1);
+      editingItem(-1);
     });
     this.addEvent('keypress', 'editor', ({ key, target }) => {
       if (key !== 'Enter') return;
-      this.$props.updateItem(target.value);
+      updateItem(target.value);
     });
   }
 }
