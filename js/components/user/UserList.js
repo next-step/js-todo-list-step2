@@ -39,14 +39,15 @@ export class UserList extends Component{
     constructor($target , event ,  props) {
         super($target , event ,  props);
         this.$target.addEventListener('click' , e=>{
-            if(e.target.className ==='ripple user-delete-button'){
-                const userName = prompt('추가하고 싶은 이름을 입력해주세요');
+            if(e.target.className ==='ripple user-create-button'){
+                const userName = prompt('생성 하고 싶은 이름을 입력해주세요');
+
                 if(userName && userName !== '' && userName.length > 1){
                     this.event.addUser(userName);
                     return;
                 }
             }
-            if(e.target.className === 'ripple user-create-button'){
+            if(e.target.className === 'ripple user-delete-button'){
                 const userName = prompt('삭제 하고 싶은 이름을 입력해주세요');
                 if(userName&& userName !== '' && userName.length > 1){
                    // this.event.deleteUser(userName);

@@ -22,8 +22,8 @@ class App{
 
         this.liveUser = 'test' ;
         this.filterType = '';
-        this.userTitle = new UserTitle(this.$target.$userTitle ,{addUser:this.addUser} ,{ liveUser : this.liveUser});
-        this.userList = new UserList(this.$target.$userList , {} , {});
+        this.userTitle = new UserTitle(this.$target.$userTitle ,{} ,{ liveUser : this.liveUser});
+        this.userList = new UserList(this.$target.$userList , {addUser : this.addUser} , {});
         new TodoClearButton(this.$target.$todoClear , {clearTodo :this.clearTodo} , {});
         this.TodoCount = new TodoCount(this.$target.$todoCounter , {} , {});
         new TodoFilter(this.$target.$todoFilter , {} , {});
@@ -60,8 +60,8 @@ class App{
         this.setUsername(userList[0].name);
     }
     addUser = async (username) => {
-        console.log(isCreated);
         const isCreated = await userApi.postUser(username);
+        console.log(isCreated);
     }
     deleteUser = (userId) => {
 
