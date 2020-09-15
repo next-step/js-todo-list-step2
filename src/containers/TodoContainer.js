@@ -2,13 +2,59 @@ import {Component} from "../core/Component.js";
 import {TodoAppender} from "../components/Todo/TodoAppender.js";
 import {TodoList} from "../components/Todo/TodoList.js";
 import {TodoFooter} from "../components/Todo/TodoFooter.js";
+import {userStore} from "../store/userStore.js";
+import {PUT_ITEM, PUT_PRIORITY_ITEM, REMOVE_ITEM, todoStore, TOGGLE_ITEM} from "../store/todoStore.js";
 
 export const TodoContainer = class extends Component {
+
+  get #user () { return userStore.$getters.selectedUser?._id; }
+
+  removeItem (index) {
+    const { todoItems } = todoStore.$state;
+    todoStore.dispatch(REMOVE_ITEM, {
+      userId: this.#user,
+      itemId: todoItems[index]._id,
+    });
+  }
+
+  toggleItem (index) {
+    const { todoItems } = todoStore.$state;
+    todoStore.dispatch(TOGGLE_ITEM, {
+      userId: this.#user,
+      itemId: todoItems[index]._id,
+    });
+  }
+
+  updateItem (contents) {
+    const { editingItem } = todoStore.$getters;
+    editingItem.contents = contents;
+    todoStore.dispatch(PUT_ITEM, {
+      userId: this.#user,
+      item: editingItem
+    })
+  }
+
+  selectPriority (index, priority) {
+    const item = todoStore.$state.todoItems[index];
+    item.priority = priority;
+    todoStore.dispatch(PUT_PRIORITY_ITEM, {
+      userId: this.#user,
+      item
+    })
+  }
 
   componentInit () {
     this.$children = {
       TodoAppender: { constructor: TodoAppender },
-      TodoList: { constructor: TodoList },
+      TodoList: {
+        constructor: TodoList,
+        props: {
+          removeItem: this.removeItem.bind(this),
+          toggleItem: this.toggleItem.bind(this),
+          updateItem: this.updateItem.bind(this),
+          selectPriority: this.selectPriority.bind(this),
+        }
+      },
       TodoFooter: { constructor: TodoFooter },
     }
 
