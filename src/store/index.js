@@ -6,11 +6,13 @@ const store = {
   user: undefined,
 };
 export const setter = {
-  async userList () {
+  async userList (newUser) {
     try {
       const result = await getUserList();
       store.userList = result;
-      result[0] && this.user(result[0]);
+      const user = newUser ? newUser :
+        (result[0] ? result[0] : undefined);
+      this.user(user);
       userListRender();
     } catch (err) {
       console.log(err);
@@ -19,7 +21,7 @@ export const setter = {
   user (value) {
     store.user = value;
     // render();
-  }
+  },
 };
 
 export const initStore = async () => {
@@ -38,7 +40,7 @@ export const getter = {
   },
   userId () {
     return store.user._id;
-  }
+  },
 };
 
 

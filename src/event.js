@@ -8,8 +8,8 @@ const onUserCreateHandler = async () => {
   await validateUserName(name);
 
   try {
-    await postUser({ name });
-    await setter.userList();
+    const newUser = await postUser({ name });
+    await setter.userList(newUser);
   } catch (err) {
     console.log(err);
   }
