@@ -29,25 +29,25 @@ const todoListTemplate = (isCompleted, id, todoPriorityTemplate, contents) => {
 const priorityTemplate = (priority) => {
     if (priority === 'NONE') {
         return `<select class="chip select">
-            <option value="0" selected>순위</option>
-            <option value="1">1순위</option>
-            <option value="2">2순위</option>
+            <option value="NONE" selected>순위</option>
+            <option value="FIRST">1순위</option>
+            <option value="SECOND">2순위</option>
         </select>
     `;
     }
     if (priority === 'FIRST') {
         return `<select class="chip primary">
-            <option value="0" >순위</option>
-            <option value="1" selected>1순위</option>
-            <option value="2">2순위</option>
+            <option value="NONE" >순위</option>
+            <option value="FIRST" selected>1순위</option>
+            <option value="SECOND">2순위</option>
         </select>
     `;
     }
     if (priority === 'SECOND') {
         return `<select class="chip secondary">
-            <option value="0" >순위</option>
-            <option value="1">1순위</option>
-            <option value="2" selected>2순위</option>
+            <option value="NONE" >순위</option>
+            <option value="FIRST">1순위</option>
+            <option value="SECOND" selected>2순위</option>
         </select>
     `;
     }
@@ -71,7 +71,6 @@ export class TodoList extends Component {
             }
             if (target && target.classList.contains('destroy')) {
                 const {$li, todoId} = this.#getItemId(target);
-                console.log($li);
                 this.event.deleteTodo(this.userId, todoId);
                 return;
             }
@@ -79,7 +78,7 @@ export class TodoList extends Component {
         this.$target.addEventListener('change' , ({target})=>{
             if(target && target.tagName==="SELECT"){
                 const {$li, todoId} = this.#getItemId(target);
-
+                this.event.changeTodoPriority(this.userId , todoId,target.value)
             }
         })
         this.$target.addEventListener('dblclick', ({target}) => {
@@ -118,7 +117,6 @@ export class TodoList extends Component {
     }
 
     setTodoList(todoList) {
-        console.log(todoList);
         this.todoList = todoList;
         this.render();
     }

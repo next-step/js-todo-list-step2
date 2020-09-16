@@ -4,7 +4,6 @@ import {Component} from "../../core/Component.js";
 
 const template = (userName, userList) => {
 
-    console.log(userList);
     return userList.map(
         (user) =>
             `<button data-id="${user._id}" class="${
@@ -54,6 +53,10 @@ export class UserList extends Component{
                     return;
                 }
             }
+            if(e.target.className === 'ripple'){
+
+                this.event.getTodoList(e.target.innerText ,e.target.dataset.id);
+            }
         })
 
     }
@@ -71,8 +74,6 @@ export class UserList extends Component{
         this.$target.innerHTML = template(this.username , this.userList);
         this.$target.innerHTML += createUserTemplate();
         this.$target.innerHTML += deleteUserTemplate();
-
-        console.log(this.$target);
 
 
     }

@@ -1,4 +1,5 @@
 import {Component} from "../../core/Component.js";
+import {filterConstant} from "../../constants/constants.js";
 
 
 const template = (todoCounter,completeCounter) => {
@@ -19,16 +20,31 @@ const template = (todoCounter,completeCounter) => {
                     <a href="#completed" class="completed">완료한 일</a>
                 </li>
             </ul>
+            
         <button class="clear-completed">모두 삭제</button>
     `;
 }
 
 export class TodoCount extends Component {
     todoList;
-
+    userId;
     constructor($target, event, props) {
         super($target, event, props)
 
+        this.$target.addEventListener('click' , e=>{
+            if(e.target.className === 'clear-completed'){
+                this.event.clearTodo(this.userId);
+            }
+            if (e.target.className === 'all selected') {
+                this.event.setFilter(filterConstant.ALL);
+            }
+            if (e.target.className === 'active') {
+                this.event.setFilter(filterConstant.ACTIVE);
+            }
+            if (e.target.className === 'completed') {
+                this.event.setFilter(filterConstant.COMPLETED);
+            }
+        })
     }
 
     setTodoList(todoList) {
@@ -36,6 +52,9 @@ export class TodoCount extends Component {
         this.render();
     }
 
+    setUserId(userId){
+        this.userId=userId;
+    }
     render() {
 
         const countTodoList = this.todoList.length;
