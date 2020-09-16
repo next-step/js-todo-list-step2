@@ -7,7 +7,7 @@ const TodoList = () => {
   return `
     <section class="main">
     <ul class="todo-list">
-      <li>${ TodoLoading({}) }</li>
+      <li class="loading">${ TodoLoading({}) }</li>
       ${ user()?.todoList?.map(todo => `<li data-todoIdx="${todo._id}">  ${ TodoItem({ todo }) } </li>`).join('') }
     </ul>
     </section>

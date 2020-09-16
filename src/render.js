@@ -18,12 +18,20 @@ export const initRender = () => {
   $app.innerHTML = components.userTitle
     + components.userListContainer
     + components.todoApp;
+  loadingRender(false);
 };
 
 export const userRender = () => {
   document.querySelector('#user-list').innerHTML = UserList({});
   document.querySelector('#user-title').innerHTML = UserTitle();
   document.querySelector('.todo-list').innerHTML = TodoList();
+
+};
+
+export const loadingRender = (boolean) => {
+  const display =  (boolean ? "block" : "none");
+  const $loading = document.querySelector('.loading');
+  $loading && ($loading.style.display = display)
 };
 
 /*

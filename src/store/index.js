@@ -1,6 +1,5 @@
 import { setUserList } from '../endpoint/service.js';
 import { userRender } from '../render.js';
-
 const store = {
   userList: [],
   user: undefined,
@@ -15,8 +14,7 @@ export const setter = {
     store.user = userId ?
       store.userList.find(user => user._id === userId) :
       store.userList[0];
-
-    userId && userRender()
+    userId && userRender();
   },
 };
 
