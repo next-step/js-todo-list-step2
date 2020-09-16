@@ -1,4 +1,4 @@
-import { getUserList } from '../endpoint/api.js';
+import { setUserList } from '../endpoint/service.js';
 import { userListRender } from '../render.js';
 
 const store = {
@@ -7,20 +7,17 @@ const store = {
 };
 export const setter = {
   async userList (newUser) {
-    try {
-      const result = await getUserList();
-      store.userList = result;
-      const user = newUser ? newUser :
-        (result[0] ? result[0] : undefined);
-      this.user(user);
-      userListRender();
-    } catch (err) {
-      console.log(err);
-    }
+    const result = await setUserList();
+    store.userList = result;
+
+    const user = newUser ? newUser :
+      (result[0] ? result[0] : undefined);
+    this.user(user);
+
+    newUser && userListRender();
   },
   user (value) {
     store.user = value;
-    // render();
   },
 };
 
