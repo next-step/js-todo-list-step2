@@ -21,6 +21,7 @@ export const initRender = () => {
 
 export const userListRender = () => {
   document.querySelector('#user-list').innerHTML = UserList({});
+  document.querySelector('#user-title').innerHTML = UserTitle();
 };
 
 /*

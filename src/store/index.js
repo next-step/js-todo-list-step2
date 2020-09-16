@@ -5,24 +5,24 @@ const store = {
   userList: [],
   user: undefined,
 };
+/* store 를 변경하는 함수는 set 으로 시작됩니다. */
 export const setter = {
-  async userList (newUser) {
+  async userList () {
     const result = await setUserList();
     store.userList = result;
-
-    const user = newUser ? newUser :
-      (result[0] ? result[0] : undefined);
-    this.user(user);
-
-    newUser && userListRender();
   },
-  user (value) {
-    store.user = value;
+  user (userId) {
+    store.user = userId ?
+      store.userList.find(user => user._id === userId) :
+      store.userList[0];
+
+    userId && userListRender()
   },
 };
 
 export const initStore = async () => {
-  await Promise.all([setter.userList()]);
+  await setter.userList();
+  setter.user();
 };
 
 export const getter = {

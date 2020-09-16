@@ -11,7 +11,8 @@ export const onUserCreateHandler = async (validator) => {
 
   try {
     const newUser = await postUser({ name });
-    await setter.userList(newUser);
+    await setter.userList();
+    await setter.user(newUser._id);
   } catch (err) {
     console.log(err);
   }
