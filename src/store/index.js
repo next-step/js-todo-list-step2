@@ -1,4 +1,5 @@
 import { getUserList } from '../endpoint/api.js';
+import { initRender } from '../render.js';
 
 const store = {
   userList: [],
@@ -16,6 +17,7 @@ export const setter = {
   },
   user (value) {
     store.user = value;
+    // render();
   }
 };
 
