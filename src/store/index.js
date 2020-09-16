@@ -1,5 +1,5 @@
 import { getUserList } from '../endpoint/api.js';
-import { initRender } from '../render.js';
+import { userListRender } from '../render.js';
 
 const store = {
   userList: [],
@@ -11,6 +11,7 @@ export const setter = {
       const result = await getUserList();
       store.userList = result;
       result[0] && this.user(result[0]);
+      userListRender();
     } catch (err) {
       console.log(err);
     }
