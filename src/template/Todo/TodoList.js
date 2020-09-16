@@ -2,7 +2,7 @@ import TodoLoading from './TodoLoading.js';
 import TodoItem from './TodoItem.js';
 import { getter } from '../../store/index.js';
 
-const TodoList = ({}) => {
+const TodoList = () => {
   const { user } = getter;
   return `
     <section class="main">

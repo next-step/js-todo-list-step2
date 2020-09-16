@@ -2,6 +2,7 @@ import UserTitle from './template/User/UserTitle.js';
 import UserListContainer from './template/User/UserListContainer.js';
 import TodoContainer from './template/Todo/TodoContainer.js';
 import UserList from './template/User/UserList.js';
+import TodoList from './template/Todo/TodoList.js';
 
 const $app = document.getElementById('app');
 
@@ -19,9 +20,10 @@ export const initRender = () => {
     + components.todoApp;
 };
 
-export const userListRender = () => {
+export const userRender = () => {
   document.querySelector('#user-list').innerHTML = UserList({});
   document.querySelector('#user-title').innerHTML = UserTitle();
+  document.querySelector('.todo-list').innerHTML = TodoList();
 };
 
 /*
