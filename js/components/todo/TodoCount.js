@@ -1,13 +1,10 @@
-import {userApi} from '../../service/UserApi.js'
 import {Component} from "../../core/Component.js";
 
 
-const template = (completeCounter, todoCounter) => {
+const template = (todoCounter,completeCounter) => {
 
     return `
-        <span id="todo-count" class="todo-count>
-            총 <span class="count"><strong>${todoCounter}</strong></span> 개 중
-        </span>        
+        <span class="todo-count">총 <strong>${todoCounter}</strong> 개</span>        
         <span id="completed-count" class="todo-count">
                 <span class="count">${completeCounter}</span> 개 완료
         </span>
@@ -22,14 +19,30 @@ const template = (completeCounter, todoCounter) => {
                     <a href="#completed" class="completed">완료한 일</a>
                 </li>
             </ul>
-        <button class="clear-all">모두 삭제</button>
+        <button class="clear-completed">모두 삭제</button>
     `;
 }
 
-export class TodoCount extends Component{
-    constructor($target ,  event , props) {
-        super($target ,  event , props)
+export class TodoCount extends Component {
+    todoList;
 
+    constructor($target, event, props) {
+        super($target, event, props)
+
+    }
+
+    setTodoList(todoList) {
+        this.todoList = todoList;
+        this.render();
+    }
+
+    render() {
+
+        const countTodoList = this.todoList.length;
+        const completedTodoFilter = this.todoList.filter(todo => todo.isCompleted === true);
+        const countCompletedTodoList = completedTodoFilter.length;
+        const todoCountTemplate = template(countTodoList, countCompletedTodoList);
+        this.$target.innerHTML = todoCountTemplate;
     }
 
 }
