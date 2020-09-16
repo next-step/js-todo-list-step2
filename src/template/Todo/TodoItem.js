@@ -1,13 +1,13 @@
 import TodoLabel from './TodoLabel.js';
 
-const TodoItem = ({ content }) => {
+const TodoItem = ({ todo }) => {
   return `
       <div class="view">
       <input class="toggle" type="checkbox" />
-      ${ TodoLabel({ content }) }
+      ${ TodoLabel({ contents: todo.contents }) }
       <button class="destroy"></button>
     </div>
-    <input class="edit" value="${ content }" />
+    <input class="edit" value="${ todo.contents }" />
   `;
 };
 

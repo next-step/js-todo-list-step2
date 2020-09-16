@@ -1,6 +1,6 @@
 import UserTitle from './template/User/UserTitle.js';
 import UserListContainer from './template/User/UserListContainer.js';
-import TodoApp from './template/Todo/TodoApp.js';
+import TodoContainer from './template/Todo/TodoContainer.js';
 import UserList from './template/User/UserList.js';
 
 const $app = document.getElementById('app');
@@ -11,7 +11,7 @@ export const initRender = () => {
   components = {
     userTitle: UserTitle({}),
     userListContainer: UserListContainer('userList'),
-    todoApp: TodoApp({}),
+    todoApp: TodoContainer({}),
   };
 
   $app.innerHTML = components.userTitle

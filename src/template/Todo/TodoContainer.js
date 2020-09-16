@@ -3,7 +3,7 @@ import TodoInput from './TodoInput.js';
 import TodoList from './TodoList.js';
 import TodoCountContainer from './TodoCountContainer.js';
 
-const TodoApp = ({}) => {
+const TodoContainer = ({}) => {
   return `
     <section class="todoapp">
       ${ TodoInput({}) }
@@ -13,4 +13,4 @@ const TodoApp = ({}) => {
   `;
 };
 
-export default TodoApp;
+export default TodoContainer;
