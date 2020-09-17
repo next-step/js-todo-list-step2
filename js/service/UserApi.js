@@ -3,9 +3,8 @@ import {request} from "./core.js";
 const API_URL = 'https://js-todo-list-9ca3a.df.r.appspot.com';
 
 export const userApi = {
-    getUserList: () => {
-        return request(`${API_URL}/api/users/`);
-    },
+    getUserList: () => request(`${API_URL}/api/users/`)
+    ,
     postUser: (name) => {
         const apiOption = {
             method: 'POST',
@@ -18,9 +17,8 @@ export const userApi = {
         }
         return request(`${API_URL}/api/users/`, apiOption);
     },
-    getUser: (userId) => {
-        return request(`${API_URL}/api/users/${userId}/`);
-    },
+    getUser: (userId) => (`${API_URL}/api/users/${userId}/`)
+    ,
     deleteUser: (userId) => {
         const apiOption = {
             headers: {
@@ -31,9 +29,8 @@ export const userApi = {
         };
         return request(`${API_URL}/api/users/${userId}/`, apiOption);
     },
-    getUserTodoItem: (userId) => {
-        return request(`${API_URL}/api/users/${userId}/items/`);
-    },
+    getUserTodoItem: (userId) => request(`${API_URL}/api/users/${userId}/items/`)
+    ,
     postUserTodoItem: (userId, contents) => {
         const apiOptions = {
             method: 'POST',
@@ -66,7 +63,7 @@ export const userApi = {
         };
         return request(`${API_URL}/api/users/${userId}/items/${todoItemId}`, apiOption);
     },
-    putUserTodoItem: (userId, todoItemId , contents) => {
+    putUserTodoItem: (userId, todoItemId, contents) => {
         const apiOptions = {
             method: 'PUT',
             headers: {
