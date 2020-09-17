@@ -50,6 +50,7 @@ class App {
     }
 
     addTodo = async (userId, contents) => {
+        console.log(userId, contents);
         const isPosted = await userApi.postUserTodoItem(userId, contents);
         const getTodoList = this.getTodoList(this.username, userId);
     }
@@ -102,11 +103,14 @@ class App {
         if (this.filterType === 'ACTIVE') {
             this.todoArray = todoList.filter(todo => todo.isCompleted === false);
         }
+        console.log(this.todoArray);
         this.todoList.setTodoList(this.todoArray);
         this.todoCount.setTodoList(this.todoArray);
     }
     getUserList = async () => {
+
         const userList = await userApi.getUserList();
+        console.log(userList);
         this.setUserList(userList);
         this.users = userList;
     }
@@ -121,6 +125,7 @@ class App {
         this.todoInput.setUserId(userId);
         this.todoList.setUserId(userId);
         this.todoCount.setUserId(userId);
+        this.userList.setUserId(userId);
     }
 
     setFilter  = (filterType ) => {

@@ -2,12 +2,12 @@
 import {Component} from "../../core/Component.js";
 
 
-const template = (userName, userList) => {
+const template = (userId , userName, userList) => {
 
     return userList.map(
         (user) =>
             `<button data-id="${user._id}" class="${
-                user.name === userName ? 'ripple active' : 'ripple'
+                user._id === userId ? 'ripple active' : 'ripple'
             }">${user.name}</button>`
     ).join(' ');
 }
@@ -33,6 +33,7 @@ const deleteUserTemplate = () => `
 
 export class UserList extends Component{
 
+    userId;
     userList;
     username;
     constructor($target , event ,  props) {
@@ -61,6 +62,10 @@ export class UserList extends Component{
 
     }
 
+    setUserId(userId){
+        this.userId = userId;
+        this.render();
+    }
     setUsername(username){
         this.username = username;
         this.render();
@@ -71,7 +76,7 @@ export class UserList extends Component{
     }
     render(){
 
-        this.$target.innerHTML = template(this.username , this.userList);
+        this.$target.innerHTML = template(this.userId , this.username , this.userList);
         this.$target.innerHTML += createUserTemplate();
         this.$target.innerHTML += deleteUserTemplate();
 

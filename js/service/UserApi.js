@@ -29,7 +29,11 @@ export const userApi = {
         };
         return request(`${API_URL}/api/users/${userId}/`, apiOption);
     },
-    getUserTodoItem: (userId) => request(`${API_URL}/api/users/${userId}/items/`)
+    getUserTodoItem: (userId) =>{
+        console.log(userId);
+        return request(`${API_URL}/api/users/${userId}/items/` )
+
+    }
     ,
     postUserTodoItem: (userId, contents) => {
         const apiOptions = {
