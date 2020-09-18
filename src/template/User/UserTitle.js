@@ -21,11 +21,10 @@ const UserTitle = () => {
   const render = () => {
     const userName = getter.userName();
     const getTitleName = userName ? `${ userName }\'s` : '';
-
     dom.innerHTML = `
     <h1 data-username="${ userName }">
       <span><strong>${ getTitleName }</strong>Todo List</span>
-      <span data-component="user-delete" class="user-delete">X</span>
+      ${ userName ? `<span data-component="user-delete" class="user-delete">X</span>` : ''}
     </h1>
   `;
   };
