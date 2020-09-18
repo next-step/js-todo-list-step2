@@ -482,3 +482,19 @@ button.user-create-button.ripple {
   padding-right: 10px;
   margin-left: 10px;
 }
+.user-title {
+  position: relative;
+}
+.user-delete {
+  position: absolute;
+  cursor: pointer;
+  margin: 0 10px;
+  font-size: 20px;
+}
+
+.user-delete:hover {
+  font-weight: bold;
+  color: red;
+  font-size: 30px;
+  transition: 0.3s;
+}

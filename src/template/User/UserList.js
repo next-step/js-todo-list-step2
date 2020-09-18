@@ -1,18 +1,32 @@
 import { getter } from '../../store/index.js';
+import { loadingWrapper } from '../../utils.js';
+import { setter } from '../../store/index.js';
+import { observer } from '../../store/index.js';
 
-const UserList = ({}) => {
-  const userId = getter.userId();
-  const userList = getter.userList();
+const setUser = (event) => {
+  const userId = event.target.dataset.index;
+  userId && loadingWrapper(() => setter.user(userId));
+};
 
-  const btnStyle = (id) => userId === id ? 'active' : '';
+const UserList = () => {
+  const dom = document.createElement('div');
+  dom.classList.add('user-list');
+  dom.addEventListener('click', setUser);
 
-  return `<div id="user-list"> 
-            ${ userList.map((user) =>
-            `<button data-index="${ user._id }" 
-                            class="ripple ${ btnStyle(user._id) }">
-                            ${ user.name }
-            </button>`).join('') }
-         </div>`;
+  const render = () => {
+    const userId = getter.userId();
+    const userList = getter.userList();
+    const btnStyle = (id) => userId === id ? 'active' : '';
+
+    dom.innerHTML = `${ userList.map((user) =>
+      `<button data-index="${ user._id }" 
+        class="ripple ${ btnStyle(user._id) }">
+        ${ user.name }
+    </button>`).join('') }`;
+  };
+  observer.addObserver('user', render);
+
+  return { dom, render };
 };
 
 export default UserList;

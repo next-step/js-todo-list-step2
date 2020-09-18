@@ -1,6 +1,7 @@
 import TodoLabel from './TodoLabel.js';
 
 const TodoItem = ({ todo }) => {
+  // const dom = document.createElement()
   return `
       <div class="view">
       <input class="toggle" type="checkbox" />

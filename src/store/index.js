@@ -1,5 +1,4 @@
-import { setUserList } from '../endpoint/service.js';
-import { userRender } from '../render.js';
+import { getUserListService } from '../endpoint/service.js';
 const store = {
   userList: [],
   user: undefined,
@@ -7,20 +6,31 @@ const store = {
 /* store 를 변경하는 함수는 set 으로 시작됩니다. */
 export const setter = {
   async userList () {
-    const result = await setUserList();
+    const result = await getUserListService();
     store.userList = result;
   },
   user (userId) {
     store.user = userId ?
       store.userList.find(user => user._id === userId) :
       store.userList[0];
-    userId && userRender();
+    observer.render('user');
   },
 };
 
 export const initStore = async () => {
   await setter.userList();
   setter.user();
+};
+
+export const observer = {
+  userList: [],
+  user: [],
+  addObserver(target, component) {
+    this[target].push(component);
+  },
+  render (target) {
+    this[target].forEach(render => render());
+  }
 };
 
 export const getter = {

@@ -1,5 +1,13 @@
-const TodoCount = ({}) => {
-  return `<span class="todo-count">총 <strong>0</strong> 개</span>`
+const TodoCount = () => {
+  const dom = document.createElement('span');
+  dom.classList.add('todo-count');
+
+  const render = () => {
+    const count = 0;
+    dom.innerHTML = `총 <strong>${ count }</strong> 개`;
+  };
+
+  return { dom, render };
 };
 
 export default TodoCount;
