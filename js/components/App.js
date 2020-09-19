@@ -73,10 +73,10 @@ export default class App extends Component {
     const data = await fetch(
       `${API_BASE_URL}/api/users/${this.activeUser.value._id}/items/`,
       option
-    );
+    ).then((res) => res.json());
     this.activeUser.value = {
       ...this.activeUser.value,
-      todoList: this.activeUser.value.todoList.concat(await data.json()),
+      todoList: this.activeUser.value.todoList.concat(data),
     };
   };
 
