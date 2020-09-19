@@ -9,10 +9,12 @@ export default new class TodoInput{
     }
 
     add(target){
+        TodoList.$todoList.insertAdjacentHTML("beforeend", TodoList.skeltonTemplate());
         fetcher(fetchParams.addItem(TodoState.user._id,target.value),this.loadUserItem)
         target.value = '';
     }
     loadUserItem(){
+        TodoList.$todoList.insertAdjacentHTML("beforeend", TodoList.skeltonTemplate());
         fetcher(fetchParams.userItem(TodoState.user._id),TodoList.makeList);
     }
 
