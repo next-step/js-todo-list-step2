@@ -14,30 +14,13 @@ export const getters = Object.freeze({
 });
 
 export const setter = Object.freeze({
-  userList () {
-    state.userList = [];
-    observer.notify('userList');
+  userList (userList) {
+    state.userList = userList;
   },
-  user () {
-    state.user = undefined;
-    observer.notify('user');
+  user (user) {
+    state.user = user;
   },
-  userTodoList () {
-    state.user.todoList = [];
-    observer.notify('userTodoList');
+  userTodoList (userTodoList) {
+    state.user.todoList = userTodoList;
   }
 });
-
-export const observer = {
-  userList: [],
-  user: [],
-  userTodoList: [],
-
-  addObserver(target, render) {
-    this[target].push(render);
-  },
-
-  notify (target) {
-    this[target].forEach(render => render());
-  }
-};
