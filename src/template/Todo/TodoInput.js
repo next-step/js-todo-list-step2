@@ -23,7 +23,7 @@ const TodoInput = () => {
     }
   };
 
-  dom.addEventListener('keydown', addUserItem);
+  dom.addEventListener('keypress', addUserItem);
 
   const render = () => {
     const isUserId = !!getter.userId();
