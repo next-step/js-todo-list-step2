@@ -21,6 +21,10 @@ function UserListContainer($dom, store) {
             case 'create': {
                 store.dispatch(setStatus({status: PENDING}));
                 const userName = window.prompt('username?');
+                if (userName.length < 2) {
+                    alert('이름은 두글자 이상 입력해주세요.');
+                    return;
+                }
                 const {_id, todoList, name} = await createUser(userName);
                 store.dispatch(addUser({user: {_id, name}}));
                 store.dispatch(setUserId({selectedUserId: _id}))
@@ -34,13 +38,13 @@ function UserListContainer($dom, store) {
         const {userId, role} = dataset;
         if (role === 'select') {
             const confirmFl = confirm('정말 삭제하시겠습니까?');
-            if(confirmFl){
+            if (confirmFl) {
                 await deleteUser(userId);
                 const {selectedUserId, userList} = store.getState();
                 store.dispatch(removeUser({userId}));
                 if (selectedUserId === userId) {
                     const newUserId = userList[0]._id;
-                    store.dispatch(setUserId({selectedUserId:newUserId}));
+                    store.dispatch(setUserId({selectedUserId: newUserId}));
                     store.dispatch(setStatus({status: PENDING}));
                     const todoList = await getTodoList(newUserId);
                     store.dispatch(setTodoList({todoList}));
