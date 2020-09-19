@@ -7,10 +7,10 @@ const state = observable({
 
 export const getters = Object.freeze({
   get userList () { return state.userList },
-  get user() { return state.user },
-  get userId() { return this.user._id },
-  get userName() { return this.user.name },
-  get userTodoList() { return this.user.todoList },
+  get user () { return state.user },
+  get userId () { return this.user._id },
+  get userName () { return this.user.name },
+  get userTodoList () { return this.user.todoList },
 });
 
 export const setter = Object.freeze({

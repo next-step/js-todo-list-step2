@@ -5,10 +5,9 @@ export const observe = (target, fn) => {
 }
 
 export const observable = target => {
-
+  const observers = new Set();
+  observerMap.set(target, observers);
   return Object.keys(target).reduce((obj, key) => {
-    observerMap.set(obj, new Set());
-    const observers = observerMap.get(obj);
     let _value = target[key];
 
     Object.defineProperty(obj, key, {
@@ -23,6 +22,6 @@ export const observable = target => {
 
     return obj;
 
-  }, {});
+  }, target);
 
 };
