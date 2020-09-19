@@ -1,5 +1,6 @@
 import { postUserItemService } from '../../endpoint/service.js';
 import { getter, setter } from '../../store/index.js';
+import { observer } from '../../store/index.js';
 
 const TodoInput = () => {
   const dom = document.createElement('section');
@@ -26,12 +27,14 @@ const TodoInput = () => {
   dom.addEventListener('keydown', addUserItem);
 
   const render = () => {
+    const isUserId = !!getter.userId();
     dom.innerHTML = `
         <input
         class="new-todo"
-        placeholder="할 일을 입력해주세요."
-        autofocus />`;
+        placeholder="${ isUserId ? '할 일을 입력해주세요.' : '선택된 유저가 없습니다' }"
+        autofocus ${ isUserId || 'disabled' }/>`;
   };
+  observer.addObserver('user', render);
 
   return { dom, render };
 };

@@ -1,4 +1,5 @@
-import { getUserListService, getUserItemsService } from '../endpoint/service.js';
+import { getUserListService, getUserItemsService, getUserService } from '../endpoint/service.js';
+
 const store = {
   userList: [],
   user: undefined,
@@ -9,34 +10,43 @@ export const setter = {
     const result = await getUserListService();
     store.userList = result;
   },
-  user (userId) {
-    store.user = userId ?
-      store.userList.find(user => user._id === userId) :
-      store.userList[0];
+  async user (userId) {
+    const newUserId = userId ? userId : store.userList[0]._id;
+    try {
+      const user = await getUserService({ userId: newUserId });
+      if (user.message) {
+        alert(user.message);
+        return;
+      }
+      store.user = user;
+    } catch (err) {
+      console.log(err);
+    }
     observer.render('user');
   },
   async userItems (userId) {
     const userItems = await getUserItemsService({ userId });
     store.user.todoList = userItems;
     observer.render('userItems');
-  }
+  },
 };
 
 export const initStore = async () => {
   await setter.userList();
-  setter.user();
+  await setter.user();
 };
+
 
 export const observer = {
   userList: [],
   user: [],
   userItems: [],
-  addObserver(target, component) {
+  addObserver (target, component) {
     this[target].push(component);
   },
   render (target) {
     this[target].forEach(render => render());
-  }
+  },
 };
 
 export const getter = {
@@ -47,10 +57,10 @@ export const getter = {
     return store.user;
   },
   userName () {
-    return store.user.name;
+    return store.user?.name;
   },
   userId () {
-    return store.user._id;
+    return store.user?._id;
   },
 };
 

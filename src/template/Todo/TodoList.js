@@ -24,7 +24,7 @@ const TodoList = () => {
   const render = () => {
     const { user } = getter;
     todos.innerHTML = `
-      ${ user()?.todoList?.map(todo => `<li data-todoIdx="${ todo._id }">  ${ TodoItem({ todo }) } </li>`).join('') }
+      ${ user()?.todoList?.map(todo => `<li data-todoIdx="${ todo._id }">  ${ TodoItem({ todo }) } </li>`).join('') ?? '' }
     `;
   };
 
