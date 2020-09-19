@@ -35,4 +35,5 @@ export const putUserItemPriority = ({ userId, itemId, priority }) =>
 // "priority": "string" // 'NONE', 'FIRST', 'SECOND'
 
 export const putUserItemCompleteToggle = ({ userId, itemId }) =>
-  api.PUT(`/api/users/${ userId }/items/${ itemId }`);
+  api.PUT(`/api/users/${ userId }/items/${ itemId }/toggle`);
+

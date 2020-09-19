@@ -14,11 +14,9 @@ export const setter = {
     const newUserId = userId ? userId : store.userList[0]._id;
     try {
       const user = await getUserService({ userId: newUserId });
-      if (user.message) {
+      if (user.message)
         alert(user.message);
-        return;
-      }
-      store.user = user;
+      store.user = user.message ? undefined : user;
     } catch (err) {
       console.log(err);
     }
@@ -62,6 +60,9 @@ export const getter = {
   userId () {
     return store.user?._id;
   },
+  userItems () {
+    return store.user?.todoList;
+  }
 };
 
 
