@@ -33,8 +33,8 @@ export default new class fetchParams{//ㄷ_ㄷ..
             body: JSON.stringify({ contents: contents })
         }
     })
-    updateContents = (item_id,contents) => ({
-        url : this.baseUrl+`items/${item_id}/`,
+    updateContents = (user_id,item_id,contents) => ({
+        url : this.baseUrl+`${user_id}/items/${item_id}`,
         option : {
             method : "PUT",
             headers  : { 'Content-Type': 'application/json' },

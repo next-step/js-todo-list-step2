@@ -10,7 +10,6 @@ export default new class TodoList{
     }
 
     makeList = (items) => {
-        TodoState.user.todoList = items;
         if(!items) return this.$todoList.innerHTML = '';
         const newItems = items.filter(item => 
             (TodoState.view === 'all') ||
@@ -18,7 +17,7 @@ export default new class TodoList{
             (TodoState.view === 'active' && !item.isCompleted))
         const template = newItems.map((item) => this.todoTemplate({...item}));
         this.$todoList.innerHTML = template.join("");
-
+        TodoState.user.todoList = newItems;
         console.log(
             "%c"+TodoState.user.name+
             "[%c"+TodoState.user._id+
@@ -27,11 +26,30 @@ export default new class TodoList{
             "loaded!");
     }
 
-    toggle(target){
+    toggleCompleted(target){
         const $li = getLi(target);
         const index = getIndex($li);
         const item_id = TodoState.user.todoList[index]._id;
         fetcher(fetchParams.toggleCompleted(TodoState.user._id,item_id),this.refreshList);
+    }
+
+    toggleEditing(target){
+        getLi(target).classList.toggle("editing");
+        qs(".edit",getLi(target)).focus();
+    }
+    
+    updateContents(target,key){
+        const index = getIndex(getLi(target));
+        const item_id = TodoState.user.todoList[index]._id;
+        const title = qs("label",getLi(target)).lastChild.textContent;
+        const newTitle = target.value;
+        if(key === 'Enter' && !!newTitle.trim() && title !== newTitle){
+            fetcher(fetchParams.updateContents(TodoState.user._id,item_id,target.value),this.refreshList)
+        }
+        else{
+            target.value = title;
+            getLi(target).classList.toggle("editing");
+        }
     }
 
     delete(target){
@@ -68,10 +86,7 @@ export default new class TodoList{
         <li ${isCompleted ? 'class="completed"':""}>
             <div class="view">
                 <input class="toggle" type="checkbox" ${isCompleted && "checked"}/>
-                <label class="label">
-                ${span}
-                ${contents}
-                </label>
+                <label class="label">${span}${contents}</label>
                 <button class="destroy"></button>
                 </div>
             <input class="edit" value="${contents}" />
@@ -80,9 +95,17 @@ export default new class TodoList{
     }
 
     eventController(todoList){
-        todoList.addEventListener("change", ({target}) => this.toggle(target))
+        todoList.addEventListener("change", ({target}) => {
+            if(target.classList.contains("toggle")) this.toggleCompleted(target) 
+        })
         todoList.addEventListener("click", ({target})=>{
             if(target.classList.contains("destroy")) this.delete(target)
         })
+        todoList.addEventListener("dblclick", ({target}) => {
+            if(target.classList.contains("label")) this.toggleEditing(target);
+        })
+        todoList.addEventListener("keyup", ({target,key}) => {
+            if(['Enter','Escape'].includes(key)) this.updateContents(target,key)
+        });
     }
 }
