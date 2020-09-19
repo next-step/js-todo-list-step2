@@ -4,11 +4,11 @@ export default class State {
 
   constructor(initialValue, render) {
     this.#value = initialValue;
-    this.#renders = [render];
+    this.#renders = new Set([render]);
   }
 
   subscribe = (render) => {
-    this.#renders.push(render);
+    this.#renders.add(render);
   };
 
   renderAll = () => {
