@@ -51,3 +51,11 @@ export const createTodoItem = async (userId, contents) => {
     })
     return await data.json();
 }
+export const toggleTodoItemComplete = async (userId, itemId) => {
+    const data = await fetch(`${BASE_URL}/${userId}/items/${itemId}/toggle`, {
+        method: 'PUT', headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+    return await data.json();
+}

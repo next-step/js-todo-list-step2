@@ -1,7 +1,7 @@
 const TodoItem = ({_id, contents, isCompleted, priority}) => `
-	<li>
+	<li ${isCompleted ? 'class=completed' : ''}>
 		<div class="view">
-            <input class="toggle" type="checkbox" ${isCompleted ? 'checked' : ''}/>
+            <input data-id="${_id}" class="toggle" type="checkbox" ${isCompleted ? 'checked' : ''}/>
             <label class="label">
               <span class="chip primary">${priority}순위</span>
               ${contents}

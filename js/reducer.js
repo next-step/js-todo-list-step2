@@ -9,6 +9,7 @@ const SET_TODO_LIST = 'setTodoList';
 const ADD_USER = 'addUser';
 const REMOVE_USER = 'removeUser';
 const ADD_TODO_ITEM = 'addTodoItem';
+const SET_TODO_ITEM = 'setTodoItem';
 
 export const setStatus = ({status}) => actionCreator(SET_STATUS, {status});
 export const setUserList = ({userList, selectedUserId}) => actionCreator(SET_USER_LIST, {userList, selectedUserId});
@@ -21,7 +22,8 @@ export const setUserId = ({selectedUserId}) => actionCreator(SET_USER_ID, {selec
 export const setTodoList = ({todoList}) => actionCreator(SET_TODO_LIST, {todoList});
 export const addUser = ({user}) => actionCreator(ADD_USER, {user});
 export const removeUser = ({userId}) => actionCreator(REMOVE_USER, {userId});
-export const addTodoItem = ({todoItem}) => actionCreator(ADD_TODO_ITEM,{todoItem});
+export const addTodoItem = ({todoItem}) => actionCreator(ADD_TODO_ITEM, {todoItem});
+export const setTodoItem = ({todoItem}) => actionCreator(SET_TODO_ITEM, {todoItem});
 
 const initState = {
     status: '',
@@ -90,6 +92,13 @@ const reducer = (state = initState, {type, payload}) => {
             return {
                 ...state,
                 todoList: [...state.todoList, todoItem],
+            }
+        }
+        case SET_TODO_ITEM: {
+            const {todoItem} = payload;
+            return {
+                ...state,
+                todoList: state.todoList.map((item) => item._id === todoItem._id ? todoItem : item)
             }
         }
         default:
