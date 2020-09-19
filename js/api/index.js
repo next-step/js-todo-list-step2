@@ -59,3 +59,21 @@ export const toggleTodoItemComplete = async (userId, itemId) => {
     })
     return await data.json();
 }
+
+export const deleteTodoItem = async (userId, itemId) => {
+    const data = await fetch(`${BASE_URL}/${userId}/items/${itemId}`, {
+        method: 'DELETE', headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+    return await data.json();
+}
+
+export const updateTodoItem = async (userId, itemId, contents) => {
+    const data = await fetch(`${BASE_URL}/${userId}/items/${itemId}`, {
+        method: 'DELETE', headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({contents})
+    })
+}

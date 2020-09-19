@@ -10,6 +10,7 @@ const ADD_USER = 'addUser';
 const REMOVE_USER = 'removeUser';
 const ADD_TODO_ITEM = 'addTodoItem';
 const SET_TODO_ITEM = 'setTodoItem';
+const TOGGLE_TODO_ITEM = 'toggleTodoItem';
 
 export const setStatus = ({status}) => actionCreator(SET_STATUS, {status});
 export const setUserList = ({userList, selectedUserId}) => actionCreator(SET_USER_LIST, {userList, selectedUserId});
@@ -24,6 +25,7 @@ export const addUser = ({user}) => actionCreator(ADD_USER, {user});
 export const removeUser = ({userId}) => actionCreator(REMOVE_USER, {userId});
 export const addTodoItem = ({todoItem}) => actionCreator(ADD_TODO_ITEM, {todoItem});
 export const setTodoItem = ({todoItem}) => actionCreator(SET_TODO_ITEM, {todoItem});
+export const toggleTodoItem = ({todoItemId}) => actionCreator(TOGGLE_TODO_ITEM, {todoItemId});
 
 const initState = {
     status: '',
@@ -99,6 +101,13 @@ const reducer = (state = initState, {type, payload}) => {
             return {
                 ...state,
                 todoList: state.todoList.map((item) => item._id === todoItem._id ? todoItem : item)
+            }
+        }
+        case TOGGLE_TODO_ITEM: {
+            const {todoItemId} = payload;
+            return {
+                ...state,
+                todoList: state.todoList.map((todoItem) => todoItem._id === todoItemId ? {...todoItem,edit:!todoItem.edit } : todoItem)
             }
         }
         default:
