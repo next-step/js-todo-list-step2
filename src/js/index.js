@@ -1,15 +1,18 @@
-import {observable, observe} from "./core/Observer.js";
+import { setter, getters } from './store/index.js';
+import { observe } from './core/Observer.js';
+import '../components/title.js';
+
+const newUser = {
+  name: 'ey',
+  _id: '123',
+  todoList: [],
+};
 
 
-const state = observable({
-  a: 10,
-  b: 20,
-  c: 30,
-});
+observe(() => console.log(getters.user));
 
-const onUserCreateHandler = () => {
-  const userName = prompt("추가하고 싶은 이름을 입력해주세요.");
-}
+setter.userName(newUser.name);
+// setter.userName(newUser.name);
+// setter.userName(newUser.name);
 
-const userCreateButton = document.querySelector('.user-create-button')
-userCreateButton.addEventListener('click', onUserCreateHandler)
+

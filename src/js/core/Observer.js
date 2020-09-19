@@ -13,6 +13,7 @@ export const observable = target => {
     let _value = obj[key];
     Object.defineProperty(obj, key, {
       get () {
+        console.log(key);
         if (currentObserver) observers.add(currentObserver);
         return _value;
       },
