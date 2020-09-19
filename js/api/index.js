@@ -78,3 +78,11 @@ export const updateTodoItem = async (userId, itemId, contents) => {
     });
     return await data.json();
 }
+export const deleteAllTodoItem = async (userId) =>{
+    const data = await fetch(`${BASE_URL}/${userId}/items/`, {
+        method: 'DELETE', headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+    return await data.json();
+}
