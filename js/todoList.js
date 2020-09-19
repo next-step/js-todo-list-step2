@@ -20,7 +20,7 @@ export default new class TodoList{
         TodoState.user.todoList = newItems;
         console.log(
             "%c"+TodoState.user.name+
-            "[%c"+TodoState.user._id+
+            "[%c"+TodoState.userId+
             "%c]",
             "font-weight:bold;","color:red;","color:black;",
             "loaded!");
@@ -29,8 +29,8 @@ export default new class TodoList{
     toggleCompleted(target){
         const $li = getLi(target);
         const index = getIndex($li);
-        const item_id = TodoState.user.todoList[index]._id;
-        fetcher(fetchParams.toggleCompleted(TodoState.user._id,item_id),this.refreshList);
+        const item_id = TodoState.itemId(index)
+        fetcher(fetchParams.toggleCompleted(TodoState.userId,item_id),this.refreshList);
     }
 
     toggleEditing(target){
@@ -38,13 +38,21 @@ export default new class TodoList{
         qs(".edit",getLi(target)).focus();
     }
     
+    updatePriority(target){
+        const index = getIndex(getLi(target));
+        const item_id = TodoState.itemId(index)
+        const select = Number(target.value);
+        const priority = select === 0 ? "NONE" : select === 1 ? "FIRST" : "SECOND"
+        fetcher(fetchParams.updatePriority(TodoState.userId,item_id,priority),this.refreshList)
+    }
+
     updateContents(target,key){
         const index = getIndex(getLi(target));
-        const item_id = TodoState.user.todoList[index]._id;
+        const item_id = TodoState.itemId(index);
         const title = qs("label",getLi(target)).lastChild.textContent;
         const newTitle = target.value;
         if(key === 'Enter' && !!newTitle.trim() && title !== newTitle){
-            fetcher(fetchParams.updateContents(TodoState.user._id,item_id,target.value),this.refreshList)
+            fetcher(fetchParams.updateContents(TodoState.userId,item_id,target.value),this.refreshList)
         }
         else{
             target.value = title;
@@ -56,19 +64,19 @@ export default new class TodoList{
         if(confirm("정말로 삭제하시겠습니까?")){
             const $li = getLi(target)
             const index = getIndex($li);
-            const item_id = TodoState.user.todoList[index]._id;
-            fetcher(fetchParams.deleteItem(TodoState.user._id,item_id),this.refreshList);
+            const item_id = TodoState.itemId(index);
+            fetcher(fetchParams.deleteItem(TodoState.userId,item_id),this.refreshList);
         }
     }
 
     deleteAll(){
         if(confirm("주의! 정말로 전체 삭제하시겠습니까!?")){
-            fetcher(fetchParams.deleteAllItem(TodoState.user._id),this.refreshList)
+            fetcher(fetchParams.deleteAllItem(TodoState.userId),this.refreshList)
         }
     }
  
     refreshList = () => {
-        fetcher(fetchParams.userItem(TodoState.user._id),this.makeList)
+        fetcher(fetchParams.userItem(TodoState.userId),this.makeList)
     }
 
     todoTemplate({contents,isCompleted,priority}){
@@ -97,6 +105,7 @@ export default new class TodoList{
     eventController(todoList){
         todoList.addEventListener("change", ({target}) => {
             if(target.classList.contains("toggle")) this.toggleCompleted(target) 
+            if(target.classList.contains("chip")) this.updatePriority(target)
         })
         todoList.addEventListener("click", ({target})=>{
             if(target.classList.contains("destroy")) this.delete(target)
