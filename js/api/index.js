@@ -34,3 +34,11 @@ export const createUser = async (userName) => {
     })
     return await data.json();
 }
+export const deleteUser = async (userId) => {
+    const data = await fetch(`${BASE_URL}/${userId}`, {
+        method: 'DELETE', headers:{
+            'Content-Type': 'application/json'
+        }
+    })
+    return await data.json();
+}
