@@ -7,10 +7,10 @@ export const observe = fn => {
 }
 
 export const observable = target => {
-  const observers = new Set();
-  return Object.keys(target).reduce((obj, key) => {
-    let _value = obj[key];
 
+  return Object.keys(target).reduce((obj, key) => {
+    const observers = new Set();
+    let _value = obj[key];
     Object.defineProperty(obj, key, {
       get () {
         if (currentObserver) observers.add(currentObserver);
