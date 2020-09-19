@@ -5,6 +5,7 @@ import TodoSkeleton from '../components/TodoSkeleton.js';
 import {PENDING, SUCCESS} from "../constant.js";
 
 function TodoListContainer($dom, store) {
+    let prevFilter;
     let prevStatus;
     let prevTodoList;
 
@@ -50,8 +51,9 @@ function TodoListContainer($dom, store) {
     })
 
     return () => {
-        const {status, todoList} = store.getState();
-        if (prevStatus !== status || prevTodoList !== todoList) {
+        const {filter, status, todoList} = store.getState();
+        if (prevFilter!==filter || prevStatus !== status || prevTodoList !== todoList) {
+            prevFilter = filter;
             prevStatus = status;
             prevTodoList = todoList;
             switch (status) {
@@ -60,7 +62,17 @@ function TodoListContainer($dom, store) {
                     break;
                 }
                 case SUCCESS: {
-                    $dom.innerHTML = TodoList({todoList});
+                    const filteredTodoList = todoList.filter(({isCompleted})=>{
+                        switch (filter){
+                            case 'all':
+                                return true;
+                            case 'active':
+                                return !isCompleted;
+                            case 'completed':
+                                return isCompleted;
+                        }
+                    })
+                    $dom.innerHTML = TodoList({todoList:filteredTodoList});
                     break;
                 }
             }

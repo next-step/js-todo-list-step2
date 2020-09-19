@@ -11,6 +11,7 @@ const REMOVE_USER = 'removeUser';
 const ADD_TODO_ITEM = 'addTodoItem';
 const SET_TODO_ITEM = 'setTodoItem';
 const TOGGLE_TODO_ITEM = 'toggleTodoItem';
+const SET_TODO_FILTER = 'setTodoFilter';
 
 export const setStatus = ({status}) => actionCreator(SET_STATUS, {status});
 export const setUserList = ({userList, selectedUserId}) => actionCreator(SET_USER_LIST, {userList, selectedUserId});
@@ -26,6 +27,7 @@ export const removeUser = ({userId}) => actionCreator(REMOVE_USER, {userId});
 export const addTodoItem = ({todoItem}) => actionCreator(ADD_TODO_ITEM, {todoItem});
 export const setTodoItem = ({todoItem}) => actionCreator(SET_TODO_ITEM, {todoItem});
 export const toggleTodoItem = ({todoItemId}) => actionCreator(TOGGLE_TODO_ITEM, {todoItemId});
+export const setTodoFilter = ({filter}) => actionCreator(SET_TODO_FILTER,{filter});
 
 const initState = {
     filter: 'all',
@@ -109,6 +111,13 @@ const reducer = (state = initState, {type, payload}) => {
             return {
                 ...state,
                 todoList: state.todoList.map((todoItem) => todoItem._id === todoItemId ? {...todoItem,edit:!todoItem.edit } : todoItem)
+            }
+        }
+        case SET_TODO_FILTER: {
+            const {filter} = payload;
+            return {
+                ...state,
+                filter,
             }
         }
         default:
