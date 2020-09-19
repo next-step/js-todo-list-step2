@@ -88,10 +88,10 @@ export default class App extends Component {
     );
     this.activeUser.value = {
       ...this.activeUser.value,
-      todoList: this.activeUser.value.todoList.map((todoItem) => {
-        if (todoItem._id === targetItemId) todoItem.contents = contents;
-        return todoItem;
-      }),
+      todoList: this.activeUser.value.todoList.map((todoItem) => ({
+        ...todoItem,
+        contents: todoItem._id === targetItemId ? contents : todoItem.contents,
+      })),
     };
   };
 
@@ -103,11 +103,13 @@ export default class App extends Component {
     );
     this.activeUser.value = {
       ...this.activeUser.value,
-      todoList: this.activeUser.value.todoList.map((todoItem) => {
-        if (todoItem._id === targetItemId)
-          todoItem.isCompleted = !todoItem.isCompleted;
-        return todoItem;
-      }),
+      todoList: this.activeUser.value.todoList.map((todoItem) => ({
+        ...todoItem,
+        isCompleted:
+          todoItem._id === targetItemId
+            ? !todoItem.isCompleted
+            : todoItem.isCompleted,
+      })),
     };
   };
 
@@ -150,10 +152,10 @@ export default class App extends Component {
     );
     this.activeUser.value = {
       ...this.activeUser.value,
-      todoList: this.activeUser.value.todoList.map((todoItem) => {
-        if (todoItem._id === targetItemId) todoItem.priority = priority;
-        return todoItem;
-      }),
+      todoList: this.activeUser.value.todoList.map((todoItem) => ({
+        ...todoItem,
+        priority: todoItem._id === targetItemId ? priority : todoItem.priority,
+      })),
     };
   };
 
