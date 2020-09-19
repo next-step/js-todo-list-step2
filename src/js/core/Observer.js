@@ -1,17 +1,19 @@
-const observerMap = new Map();
+let currentObserver = null;
 
-export const observe = (target, fn) => {
-  observerMap.get(target).add(fn);
+export const observe = fn => {
+  currentObserver = fn;
+  fn();
+  currentObserver = null;
 }
 
 export const observable = target => {
   const observers = new Set();
-  observerMap.set(target, observers);
   return Object.keys(target).reduce((obj, key) => {
-    let _value = target[key];
+    let _value = obj[key];
 
     Object.defineProperty(obj, key, {
       get () {
+        if (currentObserver) observers.add(currentObserver);
         return _value;
       },
       set (value) {
