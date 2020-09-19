@@ -1,4 +1,4 @@
-import { getUserListService } from '../endpoint/service.js';
+import { getUserListService, getUserItemsService } from '../endpoint/service.js';
 const store = {
   userList: [],
   user: undefined,
@@ -15,6 +15,11 @@ export const setter = {
       store.userList[0];
     observer.render('user');
   },
+  async userItems (userId) {
+    const userItems = await getUserItemsService({ userId });
+    store.user.todoList = userItems;
+    observer.render('userItems');
+  }
 };
 
 export const initStore = async () => {
@@ -25,6 +30,7 @@ export const initStore = async () => {
 export const observer = {
   userList: [],
   user: [],
+  userItems: [],
   addObserver(target, component) {
     this[target].push(component);
   },

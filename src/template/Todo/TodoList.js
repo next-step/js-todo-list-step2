@@ -29,6 +29,7 @@ const TodoList = () => {
   };
 
   observer.addObserver('user', render);
+  observer.addObserver('userItems', render);
 
   return { dom, render };
 };

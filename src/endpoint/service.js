@@ -1,6 +1,6 @@
 /* api 를 호출하는 함수가 모이는 곳 입니다. */
 
-import { postUser, getUserList, deleteUser } from './api.js';
+import { postUser, getUserList, deleteUser, postUserItem, getUserItems } from './api.js';
 import { setter } from '../store/index.js';
 import { loadingWrapper } from '../utils.js';
 
@@ -39,3 +39,21 @@ export const getUserListService = async () => {
     console.log(err);
   }
 };
+
+export const postUserItemService = async ({ userId, contents }) => {
+  try {
+    const result = await postUserItem({ userId, contents });
+    return result;
+  } catch (err) {
+    alert(err);
+  }
+};
+
+export const getUserItemsService = async ({ userId }) => {
+  try {
+    const result = await getUserItems({ userId });
+    return result;
+  } catch (err) {
+    console.log(err)
+  }
+}
