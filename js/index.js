@@ -1,6 +1,6 @@
-fetch('https://js-todo-list-9ca3a.df.r.appspot.com/api/users/')
-  .then(response => response.json())
-  .then(json => userLoad(json));
+import { fetcher } from "./fetcher.js"
+import fetchParams from "./fetchParams.js"
+fetcher(fetchParams.userList,userLoad)
 
 function userLoad(users){
   const userList = document.querySelector("#user-list");
