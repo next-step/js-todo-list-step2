@@ -42,3 +42,12 @@ export const deleteUser = async (userId) => {
     })
     return await data.json();
 }
+
+export const createTodoItem = async (userId, contents) => {
+    const data = await fetch(`${BASE_URL}/${userId}/items`, {
+        method: 'POST', headers: {
+            'Content-Type': 'application/json'
+        }, body: JSON.stringify({contents})
+    })
+    return await data.json();
+}

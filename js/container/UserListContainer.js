@@ -1,4 +1,4 @@
-import {addUser, setStatus, setTodoList, setUserId} from "../reducer.js";
+import {addUser, removeUser, setStatus, setTodoList, setUserId} from "../reducer.js";
 import UserList from "../components/UserList.js";
 import {PENDING, SUCCESS} from "../constant.js";
 import {getTodoList, createUser, deleteUser} from "../api/index.js";
@@ -34,16 +34,19 @@ function UserListContainer($dom, store) {
         const {userId, role} = dataset;
         if (role === 'select') {
             const confirmFl = confirm('정말 삭제하시겠습니까?');
-            await deleteUser(userId);
-            const {selectedUserId, userList} = store.getState();
-            let newUserId = userId;
-            if (selectedUserId === userId) {
-                newUserId = userList[0]._id;
+            if(confirmFl){
+                await deleteUser(userId);
+                const {selectedUserId, userList} = store.getState();
+                store.dispatch(removeUser({userId}));
+                if (selectedUserId === userId) {
+                    const newUserId = userList[0]._id;
+                    store.dispatch(setUserId({selectedUserId:newUserId}));
+                    store.dispatch(setStatus({status: PENDING}));
+                    const todoList = await getTodoList(newUserId);
+                    store.dispatch(setTodoList({todoList}));
+                    store.dispatch(setStatus({status: SUCCESS}));
+                }
             }
-            const todoList = await getTodoList(newUserId);
-            store.dispatch(setTodoList({todoList}));
-            store.dispatch(setStatus({status: SUCCESS}));
-
         }
     })
 
