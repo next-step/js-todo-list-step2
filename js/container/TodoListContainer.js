@@ -9,10 +9,14 @@ function TodoListContainer($dom, store) {
     let prevTodoList;
 
     $dom.addEventListener('change', async ({target:{dataset}}) => {
-        const {id:targetId} = dataset;
+        const {id:targetId, role} = dataset;
         const {selectedUserId} = store.getState();
-        const todoItem = await toggleTodoItemComplete(selectedUserId, targetId);
-        store.dispatch(setTodoItem({todoItem}));
+        switch (role){
+            case 'complete':{
+                const todoItem = await toggleTodoItemComplete(selectedUserId, targetId);
+                store.dispatch(setTodoItem({todoItem}));
+            }
+        }
     })
 
     $dom.addEventListener('click', async ({target:{dataset}}) => {

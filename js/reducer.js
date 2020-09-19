@@ -28,6 +28,7 @@ export const setTodoItem = ({todoItem}) => actionCreator(SET_TODO_ITEM, {todoIte
 export const toggleTodoItem = ({todoItemId}) => actionCreator(TOGGLE_TODO_ITEM, {todoItemId});
 
 const initState = {
+    filter: 'all',
     status: '',
     userList: [],
     todoList: [],
