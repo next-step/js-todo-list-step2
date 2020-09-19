@@ -1,4 +1,4 @@
-import TodoState from "./TodoState.js"
+import TodoState from "./TodoState.js";
 import { fetcher } from "./fetcher.js";
 import fetchParams from "./fetchParams.js";
 export default new class TodoList{
@@ -12,7 +12,11 @@ export default new class TodoList{
     makeList = (items) => {
         TodoState.user.todoList = items;
         if(!items) return this.$todoList.innerHTML = '';
-        const template = items.map((item) => this.todoTemplate({...item}));
+        const newItems = items.filter(item => 
+            (TodoState.view === 'all') ||
+            (TodoState.view === 'completed' && item.isCompleted) ||
+            (TodoState.view === 'active' && !item.isCompleted))
+        const template = newItems.map((item) => this.todoTemplate({...item}));
         this.$todoList.innerHTML = template.join("");
 
         console.log(
