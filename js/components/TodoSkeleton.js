@@ -13,3 +13,5 @@ const TodoSkeleton = () => `
         </li>
     </ul>
 `;
+
+export default TodoSkeleton;

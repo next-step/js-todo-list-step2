@@ -17,3 +17,11 @@ export const getTodoApp = async () => {
         return acc;
     }, {selectedUserId: null, userList: [], todoList: null});
 }
+
+export const getTodoList = async (userId) => {
+    const data = await fetch(`${BASE_URL}/${userId}/items/`)
+    if(!data.ok){
+        throw new Error(data.status);
+    }
+    return await data.json();
+}

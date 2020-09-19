@@ -1,5 +1,5 @@
 const UserButton = ({_id, name, active}) => `
-    <button class="ripple${active ? ' active' : ''}" data-id=${_id}>
+    <button class="ripple${active ? ' active' : ''}" data-user-id=${_id}>
         ${name}
     </button>
 `;

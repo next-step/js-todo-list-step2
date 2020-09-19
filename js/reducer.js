@@ -5,11 +5,13 @@ const SET_STATUS = 'setStatus';
 const SET_USER_LIST = 'setUserList';
 const SET_USER_ID = 'setUserId';
 const SET_APP = 'setApp';
+const SET_TODO_LIST = 'setTodoList';
 
 export const setStatus = ({status}) => actionCreator(SET_STATUS,{status});
 export const setUserList = ({userList, selectedUserId}) => actionCreator(SET_USER_LIST,{userList, selectedUserId});
 export const setApp = ({userList, selectedUserId, todoList}) => actionCreator(SET_APP,{userList, selectedUserId, todoList});
 export const setUserId = ({selectedUserId}) => actionCreator(SET_USER_ID, {selectedUserId});
+export const setTodoList = ({todoList}) => actionCreator(SET_TODO_LIST, {todoList});
 
 const initState = {
 	status: FAILURE,
@@ -50,6 +52,13 @@ const reducer = (state = initState, {type, payload}) => {
 			return {
 				...state,
 				selectedUserId
+			}
+		}
+		case SET_TODO_LIST: {
+			const {todoList} = payload;
+			return {
+				...state,
+				todoList,
 			}
 		}
 		default:

@@ -1,4 +1,5 @@
 import TodoList from "../components/TodoList.js";
+import TodoSkeleton from '../components/TodoSkeleton.js';
 import {PENDING, SUCCESS} from "../constant.js";
 
 function TodoListContainer($dom, store) {
@@ -17,6 +18,7 @@ function TodoListContainer($dom, store) {
                 }
                 case SUCCESS: {
                     $dom.innerHTML = TodoList({todoList});
+                    break;
                 }
             }
         }
