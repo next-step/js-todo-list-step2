@@ -20,9 +20,11 @@ const $todoList = document.querySelector('.main');
 const todoList = TodoListContainer($todoList, store);
 store.subscribe(todoList);
 
+store.subscribe(()=>console.log(store.getState()));
+
 
 (async function () {
-  store.dispatch(setStatus(PENDING));
+  store.dispatch(setStatus({status:PENDING}));
   const todoApp = await getTodoApp();
   store.dispatch(setApp(todoApp));
 })();

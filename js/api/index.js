@@ -20,8 +20,17 @@ export const getTodoApp = async () => {
 
 export const getTodoList = async (userId) => {
     const data = await fetch(`${BASE_URL}/${userId}/items/`)
-    if(!data.ok){
+    if (!data.ok) {
         throw new Error(data.status);
     }
+    return await data.json();
+}
+
+export const createUser = async (userName) => {
+    const data = await fetch(BASE_URL, {
+        method: 'POST', headers: {
+            'Content-Type': 'application/json'
+        }, body: JSON.stringify({name: userName})
+    })
     return await data.json();
 }
