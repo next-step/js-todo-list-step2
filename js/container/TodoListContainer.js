@@ -1,6 +1,6 @@
 import {setTodoItem, setTodoList, toggleTodoItem} from "../reducer.js";
 import TodoList from "../components/TodoList.js";
-import {deleteTodoItem, toggleTodoItemComplete , updateTodoItem} from "../api/index.js";
+import {deleteTodoItem, toggleTodoItemComplete , updateTodoItem, updateTodoItemPriority} from "../api/index.js";
 import TodoSkeleton from '../components/TodoSkeleton.js';
 import {PENDING, SUCCESS} from "../constant.js";
 
@@ -9,13 +9,18 @@ function TodoListContainer($dom, store) {
     let prevStatus;
     let prevTodoList;
 
-    $dom.addEventListener('change', async ({target:{dataset}}) => {
+    $dom.addEventListener('change', async ({target:{dataset, value}}) => {
         const {id:targetId, role} = dataset;
         const {selectedUserId} = store.getState();
         switch (role){
             case 'complete':{
                 const todoItem = await toggleTodoItemComplete(selectedUserId, targetId);
-                store.dispatch(setTodoItem({todoItem}));
+                return store.dispatch(setTodoItem({todoItem}));
+            }
+            case 'priority':{
+                console.log(value);
+                const todoItem = await updateTodoItemPriority(selectedUserId, targetId, value);
+                return store.dispatch(setTodoItem({todoItem}));
             }
         }
     })

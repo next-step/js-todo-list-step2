@@ -86,3 +86,13 @@ export const deleteAllTodoItem = async (userId) =>{
     })
     return await data.json();
 }
+
+export const updateTodoItemPriority = async (userId, itemId, priority) => {
+    const data = await fetch(`${BASE_URL}/${userId}/items/${itemId}/priority`, {
+        method: 'PUT', headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({priority})
+    });
+    return await data.json();
+}
