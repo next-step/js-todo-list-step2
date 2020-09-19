@@ -1,6 +1,15 @@
 /* api 를 호출하는 함수가 모이는 곳 입니다. */
 
-import { postUser, getUserList, deleteUser, postUserItem, getUserItems, getUser, putUserItemCompleteToggle, deleteUserItem } from './api.js';
+import {
+  postUser,
+  getUserList,
+  deleteUser,
+  postUserItem,
+  getUserItems,
+  getUser,
+  putUserItemCompleteToggle,
+  deleteUserItem,
+} from './api.js';
 import { setter } from '../store/index.js';
 import { loadingWrapper } from '../utils.js';
 
@@ -41,12 +50,9 @@ export const getUserListService = async () => {
 };
 
 export const postUserItemService = async ({ userId, contents }) => {
-  try {
-    const result = await postUserItem({ userId, contents });
-    return result;
-  } catch (err) {
-    alert(err);
-  }
+  const result = await postUserItem({ userId, contents });
+  if (result.message) throw new Error(result.message);
+  return result;
 };
 
 export const getUserItemsService = async ({ userId }) => {
@@ -75,11 +81,11 @@ export const putUserItemCompleteToggleService = async ({ userId, itemId }) => {
 
 export const deleteUserItemService = async ({ userId, itemId }) => {
   const result = await deleteUserItem({ userId, itemId });
-  if (result.message === "해당 유저가 존재하지 않습니다.") {
-    throw new Error('user not found')
+  if (result.message === '해당 유저가 존재하지 않습니다.') {
+    throw new Error('user not found');
   }
-  if (result.message === "Todo Item을 삭제하는데 에러가 발생했습니다.") {
-    throw new Error('item not found')
+  if (result.message === 'Todo Item을 삭제하는데 에러가 발생했습니다.') {
+    throw new Error('item not found');
   }
   return result;
 };

@@ -10,17 +10,16 @@ const TodoInput = () => {
     let { value } = target;
     if (value !== '' && key === 'Enter') {
       const userId = getter.userId();
-      const result = await postUserItemService({ userId, contents: value });
-      if (result.message) {
-        alert(result.message);
+      try {
+        await postUserItemService({ userId, contents: value });
+        await setter.userItems(userId);
+      } catch (err) {
+        alert(err.message);
         await setter.userList();
         await setter.user();
+      } finally {
         target.value = '';
-        return;
       }
-      await setter.userItems(userId);
-      target.value = '';
-
     }
   };
 
