@@ -20,8 +20,7 @@ const TodoLabel = (props) => {
         <option value="FIRST" ${priority === 'FIRST' ? 'selected' : ''} >1순위</option>
         <option value="SECOND" ${priority === 'SECOND' ? 'selected' : ''}>2순위</option>
       </select>
-      ${ contents }
-    ;`
+      ${ contents }`
   };
 
   return { dom, render }
