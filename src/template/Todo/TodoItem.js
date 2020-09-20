@@ -4,11 +4,13 @@ const TodoItem = (props) => {
   const { todo } = props;
   const dom = document.createElement('li');
   dom.dataset.todoIdx = todo._id;
+  dom.classList.add('editing');
 
   const render = () => {
     const { contents, isCompleted, mode } = todo;
     const viewCondition = () => (mode === undefined || mode === 'view');
     const display = (condition) => condition ? 'block' : "none";
+
     dom.innerHTML = `
     <div class="view" style="display: ${display(viewCondition())}">
       <input class="toggle" type="checkbox" data-component="toggleComplete" ${ isCompleted && "checked"}/>
