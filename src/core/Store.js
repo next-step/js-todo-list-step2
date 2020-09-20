@@ -1,13 +1,11 @@
+import {observable} from "./Observer";
+
 export const Store = class {
 
-  $state;
-  #mutations;
-  #actions;
-  $getters;
-  #observes = new Set();
+  $state; $getters; #mutations; #actions;
 
-  constructor({ state, mutations, getters, actions }) {
-    this.$state = state;
+  constructor({ state = {}, mutations = {}, getters = {}, actions = {} }) {
+    this.$state = observable(state);
     this.$getters = Object.entries(getters)
                           .reduce((getters, [key, getter]) => {
                             Object.defineProperty(getters, key, {
@@ -20,25 +18,14 @@ export const Store = class {
   }
 
   commit (key, payload) {
-    const newState = { ...this.$state };
-    this.#mutations[key](newState, payload);
-    this.#setState(newState);
+    this.#mutations[key](this.$state, payload);
   }
 
   dispatch (key, payload) {
     return this.#actions[key]({
       commit: (key, payload) => this.commit(key, payload),
       dispatch: (key, payload) => this.dispatch(key, payload),
-      state: { ...this.$state },
+      state: this.$state,
     }, payload);
-  }
-
-  addObserver (component) {
-    this.#observes.add(component);
-  }
-
-  #setState (newState) {
-    this.$state = { ...newState };
-    this.#observes.forEach(observer => observer.render());
   }
 }
