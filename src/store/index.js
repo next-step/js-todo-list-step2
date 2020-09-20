@@ -27,6 +27,10 @@ export const setter = {
     store.user.todoList = userItems;
     observer.render('userItems');
   },
+  itemMode (itemId, mode) {
+    const item = store?.user?.todoList.find(v => v._id === itemId);
+    item.mode = mode;
+  }
 };
 
 export const initStore = async () => {

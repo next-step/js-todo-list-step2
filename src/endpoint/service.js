@@ -9,6 +9,7 @@ import {
   getUser,
   putUserItemCompleteToggle,
   deleteUserItem,
+  putUserItem,
 } from './api.js';
 import { setter } from '../store/index.js';
 import { loadingWrapper } from '../utils.js';
@@ -75,17 +76,26 @@ export const getUserService = async ({ userId }) => {
 
 export const putUserItemCompleteToggleService = async ({ userId, itemId }) => {
   const result = await putUserItemCompleteToggle({ userId, itemId });
-  if (result.message) throw new Error(result.message);
+  if (result.message)
+    throw new Error(result.message);
   return result;
 };
 
 export const deleteUserItemService = async ({ userId, itemId }) => {
   const result = await deleteUserItem({ userId, itemId });
-  if (result.message === '해당 유저가 존재하지 않습니다.') {
+  if (result.message === '해당 유저가 존재하지 않습니다.')
     throw new Error('user not found');
-  }
-  if (result.message === 'Todo Item을 삭제하는데 에러가 발생했습니다.') {
+  if (result.message === 'Todo Item을 삭제하는데 에러가 발생했습니다.')
     throw new Error('item not found');
-  }
+  return result;
+};
+
+export const putUserItemService = async ({ userId, itemId, contents }) => {
+  const result = await putUserItem({ userId, itemId, contents });
+  if (result.message === 'Todo Item을 수정하는데 에러가 발생했습니다.')
+    throw new Error('item not found');
+  if (result.message === '해당 유저가 존재하지 않습니다.')
+    throw new Error('user not found');
+
   return result;
 };
