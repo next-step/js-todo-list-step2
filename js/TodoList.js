@@ -1,4 +1,4 @@
-import {KEY, ADDRESS} from './constants.js';
+import {KEY} from './constants.js';
 import {API} from './API.js';
 
 export default function TodoList($todoList, userId) {
@@ -12,9 +12,11 @@ export default function TodoList($todoList, userId) {
     this.bindEvents();
   };
 
-  this.setState = (activeUserId) => {
-    this.userId = activeUserId;
-    this.getTodoItems();
+  this.setState = async (activeUserId) => {
+      this.userId = activeUserId;
+      this.data = await API.GetTodoItems(this.userId);
+      this.render();
+      this.bindEvents();
   };
 
   this.bindEvents = () => {
@@ -53,7 +55,6 @@ export default function TodoList($todoList, userId) {
             e.target.value = oldValue;
           } else if (e.key === KEY.ENTER) {
             this.editItem(index, e.target.value);
-
             this.edit($todoItem.id, e.target.value);
           }
         });
@@ -61,54 +62,46 @@ export default function TodoList($todoList, userId) {
     });
   };
 
-  this.getTodoItems = async () => {
-    const response = await fetch(`${ADDRESS.BASE_URL}/api/users/${this.userId}/items`, API.GET);
-    // TODO: user validation
-    this.data = await response.json();
-
-    this.render();
-    this.bindEvents();
-  };
-
   this.post = async (text) => {
-    await fetch(`${ADDRESS.BASE_URL}/api/u/${this.userId}/item/`, API.POST( {contents: text} ));
-    this.getTodoItems();
+    await API.AddItem(this.userId, text);
+    this.data = await API.GetTodoItems(this.userId);
+    this.setState(this.userId);
   };
 
   this.delete = async (_id) => {
-    await fetch(`${ADDRESS.BASE_URL}/api/u/${this.userId}/item/${_id}`, API.DELETE);
-    this.getTodoItems();
+    await API.DeleteItem(this.userId, _id);
+    this.data = await API.GetTodoItems(this.userId);
+    this.setState(this.userId);
   };
 
   this.toggle = async (_id) => {
-    await fetch(`${ADDRESS.BASE_URL}/api/u/${this.userId}/item/${_id}/toggle`, API.TOGGLE);
+    await API.ToggleItem(this.userId, _id);
   };
 
   this.edit = async (_id, text) => {
-    await fetch(`${ADDRESS.BASE_URL}/api/u/${this.userId}/item/${_id}/`, API.EDIT({contents: text}));
-    this.getTodoItems();
+    await API.EditItem(this.userId, _id, text);
+    this.data = await API.GetTodoItems(this.userId);
+    this.setState(this.userId);
   };
 
   this.render = () => {
-    if (this.data) {
-      this.$todoList.innerHTML = this.data.map(({_id, contents, isCompleted, priority}, index) => {
-        `<li class="todo-item ${isCompleted ? 'completed' : ''}" data-index="${index}" id="${_id}">
-          <div class="view">
-          <input class="toggle" type="checkbox" ${isCompleted ? 'checked' : ''} />
-          <label class="label">
-          <select class="chip select">
-            <option value="0" ${priority == 0 ? 'selected' : ''}>순위</option>
-            <option value="1" ${priority == 1 ? 'selected' : ''}>1순위</option>
-            <option value="2" ${priority == 2 ? 'selected' : ''}>2순위</option>
-          </select>
-          ${contents}</label>
-          <button class="destroy"></button>
-          </div>
-          <input class="edit" value="${contents}" />
-          </li>`;
-      }).join('');
-    }
+    this.$todoList.innerHTML = this.data.map(({_id, contents, isCompleted, priority}, index) => 
+      `<li class="todo-item ${isCompleted ? 'completed' : ''}" data-index="${index}" id="${_id}">
+        <div class="view">
+        <input class="toggle" type="checkbox" ${isCompleted ? 'checked' : ''} />
+        <label class="label">
+        <select class="chip select">
+          <option value="0" ${priority === 'NONE' ? 'selected' : ''}>순위</option>
+          <option value="1" ${priority === '1' ? 'selected' : ''}>1순위</option>
+          <option value="2" ${priority === '2' ? 'selected' : ''}>2순위</option>
+        </select>
+        ${contents}</label>
+        <button class="destroy"></button>
+        </div>
+        <input class="edit" value="${contents}" />
+        </li>`
+    ).join('');
   };
 
-  this.getTodoItems();
+  this.setState(this.userId);
 }

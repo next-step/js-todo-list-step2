@@ -1,5 +1,6 @@
 export const DEFAULT_USER = {
-  ID: 'Someone',
+  _id: 'Someone',
+  name: 'Someone'
 };
 
 export const KEY = {
@@ -7,9 +8,7 @@ export const KEY = {
   ESC: 'Escape',
 };
 
-export const ADDRESS = {
-  BASE_URL: 'https://blackcoffee-todolist.df.r.appspot.com',
-};
+export const ADDRESS = 'https://js-todo-list-9ca3a.df.r.appspot.com';
 
 export const FilterOptions = {
   ALL: 'all',

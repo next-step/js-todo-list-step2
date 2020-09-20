@@ -1,4 +1,42 @@
+import {ADDRESS, DEFAULT_USER} from './constants.js';
+
 export const API = {
+  GetUsers: async () => {
+    try{
+      const response = await fetch(`${ADDRESS}/api/users`, ApiOptions.GET);
+      return await response.json();
+    } catch {
+      return DEFAULT_USER.json();
+    }
+  },
+  AddUser: async (userName) => {
+    await fetch(`${ADDRESS}/api/users`, ApiOptions.POST({name: userName}));
+  },
+  GetTodoItems: async (userId) => {
+    try{
+      const response = await fetch(`${ADDRESS}/api/users/${userId}/items`, ApiOptions.GET);
+      if (response.ok)
+        return await response.json();
+      return [];
+    } catch {
+      return [];
+    }
+  },
+  AddItem: async (userId, contentText) => {
+    await fetch(`${ADDRESS}/api/users/${userId}/items/`, ApiOptions.POST( {contents: contentText} ));
+  },
+  DeleteItem: async (userId, itemId) => {
+    await fetch(`${ADDRESS}/api/users/${userId}/item/${itemId}`, ApiOptions.DELETE);
+  },
+  ToggleItem: async (userId, itemId) => {
+    await fetch(`${ADDRESS}/api/users/${userId}/item/${itemId}/toggle`, ApiOptions.TOGGLE);
+  },
+  EditItem: async (userId, itemId, newContentText) => {
+    await fetch(`${ADDRESS}/api/users/${userId}/item/${itemId}/`, ApiOptions.EDIT({contents: newContentText}));
+  }
+};
+
+export const ApiOptions = {
   POST: (data) => {
     return {
       method: 'POST',
@@ -9,7 +47,6 @@ export const API = {
   GET: () => {
     return {
       method: 'GET',
-      headers: {'Content-Type': 'application/json'},
     };
   },
   DELETE: () => {

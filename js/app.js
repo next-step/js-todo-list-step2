@@ -24,7 +24,7 @@ function App() {
   this.addItem = (text) => {
     todoList.post(text);
 
-    this.filterItems(this.state.activeFilterType);
+    //this.filterItems(this.state.activeFilterType);
   };
 
   this.filterItems = (type) => {

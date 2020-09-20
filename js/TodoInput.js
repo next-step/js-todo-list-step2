@@ -1,7 +1,7 @@
 import {KEY} from './constants.js';
 import {isEmptyOrWhitespace} from './validation.js';
 
-export default function TodoInput($todoInput, onAdd) {
+export default function TodoInput($todoInput, addItem) {
   this.$todoInput = $todoInput;
   this.$todoInput.addEventListener('keyup', (e) => {
     e.stopPropagation();
@@ -11,7 +11,7 @@ export default function TodoInput($todoInput, onAdd) {
         return;
       }
 
-      onAdd(this.$todoInput.value);
+      addItem(this.$todoInput.value);
 
       this.$todoInput.value = '';
     }
