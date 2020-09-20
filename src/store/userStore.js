@@ -1,11 +1,11 @@
-import { Store } from '../core/Store.js';
+import {Store} from '../core/Store.js';
 import TodoService from "../services/TodoService.js";
-import {getQuery} from "../utils/index.js";
 
 export const SET_USERS = 'SET_USERS';
 export const SET_USER = 'SET_USER';
 export const FETCH_USERS = 'FETCH_USERS';
 export const ADD_USER = 'ADD_USER';
+export const REMOVE_USER = 'REMOVE_USER';
 
 export const userStore = new Store({
   state: {
@@ -32,9 +32,17 @@ export const userStore = new Store({
       commit(SET_USERS, users);
       return users;
     },
-    async [ADD_USER] ({ dispatch }, name) {
-      await TodoService.addUser(name);
-      dispatch(FETCH_USERS);
+    async [ADD_USER] ({ dispatch, commit }, name) {
+      const { _id: userId } = await TodoService.addUser(name);
+      const users = await dispatch(FETCH_USERS);
+      commit(SET_USER, users.findIndex(user => user._id === userId));
+      history.pushState({ user_id: userId }, null, `./?user_id=${userId}`);
+    },
+    async [REMOVE_USER] ({ dispatch, commit }, userId) {
+      await TodoService.removeUser(userId);
+      const users = await dispatch(FETCH_USERS);
+      commit(SET_USER, 0);
+      history.pushState({ user_id: users[0]._id }, null, `./?user_id=${users[0]._id}`);
     },
   }
 })
