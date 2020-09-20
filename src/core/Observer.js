@@ -2,9 +2,9 @@ import {debounceOneFrame} from "../utils";
 
 let currentObserver = null;
 
-export const observe = fn => {
-  currentObserver = debounceOneFrame(fn);
-  fn();
+export const observe = observer => {
+  currentObserver = debounceOneFrame(observer);
+  observer();
   currentObserver = null;
 }
 
