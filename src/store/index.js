@@ -30,6 +30,16 @@ export const setter = {
   itemMode (itemId, mode) {
     const item = store?.user?.todoList.find(v => v._id === itemId);
     item.mode = mode;
+  },
+  userItem(itemId, newItem) {
+    let idx;
+    store.user.todoList.find((v, k) => {
+      if (v._id === itemId) {
+        idx = k;
+        return;
+      }
+    });
+    store.user.todoList[idx] = newItem;
   }
 };
 
@@ -66,6 +76,9 @@ export const getter = {
   },
   userItems () {
     return store.user?.todoList;
+  },
+  userItem(itemId) {
+    return store.user.todoList.find(v => v._id === itemId);
   }
 };
 

@@ -464,10 +464,12 @@ button.ripple {
 
 .chip.primary {
   background-color: #d63a49;
+  color: #fff;
 }
 
 .chip.secondary {
   background-color: #26c6da;
+  color: #fff;
 }
 
 select.chip {

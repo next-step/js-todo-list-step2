@@ -1,21 +1,22 @@
 import TodoLabel from './TodoLabel.js';
+import { getter } from '../../store/index.js';
 
 const TodoItem = (props) => {
   const components = {
     todoLabel: undefined
   };
 
-  const { todo } = props;
+  const { itemId } = props;
   const dom = document.createElement('li');
-  dom.dataset.todoIdx = todo._id;
+  dom.dataset.todoIdx = itemId;
   dom.classList.add('editing');
 
   const render = () => {
-    const { contents, isCompleted, mode } = todo;
+    const { contents, isCompleted, mode } =  getter.userItem(itemId);
     const viewCondition = () => (mode === undefined || mode === 'view');
     const display = (condition) => condition ? 'block' : "none";
 
-    components.todoLabel = TodoLabel({ contents });
+    components.todoLabel = TodoLabel(props);
 
     dom.innerHTML = `
     <div class="view" style="display: ${display(viewCondition())}">
@@ -28,7 +29,7 @@ const TodoItem = (props) => {
     components.todoLabel.render();
   };
 
-  return { dom, render };
+  return { dom, render, components };
 };
 
 export default TodoItem;

@@ -2,7 +2,7 @@ import TodoLoading from './TodoLoading.js';
 import TodoItem from './TodoItem.js';
 import { getter, setter } from '../../store/index.js';
 import { observer } from '../../store/index.js';
-import { putUserItemCompleteToggleService, deleteUserItemService, putUserItemService } from '../../endpoint/service.js';
+import { putUserItemCompleteToggleService, deleteUserItemService, putUserItemService, putUserItemPriorityService } from '../../endpoint/service.js';
 
 const TodoList = () => {
   const components = {
@@ -10,6 +10,7 @@ const TodoList = () => {
     todoList: {},
   };
   let editItem = { id: -1, components: undefined };
+
 
   const dom = document.createElement('section');
   dom.classList.add('main');
@@ -88,6 +89,24 @@ const TodoList = () => {
     }
   };
 
+  const setPriority = async ({ target, target: { dataset, value }}) => {
+    if (dataset.component === 'todoPriority') {
+      const itemId = target.closest('li').dataset.todoIdx;
+      const userId = getter.userId();
+      const priority = value;
+      try {
+        const result = await putUserItemPriorityService({ userId, itemId, priority });
+        setter.userItem(itemId, result);
+        components.todoList[itemId].components.todoLabel.render();
+      } catch (err) {
+        alert(err.message);
+        if (err.message === 'item not found')
+          await setter.userItems(userId);
+        if (err.message === 'user not found')
+          await setter.user();
+      }
+    }
+  };
   const todos = document.createElement('div');
   todos.addEventListener('click', async ({ target }) => {
     if (target.dataset.component === 'toggleComplete')
@@ -99,6 +118,7 @@ const TodoList = () => {
   todos.addEventListener('dblclick', setEditMode);
   todos.addEventListener('keypress', editItemContents);
   todos.addEventListener('keydown', setViewItemWithEsc);
+  todos.addEventListener('change', setPriority);
 
   ul.appendChild(todos);
 
@@ -107,8 +127,8 @@ const TodoList = () => {
   const render = () => {
     const { userItems } = getter;
     todos.innerHTML = '';
-    userItems()?.forEach(todo => {
-      const todoItem = TodoItem({ todo });
+    userItems?.()?.forEach(todo => {
+      const todoItem = TodoItem({ itemId: todo._id });
       components.todoList[todo._id] = todoItem;
       todos.appendChild(todoItem.dom);
       todoItem.render();
