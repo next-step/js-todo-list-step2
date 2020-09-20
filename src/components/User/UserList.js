@@ -1,5 +1,5 @@
 import {Component} from "../../core/Component.js";
-import {ADD_USER, userStore} from "../../store/userStore.js";
+import {userStore} from "../../store/userStore.js";
 
 export const UserList = class extends Component {
 
@@ -15,6 +15,7 @@ export const UserList = class extends Component {
         </button>
       `).join('')}
       <button data-ref="appender" class="ripple user-create-button">+ 유저 생성</button>
+      <button data-ref="remover" class="ripple user-create-button">- 선택 삭제</button>
     `;
   }
 
@@ -24,8 +25,9 @@ export const UserList = class extends Component {
     })
     this.addEvent('click', 'appender', () => {
       const userName = prompt("추가하고 싶은 이름을 입력해주세요.");
-      userStore.dispatch(ADD_USER, userName);
+      this.$props.appendUser(userName);
     })
+    this.addEvent('click', 'remover', () => this.$props.removeUser());
 
   }
 }
