@@ -54,39 +54,36 @@ export const TodoContainer = class extends Component {
   filterItem = filterType => todoStore.commit(SET_FILTER_TYPE, filterType);
   removeAll = () => todoStore.dispatch(REMOVE_ALL_ITEM, this.userId);
 
-  componentInit () {
-
-    this.$children = {
-      TodoAppender: {
-        constructor: TodoAppender,
-        props: {
-          appendItem: this.appendItem
-        }
-      },
-      TodoList: {
-        constructor: TodoList,
-        props: {
-          removeItem: this.removeItem,
-          toggleItem: this.toggleItem,
-          updateItem: this.updateItem,
-          selectPriority: this.selectPriority,
-          editingItem: this.editingItem,
-          get loading () { return todoStore.$state.loading },
-          get editingIndex () { return todoStore.$state.editingIndex },
-          get items () { return todoStore.$getters.filteredItems }
-        }
-      },
-      TodoFooter: {
-        constructor: TodoFooter,
-        props: {
-          filterItem: this.filterItem,
-          removeAll: this.removeAll,
-          get itemCount () { return todoStore.$getters.filteredItems.length },
-          get filterType () { return todoStore.$state.filterType },
-        }
-      },
-    }
-  }
+  $children = () => ({
+    TodoAppender: {
+      constructor: TodoAppender,
+      props: {
+        appendItem: this.appendItem
+      }
+    },
+    TodoList: {
+      constructor: TodoList,
+      props: {
+        removeItem: this.removeItem,
+        toggleItem: this.toggleItem,
+        updateItem: this.updateItem,
+        selectPriority: this.selectPriority,
+        editingItem: this.editingItem,
+        get loading () { return todoStore.$state.loading },
+        get editingIndex () { return todoStore.$state.editingIndex },
+        get items () { return todoStore.$getters.filteredItems }
+      }
+    },
+    TodoFooter: {
+      constructor: TodoFooter,
+      props: {
+        filterItem: this.filterItem,
+        removeAll: this.removeAll,
+        get itemCount () { return todoStore.$getters.filteredItems.length },
+        get filterType () { return todoStore.$state.filterType },
+      }
+    },
+  });
 
   template () {
     return `

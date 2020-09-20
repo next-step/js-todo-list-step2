@@ -14,12 +14,13 @@ const App = class extends Component{
     userStore.commit(SET_USERS, users);
     userStore.commit(SET_USER, selectedIndex);
     todoStore.commit(SET_TODO_ITEMS, users[selectedIndex].todoList);
-
-    this.$children = {
-      UserContainer: { constructor: UserContainer },
-      TodoContainer: { constructor: TodoContainer },
-    }
   }
+
+
+  $children =  () => ({
+    UserContainer: { constructor: UserContainer },
+    TodoContainer: { constructor: TodoContainer },
+  })
 
   template () {
     return `

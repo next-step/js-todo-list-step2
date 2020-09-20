@@ -1,12 +1,11 @@
 import {addEventBubblingListener, debounceOneFrame} from "../utils/index.js";
-import {observable, observe} from "./Observer";
+import {observable, observe} from "./Observer.js";
 
 export const Component = class {
 
   $target;
   $props;
   $state = {};
-  $children = {};
 
   constructor($target, $props = {}) {
     this.$target = $target;
@@ -41,10 +40,11 @@ export const Component = class {
     });
   }
 
-
+  $children = () => {};
   #childrenBuild () {
+    const children = this.$children();
     this.$target.querySelectorAll('[data-component]').forEach(target => {
-      const { constructor, props } = this.$children[target.dataset.component];
+      const { constructor, props } = children[target.dataset.component];
       new constructor(target, props);
     })
   }

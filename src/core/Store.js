@@ -1,4 +1,4 @@
-import {observable} from "./Observer";
+import {observable} from "./Observer.js";
 
 export const Store = class {
 
@@ -6,6 +6,7 @@ export const Store = class {
 
   constructor({ state = {}, mutations = {}, getters = {}, actions = {} }) {
     this.$state = observable(state);
+    console.log(state);
     this.$getters = Object.entries(getters)
                           .reduce((getters, [key, getter]) => {
                             Object.defineProperty(getters, key, {

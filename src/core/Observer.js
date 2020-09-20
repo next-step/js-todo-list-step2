@@ -8,7 +8,7 @@ export const observe = fn => {
 
 export const observable = target => {
   return Object.keys(target).reduce((obj, key) => {
-    let _value = typeof obj[key];
+    let _value = obj[key];
     if ( typeof _value === 'object' ) _value = observable(_value);
     const observers = new Set();
     Object.defineProperty(obj, key, {
