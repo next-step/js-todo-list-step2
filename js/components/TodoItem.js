@@ -14,7 +14,7 @@ const TodoItem = ({_id, contents, isCompleted, priority, edit}) => `
             </label>
             <button class="destroy" data-id="${_id}" data-role="delete"></button>
 	 	</div>
-	 	<input class="edit" value="${contents}" data-id="${_id}"/>
+	 	<input class="edit" value="${contents}" data-id="${_id}" data-role="edit"/>
 	</li>
 `;
 

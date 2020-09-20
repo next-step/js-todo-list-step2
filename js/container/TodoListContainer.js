@@ -36,8 +36,16 @@ function TodoListContainer($dom, store) {
 
     $dom.addEventListener('dblclick', ({target:{dataset}})=>{
         const {id:todoItemId} = dataset;
-        console.log(store.getState());
         store.dispatch(toggleTodoItem({todoItemId}))
+    })
+
+    $dom.addEventListener('focusout', ({target:{dataset}})=>{
+        const {id:todoItemId, role} = dataset;
+        switch (role){
+            case 'edit': {
+                store.dispatch(toggleTodoItem({todoItemId}))
+            }
+        }
     })
 
     $dom.addEventListener('keyup', async ({target:{dataset, value},key})=>{
@@ -78,6 +86,13 @@ function TodoListContainer($dom, store) {
                         }
                     })
                     $dom.innerHTML = TodoList({todoList:filteredTodoList});
+                    const $edit = $dom.querySelector('.editing .edit');
+                    if($edit) {
+                        $edit.focus();
+                        const val = $edit.value;
+                        $edit.value = '';
+                        $edit.value = val;
+                    }
                     break;
                 }
             }

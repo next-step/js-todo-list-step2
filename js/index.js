@@ -29,9 +29,6 @@ const $todoFooter = document.querySelector('.count-container');
 const todoFooter = TodoFooterContainer($todoFooter, store);
 store.subscribe(todoFooter);
 
-store.subscribe(()=>console.log(store.getState()));
-
-
 (async function () {
   store.dispatch(setStatus({status:PENDING}));
   const todoApp = await getTodoApp();
