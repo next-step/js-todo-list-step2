@@ -37,11 +37,13 @@ export const todoStore = new Store({
       state.filterType = filterType;
     },
     [SET_ADD_LOADING_ITEM] (state) {
-      state.todoItems.push({ isLoading: true });
+      state.todoItems = [...state.todoItems, { isLoading: true }];
     },
     [SET_LOADING_ITEM] (state, id) {
-      const index = state.todoItems.findIndex(item => item._id === id);
-      state.todoItems[index] = { isLoading: true };
+      const todoItems = [ ...state.todoItems ];
+      const index = todoItems.findIndex(item => item._id === id);
+      todoItems[index] = { isLoading: true };
+      state.todoItems = todoItems;
     },
     [SET_LOADING_ALL] (state) {
       state.todoItems = state.todoItems.map(item => ({
