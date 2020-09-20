@@ -8,7 +8,8 @@ export const observe = fn => {
 
 export const observable = target => {
   return Object.keys(target).reduce((obj, key) => {
-    let _value = obj[key];
+    let _value = typeof obj[key];
+    if ( typeof _value === 'object' ) _value = observable(_value);
     const observers = new Set();
     Object.defineProperty(obj, key, {
       get ()  {
@@ -17,6 +18,8 @@ export const observable = target => {
       },
       set (value) {
         if (value === _value) return;
+        if ( typeof value === 'object' ) value = observable(value);
+        _value = value;
         observers.forEach(observer => observer());
       }
     });
