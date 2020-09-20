@@ -11,6 +11,7 @@ function TodoFooterContainer($dom, store) {
         switch (role) {
             case 'filter': {
                 store.dispatch(setTodoFilter({filter}))
+                break;
             }
             case 'clear': {
                 const {selectedUserId} = store.getState();
@@ -19,8 +20,8 @@ function TodoFooterContainer($dom, store) {
                     alert('삭제 완료');
                     store.dispatch(setTodoList({todoList: []}))
                 }
+                break;
             }
-
         }
     });
 
