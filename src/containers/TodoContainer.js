@@ -8,7 +8,7 @@ import {
   PUT_ITEM,
   PUT_PRIORITY_ITEM, REMOVE_ALL_ITEM,
   REMOVE_ITEM, SET_EDITING,
-  SET_FILTER_TYPE,
+  SET_FILTER_TYPE, SET_PRIORITY,
   todoStore,
   TOGGLE_ITEM
 } from "../store/todoStore.js";
@@ -50,6 +50,7 @@ export const TodoContainer = class extends Component {
     todoStore.dispatch(PUT_PRIORITY_ITEM, { userId: this.userId, item });
   }
 
+  editPriority = index => todoStore.commit(SET_PRIORITY, index);
   editingItem = index => todoStore.commit(SET_EDITING, index);
   filterItem = filterType => todoStore.commit(SET_FILTER_TYPE, filterType);
   removeAll = () => todoStore.dispatch(REMOVE_ALL_ITEM, this.userId);
@@ -68,6 +69,7 @@ export const TodoContainer = class extends Component {
         toggleItem: this.toggleItem,
         updateItem: this.updateItem,
         selectPriority: this.selectPriority,
+        editPriority: this.editPriority,
         editingItem: this.editingItem,
         get loading () { return todoStore.$state.loading },
         get editingIndex () { return todoStore.$state.editingIndex },

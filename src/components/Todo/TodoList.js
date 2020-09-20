@@ -34,8 +34,8 @@ export const TodoList = class extends Component {
         <div class="view">
           <input data-ref="toggle" class="toggle" type="checkbox" ${isCompleted ? 'checked' : ''} />
           <label data-ref="contents" class="label">
-            ${ priority === PriorityTypes.FIRST ? `<span class="chip primary">1순위</span>` :
-               priority === PriorityTypes.SECOND ? `<span class="chip secondary">2순위</span>` : `
+            ${ priority === PriorityTypes.FIRST ? `<span data-ref="chip" class="chip primary">1순위</span>` :
+               priority === PriorityTypes.SECOND ? `<span data-ref="chip" class="chip secondary">2순위</span>` : `
               <select data-ref="priority" class="chip select">
                 <option value="${PriorityTypes.NONE}" selected>순위</option>
                 <option value="${PriorityTypes.FIRST}">1순위</option>
@@ -51,10 +51,11 @@ export const TodoList = class extends Component {
   }
 
   setEvent () {
-    const { removeItem, toggleItem, selectPriority, updateItem, editingItem } = this.$props;
+    const { removeItem, toggleItem, editPriority, selectPriority, updateItem, editingItem } = this.$props;
     this.addEvent('click', 'destroy', ({  index }) => removeItem(index));
     this.addEvent('change', 'toggle', ({  index }) => toggleItem(index));
     this.addEvent('change', 'priority', ({ target, index }) => selectPriority(index, target.value));
+    this.addEvent('click', 'chip', ({ index }) => editPriority(index));
     this.addEvent('dblclick', 'contents', ({ index }) => editingItem(index));
     this.addEvent('keydown', 'editor', ({ key }) => {
       if (key !== 'Escape') return;
