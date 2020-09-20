@@ -2,11 +2,11 @@ const BASE_URL = 'https://js-todo-list-9ca3a.df.r.appspot.com/api/users'
 
 export const getTodoApp = async () => {
     const data = await fetch(BASE_URL);
+    const res = await data.json();
     if (!data.ok) {
-        throw new Error(data.status);
+        throw new Error(res.message);
     }
-    const todoApp = await data.json();
-    return todoApp.reduce((acc, cur) => {
+    return res.reduce((acc, cur) => {
         if (!acc.selectedUserId) {
             acc.selectedUserId = cur._id;
         }
@@ -20,10 +20,11 @@ export const getTodoApp = async () => {
 
 export const getTodoList = async (userId) => {
     const data = await fetch(`${BASE_URL}/${userId}/items/`)
+    const res = await data.json();
     if (!data.ok) {
-        throw new Error(data.status);
+        throw new Error(res.message);
     }
-    return await data.json();
+    return await res;
 }
 
 export const createUser = async (userName) => {
@@ -32,7 +33,11 @@ export const createUser = async (userName) => {
             'Content-Type': 'application/json'
         }, body: JSON.stringify({name: userName})
     })
-    return await data.json();
+    const res = await data.json();
+    if (!data.ok) {
+        throw new Error(res.message);
+    }
+    return await res;
 }
 export const deleteUser = async (userId) => {
     const data = await fetch(`${BASE_URL}/${userId}`, {
@@ -40,7 +45,11 @@ export const deleteUser = async (userId) => {
             'Content-Type': 'application/json'
         }
     })
-    return await data.json();
+    const res = await data.json();
+    if (!data.ok) {
+        throw new Error(res.message);
+    }
+    return await res;
 }
 
 export const createTodoItem = async (userId, contents) => {
@@ -49,7 +58,11 @@ export const createTodoItem = async (userId, contents) => {
             'Content-Type': 'application/json'
         }, body: JSON.stringify({contents})
     })
-    return await data.json();
+    const res = await data.json();
+    if (!data.ok) {
+        throw new Error(res.message);
+    }
+    return await res;
 }
 export const toggleTodoItemComplete = async (userId, itemId) => {
     const data = await fetch(`${BASE_URL}/${userId}/items/${itemId}/toggle`, {
@@ -57,7 +70,11 @@ export const toggleTodoItemComplete = async (userId, itemId) => {
             'Content-Type': 'application/json'
         }
     })
-    return await data.json();
+    const res = await data.json();
+    if (!data.ok) {
+        throw new Error(res.message);
+    }
+    return await res;
 }
 
 export const deleteTodoItem = async (userId, itemId) => {
@@ -66,7 +83,11 @@ export const deleteTodoItem = async (userId, itemId) => {
             'Content-Type': 'application/json'
         }
     })
-    return await data.json();
+    const res = await data.json();
+    if (!data.ok) {
+        throw new Error(res.message);
+    }
+    return await res;
 }
 
 export const updateTodoItem = async (userId, itemId, contents) => {
@@ -76,7 +97,11 @@ export const updateTodoItem = async (userId, itemId, contents) => {
         },
         body: JSON.stringify({contents})
     });
-    return await data.json();
+    const res = await data.json();
+    if (!data.ok) {
+        throw new Error(res.message);
+    }
+    return await res;
 }
 export const deleteAllTodoItem = async (userId) =>{
     const data = await fetch(`${BASE_URL}/${userId}/items/`, {
@@ -84,6 +109,9 @@ export const deleteAllTodoItem = async (userId) =>{
             'Content-Type': 'application/json'
         }
     })
+    if (!data.ok) {
+        throw new Error(await data.json());
+    }
     return await data.json();
 }
 
@@ -94,5 +122,9 @@ export const updateTodoItemPriority = async (userId, itemId, priority) => {
         },
         body: JSON.stringify({priority})
     });
-    return await data.json();
+    const res = await data.json();
+    if (!data.ok) {
+        throw new Error(res.message);
+    }
+    return await res;
 }

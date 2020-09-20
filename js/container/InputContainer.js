@@ -5,10 +5,16 @@ function InputContainer($dom, store) {
     $dom.addEventListener('keyup', async ({target, key})=>{
         switch (key){
             case 'Enter':{
-                const {selectedUserId} = store.getState();
-                const todoItem = await createTodoItem(selectedUserId, target.value);
-                store.dispatch(addTodoItem({todoItem}));
-                target.value='';
+                try {
+                    const {selectedUserId} = store.getState();
+                    const todoItem = await createTodoItem(selectedUserId, target.value);
+                    store.dispatch(addTodoItem({todoItem}));
+                    target.value = '';
+                }catch (e) {
+                    alert(e);
+                    console.error(e)
+                    target.value = '';
+                }
             }
         }
     })
