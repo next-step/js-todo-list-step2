@@ -1,6 +1,4 @@
 import {Component} from "../../core/Component.js";
-import {SET_EDITING, todoStore} from "../../store/todoStore.js";
-import {userStore} from "../../store/userStore.js";
 import LoadingTypes from "../../constants/LoadingTypes.js";
 import PriorityTypes from "../../constants/PriorityTypes.js";
 
@@ -24,10 +22,6 @@ const getItemClass = (completed, editing) => editing   ? ' class="editing"'   :
                                              completed ? ' class="completed"' : '';
 
 export const TodoList = class extends Component {
-
-  componentInit () {
-    this.$stores = [ todoStore, userStore ];
-  }
 
   template () {
     const { loading, editingIndex, items } = this.$props

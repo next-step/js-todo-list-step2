@@ -1,6 +1,5 @@
 import { Component } from "../../core/Component.js";
 import FilterTypes from "../../constants/FilterTypes.js";
-import { todoStore } from "../../store/todoStore.js";
 
 const filterButtons = [
   { type: FilterTypes.ALL, text: '전체보기' },
@@ -9,10 +8,6 @@ const filterButtons = [
 ];
 
 export const TodoFooter = class extends Component {
-
-  componentInit () {
-    this.$stores = [ todoStore ];
-  }
 
   template () {
     const { itemCount, filterType } = this.$props;

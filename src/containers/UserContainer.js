@@ -9,7 +9,6 @@ import {lazyFrame} from "../utils/index.js";
 export const UserContainer = class extends Component {
 
   componentInit () {
-    this.$stores = [userStore];
     this.$children = {
       UserTitle: {
         constructor: UserTitle
