@@ -16,7 +16,6 @@ const App = class extends Component{
     todoStore.commit(SET_TODO_ITEMS, users[selectedIndex].todoList);
   }
 
-
   $children =  () => ({
     UserContainer: { constructor: UserContainer },
     TodoContainer: { constructor: TodoContainer },

@@ -1,7 +1,9 @@
+import {debounceOneFrame} from "../utils";
+
 let currentObserver = null;
 
 export const observe = fn => {
-  currentObserver = fn;
+  currentObserver = debounceOneFrame(fn);
   fn();
   currentObserver = null;
 }

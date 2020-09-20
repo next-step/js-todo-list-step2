@@ -16,16 +16,16 @@ export const Component = class {
   async #setup () {
     await this.componentInit();
     this.$state = observable(this.$state);
-    observe(() => this.render());
+    observe(this.render);
     this.componentDidMount();
     this.setEvent();
   }
 
-  render = debounceOneFrame(() => {
+  render = () => {
     this.$target.innerHTML = this.template();
     this.#childrenBuild();
     this.componentDidUpdate()
-  });
+  };
 
   setState (payload) {
     for (const [key, value] in Object.entries(payload)) {
