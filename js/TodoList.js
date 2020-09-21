@@ -36,26 +36,24 @@ export default function TodoList($todoList, userId) {
         this.toggle($todoItem.id);
       });
 
-      $item.querySelector('button.destroy').addEventListener('click', (e) => {
-        e.stopPropagation();
-        const _id = e.target.closest('.todo-item').id;
+      $item.querySelector('button.destroy').addEventListener('click', ({target}) => {
+        const _id = target.closest('.todo-item').id;
         this.delete(_id);
       });
 
-      $item.querySelector('label').addEventListener('dblclick', (e) => {
-        e.stopPropagation();
-        const $todoItem = e.target.closest('.todo-item');
-        const {index} = e.target.closest('.todo-item').dataset;
-        const oldValue = e.target.innerText;
+      $item.querySelector('label').addEventListener('dblclick', ({target}) => {
+        const $todoItem = target.closest('.todo-item');
+        const {index} = target.closest('.todo-item').dataset;
+        const oldValue = target.innerText;
 
         $todoItem.classList.add('editing');
-        $todoItem.addEventListener('keyup', (e) => {
-          if (e.key === KEY.ESC) {
+        $todoItem.addEventListener('keyup', ({key, target}) => {
+          if (key === KEY.ESC) {
             $todoItem.classList.remove('editing');
-            e.target.value = oldValue;
-          } else if (e.key === KEY.ENTER) {
-            this.editItem(index, e.target.value);
-            this.edit($todoItem.id, e.target.value);
+            target.value = oldValue;
+          } else if (key === KEY.ENTER) {
+            this.editItem(index, target.value);
+            this.edit($todoItem.id, target.value);
           }
         });
       });

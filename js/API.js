@@ -23,16 +23,16 @@ export const API = {
     }
   },
   AddItem: async (userId, contentText) => {
-    await fetch(`${ADDRESS}/api/users/${userId}/items/`, ApiOptions.POST( {contents: contentText} ));
+    await fetch(`${ADDRESS}/api/users/${userId}/items`, ApiOptions.POST( {contents: contentText} ));
   },
   DeleteItem: async (userId, itemId) => {
-    await fetch(`${ADDRESS}/api/users/${userId}/item/${itemId}`, ApiOptions.DELETE);
+    await fetch(`${ADDRESS}/api/users/${userId}/items/${itemId}`, ApiOptions.DELETE);
   },
   ToggleItem: async (userId, itemId) => {
-    await fetch(`${ADDRESS}/api/users/${userId}/item/${itemId}/toggle`, ApiOptions.TOGGLE);
+    await fetch(`${ADDRESS}/api/users/${userId}/items/${itemId}/toggle`, ApiOptions.TOGGLE);
   },
   EditItem: async (userId, itemId, newContentText) => {
-    await fetch(`${ADDRESS}/api/users/${userId}/item/${itemId}/`, ApiOptions.EDIT({contents: newContentText}));
+    await fetch(`${ADDRESS}/api/users/${userId}/items/${itemId}`, ApiOptions.EDIT({contents: newContentText}));
   }
 };
 
@@ -63,6 +63,7 @@ export const ApiOptions = {
     return {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json'},
-      body: JSON.stringify(data)};
+      body: JSON.stringify(data),
+    };
   },
 };

@@ -15,7 +15,7 @@
 ## 🎯🎯 심화 요구사항
 
 - [ ] 1. 데이터를 불러오기전 로딩바를 이용해, 사용자가 데이터가 불러와지고 있다는 것을 보여줍니다.
-- [ ] 2. fetch api 사용하는 부분을 async await을 사용하여 리팩토링합니다.
+- [x] 2. fetch api 사용하는 부분을 async await을 사용하여 리팩토링합니다.
 - [ ] 3. github issue에서 라벨을 붙이는 것처럼, 우선순위에 따라서 badge를 추가합니다.
 - [x] 4. ES6 impot & export를 이용해 자바스크립트 파일을 리팩토링합니다.
 
@@ -267,4 +267,5 @@ This project is [MIT](https://github.com/next-step/js-todo-list-step3/blob/maste
 - 엔터를 한번 눌렀는데 TodoInput 이벤트가 두번 호출되는 경우?
 
 ## 3기
-
+### 🤔 고민
+- Delete, Toggle에서 404에러가 난다. `ApiOptions`를 사용하지 않고 객체를 바로 넣으면 동작한다. 뭐지??
