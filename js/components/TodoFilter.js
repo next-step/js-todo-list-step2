@@ -9,7 +9,6 @@ export default class TodoFilter extends Component {
 
     this.$filters = this.$target.querySelectorAll('a');
     this.setDataToHTML();
-    this.initEventListener();
   }
 
   setDataToHTML = () => {
@@ -23,7 +22,7 @@ export default class TodoFilter extends Component {
     });
   };
 
-  initEventListener = () => {
+  initEventListener() {
     this.$target.addEventListener('click', (e) => {
       e.preventDefault();
       const { target } = e;
@@ -37,5 +36,5 @@ export default class TodoFilter extends Component {
         }
       });
     });
-  };
+  }
 }

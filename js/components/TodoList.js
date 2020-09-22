@@ -6,7 +6,6 @@ export default class TodoList extends Component {
   constructor($target, props) {
     super($target, props);
     this.props.todoList.subscribe(this.render);
-    this.initEventListener();
     this.render();
   }
 

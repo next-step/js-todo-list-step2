@@ -24,8 +24,7 @@ export default class UserList extends Component {
   loadUsers = async () => {
     const data = await (await fetch(`${API_BASE_URL}/api/users`)).json();
     if (data instanceof Array) this.#users.value = data;
-    if (!this.props.activeUser.value._id)
-      this.props.activeUser.value = data[10];
+    if (!this.props.activeUser.value._id) this.props.activeUser.value = data[0];
   };
 
   createUser = async () => {
