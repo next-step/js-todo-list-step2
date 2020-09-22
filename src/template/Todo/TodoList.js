@@ -2,9 +2,15 @@ import TodoLoading from './TodoLoading.js';
 import TodoItem from './TodoItem.js';
 import { getter, setter } from '../../store/index.js';
 import { observer } from '../../store/index.js';
-import { putUserItemCompleteToggleService, deleteUserItemService, putUserItemService, putUserItemPriorityService } from '../../endpoint/service.js';
+import {
+  putUserItemCompleteToggleService,
+  deleteUserItemService,
+  putUserItemService,
+  putUserItemPriorityService,
+} from '../../endpoint/service.js';
+import * as CONST from '../../constants/index.js';
 
-const TodoList = () => {
+const TodoList = (props) => {
   const components = {
     TodoLoading: TodoLoading(),
     todoList: {},
@@ -80,7 +86,7 @@ const TodoList = () => {
     }
   };
 
-  const setViewItemWithEsc = async ({ key, target: { dataset }}) => {
+  const setViewItemWithEsc = async ({ key, target: { dataset } }) => {
     if (dataset.component === 'editMode' && key === 'Escape') {
       setter.itemMode(editItem.id, 'view');
       editItem.component.render();
@@ -89,7 +95,7 @@ const TodoList = () => {
     }
   };
 
-  const setPriority = async ({ target, target: { dataset, value }}) => {
+  const setPriority = async ({ target, target: { dataset, value } }) => {
     if (dataset.component === 'todoPriority') {
       const itemId = target.closest('li').dataset.todoIdx;
       const userId = getter.userId();
@@ -124,10 +130,20 @@ const TodoList = () => {
 
   components.TodoLoading.render();
 
-  const render = () => {
+  const filterTodoList = () => {
     const { userItems } = getter;
+    const { getFilter } = props;
+    const filter = getFilter(render);
+    const todoList = userItems();
+    const isCompleted = (filter === CONST.ACTIVE ? false : true);
+    return (filter === CONST.ALL) ? todoList : todoList?.filter(todo => todo.isCompleted === isCompleted);
+  };
+
+  const render = () => {
+    const todoList = filterTodoList();
     todos.innerHTML = '';
-    userItems?.()?.forEach(todo => {
+
+    todoList?.forEach(todo => {
       const todoItem = TodoItem({ itemId: todo._id });
       components.todoList[todo._id] = todoItem;
       todos.appendChild(todoItem.dom);

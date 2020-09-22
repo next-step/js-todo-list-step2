@@ -1,19 +1,17 @@
-const TodoFilter = () => {
+import * as CONST from '../../constants/index.js';
+
+const TodoFilter = (props) => {
+  const { getFilter, setFilter } = props;
+  const onFilterHandler = ({ target: { dataset } }) => setFilter(dataset.filter);
   const dom = document.createElement('ul');
   dom.classList.add('filters');
+  dom.addEventListener('click', onFilterHandler);
 
   const render = () => {
-    dom.innerHTML = `
-      <li>
-        <a href="/#" class="all selected" >전체보기</a>
-      </li>
-      <li>
-        <a href="#active" class="active">해야할 일</a>
-      </li>
-      <li>
-        <a href="#completed" class="completed">완료한 일</a>
-      </li>
-    `;
+    const filter = getFilter(render);
+    dom.innerHTML = Object.entries(CONST.filter).map(([key, value]) => {
+      return `<li><a href="#" class="${ key } ${ filter === key ? 'selected' : '' }" data-filter="${ key }">${ value }</a></li>`;
+    }).join('');
   };
 
   return { dom, render };

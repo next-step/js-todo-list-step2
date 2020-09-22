@@ -3,20 +3,21 @@ import TodoFilter from './TodoFilter.js';
 import { deleteUserItemsAllService } from '../../endpoint/service.js';
 import { getter, setter } from '../../store/index.js';
 
-const TodoCountContainer = () => {
+const TodoCountContainer = (props) => {
+  const { getFilter, setFilter } = props;
   const dom = document.createElement('div');
   dom.classList.add('count-container');
 
   const components = {
     TodoCount: TodoCount(),
-    TodoFilter: TodoFilter()
+    TodoFilter: TodoFilter({ getFilter, setFilter }),
   };
 
   const deleteUserItems = async () => {
     const userId = getter.userId();
     try {
       const result = await deleteUserItemsAllService({ userId });
-      alert(result.message)
+      alert(result.message);
     } catch (err) {
       if (err.message === 'user not found') {
         alert(err.message);
@@ -25,6 +26,7 @@ const TodoCountContainer = () => {
       }
     }
   };
+
   const clearCompleted = document.createElement('button');
   clearCompleted.classList.add('clear-completed');
   clearCompleted.innerText = '모두 삭제';
