@@ -104,8 +104,8 @@ export const putUserItemService = async ({ userId, itemId, contents }) => {
 
 export const deleteUserItemsAllService = async ({ userId }) => {
   const result = await deleteUserItemsAll({ userId });
-  if (result.message === 'Todo Item을 수정하는데 에러가 발생했습니다.')
-    throw new Error('item not found');
+  if (result.success)
+    result.message = '해당 유저의 Todo Item 을 모두 삭제하였습니다.';
   if (result.message === '해당 유저가 존재하지 않습니다.')
     throw new Error('user not found');
   return result;
@@ -115,7 +115,7 @@ export const putUserItemPriorityService = async ({ userId, itemId, priority }) =
   const result = await putUserItemPriority({ userId, itemId, priority });
   if (result.message === 'Todo Item을 수정하는데 에러가 발생했습니다.')
     throw new Error('item not found');
-  if (result.message === '해당 유저가 존재하지 않습니다.')
+  if (result.message === "해당 유저가 존재하지 않습니다.")
     throw new Error('user not found');
   return result;
 };
