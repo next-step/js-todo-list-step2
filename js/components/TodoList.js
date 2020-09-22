@@ -46,17 +46,13 @@ export default class TodoList extends Component {
   render = () => {
     if (!!this.props.todoList.value) {
       const todoList = this.props.todoList.value;
+      let tempHTML = '';
 
-      this.$target.innerHTML = '';
       todoList.forEach(
         ({ contents, isCompleted, priority, _id }) =>
-          (this.$target.innerHTML += createTodoItem(
-            _id,
-            contents,
-            isCompleted,
-            priority
-          ))
+          (tempHTML += createTodoItem(_id, contents, isCompleted, priority))
       );
+      this.$target.innerHTML = tempHTML;
     } else {
       this.$target.innerHTML = createLoadingBar();
     }

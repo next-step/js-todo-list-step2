@@ -17,7 +17,6 @@ export default class UserList extends Component {
     this.#users = new State([], this.render);
     this.props.activeUser.subscribe(this.render);
 
-    this.initEventListener();
     this.loadUsers();
   }
 
@@ -55,7 +54,7 @@ export default class UserList extends Component {
     );
   };
 
-  initEventListener = () => {
+  initEventListener() {
     this.$target.addEventListener('click', ({ target }) => {
       if (target.classList.contains('user-create-button')) this.createUser();
       else if (target.classList.contains('user-delete-button')) {
@@ -63,21 +62,22 @@ export default class UserList extends Component {
       } else if (target.className === 'ripple')
         this.selectUser(target.dataset.userId);
     });
-  };
+  }
 
   render = () => {
     const users = this.#users.value;
+    let tempHTML = '';
 
-    this.$target.innerHTML = '';
     users.forEach(
       ({ name, _id }) =>
-        (this.$target.innerHTML += createUserButton(
+        (tempHTML += createUserButton(
           _id,
           name,
           this.props.activeUser.value._id === _id
         ))
     );
-    this.$target.innerHTML += createUserCreateButton();
-    this.$target.innerHTML += createUserDeleteButton();
+    tempHTML += createUserCreateButton();
+    tempHTML += createUserDeleteButton();
+    this.$target.innerHTML = tempHTML;
   };
 }
