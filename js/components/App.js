@@ -142,7 +142,11 @@ export default class App extends Component {
 
   changeTodoPriority = async (targetItemId, priorityId) => {
     const priority =
-      priorityId === '1' ? 'FIRST' : priorityId === '2' ? 'SECOND' : 'NONE';
+      priorityId === '1'
+        ? Priority.First
+        : priorityId === '2'
+        ? Priority.Second
+        : Priority.None;
     const option = createFetchOption(PUT, {
       priority,
     });
