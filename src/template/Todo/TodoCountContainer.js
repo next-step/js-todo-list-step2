@@ -12,9 +12,9 @@ const TodoCountContainer = () => {
     TodoFilter: TodoFilter()
   };
 
-  const deleteUserItems = async ({ target }) => {
+  const deleteUserItems = async () => {
     const userId = getter.userId();
-    try {;
+    try {
       const result = await deleteUserItemsAllService({ userId });
       alert(result.message)
     } catch (err) {
