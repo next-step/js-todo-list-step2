@@ -9,7 +9,7 @@ const TodoCountContainer = (props) => {
   dom.classList.add('count-container');
 
   const components = {
-    TodoCount: TodoCount(),
+    TodoCount: TodoCount({ getFilter }),
     TodoFilter: TodoFilter({ getFilter, setFilter }),
   };
 
