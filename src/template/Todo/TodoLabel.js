@@ -12,8 +12,8 @@ const TodoLabel = (props) => {
   dom.dataset.component = 'todo-label';
 
   const render = () => {
-    const { itemId } = props;
-    const  { contents, priority } =  getter.userItem(itemId);
+    const { todo } = props;
+    const { priority, contents } = todo;
     dom.innerHTML = `
       <select class="chip select ${PRIORITY[priority]}"" data-component="todoPriority"> 
         <option value="NONE" ${priority === 'NONE' ? 'selected' : ''}>순위</option>

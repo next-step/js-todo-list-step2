@@ -8,7 +8,6 @@ import {
   putUserItemService,
   putUserItemPriorityService,
 } from '../../endpoint/service.js';
-import * as CONST from '../../constants/index.js';
 
 const TodoList = (props) => {
   const components = {
@@ -31,6 +30,8 @@ const TodoList = (props) => {
     const userId = getter.userId();
     try {
       await putUserItemCompleteToggleService({ userId, itemId });
+      await setter.userItems(userId);
+      render();
     } catch (err) {
       alert(err.message);
       await setter.userList();
@@ -63,6 +64,7 @@ const TodoList = (props) => {
       }
       editItem = { id: itemId, component };
       setter.itemMode(itemId, 'edit');
+
       component.render();
     }
   };
@@ -104,6 +106,7 @@ const TodoList = (props) => {
         const result = await putUserItemPriorityService({ userId, itemId, priority });
         setter.userItem(itemId, result);
         components.todoList[itemId].components.todoLabel.render();
+        render();
       } catch (err) {
         alert(err.message);
         if (err.message === 'item not found')
@@ -130,21 +133,13 @@ const TodoList = (props) => {
 
   components.TodoLoading.render();
 
-  const filterTodoList = () => {
+  const render = () => {
     const { userItems } = getter;
     const { getFilter } = props;
-    const filter = getFilter(render);
-    const todoList = userItems();
-    const isCompleted = (filter === CONST.ACTIVE ? false : true);
-    return (filter === CONST.ALL) ? todoList : todoList?.filter(todo => todo.isCompleted === isCompleted);
-  };
-
-  const render = () => {
-    const todoList = filterTodoList();
     todos.innerHTML = '';
 
-    todoList?.forEach(todo => {
-      const todoItem = TodoItem({ itemId: todo._id });
+    userItems()?.forEach(todo => {
+      const todoItem = TodoItem({ getFilter, todo });
       components.todoList[todo._id] = todoItem;
       todos.appendChild(todoItem.dom);
       todoItem.render();
