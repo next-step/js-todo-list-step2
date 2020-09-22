@@ -17,6 +17,7 @@ const TodoCountContainer = (props) => {
     const userId = getter.userId();
     try {
       const result = await deleteUserItemsAllService({ userId });
+      await setter.userItems(userId);
       alert(result.message);
     } catch (err) {
       if (err.message === 'user not found') {
