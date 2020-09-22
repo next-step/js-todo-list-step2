@@ -11,9 +11,9 @@ const TodoCount = (props) => {
     const todoList = getter.userItems();
     const filter = getFilter();
     const filterLength = () => {
-      return filter === CONST.ALL ? todoList : todoList.filter(todo => (filter === 'active') === !todo.isCompleted );
+      return (filter === CONST.ALL ? todoList : todoList.filter(todo => (filter === 'active') === !todo.isCompleted ))?.length || 0;
     };
-    dom.innerHTML = `총 <strong>${ filterLength(filter).length }</strong> 개`;
+    dom.innerHTML = `총 <strong>${ filterLength() }</strong> 개`;
   };
 
   getFilter(render);
