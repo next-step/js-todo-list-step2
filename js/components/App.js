@@ -6,6 +6,7 @@ import {
   DELETE,
   POST,
   PUT,
+  Priority,
 } from '../constant/index.js';
 import { createFetchOption } from '../util/index.js';
 import Component from '../core/Component.js';
@@ -172,10 +173,10 @@ export default class App extends Component {
       })
       .sort((a, b) => {
         if (a.priority === b.priority) return 0;
-        if (a.priority === 'FIRST') return -1;
-        if (b.priority === 'FIRST') return 1;
-        if (a.priority === 'SECOND') return -1;
-        if (b.priority === 'SECOND') return 1;
+        if (a.priority === Priority.First) return -1;
+        if (b.priority === Priority.First) return 1;
+        if (a.priority === Priority.Second) return -1;
+        if (b.priority === Priority.Second) return 1;
       });
   };
 }

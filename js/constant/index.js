@@ -8,3 +8,9 @@ export const ALL = 'all';
 export const ACTIVE = 'active';
 export const COMPLETED = 'completed';
 export const SELECTED = 'selected';
+
+export const Priority = {
+  First: 'FIRST',
+  Second: 'SECOND',
+  None: 'NONE',
+};
