@@ -1,4 +1,4 @@
-export default function TotalCount($todoCount, totalCount) {
+export default function TodoCount($todoCount, totalCount) {
   const render = (totalCount) => {
     $todoCount.innerHTML = `총 <strong>${totalCount}</strong> 개`;
   };

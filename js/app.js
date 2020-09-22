@@ -1,14 +1,14 @@
 import {DEFAULT_USER, FilterOptions} from './constants.js';
 import TodoList from './TodoList.js';
 import TodoInput from './TodoInput.js';
-import TodoCount from './TodoCount.js';
+// import TodoCount from './TodoCount.js';
 // import TodoFilter from './TodoFilter.js';
 import TodoUser from './TodoUser.js';
 
 function App() {
   const $todoInput = document.querySelector('.new-todo');
   const $todoList = document.querySelector('.todo-list');
-  const $todoCount = document.querySelector('.todo-count');
+  // const $todoCount = document.querySelector('.todo-count');
   // const $todoFilter = document.querySelector('.filters');
   const $userTitle = document.querySelector('#user-title');
   const $userList = document.querySelector('#user-list');
@@ -24,7 +24,7 @@ function App() {
   this.addItem = (text) => {
     todoList.post(text);
 
-    //this.filterItems(this.state.activeFilterType);
+    this.filterItems(this.state.activeFilterType);
   };
 
   this.filterItems = (type) => {
@@ -44,7 +44,7 @@ function App() {
     this.addItem(text);
   });
 
-  const todoCount = new TodoCount($todoCount);
+  //const todoCount = new TodoCount($todoCount);
   const todoUser = new TodoUser($userTitle, $userCreateButton, $userList, this.userId, (activeUserId) => {
     this.setState(activeUserId);
   });

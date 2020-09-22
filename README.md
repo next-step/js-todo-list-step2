@@ -267,5 +267,5 @@ This project is [MIT](https://github.com/next-step/js-todo-list-step3/blob/maste
 - 엔터를 한번 눌렀는데 TodoInput 이벤트가 두번 호출되는 경우?
 
 ## 3기
-### 🤔 고민
-- Delete, Toggle에서 404에러가 난다. `ApiOptions`를 사용하지 않고 객체를 바로 넣으면 동작한다. 뭐지??
+### 🐞 버그
+- Delete, Toggle에서 404에러가 난다. `ApiOptions`를 사용하지 않고 객체를 바로 넣으면 동작한다. 뭐지?? -> [fixed](https://github.com/next-step/js-todo-list-step2/pull/23#issuecomment-696489552)
