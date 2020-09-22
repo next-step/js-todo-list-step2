@@ -23,13 +23,13 @@ export const API = {
     }
   },
   AddItem: async (userId, contentText) => {
-    await fetch(`${ADDRESS}/api/users/${userId}/items`, ApiOptions.POST( {contents: contentText} ));
+    await fetch(`${ADDRESS}/api/users/${userId}/items`, ApiOptions.POST({contents: contentText}));
   },
   DeleteItem: async (userId, itemId) => {
-    await fetch(`${ADDRESS}/api/users/${userId}/items/${itemId}`, ApiOptions.DELETE);
+    await fetch(`${ADDRESS}/api/users/${userId}/items/${itemId}`, ApiOptions.DELETE());
   },
   ToggleItem: async (userId, itemId) => {
-    await fetch(`${ADDRESS}/api/users/${userId}/items/${itemId}/toggle`, ApiOptions.TOGGLE);
+    await fetch(`${ADDRESS}/api/users/${userId}/items/${itemId}/toggle`, ApiOptions.TOGGLE());
   },
   EditItem: async (userId, itemId, newContentText) => {
     await fetch(`${ADDRESS}/api/users/${userId}/items/${itemId}`, ApiOptions.EDIT({contents: newContentText}));
