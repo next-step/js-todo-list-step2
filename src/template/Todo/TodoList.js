@@ -9,9 +9,8 @@ import {
 } from '../../endpoint/service.js';
 import { ERROR } from '../../constants/messageAPI.js';
 
-const TodoList = (props) => {
+const TodoList = ({ getFilter }) => {
   const components = {
-    TodoLoading: TodoLoading(),
     todoList: {},
   };
   let editItem = { id: -1, components: undefined };
@@ -21,7 +20,9 @@ const TodoList = (props) => {
 
   const ul = document.createElement('ul');
   ul.classList.add('todo-list');
-  ul.appendChild(components.TodoLoading.dom);
+  ul.append(
+    TodoLoading()
+  );
   dom.appendChild(ul);
 
   const toggleComplete = async (target) => {
@@ -145,11 +146,8 @@ const TodoList = (props) => {
 
   ul.appendChild(todos);
 
-  components.TodoLoading.render();
-
   const render = () => {
     const { userItems } = getter;
-    const { getFilter } = props;
     todos.innerHTML = '';
 
     userItems()?.forEach(todo => {
@@ -163,7 +161,8 @@ const TodoList = (props) => {
   observer.addObserver('user', render);
   observer.addObserver('userItems', render);
 
-  return { dom, render };
+  render();
+  return dom;
 };
 
 export default TodoList;

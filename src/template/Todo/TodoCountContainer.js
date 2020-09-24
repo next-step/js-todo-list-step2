@@ -4,15 +4,10 @@ import { removeUserTodoItemsAll } from '../../endpoint/service.js';
 import { getter, setter, initStore } from '../../store/index.js';
 import { ERROR } from '../../constants/messageAPI.js';
 
-const TodoCountContainer = (props) => {
-  const { getFilter, setFilter } = props;
+const TodoCountContainer = ({ getFilter, setFilter }) => {
   const dom = document.createElement('div');
   dom.classList.add('count-container');
 
-  const components = {
-    TodoCount: TodoCount({ getFilter }),
-    TodoFilter: TodoFilter({ getFilter, setFilter }),
-  };
 
   const deleteUserItems = async () => {
     const userId = getter.userId();
@@ -33,14 +28,13 @@ const TodoCountContainer = (props) => {
   clearCompleted.innerText = '모두 삭제';
   clearCompleted.addEventListener('click', deleteUserItems);
 
-  dom.appendChild(components.TodoCount.dom);
-  dom.appendChild(components.TodoFilter.dom);
-  dom.appendChild(clearCompleted);
+  dom.append(
+    TodoCount({ getFilter }),
+    TodoFilter({ getFilter, setFilter }),
+    clearCompleted
+  );
 
-  components.TodoCount.render();
-  components.TodoFilter.render();
-
-  return { dom };
+  return dom;
 };
 
 export default TodoCountContainer;

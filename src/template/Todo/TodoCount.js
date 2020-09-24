@@ -2,10 +2,9 @@ import { getter } from '../../store/index.js';
 import * as CONST from '../../constants/index.js';
 import { observer } from '../../store/index.js';
 
-const TodoCount = (props) => {
+const TodoCount = ({ getFilter }) => {
   const dom = document.createElement('span');
   dom.classList.add('todo-count');
-  const { getFilter } = props;
 
   const render = () => {
     const todoList = getter.userItems();
@@ -20,7 +19,8 @@ const TodoCount = (props) => {
   observer.addObserver('userItems', render);
   observer.addObserver('user', render);
 
-  return { dom, render };
+  render();
+  return dom;
 };
 
 export default TodoCount;

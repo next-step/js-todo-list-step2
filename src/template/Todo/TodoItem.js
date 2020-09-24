@@ -1,3 +1,4 @@
+// TODO refactor
 import TodoLabel from './TodoLabel.js';
 import * as CONST from '../../constants/index.js';
 

@@ -1,7 +1,6 @@
 import * as CONST from '../../constants/index.js';
 
-const TodoFilter = (props) => {
-  const { getFilter, setFilter } = props;
+const TodoFilter = ({ getFilter, setFilter }) => {
   const onFilterHandler = ({ target: { dataset } }) => setFilter(dataset.filter);
   const dom = document.createElement('ul');
   dom.classList.add('filters');
@@ -14,7 +13,8 @@ const TodoFilter = (props) => {
     }).join('');
   };
 
-  return { dom, render };
+  render();
+  return dom;
 };
 
 export default TodoFilter;

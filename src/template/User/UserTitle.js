@@ -20,8 +20,8 @@ const UserTitle = () => {
       }
     }
   };
-  dom.addEventListener('click', deleteUser);
 
+  dom.addEventListener('click', deleteUser);
   const render = () => {
     const userName = getter.userName();
     const getTitleName = userName ? `${userName}\'s` : '';
@@ -34,7 +34,8 @@ const UserTitle = () => {
   };
   observer.addObserver('user', render);
 
-  return { dom, render };
+  render();
+  return dom ;
 };
 
 export default UserTitle;

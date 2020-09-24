@@ -1,18 +1,16 @@
-import { getter } from '../../store/index.js';
-
+// TODO refactor
 const PRIORITY = {
   'NONE': '',
   'FIRST': 'primary',
   'SECOND': 'secondary'
 };
 
-const TodoLabel = (props) => {
+const TodoLabel = ({ todo }) => {
   const dom = document.createElement('label');
   dom.classList.add('label');
   dom.dataset.component = 'todo-label';
 
   const render = () => {
-    const { todo } = props;
     const { priority, contents } = todo;
     dom.innerHTML = `
       <select class="chip select ${PRIORITY[priority]}"" data-component="todoPriority"> 

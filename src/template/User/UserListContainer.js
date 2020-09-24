@@ -5,19 +5,15 @@ import { setter } from '../../store/index.js';
 import { validateUserName } from '../../validator.js';
 
 const UserListContainer = () => {
-
   const dom = document.createElement('section');
 
-  const components = {
-    UserList: UserList(),
-  };
   const userCreateButton = document.createElement('button');
   userCreateButton.classList.add('ripple', 'user-create-button');
   userCreateButton.innerText = '+ 유저 생성';
-  dom.appendChild(components.UserList.dom);
-  dom.appendChild(userCreateButton);
-
-  components.UserList.render();
+  dom.append(
+    UserList(),
+    userCreateButton
+  );
 
   const onUserCreateHandler = async (validator) => {
     const name = prompt('추가하고 싶은 이름을 입력해주세요.');
@@ -39,10 +35,7 @@ const UserListContainer = () => {
 
   userCreateButton.addEventListener('click', () => onUserCreateHandler(validateUserName));
 
-
-  return {
-    dom
-  };
+  return dom;
 };
 
 export default UserListContainer;

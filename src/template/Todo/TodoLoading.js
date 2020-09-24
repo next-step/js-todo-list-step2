@@ -15,8 +15,9 @@ const TodoLoading = () => {
       </div>
     `
   };
+  render();
 
-return { dom, render };
+  return dom;
 };
 
 export default TodoLoading;

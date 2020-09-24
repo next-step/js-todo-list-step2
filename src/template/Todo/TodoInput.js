@@ -37,7 +37,8 @@ const TodoInput = () => {
   };
   observer.addObserver('user', render);
 
-  return { dom, render };
+  render();
+  return dom;
 };
 
 export default TodoInput;
