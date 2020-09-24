@@ -1,9 +1,9 @@
-import HttpMethod from '../constants/HttpMethod.js';
+import HttpMethod from './HttpMethod.js';
+import env from '../env.js';
 
 const _baseURL = env.baseURL;
 
 
-// TODO 호출시 error 가 catch 되지 않음
 const request = async (uri, method, body = undefined, timeout = 5000) => {
   const config = { method };
   const url = _baseURL + uri;
