@@ -92,7 +92,7 @@ export const updateUserTodoItem = async ({ userId, itemId, contents }) => {
 
 export const removeUserTodoItemsAll = async ({ userId }) => {
   const result = await deleteUserTodoItemsAll({ userId });
-  if (result.success === SUCCESS.DELETE_TODO_ITEM_ALL) {
+  if (result.success) {
     result.message = SUCCESS.DELETE_TODO_ITEM_ALL;
   }
   if (result.message === ERROR.NO_USER3) {

@@ -1,24 +1,22 @@
 import TodoInput from './TodoInput.js';
-
 import TodoList from './TodoList.js';
 import TodoCountContainer from './TodoCountContainer.js';
 import { useState } from '../../core/state.js';
 import * as CONST from '../../constants/index.js';
-
+import { createDOM } from '../../utils.js';
 
 const TodoContainer = () => {
   const [getFilter, setFilter] = useState(CONST.ALL);
 
-  const dom = document.createElement('section');
-  dom.classList.add('todoapp');
+  const dom = createDOM('section', { className: 'todoapp' });
 
   dom.append(
     TodoInput(),
     TodoList({ getFilter }),
-    TodoCountContainer({ getFilter, setFilter })
+    TodoCountContainer({ getFilter, setFilter }),
   );
 
-  return dom ;
+  return dom;
 };
 
 export default TodoContainer;

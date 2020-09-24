@@ -1,27 +1,10 @@
-import { getter, observer, initStore } from '../../store/index.js';
-import { removeUser } from '../../endpoint/service.js';
-import { loadingWrapper } from '../../utils.js';
+import { getter, observer } from '../../store/index.js';
+import { deleteUserHandler } from '../../eventHandler.js';
 
 const UserTitle = () => {
   const dom = document.createElement('div');
 
-  const deleteUser = async (event) => {
-    if (event.target.dataset.component === 'user-delete') {
-      const confirm = window.confirm('유저를 정말로 삭제하시겠습니까?');
-      if (!confirm) return;
-      try {
-        const userId = getter.userId();
-        loadingWrapper(async () => {
-          await removeUser({ userId });
-          await initStore();
-        });
-      } catch (err) {
-        alert(err.message);
-      }
-    }
-  };
-
-  dom.addEventListener('click', deleteUser);
+  dom.addEventListener('click', deleteUserHandler);
   const render = () => {
     const userName = getter.userName();
     const getTitleName = userName ? `${userName}\'s` : '';

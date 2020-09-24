@@ -1,6 +1,12 @@
+import { createDOM } from '../../utils.js';
+
 const TodoLoading = () => {
-  const dom = document.createElement('li');
-  dom.classList.add('loading');
+  const dom = createDOM(
+    'li',
+    {
+      className: 'loading',
+    },
+  );
 
   const render = () => {
     dom.innerHTML = `
@@ -13,7 +19,7 @@ const TodoLoading = () => {
           </div>
         </label>
       </div>
-    `
+    `;
   };
   render();
 

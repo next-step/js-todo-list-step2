@@ -1,13 +1,15 @@
 import TodoLoading from './TodoLoading.js';
 import TodoItem from './TodoItem.js';
-import { getter, setter, initStore, observer } from '../../store/index.js';
+import { getter, observer } from '../../store/index.js';
+import { createDOM } from '../../utils.js';
 import {
-  updateUserTodoItemComplete,
-  removeUserTodoItem,
-  updateUserTodoItem,
-  updateUserTodoItemPriority,
-} from '../../endpoint/service.js';
-import { ERROR } from '../../constants/messageAPI.js';
+  toggleCompleteHandler,
+  deleteTodoItemHandler,
+  editItemContentsHandler,
+  editModeHandler,
+  escapeEditHandler,
+  setPriorityHandler
+} from '../../eventHandler.js';
 
 const TodoList = ({ getFilter }) => {
   const components = {
@@ -15,134 +17,54 @@ const TodoList = ({ getFilter }) => {
   };
   let editItem = { id: -1, components: undefined };
 
-  const dom = document.createElement('section');
-  dom.classList.add('main');
-
-  const ul = document.createElement('ul');
-  ul.classList.add('todo-list');
-  ul.append(
-    TodoLoading()
+  const dom = createDOM(
+    'section',
+    {
+      className: 'name',
+    },
   );
-  dom.appendChild(ul);
 
-  const toggleComplete = async (target) => {
-    const itemId = target.closest('li').dataset.todoIdx;
-    const userId = getter.userId();
-    try {
-      await updateUserTodoItemComplete({ userId, itemId });
-      await setter.userItems(userId);
-      render();
-    }
-    catch (err) {
-      alert(err.message);
-      if (err.message === ERROR.NO_USER3) {
-        await initStore();
-      }
-      if (err.message === ERROR.NO_TODO_ITEM) {
-        await setter.userItems(userId);
-      }
-    }
-  };
+  const ul = createDOM(
+    'ul',
+    {
+      className: 'todo-list',
+    },
+  );
+  ul.append(
+    TodoLoading(),
+  );
+  dom.append(ul);
 
-  const deleteItem = async (target) => {
-    const userId = getter.userId();
-    const itemId = target.closest('li').dataset.todoIdx;
-    try {
-      await removeUserTodoItem({ userId, itemId });
-      await setter.userItems(userId);
-    }
-    catch (err) {
-      alert(err.message);
-      if (err.message === ERROR.DELETE_TODO_ITEM) {
-        await setter.userItems(userId);
-      }
-      if (err.message === ERROR.NO_USER3) {
-        await initStore();
-      }
-    }
-  };
-
-  const setEditMode = ({ target }) => {
-    if (target.dataset.component === 'todo-label') {
-      const itemId = target.closest('li').dataset.todoIdx;
-      const component = components.todoList[itemId];
-      if (editItem.id !== -1 && editItem.id !== itemId) {
-        setter.itemMode(editItem.id, 'view');
-        editItem.component.render();
-      }
-      editItem = { id: itemId, component };
-      setter.itemMode(itemId, 'edit');
-
-      component.render();
-    }
-  };
-
-  const editItemContents = async ({ target, target: { closest, dataset, value }, key }) => {
-    if (dataset.component === 'editMode' && value !== '' && key === 'Enter') {
-      const itemId = target.closest('li').dataset.todoIdx;
-      const userId = getter.userId();
-      const contents = value;
-
-      try {
-        await updateUserTodoItem({ userId, itemId, contents });
-        await setter.userItems(userId);
-      }
-      catch (err) {
-        alert(err.message);
-        if (err.message === ERROR.UPDATE_TODO_ITEM) {
-          await setter.userItems(userId);
-        }
-        if (err.message === ERROR.NO_USER3) {
-          await initStore();
-        }
-      }
-    }
-  };
-
-  const setViewItemWithEsc = async ({ key, target: { dataset } }) => {
-    if (dataset.component === 'editMode' && key === 'Escape') {
-      setter.itemMode(editItem.id, 'view');
-      editItem.component.render();
-      editItem.id = -1;
-      editItem.component = undefined;
-    }
-  };
-
-  const setPriority = async ({ target, target: { dataset, value } }) => {
-    if (dataset.component === 'todoPriority') {
-      const itemId = target.closest('li').dataset.todoIdx;
-      const userId = getter.userId();
-      const priority = value;
-      try {
-        const result = await updateUserTodoItemPriority({ userId, itemId, priority });
-        setter.userItem(itemId, result);
-        components.todoList[itemId].components.todoLabel.render();
-        render();
-      }
-      catch (err) {
-        alert(err.message);
-        if (err.message === ERROR.UPDATE_TODO_ITEM) {
-          await setter.userItems(userId);
-        }
-        if (err.message === ERROR.NO_USER3) {
-          await initStore();
-        }
-
-      }
-    }
-  };
   const todos = document.createElement('div');
+
   todos.addEventListener('click', async ({ target }) => {
     if (target.dataset.component === 'toggleComplete')
-      await toggleComplete(target);
+      await toggleCompleteHandler(target);
 
     if (target.dataset.component === 'deleteItem')
-      await deleteItem(target);
+      await deleteTodoItemHandler(target);
   });
-  todos.addEventListener('dblclick', setEditMode);
-  todos.addEventListener('keypress', editItemContents);
-  todos.addEventListener('keydown', setViewItemWithEsc);
-  todos.addEventListener('change', setPriority);
+
+  todos.addEventListener('dblclick', (event) => {
+    const itemId = editModeHandler(event, editItem);
+    if (itemId) {
+      const component = components.todoList[itemId];
+      component.render();
+      editItem = { id: itemId, component };
+    }
+  });
+
+  todos.addEventListener('keypress', editItemContentsHandler);
+  todos.addEventListener('keydown', async (event) => (
+    await escapeEditHandler(event, editItem)),
+  );
+  todos.addEventListener('change', async (event) => {
+    const itemId = await setPriorityHandler(event);
+    if (itemId) {
+      components.todoList[itemId].components.todoLabel.render();
+      render();
+    }
+  });
 
   ul.appendChild(todos);
 
@@ -154,7 +76,6 @@ const TodoList = ({ getFilter }) => {
       const todoItem = TodoItem({ getFilter, todo });
       components.todoList[todo._id] = todoItem;
       todos.appendChild(todoItem.dom);
-      todoItem.render();
     });
   };
 

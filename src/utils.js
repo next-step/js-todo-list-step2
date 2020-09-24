@@ -9,3 +9,19 @@ export const loadingWrapper = (handler) => {
   handler();
   showLoading(false);
 };
+
+
+export const createDOM = (tagName, option = {}, dataset = undefined) => {
+  const dom = document.createElement(tagName);
+
+  for (const key in option) {
+    dom[key] = option[key];
+  }
+
+  if (dataset) {
+    for (const data in dataset) {
+      dom.dataset[data] = dataset[data];
+    }
+  }
+  return dom;
+};

@@ -1,39 +1,25 @@
 import UserList from './UserList.js';
-import { createUser } from '../../endpoint/service.js';
-import { loadingWrapper } from '../../utils.js';
-import { setter } from '../../store/index.js';
+import { createDOM } from '../../utils.js';
+import { createUserHandler } from '../../eventHandler.js';
 import { validateUserName } from '../../validator.js';
 
 const UserListContainer = () => {
   const dom = document.createElement('section');
 
-  const userCreateButton = document.createElement('button');
-  userCreateButton.classList.add('ripple', 'user-create-button');
-  userCreateButton.innerText = '+ 유저 생성';
-  dom.append(
-    UserList(),
-    userCreateButton
+  const userCreateButton = createDOM(
+    'button',
+    {
+      className: 'ripple user-create-button',
+      innerText: '+ 유저 생성',
+    },
   );
 
-  const onUserCreateHandler = async (validator) => {
-    const name = prompt('추가하고 싶은 이름을 입력해주세요.');
-    if (name === null) return;
+  userCreateButton.addEventListener('click', () => createUserHandler(validateUserName));
 
-    await validator(name, onUserCreateHandler);
-
-    try {
-      const user = await createUser({ name });
-      loadingWrapper(async () => {
-        await setter.userList();
-        await setter.user(user._id);
-      });
-    }
-    catch (err) {
-      alert(err.message);
-    }
-  };
-
-  userCreateButton.addEventListener('click', () => onUserCreateHandler(validateUserName));
+  dom.append(
+    UserList(),
+    userCreateButton,
+  );
 
   return dom;
 };
