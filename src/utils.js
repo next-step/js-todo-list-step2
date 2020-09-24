@@ -8,8 +8,8 @@ export const validateUserName = async (name, caller) => {
   await caller(validateUserName);
 };
 
-export const loadingWrapper = async (handler) => {
+export const loadingWrapper = (handler) => {
   loadingRender(true);
-  await handler();
+  handler();
   loadingRender(false);
 };

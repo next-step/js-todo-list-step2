@@ -1,30 +1,34 @@
-import { getter } from '../../store/index.js';
-import { observer } from '../../store/index.js';
-import { deleteUserService } from '../../endpoint/service.js';
+import { getter, observer, initStore } from '../../store/index.js';
+import { removeUser } from '../../endpoint/service.js';
 import { loadingWrapper } from '../../utils.js';
-import { setter } from '../../store/index.js';
 
 const UserTitle = () => {
   const dom = document.createElement('div');
 
   const deleteUser = async (event) => {
     if (event.target.dataset.component === 'user-delete') {
-      await deleteUserService(getter.userId());
-      await loadingWrapper(async () => {
-        await setter.userList();
-        setter.user();
-      });
+      const confirm = window.confirm('유저를 정말로 삭제하시겠습니까?');
+      if (!confirm) return;
+      try {
+        const userId = getter.userId();
+        loadingWrapper(async () => {
+          await removeUser({ userId });
+          await initStore();
+        });
+      } catch (err) {
+        alert(err.message);
+      }
     }
   };
   dom.addEventListener('click', deleteUser);
 
   const render = () => {
     const userName = getter.userName();
-    const getTitleName = userName ? `${ userName }\'s` : '';
+    const getTitleName = userName ? `${userName}\'s` : '';
     dom.innerHTML = `
-    <h1 data-username="${ userName }">
-      <span><strong>${ getTitleName }</strong>Todo List</span>
-      ${ userName ? `<span data-component="user-delete" class="user-delete">X</span>` : ''}
+    <h1 data-username="${userName}">
+      <span><strong>${getTitleName}</strong>Todo List</span>
+      ${userName ? `<span data-component="user-delete" class="user-delete">X</span>` : ''}
     </h1>
   `;
   };

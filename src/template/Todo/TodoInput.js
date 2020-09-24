@@ -1,6 +1,6 @@
-import { postUserItemService } from '../../endpoint/service.js';
-import { getter, setter } from '../../store/index.js';
-import { observer } from '../../store/index.js';
+import { createUserTodoItem } from '../../endpoint/service.js';
+import { getter, setter, initStore, observer } from '../../store/index.js';
+import { ERROR } from '../../constants/messageAPI.js';
 
 const TodoInput = () => {
   const dom = document.createElement('section');
@@ -11,12 +11,14 @@ const TodoInput = () => {
     if (value !== '' && key === 'Enter') {
       const userId = getter.userId();
       try {
-        await postUserItemService({ userId, contents: value });
+        await createUserTodoItem({ userId, contents: value });
         await setter.userItems(userId);
       } catch (err) {
+        if (err.message = ERROR.NO_USER) {
+          // something
+        }
         alert(err.message);
-        await setter.userList();
-        await setter.user();
+        await initStore();
       } finally {
         target.value = '';
       }
@@ -30,8 +32,8 @@ const TodoInput = () => {
     dom.innerHTML = `
         <input
         class="new-todo"
-        placeholder="${ isUserId ? '할 일을 입력해주세요.' : '선택된 유저가 없습니다' }"
-        autofocus ${ isUserId || 'disabled' }/>`;
+        placeholder="${isUserId ? '할 일을 입력해주세요.' : '선택된 유저가 없습니다'}"
+        autofocus ${isUserId || 'disabled'}/>`;
   };
   observer.addObserver('user', render);
 

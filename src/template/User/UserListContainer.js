@@ -1,6 +1,7 @@
 import UserList from './UserList.js';
-import { onUserCreateHandler } from '../../endpoint/service.js';
-import { validateUserName } from '../../utils.js';
+import { createUser } from '../../endpoint/service.js';
+import { validateUserName, loadingWrapper } from '../../utils.js';
+import { setter } from '../../store/index.js';
 
 const UserListContainer = () => {
 
@@ -16,6 +17,24 @@ const UserListContainer = () => {
   dom.appendChild(userCreateButton);
 
   components.UserList.render();
+
+  const onUserCreateHandler = async (validator) => {
+    const name = prompt('추가하고 싶은 이름을 입력해주세요.');
+    if (name === null) return;
+
+    await validator(name, onUserCreateHandler);
+
+    try {
+      const user = await createUser({ name });
+      loadingWrapper(async () => {
+        await setter.userList();
+        await setter.user(user._id);
+      });
+    }
+    catch (err) {
+      alert(err.message);
+    }
+  };
 
   userCreateButton.addEventListener('click', () => onUserCreateHandler(validateUserName));
 

@@ -1,5 +1,5 @@
 /* api 를 호출하는 함수가 모이는 곳 입니다. */
-
+import { ERROR, SUCCESS }  from '../constants/messageAPI.js';
 import {
   postUser,
   getUserList,
@@ -7,115 +7,107 @@ import {
   postUserTodoItem,
   getUserTodoList,
   getUser,
-  putUserTodoItemCompleteToggle,
+  putUserTodoItemComplete,
   deleteUserTodoItem,
   putUserTodoItem,
   deleteUserTodoItemsAll,
   putUserTodoItemPriority,
 } from './api/user.js';
-import { setter } from '../store/index.js';
-import { loadingWrapper } from '../utils.js';
 
-export const onUserCreateHandler = async (validator) => {
-  const name = prompt('추가하고 싶은 이름을 입력해주세요.');
-  if (name === null) return;
-
-  await validator(name, onUserCreateHandler);
-
-  try {
-    const newUser = await postUser({ name });
-    await loadingWrapper(async () => {
-      await setter.userList();
-      await setter.user(newUser._id);
-    });
-  } catch (err) {
-    console.log(err);
-  }
+export const createUser = async ({ name }) => {
+  const result = await postUser({ name });
+  // 에러 처리
+  return result;
 };
 
-export const deleteUserService = async (userId) => {
-  const confirm = window.confirm('유저를 정말로 삭제하시겠습니까?');
-  if (!confirm) return;
-  try {
-    const result = await deleteUser({ userId });
-    alert(result.message);
-  } catch (err) {
-    console.log(err);
-  }
+export const removeUser = async ({ userId }) => {
+  const result = await deleteUser({ userId });
+  // 에러처리
+  return result;
 };
 
-export const getUserListService = async () => {
-  try {
-    return await getUserList();
-  } catch (err) {
-    console.log(err);
-  }
+export const readUserList = async () => {
+   const result = await getUserList();
+   // 에러 처리
+   return result;
 };
 
-export const postUserItemService = async ({ userId, contents }) => {
+export const createUserTodoItem = async ({ userId, contents }) => {
   const result = await postUserTodoItem({ userId, contents });
-  if (result.message) throw new Error(result.message);
+  if (result.message === ERROR.NO_USER ) {
+    throw new Error(ERROR.NO_USER);
+  }
   return result;
 };
 
-export const getUserItemsService = async ({ userId }) => {
-  try {
-    const result = await getUserTodoList({ userId });
-    return result;
-  } catch (err) {
-    console.log(err);
+export const readUserTodoItems = async ({ userId }) => {
+  const result = await getUserTodoList({ userId });
+  if (result.message === ERROR.NO_USER2) {
+    throw new Error(ERROR.NO_USER2);
   }
-};
-
-export const getUserService = async ({ userId }) => {
-  try {
-    const result = await getUser({ userId });
-    return result;
-  } catch (err) {
-    console.log(err.message);
-  }
-};
-
-export const putUserItemCompleteToggleService = async ({ userId, itemId }) => {
-  const result = await putUserTodoItemCompleteToggle({ userId, itemId });
-  if (result.message)
-    throw new Error(result.message);
   return result;
 };
 
-export const deleteUserItemService = async ({ userId, itemId }) => {
+export const readUser = async ({ userId }) => {
+  const result = await getUser({ userId });
+  if (result.message === ERROR.NO_USER2) {
+    throw new Error(ERROR.NO_USER2);
+  }
+  return result;
+};
+
+export const updateUserTodoItemComplete = async ({ userId, itemId }) => {
+  const result = await putUserTodoItemComplete({ userId, itemId });
+  if (result.message === ERROR.NO_USER3) {
+    throw new Error(ERROR.NO_USER3);
+  }
+  if (result.message === ERROR.NO_TODO_ITEM) {
+    throw new Error(ERROR.NO_TODO_ITEM);
+  }
+  return result;
+};
+
+export const removeUserTodoItem = async ({ userId, itemId }) => {
   const result = await deleteUserTodoItem({ userId, itemId });
-  if (result.message === '해당 유저가 존재하지 않습니다.')
-    throw new Error('user not found');
-  if (result.message === 'Todo Item을 삭제하는데 에러가 발생했습니다.')
-    throw new Error('item not found');
+  if (result.message === ERROR.NO_USER3) {
+    throw new Error(ERROR.NO_USER3);
+  }
+  if (result.message === ERROR.DELETE_TODO_ITEM) {
+    throw new Error(ERROR.DELETE_TODO_ITEM);
+  }
   return result;
 };
 
-export const putUserItemService = async ({ userId, itemId, contents }) => {
+export const updateUserTodoItem = async ({ userId, itemId, contents }) => {
   const result = await putUserTodoItem({ userId, itemId, contents });
-  if (result.message === 'Todo Item을 수정하는데 에러가 발생했습니다.')
-    throw new Error('item not found');
-  if (result.message === '해당 유저가 존재하지 않습니다.')
-    throw new Error('user not found');
+  if (result.message === ERROR.UPDATE_TODO_ITEM) {
+    throw new Error(ERROR.UPDATE_TODO_ITEM);
+  }
+  if (result.message === ERROR.NO_USER3) {
+    throw new Error(ERROR.NO_USER3);
+  }
 
   return result;
 };
 
-export const deleteUserItemsAllService = async ({ userId }) => {
+export const removeUserTodoItemsAll = async ({ userId }) => {
   const result = await deleteUserTodoItemsAll({ userId });
-  if (result.success)
-    result.message = '해당 유저의 Todo Item 을 모두 삭제하였습니다.';
-  if (result.message === '해당 유저가 존재하지 않습니다.')
-    throw new Error('user not found');
+  if (result.success === SUCCESS.DELETE_TODO_ITEM_ALL) {
+    result.message = SUCCESS.DELETE_TODO_ITEM_ALL;
+  }
+  if (result.message === ERROR.NO_USER3) {
+    throw new Error(ERROR.NO_USER3);
+  }
   return result;
 };
 
-export const putUserItemPriorityService = async ({ userId, itemId, priority }) => {
+export const updateUserTodoItemPriority = async ({ userId, itemId, priority }) => {
   const result = await putUserTodoItemPriority({ userId, itemId, priority });
-  if (result.message === 'Todo Item을 수정하는데 에러가 발생했습니다.')
-    throw new Error('item not found');
-  if (result.message === "해당 유저가 존재하지 않습니다.")
-    throw new Error('user not found');
+  if (result.message === ERROR.UPDATE_TODO_ITEM) {
+    throw new Error(ERROR.UPDATE_TODO_ITEM);
+  }
+  if (result.message === ERROR.NO_USER3) {
+    throw new Error(ERROR.NO_USER3);
+  }
   return result;
 };

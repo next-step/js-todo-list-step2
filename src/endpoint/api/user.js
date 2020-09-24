@@ -65,7 +65,7 @@ export const putUserTodoItemPriority = ({ userId, itemId, priority }) => (
   )
 );
 
-export const putUserTodoItemCompleteToggle = ({ userId, itemId }) => (
+export const putUserTodoItemComplete = ({ userId, itemId }) => (
   api.PUT(
     `${userAPI}/${userId}/items/${itemId}/toggle`)
 );

@@ -1,13 +1,13 @@
 import TodoLoading from './TodoLoading.js';
 import TodoItem from './TodoItem.js';
-import { getter, setter } from '../../store/index.js';
-import { observer } from '../../store/index.js';
+import { getter, setter, initStore, observer } from '../../store/index.js';
 import {
-  putUserItemCompleteToggleService,
-  deleteUserItemService,
-  putUserItemService,
-  putUserItemPriorityService,
+  updateUserTodoItemComplete,
+  removeUserTodoItem,
+  updateUserTodoItem,
+  updateUserTodoItemPriority,
 } from '../../endpoint/service.js';
+import { ERROR } from '../../constants/messageAPI.js';
 
 const TodoList = (props) => {
   const components = {
@@ -15,7 +15,6 @@ const TodoList = (props) => {
     todoList: {},
   };
   let editItem = { id: -1, components: undefined };
-
 
   const dom = document.createElement('section');
   dom.classList.add('main');
@@ -29,13 +28,18 @@ const TodoList = (props) => {
     const itemId = target.closest('li').dataset.todoIdx;
     const userId = getter.userId();
     try {
-      await putUserItemCompleteToggleService({ userId, itemId });
+      await updateUserTodoItemComplete({ userId, itemId });
       await setter.userItems(userId);
       render();
-    } catch (err) {
+    }
+    catch (err) {
       alert(err.message);
-      await setter.userList();
-      await setter.user();
+      if (err.message === ERROR.NO_USER3) {
+        await initStore();
+      }
+      if (err.message === ERROR.NO_TODO_ITEM) {
+        await setter.userItems(userId);
+      }
     }
   };
 
@@ -43,14 +47,17 @@ const TodoList = (props) => {
     const userId = getter.userId();
     const itemId = target.closest('li').dataset.todoIdx;
     try {
-      await deleteUserItemService({ userId, itemId });
+      await removeUserTodoItem({ userId, itemId });
       await setter.userItems(userId);
-    } catch (err) {
+    }
+    catch (err) {
       alert(err.message);
-      if (err.message === 'item not found')
+      if (err.message === ERROR.DELETE_TODO_ITEM) {
         await setter.userItems(userId);
-      if (err.message === 'user not found')
-        await setter.user();
+      }
+      if (err.message === ERROR.NO_USER3) {
+        await initStore();
+      }
     }
   };
 
@@ -76,14 +83,17 @@ const TodoList = (props) => {
       const contents = value;
 
       try {
-        await putUserItemService({ userId, itemId, contents });
+        await updateUserTodoItem({ userId, itemId, contents });
         await setter.userItems(userId);
-      } catch (err) {
+      }
+      catch (err) {
         alert(err.message);
-        if (err.message === 'item not found')
+        if (err.message === ERROR.UPDATE_TODO_ITEM) {
           await setter.userItems(userId);
-        if (err.message === 'user not found')
-          await setter.user();
+        }
+        if (err.message === ERROR.NO_USER3) {
+          await initStore();
+        }
       }
     }
   };
@@ -103,16 +113,20 @@ const TodoList = (props) => {
       const userId = getter.userId();
       const priority = value;
       try {
-        const result = await putUserItemPriorityService({ userId, itemId, priority });
+        const result = await updateUserTodoItemPriority({ userId, itemId, priority });
         setter.userItem(itemId, result);
         components.todoList[itemId].components.todoLabel.render();
         render();
-      } catch (err) {
+      }
+      catch (err) {
         alert(err.message);
-        if (err.message === 'item not found')
+        if (err.message === ERROR.UPDATE_TODO_ITEM) {
           await setter.userItems(userId);
-        if (err.message === 'user not found')
-          await setter.user();
+        }
+        if (err.message === ERROR.NO_USER3) {
+          await initStore();
+        }
+
       }
     }
   };

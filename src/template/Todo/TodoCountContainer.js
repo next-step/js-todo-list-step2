@@ -1,7 +1,8 @@
 import TodoCount from './TodoCount.js';
 import TodoFilter from './TodoFilter.js';
-import { deleteUserItemsAllService } from '../../endpoint/service.js';
-import { getter, setter } from '../../store/index.js';
+import { removeUserTodoItemsAll } from '../../endpoint/service.js';
+import { getter, setter, initStore } from '../../store/index.js';
+import { ERROR } from '../../constants/messageAPI.js';
 
 const TodoCountContainer = (props) => {
   const { getFilter, setFilter } = props;
@@ -16,14 +17,13 @@ const TodoCountContainer = (props) => {
   const deleteUserItems = async () => {
     const userId = getter.userId();
     try {
-      const result = await deleteUserItemsAllService({ userId });
+      const result = await removeUserTodoItemsAll({ userId });
       await setter.userItems(userId);
       alert(result.message);
-    } catch (err) {
-      if (err.message === 'user not found') {
-        alert(err.message);
-        await setter.userList();
-        await setter.user();
+    }
+    catch (err) {
+      if (err.message === ERROR.NO_USER3) {
+        await initStore();
       }
     }
   };

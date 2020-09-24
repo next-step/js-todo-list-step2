@@ -1,5 +1,5 @@
-import { getUserListService, getUserItemsService, getUserService } from '../endpoint/service.js';
-
+import { readUserList, readUserTodoItems, readUser } from '../endpoint/service.js';
+import { ERROR } from '../constants/messageAPI.js';
 const store = {
   userList: [],
   user: undefined,
@@ -7,25 +7,40 @@ const store = {
 /* store 를 변경하는 함수는 set 으로 시작됩니다. */
 export const setter = {
   async userList () {
-    const result = await getUserListService();
-    store.userList = result;
+    try {
+      store.userList = await readUserList();
+    }
+    catch (err) {
+      alert(err.message);
+    }
   },
   async user (userId) {
     const newUserId = userId ? userId : store.userList[0]._id;
     try {
-      const user = await getUserService({ userId: newUserId });
-      if (user.message)
-        alert(user.message);
+      const user = await readUser({ userId: newUserId });
       store.user = user.message ? undefined : user;
-    } catch (err) {
-      console.log(err);
+    }
+    catch (err) {
+      if (err.message === ERROR.NO_USER2) {
+        alert(err);
+        await initStore();
+      }
     }
     observer.render('user');
   },
   async userItems (userId) {
-    const userItems = await getUserItemsService({ userId });
-    store.user.todoList = userItems;
-    observer.render('userItems');
+    try {
+      store.user.todoList = await readUserTodoItems({ userId });
+    }
+    catch (err) {
+      if (err.message === ERROR.NO_USER2) {
+        alert(err.message);
+        await initStore();
+      }
+    }
+    finally {
+      observer.render('userItems');
+    }
   },
   itemMode (itemId, mode) {
     const item = store?.user?.todoList.find(v => v._id === itemId);
