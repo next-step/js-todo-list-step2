@@ -1,8 +1,7 @@
 import HttpMethod from '../constants/HttpMethod.js';
 
-let _baseURL;
+const _baseURL = env.baseURL;
 
-export const setBaseURL = (baseURL) => _baseURL = baseURL;
 
 // TODO 호출시 error 가 catch 되지 않음
 const request = async (uri, method, body = undefined, timeout = 5000) => {
@@ -16,18 +15,20 @@ const request = async (uri, method, body = undefined, timeout = 5000) => {
 
   let id = -1;
   const race = await Promise.race([
-    new Promise(res => id = window.setTimeout(_ => res(), timeout)),
-    fetch(url, config).then(response => response),
+    new Promise(res => id = window.setTimeout(() => res(), timeout)),
+    fetch(url, config)
   ]);
 
   if (race instanceof Response) {
     clearTimeout(id);
     const contents = await race.json();
 
-    if (race.status === 500) return new Error(contents.message);
-    return race.status === 404 ? new Error('404') : contents;
+    if (race.status === 500) new Error(contents.message);
+    if (race.status === 404) new Error('404');
+    return contents;
   }
-  else return new Error('timeout');
+
+  else new Error('timeout');
 };
 
 const GET = (uri) => request(uri, HttpMethod.GET);
