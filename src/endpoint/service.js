@@ -61,8 +61,8 @@ export const updateUserTodoItemComplete = async ({ userId, itemId }) => {
   if (result.message === ERROR.NO_USER3) {
     throw new Error(ERROR.NO_USER3);
   }
-  if (result.message === ERROR.NO_TODO_ITEM) {
-    throw new Error(ERROR.NO_TODO_ITEM);
+  if (result.message === ERROR.UPDATE_TODO_ITEM) {
+    throw new Error(ERROR.UPDATE_TODO_ITEM);
   }
   return result;
 };
