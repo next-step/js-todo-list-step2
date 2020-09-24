@@ -3,7 +3,7 @@ import {ADDRESS, DEFAULT_USER} from './constants.js';
 export const API = {
   GetUsers: async () => {
     try{
-      const response = await fetch(`${ADDRESS}/api/users`, ApiOptions.GET);
+      const response = await fetch(`${ADDRESS}/api/users`, ApiOptions.GET());
       return await response.json();
     } catch {
       return DEFAULT_USER.json();
@@ -14,7 +14,7 @@ export const API = {
   },
   GetTodoItems: async (userId) => {
     try{
-      const response = await fetch(`${ADDRESS}/api/users/${userId}/items`, ApiOptions.GET);
+      const response = await fetch(`${ADDRESS}/api/users/${userId}/items`, ApiOptions.GET());
       if (response.ok)
         return await response.json();
       return [];
