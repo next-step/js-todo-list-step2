@@ -1,7 +1,8 @@
 import UserList from './UserList.js';
 import { createUser } from '../../endpoint/service.js';
-import { validateUserName, loadingWrapper } from '../../utils.js';
+import { loadingWrapper } from '../../utils.js';
 import { setter } from '../../store/index.js';
+import { validateUserName } from '../../validator.js';
 
 const UserListContainer = () => {
 

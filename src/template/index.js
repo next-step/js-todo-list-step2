@@ -1,6 +1,7 @@
-import UserTitle from './template/User/UserTitle.js';
-import UserListContainer from './template/User/UserListContainer.js';
-import TodoContainer from './template/Todo/TodoContainer.js';
+import UserTitle from './User/UserTitle.js';
+import UserListContainer from './User/UserListContainer.js';
+import TodoContainer from './Todo/TodoContainer.js';
+import { showLoading } from '../utils.js';
 
 const $app = document.getElementById('app');
 
@@ -22,13 +23,9 @@ export const initRender = () => {
 
   components.UserTitle.render();
 
-  loadingRender(false);
+  showLoading(false);
 };
 
-export const loadingRender = (boolean) => {
-  const display = (boolean ? 'block' : 'none');
-  const $loading = document.querySelector('.loading');
-  $loading && ($loading.style.display = display);
-};
+
 
 

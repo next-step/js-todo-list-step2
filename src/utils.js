@@ -1,15 +1,11 @@
-import { loadingRender } from './render.js';
-
-export const validateUserName = async (name, caller) => {
-  if (name.length > 1)
-    return true;
-
-  alert('User 의 이름은 최소 2글자 이상이어야 합니다.');
-  await caller(validateUserName);
+export const showLoading = (boolean) => {
+  const display = (boolean ? 'block' : 'none');
+  const $loading = document.querySelector('.loading');
+  $loading && ($loading.style.display = display);
 };
 
 export const loadingWrapper = (handler) => {
-  loadingRender(true);
+  showLoading(true);
   handler();
-  loadingRender(false);
+  showLoading(false);
 };
