@@ -1,6 +1,7 @@
 import TodoState from "./TodoState.js";
 import { fetcher } from "./fetcher.js";
 import fetchParams from "./fetchParams.js";
+import * as util from "./util.js";
 export default new class TodoList{
     constructor(){
         this.$todoList = document.querySelector(".todo-list");
@@ -20,8 +21,8 @@ export default new class TodoList{
     }
 
     async toggleCompleted(target){
-        const $li = getLi(target);
-        const index = getIndex($li);
+        const $li = util.getLi(target);
+        const index = util.getIndex($li);
         const item_id = TodoState.itemId(index)
         this.skeltonTemplate($li);
         await fetcher(fetchParams.toggleCompleted(TodoState.userId,item_id))
@@ -29,13 +30,13 @@ export default new class TodoList{
     }
 
     toggleEditing(target){
-        getLi(target).classList.toggle("editing");
-        qs(".edit",getLi(target)).focus();
+        util.getLi(target).classList.toggle("editing");
+        util.qs(".edit",util.getLi(target)).focus();
     }
     
     async updatePriority(target){
-        const $li = getLi(target);
-        const index = getIndex($li);
+        const $li = util.getLi(target);
+        const index = util.getIndex($li);
         const item_id = TodoState.itemId(index)
         const select = Number(target.value);
         const priority = select === 0 ? "NONE" : select === 1 ? "FIRST" : "SECOND";
@@ -46,10 +47,10 @@ export default new class TodoList{
     }
 
     async updateContents(target,key){
-        const $li = getLi(target);
-        const index = getIndex(getLi(target));
+        const $li = util.getLi(target);
+        const index = util.getIndex(util.getLi(target));
         const item_id = TodoState.itemId(index);
-        const title = qs("label",getLi(target)).lastChild.textContent;
+        const title = util.qs("label",util.getLi(target)).lastChild.textContent;
         const newTitle = target.value;
         if(key === 'Enter' && !!newTitle.trim() && title !== newTitle){
             $li.outerHTML = this.skeltonTemplate();
@@ -58,14 +59,14 @@ export default new class TodoList{
         }
         else{
             target.value = title;
-            getLi(target).classList.toggle("editing");
+            util.getLi(target).classList.toggle("editing");
         }
     }
 
     async delete(target){
         if(confirm("정말로 삭제하시겠습니까?")){
-            const $li = getLi(target)
-            const index = getIndex($li);
+            const $li = util.getLi(target)
+            const index = util.getIndex($li);
             const item_id = TodoState.itemId(index);
             this.skeltonTemplate($li);
 
@@ -76,7 +77,7 @@ export default new class TodoList{
 
     async deleteAll(){
         if(confirm("주의! 정말로 전체 삭제하시겠습니까!?")){
-            Array.from(qsa("li",this.$todoList)).forEach(e=>this.skeltonTemplate(e));
+            Array.from(util.qsa("li",this.$todoList)).forEach(e=>this.skeltonTemplate(e));
             await fetcher(fetchParams.deleteAllItem(TodoState.userId));
             await this.refreshList();
         }
@@ -104,15 +105,16 @@ export default new class TodoList{
         return target ? target.innerHTML = template : template
     }
     todoTemplate({contents,isCompleted,priority}){
-        const span = priority == "NONE" ? 
-        `<select class="chip select">
+        const span = 
+            priority == "FIRST" ? 
+            `<span class="chip primary">1순위</span>` :
+            priority == "SECOND" ? 
+            `<span class="chip secondary">2순위</span>` :
+            `<select class="chip select">
             <option value="0" selected>순위</option>
             <option value="1">1순위</option>
             <option value="2">2순위</option>
-        </select>` 
-        : priority == "FIRST" ? 
-          `<span class="chip primary">1순위</span>`
-        : `<span class="chip secondary">2순위</span>`;
+            </select>`;
         
         return `
         <li ${isCompleted ? 'class="completed"':""}>

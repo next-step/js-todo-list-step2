@@ -1,9 +1,10 @@
 import TodoState from "./TodoState.js";
 import TodoList from "./todoList.js";
-export class TodoCount{
+import * as util from "./util.js"; 
+export default new class TodoCount{
     constructor(){
-        this.$todoCount = qs(".count-container");
-        this.$todoFilters = qs(".filters",this.$todoCount);
+        this.$todoCount = util.qs(".count-container");
+        this.$todoFilters = util.qs(".filters",this.$todoCount);
         this.filterButtons = [
             { type: 'all', text: "전체보기" },
             { type: 'active', text: "해야할 일" },
@@ -33,7 +34,7 @@ export class TodoCount{
         todoCount.addEventListener("click", ({target}) => {
             if(target.nodeName == "BUTTON") TodoList.deleteAll()
         })
-        qs(".filters",todoCount).addEventListener("click", ({target}) =>{
+        util.qs(".filters",todoCount).addEventListener("click", ({target}) =>{
             if(target.nodeName == "A") this.viewChange(target);
         })
     }

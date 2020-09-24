@@ -2,6 +2,7 @@ import TodoState from "./TodoState.js"
 import TodoList from "./todoList.js"
 import {fetcher} from "./fetcher.js"
 import fetchParams from "./fetchParams.js"
+import * as util from "./util.js"
 export class UserList{
     constructor(){
         this.$userList = document.querySelector("#user-list");
@@ -67,7 +68,7 @@ export class UserList{
     }
     selectChange(target){
         const index = target.dataset.index;
-        qs(".active",this.$userList).classList.remove("active");
+        util.qs(".active",this.$userList).classList.remove("active");
         this.$userList.children[index].classList.add("active");
         this.$title.innerText = target.innerText;
     }
