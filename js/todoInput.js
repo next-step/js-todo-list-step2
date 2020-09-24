@@ -8,14 +8,15 @@ export default new class TodoInput{
         this.eventController(this.$todoInput);
     }
 
-    add(target){
-        TodoList.$todoList.insertAdjacentHTML("beforeend", TodoList.skeltonTemplate());
-        fetcher(fetchParams.addItem(TodoState.user._id,target.value),this.loadUserItem)
+    async add(target){
+        const items = await fetcher(fetchParams.addItem(TodoState.user._id,target.value));
+        this.loadUserItem(items);
         target.value = '';
     }
-    loadUserItem(){
+    async loadUserItem(){
         TodoList.$todoList.insertAdjacentHTML("beforeend", TodoList.skeltonTemplate());
-        fetcher(fetchParams.userItem(TodoState.user._id),TodoList.makeList);
+        const items = await fetcher(fetchParams.userItem(TodoState.user._id));
+        TodoList.makeList(items);
     }
 
     eventController(todoInput){

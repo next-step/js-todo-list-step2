@@ -5,8 +5,6 @@ export default new class TodoList{
     constructor(){
         this.$todoList = document.querySelector(".todo-list");
         this.eventController(this.$todoList);
-        this.makeList.bind(this);
-        this.refreshList.bind(this);
     }
 
     makeList = (items) => {
@@ -18,20 +16,16 @@ export default new class TodoList{
         const template = newItems.map((item) => this.todoTemplate({...item}));
         this.$todoList.innerHTML = template.join("");
         TodoState.user.todoList = newItems;
-        console.log(
-            "%c"+TodoState.user.name+
-            "[%c"+TodoState.userId+
-            "%c]",
-            "font-weight:bold;","color:red;","color:black;",
-            "loaded!");
+        document.querySelector(".todo-count strong").innerText = newItems.length;
     }
 
-    toggleCompleted(target){
+    async toggleCompleted(target){
         const $li = getLi(target);
         const index = getIndex($li);
         const item_id = TodoState.itemId(index)
-        $li.innerHTML = this.skeltonTemplate();
-        fetcher(fetchParams.toggleCompleted(TodoState.userId,item_id),this.refreshList);
+        this.skeltonTemplate($li);
+        await fetcher(fetchParams.toggleCompleted(TodoState.userId,item_id))
+        await this.refreshList();
     }
 
     toggleEditing(target){
@@ -39,25 +33,28 @@ export default new class TodoList{
         qs(".edit",getLi(target)).focus();
     }
     
-    updatePriority(target){
+    async updatePriority(target){
         const $li = getLi(target);
         const index = getIndex($li);
         const item_id = TodoState.itemId(index)
         const select = Number(target.value);
         const priority = select === 0 ? "NONE" : select === 1 ? "FIRST" : "SECOND";
-        $li.innerHTML = this.skeltonTemplate();
-        fetcher(fetchParams.updatePriority(TodoState.userId,item_id,priority),this.refreshList)
+        this.skeltonTemplate($li);
+        
+        await fetcher(fetchParams.updatePriority(TodoState.userId,item_id,priority));
+        await this.refreshList();
     }
 
-    updateContents(target,key){
+    async updateContents(target,key){
+        const $li = getLi(target);
         const index = getIndex(getLi(target));
         const item_id = TodoState.itemId(index);
         const title = qs("label",getLi(target)).lastChild.textContent;
         const newTitle = target.value;
         if(key === 'Enter' && !!newTitle.trim() && title !== newTitle){
-            const $li = getLi(target);
-            $li.innerHTML = this.skeltonTemplate();
-            fetcher(fetchParams.updateContents(TodoState.userId,item_id,target.value),this.refreshList)
+            $li.outerHTML = this.skeltonTemplate();
+            await fetcher(fetchParams.updateContents(TodoState.userId,item_id,target.value))
+            await this.refreshList();
         }
         else{
             target.value = title;
@@ -65,30 +62,33 @@ export default new class TodoList{
         }
     }
 
-    delete(target){
+    async delete(target){
         if(confirm("정말로 삭제하시겠습니까?")){
             const $li = getLi(target)
             const index = getIndex($li);
             const item_id = TodoState.itemId(index);
-            $li.innerHTML = this.skeltonTemplate();
-            fetcher(fetchParams.deleteItem(TodoState.userId,item_id),this.refreshList);
+            this.skeltonTemplate($li);
+
+            await fetcher(fetchParams.deleteItem(TodoState.userId,item_id))
+            await this.refreshList();
         }
     }
 
-    deleteAll(){
+    async deleteAll(){
         if(confirm("주의! 정말로 전체 삭제하시겠습니까!?")){
-            this.$todoList.innerHTML = this.skeltonTemplate();
-            fetcher(fetchParams.deleteAllItem(TodoState.userId),this.refreshList)
+            Array.from(qsa("li",this.$todoList)).forEach(e=>this.skeltonTemplate(e));
+            await fetcher(fetchParams.deleteAllItem(TodoState.userId));
+            await this.refreshList();
         }
     }
  
-    refreshList = () => {
-        this.$todoList.innerHTML = this.skeltonTemplate();
-        fetcher(fetchParams.userItem(TodoState.userId),this.makeList)
+    async refreshList(){
+        const items = await fetcher(fetchParams.userItem(TodoState.userId))
+        this.makeList(items);
     }
 
-    skeltonTemplate(){
-        return `
+    skeltonTemplate(target){
+        const template = `
         <li>
         <div class="view">
             <label class="label">
@@ -101,6 +101,7 @@ export default new class TodoList{
         </div>
         </li>
         `
+        return target ? target.innerHTML = template : template
     }
     todoTemplate({contents,isCompleted,priority}){
         const span = priority == "NONE" ? 

@@ -9,26 +9,31 @@ export class UserList{
         this.eventController(this.$userList);
     }
 
-    loadUserList(){
-        fetcher(fetchParams.userList,this.makeUserList.bind(this));
+    async loadUserList(){
+        const users = await fetcher(fetchParams.userList);
+        this.makeUserList(users);
     }
 
-    loadUser = (target)=>{
+    async loadUser(target){
         if(target.nodeName !== "BUTTON") return;
         const index = target.dataset.index;
         this.selectChange(target);
         TodoState.user = TodoState.users[index]; 
-        fetcher(fetchParams.userItem(TodoState.user._id),TodoList.makeList);
+
+        const items = await fetcher(fetchParams.userItem(TodoState.user._id));
+        TodoList.makeList(items);
     }
     
-    addUser(){
+    async addUser(){
         const name = prompt("추가하고 싶은 이름을 입력해주세요.");
         if(!name || name.trim().length < 2) return;
-        fetcher(fetchParams.addUser(name),this.loadUserList.bind(this));
+        await fetcher(fetchParams.addUser(name));
+        await this.loadUserList();
     }
-    deleteUser(){
+    async deleteUser(){
         if(confirm(`주의! 정말로 ${TodoState.user.name} 유저를 삭제하시겠습니까!?`)){
-            fetcher(fetchParams.deleteUser(TodoState.user._id),this.loadUserList.bind(this));
+            await fetcher(fetchParams.deleteUser(TodoState.user._id))
+            await this.loadUserList();
         }
     }
 
