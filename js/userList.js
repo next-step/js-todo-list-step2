@@ -12,7 +12,7 @@ export class UserList{
 
     async loadUserList(){
         const users = await fetcher(fetchParams.userList);
-        this.makeUserList(users);
+        if(users) this.makeUserList(users);
     }
 
     async loadUser(target){
