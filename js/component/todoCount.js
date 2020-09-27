@@ -1,6 +1,6 @@
-import TodoState from "./TodoState.js";
+import TodoState from "../TodoState.js";
 import TodoList from "./todoList.js";
-import * as util from "./util.js"; 
+import * as util from "../util/util.js"; 
 export default new class TodoCount{
     constructor(){
         this.$todoCount = util.qs(".count-container");

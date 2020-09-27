@@ -1,6 +1,6 @@
-import { UserList } from "./userList.js"
-import TodoInput from "./todoInput.js"
-import TodoCount from "./todoCount.js"
+import { UserList } from "./component/userList.js"
+import TodoInput from "./component/todoInput.js"
+import TodoCount from "./component/todoCount.js"
 new class {
   constructor(){
     this.userList = new UserList();

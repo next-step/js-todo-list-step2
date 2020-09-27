@@ -1,5 +1,5 @@
 import HttpMethod from "./httpMethod.js"
-import Urls from "./urlMaker.js"
+import Urls from "./urls.js"
 export default new class fetchParams{
     get userList() { return {url : Urls.baseUrl} }
     user = (user_id) => ({url : Urls.user(user_id)})

@@ -1,8 +1,8 @@
-import TodoState from "./TodoState.js"
+import TodoState from "../TodoState.js"
 import TodoList from "./todoList.js"
-import {fetcher} from "./fetcher.js"
-import fetchParams from "./fetchParams.js"
-import * as util from "./util.js"
+import {fetcher} from "../util/fetcher.js"
+import fetchParams from "../util/fetchParams.js"
+import * as util from "../util/util.js"
 export class UserList{
     constructor(){
         this.$userList = document.querySelector("#user-list");

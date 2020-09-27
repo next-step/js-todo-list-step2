@@ -1,7 +1,7 @@
-import TodoState from "./TodoState.js"
+import TodoState from "../TodoState.js"
 import TodoList from "./todoList.js"
-import { fetcher } from "./fetcher.js"
-import fetchParams from "./fetchParams.js";
+import { fetcher } from "../util/fetcher.js"
+import fetchParams from "../util/fetchParams.js";
 export default new class TodoInput{
     constructor(){
         this.$todoInput = document.querySelector(".new-todo");
