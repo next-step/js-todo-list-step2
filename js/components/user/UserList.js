@@ -2,16 +2,18 @@
 import {Component} from "../../core/Component.js";
 
 
-const template = (userId , userName, userList) => {
+export class UserList extends Component{
 
-    return userList.map(
-        (user) =>
-            `<button data-id="${user._id}" class="${
-                user._id === userId ? 'ripple active' : 'ripple'
-            }">${user.name}</button>`
-    ).join(' ');
-}
-const loadingTemplate = () => `
+     template = (userId , userName, userList) => {
+
+        return userList.map(
+            (user) =>
+                `<button data-id="${user._id}" class="${
+                    user._id === userId ? 'ripple active' : 'ripple'
+                }">${user.name}</button>`
+        ).join(' ');
+    }
+     loadingTemplate = () => `
     <li>
         <div class="view">
         <label class="label">
@@ -25,14 +27,12 @@ const loadingTemplate = () => `
         </div>
     </li>    
     `
-const createUserTemplate = () => `
+     createUserTemplate = () => `
     <button class="ripple user-create-button">+ 유저 생성</button>
 `
-const deleteUserTemplate = () => `
+     deleteUserTemplate = () => `
     <button class="ripple user-delete-button">- 유저 삭제</button>
 `
-
-export class UserList extends Component{
 
     userId;
     userList;
@@ -77,9 +77,9 @@ export class UserList extends Component{
     }
     render(){
 
-        this.$target.innerHTML = template(this.userId , this.username , this.userList);
-        this.$target.innerHTML += createUserTemplate();
-        this.$target.innerHTML += deleteUserTemplate();
+        this.$target.innerHTML = this.template(this.userId , this.username , this.userList);
+        this.$target.innerHTML += this.createUserTemplate();
+        this.$target.innerHTML += this.deleteUserTemplate();
 
 
     }

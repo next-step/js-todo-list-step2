@@ -1,11 +1,12 @@
 import {Component} from "../../core/Component.js";
 
-const template = (userName) => {
-    return `<span><strong>${userName}</strong>'s Todo List</span>
-`;
-}
-
 export class UserTitle extends Component{
+
+     template = (userName) => {
+        return `<span><strong>${userName}</strong>'s Todo List</span>
+`;
+    }
+
     username = '';
     constructor($target , event , props) {
         super($target,event , props);
@@ -20,6 +21,6 @@ export class UserTitle extends Component{
     }
 
     render(){
-        this.$target.innerHTML = template(this.username);
+        this.$target.innerHTML = this.template(this.username);
     }
 }

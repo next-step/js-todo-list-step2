@@ -2,16 +2,22 @@ import {Component} from "../../core/Component.js";
 
 
 
-const todoListArrayTemplate = todoArray => {
-    return todoArray
-        .map((todo) =>
-                todoListTemplate(todo.isCompleted, todo._id, priorityTemplate(todo.priority), todo.contents)
 
-        ).join('');
-}
+export class TodoList extends Component {
+    todoList;
+    userId;
 
-const todoListTemplate = (isCompleted, id, todoPriorityTemplate, contents) => {
-    return `
+
+    todoListArrayTemplate = todoArray => {
+        return todoArray
+            .map((todo) =>
+                this.todoListTemplate(todo.isCompleted, todo._id, this.priorityTemplate(todo.priority), todo.contents)
+
+            ).join('');
+    }
+
+    todoListTemplate = (isCompleted, id, todoPriorityTemplate, contents) => {
+        return `
         <li ${isCompleted ? 'class=completed' : ''} data-todo-id="${id}">
             <div class="view">
                 <input class="toggle" type="checkbox" ${isCompleted ? 'checked' : ''}/>
@@ -24,40 +30,35 @@ const todoListTemplate = (isCompleted, id, todoPriorityTemplate, contents) => {
             <input class="edit" placeholder="${contents}" value="" />
         </li>          
     `;
-}
+    }
 
-const priorityTemplate = (priority) => {
-    if (priority === 'NONE') {
-        return `<select class="chip select">
+    priorityTemplate = (priority) => {
+        if (priority === 'NONE') {
+            return `<select class="chip select">
             <option value="NONE" selected>순위</option>
             <option value="FIRST">1순위</option>
             <option value="SECOND">2순위</option>
         </select>
     `;
-    }
-    if (priority === 'FIRST') {
-        return `<select class="chip primary">
+        }
+        if (priority === 'FIRST') {
+            return `<select class="chip primary">
             <option value="NONE" >순위</option>
             <option value="FIRST" selected>1순위</option>
             <option value="SECOND">2순위</option>
         </select>
     `;
-    }
-    if (priority === 'SECOND') {
-        return `<select class="chip secondary">
+        }
+        if (priority === 'SECOND') {
+            return `<select class="chip secondary">
             <option value="NONE" >순위</option>
             <option value="FIRST">1순위</option>
             <option value="SECOND" selected>2순위</option>
         </select>
     `;
+        }
+
     }
-
-}
-
-
-export class TodoList extends Component {
-    todoList;
-    userId;
 
     constructor($target, event, props) {
         super($target, event, props);
@@ -123,7 +124,7 @@ export class TodoList extends Component {
 
     render() {
 
-        this.$target.innerHTML = todoListArrayTemplate(this.todoList);
+        this.$target.innerHTML = this.todoListArrayTemplate(this.todoList);
 
     }
 
