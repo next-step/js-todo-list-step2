@@ -1,10 +1,9 @@
-
 import {Component} from "../../core/Component.js";
 
 
-export class UserList extends Component{
+export class UserList extends Component {
 
-     template = (userId , userName, userList) => {
+    template = (userId, userName, userList) => {
 
         return userList.map(
             (user) =>
@@ -13,7 +12,7 @@ export class UserList extends Component{
                 }">${user.name}</button>`
         ).join(' ');
     }
-     loadingTemplate = () => `
+    loadingTemplate = () => `
     <li>
         <div class="view">
         <label class="label">
@@ -27,59 +26,66 @@ export class UserList extends Component{
         </div>
     </li>    
     `
-     createUserTemplate = () => `
+    createUserTemplate = () => `
     <button class="ripple user-create-button">+ 유저 생성</button>
 `
-     deleteUserTemplate = () => `
+    deleteUserTemplate = () => `
     <button class="ripple user-delete-button">- 유저 삭제</button>
 `
 
     userId;
     userList;
     username;
-    constructor($target , event ,  props) {
-        super($target , event ,  props);
-        this.$target.addEventListener('click' , e=>{
-            if(e.target.className ==='ripple user-create-button'){
+
+    constructor($target, event, props) {
+        super($target, event, props);
+        this.$target.addEventListener('click', e => {
+            if (e.target.className === 'ripple user-create-button') {
                 const userName = prompt('생성 하고 싶은 이름을 입력해주세요');
 
-                if(userName && userName !== '' && userName.length > 1){
+                if (userName && userName !== '' && userName.length > 1) {
                     this.event.addUser(userName);
                     return;
                 }
             }
-            if(e.target.className === 'ripple user-delete-button'){
+            if (e.target.className === 'ripple user-delete-button') {
                 const userName = prompt('삭제 하고 싶은 이름을 입력해주세요');
-                if(userName&& userName !== '' && userName.length > 1){
-                   // this.event.deleteUser(userName);
+                if (userName && userName !== '' && userName.length > 1) {
+                    // this.event.deleteUser(userName);
                     return;
                 }
             }
-            if(e.target.className === 'ripple'){
+            if (e.target.className === 'ripple') {
 
-                this.event.getTodoList(e.target.innerText ,e.target.dataset.id);
+                this.event.getTodoList(e.target.innerText, e.target.dataset.id);
             }
         })
 
     }
 
-    setUserId(userId){
+    setUserId(userId) {
         this.userId = userId;
         this.render();
     }
-    setUsername(username){
+
+    setUsername(username) {
         this.username = username;
         this.render();
     }
-    setUserList(userList){
+
+    setUserList(userList) {
         this.userList = userList;
         this.render();
     }
-    render(){
 
-        this.$target.innerHTML = this.template(this.userId , this.username , this.userList);
-        this.$target.innerHTML += this.createUserTemplate();
-        this.$target.innerHTML += this.deleteUserTemplate();
+    render() {
+
+        let template = '';
+
+        template += this.template(this.userId, this.username, this.userList);
+        template += this.createUserTemplate();
+        template += this.deleteUserTemplate();
+        this.$target.innerHTML = template;
 
 
     }
