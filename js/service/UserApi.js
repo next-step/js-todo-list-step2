@@ -1,4 +1,5 @@
 import {request} from "./core.js";
+import {httpMethod} from "../constants/constants.js";
 
 const API_URL = 'https://js-todo-list-9ca3a.df.r.appspot.com';
 
@@ -7,7 +8,7 @@ export const userApi = {
     ,
     postUser: (name) => {
         const apiOption = {
-            method: 'POST',
+            method: httpMethod.POST,
             headers: {
                 'Content-Type': 'application/json',
             },
@@ -24,20 +25,19 @@ export const userApi = {
             headers: {
                 'Content-Type': 'application/json',
             },
-            method: 'DELETE',
+            method: httpMethod.DELETE,
 
         };
         return request(`${API_URL}/api/users/${userId}/`, apiOption);
     },
     getUserTodoItem: (userId) =>{
-        console.log(userId);
         return request(`${API_URL}/api/users/${userId}/items/` )
 
     }
     ,
     postUserTodoItem: (userId, contents) => {
         const apiOptions = {
-            method: 'POST',
+            method: httpMethod.POST,
             headers: {
                 'Content-Type': 'application/json',
             },
@@ -52,7 +52,7 @@ export const userApi = {
             headers: {
                 'Content-Type': 'application/json',
             },
-            method: 'DELETE',
+            method: httpMethod.DELETE,
 
         };
         return request(`${API_URL}/api/users/${userId}/items/`, apiOption);
@@ -62,14 +62,14 @@ export const userApi = {
             headers: {
                 'Content-Type': 'application/json',
             },
-            method: 'DELETE',
+            method: httpMethod.DELETE,
 
         };
         return request(`${API_URL}/api/users/${userId}/items/${todoItemId}`, apiOption);
     },
     putUserTodoItem: (userId, todoItemId, contents) => {
         const apiOptions = {
-            method: 'PUT',
+            method: httpMethod.PUT,
             headers: {
                 'Content-Type': 'application/json',
             },
@@ -81,7 +81,7 @@ export const userApi = {
     },
     putUserTodoItemPriority: (userId, todoItemId, priority) => {
         const apiOptions = {
-            method: 'PUT',
+            method: httpMethod.PUT,
             headers: {
                 'Content-Type': 'application/json',
             },
@@ -93,7 +93,7 @@ export const userApi = {
     },
     putUserTodoItemCompleteToggle: (userId, todoItemId) => {
         const apiOptions = {
-            method: 'PUT',
+            method: httpMethod.PUT,
             headers: {
                 'Content-Type': 'application/json',
             },

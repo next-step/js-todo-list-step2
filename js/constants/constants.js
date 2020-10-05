@@ -9,3 +9,9 @@ export const priority= {
     SECOND : '2',
 
 }
+export const httpMethod = {
+    GET : 'GET',
+    POST : 'POST',
+    PUT : 'PUT',
+    DELETE : 'DELETE',
+}
