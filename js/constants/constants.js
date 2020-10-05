@@ -3,7 +3,7 @@ export const filterConstant = {
     COMPLETED: 'COMPLETED',
     ACTIVE: 'ACTIVE'
 }
-export const priority= {
+export const priorityType= {
     NONE : '0',
     FIRST : '1',
     SECOND : '2',

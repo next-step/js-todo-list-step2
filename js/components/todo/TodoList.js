@@ -1,7 +1,5 @@
 import {Component} from "../../core/Component.js";
-
-
-
+import {priorityType} from "../../constants/constants.js";
 
 export class TodoList extends Component {
     todoList;
@@ -12,7 +10,6 @@ export class TodoList extends Component {
         return todoArray
             .map((todo) =>
                 this.todoListTemplate(todo.isCompleted, todo._id, this.priorityTemplate(todo.priority), todo.contents)
-
             ).join('');
     }
 
@@ -33,30 +30,11 @@ export class TodoList extends Component {
     }
 
     priorityTemplate = (priority) => {
-        if (priority === 'NONE') {
-            return `<select class="chip select">
-            <option value="NONE" selected>순위</option>
-            <option value="FIRST">1순위</option>
-            <option value="SECOND">2순위</option>
-        </select>
-    `;
-        }
-        if (priority === 'FIRST') {
-            return `<select class="chip primary">
-            <option value="NONE" >순위</option>
-            <option value="FIRST" selected>1순위</option>
-            <option value="SECOND">2순위</option>
-        </select>
-    `;
-        }
-        if (priority === 'SECOND') {
-            return `<select class="chip secondary">
-            <option value="NONE" >순위</option>
-            <option value="FIRST">1순위</option>
-            <option value="SECOND" selected>2순위</option>
-        </select>
-    `;
-        }
+        return `<select class="chip secondary">
+    <option value="NONE" ${priority === priorityType.NONE ? ' selected' : ''}>순위</option>
+    <option value="FIRST" ${priority === priorityType.FIRST ? ' selected' : ''}>1순위</option>
+    <option value="SECOND" ${priority === priorityType.SECOND ? ' selected' : ''}>2순위</option>
+           </select>`
 
     }
 
@@ -76,15 +54,15 @@ export class TodoList extends Component {
                 return;
             }
         })
-        this.$target.addEventListener('change' , ({target})=>{
-            if(target && target.tagName==="SELECT"){
+        this.$target.addEventListener('change', ({target}) => {
+            if (target && target.tagName === "SELECT") {
                 const {$li, todoId} = this.#getItemId(target);
-                this.event.changeTodoPriority(this.userId , todoId,target.value)
+                this.event.changeTodoPriority(this.userId, todoId, target.value)
             }
         })
         this.$target.addEventListener('dblclick', ({target}) => {
             if (target && target.classList.contains("label")) {
-                const {$li , todoId} = this.#getItemId(target);
+                const {$li, todoId} = this.#getItemId(target);
                 $li.classList.add("editing");
                 return;
             }
