@@ -3,7 +3,13 @@ import { ERROR } from '../constants/messageAPI.js';
 const store = {
   userList: [],
   user: undefined,
+  user1: {
+    name: undefined,
+    id: -1,
+    todoList: []
+  },
 };
+
 /* store 를 변경하는 함수는 set 으로 시작됩니다. */
 export const setter = {
   async userList () {
@@ -23,7 +29,7 @@ export const setter = {
     catch (err) {
       if (err.message === ERROR.NO_USER2) {
         alert(err);
-        await initStore();
+        // await initStore();
       }
     }
     observer.render('user');
