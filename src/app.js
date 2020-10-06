@@ -3,7 +3,7 @@ import { Home } from './template/index.js';
 
 const $app = document.getElementById('app');
 
-(async () => await initStore())()
+initStore()
   .then(() => Home($app));
 
 
