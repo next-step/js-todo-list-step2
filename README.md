@@ -29,12 +29,14 @@
     
 - appendChild 말고 append 써보기
 
-- 계속 욕심이 나면... 스텝 2 못끝낼듯...
+- facade -> dispatcher 부분 분리하기
+- todoItem 의 존재여부를 확인하는 api 가 없어 미들웨어를 만들 수 없다.
+
 
 ## log
 20200922 : component 내에서 state 만들어 보기
 
-20200924 : api 구조 변경, 및 ERROR 처리 부분 수정
+20200924 : api 구조 변경, 및 ERROR 처리 부분 수정, event 1차 분리, dom 생성 함수로 만들기
 
 
 Q. 이벤트 위임 문제
@@ -46,26 +48,26 @@ Q. 이벤트 위임 문제
 
 ## 🎯 요구사항
 
-- [ ] 1. User 추가하기
-- [ ] 2. User의 투두리스트 불러오기
-- [ ] 3. User 삭제하기
-- [ ] 3. todoItem 추가하기
-- [ ] 4. todoItem 불러오기
-- [ ] 5. todoItem complete하기
-- [ ] 6. todoItem 삭제하기
-- [ ] 7. todoItem contents 내용 수정하기
+- [x] 1. User 추가하기
+- [x] 2. User의 투두리스트 불러오기
+- [x] 3. User 삭제하기
+- [x] 3. todoItem 추가하기
+- [x] 4. todoItem 불러오기
+- [x] 5. todoItem complete하기
+- [x] 6. todoItem 삭제하기
+- [x] 7. todoItem contents 내용 수정하기
 
 
 ## 🎯🎯 심화 요구사항
 
-- [ ] 1. 데이터를 불러오기전 로딩바를 이용해, 사용자가 데이터가 불러와지고 있다는 것을 보여줍니다.
-- [ ] 2. fetch api 사용하는 부분을 async await을 사용하여 리팩토링합니다.
-- [ ] 3. github issue에서 라벨을 붙이는 것처럼, 우선순위에 따라서 badge를 추가합니다.
-- [ ] 4. ES6 impot & export를 이용해 자바스크립트 파일을 리팩토링합니다.
+- [x] 1. 데이터를 불러오기전 로딩바를 이용해, 사용자가 데이터가 불러와지고 있다는 것을 보여줍니다.
+- [x] 2. fetch api 사용하는 부분을 async await을 사용하여 리팩토링합니다.
+- [x] 3. github issue에서 라벨을 붙이는 것처럼, 우선순위에 따라서 badge를 추가합니다.
+- [x] 4. ES6 impot & export를 이용해 자바스크립트 파일을 리팩토링합니다.
 
 ## 🕵️‍♂️ 제약사항
 
-- [ ] 1. User의 이름은 최소 2글자 이상이어야 합니다.
+- [x] 1. User의 이름은 최소 2글자 이상이어야 합니다.
 
 <br/><br/>
 

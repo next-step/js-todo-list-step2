@@ -8,7 +8,7 @@ import {
   editItemContentsHandler,
   editModeHandler,
   escapeEditHandler,
-  setPriorityHandler
+  setPriorityHandler,
 } from '../../eventHandler.js';
 
 const TodoList = ({ getFilter }) => {
@@ -37,7 +37,7 @@ const TodoList = ({ getFilter }) => {
 
   const todos = document.createElement('div');
 
-  todos.addEventListener('click', async ({ target }) => {
+  todos.addEventListener('click', async({ target }) => {
     if (target.dataset.component === 'toggleComplete')
       await toggleCompleteHandler(target);
 
@@ -55,15 +55,11 @@ const TodoList = ({ getFilter }) => {
   });
 
   todos.addEventListener('keypress', editItemContentsHandler);
-  todos.addEventListener('keydown', async (event) => (
+  todos.addEventListener('keydown', async(event) => (
     await escapeEditHandler(event, editItem)),
   );
-  todos.addEventListener('change', async (event) => {
-    const itemId = await setPriorityHandler(event);
-    if (itemId) {
-      components.todoList[itemId].components.todoLabel.render();
-      render();
-    }
+  todos.addEventListener('change', async(event) => {
+    await setPriorityHandler(event)
   });
 
   ul.appendChild(todos);

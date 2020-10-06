@@ -1,5 +1,5 @@
 /* api 를 호출하는 함수가 모이는 곳 입니다. */
-import { ERROR, SUCCESS }  from '../constants/messageAPI.js';
+import { ERROR, SUCCESS } from '../constants/messageAPI.js';
 import {
   postUser,
   getUserList,
@@ -14,100 +14,117 @@ import {
   putUserTodoItemPriority,
 } from './api/user.js';
 
-export const createUser = async ({ name }) => {
-  const result = await postUser({ name });
-  // 에러 처리
-  return result;
+export const createUser = async({ name }) => {
+  try {
+    const result = await postUser({ name });
+    return result;
+  } catch (error) {
+    console.log(error);
+  }
 };
 
-export const removeUser = async ({ userId }) => {
-  const result = await deleteUser({ userId });
-  // 에러처리
-  return result;
+export const removeUser = async({ userId }) => {
+  try {
+    const result = await deleteUser({ userId });
+    return result;
+  } catch (error) {
+    console.log(error);
+  }
 };
 
-export const readUserList = async () => {
-   const result = await getUserList();
-   // 에러 처리
-   return result;
+export const readUserList = async() => {
+  try {
+    const result = await getUserList();
+    return result;
+  } catch (error) {
+    console.log(error);
+  }
 };
 
-export const createUserTodoItem = async ({ userId, contents }) => {
-  const result = await postUserTodoItem({ userId, contents });
-  if (result.message === ERROR.NO_USER ) {
-    throw new Error(ERROR.NO_USER);
+export const createUserTodoItem = async({ userId, contents }) => {
+  try {
+    const result = await postUserTodoItem({ userId, contents });
+    return result;
+  } catch (error) {
+    console.log(error);
   }
-  return result;
 };
 
-export const readUserTodoItems = async ({ userId }) => {
-  const result = await getUserTodoList({ userId });
-  if (result.message === ERROR.NO_USER2) {
-    throw new Error(ERROR.NO_USER2);
+export const readUserTodoItems = async({ userId }) => {
+  try {
+    const result = await getUserTodoList({ userId });
+    return result;
+  } catch (error) {
+    console.log(error);
   }
-  return result;
 };
 
-export const readUser = async ({ userId }) => {
-  const result = await getUser({ userId });
-  if (result.message === ERROR.NO_USER2) {
-    throw new Error(ERROR.NO_USER2);
+export const readUser = async({ userId }) => {
+  try {
+    const result = await getUser({ userId });
+    return result;
+  } catch (error) {
+    console.log(error);
+    if (error.message === ERROR.NO_USER2) {
+      throw new Error(ERROR.NO_USER2);
+    }
   }
-  return result;
 };
 
-export const updateUserTodoItemComplete = async ({ userId, itemId }) => {
-  const result = await putUserTodoItemComplete({ userId, itemId });
-  if (result.message === ERROR.NO_USER3) {
-    throw new Error(ERROR.NO_USER3);
+export const updateUserTodoItemComplete = async({ userId, itemId }) => {
+  try {
+    const result = await putUserTodoItemComplete({ userId, itemId });
+    return result;
+  } catch (error) {
+    console.log(error);
+    if (error.message === ERROR.UPDATE_TODO_ITEM) {
+      throw new Error(ERROR.UPDATE_TODO_ITEM);
+    }
   }
-  if (result.message === ERROR.UPDATE_TODO_ITEM) {
-    throw new Error(ERROR.UPDATE_TODO_ITEM);
-  }
-  return result;
 };
 
-export const removeUserTodoItem = async ({ userId, itemId }) => {
-  const result = await deleteUserTodoItem({ userId, itemId });
-  if (result.message === ERROR.NO_USER3) {
-    throw new Error(ERROR.NO_USER3);
+export const removeUserTodoItem = async({ userId, itemId }) => {
+  try {
+    const result = await deleteUserTodoItem({ userId, itemId });
+    return result;
+  } catch (error) {
+    console.log(error);
+    if (error.message === ERROR.DELETE_TODO_ITEM) {
+      throw new Error(ERROR.DELETE_TODO_ITEM);
+    }
   }
-  if (result.message === ERROR.DELETE_TODO_ITEM) {
-    throw new Error(ERROR.DELETE_TODO_ITEM);
-  }
-  return result;
 };
 
-export const updateUserTodoItem = async ({ userId, itemId, contents }) => {
-  const result = await putUserTodoItem({ userId, itemId, contents });
-  if (result.message === ERROR.UPDATE_TODO_ITEM) {
-    throw new Error(ERROR.UPDATE_TODO_ITEM);
+export const updateUserTodoItem = async({ userId, itemId, contents }) => {
+  try {
+    const result = await putUserTodoItem({ userId, itemId, contents });
+    return result;
+  } catch (error) {
+    console.log(error);
+    if (error.message === ERROR.UPDATE_TODO_ITEM) {
+      throw new Error(ERROR.UPDATE_TODO_ITEM);
+    }
   }
-  if (result.message === ERROR.NO_USER3) {
-    throw new Error(ERROR.NO_USER3);
-  }
-
-  return result;
 };
 
-export const removeUserTodoItemsAll = async ({ userId }) => {
-  const result = await deleteUserTodoItemsAll({ userId });
-  if (result.success) {
+export const removeUserTodoItemsAll = async({ userId }) => {
+  try {
+    const result = await deleteUserTodoItemsAll({ userId });
     result.message = SUCCESS.DELETE_TODO_ITEM_ALL;
+    return result;
+  } catch (error) {
+    console.log(error);
   }
-  if (result.message === ERROR.NO_USER3) {
-    throw new Error(ERROR.NO_USER3);
-  }
-  return result;
 };
 
-export const updateUserTodoItemPriority = async ({ userId, itemId, priority }) => {
-  const result = await putUserTodoItemPriority({ userId, itemId, priority });
-  if (result.message === ERROR.UPDATE_TODO_ITEM) {
-    throw new Error(ERROR.UPDATE_TODO_ITEM);
+export const updateUserTodoItemPriority = async({ userId, itemId, priority }) => {
+  try {
+    const result = await putUserTodoItemPriority({ userId, itemId, priority });
+    return result;
+  } catch (error) {
+    console.log(error);
+    if (error.message === ERROR.UPDATE_TODO_ITEM) {
+      throw new Error(ERROR.UPDATE_TODO_ITEM);
+    }
   }
-  if (result.message === ERROR.NO_USER3) {
-    throw new Error(ERROR.NO_USER3);
-  }
-  return result;
 };

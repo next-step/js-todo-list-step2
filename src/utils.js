@@ -10,6 +10,14 @@ export const loadingWrapper = (handler) => {
   showLoading(false);
 };
 
+export const useMiddleWare = async (middleware, handler) => {
+  try {
+    await middleware();
+    await handler();
+  } catch (error) {
+    alert(error.message);
+  }
+};
 
 export const createDOM = (tagName, option = {}, dataset = undefined) => {
   const dom = document.createElement(tagName);
