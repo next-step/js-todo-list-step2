@@ -15,20 +15,20 @@ const request = async (uri, method, body = undefined, timeout = 5000) => {
 
   let id = -1;
   const race = await Promise.race([
-    new Promise(res => id = window.setTimeout(() => res(), timeout)),
+    new Promise(res => {
+      id = window.setTimeout(() => res(), timeout)
+    }),
     fetch(url, config)
   ]);
 
   if (race instanceof Response) {
     clearTimeout(id);
     const contents = await race.json();
-
-    if (race.status === 500) new Error(contents.message);
-    if (race.status === 404) new Error('404');
+    if (race.status === 404) throw new Error('404');
+    if (race.status === 500) throw new Error(contents.message);
     return contents;
   }
-
-  else new Error('timeout');
+  throw new Error('timeout');
 };
 
 const GET = (uri) => request(uri, HttpMethod.GET);
