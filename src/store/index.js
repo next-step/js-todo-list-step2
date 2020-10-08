@@ -69,4 +69,7 @@ export const getter = {
   },
 };
 
+export const dispatch = {
+
+};
 

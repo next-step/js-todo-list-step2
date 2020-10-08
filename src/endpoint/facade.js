@@ -28,7 +28,7 @@ export const userCheck = async() => {
 export const createUserFunc = async(name) => {
   const user = await createUser({ name });
   await readUserListFacade();
-  await setter.user(user._id);
+  await setter.user(user);
 };
 
 export const createUserFacade = async(name) => {
