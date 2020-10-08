@@ -17,11 +17,11 @@ export const createUserHandler = async(validator) => {
   const name = prompt('추가하고 싶은 이름을 입력해주세요.');
   if (name === null) return;
 
-  await validator(name, createUserHandler);
-  await createUserFacade(name);
+  const result = await validator(name, createUserHandler);
+  if (result) createUserFacade(name);
 };
 
-export const deleteUserTodoItemsAllHandler = async() => {
+export const deleteUserTodoItemsAllHandler = () => {
   removeUserTodoItemsAllFacade();
 };
 
@@ -32,12 +32,12 @@ export const addUserTodoItemHandler = ({ target, target: { value }, key }) => {
 };
 
 
-export const toggleCompleteHandler = async(target) => {
+export const toggleCompleteHandler = (target) => {
   const itemId = target.closest('li').dataset.todoIdx;
   updateUserTodoItemCompleteFacade(itemId);
 };
 
-export const deleteTodoItemHandler = async(target) => {
+export const deleteTodoItemHandler = (target) => {
   const itemId = target.closest('li').dataset.todoIdx;
   removeUserTodoItemFacade(itemId);
 };
@@ -54,13 +54,13 @@ export const editModeHandler = ({ target }, editItem) => {
   return itemId;
 };
 
-export const editItemContentsHandler = async({ target, target: { dataset, value }, key }) => {
+export const editItemContentsHandler = ({ target, target: { dataset, value }, key }) => {
   if (dataset.component !== 'editMode' || value === '' || key !== 'Enter') return;
   const itemId = target.closest('li').dataset.todoIdx;
   updateUserTodoItemFacade(value, itemId);
 };
 
-export const escapeEditHandler = async({ key, target: { dataset } }, editItem) => {
+export const escapeEditHandler = ({ key, target: { dataset } }, editItem) => {
   if (dataset.component !== 'editMode' || key !== 'Escape') return;
   setter.itemMode(editItem.id, 'view');
   editItem.component.render();
@@ -68,10 +68,10 @@ export const escapeEditHandler = async({ key, target: { dataset } }, editItem) =
   editItem.component = undefined;
 };
 
-export const setPriorityHandler = async({ target, target: { dataset, value } }) => {
+export const setPriorityHandler = ({ target, target: { dataset, value } }) => {
   if (dataset.component !== 'todoPriority') return;
   const itemId = target.closest('li').dataset.todoIdx;
-  await updateUserTodoItemPriorityFacade(value, itemId);
+  updateUserTodoItemPriorityFacade(value, itemId);
   return itemId;
 };
 
@@ -80,7 +80,7 @@ export const setUserHandler = (event) => {
   userId && readUserFacade(userId);
 };
 
-export const deleteUserHandler = async({ target: { dataset: { component } } }) => {
+export const deleteUserHandler = ({ target: { dataset: { component } } }) => {
   if (component !== 'user-delete') return;
 
   const confirm = window.confirm('유저를 정말로 삭제하시겠습니까?');

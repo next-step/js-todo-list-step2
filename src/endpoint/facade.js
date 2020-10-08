@@ -31,7 +31,7 @@ export const createUserFunc = async(name) => {
   await setter.user(user);
 };
 
-export const createUserFacade = async(name) => {
+export const createUserFacade = (name) => {
   loadingWrapper(() => createUserFunc(name));
 };
 
@@ -51,7 +51,7 @@ const createUserTodoItemFunc = async(contents) => {
   const userId = getter.userId();
   try {
     await createUserTodoItem({ userId, contents });
-    await readUserTodoItemsFunc();
+    readUserTodoItemsFunc();
   } catch (err) {
     alert(err.message);
     await initStore();
@@ -64,10 +64,12 @@ export const createUserTodoItemFacade = (contents) => {
   );
 };
 
-const readUserTodoItemsFunc = async() => {
+const readUserTodoItemsFunc = () => {
   const userId = getter.userId();
-  const result = await readUserTodoItems({ userId });
-  setter.userItems(result);
+  readUserTodoItems({ userId })
+    .then((result) => {
+      setter.userItems(result);
+    });
 };
 
 export const readUserListFacade = async() => {
@@ -95,7 +97,7 @@ export const readUserFacade = (userId) => {
 const updateUserTodoItemCompleteFunc = async(itemId) => {
   const userId = getter.userId();
   await updateUserTodoItemComplete({ userId, itemId });
-  await readUserTodoItemsFunc();
+  readUserTodoItemsFunc();
 };
 
 export const updateUserTodoItemCompleteFacade = (itemId) => {
@@ -107,7 +109,7 @@ export const updateUserTodoItemCompleteFacade = (itemId) => {
 const removeUserTodoItemFunc = async(itemId) => {
   const userId = getter.userId();
   await removeUserTodoItem({ userId, itemId });
-  await readUserTodoItemsFunc();
+  readUserTodoItemsFunc();
 };
 
 export const removeUserTodoItemFacade = (itemId) => {
@@ -119,7 +121,7 @@ export const removeUserTodoItemFacade = (itemId) => {
 const updateUserTodoItemFunc = async(contents, itemId) => {
   const userId = getter.userId();
   await updateUserTodoItem({ userId, itemId, contents });
-  await readUserTodoItemsFunc();
+  readUserTodoItemsFunc();
 };
 
 export const updateUserTodoItemFacade = (contents, itemId) => {
@@ -132,7 +134,7 @@ const removeUserTodoItemsAllFunc = async() => {
   const userId = getter.userId();
   const result = await removeUserTodoItemsAll({ userId });
   alert(result.message);
-  await readUserTodoItemsFunc();
+  readUserTodoItemsFunc();
 };
 
 export const removeUserTodoItemsAllFacade = () => {
@@ -145,7 +147,7 @@ export const removeUserTodoItemsAllFacade = () => {
 const updateUserTodoItemPriorityFunc = async(priority, itemId) => {
   const userId = getter.userId();
   await updateUserTodoItemPriority({ userId, itemId, priority });
-  await readUserTodoItemsFunc();
+  readUserTodoItemsFunc();
 };
 
 export const updateUserTodoItemPriorityFacade = (priority, itemId) => {
