@@ -107,6 +107,7 @@ export const updateUserTodoItemCompleteFacade = (itemId) => {
 const removeUserTodoItemFunc = async(itemId) => {
   const userId = getter.userId();
   await removeUserTodoItem({ userId, itemId });
+  await readUserTodoItemsFunc();
 };
 
 export const removeUserTodoItemFacade = (itemId) => {
@@ -138,6 +139,7 @@ export const removeUserTodoItemsAllFacade = () => {
   loadingWrapper(
     () => useMiddleWare(userCheck, removeUserTodoItemsAllFunc),
   );
+
 };
 
 const updateUserTodoItemPriorityFunc = async(priority, itemId) => {
