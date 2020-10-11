@@ -68,8 +68,3 @@ export const getter = {
     return store.user.todoList.find(v => v._id === itemId);
   },
 };
-
-export const dispatch = {
-
-};
-
