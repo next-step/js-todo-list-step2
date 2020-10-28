@@ -8,6 +8,8 @@
           href="https://fonts.googleapis.com/icon?family=Material+Icons"
           rel="stylesheet"
   />
+  <script defer src="js/components/TodoApp.js" type="module"></script>
+
 </head>
 <body>
 <div id="app">
@@ -17,10 +19,6 @@
   <section>
     <div id="user-list">
       <button class="ripple active">eastjun</button>
-      <button class="ripple">westjun</button>
-      <button class="ripple">southjun</button>
-      <button class="ripple">northjun</button>
-      <button class="ripple">hojun</button>
       <button class="ripple user-create-button">+ 유저 생성</button>
     </div>
   </section>
@@ -35,17 +33,6 @@
     </section>
     <section class="main">
       <ul class="todo-list">
-        <li>
-          <div class="view">
-            <label class="label">
-              <div class="animated-background">
-                <div class="skel-mask-container">
-                  <div class="skel-mask"></div>
-                </div>
-              </div>
-            </label>
-          </div>
-        </li>
         <li>
           <div class="view">
             <input class="toggle" type="checkbox" />
@@ -108,19 +95,18 @@
       <span class="todo-count">총 <strong>0</strong> 개</span>
       <ul class="filters">
         <li>
-          <a href="/#" class="all selected" >전체보기</a>
+          <a href="/#" data-tab="all" class="all selected" >전체보기</a>
         </li>
         <li>
-          <a href="#active" class="active">해야할 일</a>
+          <a href="#active" data-tab="active" class="active">해야할 일</a>
         </li>
         <li>
-          <a href="#completed" class="completed">완료한 일</a>
+          <a href="#completed" data-tab="completed" class="completed">완료한 일</a>
         </li>
       </ul>
       <button class="clear-completed">모두 삭제</button>
     </div>
   </section>
 </div>
-<script src="js/index.js"></script>
 </body>
 </html>
