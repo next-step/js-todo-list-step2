@@ -1,19 +1,18 @@
-import { KEY } from './constants.js'
-import { isEmptyOrWhitespace } from './validation.js'
+import {KEY} from './constants.js';
+import {isEmptyOrWhitespace} from './validation.js';
 
-export default function TodoInput ($todoInput, onAdd) {
-  this.$todoInput = $todoInput
-  this.$todoInput.addEventListener('keyup', (e) => {
-    e.stopPropagation()
-    if (e.key === KEY.ENTER) {
+export default function TodoInput($todoInput, addItem) {
+  this.$todoInput = $todoInput;
+  this.$todoInput.addEventListener('keyup', ({key}) => {
+    if (key === KEY.ENTER) {
       if (isEmptyOrWhitespace(this.$todoInput.value)) {
-        alert('할일을 입력하세요!')
-        return
+        alert('할일을 입력하세요!');
+        return;
       }
 
-      onAdd(this.$todoInput.value)
+      addItem(this.$todoInput.value);
 
-      this.$todoInput.value = ''
+      this.$todoInput.value = '';
     }
-  })
+  });
 }
