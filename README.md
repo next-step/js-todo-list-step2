@@ -17,7 +17,7 @@
 ## 🎯🎯 심화 요구사항
 
 - [ ] 1. 데이터를 불러오기전 로딩바를 이용해, 사용자가 데이터가 불러와지고 있다는 것을 보여줍니다.
-- [ ] 2. fetch api 사용하는 부분을 async await을 사용하여 리팩토링합니다.
+- [ ] 2. fetch todoApi 사용하는 부분을 async await을 사용하여 리팩토링합니다.
 - [ ] 3. github issue에서 라벨을 붙이는 것처럼, 우선순위에 따라서 badge를 추가합니다.
 - [ ] 4. ES6 impot & export를 이용해 자바스크립트 파일을 리팩토링합니다.
 
@@ -33,7 +33,7 @@
 
 | method | uri |
 |---|---|
-|GET|/api/users|
+|GET|/todoApi/users|
 
 ```javascript
 {
@@ -45,7 +45,7 @@
 
 | method | uri |
 |---|---|
-|POST|/api/users|
+|POST|/todoApi/users|
 
 ```javascript
 {
@@ -64,7 +64,7 @@
 
 | method | uri |
 |---|---|
-|GET|/api/users/:userId|
+|GET|/todoApi/users/:userId|
 
 ```javascript
 {
@@ -80,7 +80,7 @@
 
 | method | uri |
 |---|---|
-|DELETE|/api/users/:userId|
+|DELETE|/todoApi/users/:userId|
 
 ```javascript
 {
@@ -92,7 +92,7 @@
 
 | method | uri |
 |---|---|
-|GET|/api/users/:userId/items/|
+|GET|/todoApi/users/:userId/items/|
 ```javascript
 {
  response: {
@@ -108,7 +108,7 @@
 
 | method | uri |
 |---|---|
-|POST|/api/users/:userId/items/|
+|POST|/todoApi/users/:userId/items/|
 ```javascript
 {
  requestBody: {
@@ -127,7 +127,7 @@
 
 | method | uri |
 |---|---|
-|DELETE|/api/users/:userId/items/|
+|DELETE|/todoApi/users/:userId/items/|
 ```javascript
 {
  response: {
@@ -142,7 +142,7 @@
 
 | method | uri |
 |---|---|
-|DELETE|/api/users/:userId/items/:itemId|
+|DELETE|/todoApi/users/:userId/items/:itemId|
 ```javascript
 {
  response: {
@@ -157,7 +157,7 @@
 
 | method | uri |
 |---|---|
-|PUT|/api/users/:userId/items/:itemId|
+|PUT|/todoApi/users/:userId/items/:itemId|
 ```javascript
 {
  response: {
@@ -173,7 +173,7 @@
 
 | method | uri |
 |---|---|
-|PUT|/api/users/:userId/items/:itemId/priority|
+|PUT|/todoApi/users/:userId/items/:itemId/priority|
 ```javascript
 {
  response: {
@@ -190,7 +190,7 @@
 
 | method | uri |
 |---|---|
-|PUT|/api/users/:userId/items/:itemId/toggle|
+|PUT|/todoApi/users/:userId/items/:itemId/toggle|
 ```javascript
 {
  response: {
