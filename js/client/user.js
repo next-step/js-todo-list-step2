@@ -8,11 +8,17 @@ export default class User {
     this.headers = { "Content-Type": "application/json" };
   }
 
-  userAdd(name) {
-    fetch(`${this.baseUrl}/api/user`, {
+  addUser(name) {
+    fetch(`${this.baseUrl}/api/users`, {
       method: "POST",
       headers: this.headers,
       body: JSON.stringify({ name }),
-    }).then();
+    }).then(console.log);
+  }
+
+  fetchUsers() {
+    return fetch(`${this.baseUrl}/api/users`).then((response) =>
+      response.json()
+    );
   }
 }
