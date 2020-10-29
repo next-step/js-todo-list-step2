@@ -9,15 +9,21 @@ export default class User {
   }
 
   addUser(name) {
-    fetch(`${this.baseUrl}/api/users`, {
+    return fetch(`${this.baseUrl}/api/users`, {
       method: "POST",
       headers: this.headers,
       body: JSON.stringify({ name }),
-    }).then(console.log);
+    });
   }
 
   fetchUsers() {
     return fetch(`${this.baseUrl}/api/users`).then((response) =>
+      response.json()
+    );
+  }
+
+  fetchUserTodo(id) {
+    return fetch(`${this.baseUrl}/api/users/${id}/items/`).then((response) =>
       response.json()
     );
   }
