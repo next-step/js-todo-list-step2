@@ -34,16 +34,19 @@ apiService.fetchUsers().then(showUsers);
 
 const todolistEventHandler = (e, eId) => {
   const { className } = e.target;
-  console.log(className);
+  const targetId = e.target.closest("li").dataset.id;
   switch (className) {
     case "destroy":
-      const targetId = e.target.closest("li").dataset.id;
       apiService
         .deleteUserTodoOne(eId, targetId)
         .then(() => apiService.fetchUserTodo(eId))
         .then(showItems);
       return;
     case "toggle":
+      apiService
+        .toggleUserTodo(eId, targetId)
+        .then(() => apiService.fetchUserTodo(eId))
+        .then(showItems);
       return;
   }
 };
@@ -52,9 +55,13 @@ const showItems = (todos) => {
   const userTodos = todos
     .map(
       (todo) =>
-        `<li data-id="${todo._id}">
+        `<li class=${todo.isCompleted ? "completed" : "view"} data-id="${
+          todo._id
+        }">
            <div class="view">
-            <input class="toggle" type="checkbox" />
+            <input class="toggle" type="checkbox" ${
+              todo.isCompleted ? "checked" : ""
+            } />
             <label class="label">
               <select class="chip select">
                 <option value="0" selected>순위</option>
