@@ -23,7 +23,7 @@ export default class UserService {
     ).then((response) => response.json());
   }
 
-  //유저를 삭제하는 경우는??
+  //유저를 삭제하는 경우는?? 삭제 버튼도 없어서 어느경우에 쓰려고 의도한 건지 모르겠어요..
   async deleteUser(userId) {
     return await fetch(`${this.baseUrl}/api/users/${userId}/items/`, {
       method: "DELETE",
