@@ -49,6 +49,30 @@ const todolistEventHandler = (e, userId) => {
       .then(showItems);
     return;
   }
+  if (classList.contains("chip")) {
+    const { value } = e.target;
+    if (value === "0") {
+      const priorityValue = "NONE";
+      apiService.makePriorityUserTodo(userId, targetId, priorityValue);
+      return;
+    }
+    if (value === "1") {
+      const priorityValue = "FIRST";
+      apiService
+        .makePriorityUserTodo(userId, targetId, priorityValue)
+        .then(() => apiService.fetchUserTodo(userId))
+        .then(showItems);
+      return;
+    }
+    if (value === "2") {
+      const priorityValue = "SECOND";
+      apiService
+        .makePriorityUserTodo(userId, targetId, priorityValue)
+        .then(() => apiService.fetchUserTodo(userId))
+        .then(showItems);
+      return;
+    }
+  }
 };
 
 const todoEditHandler = (e, userId) => {
@@ -58,7 +82,6 @@ const todoEditHandler = (e, userId) => {
     $label.classList.toggle("editing");
     $label.addEventListener("keydown", (e) => {
       const targetId = $label.dataset.id;
-
       if (e.key === "Enter") {
         const contents = e.target.value;
         apiService
@@ -74,6 +97,16 @@ const todoEditHandler = (e, userId) => {
     });
   }
 };
+
+const priorityTag = (priority) => {
+  if (priority === "FIRST") {
+    return `<span class="chip primary">1순위</span>`;
+  }
+  if (priority === "SECOND") {
+    return `<span class="chip secondary">2순위</span>`;
+  }
+  return;
+};
 const showItems = (todos) => {
   const userTodos = todos
     .map(
@@ -86,11 +119,17 @@ const showItems = (todos) => {
               todo.isCompleted ? "checked" : ""
             } />
             <label class="label">
-              <select class="chip select">
-                <option value="0" selected>순위</option>
-                <option value="1">1순위</option>
-                <option value="2">2순위</option>
-              </select>
+             ${
+               todo.priority === "NONE"
+                 ? `<select class="chip select">
+               <option value="0" selected>
+                 순위
+               </option>
+               <option value="1">1순위</option>
+               <option value="2">2순위</option>
+             </select>`
+                 : priorityTag(todo.priority)
+             }
               ${todo.contents}
             </label>
             <button class="destroy"></button>
