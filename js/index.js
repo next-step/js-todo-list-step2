@@ -8,9 +8,6 @@ const selectedUser = new SelectedUser();
 
 //Btns from DOM
 const $userList = document.querySelector("#user-list");
-const $deleteAllTodosBtn = document.querySelector(".clear-completed");
-const $input = document.querySelector(".new-todo");
-const $todoUl = document.querySelector(".todo-list");
 
 //initial Render
 apiService.fetchUsers().then(render.showUsers);

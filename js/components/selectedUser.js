@@ -6,7 +6,6 @@ const render = new Render();
 const $deleteAllTodosBtn = document.querySelector(".clear-completed");
 const $input = document.querySelector(".new-todo");
 const $todoUl = document.querySelector(".todo-list");
-
 const $filters = document.querySelector(".filters");
 
 export default class SelectedUser {
