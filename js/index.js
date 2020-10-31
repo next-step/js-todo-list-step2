@@ -32,25 +32,48 @@ const showUsers = (users) => {
 const $todoUl = document.querySelector(".todo-list");
 apiService.fetchUsers().then(showUsers);
 
-const todolistEventHandler = (e, eId) => {
-  const { className } = e.target;
+const todolistEventHandler = (e, userId) => {
+  const { classList } = e.target;
   const targetId = e.target.closest("li").dataset.id;
-  switch (className) {
-    case "destroy":
-      apiService
-        .deleteUserTodoOne(eId, targetId)
-        .then(() => apiService.fetchUserTodo(eId))
-        .then(showItems);
-      return;
-    case "toggle":
-      apiService
-        .toggleUserTodo(eId, targetId)
-        .then(() => apiService.fetchUserTodo(eId))
-        .then(showItems);
-      return;
+  if (classList.contains("destroy")) {
+    apiService
+      .deleteUserTodoOne(userId, targetId)
+      .then(() => apiService.fetchUserTodo(userId))
+      .then(showItems);
+    return;
+  }
+  if (classList.contains("toggle")) {
+    apiService
+      .toggleUserTodo(userId, targetId)
+      .then(() => apiService.fetchUserTodo(userId))
+      .then(showItems);
+    return;
   }
 };
 
+const todoEditHandler = (e, userId) => {
+  const { classList } = e.target;
+  const $label = e.target.closest("li");
+  if (classList.contains("label")) {
+    $label.classList.toggle("editing");
+    $label.addEventListener("keydown", (e) => {
+      const targetId = $label.dataset.id;
+
+      if (e.key === "Enter") {
+        const contents = e.target.value;
+        apiService
+          .updateUserTodo(userId, targetId, contents)
+          .then(() => apiService.fetchUserTodo(userId))
+          .then(showItems);
+        return;
+      }
+      if (e.key === "Escape") {
+        $label.classList.toggle("editing");
+        return;
+      }
+    });
+  }
+};
 const showItems = (todos) => {
   const userTodos = todos
     .map(
@@ -72,7 +95,7 @@ const showItems = (todos) => {
             </label>
             <button class="destroy"></button>
           </div>
-          <input class="edit" value="완료된 타이틀" />
+          <input class="edit" value="${todo.contents}" />
         </li>`
     )
     .join("");
@@ -82,33 +105,34 @@ const showItems = (todos) => {
   userCreateButton.addEventListener("click", onUserCreateHandler);
 };
 
-const addNewTodo = (eId, newTodo) => {
+const addNewTodo = (userId, newTodo) => {
   apiService
-    .addUserTodo(eId, newTodo)
-    .then(() => apiService.fetchUserTodo(eId))
+    .addUserTodo(userId, newTodo)
+    .then(() => apiService.fetchUserTodo(userId))
     .then(showItems);
 };
 
-const deleteAllTodos = (eId) => {
+const deleteAllTodos = (userId) => {
   console.log("delete all");
   apiService
-    .deleteUserTodosAll(eId)
-    .then(() => apiService.fetchUserTodo(eId))
+    .deleteUserTodosAll(userId)
+    .then(() => apiService.fetchUserTodo(userId))
     .then(showItems);
 };
 
 //selectedUser
-const selectedUserState = (eId) => {
-  apiService.fetchUserTodo(eId).then(showItems);
+const selectedUserState = (userId) => {
+  apiService.fetchUserTodo(userId).then(showItems);
   $input.addEventListener("keypress", (e) => {
     if (e.key !== "Enter") return;
     if (e.key === "Enter") {
-      addNewTodo(eId, $input.value);
+      addNewTodo(userId, $input.value);
       $input.value = "";
     }
   });
-  $deleteAllTodosBtn.addEventListener("click", () => deleteAllTodos(eId));
-  $todoUl.addEventListener("click", (e) => todolistEventHandler(e, eId));
+  $deleteAllTodosBtn.addEventListener("click", () => deleteAllTodos(userId));
+  $todoUl.addEventListener("click", (e) => todolistEventHandler(e, userId));
+  $todoUl.addEventListener("dblclick", (e) => todoEditHandler(e, userId));
 };
 
 //click one user
@@ -116,6 +140,6 @@ $userList.addEventListener("click", (e) => {
   if (!e.target.classList.contains("showTodo")) {
     return;
   }
-  const eId = e.target.dataset.id;
-  selectedUserState(eId);
+  const userId = e.target.dataset.id;
+  selectedUserState(userId);
 });

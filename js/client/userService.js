@@ -49,17 +49,21 @@ export default class UserService {
     });
   }
 
-  async updateUserTodo(userId, itemId) {
+  async updateUserTodo(userId, itemId, contents) {
     return await fetch(`${this.baseUrl}/api/users/${userId}/items/${itemId}`, {
       method: "PUT",
+      headers: this.headers,
+      body: JSON.stringify({ contents }),
     });
   }
 
-  async makePriorityUserTodo(userId, itemId) {
+  async makePriorityUserTodo(userId, itemId, priority) {
     return await fetch(
       `${this.baseUrl}/api/users/${userId}/items/${itemId}/priority`,
       {
         method: "PUT",
+        headers: this.headers,
+        body: JSON.stringify({ priority }),
       }
     );
   }
