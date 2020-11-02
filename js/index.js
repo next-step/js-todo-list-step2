@@ -10,7 +10,7 @@ const selectedUser = new SelectedUser();
 const $userList = document.querySelector("#user-list");
 
 //initial Render
-apiService.fetchUsers().then(render.showUsers);
+apiService.getUsers().then(render.showUsers);
 
 //click one user
 $userList.addEventListener("click", (e) => {
@@ -24,4 +24,10 @@ $userList.addEventListener("click", (e) => {
   e.target.classList.toggle("active");
   const userId = e.target.dataset.id;
   selectedUser.selectedUserState(userId);
+
+  $userList.innerHTML += `<button class="ripple user-create-button delete-user">- 유저 삭제</button>`;
+  const $deleteUserBtn = document.querySelector(".delete-user");
+  $deleteUserBtn.addEventListener("click", () =>
+    selectedUser.onUserDeleteHandler(userId)
+  );
 });

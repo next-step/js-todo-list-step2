@@ -10,7 +10,7 @@ export default class Render {
     const userName = prompt("추가하고 싶은 이름을 입력해주세요.");
     apiService
       .addUser(userName)
-      .then(() => apiService.fetchUsers())
+      .then(() => apiService.getUsers())
       .then(this.showUsers);
   };
 

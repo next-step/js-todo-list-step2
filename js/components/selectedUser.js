@@ -9,8 +9,18 @@ const $todoUl = document.querySelector(".todo-list");
 const $filters = document.querySelector(".filters");
 
 export default class SelectedUser {
+  //문제가 있음
+  onUserDeleteHandler = (userId) => {
+    apiService
+      .deleteUser(userId)
+      .then(() => apiService.getUsers())
+      .then(render.showUsers);
+    // apiService.getUsers().then(render.showItems);
+  };
+
   selectedUserState = (userId) => {
-    apiService.fetchUserTodo(userId).then(render.showItems);
+    apiService.getUserTodo(userId).then(render.showItems);
+
     $input.addEventListener("keypress", (e) => {
       if (e.key !== "Enter") return;
       if (e.key === "Enter") {
@@ -36,24 +46,28 @@ export default class SelectedUser {
     });
   };
 
+  deleteUser = () => {
+    console.log("going");
+  };
+
   handleFiltering = (condition, userId) => {
     if (condition.contains("completed")) {
       apiService
-        .fetchUserTodo(userId)
+        .getUserTodo(userId)
         .then((todos) => todos.filter((todo) => todo.isCompleted))
         .then(render.showItems);
       return;
     }
     if (condition.contains("active")) {
       apiService
-        .fetchUserTodo(userId)
+        .getUserTodo(userId)
         .then((todos) => todos.filter((todo) => !todo.isCompleted))
         .then(render.showItems);
       return;
     }
     if (condition.contains("all")) {
       apiService //
-        .fetchUserTodo(userId)
+        .getUserTodo(userId)
         .then(render.showItems);
       return;
     }
@@ -65,7 +79,7 @@ export default class SelectedUser {
     window.location.replace("/#");
     apiService
       .deleteUserTodosAll(userId)
-      .then(() => apiService.fetchUserTodo(userId))
+      .then(() => apiService.getUserTodo(userId))
       .then(render.showItems);
   };
 
@@ -80,7 +94,7 @@ export default class SelectedUser {
           const contents = e.target.value;
           apiService
             .updateUserTodo(userId, targetId, contents)
-            .then(() => apiService.fetchUserTodo(userId))
+            .then(() => apiService.getUserTodo(userId))
             .then(render.showItems);
           return;
         }
@@ -103,7 +117,7 @@ export default class SelectedUser {
       window.location.replace("/#");
       apiService
         .deleteUserTodoOne(userId, targetId)
-        .then(() => apiService.fetchUserTodo(userId))
+        .then(() => apiService.getUserTodo(userId))
         .then(render.showItems);
       return;
     }
@@ -115,10 +129,11 @@ export default class SelectedUser {
       window.location.replace("/#");
       apiService
         .toggleUserTodo(userId, targetId)
-        .then(() => apiService.fetchUserTodo(userId))
+        .then(() => apiService.getUserTodo(userId))
         .then(render.showItems);
       return;
     }
+
     if (classList.contains("chip")) {
       const { value } = e.target;
       if (value === "0") {
@@ -130,7 +145,7 @@ export default class SelectedUser {
         const priorityValue = "FIRST";
         apiService
           .makePriorityUserTodo(userId, targetId, priorityValue)
-          .then(() => apiService.fetchUserTodo(userId))
+          .then(() => apiService.getUserTodo(userId))
           .then(render.showItems);
         return;
       }
@@ -138,7 +153,7 @@ export default class SelectedUser {
         const priorityValue = "SECOND";
         apiService
           .makePriorityUserTodo(userId, targetId, priorityValue)
-          .then(() => apiService.fetchUserTodo(userId))
+          .then(() => apiService.getUserTodo(userId))
           .then(render.showItems);
         return;
       }
@@ -151,7 +166,7 @@ export default class SelectedUser {
     window.location.replace("/#");
     apiService
       .addUserTodo(userId, newTodo)
-      .then(() => apiService.fetchUserTodo(userId))
+      .then(() => apiService.getUserTodo(userId))
       .then(render.showItems);
   };
 }
