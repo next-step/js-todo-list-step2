@@ -22,7 +22,9 @@ export default class Render {
             `<button data-id="${user._id}" class="ripple showTodo">${user.name}</button>`
         )
         .join("") +
-      `<button class="ripple user-create-button">+ 유저 생성</button>`;
+      `<button class="ripple user-create-button">+ 유저 생성</button>
+      <div class="to-make-deleteBtn"></div>`;
+
     $userList.innerHTML = usersName;
 
     const userCreateButton = document.querySelector(".user-create-button");

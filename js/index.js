@@ -25,7 +25,9 @@ $userList.addEventListener("click", (e) => {
   const userId = e.target.dataset.id;
   selectedUser.selectedUserState(userId);
 
-  $userList.innerHTML += `<button class="ripple user-create-button delete-user">- 유저 삭제</button>`;
+  //userDeleteBtn
+  const $makeDeleteBtn = document.querySelector(".to-make-deleteBtn");
+  $makeDeleteBtn.innerHTML = `<button class="ripple user-create-button delete-user">- 유저 삭제</button>`;
   const $deleteUserBtn = document.querySelector(".delete-user");
   $deleteUserBtn.addEventListener("click", () =>
     selectedUser.onUserDeleteHandler(userId)

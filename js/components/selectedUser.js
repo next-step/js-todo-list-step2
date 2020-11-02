@@ -9,13 +9,11 @@ const $todoUl = document.querySelector(".todo-list");
 const $filters = document.querySelector(".filters");
 
 export default class SelectedUser {
-  //문제가 있음
   onUserDeleteHandler = (userId) => {
     apiService
       .deleteUser(userId)
       .then(() => apiService.getUsers())
       .then(render.showUsers);
-    // apiService.getUsers().then(render.showItems);
   };
 
   selectedUserState = (userId) => {
@@ -44,10 +42,6 @@ export default class SelectedUser {
       now.classList.toggle("selected");
       this.handleFiltering(now.classList, userId);
     });
-  };
-
-  deleteUser = () => {
-    console.log("going");
   };
 
   handleFiltering = (condition, userId) => {
