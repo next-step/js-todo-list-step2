@@ -11,7 +11,8 @@ export default class Store {
 
   constructor() {
     when(VIEW.INIT, () => this.init());
-    when(VIEW.ADD_USER, (props) => this.addUser(props));
+    when(VIEW.ADD_USER, ({ name }) => this.addUser(name));
+    when(VIEW.DELETE_USER, ({ id }) => this.deleteUser(id));
   }
 
   async init() {
@@ -28,7 +29,7 @@ export default class Store {
     });
   }
 
-  async addUser({ name }) {
+  async addUser(name) {
     const user = await API.POST('/users', { name });
     const users = await API.GET('/users');
 
@@ -38,6 +39,20 @@ export default class Store {
         users,
         currentUser: user._id,
         todoList: user.todoList,
+      },
+    });
+  }
+
+  async deleteUser(id) {
+    const response = await API.DELETE('/users/' + id);
+    const users = await API.GET('/users');
+
+    this.dispatch({
+      type: VIEW.DELETE_USER,
+      payload: {
+        users,
+        currentUser: users[0]?._id,
+        todoList: users[0]?.todoList || [],
       },
     });
   }
@@ -55,6 +70,11 @@ export default class Store {
       case VIEW.INIT:
         return payload;
       case VIEW.ADD_USER:
+        return {
+          ...state,
+          ...payload,
+        };
+      case VIEW.DELETE_USER:
         return {
           ...state,
           ...payload,

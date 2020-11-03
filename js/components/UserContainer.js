@@ -18,7 +18,9 @@ export default class UserContainer {
 
   setState({ users, currentUser }) {
     this.$userSection.innerHTML = '';
-    this.userTitle.setState({ user: users[currentUser] });
+    this.userTitle.setState({
+      user: users.find(({ _id }) => _id === currentUser),
+    });
     this.userList.setState({ users, currentUser });
     this.render();
   }

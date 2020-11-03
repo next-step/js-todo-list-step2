@@ -1,6 +1,9 @@
 import DOM from '../core/createElement.js';
 import UserItem from './UserItem.js';
-import { onCreateUserButtonClick } from '../actions/index.js';
+import {
+  onCreateUserButtonClick,
+  onDeleteUserButtonClick,
+} from '../actions/index.js';
 
 export default class UserList {
   constructor() {
@@ -9,6 +12,11 @@ export default class UserList {
       class: 'ripple user-create-button',
       innerText: '+ 유저 생성',
       onclick: onCreateUserButtonClick,
+    });
+    this.$userDeleteButton = DOM.button({
+      class: 'ripple user-delete-button',
+      innerText: '- 유저 삭제',
+      onclick: onDeleteUserButtonClick,
     });
     this.render();
   }
@@ -30,5 +38,6 @@ export default class UserList {
   render(userItems = []) {
     userItems.forEach((userItem) => this.$userList.appendChild(userItem.$el));
     this.$userList.appendChild(this.$userCreateButton);
+    this.$userList.appendChild(this.$userDeleteButton);
   }
 }

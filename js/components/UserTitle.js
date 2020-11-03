@@ -17,7 +17,7 @@ export default class UserTitle {
 
     const { _id, name } = user;
 
-    this.$title.dataset.id = _id;
+    this.$title.dataset.userId = _id;
     this.render(name);
   }
 

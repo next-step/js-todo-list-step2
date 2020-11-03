@@ -7,6 +7,7 @@ const { done, when } = eventChannel;
 export const VIEW = {
   INIT: 'view/init',
   ADD_USER: 'view/addUser',
+  DELETE_USER: 'view/deleteUser',
 };
 
 export const STORE = {
@@ -19,4 +20,11 @@ export const onCreateUserButtonClick = () => {
   isValidUserName(name)
     ? done(VIEW.ADD_USER, { name })
     : alert(MESSAGES.FAILED_ADD_USER);
+};
+
+export const onDeleteUserButtonClick = () => {
+  const $userTitle = document.querySelector('#user-title');
+
+  confirm(MESSAGES.DELETE_USER) &&
+    done(VIEW.DELETE_USER, { id: $userTitle.dataset.userId });
 };
