@@ -1,19 +1,17 @@
 import DOM from '../core/createElement.js';
 import UserItem from './UserItem.js';
-import { onCreateUserButtonClick, onDeleteUserButtonClick } from '../actions/index.js';
+import { onUserListClickHandler } from '../actions/index.js';
 
 export default class UserList {
   constructor() {
-    this.$userList = DOM.div({ id: 'user-list' });
+    this.$userList = DOM.div({ id: 'user-list', onclick: onUserListClickHandler });
     this.$userCreateButton = DOM.button({
       class: 'ripple user-create-button',
       innerText: '+ 유저 생성',
-      onclick: onCreateUserButtonClick,
     });
     this.$userDeleteButton = DOM.button({
       class: 'ripple user-delete-button',
       innerText: '- 유저 삭제',
-      onclick: onDeleteUserButtonClick,
     });
     this.render();
   }

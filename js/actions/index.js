@@ -23,7 +23,25 @@ export const STORE = {
   REQUEST: 'store/request',
 };
 
-export const onCreateUserButtonClick = () => {
+export const onUserListClickHandler = ({ target }) => {
+  const { className } = target;
+
+  switch (className) {
+    case 'ripple':
+      done(VIEW.CHANGE_USER, { id: target.dataset.userId });
+      return;
+    case 'ripple user-create-button':
+      onCreateUserButtonClickHandler();
+      return;
+    case 'ripple user-delete-button':
+      onDeleteUserButtonClickHandler();
+      return;
+    default:
+      return;
+  }
+};
+
+export const onCreateUserButtonClickHandler = () => {
   const name = prompt(MESSAGES.ADD_USER);
 
   isValidUserName(name)
@@ -31,12 +49,8 @@ export const onCreateUserButtonClick = () => {
     : alert(MESSAGES.FAILED_ADD_USER);
 };
 
-export const onDeleteUserButtonClick = () => {
+export const onDeleteUserButtonClickHandler = () => {
   confirm(MESSAGES.DELETE_USER) && done(VIEW.DELETE_USER);
-};
-
-export const onChangeUserButtonClick = (e) => {
-  done(VIEW.CHANGE_USER, { id: e.target.dataset.userId });
 };
 
 export const onCreateTodoInputEnterKeypress = ({ key, target }) => {
