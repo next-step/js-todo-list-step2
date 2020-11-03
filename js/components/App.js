@@ -1,7 +1,7 @@
 import UserContainer from './UserContainer.js';
 import TodoContainer from './TodoContainer.js';
 import eventChannel from '../core/eventChannel.js';
-import { ACTION } from '../actions/index.js';
+import { VIEW, STORE } from '../actions/index.js';
 
 const { done, when } = eventChannel;
 
@@ -17,8 +17,8 @@ export default class App {
   }
 
   connect() {
-    when(ACTION.INIT, (props) => this.setState(props));
-    done(ACTION.VIEW_INIT);
+    when(STORE.UPDATE, (props) => this.setState(props));
+    done(VIEW.INIT);
   }
 
   setState({ users, currentUser, todoList, currentFilter }) {

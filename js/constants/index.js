@@ -23,6 +23,13 @@ const FILTER_TEXT = {
 export const GET_FILTER_TEXT = (filterStr) =>
   FILTER_TEXT[_REVERSE_FILTER[filterStr]];
 
+export const MESSAGES = {
+  ADD_USER: '추가하고 싶은 이름을 입력해주세요.',
+  FAILED_ADD_USER: '이름은 최소 2글자 이상이어야 합니다.',
+};
+
+export const MINIMUM_USER_NAME_LENGTH = 2;
+
 export const HTML_TAG_NAMES = [
   'a',
   'abbr',

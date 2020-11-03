@@ -1,5 +1,6 @@
 import DOM from '../core/createElement.js';
 import UserItem from './UserItem.js';
+import { onCreateUserButtonClick } from '../actions/index.js';
 
 export default class UserList {
   constructor() {
@@ -7,6 +8,7 @@ export default class UserList {
     this.$userCreateButton = DOM.button({
       class: 'ripple user-create-button',
       innerText: '+ 유저 생성',
+      onclick: onCreateUserButtonClick,
     });
     this.render();
   }
@@ -19,8 +21,8 @@ export default class UserList {
     this.$userList.innerHTML = '';
     this.render(
       users.map(
-        ({ _id, name }, i) =>
-          new UserItem({ _id, name, isActive: currentUser === i })
+        ({ _id, name }) =>
+          new UserItem({ _id, name, isActive: currentUser === _id })
       )
     );
   }
