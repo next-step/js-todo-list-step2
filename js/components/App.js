@@ -4,54 +4,62 @@ import { checkTarget } from "../utils/validator.js";
 import TodoList from "./TodoList.js";
 import UserList from "./UserList.js";
 import TodoInput from "./TodoInput.js";
-import { addTodo } from "../api/todoApi.js";
-import { ADD_TODO, ADD_USER, LOAD_USER } from "../store/Store.js";
+import { addTodo, toggleTodo } from "../api/todoApi.js";
+import { ADD_TODO, ADD_USER, LOAD_USER, TOGGLE_TODO } from "../store/Store.js";
 
 function App({ $target, store }) {
-  const init = async () => {
-    checkTarget($target);
+    const init = async () => {
+        checkTarget($target);
 
-    this.userList = new UserList({
-      $target: document.querySelector(SELECTOR.USER_LIST),
-      onChangeUser: this.onChangeUser,
-      onAddUser: this.onAddUser,
-      store,
-    });
+        this.userList = new UserList({
+            $target: document.querySelector(SELECTOR.USER_LIST),
+            onChangeUser: this.onChangeUser,
+            onAddUser: this.onAddUser,
+            store,
+        });
 
-    this.todoList = new TodoList({
-      $target: document.querySelector(SELECTOR.TODO_LIST),
-      store,
-    });
+        this.todoList = new TodoList({
+            $target: document.querySelector(SELECTOR.TODO_LIST),
+            onToggleTodo: this.onToggleTodo,
+            store,
+        });
 
-    this.todoInput = new TodoInput({
-      $target: document.querySelector(SELECTOR.TODO_INPUT),
-      onAddTodo: this.onAddTodo,
-      store,
-    });
-  };
+        this.todoInput = new TodoInput({
+            $target: document.querySelector(SELECTOR.TODO_INPUT),
+            onAddTodo: this.onAddTodo,
+            store,
+        });
+    };
 
-  this.onChangeUser = async (username) => {
-    store.dispatch({
-      type: LOAD_USER,
-      payload: await fetchUser(username),
-    });
-  };
+    this.onChangeUser = async (username) => {
+        store.dispatch({
+            type: LOAD_USER,
+            payload: await fetchUser(username),
+        });
+    };
 
-  this.onAddUser = async (username) => {
-    store.dispatch({
-      type: ADD_USER,
-      payload: await addUser(username),
-    });
-  };
+    this.onAddUser = async (username) => {
+        store.dispatch({
+            type: ADD_USER,
+            payload: await addUser(username),
+        });
+    };
 
-  this.onAddTodo = async (title, name) => {
-    store.dispatch({
-      type: ADD_TODO,
-      payload: await addTodo(title, name),
-    });
-  };
+    this.onAddTodo = async (title, name) => {
+        store.dispatch({
+            type: ADD_TODO,
+            payload: await addTodo(title, name),
+        });
+    };
 
-  init();
+    this.onToggleTodo = async (userId, itemId) => {
+        store.dispatch({
+            type: TOGGLE_TODO,
+            payload: await toggleTodo(userId, itemId),
+        });
+    };
+
+    init();
 }
 
 export default App;

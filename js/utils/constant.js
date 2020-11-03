@@ -37,5 +37,6 @@ export const SELECTOR = {
 
 export const CLASS = {
   USER_CREATE_BUTTON: "user-create-button",
+  TOGGLE: "toggle",
   RIPPLE: "ripple",
 };

@@ -9,7 +9,7 @@ export const userCreateButtonDOM = () =>
     </button>`;
 
 export const todoDOM = (todo) => `
-    <li id=${todo._id} class=${todo.isCompleted && "completed"}>
+    <li data-id=${todo._id} class=${todo.isCompleted && "completed"}>
     <div class="view">
     <input class="toggle" type="checkbox" ${todo.isCompleted && "checked"}/>
     <label class="label">
