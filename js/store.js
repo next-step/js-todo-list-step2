@@ -14,6 +14,11 @@ export default class Store {
     when(VIEW.ADD_USER, ({ name }) => this.addUser(name));
     when(VIEW.DELETE_USER, ({ id }) => this.deleteUser(id));
     when(VIEW.CHANGE_USER, ({ id }) => this.changeUser(id));
+    when(VIEW.ADD_TODO, ({ contents }) => this.addTodo(contents));
+  }
+
+  get userId() {
+    return this.#state.currentUser;
   }
 
   async init() {
@@ -44,8 +49,8 @@ export default class Store {
     });
   }
 
-  async deleteUser(id) {
-    const response = await API.DELETE('/users/' + id);
+  async deleteUser() {
+    const response = await API.DELETE('/users/' + this.userId);
     const users = await API.GET('/users');
 
     this.dispatch({
@@ -65,6 +70,20 @@ export default class Store {
       type: VIEW.CHANGE_USER,
       payload: {
         currentUser: id,
+        todoList,
+      },
+    });
+  }
+
+  async addTodo(contents) {
+    const todoItem = await API.POST('/users/' + this.userId + '/items', {
+      contents,
+    });
+    const todoList = await API.GET('/users/' + this.userId + '/items');
+
+    this.dispatch({
+      type: VIEW.ADD_TODO,
+      payload: {
         todoList,
       },
     });
@@ -93,6 +112,11 @@ export default class Store {
           ...payload,
         };
       case VIEW.CHANGE_USER:
+        return {
+          ...state,
+          ...payload,
+        };
+      case VIEW.ADD_TODO:
         return {
           ...state,
           ...payload,

@@ -9,6 +9,7 @@ export const VIEW = {
   ADD_USER: 'view/addUser',
   DELETE_USER: 'view/deleteUser',
   CHANGE_USER: 'view/changeUser',
+  ADD_TODO: 'view/addTodo',
 };
 
 export const STORE = {
@@ -24,12 +25,16 @@ export const onCreateUserButtonClick = () => {
 };
 
 export const onDeleteUserButtonClick = () => {
-  const $userTitle = document.querySelector('#user-title');
-
-  confirm(MESSAGES.DELETE_USER) &&
-    done(VIEW.DELETE_USER, { id: $userTitle.dataset.userId });
+  confirm(MESSAGES.DELETE_USER) && done(VIEW.DELETE_USER);
 };
 
 export const onChangeUserButtonClick = (e) => {
   done(VIEW.CHANGE_USER, { id: e.target.dataset.userId });
+};
+
+export const onCreateTodoInputEnterKeypress = ({ key, target }) => {
+  if (key === 'Enter') {
+    done(VIEW.ADD_TODO, { contents: target.value });
+    target.value = '';
+  }
 };
