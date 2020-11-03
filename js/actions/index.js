@@ -1,4 +1,4 @@
-import { MESSAGES } from '../constants/index.js';
+import { MESSAGES, FILTER } from '../constants/index.js';
 import { isValidUserName } from '../utils/validators.js';
 import eventChannel from '../core/eventChannel.js';
 
@@ -13,6 +13,7 @@ export const VIEW = {
   DELETE_TODO: 'view/deleteTodo',
   TOGGLE_TODO: 'view/toggleTodo',
   UPDATE_TODO: 'view/updateTodo',
+  CHANGE_FILTER: 'view/changeFilter',
 };
 
 export const STORE = {
@@ -81,6 +82,24 @@ export const onTodoItemEditKeyDown = ({ key, target }) => {
       return;
     case 'Enter':
       done(VIEW.UPDATE_TODO, { id, contents: target.value });
+      return;
+    default:
+      return;
+  }
+};
+
+export const onChangeFilterButtonClick = ({ target }) => {
+  const { className } = target;
+
+  switch (className) {
+    case FILTER.ALL:
+      done(VIEW.CHANGE_FILTER, { currentFilter: FILTER.ALL });
+      return;
+    case FILTER.ACTIVE:
+      done(VIEW.CHANGE_FILTER, { currentFilter: FILTER.ACTIVE });
+      return;
+    case FILTER.COMPLETED:
+      done(VIEW.CHANGE_FILTER, { currentFilter: FILTER.COMPLETED });
       return;
     default:
       return;

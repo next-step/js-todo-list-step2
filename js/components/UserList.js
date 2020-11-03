@@ -1,9 +1,6 @@
 import DOM from '../core/createElement.js';
 import UserItem from './UserItem.js';
-import {
-  onCreateUserButtonClick,
-  onDeleteUserButtonClick,
-} from '../actions/index.js';
+import { onCreateUserButtonClick, onDeleteUserButtonClick } from '../actions/index.js';
 
 export default class UserList {
   constructor() {
@@ -29,8 +26,7 @@ export default class UserList {
     this.$userList.innerHTML = '';
     this.render(
       users.map(
-        ({ _id, name }) =>
-          new UserItem({ _id, name, isActive: currentUser === _id })
+        ({ _id, name }) => new UserItem({ _id, name, isActive: currentUser === _id })
       )
     );
   }

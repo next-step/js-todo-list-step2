@@ -3,6 +3,7 @@ import TodoList from '../components/TodoList.js';
 import TodoFooter from '../components/TodoFooter.js';
 import DOM from '../core/createElement.js';
 import API from '../api/index.js';
+import { filterTodoList } from '../utils/index.js';
 
 export default class TodoContainer {
   constructor() {
@@ -20,9 +21,14 @@ export default class TodoContainer {
   }
 
   setState({ todoList, currentFilter }) {
+    const filteredTodoList = filterTodoList(todoList, currentFilter);
+    const todoCount = filteredTodoList.length;
+
     this.$todoSection.innerHTML = '';
-    this.todoList.setState({ todoList, currentFilter });
-    this.todoFooter.setState({ todoCount: todoList.length, currentFilter });
+
+    this.todoList.setState({ todoList: filteredTodoList });
+    this.todoFooter.setState({ todoCount, currentFilter });
+
     this.render();
   }
 

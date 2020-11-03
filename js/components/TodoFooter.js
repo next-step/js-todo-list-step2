@@ -1,10 +1,14 @@
 import DOM from '../core/createElement.js';
 import FilterItem from './FilterItem.js';
 import { FILTER } from '../constants/index.js';
+import { onChangeFilterButtonClick } from '../actions/index.js';
 
 export default class TodoFooter {
   constructor() {
-    this.$counterContainer = DOM.div({ class: 'count-container' });
+    this.$counterContainer = DOM.div({
+      class: 'count-container',
+      onclick: onChangeFilterButtonClick,
+    });
 
     this.render();
   }
@@ -24,8 +28,8 @@ export default class TodoFooter {
           ${Object.values(FILTER)
             .map(
               (filter) =>
-                new FilterItem({ filter, isSelected: filter === currentFilter })
-                  .$el.outerHTML
+                new FilterItem({ filter, isSelected: filter === currentFilter }).$el
+                  .outerHTML
             )
             .join('')}
         </ul>

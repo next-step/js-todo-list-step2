@@ -20,8 +20,7 @@ const FILTER_TEXT = {
   COMPLETED: '완료한 일',
 };
 
-export const GET_FILTER_TEXT = (filterStr) =>
-  FILTER_TEXT[_REVERSE_FILTER[filterStr]];
+export const GET_FILTER_TEXT = (filterStr) => FILTER_TEXT[_REVERSE_FILTER[filterStr]];
 
 export const MESSAGES = {
   ADD_USER: '추가하고 싶은 이름을 입력해주세요.',

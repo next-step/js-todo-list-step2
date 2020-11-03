@@ -18,6 +18,7 @@ export default class Store {
     when(VIEW.DELETE_TODO, ({ id }) => this.deleteTodo(id));
     when(VIEW.TOGGLE_TODO, ({ id }) => this.toggleTodo(id));
     when(VIEW.UPDATE_TODO, ({ id, contents }) => this.updateTodo(id, contents));
+    when(VIEW.CHANGE_FILTER, ({ currentFilter }) => this.changeFilter(currentFilter));
   }
 
   get userId() {
@@ -90,9 +91,7 @@ export default class Store {
   }
 
   async deleteTodo(id) {
-    const { todoList } = await API.DELETE(
-      '/users/' + this.userId + '/items/' + id
-    );
+    const { todoList } = await API.DELETE('/users/' + this.userId + '/items/' + id);
 
     this.dispatch({
       type: VIEW.DELETE_TODO,
@@ -101,9 +100,7 @@ export default class Store {
   }
 
   async toggleTodo(id) {
-    const todoItem = await API.PUT(
-      '/users/' + this.userId + '/items/' + id + '/toggle'
-    );
+    const todoItem = await API.PUT('/users/' + this.userId + '/items/' + id + '/toggle');
 
     this.dispatch({
       type: VIEW.TOGGLE_TODO,
@@ -119,6 +116,13 @@ export default class Store {
     this.dispatch({
       type: VIEW.UPDATE_TODO,
       payload: { todoItem },
+    });
+  }
+
+  async changeFilter(currentFilter) {
+    this.dispatch({
+      type: VIEW.CHANGE_FILTER,
+      payload: { currentFilter },
     });
   }
 
@@ -176,6 +180,11 @@ export default class Store {
           todoList: state.todoList.map((todo) =>
             todo._id === todoItem._id ? todoItem : todo
           ),
+        };
+      case VIEW.CHANGE_FILTER:
+        return {
+          ...state,
+          ...payload,
         };
       default:
         return state;
