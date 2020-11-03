@@ -1,9 +1,9 @@
 class Store {
   constructor() {
     this.state = {
-      activeUser: "",
       users: [{ name: "", todoList: [], _id: "" }],
       user: {
+        _id: "",
         todoList: [],
       },
     };
@@ -40,7 +40,6 @@ class Store {
       case LOAD_USER:
         return {
           ...state,
-          activeUser: action.payload.name,
           user: action.payload,
         };
       case ADD_USER:

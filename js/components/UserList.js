@@ -24,11 +24,18 @@ function UserList({ $target, onChangeUser, onAddUser, store }) {
   };
 
   this.onClick = (e) => {
+    this.onSelectUser(e);
+    this.onCreateUser(e);
+  };
+
+  this.onSelectUser = (e) => {
     if (isUserButton(e)) {
       const selectedName = e.target.innerText;
       onChangeUser(selectedName);
     }
+  };
 
+  this.onCreateUser = (e) => {
     if (isUserCreateButton(e)) {
       const username = prompt(MESSAGE.INPUT_USERNAME);
       if (!username) return;
@@ -40,7 +47,8 @@ function UserList({ $target, onChangeUser, onAddUser, store }) {
   };
 
   this.render = (state) => {
-    $target.innerHTML = createUserListDOM(state.users);
+    const { user, users } = state;
+    $target.innerHTML = createUserListDOM(users, user);
   };
 
   const isUserCreateButton = (e) => {
@@ -55,9 +63,11 @@ function UserList({ $target, onChangeUser, onAddUser, store }) {
     return username.length >= 2;
   };
 
-  const createUserListDOM = (users) =>
-    users.reduce((html, user) => html + userButtonDOM(user.name, user), "") +
-    userCreateButtonDOM();
+  const createUserListDOM = (users, activeUser) =>
+    users.reduce(
+      (html, user) => html + userButtonDOM(user.name, activeUser),
+      ""
+    ) + userCreateButtonDOM();
 
   this.init();
 }
