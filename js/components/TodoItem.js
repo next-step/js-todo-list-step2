@@ -1,8 +1,13 @@
 import DOM from '../core/createElement.js';
+import { onTodoItemClickHandler } from '../actions/index.js';
 
 export default class TodoItem {
   constructor({ _id, contents, isCompleted, priority }) {
-    this.$todoItem = DOM.li({ id: _id, class: isCompleted && 'completed' });
+    this.$todoItem = DOM.li({
+      dataTodoId: _id,
+      class: isCompleted && 'completed',
+      onclick: onTodoItemClickHandler,
+    });
 
     this.render({ contents, isCompleted, priority });
   }

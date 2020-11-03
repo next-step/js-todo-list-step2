@@ -15,6 +15,8 @@ export default class Store {
     when(VIEW.DELETE_USER, ({ id }) => this.deleteUser(id));
     when(VIEW.CHANGE_USER, ({ id }) => this.changeUser(id));
     when(VIEW.ADD_TODO, ({ contents }) => this.addTodo(contents));
+    when(VIEW.DELETE_TODO, ({ id }) => this.deleteTodo(id));
+    when(VIEW.TOGGLE_TODO, ({ id }) => this.toggleTodo(id));
   }
 
   get userId() {
@@ -79,24 +81,47 @@ export default class Store {
     const todoItem = await API.POST('/users/' + this.userId + '/items', {
       contents,
     });
-    const todoList = await API.GET('/users/' + this.userId + '/items');
 
     this.dispatch({
       type: VIEW.ADD_TODO,
-      payload: {
-        todoList,
-      },
+      payload: { todoItem },
+    });
+  }
+
+  async deleteTodo(id) {
+    const { todoList } = await API.DELETE(
+      '/users/' + this.userId + '/items/' + id
+    );
+
+    this.dispatch({
+      type: VIEW.DELETE_TODO,
+      payload: { todoList },
+    });
+  }
+
+  async toggleTodo(id) {
+    const todoItem = await API.PUT(
+      '/users/' + this.userId + '/items/' + id + '/toggle'
+    );
+
+    this.dispatch({
+      type: VIEW.TOGGLE_TODO,
+      payload: { todoItem },
     });
   }
 
   dispatch(action) {
     this.#state = this.reducer(this.#state, action);
-    console.info(this.#state);
+    console.info('current state', this.#state);
     done(STORE.UPDATE, this.#state);
   }
 
   reducer(state, action) {
     const { type, payload } = action;
+    console.info('prev state', state);
+    console.info('action', type);
+
+    const { todoItem } = payload;
 
     switch (type) {
       case VIEW.INIT:
@@ -119,7 +144,19 @@ export default class Store {
       case VIEW.ADD_TODO:
         return {
           ...state,
+          todoList: [...state.todoList, todoItem],
+        };
+      case VIEW.DELETE_TODO:
+        return {
+          ...state,
           ...payload,
+        };
+      case VIEW.TOGGLE_TODO:
+        return {
+          ...state,
+          todoList: state.todoList.map((todo) =>
+            todo._id === todoItem._id ? todoItem : todo
+          ),
         };
       default:
         return state;

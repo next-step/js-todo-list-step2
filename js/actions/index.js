@@ -38,3 +38,20 @@ export const onCreateTodoInputEnterKeypress = ({ key, target }) => {
     target.value = '';
   }
 };
+
+export const onTodoItemClickHandler = ({ target }) => {
+  const { className } = target;
+  const $todoItem = target.closest('li');
+  const id = $todoItem.dataset.todoId;
+
+  switch (className) {
+    case 'toggle':
+      done(VIEW.TOGGLE_TODO, { id });
+      return;
+    case 'destroy':
+      done(VIEW.DELETE_TODO, { id });
+      return;
+    default:
+      return;
+  }
+};
