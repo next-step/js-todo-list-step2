@@ -1,10 +1,10 @@
-import { addUser, fetchUser, fetchUsers } from "../domain/userApi.js";
+import { addUser, fetchUser, fetchUsers } from "../api/userApi.js";
 import { SELECTOR } from "../utils/constant.js";
 import { checkTarget } from "../utils/validator.js";
 import TodoList from "./TodoList.js";
 import UserList from "./UserList.js";
 import TodoInput from "./TodoInput.js";
-import { addTodo } from "../domain/todoApi.js";
+import { addTodo } from "../api/todoApi.js";
 import { ADD_TODO, ADD_USER, LOAD_USER } from "../store/Store.js";
 
 function App({ $target, store }) {

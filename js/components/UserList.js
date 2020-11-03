@@ -1,4 +1,4 @@
-import { fetchUsers } from "../domain/userApi.js";
+import { fetchUsers } from "../api/userApi.js";
 import { LOAD_USERS } from "../store/Store.js";
 import { CLASS, EVENT, MESSAGE } from "../utils/constant.js";
 import { userButtonDOM, userCreateButtonDOM } from "../utils/templates.js";

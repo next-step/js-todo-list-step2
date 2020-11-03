@@ -1,7 +1,6 @@
-import Store, { LOAD_USERS } from "./store/Store.js";
+import Store from "./store/Store.js";
 import App from "./components/App.js";
 import { EVENT, SELECTOR } from "./utils/constant.js";
-import { fetchUsers } from "./domain/userApi.js";
 
 const onUserCreateHandler = () => {
   const userName = prompt("추가하고 싶은 이름을 입력해주세요.");
