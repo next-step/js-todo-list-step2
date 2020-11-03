@@ -24,11 +24,11 @@ export const STORE = {
 };
 
 export const onUserListClickHandler = ({ target }) => {
-  const { className } = target;
+  const { className, dataset } = target;
 
   switch (className) {
     case 'ripple':
-      done(VIEW.CHANGE_USER, { id: target.dataset.userId });
+      onChangeUserButtonClickHandler(dataset.userId);
       return;
     case 'ripple user-create-button':
       onCreateUserButtonClickHandler();
@@ -40,6 +40,8 @@ export const onUserListClickHandler = ({ target }) => {
       return;
   }
 };
+
+export const onChangeUserButtonClickHandler = (id) => done(VIEW.CHANGE_USER, { id });
 
 export const onCreateUserButtonClickHandler = () => {
   const name = prompt(MESSAGES.ADD_USER);
