@@ -16,15 +16,15 @@ function TodoList({ $target, store, onToggleTodo, onRemoveTodo }) {
 
     this.onClick = (e) => {
         if (e.target.className === CLASS.TOGGLE) {
-            const id = e.target.closest("li").dataset.id;
+            const todoId = e.target.closest("li").dataset.id;
             const userId = store.getState().user._id;
-            onToggleTodo(userId, id);
+            onToggleTodo(userId, todoId);
         }
 
         if (e.target.className === CLASS.DESTROY) {
-            const id = e.target.closest("li").dataset.id;
+            const todoId = e.target.closest("li").dataset.id;
             const userId = store.getState().user._id;
-            onRemoveTodo(userId, id);
+            onRemoveTodo(userId, todoId);
         }
     };
 
