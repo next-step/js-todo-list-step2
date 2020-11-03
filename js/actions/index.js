@@ -8,6 +8,7 @@ export const VIEW = {
   INIT: 'view/init',
   ADD_USER: 'view/addUser',
   DELETE_USER: 'view/deleteUser',
+  CHANGE_USER: 'view/changeUser',
 };
 
 export const STORE = {
@@ -27,4 +28,8 @@ export const onDeleteUserButtonClick = () => {
 
   confirm(MESSAGES.DELETE_USER) &&
     done(VIEW.DELETE_USER, { id: $userTitle.dataset.userId });
+};
+
+export const onChangeUserButtonClick = (e) => {
+  done(VIEW.CHANGE_USER, { id: e.target.dataset.userId });
 };

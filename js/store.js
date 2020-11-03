@@ -13,6 +13,7 @@ export default class Store {
     when(VIEW.INIT, () => this.init());
     when(VIEW.ADD_USER, ({ name }) => this.addUser(name));
     when(VIEW.DELETE_USER, ({ id }) => this.deleteUser(id));
+    when(VIEW.CHANGE_USER, ({ id }) => this.changeUser(id));
   }
 
   async init() {
@@ -57,6 +58,18 @@ export default class Store {
     });
   }
 
+  async changeUser(id) {
+    const todoList = await API.GET('/users/' + id + '/items');
+
+    this.dispatch({
+      type: VIEW.CHANGE_USER,
+      payload: {
+        currentUser: id,
+        todoList,
+      },
+    });
+  }
+
   dispatch(action) {
     this.#state = this.reducer(this.#state, action);
     console.info(this.#state);
@@ -75,6 +88,11 @@ export default class Store {
           ...payload,
         };
       case VIEW.DELETE_USER:
+        return {
+          ...state,
+          ...payload,
+        };
+      case VIEW.CHANGE_USER:
         return {
           ...state,
           ...payload,
