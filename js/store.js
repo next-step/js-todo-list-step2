@@ -12,10 +12,11 @@ export default class Store {
   constructor() {
     when(VIEW.INIT, () => this.init());
     when(VIEW.ADD_USER, ({ name }) => this.addUser(name));
-    when(VIEW.DELETE_USER, ({ id }) => this.deleteUser(id));
+    when(VIEW.DELETE_USER, () => this.deleteUser());
     when(VIEW.CHANGE_USER, ({ id }) => this.changeUser(id));
     when(VIEW.ADD_TODO, ({ contents }) => this.addTodo(contents));
     when(VIEW.DELETE_TODO, ({ id }) => this.deleteTodo(id));
+    when(VIEW.DELETE_ALL_TODOS, () => this.deleteAllTodos());
     when(VIEW.TOGGLE_TODO, ({ id }) => this.toggleTodo(id));
     when(VIEW.UPDATE_TODO, ({ id, contents }) => this.updateTodo(id, contents));
     when(VIEW.SET_PRIORITY, ({ id, priority }) => this.setPriority(id, priority));
@@ -106,6 +107,16 @@ export default class Store {
     });
   }
 
+  async deleteAllTodos() {
+    done(STORE.REQUEST);
+    const response = await API.DELETE('/users/' + this.userId + '/items');
+
+    this.dispatch({
+      type: VIEW.DELETE_ALL_TODOS,
+      payload: {},
+    });
+  }
+
   async toggleTodo(id) {
     done(STORE.REQUEST);
     const todoItem = await API.PUT('/users/' + this.userId + '/items/' + id + '/toggle');
@@ -189,6 +200,11 @@ export default class Store {
         return {
           ...state,
           ...payload,
+        };
+      case VIEW.DELETE_ALL_TODOS:
+        return {
+          ...state,
+          todoList: [],
         };
       case VIEW.TOGGLE_TODO:
         return {

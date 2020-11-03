@@ -27,7 +27,8 @@ export const GET_FILTER_TEXT = (filterStr) => FILTER_TEXT[_REVERSE_FILTER[filter
 export const MESSAGES = {
   ADD_USER: '추가하고 싶은 이름을 입력해주세요.',
   FAILED_ADD_USER: '이름은 최소 2글자 이상이어야 합니다.',
-  DELETE_USER: '정말 삭제하시겠습니까?',
+  DELETE_USER: '현재 유저를 삭제하시겠습니까?',
+  DELETE_ALL_TODOS: '모든 할 일 목록을 삭제하시겠습니까?',
 };
 
 export const MINIMUM_USER_NAME_LENGTH = 2;

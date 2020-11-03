@@ -1,13 +1,13 @@
 import DOM from '../core/createElement.js';
 import FilterItem from './FilterItem.js';
 import { FILTER } from '../constants/index.js';
-import { onChangeFilterButtonClick } from '../actions/index.js';
+import { onFooterClickHandler } from '../actions/index.js';
 
 export default class TodoFooter {
   constructor() {
     this.$counterContainer = DOM.div({
       class: 'count-container',
-      onclick: onChangeFilterButtonClick,
+      onclick: onFooterClickHandler,
     });
 
     this.render();

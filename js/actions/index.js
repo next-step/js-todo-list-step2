@@ -11,6 +11,7 @@ export const VIEW = {
   CHANGE_USER: 'view/changeUser',
   ADD_TODO: 'view/addTodo',
   DELETE_TODO: 'view/deleteTodo',
+  DELETE_ALL_TODOS: 'view/deleteAllTodos',
   TOGGLE_TODO: 'view/toggleTodo',
   UPDATE_TODO: 'view/updateTodo',
   SET_PRIORITY: 'view/setPriority',
@@ -90,7 +91,7 @@ export const onTodoItemEditKeyDown = ({ key, target }) => {
   }
 };
 
-export const onChangeFilterButtonClick = ({ target }) => {
+export const onFooterClickHandler = ({ target }) => {
   const { className } = target;
 
   switch (className) {
@@ -102,6 +103,9 @@ export const onChangeFilterButtonClick = ({ target }) => {
       return;
     case FILTER.COMPLETED:
       done(VIEW.CHANGE_FILTER, { currentFilter: FILTER.COMPLETED });
+      return;
+    case 'clear-completed':
+      confirm(MESSAGES.DELETE_ALL_TODOS) && done(VIEW.DELETE_ALL_TODOS);
       return;
     default:
       return;
