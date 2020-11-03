@@ -3,22 +3,9 @@ class Store {
         this.state = {
             users: [{ name: "bgpark", todoList: [], _id: "Vy0AtqqvR" }],
             user: {
-                name: "bgpark",
-                todoList: [
-                    {
-                        contents: "123",
-                        isCompleted: false,
-                        priority: "NONE",
-                        _id: "BMxbjo85i",
-                    },
-                    {
-                        contents: "123",
-                        isCompleted: false,
-                        priority: "NONE",
-                        _id: "0yHobN7Ac",
-                    },
-                ],
-                _id: "Vy0AtqqvR",
+                name: "",
+                todoList: [],
+                _id: "",
             },
         };
         this.subscribers = [];
@@ -69,7 +56,7 @@ class Store {
                         todoList: [...state.user.todoList, action.payload],
                     },
                 };
-            case TOGGLE_TODO:
+            case UPDATE_TODO:
                 const newTodoList =
                     state.user.todoList.map((todo) =>
                         todo._id === action.payload._id ? action.payload : todo
@@ -96,7 +83,26 @@ export const LOAD_USERS = "LOAD_USERS";
 export const LOAD_USER = "LOAD_USER";
 export const ADD_USER = "ADD_USER";
 export const ADD_TODO = "ADD_TODO";
-export const TOGGLE_TODO = "TOGGLE_TODO";
 export const REMOVE_TODO = "REMOVE_TODO";
+export const UPDATE_TODO = "UPDATE_TODO";
+
+const mockUser = {
+    name: "bgpark",
+    todoList: [
+        {
+            contents: "123",
+            isCompleted: false,
+            priority: "NONE",
+            _id: "BMxbjo85i",
+        },
+        {
+            contents: "123",
+            isCompleted: false,
+            priority: "NONE",
+            _id: "0yHobN7Ac",
+        },
+    ],
+    _id: "Vy0AtqqvR",
+};
 
 export default Store;

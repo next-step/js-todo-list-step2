@@ -11,3 +11,10 @@ export const toggleTodo = (userId, itemId) => {
 export const removeTodo = (userId, itemId) => {
     return new Api().delete(`/users/${userId}/items/${itemId}`).build();
 };
+
+export const updateTodo = (userId, itemId, contents) => {
+    return new Api()
+        .put(`/users/${userId}/items/${itemId}`)
+        .data({ contents })
+        .build();
+};

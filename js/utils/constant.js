@@ -3,6 +3,8 @@ export const EVENT = {
     DOM_LOADED: "DOMContentLoaded",
     KEY_DOWN: "keydown",
     CLICK: "click",
+    DOUBLE_CLICK: "dblclick",
+    CHANGE: "change",
 };
 
 export const TYPE = {
@@ -40,4 +42,7 @@ export const CLASS = {
     TOGGLE: "toggle",
     RIPPLE: "ripple",
     DESTROY: "destroy",
+    LABEL: "label",
+    EDITING: "editing",
+    EDIT: "edit",
 };

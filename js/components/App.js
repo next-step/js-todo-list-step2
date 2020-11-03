@@ -4,8 +4,14 @@ import { checkTarget } from "../utils/validator.js";
 import TodoList from "./TodoList.js";
 import UserList from "./UserList.js";
 import TodoInput from "./TodoInput.js";
-import { addTodo, removeTodo, toggleTodo } from "../api/todoApi.js";
-import { ADD_TODO, ADD_USER, LOAD_USER, REMOVE_TODO, TOGGLE_TODO } from "../store/Store.js";
+import { addTodo, removeTodo, toggleTodo, updateTodo } from "../api/todoApi.js";
+import {
+    ADD_TODO,
+    ADD_USER,
+    LOAD_USER,
+    REMOVE_TODO,
+    UPDATE_TODO,
+} from "../store/Store.js";
 
 function App({ $target, store }) {
     const init = async () => {
@@ -22,6 +28,7 @@ function App({ $target, store }) {
             $target: document.querySelector(SELECTOR.TODO_LIST),
             onToggleTodo: this.onToggleTodo,
             onRemoveTodo: this.onRemoveTodo,
+            onChangeTodo: this.onChangeTodo,
             store,
         });
 
@@ -55,8 +62,15 @@ function App({ $target, store }) {
 
     this.onToggleTodo = async (userId, itemId) => {
         store.dispatch({
-            type: TOGGLE_TODO,
+            type: UPDATE_TODO,
             payload: await toggleTodo(userId, itemId),
+        });
+    };
+
+    this.onChangeTodo = async (userId, itemId, contents) => {
+        store.dispatch({
+            type: UPDATE_TODO,
+            payload: await updateTodo(userId, itemId, contents),
         });
     };
 
