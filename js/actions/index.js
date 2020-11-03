@@ -1,4 +1,4 @@
-import { MESSAGES, FILTER } from '../constants/index.js';
+import { MESSAGES, FILTER, PRIORITY } from '../constants/index.js';
 import { isValidUserName } from '../utils/validators.js';
 import eventChannel from '../core/eventChannel.js';
 
@@ -13,6 +13,7 @@ export const VIEW = {
   DELETE_TODO: 'view/deleteTodo',
   TOGGLE_TODO: 'view/toggleTodo',
   UPDATE_TODO: 'view/updateTodo',
+  SET_PRIORITY: 'view/setPriority',
   CHANGE_FILTER: 'view/changeFilter',
 };
 
@@ -105,4 +106,11 @@ export const onChangeFilterButtonClick = ({ target }) => {
     default:
       return;
   }
+};
+
+export const onSelectPriority = ({ target }) => {
+  const $todoItem = target.closest('li');
+  const id = $todoItem.dataset.todoId;
+
+  done(VIEW.SET_PRIORITY, { id, priority: PRIORITY[target.value] });
 };

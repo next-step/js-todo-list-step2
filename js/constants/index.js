@@ -20,6 +20,8 @@ const FILTER_TEXT = {
   COMPLETED: '완료한 일',
 };
 
+export const PRIORITY = ['NONE', 'FIRST', 'SECOND'];
+
 export const GET_FILTER_TEXT = (filterStr) => FILTER_TEXT[_REVERSE_FILTER[filterStr]];
 
 export const MESSAGES = {

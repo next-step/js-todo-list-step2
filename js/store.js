@@ -18,6 +18,7 @@ export default class Store {
     when(VIEW.DELETE_TODO, ({ id }) => this.deleteTodo(id));
     when(VIEW.TOGGLE_TODO, ({ id }) => this.toggleTodo(id));
     when(VIEW.UPDATE_TODO, ({ id, contents }) => this.updateTodo(id, contents));
+    when(VIEW.SET_PRIORITY, ({ id, priority }) => this.setPriority(id, priority));
     when(VIEW.CHANGE_FILTER, ({ currentFilter }) => this.changeFilter(currentFilter));
   }
 
@@ -127,6 +128,21 @@ export default class Store {
     });
   }
 
+  async setPriority(id, priority) {
+    done(STORE.REQUEST);
+    const todoItem = await API.PUT(
+      '/users/' + this.userId + '/items/' + id + '/priority',
+      {
+        priority,
+      }
+    );
+
+    this.dispatch({
+      type: VIEW.SET_PRIORITY,
+      payload: { todoItem },
+    });
+  }
+
   async changeFilter(currentFilter) {
     this.dispatch({
       type: VIEW.CHANGE_FILTER,
@@ -142,7 +158,6 @@ export default class Store {
 
   reducer(state, action) {
     const { type, payload } = action;
-    console.info('prev state', state);
     console.info('action', type);
 
     const { todoItem } = payload;
@@ -183,6 +198,13 @@ export default class Store {
           ),
         };
       case VIEW.UPDATE_TODO:
+        return {
+          ...state,
+          todoList: state.todoList.map((todo) =>
+            todo._id === todoItem._id ? todoItem : todo
+          ),
+        };
+      case VIEW.SET_PRIORITY:
         return {
           ...state,
           todoList: state.todoList.map((todo) =>

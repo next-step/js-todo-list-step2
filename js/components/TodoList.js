@@ -2,6 +2,7 @@ import {
   onTodoItemClickHandler,
   onTodoItemDoubleClickHandler,
   onTodoItemEditKeyDown,
+  onSelectPriority,
 } from '../actions/index.js';
 import DOM from '../core/createElement.js';
 import TodoItem from './TodoItem.js';
@@ -14,6 +15,7 @@ export default class TodoList {
       onclick: onTodoItemClickHandler,
       ondblclick: onTodoItemDoubleClickHandler,
       onkeydown: onTodoItemEditKeyDown,
+      onchange: onSelectPriority,
     });
 
     this.render();
