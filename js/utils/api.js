@@ -4,6 +4,7 @@ const METHOD = {
     GET: "get",
     POST: "post",
     PUT: "put",
+    DELETE: "delete",
 };
 
 class Api {
@@ -15,6 +16,12 @@ class Api {
     get(url) {
         this.url = BASE_URL + url;
         this.method = METHOD.GET;
+        return this;
+    }
+
+    delete(url) {
+        this.url = BASE_URL + url;
+        this.method = METHOD.DELETE;
         return this;
     }
 

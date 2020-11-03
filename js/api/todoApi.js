@@ -7,3 +7,7 @@ export const addTodo = (contents, userId) => {
 export const toggleTodo = (userId, itemId) => {
     return new Api().put(`/users/${userId}/items/${itemId}/toggle`).build();
 };
+
+export const removeTodo = (userId, itemId) => {
+    return new Api().delete(`/users/${userId}/items/${itemId}`).build();
+};

@@ -49,7 +49,7 @@ index.js
 -   [x] 3. todoItem 추가하기
 -   [x] 4. todoItem 불러오기
 -   [x] 5. todoItem complete하기
--   [ ] 6. todoItem 삭제하기
+-   [x] 6. todoItem 삭제하기
 -   [ ] 7. todoItem contents 내용 수정하기
 
 ## 🎯🎯 심화 요구사항

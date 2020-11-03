@@ -4,8 +4,8 @@ import { checkTarget } from "../utils/validator.js";
 import TodoList from "./TodoList.js";
 import UserList from "./UserList.js";
 import TodoInput from "./TodoInput.js";
-import { addTodo, toggleTodo } from "../api/todoApi.js";
-import { ADD_TODO, ADD_USER, LOAD_USER, TOGGLE_TODO } from "../store/Store.js";
+import { addTodo, removeTodo, toggleTodo } from "../api/todoApi.js";
+import { ADD_TODO, ADD_USER, LOAD_USER, REMOVE_TODO, TOGGLE_TODO } from "../store/Store.js";
 
 function App({ $target, store }) {
     const init = async () => {
@@ -21,6 +21,7 @@ function App({ $target, store }) {
         this.todoList = new TodoList({
             $target: document.querySelector(SELECTOR.TODO_LIST),
             onToggleTodo: this.onToggleTodo,
+            onRemoveTodo: this.onRemoveTodo,
             store,
         });
 
@@ -56,6 +57,13 @@ function App({ $target, store }) {
         store.dispatch({
             type: TOGGLE_TODO,
             payload: await toggleTodo(userId, itemId),
+        });
+    };
+
+    this.onRemoveTodo = async (userId, itemId) => {
+        store.dispatch({
+            type: REMOVE_TODO,
+            payload: await removeTodo(userId, itemId),
         });
     };
 
