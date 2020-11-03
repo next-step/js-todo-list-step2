@@ -1,16 +1,17 @@
 class TodoStore {
-  constructor({ todos, userList, activeUser }) {
+  constructor({ todos, userList, count, activeUser }) {
     this.todos = todos;
     this.userList = userList;
+    this.count = count;
     this.activeUser = activeUser;
   }
 
   static init({ todos = [], userList = [], activeUser = "" } = {}) {
-    console.log(todos, userList, activeUser);
     return new TodoStore({
-      todos: todos,
-      userList: userList,
-      activeUser: activeUser
+      todos,
+      userList,
+      count: userList.length,
+      activeUser
     });
   }
 }

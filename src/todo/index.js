@@ -1,4 +1,9 @@
-import { TodoInput, TodoUserList, TodoList } from "./components/index.js";
+import {
+  TodoInput,
+  TodoUserList,
+  TodoList,
+  TodoCount
+} from "./components/index.js";
 import { TodoStore } from "./models/index.js";
 
 import { filterActiveTodoUsers } from "./utils/validator.js";
@@ -24,6 +29,11 @@ class Todo {
       $target: document.querySelector(TARGETS.TODO_LIST),
       todos: this.state.todos
     });
+
+    this.todoCount = new TodoCount({
+      $target: document.querySelector(TARGETS.TODO_COUNT),
+      count: this.state.count
+    });
   }
 
   setState(payload) {
@@ -35,6 +45,8 @@ class Todo {
     });
 
     this.todoList.setState({ todos: this.state.todos });
+
+    this.todoCount.setState({ count: this.state.count });
   }
 
   init = async () => {
@@ -49,6 +61,7 @@ class Todo {
     this.setState({
       userList,
       todos: userList[0].todoList,
+      count: userList[0].todoList.length,
       activeUser: userList[0]._id
     });
   };
