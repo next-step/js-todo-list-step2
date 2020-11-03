@@ -1,13 +1,17 @@
 import API from './api/index.js';
-import eventChannel, { ACTION } from './core/eventChannel.js';
+import eventChannel from './core/eventChannel.js';
+import { ACTION } from './actions/index.js';
 import { parseHash } from './utils/index.js';
 import { FILTER } from './constants/index.js';
+
+const { done, when } = eventChannel;
 
 export default class Store {
   #state;
 
   constructor() {
-    eventChannel.subscribe(ACTION.VIEW_INIT, () => this.init());
+    when(ACTION.VIEW_INIT, () => this.init());
+    when(ACTION.ADD_USER, (props) => this.addUser(props));
   }
 
   async init() {
@@ -27,11 +31,7 @@ export default class Store {
   dispatch(action) {
     this.#state = this.reducer(this.#state, action);
     console.info(this.#state);
-    this.publish(action);
-  }
-
-  publish(action) {
-    eventChannel.publish(action.type, this.#state);
+    done(action.type, this.#state);
   }
 
   reducer(state, action) {

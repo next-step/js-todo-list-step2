@@ -1,17 +1,11 @@
 export default {
-  publish: (type, payload) => {
+  done: (type, payload) =>
     document.dispatchEvent(
       new CustomEvent(type, {
         detail: payload,
       })
-    );
+    ),
+  when: (type, listener) => {
+    document.addEventListener(type, ({ detail }) => listener(detail));
   },
-  subscribe: (type, listener) => {
-    document.addEventListener(type, listener);
-  },
-};
-
-export const ACTION = {
-  INIT: 'init',
-  VIEW_INIT: 'viewInit',
 };

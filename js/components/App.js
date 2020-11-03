@@ -1,6 +1,9 @@
 import UserContainer from './UserContainer.js';
 import TodoContainer from './TodoContainer.js';
-import eventChannel, { ACTION } from '../core/eventChannel.js';
+import eventChannel from '../core/eventChannel.js';
+import { ACTION } from '../actions/index.js';
+
+const { done, when } = eventChannel;
 
 export default class App {
   constructor($target) {
@@ -14,8 +17,8 @@ export default class App {
   }
 
   connect() {
-    eventChannel.subscribe(ACTION.INIT, ({ detail }) => this.setState(detail));
-    eventChannel.publish(ACTION.VIEW_INIT);
+    when(ACTION.INIT, (props) => this.setState(props));
+    done(ACTION.VIEW_INIT);
   }
 
   setState({ users, currentUser, todoList, currentFilter }) {
