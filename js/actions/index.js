@@ -18,6 +18,7 @@ export const VIEW = {
 
 export const STORE = {
   UPDATE: 'store/update',
+  REQUEST: 'store/request',
 };
 
 export const onCreateUserButtonClick = () => {

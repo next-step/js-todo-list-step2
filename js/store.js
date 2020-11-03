@@ -26,6 +26,7 @@ export default class Store {
   }
 
   async init() {
+    done(STORE.REQUEST);
     const users = await API.GET('/users');
 
     this.dispatch({
@@ -40,6 +41,7 @@ export default class Store {
   }
 
   async addUser(name) {
+    done(STORE.REQUEST);
     const user = await API.POST('/users', { name });
     const users = await API.GET('/users');
 
@@ -54,6 +56,7 @@ export default class Store {
   }
 
   async deleteUser() {
+    done(STORE.REQUEST);
     const response = await API.DELETE('/users/' + this.userId);
     const users = await API.GET('/users');
 
@@ -68,6 +71,7 @@ export default class Store {
   }
 
   async changeUser(id) {
+    done(STORE.REQUEST);
     const todoList = await API.GET('/users/' + id + '/items');
 
     this.dispatch({
@@ -80,6 +84,7 @@ export default class Store {
   }
 
   async addTodo(contents) {
+    done(STORE.REQUEST);
     const todoItem = await API.POST('/users/' + this.userId + '/items', {
       contents,
     });
@@ -91,6 +96,7 @@ export default class Store {
   }
 
   async deleteTodo(id) {
+    done(STORE.REQUEST);
     const { todoList } = await API.DELETE('/users/' + this.userId + '/items/' + id);
 
     this.dispatch({
@@ -100,6 +106,7 @@ export default class Store {
   }
 
   async toggleTodo(id) {
+    done(STORE.REQUEST);
     const todoItem = await API.PUT('/users/' + this.userId + '/items/' + id + '/toggle');
 
     this.dispatch({
@@ -109,6 +116,7 @@ export default class Store {
   }
 
   async updateTodo(id, contents) {
+    done(STORE.REQUEST);
     const todoItem = await API.PUT('/users/' + this.userId + '/items/' + id, {
       contents,
     });

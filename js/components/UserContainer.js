@@ -16,6 +16,10 @@ export default class UserContainer {
     return this.$userSection;
   }
 
+  setLoading() {
+    this.$userSection.innerHTML = '<h1>로딩 중...</h1>';
+  }
+
   setState({ users, currentUser }) {
     this.$userSection.innerHTML = '';
     this.userTitle.setState({

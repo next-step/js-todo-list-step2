@@ -18,7 +18,13 @@ export default class App {
 
   connect() {
     when(STORE.UPDATE, (props) => this.setState(props));
+    when(STORE.REQUEST, () => this.setLoading());
     done(VIEW.INIT);
+  }
+
+  setLoading() {
+    this.userContainer.setLoading();
+    this.todoContainer.setLoading();
   }
 
   setState({ users, currentUser, todoList, currentFilter }) {

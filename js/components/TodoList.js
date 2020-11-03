@@ -23,6 +23,22 @@ export default class TodoList {
     return this.$main;
   }
 
+  setLoading() {
+    this.$todoList.innerHTML = `
+      <li>
+        <div class="view">
+          <label class="label">
+            <div class="animated-background">
+              <div class="skel-mask-container">
+                <div class="skel-mask"></div>
+              </div>
+            </div>
+          </label>
+        </div>
+      </li>
+    `;
+  }
+
   setState({ todoList }) {
     this.$main.innerHTML = '';
     this.$todoList.innerHTML = '';
@@ -32,7 +48,7 @@ export default class TodoList {
   render(todos = []) {
     todos.forEach((todo) => {
       this.$todoList.appendChild(todo.$el);
-      this.$main.appendChild(this.$todoList);
     });
+    this.$main.appendChild(this.$todoList);
   }
 }

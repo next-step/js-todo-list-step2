@@ -20,6 +20,10 @@ export default class TodoContainer {
     return this.$todoSection;
   }
 
+  setLoading() {
+    this.todoList.setLoading();
+  }
+
   setState({ todoList, currentFilter }) {
     const filteredTodoList = filterTodoList(todoList, currentFilter);
     const todoCount = filteredTodoList.length;
