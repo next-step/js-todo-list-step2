@@ -1,10 +1,10 @@
 import { fetchUsers } from "../api/userApi.js";
 import { LOAD_USERS } from "../store/Store.js";
 import { CLASS, EVENT, MESSAGE } from "../utils/constant.js";
-import { userButtonDOM, userCreateButtonDOM } from "../utils/templates.js";
+import { userListDOM, userButtonDOM } from "../utils/templates.js";
 import { checkFunction, checkTarget } from "../utils/validator.js";
 
-function UserList({ $target, onChangeUser, onAddUser, store }) {
+function UserList({ $target, onChangeUser, onAddUser, onRemoveUser, store }) {
     this.init = async () => {
         checkTarget($target);
         checkFunction(onChangeUser);
@@ -26,6 +26,7 @@ function UserList({ $target, onChangeUser, onAddUser, store }) {
     this.onClick = (e) => {
         this.onSelectUser(e);
         this.onCreateUser(e);
+        this.onRemoveUser(e);
     };
 
     this.onSelectUser = (e) => {
@@ -36,7 +37,7 @@ function UserList({ $target, onChangeUser, onAddUser, store }) {
     };
 
     this.onCreateUser = (e) => {
-        if (isUserCreateButton(e)) {
+        if (isUserCreate(e)) {
             const username = prompt(MESSAGE.INPUT_USERNAME);
             if (!username) return;
             if (!isValidUsername(username)) {
@@ -46,18 +47,29 @@ function UserList({ $target, onChangeUser, onAddUser, store }) {
         }
     };
 
+    this.onRemoveUser = (e) => {
+        if (isUserRemove(e)) {
+            const id = store.getState().user._id;
+            if (id === "") return;
+            onRemoveUser(id);
+        }
+    };
+
     this.render = (state) => {
         const { user, users } = state;
         $target.innerHTML = createUserListDOM(users, user);
     };
 
-    const isUserCreateButton = (e) => {
-        // TODO : classList로 변경
-        return e.target.className.split(" ").includes(CLASS.USER_CREATE_BUTTON);
+    const isUserCreate = (e) => {
+        return e.target.className.split(" ").includes(CLASS.USER_CREATE);
+    };
+
+    const isUserRemove = (e) => {
+        return e.target.className.split(" ").includes(CLASS.USER_REMOVE);
     };
 
     const isUserButton = (e) => {
-        return e.target.className.split(" ").includes(CLASS.RIPPLE);
+        return e.target.className === CLASS.RIPPLE;
     };
 
     const isValidUsername = (username) => {
@@ -66,9 +78,9 @@ function UserList({ $target, onChangeUser, onAddUser, store }) {
 
     const createUserListDOM = (users, activeUser) =>
         users.reduce(
-            (html, user) => html + userButtonDOM(user.name, activeUser),
+            (html, user) => html + userListDOM(user.name, activeUser),
             ""
-        ) + userCreateButtonDOM();
+        ) + userButtonDOM();
 
     this.init();
 }

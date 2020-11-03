@@ -1,12 +1,11 @@
-export const userButtonDOM = (username, activeUser) =>
-    `<button class="ripple ${username == activeUser.name ? "active" : ""}">
+export const userListDOM = (username, activeUser) =>
+    `<button class="ripple${username == activeUser.name ? " active" : ""}">
         ${username}
     </button>`;
 
-export const userCreateButtonDOM = () =>
-    `<button class="ripple user-create-button">
-        + 유저 생성
-    </button>`;
+export const userButtonDOM = () =>
+    `<button class="ripple user-create">+ 유저 생성</button>
+    <button class="ripple user-remove">- 유저 삭제</button>`;
 
 export const todoDOM = (todo) => `
     <li data-id=${todo._id} ${todo.isCompleted ? "class=completed" : ""}>

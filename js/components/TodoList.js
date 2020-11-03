@@ -2,7 +2,13 @@ import { CLASS, EVENT } from "../utils/constant.js";
 import { todoDOM } from "../utils/templates.js";
 import { checkTarget } from "../utils/validator.js";
 
-function TodoList({ $target, store, onToggleTodo, onRemoveTodo, onChangeTodo }) {
+function TodoList({
+    $target,
+    store,
+    onToggleTodo,
+    onRemoveTodo,
+    onChangeTodo,
+}) {
     this.init = () => {
         checkTarget($target);
 
@@ -51,6 +57,7 @@ function TodoList({ $target, store, onToggleTodo, onRemoveTodo, onChangeTodo }) 
     };
 
     const createTodoListDOM = (todos) => {
+        if (!todos) return;
         return todos.reduce((html, todo) => {
             html += todoDOM(todo);
             return html;

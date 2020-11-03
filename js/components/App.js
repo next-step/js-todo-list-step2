@@ -1,4 +1,4 @@
-import { addUser, fetchUser, fetchUsers } from "../api/userApi.js";
+import { addUser, fetchUser, fetchUsers, removeUser } from "../api/userApi.js";
 import { SELECTOR } from "../utils/constant.js";
 import { checkTarget } from "../utils/validator.js";
 import TodoList from "./TodoList.js";
@@ -11,6 +11,7 @@ import {
     LOAD_USER,
     REMOVE_TODO,
     UPDATE_TODO,
+    REMOVE_USER,
 } from "../store/Store.js";
 
 function App({ $target, store }) {
@@ -21,6 +22,7 @@ function App({ $target, store }) {
             $target: document.querySelector(SELECTOR.USER_LIST),
             onChangeUser: this.onChangeUser,
             onAddUser: this.onAddUser,
+            onRemoveUser: this.onRemoveUser,
             store,
         });
 
@@ -50,6 +52,14 @@ function App({ $target, store }) {
         store.dispatch({
             type: ADD_USER,
             payload: await addUser(username),
+        });
+    };
+
+    this.onRemoveUser = async (userId) => {
+        await removeUser(userId)
+        store.dispatch({
+            type: REMOVE_USER,
+            payload: userId,
         });
     };
 

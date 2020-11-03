@@ -48,6 +48,18 @@ class Store {
                     ...state,
                     users: [...state.users, action.payload],
                 };
+            case REMOVE_USER:
+                return {
+                    ...state,
+                    user: {
+                        _id: "",
+                        todoList: [],
+                        name: "",
+                    },
+                    users: state.users.filter(
+                        (user) => user._id !== action.payload
+                    ),
+                };
             case ADD_TODO:
                 return {
                     ...state,
@@ -82,6 +94,8 @@ class Store {
 export const LOAD_USERS = "LOAD_USERS";
 export const LOAD_USER = "LOAD_USER";
 export const ADD_USER = "ADD_USER";
+export const REMOVE_USER = "REMOVE_USER";
+
 export const ADD_TODO = "ADD_TODO";
 export const REMOVE_TODO = "REMOVE_TODO";
 export const UPDATE_TODO = "UPDATE_TODO";

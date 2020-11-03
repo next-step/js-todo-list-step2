@@ -38,7 +38,8 @@ export const SELECTOR = {
 };
 
 export const CLASS = {
-    USER_CREATE_BUTTON: "user-create-button",
+    USER_CREATE: "user-create",
+    USER_REMOVE: "user-remove",
     TOGGLE: "toggle",
     RIPPLE: "ripple",
     DESTROY: "destroy",
