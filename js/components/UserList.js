@@ -1,71 +1,65 @@
-import { CLASS, EVENT, MESSAGE, SELECTOR } from "../utils/constant.js";
+import { fetchUsers } from "../domain/userApi.js";
+import { LOAD_USERS } from "../store/Store.js";
+import { CLASS, EVENT, MESSAGE } from "../utils/constant.js";
 import { userButtonDOM, userCreateButtonDOM } from "../utils/templates.js";
 import { checkFunction, checkTarget } from "../utils/validator.js";
 
-class UserList {
-    constructor({ $target, state, onChangeUser, onAddUser }) {
-        checkTarget($target);
-        checkFunction(onChangeUser);
-        checkFunction(onAddUser);
+function UserList({ $target, onChangeUser, onAddUser, store }) {
+  this.init = async () => {
+    checkTarget($target);
+    checkFunction(onChangeUser);
+    checkFunction(onAddUser);
 
-        this.$target = $target;
-        this.state = state;
-        this.onChangeUser = onChangeUser;
-        this.onAddUser = onAddUser;
+    store.subscribe(this.render);
+    store.dispatch({
+      type: LOAD_USERS,
+      payload: await fetchUsers(),
+    });
 
-        this.bindEvents();
-        this.render();
+    this.bindEvents();
+  };
+
+  this.bindEvents = () => {
+    $target.addEventListener(EVENT.CLICK, this.onClick);
+  };
+
+  this.onClick = (e) => {
+    if (isUserButton(e)) {
+      const selectedName = e.target.innerText;
+      onChangeUser(selectedName);
     }
 
-    bindEvents = () => {
-        this.$target.addEventListener(EVENT.CLICK, this.onClick);
-    };
-
-    onClick = (e) => {
-        if (this.isUserButton(e)) {
-            const selectedName = e.target.innerText;
-            this.onChangeUser(selectedName);
-        }
-        if (this.isUserCreateButton(e)) {
-            const username = prompt("사용자 이름을 입력해주세요");
-            if (!username) return;
-            if (!this.isValidUsername(username)) {
-                throw new Error(MESSAGE.INVALID_USERNAME);
-            }
-            this.onAddUser(username);
-        }
-    };
-
-    isValidUsername = (username) => {
-        return username.length >= 2;
-    };
-
-    isUserCreateButton = (e) => {
-        return e.target.className.includes(CLASS.USER_CREATE_BUTTON);
-    };
-
-    isUserButton = (e) => {
-        return e.target.className.trim() == CLASS.RIPPLE;
-    };
-
-    createUserListDOM = () => {
-        return (
-            this.state.users.reduce(
-                (html, user) =>
-                    html + userButtonDOM(user.name, this.state.user),
-                ""
-            ) + userCreateButtonDOM()
-        );
-    };
-
-    setState = (newState) => {
-        this.state = newState;
-        this.render();
-    };
-
-    render() {
-        this.$target.innerHTML = this.createUserListDOM();
+    if (isUserCreateButton(e)) {
+      const username = prompt(MESSAGE.INPUT_USERNAME);
+      if (!username) return;
+      if (!isValidUsername(username)) {
+        throw new Error(MESSAGE.INVALID_USERNAME);
+      }
+      onAddUser(username);
     }
+  };
+
+  const isUserCreateButton = (e) => {
+    return e.target.className.split(" ").includes(CLASS.USER_CREATE_BUTTON);
+  };
+
+  const isUserButton = (e) => {
+    return e.target.className.split(" ").includes(CLASS.RIPPLE);
+  };
+
+  const isValidUsername = (username) => {
+    return username.length >= 2;
+  };
+
+  const createUserListDOM = (users) =>
+    users.reduce((html, user) => html + userButtonDOM(user.name, user), "") +
+    userCreateButtonDOM();
+
+  this.render = (state) => {
+    $target.innerHTML = createUserListDOM(state.users);
+  };
+
+  this.init();
 }
 
 export default UserList;

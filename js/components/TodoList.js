@@ -1,31 +1,25 @@
 import { todoDOM } from "../utils/templates.js";
 import { checkTarget } from "../utils/validator.js";
 
-class TodoList {
-    constructor({ $target, todos }) {
-        checkTarget($target);
+function TodoList({ $target, store }) {
+  this.init = () => {
+    checkTarget($target);
 
-        this.$target = $target;
-        this.todos = todos;
+    store.subscribe(this.render);
+  };
 
-        this.render();
-    }
+  const createTodoListDOM = (todos) => {
+    return todos.reduce((html, todo) => {
+      html += todoDOM(todo);
+      return html;
+    }, "");
+  };
 
-    createTodoListDOM = (todos) => {
-        return todos.reduce((html, todo) => {
-            html += todoDOM(todo);
-            return html;
-        }, "");
-    };
+  this.render = (state) => {
+    $target.innerHTML = createTodoListDOM(state.user.todoList);
+  };
 
-    setState = (todos) => {
-        this.todos = todos;
-        this.render();
-    };
-
-    render = () => {
-        this.$target.innerHTML = this.createTodoListDOM(this.todos);
-    };
+  this.init();
 }
 
 export default TodoList;
