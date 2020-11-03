@@ -39,6 +39,10 @@ function UserList({ $target, onChangeUser, onAddUser, store }) {
     }
   };
 
+  this.render = (state) => {
+    $target.innerHTML = createUserListDOM(state.users);
+  };
+
   const isUserCreateButton = (e) => {
     return e.target.className.split(" ").includes(CLASS.USER_CREATE_BUTTON);
   };
@@ -54,10 +58,6 @@ function UserList({ $target, onChangeUser, onAddUser, store }) {
   const createUserListDOM = (users) =>
     users.reduce((html, user) => html + userButtonDOM(user.name, user), "") +
     userCreateButtonDOM();
-
-  this.render = (state) => {
-    $target.innerHTML = createUserListDOM(state.users);
-  };
 
   this.init();
 }

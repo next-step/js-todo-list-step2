@@ -26,6 +26,10 @@ class Store {
     });
   };
 
+  getState = () => {
+    return this.state;
+  };
+
   reducer = (state, action) => {
     switch (action.type) {
       case LOAD_USERS:
@@ -39,6 +43,19 @@ class Store {
           activeUser: action.payload.name,
           user: action.payload,
         };
+      case ADD_USER:
+        return {
+          ...state,
+          users: [...state.users, action.payload],
+        };
+      case ADD_TODO:
+        return {
+          ...state,
+          user: {
+            ...state.user,
+            todoList: [...state.user.todoList, action.payload],
+          },
+        };
       default:
         return state;
     }
@@ -47,5 +64,7 @@ class Store {
 
 export const LOAD_USERS = "LOAD_USERS";
 export const LOAD_USER = "LOAD_USER";
+export const ADD_USER = "ADD_USER";
+export const ADD_TODO = "ADD_TODO";
 
 export default Store;

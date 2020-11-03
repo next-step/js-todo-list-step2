@@ -5,7 +5,7 @@ import TodoList from "./TodoList.js";
 import UserList from "./UserList.js";
 import TodoInput from "./TodoInput.js";
 import { addTodo } from "../domain/todoApi.js";
-import { LOAD_USER } from "../store/Store.js";
+import { ADD_TODO, ADD_USER, LOAD_USER } from "../store/Store.js";
 
 function App({ $target, store }) {
   const init = async () => {
@@ -23,11 +23,11 @@ function App({ $target, store }) {
       store,
     });
 
-    // this.todoInput = new TodoInput({
-    //   $target: document.querySelector(SELECTOR.TODO_INPUT),
-    //   name: this.state.user.name,
-    //   onAddTodo: this.onAddTodo,
-    // });
+    this.todoInput = new TodoInput({
+      $target: document.querySelector(SELECTOR.TODO_INPUT),
+      onAddTodo: this.onAddTodo,
+      store,
+    });
   };
 
   this.onChangeUser = async (username) => {
@@ -38,21 +38,17 @@ function App({ $target, store }) {
   };
 
   this.onAddUser = async (username) => {
-    const newUser = await addUser(username);
-    this.state.addUser(newUser);
-    this.setState();
+    store.dispatch({
+      type: ADD_USER,
+      payload: await addUser(username),
+    });
   };
 
-  // TODO : 구현
   this.onAddTodo = async (title, name) => {
-    const response = await addTodo(title, name);
-    console.log(response);
-  };
-
-  this.setState = () => {
-    this.userList.setState(this.state);
-    this.todoList.setState(this.state.user.todoList);
-    this.todoInput.setState(this.state.user.name);
+    store.dispatch({
+      type: ADD_TODO,
+      payload: await addTodo(title, name),
+    });
   };
 
   init();
