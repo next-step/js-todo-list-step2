@@ -1,5 +1,6 @@
 import DOM from '../core/createElement.js';
-import { onCreateTodoInputEnterKeypress } from '../actions.js';
+import eventChannel from '../core/eventChannel.js';
+import { VIEW } from '../actions.js';
 
 const TodoInput = () =>
   DOM.section(
@@ -13,5 +14,14 @@ const TodoInput = () =>
       onkeypress: onCreateTodoInputEnterKeypress,
     })
   );
+
+const { done } = eventChannel;
+
+const onCreateTodoInputEnterKeypress = ({ key, target }) => {
+  if (key === 'Enter') {
+    done(VIEW.ADD_TODO, { contents: target.value });
+    target.value = '';
+  }
+};
 
 export default TodoInput;

@@ -1,11 +1,10 @@
-import {
-  onTodoItemClickHandler,
-  onTodoItemDoubleClickHandler,
-  onTodoItemEditKeyDown,
-  onSelectPriority,
-} from '../actions.js';
 import DOM from '../core/createElement.js';
+import eventChannel from '../core/eventChannel.js';
+import { VIEW } from '../actions.js';
+
 import TodoItem from './TodoItem.js';
+
+import { PRIORITY } from '../constants/index.js';
 
 export default class TodoList {
   constructor() {
@@ -54,3 +53,60 @@ export default class TodoList {
     this.$main.appendChild(this.$todoList);
   }
 }
+
+const { done } = eventChannel;
+
+const onTodoItemClickHandler = ({ target }) => {
+  const { className } = target;
+  const $todoItem = target.closest('li');
+  const id = $todoItem.dataset.todoId;
+
+  switch (className) {
+    case 'toggle':
+      done(VIEW.TOGGLE_TODO, { id });
+      return;
+    case 'destroy':
+      done(VIEW.DELETE_TODO, { id });
+      return;
+    default:
+      return;
+  }
+};
+
+const onTodoItemDoubleClickHandler = ({ target }) => {
+  const { className } = target;
+  const $todoItem = target.closest('li');
+
+  if (className === 'label') {
+    $todoItem.classList.add('editing');
+  }
+};
+
+const onTodoItemEditKeyDown = ({ key, target }) => {
+  const $todoItem = target.closest('li');
+  const $label = $todoItem.querySelector('.label');
+  const $edit = $todoItem.querySelector('.edit');
+  const id = $todoItem.dataset.todoId;
+
+  switch (key) {
+    case 'Escape':
+      $edit.value = $label.lastChild.textContent;
+      $todoItem.classList.remove('editing');
+      return;
+    case 'Enter':
+      done(VIEW.UPDATE_TODO, { id, contents: target.value });
+      return;
+    default:
+      return;
+  }
+};
+
+const onSelectPriority = ({ target }) => {
+  const { className } = target;
+  const $todoItem = target.closest('li');
+  const id = $todoItem.dataset.todoId;
+
+  if (className === 'chip select') {
+    done(VIEW.SET_PRIORITY, { id, priority: PRIORITY[target.value] });
+  }
+};

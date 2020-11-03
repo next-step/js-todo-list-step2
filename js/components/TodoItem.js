@@ -1,5 +1,4 @@
 import DOM from '../core/createElement.js';
-import { onTodoItemClickHandler } from '../actions.js';
 
 const TodoItem = ({ _id, contents, isCompleted, priority }) =>
   DOM.li({

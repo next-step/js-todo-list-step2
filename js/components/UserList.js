@@ -41,7 +41,7 @@ export default class UserList {
   }
 }
 
-const { done, when } = eventChannel;
+const { done } = eventChannel;
 
 const onUserListClickHandler = ({ target }) => {
   const { className, dataset } = target;

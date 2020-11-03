@@ -1,7 +1,10 @@
 import DOM from '../core/createElement.js';
+import eventChannel from '../core/eventChannel.js';
+import { VIEW } from '../actions.js';
+
 import FilterItem from './FilterItem.js';
-import { FILTER_LIST } from '../constants/index.js';
-import { onFooterClickHandler } from '../actions.js';
+
+import { FILTER_LIST, MESSAGES } from '../constants/index.js';
 
 export default class TodoFooter {
   constructor() {
@@ -33,3 +36,19 @@ export default class TodoFooter {
     `;
   }
 }
+
+const { done } = eventChannel;
+
+const onFooterClickHandler = ({ target }) => {
+  const { className } = target;
+
+  if (className === 'clear-completed') {
+    confirm(MESSAGES.DELETE_ALL_TODOS) && done(VIEW.DELETE_ALL_TODOS);
+    return;
+  }
+
+  if (FILTER_LIST.includes(className)) {
+    done(VIEW.CHANGE_FILTER, { currentFilter: className });
+    return;
+  }
+};
