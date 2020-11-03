@@ -10,6 +10,9 @@ export const VIEW = {
   DELETE_USER: 'view/deleteUser',
   CHANGE_USER: 'view/changeUser',
   ADD_TODO: 'view/addTodo',
+  DELETE_TODO: 'view/deleteTodo',
+  TOGGLE_TODO: 'view/toggleTodo',
+  UPDATE_TODO: 'view/updateTodo',
 };
 
 export const STORE = {
@@ -50,6 +53,34 @@ export const onTodoItemClickHandler = ({ target }) => {
       return;
     case 'destroy':
       done(VIEW.DELETE_TODO, { id });
+      return;
+    default:
+      return;
+  }
+};
+
+export const onTodoItemDoubleClickHandler = ({ target }) => {
+  const { className } = target;
+  const $todoItem = target.closest('li');
+
+  if (className === 'label') {
+    $todoItem.classList.add('editing');
+  }
+};
+
+export const onTodoItemEditKeyDown = ({ key, target }) => {
+  const $todoItem = target.closest('li');
+  const $label = $todoItem.querySelector('.label');
+  const $edit = $todoItem.querySelector('.edit');
+  const id = $todoItem.dataset.todoId;
+
+  switch (key) {
+    case 'Escape':
+      $edit.value = $label.lastChild.textContent;
+      $todoItem.classList.remove('editing');
+      return;
+    case 'Enter':
+      done(VIEW.UPDATE_TODO, { id, contents: target.value });
       return;
     default:
       return;

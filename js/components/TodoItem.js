@@ -6,7 +6,6 @@ export default class TodoItem {
     this.$todoItem = DOM.li({
       dataTodoId: _id,
       class: isCompleted && 'completed',
-      onclick: onTodoItemClickHandler,
     });
 
     this.render({ contents, isCompleted, priority });
@@ -35,12 +34,10 @@ export default class TodoItem {
             <option value="2" ${
               priority === 'SECOND' && 'selected'
             }>2순위</option>
-          </select>
-          ${contents}
-        </label>
+          </select>${contents}</label>
         <button class="destroy"></button>
       </div>
-      <input class="edit" value="" />
+      <input class="edit" value="${contents}" />
     `;
   }
 }

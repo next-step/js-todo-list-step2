@@ -17,6 +17,7 @@ export default class Store {
     when(VIEW.ADD_TODO, ({ contents }) => this.addTodo(contents));
     when(VIEW.DELETE_TODO, ({ id }) => this.deleteTodo(id));
     when(VIEW.TOGGLE_TODO, ({ id }) => this.toggleTodo(id));
+    when(VIEW.UPDATE_TODO, ({ id, contents }) => this.updateTodo(id, contents));
   }
 
   get userId() {
@@ -110,6 +111,17 @@ export default class Store {
     });
   }
 
+  async updateTodo(id, contents) {
+    const todoItem = await API.PUT('/users/' + this.userId + '/items/' + id, {
+      contents,
+    });
+
+    this.dispatch({
+      type: VIEW.UPDATE_TODO,
+      payload: { todoItem },
+    });
+  }
+
   dispatch(action) {
     this.#state = this.reducer(this.#state, action);
     console.info('current state', this.#state);
@@ -152,6 +164,13 @@ export default class Store {
           ...payload,
         };
       case VIEW.TOGGLE_TODO:
+        return {
+          ...state,
+          todoList: state.todoList.map((todo) =>
+            todo._id === todoItem._id ? todoItem : todo
+          ),
+        };
+      case VIEW.UPDATE_TODO:
         return {
           ...state,
           todoList: state.todoList.map((todo) =>
