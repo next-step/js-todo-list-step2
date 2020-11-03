@@ -1,6 +1,11 @@
 import DOM from '../core/createElement.js';
+import eventChannel from '../core/eventChannel.js';
+import { VIEW } from '../actions.js';
+
 import UserItem from './UserItem.js';
-import { onUserListClickHandler } from '../actions/index.js';
+
+import { isValidUserName } from '../utils/validators.js';
+import { MESSAGES } from '../constants/index.js';
 
 export default class UserList {
   constructor() {
@@ -35,3 +40,37 @@ export default class UserList {
     this.$userList.appendChild(this.$userDeleteButton);
   }
 }
+
+const { done, when } = eventChannel;
+
+const onUserListClickHandler = ({ target }) => {
+  const { className, dataset } = target;
+
+  switch (className) {
+    case 'ripple':
+      onChangeUserButtonClickHandler(dataset.userId);
+      return;
+    case 'ripple user-create-button':
+      onCreateUserButtonClickHandler();
+      return;
+    case 'ripple user-delete-button':
+      onDeleteUserButtonClickHandler();
+      return;
+    default:
+      return;
+  }
+};
+
+const onChangeUserButtonClickHandler = (id) => done(VIEW.CHANGE_USER, { id });
+
+const onCreateUserButtonClickHandler = () => {
+  const name = prompt(MESSAGES.ADD_USER);
+
+  isValidUserName(name)
+    ? done(VIEW.ADD_USER, { name })
+    : alert(MESSAGES.FAILED_ADD_USER);
+};
+
+const onDeleteUserButtonClickHandler = () => {
+  confirm(MESSAGES.DELETE_USER) && done(VIEW.DELETE_USER);
+};

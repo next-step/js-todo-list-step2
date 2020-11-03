@@ -1,7 +1,7 @@
 import UserContainer from './UserContainer.js';
 import TodoContainer from './TodoContainer.js';
 import eventChannel from '../core/eventChannel.js';
-import { VIEW, STORE } from '../actions/index.js';
+import { VIEW, STORE } from '../actions.js';
 
 const { done, when } = eventChannel;
 

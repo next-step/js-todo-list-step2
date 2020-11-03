@@ -1,7 +1,7 @@
 import DOM from '../core/createElement.js';
 import FilterItem from './FilterItem.js';
 import { FILTER_LIST } from '../constants/index.js';
-import { onFooterClickHandler } from '../actions/index.js';
+import { onFooterClickHandler } from '../actions.js';
 
 export default class TodoFooter {
   constructor() {

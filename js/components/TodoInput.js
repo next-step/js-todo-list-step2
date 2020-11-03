@@ -1,5 +1,5 @@
 import DOM from '../core/createElement.js';
-import { onCreateTodoInputEnterKeypress } from '../actions/index.js';
+import { onCreateTodoInputEnterKeypress } from '../actions.js';
 
 const TodoInput = () =>
   DOM.section(

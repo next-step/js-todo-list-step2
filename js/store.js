@@ -1,6 +1,6 @@
 import API from './api/index.js';
 import eventChannel from './core/eventChannel.js';
-import { VIEW, STORE } from './actions/index.js';
+import { VIEW, STORE } from './actions.js';
 import { parseHash } from './utils/index.js';
 import { FILTER } from './constants/index.js';
 

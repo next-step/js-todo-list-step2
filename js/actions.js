@@ -1,6 +1,6 @@
-import { MESSAGES, FILTER, PRIORITY } from '../constants/index.js';
-import { isValidUserName } from '../utils/validators.js';
-import eventChannel from '../core/eventChannel.js';
+import { MESSAGES, PRIORITY, FILTER_LIST } from './constants/index.js';
+
+import eventChannel from './core/eventChannel.js';
 
 const { done, when } = eventChannel;
 
@@ -21,38 +21,6 @@ export const VIEW = {
 export const STORE = {
   UPDATE: 'store/update',
   REQUEST: 'store/request',
-};
-
-export const onUserListClickHandler = ({ target }) => {
-  const { className, dataset } = target;
-
-  switch (className) {
-    case 'ripple':
-      onChangeUserButtonClickHandler(dataset.userId);
-      return;
-    case 'ripple user-create-button':
-      onCreateUserButtonClickHandler();
-      return;
-    case 'ripple user-delete-button':
-      onDeleteUserButtonClickHandler();
-      return;
-    default:
-      return;
-  }
-};
-
-export const onChangeUserButtonClickHandler = (id) => done(VIEW.CHANGE_USER, { id });
-
-export const onCreateUserButtonClickHandler = () => {
-  const name = prompt(MESSAGES.ADD_USER);
-
-  isValidUserName(name)
-    ? done(VIEW.ADD_USER, { name })
-    : alert(MESSAGES.FAILED_ADD_USER);
-};
-
-export const onDeleteUserButtonClickHandler = () => {
-  confirm(MESSAGES.DELETE_USER) && done(VIEW.DELETE_USER);
 };
 
 export const onCreateTodoInputEnterKeypress = ({ key, target }) => {
@@ -110,21 +78,14 @@ export const onTodoItemEditKeyDown = ({ key, target }) => {
 export const onFooterClickHandler = ({ target }) => {
   const { className } = target;
 
-  switch (className) {
-    case FILTER.ALL:
-      done(VIEW.CHANGE_FILTER, { currentFilter: FILTER.ALL });
-      return;
-    case FILTER.ACTIVE:
-      done(VIEW.CHANGE_FILTER, { currentFilter: FILTER.ACTIVE });
-      return;
-    case FILTER.COMPLETED:
-      done(VIEW.CHANGE_FILTER, { currentFilter: FILTER.COMPLETED });
-      return;
-    case 'clear-completed':
-      confirm(MESSAGES.DELETE_ALL_TODOS) && done(VIEW.DELETE_ALL_TODOS);
-      return;
-    default:
-      return;
+  if (className === 'clear-completed') {
+    confirm(MESSAGES.DELETE_ALL_TODOS) && done(VIEW.DELETE_ALL_TODOS);
+    return;
+  }
+
+  if (FILTER_LIST.includes(className)) {
+    done(VIEW.CHANGE_FILTER, { currentFilter: className });
+    return;
   }
 };
 

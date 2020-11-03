@@ -3,7 +3,7 @@ import {
   onTodoItemDoubleClickHandler,
   onTodoItemEditKeyDown,
   onSelectPriority,
-} from '../actions/index.js';
+} from '../actions.js';
 import DOM from '../core/createElement.js';
 import TodoItem from './TodoItem.js';
 
