@@ -23,14 +23,14 @@ export default class UserList {
   setState({ users, currentUser }) {
     this.$userList.innerHTML = '';
     this.render(
-      users.map(
-        ({ _id, name }) => new UserItem({ _id, name, isActive: currentUser === _id })
+      users.map(({ _id, name }) =>
+        UserItem({ _id, name, isActive: currentUser === _id })
       )
     );
   }
 
   render(userItems = []) {
-    userItems.forEach((userItem) => this.$userList.appendChild(userItem.$el));
+    userItems.forEach((userItem) => this.$userList.appendChild(userItem));
     this.$userList.appendChild(this.$userCreateButton);
     this.$userList.appendChild(this.$userDeleteButton);
   }

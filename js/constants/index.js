@@ -8,6 +8,8 @@ export const FILTER = {
   COMPLETED: 'completed',
 };
 
+export const FILTER_LIST = Object.values(FILTER);
+
 const _REVERSE_FILTER = {
   all: 'ALL',
   active: 'ACTIVE',

@@ -2,9 +2,7 @@ import { getDataAttribute } from '../utils/index.js';
 import { HTML_TAG_NAMES } from '../constants/index.js';
 
 const createElement = (tag, attr, ...children) => {
-  const $el = tag
-    ? document.createElement(tag)
-    : document.createDocumentFragment();
+  const $el = tag ? document.createElement(tag) : document.createDocumentFragment();
 
   if (attr) {
     Object.entries(attr).forEach(([key, value]) => {

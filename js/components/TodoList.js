@@ -44,12 +44,12 @@ export default class TodoList {
   setState({ todoList }) {
     this.$main.innerHTML = '';
     this.$todoList.innerHTML = '';
-    this.render(todoList.map((todo) => new TodoItem(todo)));
+    this.render(todoList.map((todo) => TodoItem(todo)));
   }
 
   render(todos = []) {
     todos.forEach((todo) => {
-      this.$todoList.appendChild(todo.$el);
+      this.$todoList.appendChild(todo);
     });
     this.$main.appendChild(this.$todoList);
   }

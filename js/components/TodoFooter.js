@@ -1,6 +1,6 @@
 import DOM from '../core/createElement.js';
 import FilterItem from './FilterItem.js';
-import { FILTER } from '../constants/index.js';
+import { FILTER_LIST } from '../constants/index.js';
 import { onFooterClickHandler } from '../actions/index.js';
 
 export default class TodoFooter {
@@ -25,13 +25,9 @@ export default class TodoFooter {
     this.$counterContainer.innerHTML = `
       <span class="todo-count">총 <strong>${todoCount}</strong> 개</span>
         <ul class="filters">
-          ${Object.values(FILTER)
-            .map(
-              (filter) =>
-                new FilterItem({ filter, isSelected: filter === currentFilter }).$el
-                  .outerHTML
-            )
-            .join('')}
+          ${FILTER_LIST.map(
+            (filter) => FilterItem(filter, filter === currentFilter).outerHTML
+          ).join('')}
         </ul>
       <button class="clear-completed">모두 삭제</button>
     `;

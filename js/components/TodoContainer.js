@@ -9,7 +9,7 @@ export default class TodoContainer {
   constructor() {
     this.$todoSection = DOM.section({ class: 'todo-section' });
 
-    this.todoInput = new TodoInput();
+    this.todoInput = TodoInput();
     this.todoList = new TodoList();
     this.todoFooter = new TodoFooter();
 
@@ -37,7 +37,7 @@ export default class TodoContainer {
   }
 
   render() {
-    this.$todoSection.appendChild(this.todoInput.$el);
+    this.$todoSection.appendChild(this.todoInput);
     this.$todoSection.appendChild(this.todoList.$el);
     this.$todoSection.appendChild(this.todoFooter.$el);
   }
