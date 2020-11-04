@@ -3,11 +3,6 @@ import { readUserFacade, readUserListFacade } from '../endpoint/facade.js';
 const store = {
   userList: [],
   user: undefined,
-  user1: {
-    name: undefined,
-    id: -1,
-    todoList: [],
-  },
 };
 
 /* store 를 변경하는 함수는 set 으로 시작됩니다. */
@@ -68,3 +63,8 @@ export const getter = {
     return store.user.todoList.find(v => v._id === itemId);
   },
 };
+
+
+export const dispatch = {
+
+}
