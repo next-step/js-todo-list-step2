@@ -22,7 +22,14 @@ class TodoStore {
     };
   }
 
-  static changeActiveUser(activeUser) {
+  static toggleCompleted({ _id, isCompleted }) {
+    TodoStore.data.todos.map(todo => {
+      if (todo._id === _id) todo.isCompleted = isCompleted;
+      return todo;
+    });
+  }
+
+  static changeActiveUser({ activeUser }) {
     TodoStore.setState({ ...TodoStore.data, activeUser });
   }
 

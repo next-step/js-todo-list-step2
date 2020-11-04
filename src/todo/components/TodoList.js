@@ -1,12 +1,30 @@
-import { TODO_PRIORITY } from "../../shared/utils/constants.js";
+import { TodoStore } from "../stores/index.js";
+import Event from "../utils/event.js";
+import { TARGETS, TODO_PRIORITY } from "../../shared/utils/constants.js";
 
 class TodoList {
-  constructor({ $target, todos }) {
+  constructor({ $target }) {
     this.$target = $target;
-    this.state = { todos };
+    this.state = TodoStore.getStore;
+    this.toggleCompleted = Event.toggleCompleted;
 
     this.render();
+
+    document
+      .querySelector(TARGETS.TODO_LIST)
+      .addEventListener("click", this.onToggleCompleted);
   }
+
+  onToggleCompleted = e => {
+    if (e.target.nodeName !== "INPUT") return;
+
+    this.toggleCompleted({
+      _id: e.target.closest("li").dataset.id,
+      isCompleted: e.target.checked
+    });
+
+    this.setState(TodoStore.getStore);
+  };
 
   setState(payload) {
     this.state = { ...this.state, ...payload };
@@ -28,9 +46,11 @@ class TodoList {
       }
 
       return `
-      <li id=${todo._id} class="${todo.isCompleted ? "completed" : ""}">
+      <li data-id=${todo._id} class="${todo.isCompleted ? "completed" : ""}">
         <div class="view">
-          <input class="toggle" type="checkbox" checked=${todo.isCompleted} />
+          <input class="toggle" type="checkbox" ${
+            todo.isCompleted && `checked="true"`
+          } />
           ${
             todo.priority !== "NONE"
               ? `<label class="label">
