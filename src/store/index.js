@@ -26,7 +26,7 @@ export const setter = {
 
 export const initStore = async() => {
   await readUserListFacade();
-  const userId = getter.userList()?.[0]._id || null;
+  const userId = getter.firstUser();
   await readUserFacade(userId);
 };
 
@@ -62,6 +62,9 @@ export const getter = {
   userItem(itemId) {
     return store.user.todoList.find(v => v._id === itemId);
   },
+  firstUser() {
+    return store.userList?.[0]._id || null;
+  }
 };
 
 
