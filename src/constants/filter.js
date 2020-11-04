@@ -1,6 +1,12 @@
+export const ALL  = 'all';
+export const ACTIVE  = 'active';
+export const COMPLETED  = 'completed';
+
 export const filter = {
-  all: '전체보기',
-  active: '해야할 일',
-  completed: '완료한 일'
+  [ALL]: '전체보기',
+  [ACTIVE]: '해야할 일',
+  [COMPLETED]: '완료한 일'
 };
+
+Object.freeze(filter);
 

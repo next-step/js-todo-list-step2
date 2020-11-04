@@ -1,4 +1,4 @@
-import * as CONST from '../../constants/index.js';
+import * as CONST from '../../constants/filter.js';
 import { createDOM } from '../../utils.js';
 
 const TodoFilter = ({ getFilter, setFilter }) => {

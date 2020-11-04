@@ -1,5 +1,5 @@
 import { getter } from '../../store/index.js';
-import * as CONST from '../../constants/index.js';
+import * as CONST from '../../constants/filter.js';
 import { observer } from '../../store/index.js';
 import { createDOM } from '../../utils.js';
 

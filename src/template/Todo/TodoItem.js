@@ -1,6 +1,6 @@
 // TODO refactor
 import TodoLabel from './TodoLabel.js';
-import * as CONST from '../../constants/index.js';
+import * as CONST from '../../constants/filter.js';
 import { createDOM } from '../../utils.js';
 
 const TodoItem = ({ getFilter, todo, todo: { _id } }) => {
