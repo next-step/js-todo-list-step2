@@ -8,7 +8,7 @@ import TodoInput from '../components/TodoInput.js';
 import TodoList from '../components/TodoList.js';
 import TodoFooter from '../components/TodoFooter.js';
 
-// util & constants
+// utils & constants
 import API from '../api/index.js';
 import { filterTodoList } from '../utils/index.js';
 import { ACTIONS } from '../constants/index.js';

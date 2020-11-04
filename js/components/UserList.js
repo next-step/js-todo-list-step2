@@ -1,15 +1,22 @@
+// core
 import DOM from '../core/createElement.js';
 import eventChannel from '../core/eventChannel.js';
 const { done } = eventChannel;
+
+// child components
 import UserItem from './UserItem.js';
 
+// utils & constants
 import { isValidUserName } from '../utils/validators.js';
 import { ACTIONS, MESSAGES } from '../constants/index.js';
 const { VIEW } = ACTIONS;
 
 export default class UserList {
   constructor() {
-    this.$userList = DOM.div({ id: 'user-list', onclick: onUserListClickHandler });
+    this.$userList = DOM.div({
+      id: 'user-list',
+      onclick: onUserListClickHandler,
+    });
     this.$userCreateButton = DOM.button({
       class: 'ripple user-create-button',
       innerText: '+ 유저 생성',

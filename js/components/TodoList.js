@@ -2,6 +2,7 @@
 import DOM from '../core/createElement.js';
 import eventChannel from '../core/eventChannel.js';
 const { done } = eventChannel;
+
 // child components
 import TodoItem from './TodoItem.js';
 

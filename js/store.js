@@ -11,9 +11,9 @@ import {
   setPriority,
 } from './api/apis.js';
 import eventChannel from './core/eventChannel.js';
-import { ACTIONS } from './constants/index.js';
-
 const { done, when } = eventChannel;
+
+import { ACTIONS } from './constants/index.js';
 const { VIEW, STORE } = ACTIONS;
 
 export default class Store {

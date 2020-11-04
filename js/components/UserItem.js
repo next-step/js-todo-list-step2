@@ -1,3 +1,4 @@
+// core
 import DOM from '../core/createElement.js';
 
 const UserItem = ({ _id, name, isActive }) =>
