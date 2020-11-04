@@ -102,11 +102,11 @@ const onTodoItemEditKeyDown = ({ key, target }) => {
 };
 
 const onSelectPriority = ({ target }) => {
-  const { className } = target;
+  const { classList } = target;
   const $todoItem = target.closest('li');
   const id = $todoItem.dataset.todoId;
 
-  if (className === 'chip select') {
+  if (classList.contains('chip') && classList.contains('select')) {
     done(VIEW.SET_PRIORITY, { id, priority: PRIORITY[target.value] });
   }
 };

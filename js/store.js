@@ -10,29 +10,29 @@ export default class Store {
   #state;
 
   constructor() {
-    when(VIEW.INIT, () => this.init());
-    when(VIEW.ADD_USER, ({ name }) => this.addUser(name));
-    when(VIEW.DELETE_USER, () => this.deleteUser());
-    when(VIEW.CHANGE_USER, ({ id }) => this.changeUser(id));
-    when(VIEW.ADD_TODO, ({ contents }) => this.addTodo(contents));
-    when(VIEW.DELETE_TODO, ({ id }) => this.deleteTodo(id));
-    when(VIEW.DELETE_ALL_TODOS, () => this.deleteAllTodos());
-    when(VIEW.TOGGLE_TODO, ({ id }) => this.toggleTodo(id));
-    when(VIEW.UPDATE_TODO, ({ id, contents }) => this.updateTodo(id, contents));
-    when(VIEW.SET_PRIORITY, ({ id, priority }) => this.setPriority(id, priority));
-    when(VIEW.CHANGE_FILTER, ({ currentFilter }) => this.changeFilter(currentFilter));
+    when(VIEW.INIT, (data) => this.init(data));
+    when(VIEW.ADD_USER, (data) => this.addUser(data));
+    when(VIEW.DELETE_USER, (data) => this.deleteUser(data));
+    when(VIEW.CHANGE_USER, (data) => this.changeUser(data));
+    when(VIEW.ADD_TODO, (data) => this.addTodo(data));
+    when(VIEW.DELETE_TODO, (data) => this.deleteTodo(data));
+    when(VIEW.DELETE_ALL_TODOS, (data) => this.deleteAllTodos(data));
+    when(VIEW.TOGGLE_TODO, (data) => this.toggleTodo(data));
+    when(VIEW.UPDATE_TODO, (data) => this.updateTodo(data));
+    when(VIEW.SET_PRIORITY, (data) => this.setPriority(data));
+    when(VIEW.CHANGE_FILTER, (data) => this.changeFilter(currentFilter));
   }
 
   get userId() {
     return this.#state.currentUser;
   }
 
-  async init() {
+  async init({ type }) {
     done(STORE.REQUEST);
     const users = await API.GET('/users');
 
     this.dispatch({
-      type: VIEW.INIT,
+      type,
       payload: {
         users,
         currentUser: users[0]?._id,
@@ -42,13 +42,13 @@ export default class Store {
     });
   }
 
-  async addUser(name) {
+  async addUser({ name, type }) {
     done(STORE.REQUEST);
     const user = await API.POST('/users', { name });
     const users = await API.GET('/users');
 
     this.dispatch({
-      type: VIEW.ADD_USER,
+      type,
       payload: {
         users,
         currentUser: user._id,
@@ -57,13 +57,13 @@ export default class Store {
     });
   }
 
-  async deleteUser() {
+  async deleteUser({ type }) {
     done(STORE.REQUEST);
     const response = await API.DELETE('/users/' + this.userId);
     const users = await API.GET('/users');
 
     this.dispatch({
-      type: VIEW.DELETE_USER,
+      type,
       payload: {
         users,
         currentUser: users[0]?._id,
@@ -72,12 +72,12 @@ export default class Store {
     });
   }
 
-  async changeUser(id) {
+  async changeUser({ id, type }) {
     done(STORE.REQUEST);
     const todoList = await API.GET('/users/' + id + '/items');
 
     this.dispatch({
-      type: VIEW.CHANGE_USER,
+      type,
       payload: {
         currentUser: id,
         todoList,
@@ -85,61 +85,61 @@ export default class Store {
     });
   }
 
-  async addTodo(contents) {
+  async addTodo({ contents, type }) {
     done(STORE.REQUEST);
     const todoItem = await API.POST('/users/' + this.userId + '/items', {
       contents,
     });
 
     this.dispatch({
-      type: VIEW.ADD_TODO,
+      type,
       payload: { todoItem },
     });
   }
 
-  async deleteTodo(id) {
+  async deleteTodo({ id, type }) {
     done(STORE.REQUEST);
     const { todoList } = await API.DELETE('/users/' + this.userId + '/items/' + id);
 
     this.dispatch({
-      type: VIEW.DELETE_TODO,
+      type,
       payload: { todoList },
     });
   }
 
-  async deleteAllTodos() {
+  async deleteAllTodos({ type }) {
     done(STORE.REQUEST);
     const response = await API.DELETE('/users/' + this.userId + '/items');
 
     this.dispatch({
-      type: VIEW.DELETE_ALL_TODOS,
+      type,
       payload: {},
     });
   }
 
-  async toggleTodo(id) {
+  async toggleTodo({ id, type }) {
     done(STORE.REQUEST);
     const todoItem = await API.PUT('/users/' + this.userId + '/items/' + id + '/toggle');
 
     this.dispatch({
-      type: VIEW.TOGGLE_TODO,
+      type,
       payload: { todoItem },
     });
   }
 
-  async updateTodo(id, contents) {
+  async updateTodo({ id, contents, type }) {
     done(STORE.REQUEST);
     const todoItem = await API.PUT('/users/' + this.userId + '/items/' + id, {
       contents,
     });
 
     this.dispatch({
-      type: VIEW.UPDATE_TODO,
+      type,
       payload: { todoItem },
     });
   }
 
-  async setPriority(id, priority) {
+  async setPriority({ id, priority, type }) {
     done(STORE.REQUEST);
     const todoItem = await API.PUT(
       '/users/' + this.userId + '/items/' + id + '/priority',
@@ -149,14 +149,14 @@ export default class Store {
     );
 
     this.dispatch({
-      type: VIEW.SET_PRIORITY,
+      type,
       payload: { todoItem },
     });
   }
 
-  async changeFilter(currentFilter) {
+  changeFilter({ currentFilter, type }) {
     this.dispatch({
-      type: VIEW.CHANGE_FILTER,
+      type,
       payload: { currentFilter },
     });
   }
@@ -174,32 +174,10 @@ export default class Store {
     const { todoItem } = payload;
 
     switch (type) {
-      case VIEW.INIT:
-        return payload;
-      case VIEW.ADD_USER:
-        return {
-          ...state,
-          ...payload,
-        };
-      case VIEW.DELETE_USER:
-        return {
-          ...state,
-          ...payload,
-        };
-      case VIEW.CHANGE_USER:
-        return {
-          ...state,
-          ...payload,
-        };
       case VIEW.ADD_TODO:
         return {
           ...state,
           todoList: [...state.todoList, todoItem],
-        };
-      case VIEW.DELETE_TODO:
-        return {
-          ...state,
-          ...payload,
         };
       case VIEW.DELETE_ALL_TODOS:
         return {
@@ -207,19 +185,7 @@ export default class Store {
           todoList: [],
         };
       case VIEW.TOGGLE_TODO:
-        return {
-          ...state,
-          todoList: state.todoList.map((todo) =>
-            todo._id === todoItem._id ? todoItem : todo
-          ),
-        };
       case VIEW.UPDATE_TODO:
-        return {
-          ...state,
-          todoList: state.todoList.map((todo) =>
-            todo._id === todoItem._id ? todoItem : todo
-          ),
-        };
       case VIEW.SET_PRIORITY:
         return {
           ...state,
@@ -227,13 +193,11 @@ export default class Store {
             todo._id === todoItem._id ? todoItem : todo
           ),
         };
-      case VIEW.CHANGE_FILTER:
+      default:
         return {
           ...state,
           ...payload,
         };
-      default:
-        return state;
     }
   }
 }

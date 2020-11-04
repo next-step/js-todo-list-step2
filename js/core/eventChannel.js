@@ -6,6 +6,6 @@ export default {
       })
     ),
   when: (type, listener) => {
-    document.addEventListener(type, ({ detail }) => listener(detail));
+    document.addEventListener(type, ({ detail, type }) => listener({ ...detail, type }));
   },
 };
