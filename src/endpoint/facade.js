@@ -15,7 +15,7 @@ import { getter, initStore, setter } from '../store/index.js';
 import { ERROR } from '../constants/messageAPI.js';
 import { loadingWrapper, useMiddleWare } from '../utils.js';
 
-export const userCheck = async() => {
+export const checkUser = async() => {
   const userId = getter.userId();
   try {
     await readUser({ userId });
@@ -43,7 +43,7 @@ const removeUserFunc = async() => {
 
 export const removeUserFacade = () => {
   loadingWrapper(
-    () => useMiddleWare(userCheck, removeUserFunc),
+    () => useMiddleWare(checkUser, removeUserFunc),
   );
 };
 
@@ -60,7 +60,7 @@ const createUserTodoItemFunc = async(contents) => {
 
 export const createUserTodoItemFacade = (contents) => {
   loadingWrapper(
-    () => useMiddleWare(userCheck, () => createUserTodoItemFunc(contents)),
+    () => useMiddleWare(checkUser, () => createUserTodoItemFunc(contents)),
   );
 };
 
@@ -90,7 +90,7 @@ const readUserFunc = async(userId) => {
 export const readUserFacade = (userId) => {
   setter.user({ _id: userId });
   loadingWrapper(
-    () => useMiddleWare(userCheck, () => readUserFunc(userId)),
+    () => useMiddleWare(checkUser, () => readUserFunc(userId)),
   );
 };
 
@@ -102,7 +102,7 @@ const updateUserTodoItemCompleteFunc = async(itemId) => {
 
 export const updateUserTodoItemCompleteFacade = (itemId) => {
   loadingWrapper(
-    () => useMiddleWare(userCheck, () => updateUserTodoItemCompleteFunc(itemId)),
+    () => useMiddleWare(checkUser, () => updateUserTodoItemCompleteFunc(itemId)),
   );
 };
 
@@ -114,7 +114,7 @@ const removeUserTodoItemFunc = async(itemId) => {
 
 export const removeUserTodoItemFacade = (itemId) => {
   loadingWrapper(
-    () => useMiddleWare(userCheck, () => removeUserTodoItemFunc(itemId)),
+    () => useMiddleWare(checkUser, () => removeUserTodoItemFunc(itemId)),
   );
 };
 
@@ -126,7 +126,7 @@ const updateUserTodoItemFunc = async(contents, itemId) => {
 
 export const updateUserTodoItemFacade = (contents, itemId) => {
   loadingWrapper(
-    () => useMiddleWare(userCheck, () => updateUserTodoItemFunc(contents, itemId)),
+    () => useMiddleWare(checkUser, () => updateUserTodoItemFunc(contents, itemId)),
   );
 };
 
@@ -139,7 +139,7 @@ const removeUserTodoItemsAllFunc = async() => {
 
 export const removeUserTodoItemsAllFacade = () => {
   loadingWrapper(
-    () => useMiddleWare(userCheck, removeUserTodoItemsAllFunc),
+    () => useMiddleWare(checkUser, removeUserTodoItemsAllFunc),
   );
 
 };
@@ -152,7 +152,7 @@ const updateUserTodoItemPriorityFunc = async(priority, itemId) => {
 
 export const updateUserTodoItemPriorityFacade = (priority, itemId) => {
   loadingWrapper(
-    () => useMiddleWare(userCheck, () => updateUserTodoItemPriorityFunc(priority, itemId)),
+    () => useMiddleWare(checkUser, () => updateUserTodoItemPriorityFunc(priority, itemId)),
   );
 };
 
