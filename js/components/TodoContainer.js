@@ -9,7 +9,6 @@ import TodoList from '../components/TodoList.js';
 import TodoFooter from '../components/TodoFooter.js';
 
 // utils & constants
-import API from '../api/index.js';
 import { filterTodoList } from '../utils/index.js';
 import { ACTIONS } from '../constants/index.js';
 const { STORE } = ACTIONS;
