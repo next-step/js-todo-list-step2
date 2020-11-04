@@ -1,157 +1,93 @@
-import API from './api/index.js';
+import {
+  init,
+  addUser,
+  deleteUser,
+  changeUser,
+  addTodo,
+  deleteTodo,
+  deleteAllTodos,
+  toggleTodo,
+  updateTodo,
+  setPriority,
+} from './api/apis.js';
 import eventChannel from './core/eventChannel.js';
-import { VIEW, STORE } from './actions.js';
-import { parseHash } from './utils/index.js';
-import { FILTER } from './constants/index.js';
+import { ACTIONS } from './constants/index.js';
 
 const { done, when } = eventChannel;
+const { VIEW, STORE } = ACTIONS;
 
 export default class Store {
   #state;
 
   constructor() {
-    when(VIEW.INIT, (data) => this.init(data));
-    when(VIEW.ADD_USER, (data) => this.addUser(data));
-    when(VIEW.DELETE_USER, (data) => this.deleteUser(data));
-    when(VIEW.CHANGE_USER, (data) => this.changeUser(data));
-    when(VIEW.ADD_TODO, (data) => this.addTodo(data));
-    when(VIEW.DELETE_TODO, (data) => this.deleteTodo(data));
-    when(VIEW.DELETE_ALL_TODOS, (data) => this.deleteAllTodos(data));
-    when(VIEW.TOGGLE_TODO, (data) => this.toggleTodo(data));
-    when(VIEW.UPDATE_TODO, (data) => this.updateTodo(data));
-    when(VIEW.SET_PRIORITY, (data) => this.setPriority(data));
+    [
+      VIEW.INIT, 
+      VIEW.ADD_USER, 
+      VIEW.DELETE_USER
+    ].forEach((action) => when(action, (data) => this.requestAll(data)));
+
+    [
+      VIEW.CHANGE_USER,
+      VIEW.ADD_TODO,
+      VIEW.DELETE_TODO,
+      VIEW.DELETE_ALL_TODOS,
+      VIEW.TOGGLE_TODO,
+      VIEW.UPDATE_TODO,
+      VIEW.SET_PRIORITY,
+    ].forEach((action) => when(action, (data) => this.requestTodo(data)));
+
     when(VIEW.CHANGE_FILTER, (data) => this.changeFilter(data));
   }
 
   get userId() {
-    return this.#state.currentUser;
+    return this.#state?.currentUser || -1;
   }
 
-  async init({ type }) {
+  async requestAll(data) {
     done(STORE.REQUEST_ALL);
-    const users = await API.GET('/users');
-
-    this.dispatch({
-      type,
-      payload: {
-        users,
-        currentUser: users[0]?._id,
-        todoList: users[0]?.todoList || [],
-        currentFilter: parseHash(location.hash) || FILTER.ALL,
-      },
-    });
+    await this.fetch({ ...data, userId: this.userId });
   }
 
-  async addUser({ name, type }) {
-    done(STORE.REQUEST_ALL);
-    const user = await API.POST('/users', { name });
-    const users = await API.GET('/users');
-
-    this.dispatch({
-      type,
-      payload: {
-        users,
-        currentUser: user._id,
-        todoList: user.todoList,
-      },
-    });
-  }
-
-  async deleteUser({ type }) {
-    done(STORE.REQUEST_ALL);
-    const response = await API.DELETE('/users/' + this.userId);
-    const users = await API.GET('/users');
-
-    this.dispatch({
-      type,
-      payload: {
-        users,
-        currentUser: users[0]?._id,
-        todoList: users[0]?.todoList || [],
-      },
-    });
-  }
-
-  async changeUser({ id, type }) {
-    done(STORE.REQUEST_ALL);
-    const todoList = await API.GET('/users/' + id + '/items');
-
-    this.dispatch({
-      type,
-      payload: {
-        currentUser: id,
-        todoList,
-      },
-    });
-  }
-
-  async addTodo({ contents, type }) {
+  async requestTodo(data) {
     done(STORE.REQUEST_TODO);
-    const todoItem = await API.POST('/users/' + this.userId + '/items', {
-      contents,
-    });
-
-    this.dispatch({
-      type,
-      payload: { todoItem },
-    });
+    await this.fetch({ ...data, userId: this.userId });
   }
 
-  async deleteTodo({ id, type }) {
-    done(STORE.REQUEST_TODO);
-    const { todoList } = await API.DELETE('/users/' + this.userId + '/items/' + id);
-
-    this.dispatch({
-      type,
-      payload: { todoList },
-    });
-  }
-
-  async deleteAllTodos({ type }) {
-    done(STORE.REQUEST_TODO);
-    const response = await API.DELETE('/users/' + this.userId + '/items');
-
-    this.dispatch({
-      type,
-      payload: {},
-    });
-  }
-
-  async toggleTodo({ id, type }) {
-    done(STORE.REQUEST_TODO);
-    const todoItem = await API.PUT('/users/' + this.userId + '/items/' + id + '/toggle');
-
-    this.dispatch({
-      type,
-      payload: { todoItem },
-    });
-  }
-
-  async updateTodo({ id, contents, type }) {
-    done(STORE.REQUEST_TODO);
-    const todoItem = await API.PUT('/users/' + this.userId + '/items/' + id, {
-      contents,
-    });
-
-    this.dispatch({
-      type,
-      payload: { todoItem },
-    });
-  }
-
-  async setPriority({ id, priority, type }) {
-    done(STORE.REQUEST_TODO);
-    const todoItem = await API.PUT(
-      '/users/' + this.userId + '/items/' + id + '/priority',
-      {
-        priority,
-      }
-    );
-
-    this.dispatch({
-      type,
-      payload: { todoItem },
-    });
+  async fetch({ type, ...data }) {
+    switch (type) {
+      case VIEW.INIT:
+        this.dispatch({ type, payload: await init() });
+        return;
+      case VIEW.ADD_USER:
+        this.dispatch({ type, payload: await addUser(data) });
+        return;
+      case VIEW.DELETE_USER:
+        this.dispatch({ type, payload: await deleteUser(data) });
+        return;
+      case VIEW.CHANGE_USER:
+        this.dispatch({ type, payload: await changeUser(data) });
+        return;
+      case VIEW.ADD_TODO:
+        this.dispatch({ type, payload: await addTodo(data) });
+        return;
+      case VIEW.DELETE_TODO:
+        this.dispatch({ type, payload: await deleteTodo(data) });
+        return;
+      case VIEW.DELETE_ALL_TODOS:
+        this.dispatch({ type, payload: await deleteAllTodos(data) });
+        return;
+      case VIEW.TOGGLE_TODO:
+        this.dispatch({ type, payload: await toggleTodo(data) });
+        return;
+      case VIEW.UPDATE_TODO:
+        this.dispatch({ type, payload: await updateTodo(data) });
+        return;
+      case VIEW.SET_PRIORITY:
+        this.dispatch({ type, payload: await setPriority(data) });
+        return;
+      default:
+        return;
+    }
   }
 
   changeFilter({ currentFilter, type }) {
@@ -183,6 +119,14 @@ export default class Store {
             todoList: [...state.todoList, todoItem],
           },
         };
+      case VIEW.DELETE_TODO:
+        return {
+          type: STORE.UPDATE_TODO,
+          state: {
+            ...state,
+            ...payload,
+          },
+        };
       case VIEW.DELETE_ALL_TODOS:
         return {
           type: STORE.UPDATE_TODO,
@@ -203,6 +147,17 @@ export default class Store {
             ),
           },
         };
+      case VIEW.CHANGE_FILTER:
+        return {
+          type: STORE.UPDATE_TODO,
+          state: {
+            ...state,
+            ...payload,
+          },
+        };
+      case VIEW.INIT:
+      case VIEW.ADD_USER:
+      case VIEW.DELETE_USER:
       default:
         return {
           type: STORE.UPDATE_ALL,

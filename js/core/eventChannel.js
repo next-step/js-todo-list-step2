@@ -5,7 +5,8 @@ export default {
         detail: payload,
       })
     ),
-  when: (type, listener) => {
-    document.addEventListener(type, ({ detail, type }) => listener({ ...detail, type }));
-  },
+  when: (type, listener) =>
+    document.addEventListener(type, ({ detail, type }) =>
+      listener({ ...detail, type })
+    ),
 };

@@ -1,10 +1,15 @@
+// core
 import DOM from '../core/createElement.js';
 import eventChannel from '../core/eventChannel.js';
-import { STORE } from '../actions.js';
+const { when } = eventChannel;
+
+// child components
 import UserTitle from './UserTitle.js';
 import UserList from './UserList.js';
 
-const { when } = eventChannel;
+// constants
+import { ACTIONS } from '../constants/index.js';
+const { STORE } = ACTIONS;
 
 export default class UserContainer {
   constructor() {

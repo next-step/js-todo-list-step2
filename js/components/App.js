@@ -1,9 +1,14 @@
+// core
+import eventChannel from '../core/eventChannel.js';
+const { done, when } = eventChannel;
+
+// child components
 import UserContainer from './UserContainer.js';
 import TodoContainer from './TodoContainer.js';
-import eventChannel from '../core/eventChannel.js';
-import { VIEW, STORE } from '../actions.js';
 
-const { done, when } = eventChannel;
+// constants
+import { ACTIONS } from '../constants/index.js';
+const { VIEW, STORE } = ACTIONS;
 
 export default class App {
   constructor($target) {
@@ -23,7 +28,7 @@ export default class App {
 
   setState({ users, currentUser, todoList, currentFilter }) {
     this.userContainer.setState({ users, currentUser });
-    this.todoContainer.setState({ todoList, currentFilter });
+    this.todoContainer.setState({ todoList, currentUser, currentFilter });
   }
 
   render() {

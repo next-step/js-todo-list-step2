@@ -2,6 +2,28 @@ export const BASE_URL = 'https://js-todo-list-9ca3a.df.r.appspot.com/api';
 
 export const METHODS = ['GET', 'POST', 'PUT', 'DELETE'];
 
+export const ACTIONS = {
+  VIEW: {
+    INIT: 'view/init',
+    ADD_USER: 'view/addUser',
+    DELETE_USER: 'view/deleteUser',
+    CHANGE_USER: 'view/changeUser',
+    ADD_TODO: 'view/addTodo',
+    DELETE_TODO: 'view/deleteTodo',
+    DELETE_ALL_TODOS: 'view/deleteAllTodos',
+    TOGGLE_TODO: 'view/toggleTodo',
+    UPDATE_TODO: 'view/updateTodo',
+    SET_PRIORITY: 'view/setPriority',
+    CHANGE_FILTER: 'view/changeFilter',
+  },
+  STORE: {
+    UPDATE_ALL: 'store/updateAll',
+    UPDATE_TODO: 'store/updateTodo',
+    REQUEST_ALL: 'store/requestAll',
+    REQUEST_TODO: 'store/requestTodo',
+  },
+};
+
 export const FILTER = {
   ALL: 'all',
   ACTIVE: 'active',
@@ -24,7 +46,8 @@ const FILTER_TEXT = {
 
 export const PRIORITY = ['NONE', 'FIRST', 'SECOND'];
 
-export const GET_FILTER_TEXT = (filterStr) => FILTER_TEXT[_REVERSE_FILTER[filterStr]];
+export const GET_FILTER_TEXT = (filterStr) =>
+  FILTER_TEXT[_REVERSE_FILTER[filterStr]];
 
 export const MESSAGES = {
   ADD_USER: '추가하고 싶은 이름을 입력해주세요.',

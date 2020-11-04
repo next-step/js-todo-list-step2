@@ -1,10 +1,14 @@
+// core
 import DOM from '../core/createElement.js';
 import eventChannel from '../core/eventChannel.js';
-import { VIEW } from '../actions.js';
+const { done } = eventChannel;
 
+// child components
 import FilterItem from './FilterItem.js';
 
-import { FILTER_LIST, MESSAGES } from '../constants/index.js';
+// constants
+import { ACTIONS, FILTER_LIST, MESSAGES } from '../constants/index.js';
+const { VIEW } = ACTIONS;
 
 export default class TodoFooter {
   constructor() {
@@ -36,8 +40,6 @@ export default class TodoFooter {
     `;
   }
 }
-
-const { done } = eventChannel;
 
 const onFooterClickHandler = ({ target }) => {
   const { className } = target;

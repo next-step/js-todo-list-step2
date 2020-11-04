@@ -1,6 +1,11 @@
+// core
 import DOM from '../core/createElement.js';
 import eventChannel from '../core/eventChannel.js';
-import { VIEW } from '../actions.js';
+const { done } = eventChannel;
+
+// constants
+import { ACTIONS } from '../constants/index.js';
+const { VIEW } = ACTIONS;
 
 const TodoInput = () =>
   DOM.section(
@@ -14,8 +19,6 @@ const TodoInput = () =>
       onkeypress: onCreateTodoInputEnterKeypress,
     })
   );
-
-const { done } = eventChannel;
 
 const onCreateTodoInputEnterKeypress = ({ key, target }) => {
   if (key === 'Enter') {

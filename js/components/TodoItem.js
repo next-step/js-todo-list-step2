@@ -1,3 +1,4 @@
+// core
 import DOM from '../core/createElement.js';
 
 const TodoItem = ({ _id, contents, isCompleted, priority }) =>

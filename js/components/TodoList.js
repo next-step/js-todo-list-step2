@@ -1,10 +1,13 @@
+// core
 import DOM from '../core/createElement.js';
 import eventChannel from '../core/eventChannel.js';
-import { VIEW } from '../actions.js';
-
+const { done } = eventChannel;
+// child components
 import TodoItem from './TodoItem.js';
 
-import { PRIORITY } from '../constants/index.js';
+// constants
+import { ACTIONS, PRIORITY } from '../constants/index.js';
+const { VIEW } = ACTIONS;
 
 export default class TodoList {
   constructor() {
@@ -54,9 +57,7 @@ export default class TodoList {
   }
 }
 
-const { done } = eventChannel;
-
-const onTodoItemClickHandler = ({ target }) => {
+const onTodoItemClickHandler = ({ target, currentTarget }) => {
   const { className } = target;
   const $todoItem = target.closest('li');
   const id = $todoItem.dataset.todoId;

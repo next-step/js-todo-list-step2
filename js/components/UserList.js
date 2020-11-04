@@ -1,11 +1,11 @@
 import DOM from '../core/createElement.js';
 import eventChannel from '../core/eventChannel.js';
-import { VIEW } from '../actions.js';
-
+const { done } = eventChannel;
 import UserItem from './UserItem.js';
 
 import { isValidUserName } from '../utils/validators.js';
-import { MESSAGES } from '../constants/index.js';
+import { ACTIONS, MESSAGES } from '../constants/index.js';
+const { VIEW } = ACTIONS;
 
 export default class UserList {
   constructor() {
@@ -40,8 +40,6 @@ export default class UserList {
     this.$userList.appendChild(this.$userDeleteButton);
   }
 }
-
-const { done } = eventChannel;
 
 const onUserListClickHandler = ({ target }) => {
   const { className, dataset } = target;

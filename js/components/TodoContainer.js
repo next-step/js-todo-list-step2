@@ -1,13 +1,18 @@
+// core
 import DOM from '../core/createElement.js';
 import eventChannel from '../core/eventChannel.js';
-import { STORE } from '../actions.js';
+const { when } = eventChannel;
+
+// child components
 import TodoInput from '../components/TodoInput.js';
 import TodoList from '../components/TodoList.js';
 import TodoFooter from '../components/TodoFooter.js';
+
+// util & constants
 import API from '../api/index.js';
 import { filterTodoList } from '../utils/index.js';
-
-const { when } = eventChannel;
+import { ACTIONS } from '../constants/index.js';
+const { STORE } = ACTIONS;
 
 export default class TodoContainer {
   constructor() {
@@ -35,11 +40,12 @@ export default class TodoContainer {
     this.todoList.setLoading();
   }
 
-  setState({ todoList, currentFilter }) {
+  setState({ todoList, currentUser, currentFilter }) {
     const filteredTodoList = filterTodoList(todoList, currentFilter);
     const todoCount = filteredTodoList.length;
 
     this.$todoSection.innerHTML = '';
+    this.$todoSection.dataset.userId = currentUser;
 
     this.todoList.setState({ todoList: filteredTodoList });
     this.todoFooter.setState({ todoCount, currentFilter });
