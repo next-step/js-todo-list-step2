@@ -7,8 +7,8 @@ export const TARGETS = Object.freeze({
   TODO_COUNT: "#todo-count"
 });
 
-export const TODO_PRIORITY = Object.freeze([
-  { name: "select" },
-  { name: "primary" },
-  { name: "secondary" }
-]);
+export const TODO_PRIORITY = Object.freeze(
+  { NONE: "select" },
+  { FIRST: "primary" },
+  { SECOND: "secondary" }
+);
