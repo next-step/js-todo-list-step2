@@ -4,7 +4,7 @@ import DOM from '../core/createElement.js';
 // constants
 import { FILTER, GET_FILTER_TEXT } from '../constants/index.js';
 
-const FilterItem = (filter, isSelected) =>
+const FilterItem = ({ filter, isSelected }) =>
   DOM.li(
     null,
     DOM.a({

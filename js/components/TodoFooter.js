@@ -33,7 +33,9 @@ export default class TodoFooter {
       <span class="todo-count">총 <strong>${todoCount}</strong> 개</span>
         <ul class="filters">
           ${FILTER_LIST.map(
-            (filter) => FilterItem(filter, filter === currentFilter).outerHTML
+            (filter) =>
+              FilterItem({ filter, isSelected: filter === currentFilter })
+                .outerHTML
           ).join('')}
         </ul>
       <button class="clear-completed">모두 삭제</button>
