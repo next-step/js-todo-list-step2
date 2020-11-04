@@ -32,22 +32,13 @@ export const FILTER = {
 
 export const FILTER_LIST = Object.values(FILTER);
 
-const _REVERSE_FILTER = {
-  all: 'ALL',
-  active: 'ACTIVE',
-  completed: 'COMPLETED',
-};
-
-const FILTER_TEXT = {
-  ALL: '전체 보기',
-  ACTIVE: '해야할 일',
-  COMPLETED: '완료한 일',
+export const FILTER_TEXT = {
+  all: '전체 보기',
+  active: '해야할 일',
+  completed: '완료한 일',
 };
 
 export const PRIORITY = ['NONE', 'FIRST', 'SECOND'];
-
-export const GET_FILTER_TEXT = (filterStr) =>
-  FILTER_TEXT[_REVERSE_FILTER[filterStr]];
 
 export const MESSAGES = {
   ADD_USER: '추가하고 싶은 이름을 입력해주세요.',

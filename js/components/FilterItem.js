@@ -2,7 +2,7 @@
 import DOM from '../core/createElement.js';
 
 // constants
-import { FILTER, GET_FILTER_TEXT } from '../constants/index.js';
+import { FILTER, FILTER_TEXT } from '../constants/index.js';
 
 // function component
 const FilterItem = ({ filter, isSelected }) =>
@@ -11,7 +11,7 @@ const FilterItem = ({ filter, isSelected }) =>
     DOM.a({
       href: filter === FILTER.ALL ? '/#' : '#' + filter,
       class: isSelected ? `${filter} selected` : filter,
-      innerText: GET_FILTER_TEXT(filter),
+      innerText: FILTER_TEXT[filter],
     })
   );
 
