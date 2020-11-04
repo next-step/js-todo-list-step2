@@ -14,6 +14,7 @@ import { filterTodoList } from '../utils/index.js';
 import { ACTIONS } from '../constants/index.js';
 const { STORE } = ACTIONS;
 
+// class component
 export default class TodoContainer {
   constructor() {
     this.$todoSection = DOM.section({ class: 'todo-section' });

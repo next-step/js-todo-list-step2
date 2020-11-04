@@ -10,6 +10,7 @@ import TodoContainer from './TodoContainer.js';
 import { ACTIONS } from '../constants/index.js';
 const { VIEW, STORE } = ACTIONS;
 
+// class component
 export default class App {
   constructor($target) {
     this.$target = $target;

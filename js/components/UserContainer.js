@@ -11,6 +11,7 @@ import UserList from './UserList.js';
 import { ACTIONS } from '../constants/index.js';
 const { STORE } = ACTIONS;
 
+// class component
 export default class UserContainer {
   constructor() {
     this.$userSection = DOM.section({ class: 'user-section' });
@@ -36,7 +37,9 @@ export default class UserContainer {
 
   setState({ users, currentUser }) {
     this.$userSection.innerHTML = '';
-    this.userTitle.setState({ user: users.find(({ _id }) => _id === currentUser) });
+    this.userTitle.setState({
+      user: users.find(({ _id }) => _id === currentUser),
+    });
     this.userList.setState({ users, currentUser });
     this.render();
   }

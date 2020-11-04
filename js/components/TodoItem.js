@@ -1,6 +1,7 @@
 // core
 import DOM from '../core/createElement.js';
 
+// function component
 const TodoItem = ({ _id, contents, isCompleted, priority }) =>
   DOM.li({
     dataTodoId: _id,

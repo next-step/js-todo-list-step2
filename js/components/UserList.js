@@ -11,6 +11,7 @@ import { isValidUserName } from '../utils/validators.js';
 import { ACTIONS, MESSAGES } from '../constants/index.js';
 const { VIEW } = ACTIONS;
 
+// class component
 export default class UserList {
   constructor() {
     this.$userList = DOM.div({
@@ -48,6 +49,7 @@ export default class UserList {
   }
 }
 
+// event handlers
 const onUserListClickHandler = ({ target }) => {
   const { className, dataset } = target;
 

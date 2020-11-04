@@ -10,6 +10,7 @@ import TodoItem from './TodoItem.js';
 import { ACTIONS, PRIORITY } from '../constants/index.js';
 const { VIEW } = ACTIONS;
 
+// class component
 export default class TodoList {
   constructor() {
     this.$main = DOM.section({ class: 'main' });
@@ -58,6 +59,7 @@ export default class TodoList {
   }
 }
 
+// event handlers
 const onTodoItemClickHandler = ({ target, currentTarget }) => {
   const { className } = target;
   const $todoItem = target.closest('li');

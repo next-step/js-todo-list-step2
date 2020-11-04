@@ -7,6 +7,7 @@ const { done } = eventChannel;
 import { ACTIONS } from '../constants/index.js';
 const { VIEW } = ACTIONS;
 
+// function component
 const TodoInput = () =>
   DOM.section(
     {
@@ -20,6 +21,7 @@ const TodoInput = () =>
     })
   );
 
+// event handlers
 const onCreateTodoInputEnterKeypress = ({ key, target }) => {
   if (key === 'Enter') {
     done(VIEW.ADD_TODO, { contents: target.value });

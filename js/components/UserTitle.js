@@ -1,6 +1,7 @@
 // core
 import DOM from '../core/createElement.js';
 
+// class component
 export default class UserTitle {
   constructor() {
     this.$title = DOM.h1({ id: 'user-title' });

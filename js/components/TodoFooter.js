@@ -10,6 +10,7 @@ import FilterItem from './FilterItem.js';
 import { ACTIONS, FILTER_LIST, MESSAGES } from '../constants/index.js';
 const { VIEW } = ACTIONS;
 
+// class component
 export default class TodoFooter {
   constructor() {
     this.$counterContainer = DOM.div({
@@ -43,6 +44,7 @@ export default class TodoFooter {
   }
 }
 
+// event handlers
 const onFooterClickHandler = ({ target }) => {
   const { className } = target;
 
