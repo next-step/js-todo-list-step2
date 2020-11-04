@@ -2,7 +2,7 @@ import { loadingWrapper, useMiddleWare } from './utils.js';
 import { setter } from './store/index.js';
 import {
   readUserFacade,
-  userCheck,
+  checkUser,
   createUserFacade,
   removeUserFacade,
   createUserTodoItemFacade,
@@ -87,6 +87,6 @@ export const deleteUserHandler = ({ target: { dataset: { component } } }) => {
   if (!confirm) return;
 
   loadingWrapper(
-    () => useMiddleWare(userCheck, removeUserFacade),
+    () => useMiddleWare(checkUser, removeUserFacade),
   );
 };
