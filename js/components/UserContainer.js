@@ -1,6 +1,10 @@
+import DOM from '../core/createElement.js';
+import eventChannel from '../core/eventChannel.js';
+import { STORE } from '../actions.js';
 import UserTitle from './UserTitle.js';
 import UserList from './UserList.js';
-import DOM from '../core/createElement.js';
+
+const { when } = eventChannel;
 
 export default class UserContainer {
   constructor() {
@@ -10,10 +14,15 @@ export default class UserContainer {
     this.userList = new UserList();
 
     this.render();
+    this.connect();
   }
 
   get $el() {
     return this.$userSection;
+  }
+
+  connect() {
+    when(STORE.REQUEST_ALL, () => this.setLoading());
   }
 
   setLoading() {

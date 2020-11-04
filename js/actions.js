@@ -13,6 +13,8 @@ export const VIEW = {
 };
 
 export const STORE = {
-  UPDATE: 'store/update',
-  REQUEST: 'store/request',
+  UPDATE_ALL: 'store/updateAll',
+  UPDATE_TODO: 'store/updateTodo',
+  REQUEST_ALL: 'store/requestAll',
+  REQUEST_TODO: 'store/requestTodo',
 };
