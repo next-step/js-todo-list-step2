@@ -4,14 +4,14 @@
 
 ## Convention
 
--   Class : CamelCase
--   Directory : CamelCase
--   Components : start with Uppercase
--   DOM variable : use prefix "\$"
--   Method
-    -   CamelCase
-    -   DOM Method : use prefix "on"
-    -   Other Methods : start with verb
+- Class : CamelCase
+- Directory : CamelCase
+- Components : start with Uppercase
+- DOM variable : use prefix "\$"
+- Method
+  - CamelCase
+  - DOM Method : use prefix "on"
+  - Other Methods : start with verb
 
 <br>
 
@@ -43,30 +43,33 @@ index.js
 
 ## 🎯 요구사항
 
--   [x] 1. User 추가하기
--   [x] 2. User의 투두리스트 불러오기
--   [x] 3. User 삭제하기
--   [x] 3. todoItem 추가하기
--   [x] 4. todoItem 불러오기
--   [x] 5. todoItem complete하기
--   [x] 6. todoItem 삭제하기
--   [x] 7. todoItem contents 내용 수정하기
+- [x] 1. User 추가하기
+- [x] 2. User의 투두리스트 불러오기
+- [x] 3. User 삭제하기
+- [x] 3. todoItem 추가하기
+- [x] 4. todoItem 불러오기
+- [x] 5. todoItem complete하기
+- [x] 6. todoItem 삭제하기
+- [x] 7. todoItem contents 내용 수정하기
 
 ## 🎯🎯 심화 요구사항
 
--   [ ] 1. 데이터를 불러오기전 로딩바를 이용해, 사용자가 데이터가 불러와지고 있다는 것을 보여줍니다.
--   [x] 2. fetch api 사용하는 부분을 async await을 사용하여 리팩토링합니다.
--   [ ] 3. github issue에서 라벨을 붙이는 것처럼, 우선순위에 따라서 badge를 추가합니다.
--   [x] 4. ES6 impot & export를 이용해 자바스크립트 파일을 리팩토링합니다.
+- [ ] 1. 데이터를 불러오기전 로딩바를 이용해, 사용자가 데이터가 불러와지고 있다는 것을 보여줍니다.
+- [x] 2. fetch api 사용하는 부분을 async await을 사용하여 리팩토링합니다.
+- [ ] 3. github issue에서 라벨을 붙이는 것처럼, 우선순위에 따라서 badge를 추가합니다.
+- [x] 4. ES6 impot & export를 이용해 자바스크립트 파일을 리팩토링합니다.
 
 ## 🕵️‍♂️ 제약사항
 
--   [x] 1. User의 이름은 최소 2글자 이상이어야 합니다.
+- [x] 1. User의 이름은 최소 2글자 이상이어야 합니다.
 
-## 질문
+## 고민
 
--   [ ] 1. API 처리속도가 느려서 상태 업데이트 후, UI 반영이 늦은 경우
--   [ ] 2. Store를 각 Component에서 분리하는 방법 
+- [ ] 1. API 처리속도가 느려서 상태 업데이트 후, UI 반영이 늦은 경우
+- [ ] 2. Store를 각 Component에서 분리하는 방법
+- [ ] 3. facade 패턴으로 전역 store 관리해보기 (https://www.dofactory.com/javascript/design-patterns/facade)
+- [ ] 4. observer 패턴을 pub-sub 패턴으로 변경해보기 (https://medium.com/better-programming/observer-vs-pub-sub-pattern-50d3b27f838c)
+- [ ] 5. 가상 DOM 생성하여 변경지점만 render 해보기 (https://meetup.toast.com/posts/158, https://dev.to/buttercubz/explained-and-created-a-simple-virtual-dom-from-scratch-5765)
 
 <br/><br/>
 
@@ -127,8 +130,8 @@ index.js
 
 ```javascript
 {
-    response: {
-    }
+  response: {
+  }
 }
 ```
 
@@ -289,8 +292,8 @@ live-server 폴더명
 
 아래 링크들에 있는 리뷰 가이드를 보고, 좋은 코드 리뷰 문화를 만들어 나가려고 합니다.
 
--   [코드리뷰 가이드1](https://edykim.com/ko/post/code-review-guide/)
--   [코드리뷰 가이드2](https://wiki.lucashan.space/code-review/01.intro.html#_1-code%EB%A5%BC-%EB%A6%AC%EB%B7%B0%ED%95%98%EB%8A%94-%EC%82%AC%EB%9E%8C%EB%93%A4%EC%9D%80-%EC%96%B4%EB%96%A4%EA%B2%83%EC%9D%84-%EC%A4%91%EC%A0%90%EC%A0%81%EC%9C%BC%EB%A1%9C-%EC%82%B4%ED%8E%B4%EC%95%BC%ED%95%98%EB%8A%94%EA%B0%80)
+- [코드리뷰 가이드1](https://edykim.com/ko/post/code-review-guide/)
+- [코드리뷰 가이드2](https://wiki.lucashan.space/code-review/01.intro.html#_1-code%EB%A5%BC-%EB%A6%AC%EB%B7%B0%ED%95%98%EB%8A%94-%EC%82%AC%EB%9E%8C%EB%93%A4%EC%9D%80-%EC%96%B4%EB%96%A4%EA%B2%83%EC%9D%84-%EC%A4%91%EC%A0%90%EC%A0%81%EC%9C%BC%EB%A1%9C-%EC%82%B4%ED%8E%B4%EC%95%BC%ED%95%98%EB%8A%94%EA%B0%80)
 
 <br>
 
