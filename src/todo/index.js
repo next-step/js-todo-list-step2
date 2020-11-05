@@ -4,6 +4,9 @@ import Api from "./api/index.js";
 import {
   TodoInput,
   TodoUserList,
+  TodoUserInput,
+  TodoCreateUserButton,
+  TodoDeleteUserButton,
   TodoList,
   TodoCount
 } from "./components/index.js";
@@ -19,12 +22,27 @@ class Todo {
     });
 
     this.todoUserList = new TodoUserList({
-      $target: document.querySelector(TARGETS.TODO_USER_LIST),
+      $target: document.querySelector(TARGETS.TODO_USER_LIST)
+    });
+
+    this.todoUserInput = new TodoUserInput({
+      $target: document.querySelector(TARGETS.TODO_USER_LIST_INPUT),
+      setGlobalState: this.setState
+    });
+
+    this.todoCreateUserButton = new TodoCreateUserButton({
+      $target: document.querySelector(TARGETS.TODO_USER_CREATE_BUTTON),
+      setGlobalState: this.setState
+    });
+
+    this.todoDeleteUserButton = new TodoDeleteUserButton({
+      $target: document.querySelector(TARGETS.TODO_USER_DELETE_BUTTON),
       setGlobalState: this.setState
     });
 
     this.todoList = new TodoList({
-      $target: document.querySelector(TARGETS.TODO_LIST)
+      $target: document.querySelector(TARGETS.TODO_LIST),
+      setGlobalState: this.setState
     });
 
     this.todoCount = new TodoCount({
@@ -38,7 +56,9 @@ class Todo {
 
     this.todoUserList.setState(TodoStore.getStore);
     this.todoList.setState(TodoStore.getStore);
+    this.todoUserInput.setState(TodoStore.getStore);
     this.todoCount.setState(TodoStore.getStore);
+    this.todoUserInput.setState(TodoStore.getStore);
   };
 
   init = async () => {

@@ -3,10 +3,12 @@ import Event from "../utils/event.js";
 import { TARGETS, TODO_PRIORITY } from "../../shared/utils/constants.js";
 
 class TodoList {
-  constructor({ $target }) {
+  constructor({ $target, setGlobalState }) {
     this.$target = $target;
     this.state = TodoStore.getStore;
     this.toggleCompleted = Event.toggleCompleted;
+    this.deleteTodo = Event.deleteTodo;
+    this.setGlobalState = setGlobalState;
 
     this.render();
 
@@ -15,15 +17,28 @@ class TodoList {
       .addEventListener("click", this.onToggleCompleted);
   }
 
-  onToggleCompleted = e => {
-    if (e.target.nodeName !== "INPUT") return;
+  onToggleCompleted = async e => {
+    const { activeUser } = TodoStore.getStore;
 
-    this.toggleCompleted({
-      _id: e.target.closest("li").dataset.id,
-      isCompleted: e.target.checked
-    });
+    switch (e.target.nodeName) {
+      case "INPUT":
+        await this.toggleCompleted({
+          _id: activeUser,
+          itemId: e.target.closest("li").dataset.id
+        });
+        this.setGlobalState();
+        break;
+      case "BUTTON":
+        await this.deleteTodo({
+          _id: activeUser,
+          itemId: e.target.closest("li").dataset.id
+        });
+        this.setGlobalState();
+        break;
 
-    this.setState(TodoStore.getStore);
+      default:
+        break;
+    }
   };
 
   setState(payload) {
@@ -67,7 +82,7 @@ class TodoList {
                 <option value="1">1순위</option>
                 <option value="2">2순위</option>
               </select>
-              해야할 아이템
+              ${todo.contents}
             </label>`
           }
           

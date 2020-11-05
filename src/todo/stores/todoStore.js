@@ -8,10 +8,6 @@ class TodoStore {
     activeUser: ""
   };
 
-  static activeUserTodos(userList, activeUser) {
-    return filterActiveUserTodos(userList, activeUser);
-  }
-
   static setState({ ...data }) {
     const getTodos = TodoStore.activeUserTodos(data.userList, data.activeUser);
 
@@ -22,21 +18,22 @@ class TodoStore {
     };
   }
 
-  static toggleCompleted({ _id, isCompleted }) {
-    TodoStore.data.todos.map(todo => {
-      if (todo._id === _id) todo.isCompleted = isCompleted;
-      return todo;
-    });
+  static get getStore() {
+    return {
+      ...TodoStore.data
+    };
+  }
+
+  static activeUserTodos(userList, activeUser) {
+    return filterActiveUserTodos(userList, activeUser);
   }
 
   static changeActiveUser({ activeUser }) {
     TodoStore.setState({ ...TodoStore.data, activeUser });
   }
 
-  static get getStore() {
-    return {
-      ...TodoStore.data
-    };
+  static renewUserList({ activeUser, userList }) {
+    TodoStore.setState({ ...TodoStore.data, activeUser, userList });
   }
 }
 

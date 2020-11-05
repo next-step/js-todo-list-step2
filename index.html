@@ -12,17 +12,25 @@
   <body>
     <div id="app">
       <h1 id="user-title" data-username="eastjun">
-        <span><strong>juunone</strong>'s Todo List</span>
+        <span><strong>one</strong>'s Todo List</span>
       </h1>
-      <section>
-        <div id="user-list">
+      <section class="todo-user-group">
+        <label for="user-list-input">유저를 선택하세요:</label>
+        <input list="user-list" id="user-list-input" name="user-list-input" />
+        <datalist id="user-list">
           <button class="ripple active">eastjun</button>
           <button class="ripple">westjun</button>
           <button class="ripple">southjun</button>
           <button class="ripple">northjun</button>
           <button class="ripple">hojun</button>
           <button class="ripple user-create-button">+ 유저 생성</button>
-        </div>
+        </datalist>
+        <button id="user-create-button" class="ripple user-create-button">
+          + 유저 생성
+        </button>
+        <button id="user-delete-button" class="ripple user-delete-button">
+          - 유저 삭제
+        </button>
       </section>
 
       <section class="todoapp">
