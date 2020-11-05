@@ -12,6 +12,8 @@ function TodoList({
     this.init = () => {
         checkTarget($target);
 
+        // TODO : subscribe 변경
+        // store.subscribe(ADD_TODO, this.render)
         store.subscribe(this.render);
         this.bindEvents();
     };

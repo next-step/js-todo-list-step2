@@ -8,7 +8,15 @@ class Store {
                 _id: "",
             },
         };
+        /*
+         TODO: pubsub pattern
+         store.subscribe(ADD_TODO, this.render)
+         subscribers : {
+            ADD_TODO: [render, render, render]
+         }
+        */
         this.subscribers = [];
+        this.events = [];
     }
 
     dispatch = (action) => {
