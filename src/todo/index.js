@@ -1,4 +1,4 @@
-import { filterActiveTodoUsers } from "./utils/validator.js";
+import { mapTodoUsers } from "./utils/validator.js";
 
 import Api from "./api/index.js";
 import {
@@ -18,7 +18,8 @@ class Todo {
     this.state = TodoStore.getStore;
 
     this.todoInput = new TodoInput({
-      $target: document.querySelector(TARGETS.TODO_INPUT)
+      $target: document.querySelector(TARGETS.TODO_INPUT),
+      setGlobalState: this.setState
     });
 
     this.todoUserList = new TodoUserList({
@@ -62,16 +63,17 @@ class Todo {
   };
 
   init = async () => {
-    const userList = filterActiveTodoUsers(await Api.requestUser());
+    const userList = await Api.requestUser();
 
-    TodoStore.setState({
-      userList,
-      todos: userList[0].todoList,
-      count: userList[0].todoList.length,
-      activeUser: userList[0]._id
-    });
-
-    this.setState();
+    if (userList.length) {
+      TodoStore.setState({
+        userList,
+        todos: mapTodoUsers(userList[0].todoList),
+        count: userList[0].todoList.length,
+        activeUser: userList[0]._id
+      });
+      this.setState();
+    }
   };
 }
 

@@ -35,11 +35,31 @@ class Api {
     });
   }
 
+  static addTodo(_id, contents) {
+    return requestFetch({
+      url: BASE_URL,
+      method: "POST",
+      uri: `/api/users/${_id}/items/`,
+      data: {
+        contents
+      }
+    });
+  }
+
   static toggleTodo(_id, itemId) {
     return requestFetch({
       url: BASE_URL,
       method: "PUT",
       uri: `/api/users/${_id}/items/${itemId}/toggle`
+    });
+  }
+
+  static editContents(_id, itemId, contents) {
+    return requestFetch({
+      url: BASE_URL,
+      method: "PUT",
+      uri: `/api/users/${_id}/items/${itemId}`,
+      data: { contents }
     });
   }
 

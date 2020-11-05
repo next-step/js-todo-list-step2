@@ -1,6 +1,4 @@
 import { TodoStore } from "../stores/index.js";
-import Event from "../utils/event.js";
-import { TARGETS } from "../../shared/utils/constants.js";
 
 class TodoUserList {
   constructor({ $target }) {

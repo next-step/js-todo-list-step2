@@ -1,5 +1,8 @@
-export const filterActiveTodoUsers = todos => {
-  return todos.filter(todo => todo);
+export const mapTodoUsers = todos => {
+  return todos.map(todo => {
+    if (!todo.isEditing) todo.isEditing = false;
+    return todo;
+  });
 };
 
 export const filterActiveUserTodos = (todos, id) => {

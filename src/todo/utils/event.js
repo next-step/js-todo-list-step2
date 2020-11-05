@@ -32,8 +32,52 @@ class Event {
     });
   };
 
+  static addTodo = async ({ _id, contents }) => {
+    const { message, ...rest } = await Api.addTodo(_id, contents);
+    if (!message && rest) {
+      const renewPersonalUser = await Api.requestPersonalUser(_id);
+      const { userList } = TodoStore.getStore;
+      const renewUserList = changeUserData(_id, userList, renewPersonalUser);
+
+      TodoStore.setState({
+        ...TodoStore.getStore,
+        todos: renewPersonalUser,
+        userList: renewUserList
+      });
+    }
+  };
+
   static toggleCompleted = async ({ _id, itemId }) => {
     const { message, ...rest } = await Api.toggleTodo(_id, itemId);
+    if (!message && rest) {
+      const renewPersonalUser = await Api.requestPersonalUser(_id);
+      const { userList } = TodoStore.getStore;
+      const renewUserList = changeUserData(_id, userList, renewPersonalUser);
+
+      TodoStore.setState({
+        ...TodoStore.getStore,
+        todos: renewPersonalUser,
+        userList: renewUserList
+      });
+    }
+  };
+
+  static editingTodo = async ({ itemId }) => {
+    const { todos } = TodoStore.getStore;
+    const newTodos = todos.map(todo => {
+      if (todo._id === itemId) todo.isEditing = true;
+      return todo;
+    });
+
+    TodoStore.setState({
+      ...TodoStore.getStore,
+      todos: newTodos
+    });
+  };
+
+  static saveEditContents = async ({ _id, itemId, contents }) => {
+    const { message, ...rest } = await Api.editContents(_id, itemId, contents);
+
     if (!message && rest) {
       const renewPersonalUser = await Api.requestPersonalUser(_id);
       const { userList } = TodoStore.getStore;

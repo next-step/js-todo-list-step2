@@ -1,4 +1,4 @@
-import { filterActiveUserTodos } from "../utils/validator.js";
+import { filterActiveUserTodos, mapTodoUsers } from "../utils/validator.js";
 
 class TodoStore {
   static data = {
@@ -13,7 +13,7 @@ class TodoStore {
 
     TodoStore.data = {
       ...data,
-      todos: getTodos,
+      todos: mapTodoUsers(getTodos),
       count: getTodos?.length
     };
   }

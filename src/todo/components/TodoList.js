@@ -8,6 +8,8 @@ class TodoList {
     this.state = TodoStore.getStore;
     this.toggleCompleted = Event.toggleCompleted;
     this.deleteTodo = Event.deleteTodo;
+    this.editingTodo = Event.editingTodo;
+    this.saveEditContents = Event.saveEditContents;
     this.setGlobalState = setGlobalState;
 
     this.render();
@@ -15,18 +17,49 @@ class TodoList {
     document
       .querySelector(TARGETS.TODO_LIST)
       .addEventListener("click", this.onToggleCompleted);
+
+    document
+      .querySelector(TARGETS.TODO_LIST)
+      .addEventListener("dblclick", this.onChangeContents);
+
+    document.addEventListener("keypress", this.onKeypress);
   }
+
+  onKeypress = async e => {
+    if (
+      e.key === "Enter" &&
+      e.target.nodeName === "INPUT" &&
+      e.target.classList.contains("edit")
+    ) {
+      const { activeUser } = TodoStore.getStore;
+      await this.saveEditContents({
+        _id: activeUser,
+        itemId: e.target.closest("li").dataset.id,
+        contents: e.target.value
+      });
+      this.setGlobalState();
+    }
+  };
+
+  onChangeContents = async e => {
+    if (e.target.nodeName !== "LABEL") return;
+
+    this.editingTodo({ itemId: e.target.closest("li").dataset.id });
+    this.setGlobalState();
+  };
 
   onToggleCompleted = async e => {
     const { activeUser } = TodoStore.getStore;
 
     switch (e.target.nodeName) {
       case "INPUT":
-        await this.toggleCompleted({
-          _id: activeUser,
-          itemId: e.target.closest("li").dataset.id
-        });
-        this.setGlobalState();
+        if (!e.target.classList.contains("edit")) {
+          await this.toggleCompleted({
+            _id: activeUser,
+            itemId: e.target.closest("li").dataset.id
+          });
+          this.setGlobalState();
+        }
         break;
       case "BUTTON":
         await this.deleteTodo({
@@ -61,7 +94,9 @@ class TodoList {
       }
 
       return `
-      <li data-id=${todo._id} class="${todo.isCompleted ? "completed" : ""}">
+      <li data-id=${todo._id} class="${todo.isCompleted ? "completed" : ""} ${
+        todo.isEditing ? "editing" : ""
+      }">
         <div class="view">
           <input class="toggle" type="checkbox" ${
             todo.isCompleted && `checked="true"`
