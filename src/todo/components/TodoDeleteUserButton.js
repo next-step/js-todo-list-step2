@@ -1,5 +1,6 @@
 import Event from "../utils/event.js";
 import { TodoStore } from "../stores/index.js";
+import { MESSAGES } from "../../shared/utils/constants.js";
 
 class TodoDeleteUserButton {
   constructor({ $target, setGlobalState }) {
@@ -12,7 +13,7 @@ class TodoDeleteUserButton {
 
   onClick = async () => {
     const { activeUser } = TodoStore.getStore;
-    if (confirm("정말 삭제하시겠습니까?")) {
+    if (confirm(MESSAGES.DELETE_USER_CONFIRM)) {
       await this.deleteUser(activeUser);
       this.setGlobalState();
     }

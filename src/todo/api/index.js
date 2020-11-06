@@ -79,6 +79,14 @@ class Api {
       uri: `/api/users/${_id}/items/${itemId}`
     });
   }
+
+  static deleteAllTodos(_id) {
+    return requestFetch({
+      url: BASE_URL,
+      method: "DELETE",
+      uri: `/api/users/${_id}/items/`
+    });
+  }
 }
 
 export default Api;

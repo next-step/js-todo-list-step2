@@ -1,6 +1,6 @@
 import { TodoStore } from "../stores/index.js";
 import Event from "../utils/event.js";
-import { TARGETS, TODO_PRIORITY } from "../../shared/utils/constants.js";
+import { TARGETS, MESSAGES } from "../../shared/utils/constants.js";
 
 class TodoList {
   constructor({ $target, setGlobalState }) {
@@ -8,6 +8,7 @@ class TodoList {
     this.state = TodoStore.getStore;
     this.toggleCompleted = Event.toggleCompleted;
     this.deleteTodo = Event.deleteTodo;
+    this.deleteAllTodos = Event.deleteAllTodos;
     this.editingTodo = Event.editingTodo;
     this.saveEditContents = Event.saveEditContents;
     this.editPriority = Event.editPriority;
@@ -29,8 +30,19 @@ class TodoList {
 
     document.addEventListener("keydown", this.onKeydown);
 
+    document
+      .querySelector(TARGETS.TODO_DELETE_ALL_BUTTON)
+      .addEventListener("click", this.onClickDeleteAllTodos);
+
     this.$target.innerHTML = this.skeletonMask();
   }
+
+  onClickDeleteAllTodos = async () => {
+    if (confirm(MESSAGES.DELETE_USER_CONFIRM)) {
+      await this.deleteAllTodos();
+      this.setGlobalState();
+    }
+  };
 
   onKeydown = async e => {
     if (e.target.classList.contains("edit")) {

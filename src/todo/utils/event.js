@@ -1,6 +1,7 @@
 import Api from "../api/index.js";
 import { TodoStore } from "../stores/index.js";
 import { changeUserData } from "../utils/validator.js";
+import { MESSAGES } from "../../shared/utils/constants.js";
 
 class Event {
   static changeActiveUser = ({ activeUser }) => {
@@ -8,7 +9,7 @@ class Event {
   };
 
   static addUser = async () => {
-    const name = prompt("추가하고 싶은 이름을 입력해주세요.");
+    const name = prompt(MESSAGES.ADD_USER_PROMPT);
     if (name && name.length >= 2) {
       const { message, ...rest } = await Api.addUser(name);
       if (!message && rest) {
@@ -19,7 +20,7 @@ class Event {
         });
       }
     } else {
-      alert("이름은 2글자 이상 입력해주세요.");
+      alert(MESSAGES.ADD_USER_ALERT);
     }
   };
 
@@ -112,6 +113,25 @@ class Event {
       const renewPersonalUser = await Api.requestPersonalUser(_id);
       const { userList } = TodoStore.getStore;
       const renewUserList = changeUserData(_id, userList, renewPersonalUser);
+
+      TodoStore.setState({
+        ...TodoStore.getStore,
+        todos: renewPersonalUser,
+        userList: renewUserList
+      });
+    }
+  };
+
+  static deleteAllTodos = async () => {
+    const { userList, activeUser } = TodoStore.getStore;
+    const { message, ...rest } = await Api.deleteAllTodos(activeUser);
+    if (!message && rest) {
+      const renewPersonalUser = await Api.requestPersonalUser(activeUser);
+      const renewUserList = changeUserData(
+        activeUser,
+        userList,
+        renewPersonalUser
+      );
 
       TodoStore.setState({
         ...TodoStore.getStore,
