@@ -28,6 +28,8 @@ class TodoList {
       .addEventListener("change", this.onChangePriority);
 
     document.addEventListener("keydown", this.onKeydown);
+
+    this.$target.innerHTML = this.skeletonMask();
   }
 
   onKeydown = async e => {
@@ -100,6 +102,20 @@ class TodoList {
         break;
     }
   };
+
+  skeletonMask() {
+    return Array(3).fill(`<li>
+    <div class="view">
+      <label class="label">
+        <div class="animated-background">
+          <div class="skel-mask-container">
+            <div class="skel-mask"></div>
+          </div>
+        </div>
+      </label>
+    </div>
+  </li>`);
+  }
 
   setState(payload) {
     this.state = { ...this.state, ...payload };
