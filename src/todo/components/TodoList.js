@@ -1,9 +1,10 @@
 import { TodoStore } from "../stores/index.js";
 import Event from "../utils/event.js";
 import { TARGETS, MESSAGES } from "../../shared/utils/constants.js";
+import { filterViewTypeTodos } from "../utils/validator.js";
 
 class TodoList {
-  constructor({ $target, setGlobalState }) {
+  constructor({ $target, setGlobalState, todoCount }) {
     this.$target = $target;
     this.state = TodoStore.getStore;
     this.toggleCompleted = Event.toggleCompleted;
@@ -13,6 +14,7 @@ class TodoList {
     this.saveEditContents = Event.saveEditContents;
     this.editPriority = Event.editPriority;
     this.setGlobalState = setGlobalState;
+    this.todoCount = todoCount;
 
     this.render();
 
@@ -34,8 +36,31 @@ class TodoList {
       .querySelector(TARGETS.TODO_DELETE_ALL_BUTTON)
       .addEventListener("click", this.onClickDeleteAllTodos);
 
-    this.$target.innerHTML = this.skeletonMask();
+    document
+      .querySelector(TARGETS.TODO_FILTER)
+      .addEventListener("click", this.onClickFilterTodos);
+
+    this.$target.innerHTML = this.skeletonMask().join("");
   }
+
+  onClickFilterTodos = async e => {
+    if (e.target.nodeName !== "A") return;
+
+    e.target
+      .closest(TARGETS.TODO_FILTER)
+      .querySelector(".selected")
+      .classList.remove("selected");
+
+    e.target.classList.add("selected");
+
+    TodoStore.setState({
+      ...TodoStore.getStore,
+      viewType: e.target.dataset.type
+    });
+
+    this.setState(TodoStore.getStore);
+    this.todoCount.setState(TodoStore.getStore);
+  };
 
   onClickDeleteAllTodos = async () => {
     if (confirm(MESSAGES.DELETE_USER_CONFIRM)) {
@@ -135,7 +160,14 @@ class TodoList {
   }
 
   render() {
-    const todos = this.state.todos.map(todo => {
+    let filterTodos = this.state.todos;
+    if (this.state.viewType === "completed") {
+      filterTodos = filterViewTypeTodos(this.state.todos, true);
+    } else if (this.state.viewType === "active") {
+      filterTodos = filterViewTypeTodos(this.state.todos, false);
+    }
+
+    const todos = filterTodos.map(todo => {
       let priority = 0;
       switch (todo.priority) {
         case "FIRST":

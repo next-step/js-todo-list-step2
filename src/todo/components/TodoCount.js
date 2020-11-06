@@ -1,3 +1,4 @@
+import { filterViewTypeTodos } from "../utils/validator.js";
 class TodoCount {
   constructor({ $target, count }) {
     this.$target = $target;

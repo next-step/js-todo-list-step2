@@ -8,6 +8,7 @@ export const TARGETS = Object.freeze({
   TODO_USER_DELETE_BUTTON: "#user-delete-button",
   TODO_LIST: "#todo-list",
   TODO_COUNT: "#todo-count",
+  TODO_FILTER: "#filters",
   TODO_DELETE_ALL_BUTTON: "#clear-completed"
 });
 

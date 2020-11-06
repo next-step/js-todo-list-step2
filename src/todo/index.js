@@ -41,20 +41,19 @@ class Todo {
       setGlobalState: this.setState
     });
 
-    this.todoList = new TodoList({
-      $target: document.querySelector(TARGETS.TODO_LIST),
-      setGlobalState: this.setState
-    });
-
     this.todoCount = new TodoCount({
       $target: document.querySelector(TARGETS.TODO_COUNT),
       count: this.state.count
     });
+
+    this.todoList = new TodoList({
+      $target: document.querySelector(TARGETS.TODO_LIST),
+      setGlobalState: this.setState,
+      todoCount: this.todoCount
+    });
   }
 
   setState = () => {
-    console.log("state:::", TodoStore.getStore);
-
     this.todoUserList.setState(TodoStore.getStore);
     this.todoList.setState(TodoStore.getStore);
     this.todoUserInput.setState(TodoStore.getStore);
@@ -64,9 +63,11 @@ class Todo {
 
   init = async () => {
     const userList = await Api.requestUser();
+    const state = TodoStore.getStore;
 
     if (userList.length) {
       TodoStore.setState({
+        ...state,
         userList,
         todos: mapTodoUsers(userList[0].todoList),
         count: userList[0].todoList.length,

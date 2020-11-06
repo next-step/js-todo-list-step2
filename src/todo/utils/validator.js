@@ -15,3 +15,9 @@ export const changeUserData = (id, userList, renewPersonalUser) => {
     else return renewPersonalUser;
   });
 };
+
+export const filterViewTypeTodos = (todos, viewType) => {
+  return todos.filter(todo =>
+    viewType ? todo.isCompleted : !todo.isCompleted
+  );
+};

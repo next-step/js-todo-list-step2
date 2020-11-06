@@ -42,15 +42,17 @@
           <span id="todo-count" class="todo-count"
             >총 <strong>0</strong> 개</span
           >
-          <ul class="filters">
+          <ul id="filters" class="filters">
             <li>
-              <a href="/#" class="all selected">전체보기</a>
+              <a href="/#" class="all selected" data-type="all">전체보기</a>
             </li>
             <li>
-              <a href="#active" class="active">해야할 일</a>
+              <a href="#active" class="active" data-type="active">해야할 일</a>
             </li>
             <li>
-              <a href="#completed" class="completed">완료한 일</a>
+              <a href="#completed" class="completed" data-type="completed"
+                >완료한 일</a
+              >
             </li>
           </ul>
           <button id="clear-completed" class="clear-completed">
