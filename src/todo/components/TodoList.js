@@ -10,6 +10,7 @@ class TodoList {
     this.deleteTodo = Event.deleteTodo;
     this.editingTodo = Event.editingTodo;
     this.saveEditContents = Event.saveEditContents;
+    this.editPriority = Event.editPriority;
     this.setGlobalState = setGlobalState;
 
     this.render();
@@ -22,29 +23,55 @@ class TodoList {
       .querySelector(TARGETS.TODO_LIST)
       .addEventListener("dblclick", this.onChangeContents);
 
-    document.addEventListener("keypress", this.onKeypress);
+    document
+      .querySelector(TARGETS.TODO_LIST)
+      .addEventListener("change", this.onChangePriority);
+
+    document.addEventListener("keydown", this.onKeydown);
   }
 
-  onKeypress = async e => {
-    if (
-      e.key === "Enter" &&
-      e.target.nodeName === "INPUT" &&
-      e.target.classList.contains("edit")
-    ) {
-      const { activeUser } = TodoStore.getStore;
-      await this.saveEditContents({
-        _id: activeUser,
-        itemId: e.target.closest("li").dataset.id,
-        contents: e.target.value
+  onKeydown = async e => {
+    if (e.target.classList.contains("edit")) {
+      if (e.key === "Enter" && e.target.nodeName === "INPUT") {
+        const { activeUser } = TodoStore.getStore;
+        await this.saveEditContents({
+          _id: activeUser,
+          itemId: e.target.closest("li").dataset.id,
+          contents: e.target.value
+        });
+        this.setGlobalState();
+      }
+    }
+
+    if (e.key === "Escape" && document.querySelector(".editing")) {
+      this.editingTodo({
+        itemId: document.querySelector(".editing").dataset.id,
+        type: false
       });
       this.setGlobalState();
     }
   };
 
+  onChangePriority = async e => {
+    if (e.target.nodeName !== "SELECT") return;
+
+    const { activeUser } = TodoStore.getStore;
+    await this.editPriority({
+      _id: activeUser,
+      itemId: e.target.closest("li").dataset.id,
+      priority: e.target.value
+    });
+
+    this.setGlobalState();
+  };
+
   onChangeContents = async e => {
     if (e.target.nodeName !== "LABEL") return;
 
-    this.editingTodo({ itemId: e.target.closest("li").dataset.id });
+    this.editingTodo({
+      itemId: e.target.closest("li").dataset.id,
+      type: true
+    });
     this.setGlobalState();
   };
 
@@ -81,7 +108,7 @@ class TodoList {
 
   render() {
     const todos = this.state.todos.map(todo => {
-      let priority = 1;
+      let priority = 0;
       switch (todo.priority) {
         case "FIRST":
           priority = 1;
@@ -101,26 +128,20 @@ class TodoList {
           <input class="toggle" type="checkbox" ${
             todo.isCompleted && `checked="true"`
           } />
-          ${
-            todo.priority !== "NONE"
-              ? `<label class="label">
-          <span class="chip ${
-            TODO_PRIORITY[todo.priority]
-              ? TODO_PRIORITY[todo.priority]
-              : "primary"
-          }">${priority}순위</span>
+          <label class="label">
+            <select class="chip select-${priority}">
+              <option value="NONE" ${
+                todo.priority === "NONE" ? "selected" : ""
+              }>순위</option>
+              <option value="FIRST" ${
+                todo.priority === "FIRST" ? "selected" : ""
+              }>1순위</option>
+              <option value="SECOND" ${
+                todo.priority === "SECOND" ? "selected" : ""
+              }>2순위</option>
+            </select>
             ${todo.contents}
-          </label>`
-              : `<label class="label">
-              <select class="chip select">
-                <option value="0" selected>순위</option>
-                <option value="1">1순위</option>
-                <option value="2">2순위</option>
-              </select>
-              ${todo.contents}
-            </label>`
-          }
-          
+          </label>
           <button class="destroy"></button>
         </div>
         <input class="edit" value=${todo.contents} />

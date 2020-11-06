@@ -63,6 +63,15 @@ class Api {
     });
   }
 
+  static editPriority(_id, itemId, priority) {
+    return requestFetch({
+      url: BASE_URL,
+      method: "PUT",
+      uri: `/api/users/${_id}/items/${itemId}/priority`,
+      data: { priority }
+    });
+  }
+
   static deleteTodo(_id, itemId) {
     return requestFetch({
       url: BASE_URL,

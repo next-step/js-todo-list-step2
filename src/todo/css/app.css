@@ -485,6 +485,18 @@ select.chip {
   width: 45px;
 }
 
+.chip.select-1 {
+  background: #e60055;
+  color: #fff;
+  border-color: #e60055;
+}
+
+.chip.select-2 {
+  background: #00cf96;
+  color: #fff;
+  border-color: #00cf96;
+}
+
 button.user-create-button.ripple {
   border-radius: 15px;
   padding-left: 10px;

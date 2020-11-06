@@ -62,10 +62,10 @@ class Event {
     }
   };
 
-  static editingTodo = async ({ itemId }) => {
+  static editingTodo = async ({ itemId, type }) => {
     const { todos } = TodoStore.getStore;
     const newTodos = todos.map(todo => {
-      if (todo._id === itemId) todo.isEditing = true;
+      if (todo._id === itemId) todo.isEditing = type;
       return todo;
     });
 
@@ -78,6 +78,21 @@ class Event {
   static saveEditContents = async ({ _id, itemId, contents }) => {
     const { message, ...rest } = await Api.editContents(_id, itemId, contents);
 
+    if (!message && rest) {
+      const renewPersonalUser = await Api.requestPersonalUser(_id);
+      const { userList } = TodoStore.getStore;
+      const renewUserList = changeUserData(_id, userList, renewPersonalUser);
+
+      TodoStore.setState({
+        ...TodoStore.getStore,
+        todos: renewPersonalUser,
+        userList: renewUserList
+      });
+    }
+  };
+
+  static editPriority = async ({ _id, itemId, priority }) => {
+    const { message, ...rest } = await Api.editPriority(_id, itemId, priority);
     if (!message && rest) {
       const renewPersonalUser = await Api.requestPersonalUser(_id);
       const { userList } = TodoStore.getStore;
