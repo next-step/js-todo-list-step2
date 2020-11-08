@@ -4,7 +4,7 @@ import { BASE_URL } from "../../shared/utils/constants.js";
 class Api {
   static requestUser() {
     return requestFetch({
-      url: BASE_URL,
+      baseUrl: BASE_URL,
       method: "GET",
       uri: "/api/users"
     });
@@ -12,7 +12,7 @@ class Api {
 
   static requestPersonalUser(_id) {
     return requestFetch({
-      url: BASE_URL,
+      baseUrl: BASE_URL,
       method: "GET",
       uri: `/api/users/${_id}`
     });
@@ -20,7 +20,7 @@ class Api {
 
   static addUser(name) {
     return requestFetch({
-      url: BASE_URL,
+      baseUrl: BASE_URL,
       method: "POST",
       uri: "/api/users",
       data: { name }
@@ -29,7 +29,7 @@ class Api {
 
   static removeUser(id) {
     return requestFetch({
-      url: BASE_URL,
+      baseUrl: BASE_URL,
       method: "DELETE",
       uri: `/api/users/${id}`
     });
@@ -37,7 +37,7 @@ class Api {
 
   static addTodo(_id, contents) {
     return requestFetch({
-      url: BASE_URL,
+      baseUrl: BASE_URL,
       method: "POST",
       uri: `/api/users/${_id}/items/`,
       data: {
@@ -48,7 +48,7 @@ class Api {
 
   static toggleTodo(_id, itemId) {
     return requestFetch({
-      url: BASE_URL,
+      baseUrl: BASE_URL,
       method: "PUT",
       uri: `/api/users/${_id}/items/${itemId}/toggle`
     });
@@ -56,7 +56,7 @@ class Api {
 
   static editContents(_id, itemId, contents) {
     return requestFetch({
-      url: BASE_URL,
+      baseUrl: BASE_URL,
       method: "PUT",
       uri: `/api/users/${_id}/items/${itemId}`,
       data: { contents }
@@ -65,7 +65,7 @@ class Api {
 
   static editPriority(_id, itemId, priority) {
     return requestFetch({
-      url: BASE_URL,
+      baseUrl: BASE_URL,
       method: "PUT",
       uri: `/api/users/${_id}/items/${itemId}/priority`,
       data: { priority }
@@ -74,7 +74,7 @@ class Api {
 
   static deleteTodo(_id, itemId) {
     return requestFetch({
-      url: BASE_URL,
+      baseUrl: BASE_URL,
       method: "DELETE",
       uri: `/api/users/${_id}/items/${itemId}`
     });
@@ -82,7 +82,7 @@ class Api {
 
   static deleteAllTodos(_id) {
     return requestFetch({
-      url: BASE_URL,
+      baseUrl: BASE_URL,
       method: "DELETE",
       uri: `/api/users/${_id}/items/`
     });

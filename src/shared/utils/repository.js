@@ -1,11 +1,11 @@
 export const requestFetch = ({
-  url,
+  baseUrl,
   method = "GET",
   data,
   uri = "",
   params = ""
 }) => {
-  return fetch(`${url}${uri}${params}`, {
+  return fetch(`${baseUrl}${uri}${params}`, {
     method,
     headers: {
       "Content-Type": "application/json"
