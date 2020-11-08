@@ -12,7 +12,7 @@ class TodoInput {
   }
 
   onKeypress = async e => {
-    const todoValue = document.querySelector(TARGETS.TODO_INPUT).value;
+    const todoValue = this.$target.value;
 
     if (e.target.id === "new-todo" && e.key === "Enter" && todoValue) {
       const { activeUser } = TodoStore.getStore;
@@ -20,7 +20,7 @@ class TodoInput {
       this.setGlobalState();
       this.$target.value = "";
 
-      if(todoValue. length < 2){
+      if(todoValue.length < 2){
         alert(MESSAGES.TODO_CONTENTS_ALERT)
       }
     }

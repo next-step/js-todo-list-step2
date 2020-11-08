@@ -17,7 +17,12 @@ class TodoList {
     this.todoCount = todoCount;
 
     this.render();
+    this.bindEvents();
 
+    this.$target.innerHTML = this.skeletonMask().join("");
+  }
+
+  bindEvents = () => {
     document
       .querySelector(TARGETS.TODO_LIST)
       .addEventListener("click", this.onToggleCompleted);
@@ -39,8 +44,6 @@ class TodoList {
     document
       .querySelector(TARGETS.TODO_FILTER)
       .addEventListener("click", this.onClickFilterTodos);
-
-    this.$target.innerHTML = this.skeletonMask().join("");
   }
 
   onClickFilterTodos = async e => {
