@@ -440,7 +440,6 @@ button.ripple {
 .animated-background {
   will-change: transform;
   animation: placeHolderShimmer 1s linear infinite forwards;
-  -webkit-backface-visibility: hidden;
   background: #e6e6e6;
   background: linear-gradient(90deg, #eee 8%, #ddd 18%, #eee 33%);
   background-size: 800px 104px;

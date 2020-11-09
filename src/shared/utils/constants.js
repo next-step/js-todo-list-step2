@@ -18,3 +18,10 @@ export const MESSAGES = Object.freeze({
   DELETE_USER_CONFIRM: "정말 삭제하시겠습니까?",
   TODO_CONTENTS_ALERT: "내용은 2자 이상 입력해주세요."
 });
+
+export const API_METHOD = Object.freeze({
+  GET: "GET",
+  POST: "POST",
+  PUT: "PUT",
+  DELETE: "DELETE"
+});
