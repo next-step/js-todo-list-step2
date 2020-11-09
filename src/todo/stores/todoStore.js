@@ -1,6 +1,6 @@
 import {
   filterActiveUserTodos,
-  mapTodoUsers,
+  mappedTodoUsers,
   filterViewTypeTodos
 } from "../utils/validator.js";
 
@@ -14,18 +14,21 @@ class TodoStore {
   };
 
   static setState({ ...data }) {
-    const getTodos = TodoStore.activeUserTodos(data.userList, data.activeUser);
+    const mappedTodos = TodoStore.activeUserTodos(
+      data.userList,
+      data.activeUser
+    );
 
-    let filterTodosCount = getTodos.length;
+    let filterTodosCount = mappedTodos.length;
     if (data.viewType === "completed") {
-      filterTodosCount = filterViewTypeTodos(getTodos, true).length;
+      filterTodosCount = filterViewTypeTodos(mappedTodos, true).length;
     } else if (data.viewType === "active") {
-      filterTodosCount = filterViewTypeTodos(getTodos, false).length;
+      filterTodosCount = filterViewTypeTodos(mappedTodos, false).length;
     }
 
     TodoStore.data = {
       ...data,
-      todos: mapTodoUsers(getTodos),
+      todos: mappedTodoUsers(mappedTodos),
       count: filterTodosCount
     };
   }

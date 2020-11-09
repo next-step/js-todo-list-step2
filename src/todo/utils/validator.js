@@ -1,4 +1,4 @@
-export const mapTodoUsers = todos => {
+export const mappedTodoUsers = todos => {
   return todos.map(todo => {
     if (!todo.isEditing) todo.isEditing = false;
     return todo;

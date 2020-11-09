@@ -1,4 +1,4 @@
-import { mapTodoUsers } from "./utils/validator.js";
+import { mappedTodoUsers } from "./utils/validator.js";
 
 import Api from "./api/index.js";
 import {
@@ -69,7 +69,7 @@ class Todo {
       TodoStore.setState({
         ...state,
         userList,
-        todos: mapTodoUsers(userList[0].todoList),
+        todos: mappedTodoUsers(userList[0].todoList),
         count: userList[0].todoList.length,
         activeUser: userList[0]._id
       });
