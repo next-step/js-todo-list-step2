@@ -42,8 +42,7 @@ class Todo {
     });
 
     this.todoCount = new TodoCount({
-      $target: document.querySelector(TARGETS.TODO_COUNT),
-      count: this.state.count
+      $target: document.querySelector(TARGETS.TODO_COUNT)
     });
 
     this.todoList = new TodoList({

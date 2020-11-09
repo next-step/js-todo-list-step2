@@ -1,8 +1,8 @@
-import { filterViewTypeTodos } from "../utils/validator.js";
+import { TodoStore } from "../stores/index.js";
 class TodoCount {
-  constructor({ $target, count }) {
+  constructor({ $target }) {
     this.$target = $target;
-    this.state = { count };
+    this.state = TodoStore.getStore;
   }
 
   setState(payload) {
