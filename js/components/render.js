@@ -32,13 +32,12 @@ export default class Render {
   };
 
   priorityTag = (priority) => {
-    if (priority === "FIRST") {
-      return `<span class="chip primary">1순위</span>`;
+    switch (priority) {
+      case "FIRST":
+        return `<span class="chip primary">1순위</span>`;
+      case "SECOND":
+        return `<span class="chip secondary">2순위</span>`;
     }
-    if (priority === "SECOND") {
-      return `<span class="chip secondary">2순위</span>`;
-    }
-    return;
   };
 
   showItems = (todos) => {
@@ -76,8 +75,5 @@ export default class Render {
 
     const $countNum = $count.querySelector("strong");
     $countNum.innerHTML = todos.length;
-
-    const userCreateButton = document.querySelector(".user-create-button");
-    userCreateButton.addEventListener("click", this.onUserCreateHandler);
   };
 }

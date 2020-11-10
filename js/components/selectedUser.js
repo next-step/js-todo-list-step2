@@ -20,12 +20,13 @@ export default class SelectedUser {
     apiService.getUserTodo(userId).then(render.showItems);
 
     $input.addEventListener("keypress", (e) => {
-      if (e.key !== "Enter") return;
       if (e.key === "Enter") {
         this.addNewTodo(userId, $input.value);
         $input.value = "";
       }
+      return;
     });
+
     $deleteAllTodosBtn.addEventListener("click", () =>
       this.deleteAllTodos(userId)
     );
@@ -68,9 +69,7 @@ export default class SelectedUser {
   };
 
   deleteAllTodos = (userId) => {
-    $filters.getElementsByClassName("selected")[0].classList.toggle("selected");
-    $filters.querySelector(".all").classList.toggle("selected");
-    window.location.replace("/#");
+    this.goToRedirectToMain();
     apiService
       .deleteUserTodosAll(userId)
       .then(() => apiService.getUserTodo(userId))
@@ -84,31 +83,33 @@ export default class SelectedUser {
       $label.classList.toggle("editing");
       $label.addEventListener("keydown", (e) => {
         const targetId = $label.dataset.id;
-        if (e.key === "Enter") {
-          const contents = e.target.value;
-          apiService
-            .updateUserTodo(userId, targetId, contents)
-            .then(() => apiService.getUserTodo(userId))
-            .then(render.showItems);
-          return;
-        }
-        if (e.key === "Escape") {
-          $label.classList.toggle("editing");
-          return;
+        switch (e.key) {
+          case "Enter":
+            const contents = e.target.value;
+            apiService
+              .updateUserTodo(userId, targetId, contents)
+              .then(() => apiService.getUserTodo(userId))
+              .then(render.showItems);
+            break;
+          case "Escape":
+            $label.classList.toggle("editing");
+            break;
         }
       });
     }
+  };
+
+  goToRedirectToMain = () => {
+    $filters.getElementsByClassName("selected")[0].classList.toggle("selected");
+    $filters.querySelector(".all").classList.toggle("selected");
+    window.location.replace("/#");
   };
 
   todolistEventHandler = (e, userId) => {
     const { classList } = e.target;
     const targetId = e.target.closest("li").dataset.id;
     if (classList.contains("destroy")) {
-      $filters
-        .getElementsByClassName("selected")[0]
-        .classList.toggle("selected");
-      $filters.querySelector(".all").classList.toggle("selected");
-      window.location.replace("/#");
+      this.goToRedirectToMain();
       apiService
         .deleteUserTodoOne(userId, targetId)
         .then(() => apiService.getUserTodo(userId))
@@ -116,11 +117,7 @@ export default class SelectedUser {
       return;
     }
     if (classList.contains("toggle")) {
-      $filters
-        .getElementsByClassName("selected")[0]
-        .classList.toggle("selected");
-      $filters.querySelector(".all").classList.toggle("selected");
-      window.location.replace("/#");
+      this.goToRedirectToMain();
       apiService
         .toggleUserTodo(userId, targetId)
         .then(() => apiService.getUserTodo(userId))
@@ -130,34 +127,25 @@ export default class SelectedUser {
 
     if (classList.contains("chip")) {
       const { value } = e.target;
-      if (value === "0") {
-        const priorityValue = "NONE";
-        apiService.makePriorityUserTodo(userId, targetId, priorityValue);
-        return;
-      }
-      if (value === "1") {
-        const priorityValue = "FIRST";
-        apiService
-          .makePriorityUserTodo(userId, targetId, priorityValue)
-          .then(() => apiService.getUserTodo(userId))
-          .then(render.showItems);
-        return;
-      }
-      if (value === "2") {
-        const priorityValue = "SECOND";
-        apiService
-          .makePriorityUserTodo(userId, targetId, priorityValue)
-          .then(() => apiService.getUserTodo(userId))
-          .then(render.showItems);
-        return;
+      switch (value) {
+        case "1":
+          apiService
+            .makePriorityUserTodo(userId, targetId, "FIRST")
+            .then(() => apiService.getUserTodo(userId))
+            .then(render.showItems);
+          break;
+        case "2":
+          apiService
+            .makePriorityUserTodo(userId, targetId, "SECOND")
+            .then(() => apiService.getUserTodo(userId))
+            .then(render.showItems);
+          break;
       }
     }
   };
 
   addNewTodo = (userId, newTodo) => {
-    $filters.getElementsByClassName("selected")[0].classList.toggle("selected");
-    $filters.querySelector(".all").classList.toggle("selected");
-    window.location.replace("/#");
+    this.goToRedirectToMain();
     apiService
       .addUserTodo(userId, newTodo)
       .then(() => apiService.getUserTodo(userId))
