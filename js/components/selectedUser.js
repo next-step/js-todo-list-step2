@@ -18,7 +18,6 @@ export default class SelectedUser {
 
   selectedUserState = (userId) => {
     apiService.getUserTodo(userId).then(render.showItems);
-
     $input.addEventListener("keypress", (e) => {
       if (e.key === "Enter") {
         this.addNewTodo(userId, $input.value);
@@ -124,6 +123,7 @@ export default class SelectedUser {
         .then(render.showItems);
       return;
     }
+
     if (classList.contains("chip")) {
       const { value } = e.target;
       switch (value) {
