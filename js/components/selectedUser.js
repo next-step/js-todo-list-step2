@@ -27,9 +27,9 @@ export default class SelectedUser {
       return;
     });
 
-    $deleteAllTodosBtn.addEventListener("click", () =>
-      this.deleteAllTodos(userId)
-    );
+    $deleteAllTodosBtn.addEventListener("click", () => {
+      this.deleteAllTodos(userId);
+    });
     $todoUl.addEventListener("click", (e) =>
       this.todolistEventHandler(e, userId)
     );
@@ -124,7 +124,6 @@ export default class SelectedUser {
         .then(render.showItems);
       return;
     }
-
     if (classList.contains("chip")) {
       const { value } = e.target;
       switch (value) {
