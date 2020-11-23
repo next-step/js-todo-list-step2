@@ -1,23 +1,10 @@
-/* api 를 호출하는 함수가 모이는 곳 입니다. */
 import { ERROR, SUCCESS } from '../constants/messageAPI.js';
-import {
-  postUser,
-  getUserList,
-  deleteUser,
-  postUserTodoItem,
-  getUserTodoList,
-  getUser,
-  putUserTodoItemComplete,
-  deleteUserTodoItem,
-  putUserTodoItem,
-  deleteUserTodoItemsAll,
-  putUserTodoItemPriority,
-} from './api/user.js';
+import { GET, POST, PUT, DELETE } from '../RestApi.js';
+import { user, userTodoItem } from './api.js';
 
 export const createUser = async({ name }) => {
   try {
-    const result = await postUser({ name });
-    return result;
+    return await POST(user({}), { name });
   } catch (error) {
     console.log(error);
   }
@@ -25,8 +12,7 @@ export const createUser = async({ name }) => {
 
 export const removeUser = async({ userId }) => {
   try {
-    const result = await deleteUser({ userId });
-    return result;
+    await DELETE({ userId });
   } catch (error) {
     console.log(error);
   }
@@ -34,7 +20,7 @@ export const removeUser = async({ userId }) => {
 
 export const readUserList = async() => {
   try {
-    const result = await getUserList();
+    const result = await GET(user({}));
     return result;
   } catch (error) {
     console.log(error);
@@ -43,7 +29,7 @@ export const readUserList = async() => {
 
 export const createUserTodoItem = async({ userId, contents }) => {
   try {
-    const result = await postUserTodoItem({ userId, contents });
+    const result = await POST(userTodoItem(userId, {}), { contents });
     return result;
   } catch (error) {
     console.log(error);
@@ -52,7 +38,7 @@ export const createUserTodoItem = async({ userId, contents }) => {
 
 export const readUserTodoItems = async({ userId }) => {
   try {
-    const result = await getUserTodoList({ userId });
+    const result = await GET(userTodoItem(userId, {}));
     return result;
   } catch (error) {
     console.log(error);
@@ -61,7 +47,7 @@ export const readUserTodoItems = async({ userId }) => {
 
 export const readUser = async({ userId }) => {
   try {
-    const result = await getUser({ userId });
+    const result = await GET(user({ userId }));
     return result;
   } catch (error) {
     console.log(error);
@@ -73,7 +59,7 @@ export const readUser = async({ userId }) => {
 
 export const updateUserTodoItemComplete = async({ userId, itemId }) => {
   try {
-    const result = await putUserTodoItemComplete({ userId, itemId });
+    const result = await PUT(userTodoItem(userId, { itemId, toggle: true }));
     return result;
   } catch (error) {
     console.log(error);
@@ -85,7 +71,7 @@ export const updateUserTodoItemComplete = async({ userId, itemId }) => {
 
 export const removeUserTodoItem = async({ userId, itemId }) => {
   try {
-    const result = await deleteUserTodoItem({ userId, itemId });
+    const result = await DELETE(userTodoItem(userId, { itemId }));
     return result;
   } catch (error) {
     console.log(error);
@@ -97,7 +83,7 @@ export const removeUserTodoItem = async({ userId, itemId }) => {
 
 export const updateUserTodoItem = async({ userId, itemId, contents }) => {
   try {
-    const result = await putUserTodoItem({ userId, itemId, contents });
+    const result = await PUT(userTodoItem(userId, { itemId }), { contents });
     return result;
   } catch (error) {
     console.log(error);
@@ -109,7 +95,7 @@ export const updateUserTodoItem = async({ userId, itemId, contents }) => {
 
 export const removeUserTodoItemsAll = async({ userId }) => {
   try {
-    const result = await deleteUserTodoItemsAll({ userId });
+    const result = await DELETE(userTodoItem(userId, {}));
     result.message = SUCCESS.DELETE_TODO_ITEM_ALL;
     return result;
   } catch (error) {
@@ -119,7 +105,7 @@ export const removeUserTodoItemsAll = async({ userId }) => {
 
 export const updateUserTodoItemPriority = async({ userId, itemId, priority }) => {
   try {
-    const result = await putUserTodoItemPriority({ userId, itemId, priority });
+    const result = await PUT(userTodoItem(userId, { itemId, priority: true }), { priority });
     return result;
   } catch (error) {
     console.log(error);
