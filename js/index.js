@@ -1,7 +1,22 @@
-const onUserCreateHandler = () => {
-  const userName = prompt("추가하고 싶은 이름을 입력해주세요.");
-}
+import store from './store/index.js'; 
 
-const userCreateButton = document.querySelector('.user-create-button')
-userCreateButton.addEventListener('click', onUserCreateHandler)
+import Count from './components/count.js';
+import List from './components/list.js';
+import Input from './components/input.js';
+import Filter from './components/filter.js';
+import User from './components/user.js';
 
+const countInstance = new Count();
+const listInstance = new List();
+const InputInstance = new Input();
+const FilterInstance = new Filter();
+const UserInstance = new User();
+
+countInstance.render();
+listInstance.render();
+InputInstance.render();
+FilterInstance.render();
+UserInstance.render();
+
+
+store.dispatch('loadToDos');
