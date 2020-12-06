@@ -1,4 +1,4 @@
-import HttpMethods from "../constants/HttpMethods";
+import HttpMethods from "../constants/HttpMethods.js";
 
 const defaultConfig = {
     baseUrl: ""
@@ -11,7 +11,7 @@ function HttpConnector(initConfig = defaultConfig) {
 HttpConnector.prototype.request = function request(url, config) {
     const requestUrl = this.defaultConfig.baseUrl + url;
 
-    return fetch(requestUrl, config).then((response) => response.json())
+    return fetch(requestUrl, config).then((response) => response.json());
 };
 
 HttpConnector.prototype.requestWithBody = function requestWithBody(url, config) {
@@ -23,11 +23,11 @@ HttpConnector.prototype.requestWithBody = function requestWithBody(url, config) 
         method: config.method,
         body: JSON.stringify(config.data),
         headers,
-    }).then((response) => response.json())
+    }).then((response) => response.json());
 };
 
 [HttpMethods.GET, HttpMethods.DELETE].forEach((method) => {
-   HttpConnector.prototype[method] = function (url, config) {
+   HttpConnector.prototype[method.toLowerCase()] = function (url, config) {
        return this.request(url, {
            method,
            ...config,
@@ -36,7 +36,7 @@ HttpConnector.prototype.requestWithBody = function requestWithBody(url, config) 
 });
 
 [HttpMethods.POST, HttpMethods.PUT, HttpMethods.PATCH].forEach((method) => {
-   HttpConnector.prototype[method] = function (url, data, config) {
+   HttpConnector.prototype[method.toLowerCase()] = function (url, data, config) {
        return this.requestWithBody(url, {
            method,
            data,
