@@ -1,11 +1,17 @@
 import api from '../lib/api.js'
+import state from './state.js';
 
 const TODOS_LIST = 'todoList';
 
 export default {
     addToDo(state, payload){
-        state.todos.todoList.push(payload);
-        //saveToDos(TODOS_LIST, state.todoList);
+        const init = async () => {
+            const userToDo = await api.addToDo(state.selectedUser, payload);
+            if(userToDo!==null && userToDo!==''){
+                this.selectUsersToDo(state, state.selectedUser);
+            }
+        }
+        init()
         return state;
     },
     destroyToDo(state, payload){
@@ -29,13 +35,51 @@ export default {
     },
     loadToDos(state){
         const init = async () => {
-            try {
-                const userList = await api.loadToDos();
+            const userList = await api.loadToDos();
+            console.log(userList)
+            if(userList!==null && userList!==''){
                 state.userList = userList;
-              } catch (err) {
-                console.error(err);
-              }
+                //첫 값을 선택된 user로 세팅
+                this.setSelectedUser(state, userList[0]._id);
+                this.selectUsersToDo(state, state.selectedUser);
+            }
+        }
+        init()
+    },
+    setSelectedUser(state, payload){
+        state.selectedUser = payload;
+        this.selectUsersToDo(state, state.selectedUser);
+    },
+    addUser(state, payload){
+        const init = async () => {
+            const user = await api.addUser(payload);
+            if(user!==null && user!==''){
+                this.loadToDos(state);
+            }
+        }
+        init()
+        return state;
+    },
+    selectUsersToDo(state, payload){
+        const init = async () => {
+            const userToDo = await api.selectUserToDo(payload);
+            console.log(userToDo.todoList)
+            if(userToDo!==null && userToDo!==''){
+                state.todos = userToDo;
+            }
+        }
+        init()
+        return state;
+    },
+    deleteUser(state, payload){
+        const init = async () => {
+            const message = await api.deleteUser(payload);
+            if(message!==null && message!==''){
+                alert(message.message);
+                this.loadToDos(state);
+            }
         }
         init()
     }
+
 }

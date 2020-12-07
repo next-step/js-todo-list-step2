@@ -15,15 +15,8 @@ const Input = class extends Component {
         if(e.key !== "Enter" || e.target.value.replace(/(\s*)/g, "")==""){
             return;
         }
-        const toDoId = toDos.length == 0 ? 1 : parseInt(toDos[toDos.length-1].id)+1;
         const text = e.target.value;
-        const toDoObj = {
-            contents: text,
-            isCompleted: false,
-            priority: "0",
-            _id: toDoId
-        };
-        store.dispatch('addToDo', toDoObj);
+        store.dispatch('addToDo', {"contents":text});
         //입력시엔 할 일들을 보두 보여줌
         store.dispatch('setFilterType', 'all');
         e.target.value = '';

@@ -16,5 +16,19 @@ export default {
     },
     loadToDos(context){
         context.commit('loadToDos');
-    }
+    },
+    setSelectedUser(context, payload){
+        context.commit('setSelectedUser', payload);
+    },
+    addUser(context, payload){
+        context.commit('addUser', payload);
+    },
+    selectUsersToDo(context, payload){
+        context.commit('selectUsersToDo', payload);
+    },
+    deleteUser(context, payload){
+        context.commit('deleteUser', payload);
+    },
+    
+
 }

@@ -58,7 +58,14 @@ const List = class extends Component {
     render(){
         
         if(store.state.todos.todoList.length === 0){
-            this.element.innerHTML = `<li>할 일을 추가해주세요</li>`
+            this.element.innerHTML = `
+            <li>
+                <div class="view">
+                    <label class="label">
+                        👀 할 일을 추가해주세요 👀
+                    </label>
+                </div>
+            </li>`
             return;
         }
 
