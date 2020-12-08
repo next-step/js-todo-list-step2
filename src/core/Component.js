@@ -9,12 +9,18 @@ export class Component {
         this.$props = props;
         this.$state = state;
 
+        this.componentWillMount();
+
         this.$render = () => {
             target.innerHTML = this.render();
         };
 
         this.setState(state);
         this.setEvent(target);
+    }
+
+    componentWillMount() {
+
     }
 
     setState(state) {
