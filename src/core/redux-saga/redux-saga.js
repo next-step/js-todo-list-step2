@@ -5,17 +5,17 @@ export const put = action => ({ type: 'put', action });
 export const fork = (saga, ...args) => ({ type: 'fork', saga, args });
 
 export function* takeEvery(actionType, saga) {
-    yield fork(function* newSaga() {
-        while (true) {
-            const action = yield take(actionType);
-            yield* saga(action)
-        }
-    })
+    while (true) {
+        const action = yield take(actionType);
+        yield* saga(action);
+    }
 }
 
 export async function runSaga(store, saga, ...args) {
     const waitNextAction = actionType =>
-        new Promise(resolve => store.subscribe(resolve, actionType));
+        new Promise(resolve => {
+            store.subscribeOne(actionType, resolve)
+        });
 
     try {
         const it = saga(...args);

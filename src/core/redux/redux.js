@@ -33,20 +33,23 @@ export const combineReducers = (reducers) => {
 export const createStore = (reducer) => {
     let state;
     const listeners = [];
+    const sagas = new Map();
 
     const getState = () => ({ ...state });
 
     const dispatch = (action) => {
         state = reducer(state, action);
+
+        if (sagas.get(action.type)) {
+            sagas.get(action.type)(action);
+        }
         publish();
     };
 
     const publish = () => {
         listeners.forEach(({subscriber, context}) => {
-            if (typeof subscriber === 'function') {
-                subscriber.call(context);
-            }
-        });
+            subscriber.call(context);
+        })
     };
 
     const subscribe = (subscriber, context = null) => {
@@ -56,10 +59,15 @@ export const createStore = (reducer) => {
         });
     };
 
+    const subscribeOne = (actionType, resolve) => {
+        sagas.set(actionType, resolve);
+    };
+
     return {
         getState,
         dispatch,
         subscribe,
+        subscribeOne,
     };
 };
 
