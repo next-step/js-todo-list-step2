@@ -21,7 +21,7 @@ const User = class extends Set{
   }
 
   toJSON(){
-    return {title : this.name, tasks : this.getTasks()};
+    return this.getInfo();
   }
 
   setFilter(filter){
@@ -54,7 +54,7 @@ const User = class extends Set{
   }
 
   getInfo(){
-    return {_id : this._id, name : this.name };
+    return {_id : this._id, name : this.name, todoList : this.getTasks()};
   }
 
   getId(){
