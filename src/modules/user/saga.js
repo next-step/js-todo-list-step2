@@ -123,6 +123,20 @@ function* watchDeleteTodoItem() {
     yield* takeEvery(FETCH_DELETE_USER_TODO_ITEM.REQUEST, deleteTodoItem);
 }
 
+function* deleteAllTodoItems({ payload }) {
+    try {
+        yield call(TodoConnector.deleteUserTodoItems, payload.userId);
+        yield put(fetchDeleteUserTodoItems.SUCCESS());
+        yield put(fetchGetUser.REQUEST({ userId: payload.userId }));
+    } catch (error) {
+        yield put(fetchDeleteUserTodoItems.FAILURE({ error }))
+    }
+}
+
+function* watchDeleteAllTodoItems() {
+    yield* takeEvery(FETCH_DELETE_USER_TODO_ITEMS.REQUEST, deleteAllTodoItems)
+}
+
 function* userSaga() {
     yield fork(watchGetUsers);
     yield fork(watchGetSelectedUser);
@@ -131,6 +145,7 @@ function* userSaga() {
     yield fork(watchSetPriority);
     yield fork(watchToggleTodoItem);
     yield fork(watchDeleteTodoItem);
+    yield fork(watchDeleteAllTodoItems);
 }
 
 export default userSaga;
