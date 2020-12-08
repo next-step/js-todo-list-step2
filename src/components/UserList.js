@@ -33,7 +33,11 @@ export default class UserList extends Component {
                     break;
                 case "create":
                     const userName = prompt("추가하고 싶은 이름을 입력해주세요");
-                    this.createUser(userName);
+                    if(userName.length < 2) {
+                        alert("사용자 이름은 2글자 이상이어야 합니다.");
+                    }else {
+                        this.createUser(userName);
+                    }
                     break;
                 default:
                     break;
