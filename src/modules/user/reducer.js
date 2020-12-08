@@ -1,4 +1,6 @@
 import {
+    CHANGE_FILTER,
+
     FETCH_GET_USERS,
     FETCH_GET_USER,
     FETCH_ADD_USER,
@@ -14,6 +16,7 @@ import {
 } from "./actions.js";
 
 const initialState = {
+    filtered: "all",
     users: [],
     selectedUser: {
         _id: "",
@@ -27,6 +30,11 @@ const initialState = {
 /* TODO: 중복 코드 해결하는 우아한 방법 생각하기 */
 const users = (state = initialState, { type, payload }) => {
     switch (type) {
+        case CHANGE_FILTER:
+            return {
+                ...state,
+                filtered: payload.filtered,
+            };
         case FETCH_GET_USERS.REQUEST:
             return {
                 ...state,
