@@ -5,9 +5,7 @@ export const request = (method, url = '/', payload = '') => {
   const option = {
     method,
     headers: {
-      'Content-Type': 'application/json',
-      'Access-Control-Allow-Origin' : '*',
-      'mode' : 'no-cors'
+      'Content-Type': 'application/json'
     },
   };
   if(payload){
