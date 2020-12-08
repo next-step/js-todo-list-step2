@@ -7,6 +7,7 @@ import {
 } from "../modules/user/actions.js";
 import TodoPriority from "../constants/TodoPriority.js";
 import TodoPriorityClassName from "../constants/TodoPriorityClassName.js";
+import {getFilteredList} from "../helper/userHelper.js";
 
 function PrioritySelect(priority) {
     return `
@@ -45,6 +46,7 @@ function TodoItem(todo) {
 }
 
 export default class TodoList extends Component {
+
     setPriorityTodoItem(userId, itemId, priority) {
         store.dispatch(setPriorityUserTodoItem.REQUEST({userId, itemId, priority}))
     }
@@ -92,10 +94,11 @@ export default class TodoList extends Component {
     }
 
     render() {
-        const {selectedUser} = store.getState();
+        const {filtered, selectedUser} = store.getState();
+        const filteredList = selectedUser ? getFilteredList(selectedUser.todoList, filtered) : [];
 
         return `
-            ${selectedUser && selectedUser.todoList.map(todo => TodoItem(todo))}            
+            ${filteredList.map(todo => TodoItem(todo)).join('')}
         `
     }
 }
