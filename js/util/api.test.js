@@ -20,6 +20,7 @@ describe('API TEST', () => {
 
   it('addUser', async () => {
     const result = await addUser(user);
+    console.log(result)
     expect(result['name']).toEqual(user.name);
   })
 
@@ -44,7 +45,8 @@ describe('API TEST', () => {
   });
 
   it('addUserTodo', async () => {
-    const result = await addUserTodo('MfsBxqGu8',todo);
+    const result = await addUserTodo('wiKHYkdkJ',todo);
+    console.log(result)
     expect(result['contents']).toEqual(todo.contents);
   });
 
@@ -57,18 +59,18 @@ describe('API TEST', () => {
     expect(result).toEqual({"message": "Todo Item을 수정하는데 에러가 발생했습니다."});
   });
 
-  it('updateTodo1', async () => {
+  it('updateUserTodoContents', async () => {
     const result = await updateUserTodoContents('MfsBxqGu8', '9TYZSe8zJ', todo);
     expect(result).toBeGreaterThan(0);
   });
 
-  it('updateTodo2', async () => {
-    const prior = { priority: "FIRST"};
-    const result = await updateUserTodoPriority('MfsBxqGu8', 'BFeXaLvP1', prior);
+  it('updateUserTodoPriority', async () => {
+    const prior = { priority: "NONE"};
+    const result = await updateUserTodoPriority('-D1teZP-k', 'mMPaTkN9K', prior);
     expect(result.priority).toEqual(prior.priority);
   });
 
-  it('updateTodo3', async () => {
+  it('toggleTodoComplete', async () => {
     const result = await toggleTodoComplete('MfsBxqGu8', '40XRGnWCa');
     expect(result.isCompleted).toBeTruthy();
   });

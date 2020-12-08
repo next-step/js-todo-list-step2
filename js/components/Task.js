@@ -1,15 +1,19 @@
+import { PRIORITY } from '../util/request.js';
+
 const Task = class {
-  constructor (title, isCompleted = false) {
-    this.title = title;
+  constructor (id, contents, priority = 'NONE', isCompleted = false) {
+    this._id = id;
+    this.contents = contents;
+    this.priority = priority;
     this.isCompleted = isCompleted;
   }
 
-  static get(title){
-    return new Task(title);
+  static get(id, contents){
+    return new Task(id, contents);
   }
 
   static load(json){
-    const task = new Task(json.title, json.isCompleted);
+    const task = new Task(json._id, json.contents, json.priority, json.isCompleted);
     return task;
   }
 
@@ -17,8 +21,12 @@ const Task = class {
     return this.getInfo();
   }
 
-  setTitle(title){
-    this.title = title;
+  setContent(contents){
+    this.contents = contents;
+  }
+
+  setPriority(value){
+    this.priority = PRIORITY[value];
   }
 
   toggle(){
@@ -26,7 +34,11 @@ const Task = class {
   }
 
   getInfo(){
-    return {title : this.title, isCompleted : this.isCompleted};
+    return {_id : this._id, contents : this.contents, priority : this.priority, isCompleted : this.isCompleted};
+  }
+
+  getId(){
+    return this._id;
   }
 }
  export default Task;

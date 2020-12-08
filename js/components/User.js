@@ -1,26 +1,27 @@
 import Task from './task.js';
 
-const Folder = class extends Set{
-  constructor (title, filter = 'all') {
+const User = class extends Set{
+  constructor (_id, name, filter = 'all') {
     super();
-    this.title = title;
+    this._id = _id;
+    this.name = name;
     this.filter = filter;
   }
 
-  static get(title){
-    return new Folder(title);
+  static get(id, name){
+    return new User(id, name);
   }
 
   static load(json){
-    const folder = new Folder(json.title);
-    json.tasks.forEach(t=>{
-      folder.addTask(Task.load(t));
+    const user = new User(json._id, json.name);
+    json.todoList.forEach(t=>{
+      user.addTask(Task.load(t));
     });
-    return folder;
+    return user;
   }
 
   toJSON(){
-    return {title : this.title, tasks : this.getTasks()};
+    return {title : this.name, tasks : this.getTasks()};
   }
 
   setFilter(filter){
@@ -41,6 +42,10 @@ const Folder = class extends Set{
     super.delete(task);
   }
 
+  clearTasks(){
+    super.clear();
+  }
+
   getTasks(){
     const tasks = [...super.values()];
     if(this.filter === 'active') return tasks.filter(todo => !todo.isCompleted);
@@ -48,9 +53,14 @@ const Folder = class extends Set{
     return tasks;
   }
 
-  getTitle(){
-    return this.title;
+  getInfo(){
+    return {_id : this._id, name : this.name };
   }
+
+  getId(){
+    return this._id;
+  }
+
 
   add(){};
   delete(){};
@@ -59,4 +69,4 @@ const Folder = class extends Set{
 
 }
 
-export default Folder;
+export default User;

@@ -2,7 +2,7 @@ import { request, HTTP_METHOD } from './request.js';
 
 export const getUserList = async () => {
    const res = await request(HTTP_METHOD.GET, 'api/users');
-   return await res.json();
+   return res.json();
 }
 
 export const addUser = async (userInfo) => {

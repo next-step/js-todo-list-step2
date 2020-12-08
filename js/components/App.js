@@ -1,32 +1,41 @@
-import Folder from './list.js';
+import User from './User.js';
 const App = class extends Set{
   constructor () {
     super();
+    this.userNames = [];
   }
   static load(json){
     const app = new App();
     json.forEach(f=>{
-      app.addFolder(Folder.load(f));
+      app.setUserNames(User.load(f).getInfo());
+      app.addUser(User.load(f));
     });
     return app
   }
 
   toJSON(){
-    return this.getFolders();
+    return this.getUsers();
   }
 
-  addFolder(folder){
-    if(!folder instanceof Folder) return console.log('invalid folder');
-    super.add(folder);
+  addUser(user){
+    if(!user instanceof User) return console.log('invalid User');
+    super.add(user);
   }
 
-  removeFolder(folder){
-    if(!folder instanceof Folder) return console.log('invalid folder');
-    super.delete(folder);
+  removeUser(user){
+    if(!user instanceof User) return console.log('invalid User');
+    super.delete(user);
   }
 
-  getFolders(){
+  getUsers(){
     return [...super.values()];
+  }
+  setUserNames(user){
+    this.userNames.push(user);
+  }
+
+  getUserNames(){
+    return this.userNames;
   }
   add(){};
   delete(){};
