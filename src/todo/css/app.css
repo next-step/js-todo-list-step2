@@ -41,6 +41,11 @@ body {
   display: none;
 }
 
+button,
+input.toggle {
+  cursor: pointer;
+}
+
 #app {
   margin-top: 100px;
 }
@@ -53,6 +58,10 @@ body {
   font-weight: 100;
   font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
   margin-bottom: 50px;
+}
+
+.todo-user-group {
+  text-align: center;
 }
 
 .todoapp {
@@ -281,8 +290,8 @@ body {
   height: 50px;
   overflow: hidden;
   box-shadow: 0 1px 1px rgba(0, 0, 0, 0.2), 0 8px 0 -3px #f6f6f6,
-  0 9px 1px -3px rgba(0, 0, 0, 0.2), 0 16px 0 -6px #f6f6f6,
-  0 17px 2px -6px rgba(0, 0, 0, 0.2);
+    0 9px 1px -3px rgba(0, 0, 0, 0.2), 0 16px 0 -6px #f6f6f6,
+    0 17px 2px -6px rgba(0, 0, 0, 0.2);
 }
 
 .todo-count {
@@ -387,7 +396,7 @@ html .clear-completed:active {
 }
 .ripple:hover {
   background: #616161 radial-gradient(circle, transparent 1%, #616161 1%)
-  center/15000%;
+    center/15000%;
   color: white;
 }
 .ripple:active {
@@ -431,7 +440,6 @@ button.ripple {
 .animated-background {
   will-change: transform;
   animation: placeHolderShimmer 1s linear infinite forwards;
-  -webkit-backface-visibility: hidden;
   background: #e6e6e6;
   background: linear-gradient(90deg, #eee 8%, #ddd 18%, #eee 33%);
   background-size: 800px 104px;
@@ -476,9 +484,21 @@ select.chip {
   width: 45px;
 }
 
+.chip.select-1 {
+  background: #e60055;
+  color: #fff;
+  border-color: #e60055;
+}
+
+.chip.select-2 {
+  background: #00cf96;
+  color: #fff;
+  border-color: #00cf96;
+}
+
 button.user-create-button.ripple {
   border-radius: 15px;
   padding-left: 10px;
   padding-right: 10px;
-  margin-left: 10px;
+  margin: 0 10px;
 }
