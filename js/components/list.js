@@ -2,6 +2,7 @@ import Component from '../lib/component.js';
 import store from '../store/index.js';
 
 const List = class extends Component {
+
     constructor() {
         super({
             store,
@@ -87,7 +88,7 @@ const List = class extends Component {
                 <div class="view">
                     <input class="toggle" type="checkbox" ${todo.isCompleted==true?'checked':''}/>
                     <label class="label">
-                    ${todo.priority == '0'? 
+                    ${todo.priority == 'NONE'? 
                     `<select class="chip select">
                         <option value="0" selected>순위</option>
                         <option value="1">1순위</option>
@@ -110,6 +111,7 @@ const List = class extends Component {
         `;
         
     }
+
     //이벤트 설정할 수 있게 해줌
     setEvent(target){
         target.addEventListener('click', e => {
@@ -121,6 +123,9 @@ const List = class extends Component {
         target.addEventListener('keyup', e => {
             this.toDoKeyup(e);
         });
+        target.addEventListener('click', e => {
+            
+        })
     }
 
 }

@@ -1,5 +1,4 @@
-import actions from './actions.js';
-import mutations from './mutations.js';
+import {actions, mutations} from './action.js';
 
 import state from './state.js';
 import Store from './store.js';

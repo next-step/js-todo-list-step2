@@ -19,4 +19,4 @@ FilterInstance.render();
 UserInstance.render();
 
 
-store.dispatch('loadToDos');
+store.dispatch('loadUsersToDos');
