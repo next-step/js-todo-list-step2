@@ -2,28 +2,72 @@
 
 이번 미션은 Ajax를 이용하여 TodoList를 발전시키는 미션입니다. 비동기 통신으로 데이터를 관리할 경우 자바스크립트의 비동기라는 특성을 더욱 깊이있게 이해할 수 있습니다
 
+## 하고싶은것
+- store 자동화
+- dom 자동화 
+- 이벤트 다시 분리
+- 등등 리팩토링, 에러처리 다시 점검
+- fetch 액션이 있은 후 render 규칙을 적용할 때 (item 삭제나, 우선순위 변경, Content 변경, item 추가)
+    1. 항상 todolist 의 새로운 모두 업데이트 한다.
+        - 이렇게 생각한 이유는, database 를 여럿이 쓰기 때문에, 언제 데이터가 사라지고 바뀔지 몰라, 매번 최신의 데이터를 불러와야 한다고 생각하기 때문 입니다. 
+    2. todoList 의 바뀐 item 만 업데이트
+        
+    - 1번이 불필요한 이유는 todoList 를 socket 을 쓰지 않고 여럿이서 같이 쓰는 상황을 고려할 필요가 없는가? 
+    - 어떤 사람이 없앤 item 을, 내가 수정하는 api 를 호출하면, 어차피 에러를 반환하기 때문에 그때 그때 다시 업데이트를 해주면 될까? 
+    - 아니면 매번마다 미리 최신의 todoList 를 보여줘서 에러를 최대한 예방 하는 것이 좋을까?
+    - 에러를 최대한 예방한다고 해도, 항상 예방이 되는 것이 아니므로 차라리 2번을 하는게 나을까? 
+        
+- userlist 와 todolist 를 배열에서 obj 으로 만들어보기, 
+    1. 컴포넌트에서 prop 으로 데이터를 내려주는 방식 
+        - 하위 컴포넌트의 렌더링만 필요한 문제지만, prop 를 내려준 부모를 렌더링을 해야 정상적으로 하위 컴포넌트를 렌더링 할 수 있다.
+        - props 에 따라 자동으로 렌더 되는 시스템? 
+        - 그냥 통째로 부모를 다시 렌더링을 해도 무방한가?  
+    2. prop 으로 오직 item Id 만 내려주고, 매번 하위 component 마다 props 로 내려받은 item id 로 store 에서 필요한 값 탐색 
+        - 데이터를 obj 으로 만들면 탐색시간이 덜 걸릴 것 같음
+    - 2번을 먼저 해보고 1번을 시도해볼까? 
+    - 어떤게 나을까? 
+    
+- appendChild 말고 append 써보기
+
+- facade -> dispatcher 부분 분리하기
+- todoItem 의 존재여부를 확인하는 api 가 없어 미들웨어를 만들 수 없다.
+
+
+## log
+20200922 : component 내에서 state 만들어 보기
+
+20200924 : api 구조 변경, 및 ERROR 처리 부분 수정, event 1차 분리, dom 생성 함수로 만들기
+
+
+Q. 이벤트 위임 문제
+1. app 이 실행될 때 모든 이벤트를 등록하여 모든 이벤트를 이벤트 위임으로 관리하기
+2. 컴포넌트마다 이벤트를 만들어 국소적 이벤트 위임하기  (선택)
+
+
+
+
 ## 🎯 요구사항
 
-- [ ] 1. User 추가하기
-- [ ] 2. User의 투두리스트 불러오기
-- [ ] 3. User 삭제하기
-- [ ] 3. todoItem 추가하기
-- [ ] 4. todoItem 불러오기
-- [ ] 5. todoItem complete하기
-- [ ] 6. todoItem 삭제하기
-- [ ] 7. todoItem contents 내용 수정하기
+- [x] 1. User 추가하기
+- [x] 2. User의 투두리스트 불러오기
+- [x] 3. User 삭제하기
+- [x] 3. todoItem 추가하기
+- [x] 4. todoItem 불러오기
+- [x] 5. todoItem complete하기
+- [x] 6. todoItem 삭제하기
+- [x] 7. todoItem contents 내용 수정하기
 
 
 ## 🎯🎯 심화 요구사항
 
-- [ ] 1. 데이터를 불러오기전 로딩바를 이용해, 사용자가 데이터가 불러와지고 있다는 것을 보여줍니다.
-- [ ] 2. fetch api 사용하는 부분을 async await을 사용하여 리팩토링합니다.
-- [ ] 3. github issue에서 라벨을 붙이는 것처럼, 우선순위에 따라서 badge를 추가합니다.
-- [ ] 4. ES6 impot & export를 이용해 자바스크립트 파일을 리팩토링합니다.
+- [x] 1. 데이터를 불러오기전 로딩바를 이용해, 사용자가 데이터가 불러와지고 있다는 것을 보여줍니다.
+- [x] 2. fetch api 사용하는 부분을 async await을 사용하여 리팩토링합니다.
+- [x] 3. github issue에서 라벨을 붙이는 것처럼, 우선순위에 따라서 badge를 추가합니다.
+- [x] 4. ES6 impot & export를 이용해 자바스크립트 파일을 리팩토링합니다.
 
 ## 🕵️‍♂️ 제약사항
 
-- [ ] 1. User의 이름은 최소 2글자 이상이어야 합니다.
+- [x] 1. User의 이름은 최소 2글자 이상이어야 합니다.
 
 <br/><br/>
 
@@ -95,11 +139,7 @@
 |GET|/api/users/:userId/items/|
 ```javascript
 {
- response: {
-   "_id": "string",
-   "name": "string",
-   "todoList": [...]
-  }
+ response: [...]
 }
 ```
 
@@ -160,6 +200,9 @@
 |PUT|/api/users/:userId/items/:itemId|
 ```javascript
 {
+ requestBody: {
+   "contents": "string"
+ },
  response: {
   "_id": "string",
    "contents": "string",
@@ -176,6 +219,9 @@
 |PUT|/api/users/:userId/items/:itemId/priority|
 ```javascript
 {
+ requestBody: {
+   "priority": "string" // 'NONE', 'FIRST', 'SECOND'
+ },
  response: {
    "_id": "string",
    "contents": "string",
