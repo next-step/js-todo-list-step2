@@ -62,7 +62,7 @@ class DOMRenderer extends Renderer{
     await deleteUser(user._id);
     this.app.removeUser(this.currentUser);
     this.currentUser = null;
-    this.render();
+    this.init();
     return;
   }
 
@@ -238,16 +238,16 @@ class DOMRenderer extends Renderer{
 
   _render () {
     const users = this.app.getUsers();
-    if(!this.currentUser) {
-      this.currentUser = users[0];
-      this.$userTitle.innerHTML = this.currentUser.name;
-    }
-    this.userId = this.currentUser._id;
+
     this.$userList.innerHTML = '';
     users.forEach((user) => {
+      if(!this.currentUser) {
+        this.currentUser = user;
+        this.$userTitle.innerHTML = this.currentUser.name;
+      }
       this.createUserHTML(user);
     })
-
+    this.userId = this.currentUser._id;
     this.$todoList.innerHTML = '';
     const tasks = this.currentUser.getTasks();
     this.currentUser.getTasks().forEach((task) => {
