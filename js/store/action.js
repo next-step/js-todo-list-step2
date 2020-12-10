@@ -33,6 +33,10 @@ export const actions = {
     deleteUser(context, payload){
         context.commit('deleteUser', payload);
     },
+    setPriority(context, payload){
+        context.commit('setPriority', payload);
+
+    }
 }
 
 
@@ -43,11 +47,11 @@ export const mutations = {
         if(userList!==null && userList!==''){
             state.userList = userList;
             //첫 값을 선택된 user로 세팅
-            mutations.setSelectedUser(state, userList[0]._id);
-            mutations.selectUsersToDo(state, userList[0]._id);
+            mutations.setSelectedUser(state, userList[0]._id );
+            mutations.selectUsersToDo(state, state.selectedUser);
         }
     },
-
+    
     addToDo : async (state, payload) => {
         const userToDo = await api.addToDo(state.selectedUser, payload);
         if(userToDo!==null && userToDo!==''){
@@ -55,27 +59,41 @@ export const mutations = {
         }
         return state;
     },
-
-    destroyToDo : (state, payload) => {
-        state.todos.todoList.splice(payload-1, 1); //인덱스 배열 삭제
-        //saveToDos(TODOS_LIST, state.todoList);
+    
+    destroyToDo : async (state, payload) => {
+        const deleteToDo = await api.deleteToDo(state.selectedUser, payload);
+        if(deleteToDo!==null && deleteToDo!==''){
+            mutations.selectUsersToDo(state, state.selectedUser);
+        }
+        return state;
+    },
+    
+    toggleToDo : async (state, payload) => {
+        const toggleToDo = await api.toggleToDo(state.selectedUser, payload);
+        if(toggleToDo!==null && toggleToDo!==''){
+            mutations.selectUsersToDo(state, state.selectedUser);
+        }
+        return state;
+    },
+    
+    editToDo : async (state, payload) => {
+        const editToDo = await api.editToDo(state.selectedUser, payload.itemId, payload.contents);
+        if(editToDo!==null && editToDo!==''){
+            mutations.selectUsersToDo(state, state.selectedUser);
+        }
         return state;
     },
 
-    toggleToDo(state, payload){
-        payload.isCompleted = !payload.isCompleted; //토글
-        state.todos.todoList.splice(payload.id-1, 1, payload);
-        //saveToDos(TODOS_LIST, state.todoList);
+    setPriority : async (state, payload) => {
+        const priorityToDo = await api.setPriorityToDo(state.selectedUser, payload.itemId, payload.priority);
+        if(priorityToDo!==null && priorityToDo!==''){
+            console.log(priorityToDo)
+            mutations.selectUsersToDo(state, state.selectedUser);
+        }
         return state;
     },
 
-    editToDo(state, payload){
-        state.todos.todoList.splice(payload.id-1, 1, payload);
-        //saveToDos(TODOS_LIST, state.todos.todoList);
-        return state;
-    },
-
-    setFilterType(state, payload){
+    setFilterType : (state, payload) => {
         state.filterType = payload;
     },
 
@@ -87,7 +105,7 @@ export const mutations = {
     addUser : async (state, payload) => {
         const user = await api.addUser(payload);
         if(user!==null && user!==''){
-            mutations.loadToDos(state);
+            mutations.loadUsersToDos(state);
         }
         return state;
     },
@@ -104,8 +122,8 @@ export const mutations = {
     deleteUser : async (state, payload) => {
         const message = await api.deleteUser(payload);
         if(message!==null && message!==''){
-            alert(message.message);
-            mutations.loadToDos(state);
+            console.log(message.message);
+            mutations.loadUsersToDos(state);
         }
     }
 

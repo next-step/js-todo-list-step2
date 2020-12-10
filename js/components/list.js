@@ -15,12 +15,7 @@ const List = class extends Component {
         const thisToDoId = e.target.parentNode.parentNode.id;
         switch(e.target.className){
             case("toggle") : 
-                store.state.todos.todoList.filter((v, i)=>{
-                    //수정해야함
-                    if(i==thisToDoId-1){
-                        store.dispatch('toggleToDo', v);
-                    }
-                });
+                store.dispatch('toggleToDo', thisToDoId);
                 break;
             case("destroy") : 
                 store.dispatch('destroyToDo', thisToDoId);
@@ -29,8 +24,9 @@ const List = class extends Component {
     }
     //수정 
     toDoEdit = (e) => {
-        const thisToDoId = e.target.parentNode.id;
+        const thisToDoId = e.target.parentNode.parentNode.id;
         const thisToDo = document.getElementById(thisToDoId);
+
         thisToDo.className="editing";
         thisToDo.querySelector(".edit").select();
     }
@@ -41,20 +37,31 @@ const List = class extends Component {
         
         switch(e.key){
             case 'Enter':
-                store.state.todos.todoList.filter((v, i)=>{
-                    if(i==thisToDoId-1){
-                        v.text = e.target.value;
-                        store.dispatch('editToDo', v);
-                    }
-                });
+                store.dispatch('editToDo', {'itemId': thisToDoId, 'contents':e.target.value});
                 thisToDo.className="";
                 break;
             case 'Escape':
                 thisToDo.className="";
                 break;
-        }
+            }
+        };
+        
+    setPriority = (e) => {
+        
+        if(e.target.nodeName !== 'SELECT') return;
 
-    };
+        const optionValue = e.target.options[e.target.selectedIndex].value;
+        let priority = '';
+        switch(optionValue){
+            case('0') : return;
+            case('1') : priority = 'FIRST'; break;
+            case('2') : priority = 'SECOND'; break;
+        }
+        const thisToDoId = e.target.parentNode.parentNode.parentNode.id;
+            
+        store.dispatch('setPriority', {'itemId': thisToDoId, 'priority': priority});
+
+    }
 
     render(){
         
@@ -95,8 +102,8 @@ const List = class extends Component {
                         <option value="2">2순위</option>
                     </select>`
                     :
-                    ` <span class="chip ${todo.priority =='1'? 'primary':'secondary'}">
-                        ${todo.priority}순위
+                    ` <span class="chip ${todo.priority =='FIRST'? 'primary':'secondary'}">
+                        ${todo.priority =='FIRST'? '1':'2'}순위
                       </span>`
                     }
                     ${todo.contents}
@@ -124,7 +131,7 @@ const List = class extends Component {
             this.toDoKeyup(e);
         });
         target.addEventListener('click', e => {
-            
+            this.setPriority(e);
         })
     }
 
