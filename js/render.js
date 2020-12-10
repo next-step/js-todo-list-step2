@@ -62,57 +62,6 @@ class DOMRenderer extends Renderer{
     return;
   }
 
-  async onUserCreateHandler(){
-    const name = prompt("추가하고 싶은 이름을 입력해주세요.");
-    if(name.trim().length < 3){
-      alert('User의 이름은 최소 2글자 이상이어야 합니다.');
-      return;
-    }
-    const userName = {name}
-    const resData = await addUser(userName);
-    const user = User.get(resData._id, resData.name);
-    this.app.addUser(user);
-    this.createUserHTML(user)
-  }
-
-  changeSelection(e){
-    if(e.target.tagName !== 'A') return;
-    const targetClass = e.target.classList;
-    const selection = this.currentUser.getFilter();
-    if (targetClass.contains(selection)) return false;
-    this.$filter.querySelector('.' + selection).classList.remove('selected');
-    targetClass.add('selected');
-    this.currentUser.setFilter(targetClass[0]);
-    this.render();
-    return;
-  }
-
-  _makePriorityTag(priority){
-    const selectHTML =  `<select class="chip select">
-                <option value="0" selected="">순위</option>
-                <option value="1">1순위</option>
-                <option value="2">2순위</option>
-              </select>`
-    const priorityHTML = {
-      'NONE' : selectHTML,
-      'FIRST' : '<span class="chip primary">1순위</span>',
-      'SECOND' :  '<span class="chip secondary">2순위</span>'
-    }
-    return priorityHTML[priority]
-  }
-
-  async handleUserBtn(e){
-    const userId = e.target.dataset.id;
-    if(this.userId === userId) return;
-    this.showLoadingBar();
-    const resData = await getUser(userId);
-    const newUser = User.load(resData);
-    this.app.addUser(newUser);
-    this.currentUser = newUser;
-    this.userId = newUser.getInfo()._id;
-    this.render();
-  }
-
   showLoadingBar(){
     const loadingHTML = `<li>
           <div class="view">
@@ -128,6 +77,18 @@ class DOMRenderer extends Renderer{
     this.$todoList.innerHTML = loadingHTML;
   }
 
+  async handleUserBtn(e){
+    const userId = e.target.dataset.id;
+    if(this.userId === userId) return;
+    this.showLoadingBar();
+    const resData = await getUser(userId);
+    const newUser = User.load(resData);
+    this.app.addUser(newUser);
+    this.currentUser = newUser;
+    this.userId = newUser.getInfo()._id;
+    this.render();
+  }
+
   createUserHTML(user){
     const button = document.createElement('button');
     button.classList.add('ripple');
@@ -136,43 +97,33 @@ class DOMRenderer extends Renderer{
     button.addEventListener('click',  (e) => this.handleUserBtn(e));
     this.$userList.appendChild(button);
     return;
-
   }
 
-  createTodoTask (task) {
-    const li = document.createElement('li')
-    li.classList.add = task.isCompleted && 'completed';
-    li.dataset.id = task._id;
-    const priorHTML = this._makePriorityTag(task.priority);
-    li.innerHTML = `
-            <div class="view">
-                <input class="toggle" type="checkbox" ${task.isCompleted ? 'checked' : ''}/>
-                <label class="label">
-                  ${priorHTML}
-                  
-                  ${task.contents}
-                </label>
-                <button class="destroy"></button>
-            </div>
-            <input class="edit" value=${task.contents} />`
-    li.addEventListener('click' , (e) => {
-      this.handleTodo(e, task);
-    });
-    li.addEventListener('dblclick' , (e) => {
-      this.changeEditMode(e);
-    })
-    li.querySelector('.chip').addEventListener('change', (e) => {
-      this.changeSelect(e, task)
-    })
-    this.$todoList.appendChild(li);
-    return;
+  async onUserCreateHandler(){
+    const name = prompt("추가하고 싶은 이름을 입력해주세요.");
+    if(name.trim().length < 3){
+      alert('User의 이름은 최소 2글자 이상이어야 합니다.');
+      return;
+    }
+    const userName = {name}
+    const resData = await addUser(userName);
+    const user = User.get(resData._id, resData.name);
+    this.app.addUser(user);
+    this.createUserHTML(user)
   }
 
-
-  escapeEditMode(target) {
-    target.closest('li') && target.closest('li').classList.remove('editing');
-    this.isEditMode = false;
-    return;
+  makePriorityTag(priority){
+    const selectHTML =  `<select class="chip select">
+                <option value="0" selected="">순위</option>
+                <option value="1">1순위</option>
+                <option value="2">2순위</option>
+              </select>`
+    const priorityHTML = {
+      'NONE' : selectHTML,
+      'FIRST' : '<span class="chip primary">1순위</span>',
+      'SECOND' :  '<span class="chip secondary">2순위</span>'
+    }
+    return priorityHTML[priority]
   }
 
   async handleCreateTodo(e, task = null){
@@ -201,6 +152,7 @@ class DOMRenderer extends Renderer{
     this.render();
     return;
   }
+
   async handleTodo(e, task){
     e.stopPropagation();
     const target = e.target;
@@ -217,9 +169,26 @@ class DOMRenderer extends Renderer{
       this.currentUser.removeTask(task);
       this.render();
     }
-  return;
+    return;
   }
 
+  escapeEditMode(target) {
+    target.closest('li') && target.closest('li').classList.remove('editing');
+    this.isEditMode = false;
+    return;
+  }
+
+  changeSelection(e){
+    if(e.target.tagName !== 'A') return;
+    const targetClass = e.target.classList;
+    const selection = this.currentUser.getFilter();
+    if (targetClass.contains(selection)) return false;
+    this.$filter.querySelector('.' + selection).classList.remove('selected');
+    targetClass.add('selected');
+    this.currentUser.setFilter(targetClass[0]);
+    this.render();
+    return;
+  }
   changeEditMode(e){
     if (e.target.classList.contains('label')) {
       if (!this.isEditMode) {
@@ -236,6 +205,34 @@ class DOMRenderer extends Renderer{
     await updateUserTodoPriority(this.userId, task._id, prior);
     task.setPriority(e.target.selectedIndex)
     this.render();
+  }
+
+  createTodoTask (task) {
+    const li = document.createElement('li')
+    li.classList.add = task.isCompleted && 'completed';
+    li.dataset.id = task._id;
+    const priorHTML = this.makePriorityTag(task.priority);
+    li.innerHTML = `
+            <div class="view">
+                <input class="toggle" type="checkbox" ${task.isCompleted ? 'checked' : ''}/>
+                <label class="label">
+                  ${priorHTML}
+                  ${task.contents}
+                </label>
+                <button class="destroy"></button>
+            </div>
+            <input class="edit" value=${task.contents} />`
+    li.addEventListener('click' , (e) => {
+      this.handleTodo(e, task);
+    });
+    li.addEventListener('dblclick' , (e) => {
+      this.changeEditMode(e);
+    })
+    li.querySelector('.chip').addEventListener('change', (e) => {
+      this.changeSelect(e, task)
+    })
+    this.$todoList.appendChild(li);
+    return;
   }
 
   userListRender(){
