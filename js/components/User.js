@@ -20,10 +20,6 @@ const User = class extends Set{
     return user;
   }
 
-  toJSON(){
-    return this.getInfo();
-  }
-
   setFilter(filter){
     this.filter = filter;
   }

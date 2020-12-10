@@ -13,10 +13,6 @@ const App = class extends Set{
     return app
   }
 
-  toJSON(){
-    return this.getUsers();
-  }
-
   addUser(user){
     if(!user instanceof User) return console.log('invalid User');
     super.add(user);

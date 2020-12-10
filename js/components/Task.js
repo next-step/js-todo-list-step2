@@ -17,10 +17,6 @@ const Task = class {
     return task;
   }
 
-  toJSON(){
-    return this.getInfo();
-  }
-
   setContent(contents){
     this.contents = contents;
   }
