@@ -29,10 +29,6 @@ const Task = class {
     this.isCompleted = !this.isCompleted;
   }
 
-  getInfo(){
-    return {_id : this._id, contents : this.contents, priority : this.priority, isCompleted : this.isCompleted};
-  }
-
   getId(){
     return this._id;
   }

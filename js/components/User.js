@@ -49,10 +49,6 @@ const User = class extends Set{
     return tasks;
   }
 
-  getInfo(){
-    return {_id : this._id, name : this.name, todoList : this.getTasks()};
-  }
-
   getId(){
     return this._id;
   }
