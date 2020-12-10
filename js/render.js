@@ -40,7 +40,7 @@ class DOMRenderer extends Renderer{
     this.$todoList = parent.querySelector('.todo-list');
     this.$deleteBtn = parent.querySelector('.clear-completed');
     this.$userCreate = parent.querySelector('.user-create-button');
-    // this.$userDelete = parent.querySelector('.user-delete-button');
+    this.$userDelete = parent.querySelector('.user-delete-button');
     this.addDomEvent();
   }
 
@@ -55,12 +55,13 @@ class DOMRenderer extends Renderer{
     this.$newTodo.addEventListener('keydown',  (e) => this.handleCreateTodo(e));
     this.$userCreate.addEventListener('click', () => this.onUserCreateHandler());
     this.$deleteBtn.addEventListener('click', () => this.handleDeleteAllTodo());
-    // this.$userDelete.addEventListener('click', () => this.handleDeleteUser());
+    this.$userDelete.addEventListener('click', () => this.handleDeleteUser());
   }
   async handleDeleteUser(){
     const user = this.currentUser;
     await deleteUser(user._id);
     this.app.removeUser(this.currentUser);
+    this.currentUser = null;
     this.render();
     return;
   }
