@@ -3,7 +3,7 @@ import User from './components/User.js';
 import Task from './components/task.js';
 import {
   addUser,
-  addUserTodo, deleteUserAllTodo,
+  addUserTodo, deleteUser, deleteUserAllTodo,
   deleteUserTodo, getUser,
   getUserList, toggleTodoComplete,
   updateUserTodoContents,
@@ -32,13 +32,15 @@ class DOMRenderer extends Renderer{
     super(app);
     this.init();
     this.isEditMode = false;
+    this.$userTitle = parent.querySelector('#user-title strong');
     this.$userList = parent.querySelector('#user-list');
     this.$newTodo = parent.querySelector('.new-todo');
     this.$todoCount = parent.querySelector('.todo-count strong');
     this.$filter = parent.querySelector('.count-container .filters');
     this.$todoList = parent.querySelector('.todo-list');
     this.$deleteBtn = parent.querySelector('.clear-completed');
-    this.$userCreate = parent.querySelector('.user-create-button')
+    this.$userCreate = parent.querySelector('.user-create-button');
+    // this.$userDelete = parent.querySelector('.user-delete-button');
     this.addDomEvent();
   }
 
@@ -52,7 +54,15 @@ class DOMRenderer extends Renderer{
     this.$filter.addEventListener('click', (e) => this.changeSelection(e));
     this.$newTodo.addEventListener('keydown',  (e) => this.handleCreateTodo(e));
     this.$userCreate.addEventListener('click', () => this.onUserCreateHandler());
-    this.$deleteBtn.addEventListener('click', () => this.handleDeleteAllTodo())
+    this.$deleteBtn.addEventListener('click', () => this.handleDeleteAllTodo());
+    // this.$userDelete.addEventListener('click', () => this.handleDeleteUser());
+  }
+  async handleDeleteUser(){
+    const user = this.currentUser;
+    await deleteUser(user._id);
+    this.app.removeUser(this.currentUser);
+    this.render();
+    return;
   }
 
   async handleDeleteAllTodo(){
@@ -61,7 +71,6 @@ class DOMRenderer extends Renderer{
     this.render();
     return;
   }
-
   showLoadingBar(){
     const loadingHTML = `<li>
           <div class="view">
@@ -76,19 +85,17 @@ class DOMRenderer extends Renderer{
         </li>`
     this.$todoList.innerHTML = loadingHTML;
   }
-
   async handleUserBtn(e){
     const userId = e.target.dataset.id;
     if(this.userId === userId) return;
     this.showLoadingBar();
     const resData = await getUser(userId);
     const newUser = User.load(resData);
-    this.app.addUser(newUser);
     this.currentUser = newUser;
-    this.userId = newUser.getInfo()._id;
+    this.userId = newUser._id;
+    this.$userTitle.innerHTML = newUser.name;
     this.render();
   }
-
   createUserHTML(user){
     const button = document.createElement('button');
     button.classList.add('ripple');
@@ -98,7 +105,6 @@ class DOMRenderer extends Renderer{
     this.$userList.appendChild(button);
     return;
   }
-
   async onUserCreateHandler(){
     const name = prompt("추가하고 싶은 이름을 입력해주세요.");
     if(name.trim().length < 3){
@@ -111,7 +117,6 @@ class DOMRenderer extends Renderer{
     this.app.addUser(user);
     this.createUserHTML(user)
   }
-
   makePriorityTag(priority){
     const selectHTML =  `<select class="chip select">
                 <option value="0" selected="">순위</option>
@@ -125,7 +130,6 @@ class DOMRenderer extends Renderer{
     }
     return priorityHTML[priority]
   }
-
   async handleCreateTodo(e, task = null){
     e.stopPropagation();
     if(e.key === 'Escape'){
@@ -152,7 +156,6 @@ class DOMRenderer extends Renderer{
     this.render();
     return;
   }
-
   async handleTodo(e, task){
     e.stopPropagation();
     const target = e.target;
@@ -171,13 +174,11 @@ class DOMRenderer extends Renderer{
     }
     return;
   }
-
   escapeEditMode(target) {
     target.closest('li') && target.closest('li').classList.remove('editing');
     this.isEditMode = false;
     return;
   }
-
   changeSelection(e){
     if(e.target.tagName !== 'A') return;
     const targetClass = e.target.classList;
@@ -206,7 +207,6 @@ class DOMRenderer extends Renderer{
     task.setPriority(e.target.selectedIndex)
     this.render();
   }
-
   createTodoTask (task) {
     const li = document.createElement('li')
     li.classList.add = task.isCompleted && 'completed';
@@ -235,25 +235,21 @@ class DOMRenderer extends Renderer{
     return;
   }
 
-  userListRender(){
-    this.$userList.innerHTML = '';
-    const userList = this.app.getUserNames();
-    userList.forEach((user) => {
-      this.createUserHTML(user);
-    })
-  }
-
   _render () {
     const users = this.app.getUsers();
-    this.$todoList.innerHTML = '';
-    if(!this.$userList.innerText.length) this.userListRender();
     if(!this.currentUser) {
       this.currentUser = users[0];
-      this.userId = this.currentUser.getId();
+      this.$userTitle.innerHTML = this.currentUser.name;
     }
-    const tasks = this.currentUser.getTasks();
+    this.userId = this.currentUser._id;
+    this.$userList.innerHTML = '';
+    users.forEach((user) => {
+      this.createUserHTML(user);
+    })
 
-    tasks.forEach((task) => {
+    this.$todoList.innerHTML = '';
+    const tasks = this.currentUser.getTasks();
+    this.currentUser.getTasks().forEach((task) => {
       this.createTodoTask(task)
     });
     this.$todoCount.innerHTML = tasks.length;
