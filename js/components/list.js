@@ -64,7 +64,22 @@ const List = class extends Component {
     }
 
     render(){
-        
+        if(store.state.isLoading){
+            this.element.innerHTML = `
+            <li>
+            <div class="view">
+              <label class="label">
+                <div class="animated-background">
+                  <div class="skel-mask-container">
+                    <div class="skel-mask"></div>
+                  </div>
+                </div>
+              </label>
+            </div>
+          </li>`
+          return;
+        }
+
         if(store.state.todos.todoList.length === 0){
             this.element.innerHTML = `
             <li>

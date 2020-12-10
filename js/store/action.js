@@ -1,5 +1,5 @@
 import api from '../lib/api.js';
-import store from './store.js';
+import {message} from '../message/message.js';
 
 export const actions = {
     
@@ -35,7 +35,12 @@ export const actions = {
     },
     setPriority(context, payload){
         context.commit('setPriority', payload);
-
+    },
+    deleteAllToDo(context){
+        context.commit('deleteAllToDo');
+    },
+    setIsLoading(context, payload){
+        context.commit('setIsLoading');
     }
 }
 
@@ -43,13 +48,23 @@ export const actions = {
 export const mutations = {
 
     loadUsersToDos : async (state) => {
+
+        mutations.setIsLoading(state, true);
+
         const userList = await api.loadToDos();
+
         if(userList!==null && userList!==''){
             state.userList = userList;
             //첫 값을 선택된 user로 세팅
             mutations.setSelectedUser(state, userList[0]._id );
             mutations.selectUsersToDo(state, state.selectedUser);
+            
+            mutations.setIsLoading(state, false);
+        }else{
+            alert(message.failLoadUser);
+            mutations.setIsLoading(state, false);
         }
+        return state;
     },
     
     addToDo : async (state, payload) => {
@@ -83,7 +98,7 @@ export const mutations = {
         }
         return state;
     },
-
+    
     setPriority : async (state, payload) => {
         const priorityToDo = await api.setPriorityToDo(state.selectedUser, payload.itemId, payload.priority);
         if(priorityToDo!==null && priorityToDo!==''){
@@ -92,16 +107,18 @@ export const mutations = {
         }
         return state;
     },
-
+    
     setFilterType : (state, payload) => {
         state.filterType = payload;
+        return state;
     },
-
+    
     setSelectedUser : async (state, payload) => {
         state.selectedUser = payload;
         mutations.selectUsersToDo(state, payload);
+        return state;
     },
-
+    
     addUser : async (state, payload) => {
         const user = await api.addUser(payload);
         if(user!==null && user!==''){
@@ -109,7 +126,7 @@ export const mutations = {
         }
         return state;
     },
-
+    
     selectUsersToDo : async (state, payload) => {
         const userToDo = await api.selectUserToDo(payload);
         console.log(userToDo.todoList)
@@ -118,13 +135,28 @@ export const mutations = {
         }
         return state;
     },
-
+    
     deleteUser : async (state, payload) => {
         const message = await api.deleteUser(payload);
         if(message!==null && message!==''){
             console.log(message.message);
             mutations.loadUsersToDos(state);
         }
-    }
+        return state;
+    },
+    
+    deleteAllToDo : async (state) => {
+        const deleteToDo = await api.deleteAllToDo(state.selectedUser);
+        if(deleteToDo!==null && deleteToDo!==''){
+            console.log(deleteToDo);
+            mutations.selectUsersToDo(state, state.selectedUser);
+        }
+        return state;
+    },
 
+    setIsLoading : (state, payload) => {
+        state.isLoading = payload;
+        return state;
+    }
+    
 }

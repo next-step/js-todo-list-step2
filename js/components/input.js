@@ -1,5 +1,6 @@
 import Component from '../lib/component.js';
 import store from '../store/index.js';
+import {message} from '../message/message.js';
 
 const Input = class extends Component {
     constructor() {
@@ -10,11 +11,16 @@ const Input = class extends Component {
     }
     
     addToDo = (e) => {
-        //엔터 키에만 수행
-        const toDos = store.state.todos.todoList;
-        if(e.key !== "Enter" || e.target.value.replace(/(\s*)/g, "")==""){
+        //엔터 키에만 수행, 공백제거
+        if(e.key !== "Enter" || e.target.value.replace(/(\s*)/g, "")===""){
             return;
         }
+        //두글자 이상
+        if(e.target.value.length<2){
+            alert(message.userLength);
+            return;
+        }
+        
         const text = e.target.value;
         store.dispatch('addToDo', {"contents":text});
         //입력시엔 할 일들을 보두 보여줌

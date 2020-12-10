@@ -5,18 +5,21 @@ import List from './components/list.js';
 import Input from './components/input.js';
 import Filter from './components/filter.js';
 import User from './components/user.js';
+import DeleteAll from './components/deleteAll.js';
 
 const countInstance = new Count();
 const listInstance = new List();
 const InputInstance = new Input();
 const FilterInstance = new Filter();
 const UserInstance = new User();
+const DeleteAllInstance = new DeleteAll();
 
 countInstance.render();
 listInstance.render();
 InputInstance.render();
 FilterInstance.render();
 UserInstance.render();
+DeleteAllInstance.render();
 
 
 store.dispatch('loadUsersToDos');
