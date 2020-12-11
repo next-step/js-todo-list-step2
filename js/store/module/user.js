@@ -1,34 +1,45 @@
 import $api from "../../api/index.js";
 
-const user = (() => {
-  let selectedUser = {};
+const user = {
+  _selected: {},
+  get selected() {
+    return this._selected;
+  },
+  set selected(value) {
+    this._selected = value;
+    this.watch.selected.forEach((method) => method());
+  },
 
-  const mapUser = (user) => {
+  subscribe(target, method) {
+    if (!this["watch"]) {
+      this["watch"] = {};
+    }
+    if (!this["watch"][target]) {
+      this.watch[target] = [method];
+    }
+    this.watch[target].push(method);
+  },
+
+  mapUser(user) {
     return {
       ...user,
-      active: user._id === selectedUser._id,
+      active: false,
     };
-  };
+  },
 
-  const getAll = async () => {
+  async getAll() {
     const users = await $api.user.getAll();
-    return users.map(mapUser);
-  };
+    return users.map(this.mapUser);
+  },
 
-  const create = async (name) => {
+  async create(name) {
     const user = await $api.user.create({ name });
-    return mapUser(user);
-  };
+    return this.mapUser(user);
+  },
 
-  const select = (user) => {
-    selectedUser = user;
-  };
-
-  return {
-    getAll,
-    create,
-    select,
-  };
-})();
+  select(user) {
+    this.selected = user;
+  },
+};
 
 export default user;

@@ -1,4 +1,6 @@
 import Component from "./core/Component.js";
+
+import UserTitle from "./component/UserTitle.js";
 import UserList from "./component/UserList.js";
 
 export default class App extends Component {
@@ -7,14 +9,14 @@ export default class App extends Component {
 
   init() {
     this.components = {
+      UserTitle: new UserTitle("#user-title"),
       UserList: new UserList("#user-list"),
     };
   }
 
   render() {
     return `
-    <h1 id="user-title" data-username="eastjun">
-        <span><strong>eastjun</strong>'s Todo List</span>
+      <h1 id="user-title">
       </h1>
       <section>
         <div id="user-list">
