@@ -20,7 +20,7 @@ export default class UserList extends Component {
     };
   }
 
-  createUser({ target }) {
+  async createUser({ target }) {
     if (target.dataset.action !== "create") {
       return;
     }
@@ -33,8 +33,8 @@ export default class UserList extends Component {
       return;
     }
 
-    this.users.push({ name });
-    this.setState();
+    await $store.user.create(name);
+    await this.setState();
   }
 
   async render() {

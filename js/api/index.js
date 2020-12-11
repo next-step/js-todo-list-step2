@@ -1,3 +1,5 @@
+import { HTTP_METHOD } from "./utils/constant.js";
+
 const BASE_URL = "https://js-todo-list-9ca3a.df.r.appspot.com/api/users";
 
 const $api = (() => {
@@ -7,6 +9,9 @@ const $api = (() => {
   const user = {
     getAll() {
       return requestWithJsonData(BASE_URL);
+    },
+    create(data) {
+      return requestWithJsonData(BASE_URL, HTTP_METHOD.POST(data));
     },
   };
 

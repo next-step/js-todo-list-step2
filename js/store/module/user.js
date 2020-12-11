@@ -15,8 +15,14 @@ const user = (() => {
     return users.map(mapUser);
   };
 
+  const create = async (name) => {
+    const user = await $api.user.create({ name });
+    return mapUser(user);
+  };
+
   return {
     getAll,
+    create,
   };
 })();
 
