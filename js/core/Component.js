@@ -1,14 +1,16 @@
 export default class Component {
+  target;
   dom;
   components = {};
   events = {};
 
   constructor(target) {
-    this.#load(target);
+    this.target = target;
+    this.#load();
   }
 
-  async #load(target) {
-    this.dom = document.querySelector(target);
+  async #load() {
+    this.dom = document.querySelector(this.target);
     this.dom.innerHTML = await this.render();
 
     this.init();
@@ -18,6 +20,7 @@ export default class Component {
   init() {}
 
   async setState() {
+    this.dom = document.querySelector(this.target);
     this.dom.innerHTML = await this.render();
     Object.values(this.components).forEach((component) => component.setState());
   }
