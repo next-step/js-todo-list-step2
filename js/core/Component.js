@@ -1,14 +1,15 @@
 export default class Component {
   dom;
-  props = {};
   components = {};
   events = {};
 
-  constructor(target, props = {}) {
-    this.dom = document.querySelector(target);
-    this.dom.innerHTML = this.render();
+  constructor(target) {
+    this.#load(target);
+  }
 
-    this.props = props;
+  async #load(target) {
+    this.dom = document.querySelector(target);
+    this.dom.innerHTML = await this.render();
 
     this.init();
     this.setEvents();
@@ -16,8 +17,8 @@ export default class Component {
 
   init() {}
 
-  setState() {
-    this.dom.innerHTML = this.render();
+  async setState() {
+    this.dom.innerHTML = await this.render();
     Object.values(this.components).forEach((component) => component.setState());
   }
 
@@ -29,5 +30,5 @@ export default class Component {
     );
   }
 
-  render() {}
+  async render() {}
 }

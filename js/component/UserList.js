@@ -1,10 +1,10 @@
 import Component from "../core/Component.js";
+import $store from "../store/index.js";
 
-const UserListItem = ({ id: _id, name, active }) => {
+const UserListItem = ({ _id, name, active }) => {
   return `
     <button 
       class="ripple  ${active ? " active" : ""}"
-      data-action="select"
       data-id=${_id}>
       ${name}
     </button>
@@ -24,6 +24,7 @@ export default class UserList extends Component {
     if (target.dataset.action !== "create") {
       return;
     }
+
     const name = prompt("추가하고 싶은 이름을 입력해주세요.");
 
     if (!name) return;
@@ -36,11 +37,8 @@ export default class UserList extends Component {
     this.setState();
   }
 
-  render() {
-    // TODO: api를 통한 통신
-    if (!this.users) {
-      this.users = [];
-    }
+  async render() {
+    this.users = await $store.user.getAll();
 
     return `
       ${this.users.map(UserListItem).join("")}
