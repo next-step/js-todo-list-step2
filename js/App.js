@@ -4,9 +4,6 @@ import UserTitle from "./component/UserTitle.js";
 import UserList from "./component/UserList.js";
 
 export default class App extends Component {
-  dom;
-  components = {};
-
   init() {
     this.components = {
       UserTitle: new UserTitle("#user-title"),
