@@ -1,45 +1,44 @@
 import $api from "../../api/index.js";
 
-const user = {
-  _selected: {},
-  get selected() {
-    return this._selected;
-  },
-  set selected(value) {
-    this._selected = value;
-    this.watch.selected.forEach((method) => method());
-  },
+const user = (() => {
+  let selected = {};
 
-  subscribe(target, method) {
-    if (!this["watch"]) {
-      this["watch"] = {};
-    }
-    if (!this["watch"][target]) {
-      this.watch[target] = [method];
-    }
-    this.watch[target].push(method);
-  },
-
-  mapUser(user) {
+  const mapUser = (user) => {
     return {
       ...user,
-      active: false,
+      active: user._id === selected._id,
     };
-  },
+  };
 
-  async getAll() {
-    const users = await $api.user.getAll();
-    return users.map(this.mapUser);
-  },
+  return {
+    get selected() {
+      return selected;
+    },
+    set selected(value) {
+      selected = value;
+      this.watch.selected.forEach((method) => method());
+    },
 
-  async create(name) {
-    const user = await $api.user.create({ name });
-    return this.mapUser(user);
-  },
+    subscribe(target, method) {
+      if (!this["watch"]) {
+        this["watch"] = {};
+      }
+      if (!this["watch"][target]) {
+        this.watch[target] = [method];
+      }
+      this.watch[target].push(method);
+    },
 
-  select(user) {
-    this.selected = user;
-  },
-};
+    async getAll() {
+      const users = await $api.user.getAll();
+      return users.map(mapUser);
+    },
+
+    async create(name) {
+      const user = await $api.user.create({ name });
+      return mapUser(user);
+    },
+  };
+})();
 
 export default user;

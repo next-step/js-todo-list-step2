@@ -35,8 +35,7 @@ export default class UserList extends Component {
       return;
     }
 
-    const newUser = await $store.user.create(name);
-    $store.user.select(newUser);
+    $store.user.selected = await $store.user.create(name);
     await this.setState();
   }
 
@@ -48,8 +47,7 @@ export default class UserList extends Component {
     if (target.dataset.action !== "selectUser") {
       return;
     }
-    const selectedUser = this.findUser(target.dataset.id);
-    $store.user.select(selectedUser);
+    $store.user.selected = this.findUser(target.dataset.id);
     this.setState();
   }
 
