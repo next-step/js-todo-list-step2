@@ -20,9 +20,14 @@ const user = (() => {
     return mapUser(user);
   };
 
+  const select = (user) => {
+    selectedUser = user;
+  };
+
   return {
     getAll,
     create,
+    select,
   };
 })();
 

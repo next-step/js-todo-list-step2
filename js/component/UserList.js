@@ -5,7 +5,9 @@ const UserListItem = ({ _id, name, active }) => {
   return `
     <button 
       class="ripple  ${active ? " active" : ""}"
-      data-id=${_id}>
+      data-id=${_id}
+      data-action="selectUser"
+    >
       ${name}
     </button>
   `;
@@ -16,12 +18,12 @@ export default class UserList extends Component {
 
   init() {
     this.events = {
-      click: [this.createUser],
+      click: [this.createUser, this.selectUser],
     };
   }
 
   async createUser({ target }) {
-    if (target.dataset.action !== "create") {
+    if (target.dataset.action !== "createUser") {
       return;
     }
 
@@ -33,8 +35,22 @@ export default class UserList extends Component {
       return;
     }
 
-    await $store.user.create(name);
+    const newUser = await $store.user.create(name);
+    $store.user.select(newUser);
     await this.setState();
+  }
+
+  findUser(id) {
+    return this.users.find((user) => user._id === id);
+  }
+
+  selectUser({ target }) {
+    if (target.dataset.action !== "selectUser") {
+      return;
+    }
+    const selectedUser = this.findUser(target.dataset.id);
+    $store.user.select(selectedUser);
+    this.setState();
   }
 
   async render() {
@@ -42,7 +58,7 @@ export default class UserList extends Component {
 
     return `
       ${this.users.map(UserListItem).join("")}
-      <button class="ripple user-create-button" data-action="create">+ 유저 생성</button>
+      <button class="ripple user-create-button" data-action="createUser">+ 유저 생성</button>
     `;
   }
 }
