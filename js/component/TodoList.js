@@ -36,7 +36,7 @@ const TodoListItemPriority = (priority) => {
 };
 
 function renderPriority(priority) {
-  if (priority === "select") {
+  if (priority === "NONE") {
     return TodoListItemPrioritySelector();
   } else {
     return TodoListItemPriority(priority);
