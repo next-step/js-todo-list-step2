@@ -49,7 +49,7 @@ const TodoListItem = ({ _id, contents, priority, isCompleted, isEditing }) => {
     .trim();
 
   return `
-    <li class="${classList}">
+    <li class="${classList}" data-id="${_id}">
       <div class="view">
         <input class="toggle" type="checkbox" />
         <label class="label">
@@ -65,8 +65,21 @@ const TodoListItem = ({ _id, contents, priority, isCompleted, isEditing }) => {
 
 export default class TodoList extends Component {
   init() {
+    this.events = {
+      click: [this.deleteTodo],
+    };
+
     $store.user.subscribe("selected", this.setState.bind(this));
     $store.todo.subscribe("todos", this.setState.bind(this));
+  }
+
+  async deleteTodo({ target }) {
+    if (!target.classList.contains("destroy")) {
+      return;
+    }
+
+    const targetTodo = target.closest("li");
+    await $store.todo.delete(targetTodo.dataset.id);
   }
 
   async render() {

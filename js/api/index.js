@@ -25,6 +25,12 @@ const $api = (() => {
         HTTP_METHOD.POST(data)
       );
     },
+    delete(userId, todoId) {
+      return requestWithJsonData(
+        BASE_URL + `/${userId}/items/${todoId}`,
+        HTTP_METHOD.DELETE()
+      );
+    },
   };
 
   return {

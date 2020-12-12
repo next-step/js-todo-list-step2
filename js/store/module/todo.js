@@ -38,6 +38,15 @@ const todo = (() => {
 
       return newTodo;
     },
+
+    async delete(todoId) {
+      const selectedId = await user.getSelectedId();
+      const deletedTodo = await $api.todo.delete(selectedId, todoId);
+
+      todo.todos = await $api.todo.getAll(selectedId);
+
+      return deletedTodo;
+    },
   };
 })();
 

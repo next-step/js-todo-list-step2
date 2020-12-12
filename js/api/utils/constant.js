@@ -10,6 +10,11 @@ const HTTP_METHOD = {
       }),
     };
   },
+  DELETE() {
+    return {
+      method: "DELETE",
+    };
+  },
 };
 
 export { HTTP_METHOD };
