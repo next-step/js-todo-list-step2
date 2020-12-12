@@ -2,15 +2,15 @@ import Component from '../lib/component.js';
 import store from '../store/index.js';
 
 const Count = class extends Component {
-    constructor() {
+  constructor() {
     super({
-        store,
-        element: document.querySelector('.todo-count')
+      store,
+      element: document.querySelector('.todo-count'),
     });
-    }
-    
-    render(){
-        this.element.innerHTML =  `${store.state.todos.todoList.length}`
-    }
-}
+  }
+
+  render() {
+    this.element.innerHTML = `${store.state.todos.todoList.length}`;
+  }
+};
 export default Count;

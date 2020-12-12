@@ -3,7 +3,7 @@ import PubSub from '../lib/pubsub.js';
 const Store = class {
     constructor({actions, mutations, state }){
         let $this = this;
-        $this.status = 'resting';
+
         //이벤트 속성에 pubsub 클래스 할당
         $this.events = new PubSub();
 
@@ -18,10 +18,6 @@ const Store = class {
                 //key로 값 설정
                 setState[setKey] = setValue;
                 $this.events.publish('stateChange', $this.state);
-                if($this.status !== 'mutation') {
-                    console.warn(`You should use a mutation to set ${setKey}`);
-                }
-                $this.status = 'resting';
 
                 return true;
             }
@@ -36,8 +32,6 @@ const Store = class {
             return false;
         }
         console.groupCollapsed(`ACTION: ${actionKey}`)
-        //status를 action으로 변경 
-        this.status = 'action';
         //action key에 맞는 함수를 store와 payload를 받아서 수행 
         this.actions[actionKey](this, payload);
         
@@ -54,8 +48,6 @@ const Store = class {
             console.error(`Mutation "${mutationKey}" doesn't exist.`);
             return false;
         }
-        //status를 mutation으로 수정
-        this.status = 'mutation';
         //newState에 mutationkey에 맞는 함수를 store의 상태와 payload받아서 담아줌
         let newState = this.mutations[mutationKey](this.state, payload);
         //state값 변경

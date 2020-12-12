@@ -42,17 +42,18 @@ body {
 }
 
 #app {
-  margin-top: 100px;
+  margin-top: 80px;
 }
 
 #app h1 {
+  line-height: 4rem;
   width: 100%;
   font-size: 60px;
   text-align: center;
   color: #333;
   font-weight: 100;
   font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
-  margin-bottom: 50px;
+  margin-bottom: 20px;
 }
 
 .todoapp {
