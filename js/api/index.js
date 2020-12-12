@@ -15,8 +15,15 @@ const $api = (() => {
     },
   };
 
+  const todo = {
+    getAll(userId) {
+      return requestWithJsonData(BASE_URL + `/${userId}/items`);
+    },
+  };
+
   return {
     user,
+    todo,
   };
 })();
 
