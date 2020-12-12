@@ -1,5 +1,5 @@
-import Component from '../lib/component.js';
-import store from '../store/index.js';
+import Component from '../../lib/component.js';
+import store from '../../store/index.js';
 
 const UserName = class extends Component {
   constructor() {
@@ -10,6 +10,7 @@ const UserName = class extends Component {
   }
 
   render() {
+    if(!store.state.selectedUserName)return;
     this.element.setAttribute('data-username', store.state.selectedUserName);
     this.element.innerHTML = `
         <span><strong>${store.state.selectedUserName}</strong>'s Todo List</span>

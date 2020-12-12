@@ -1,5 +1,6 @@
-import Component from '../lib/component.js';
-import store from '../store/index.js';
+import Component from '../../lib/component.js';
+import store from '../../store/index.js';
+import { validateInput } from '../../common/validate.js';
 
 const User = class extends Component {
   constructor() {
@@ -14,11 +15,7 @@ const User = class extends Component {
     switch (e.target.getAttribute('data-ref')) {
       case 'appender':
         const userName = prompt('추가하고 싶은 이름을 입력해주세요.');
-        if (userName === null) return;
-        if (userName.length < 2) {
-          alert(message.userLength);
-          return;
-        }
+        if (!validateInput(userName)) return;
         store.dispatch('addUser', { name: userName });
         break;
       case 'remover':
@@ -32,6 +29,7 @@ const User = class extends Component {
   };
 
   render() {
+    if (!store.state.userList) return;
     this.element.innerHTML = `
         ${store.state.userList
           .map(
@@ -60,4 +58,5 @@ const User = class extends Component {
     });
   }
 };
+
 export default User;

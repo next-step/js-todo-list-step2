@@ -1,5 +1,7 @@
-import Component from '../lib/component.js';
-import store from '../store/index.js';
+import Component from '../../lib/component.js';
+import store from '../../store/index.js';
+import { validateInput } from '../../common/validate.js';
+import { listComponent } from './listComponent.js';
 
 const List = class extends Component {
   constructor() {
@@ -36,6 +38,9 @@ const List = class extends Component {
 
     switch (e.key) {
       case 'Enter':
+        if (!validateInput(e.target.value)) {
+          return;
+        }
         store.dispatch('editToDo', {
           itemId: thisToDoId,
           contents: e.target.value,
@@ -69,31 +74,25 @@ const List = class extends Component {
   };
 
   render() {
+    //로딩창
     if (store.state.isLoading) {
-      this.element.innerHTML = `
-            <li>
-            <div class="view">
-              <label class="label">
-                <div class="animated-background">
-                  <div class="skel-mask-container">
-                    <div class="skel-mask"></div>
-                  </div>
-                </div>
-              </label>
-            </div>
-          </li>`;
+      this.element.innerHTML = listComponent.isLoading;
       return;
     }
 
+    //user불러오기 실패
+    if (!store.state.selectedUser) {
+      this.element.innerHTML = listComponent.listMessage(
+        '할 일을 추가할 수 없습니다 😥'
+      );
+      return;
+    }
+
+    //할 일 없을 때
     if (store.state.todos.todoList.length === 0) {
-      this.element.innerHTML = `
-            <li>
-                <div class="view">
-                    <label class="label">
-                        👀 할 일을 추가해주세요 👀
-                    </label>
-                </div>
-            </li>`;
+      this.element.innerHTML = listComponent.listMessage(
+        '👀 할 일을 추가해주세요 👀'
+      );
       return;
     }
 
@@ -108,42 +107,13 @@ const List = class extends Component {
       return todo;
     });
 
-    this.element.innerHTML = `
-        ${filteredTodos
-          .map((todo) => {
-            return `
-            <li id='${todo._id}' class='${
-              todo.isCompleted == true ? 'completed' : ''
-            }'>
-                <div class="view">
-                    <input class="toggle" type="checkbox" ${
-                      todo.isCompleted == true ? 'checked' : ''
-                    }/>
-                    <label class="label">
-                    ${
-                      todo.priority == 'NONE'
-                        ? `<select class="chip select">
-                        <option value="0" selected>순위</option>
-                        <option value="1">1순위</option>
-                        <option value="2">2순위</option>
-                    </select>`
-                        : ` <span class="chip ${
-                            todo.priority == 'FIRST' ? 'primary' : 'secondary'
-                          }">
-                        ${todo.priority == 'FIRST' ? '1' : '2'}순위
-                      </span>`
-                    }
-                    ${todo.contents}
-                    </label>
-                    <button class="destroy"></button>
-                </div>
-                <input class="edit" value="${todo.contents}" />
-            </li>
-            
-            `;
-          })
-          .join('')}
-        `;
+    //리스트 있을 때
+    if (filteredTodos) {
+      this.element.innerHTML = '';
+      filteredTodos.map((todo) => {
+        this.element.innerHTML += listComponent.listToDo(todo);
+      });
+    }
   }
 
   //이벤트 설정할 수 있게 해줌

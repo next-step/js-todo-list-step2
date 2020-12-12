@@ -1,3 +1,4 @@
+import {message} from '../common/message.js';
 const BASE_URL = 'https://js-todo-list-9ca3a.df.r.appspot.com';
 
 const option = {
@@ -20,13 +21,16 @@ const option = {
 
 //요청 보내는 함수
 const request = async (url, option = {}) => {
-  const response = await fetch(url, option);
+  try {
+    const response = await fetch(url, option);
+    if (!response.ok) {
+      throw new Error(response.status);
+    }
+    return await response.json();
 
-  if (!response.ok) {
-    throw new Error(response.status);
+  } catch (e) {
+    alert(message.error(e));
   }
-
-  return await response.json();
 };
 
 export const api = {

@@ -1,12 +1,13 @@
-import store from './store/index.js'; 
+import store from './store/index.js';
 
-import Count from './components/count.js';
-import List from './components/list.js';
-import Input from './components/input.js';
-import Filter from './components/filter.js';
-import User from './components/user.js';
-import UserName from './components/userName.js';
-import DeleteAll from './components/deleteAll.js';
+import Count from './components/todoList/count.js';
+import List from './components/todoList/list.js';
+import Input from './components/todoList/input.js';
+import Filter from './components/todoList/filter.js';
+import DeleteAll from './components/todoList/deleteAll.js';
+
+import User from './components/user/user.js';
+import UserName from './components/user/userName.js';
 
 const countInstance = new Count();
 const listInstance = new List();
@@ -16,8 +17,6 @@ const UserInstance = new User();
 const DeleteAllInstance = new DeleteAll();
 const UserNameInstance = new UserName();
 
-store.dispatch('loadUsersToDos');
-
 countInstance.render();
 listInstance.render();
 InputInstance.render();
@@ -26,4 +25,4 @@ UserInstance.render();
 DeleteAllInstance.render();
 UserNameInstance.render();
 
-
+store.dispatch('loadUsersToDos');

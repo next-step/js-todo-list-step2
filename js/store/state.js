@@ -8,5 +8,5 @@ export default {
     todoList: [],
   },
   filterType: 'all',
-  isLoading: false,
+  isLoading: true,
 };

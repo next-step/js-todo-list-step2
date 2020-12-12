@@ -1,5 +1,5 @@
-import Component from '../lib/component.js';
-import store from '../store/index.js';
+import Component from '../../lib/component.js';
+import store from '../../store/index.js';
 
 const DeleteAll = class extends Component {
   constructor() {

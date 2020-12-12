@@ -1,5 +1,7 @@
 import { api } from '../lib/api.js';
-import { message } from '../message/message.js';
+import { message } from '../common/message.js';
+import { validateResult } from '../common/validate.js';
+import store from '../store/index.js';
 
 export const actions = {
   loadUsersToDos(context) {
@@ -42,36 +44,36 @@ export const actions = {
     context.commit('deleteAllToDo');
   },
   setIsLoading(context, payload) {
-    context.commit('setIsLoading');
+    context.commit('setIsLoading', payload);
   },
 };
 
 export const mutations = {
   loadUsersToDos: async (state) => {
-    mutations.setIsLoading(state, true);
+    store.dispatch('setIsLoading', true);
 
     const userList = await api.loadToDos();
 
-    if (userList !== null && userList !== '') {
+    if (validateResult(userList)) {
       state.userList = userList;
       //첫 값을 선택된 user로 세팅
-      mutations.setSelectedUser(state, userList[0]._id);
-      mutations.setSelectedUserName(state, userList[0].name);
-
-      mutations.selectUsersToDo(state, state.selectedUser);
-
-      mutations.setIsLoading(state, false);
+      store.dispatch('setSelectedUser', userList[0]._id);
+      store.dispatch('setSelectedUserName', userList[0].name);
+      //해당하는 user의 todolist가져오기
+      store.dispatch('selectUsersToDo', state.selectedUser);
+      //로딩바 상태 변경
+      store.dispatch('setIsLoading', false);
     } else {
       alert(message.failLoadUser);
-      mutations.setIsLoading(state, false);
+      store.dispatch('setIsLoading', false);
     }
     return state;
   },
 
   addToDo: async (state, payload) => {
     const userToDo = await api.addToDo(state.selectedUser, payload);
-    if (userToDo !== null && userToDo !== '') {
-      mutations.selectUsersToDo(state, state.selectedUser);
+    if (validateResult(userToDo)) {
+      store.dispatch('selectUsersToDo', state.selectedUser);
     } else {
       alert(message.failAddToDo);
     }
@@ -80,8 +82,8 @@ export const mutations = {
 
   destroyToDo: async (state, payload) => {
     const deleteToDo = await api.deleteToDo(state.selectedUser, payload);
-    if (deleteToDo !== null && deleteToDo !== '') {
-      mutations.selectUsersToDo(state, state.selectedUser);
+    if (validateResult(deleteToDo)) {
+      store.dispatch('selectUsersToDo', state.selectedUser);
     } else {
       alert(message.failDeleteToDo);
     }
@@ -90,8 +92,8 @@ export const mutations = {
 
   toggleToDo: async (state, payload) => {
     const toggleToDo = await api.toggleToDo(state.selectedUser, payload);
-    if (toggleToDo !== null && toggleToDo !== '') {
-      mutations.selectUsersToDo(state, state.selectedUser);
+    if (validateResult(toggleToDo)) {
+      store.dispatch('selectUsersToDo', state.selectedUser);
     } else {
       alert(message.failToggleUser);
     }
@@ -104,8 +106,8 @@ export const mutations = {
       payload.itemId,
       payload.contents
     );
-    if (editToDo !== null && editToDo !== '') {
-      mutations.selectUsersToDo(state, state.selectedUser);
+    if (validateResult(editToDo)) {
+      store.dispatch('selectUsersToDo', state.selectedUser);
     } else {
       alert(message.failEditUser);
     }
@@ -118,8 +120,8 @@ export const mutations = {
       payload.itemId,
       payload.priority
     );
-    if (priorityToDo !== null && priorityToDo !== '') {
-      mutations.selectUsersToDo(state, state.selectedUser);
+    if (validateResult(priorityToDo)) {
+      store.dispatch('selectUsersToDo', state.selectedUser);
     } else {
       alert(message.failPriorityUser);
     }
@@ -138,14 +140,14 @@ export const mutations = {
 
   setSelectedUser: (state, payload) => {
     state.selectedUser = payload;
-    mutations.selectUsersToDo(state, payload);
+    store.dispatch('selectUsersToDo', payload);
     return state;
   },
 
   addUser: async (state, payload) => {
     const user = await api.addUser(payload);
-    if (user !== null && user !== '') {
-      mutations.loadUsersToDos(state);
+    if (validateResult(user)) {
+      store.dispatch('loadUsersToDos', state);
     } else {
       alert(message.failAddUser);
     }
@@ -154,7 +156,7 @@ export const mutations = {
 
   selectUsersToDo: async (state, payload) => {
     const userToDo = await api.selectUserToDo(payload);
-    if (userToDo !== null && userToDo !== '') {
+    if (validateResult(userToDo)) {
       state.todos = userToDo;
     } else {
       alert(message.failLoadToDos);
@@ -164,9 +166,9 @@ export const mutations = {
 
   deleteUser: async (state, payload) => {
     const message = await api.deleteUser(payload);
-    if (message !== null && message !== '') {
+    if (validateResult(message)) {
       console.log(message.message);
-      mutations.loadUsersToDos(state);
+      store.dispatch('loadUsersToDos', state);
     } else {
       alert(message.failDeleteUser);
     }
@@ -175,8 +177,8 @@ export const mutations = {
 
   deleteAllToDo: async (state) => {
     const deleteToDo = await api.deleteAllToDo(state.selectedUser);
-    if (deleteToDo !== null && deleteToDo !== '') {
-      mutations.selectUsersToDo(state, state.selectedUser);
+    if (validateResult(deleteToDo)) {
+      store.dispatch('loadUsersToDos', state.selectedUser);
     } else {
       alert(message.failDeleteToDoAll);
     }
