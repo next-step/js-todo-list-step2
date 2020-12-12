@@ -2,6 +2,7 @@ import Component from "./core/Component.js";
 
 import UserTitle from "./component/UserTitle.js";
 import UserList from "./component/UserList.js";
+import TodoInput from "./component/TodoInput.js";
 import TodoList from "./component/TodoList.js";
 
 export default class App extends Component {
@@ -9,6 +10,7 @@ export default class App extends Component {
     this.components = {
       UserTitle: new UserTitle("#user-title"),
       UserList: new UserList("#user-list"),
+      TodoInput: new TodoInput("#todo-input"),
       TodoList: new TodoList("#todo-list"),
     };
   }
@@ -23,12 +25,7 @@ export default class App extends Component {
       </section>
 
       <section class="todoapp">
-        <section class="input-container">
-          <input
-            class="new-todo"
-            placeholder="할 일을 입력해주세요."
-            autofocus
-          />
+        <section id="todo-input" class="input-container">
         </section>
         <section id="todo-list" class="main">
         </section>

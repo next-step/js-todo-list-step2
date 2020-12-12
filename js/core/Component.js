@@ -23,14 +23,22 @@ export default class Component {
   async setState() {
     this.dom = document.querySelector(this.target);
     this.dom.innerHTML = await this.render();
-    Object.values(this.components).forEach((component) => component.setState());
+    for (const component of Object.values(this.components)) {
+      await component.setState();
+    }
+    this.setEvents();
   }
 
   setEvents() {
     Object.entries(this.events).forEach(([type, methods]) =>
-      methods.forEach((method) =>
-        this.dom.addEventListener(type, method.bind(this))
-      )
+      methods.forEach((method) => {
+        if (type.includes("key")) {
+          const $input = this.dom.querySelector("input");
+          $input.addEventListener(type, method.bind(this));
+        } else {
+          this.dom.addEventListener(type, method.bind(this));
+        }
+      })
     );
   }
 

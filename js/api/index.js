@@ -19,6 +19,12 @@ const $api = (() => {
     getAll(userId) {
       return requestWithJsonData(BASE_URL + `/${userId}/items`);
     },
+    create(userId, data) {
+      return requestWithJsonData(
+        BASE_URL + `/${userId}/items`,
+        HTTP_METHOD.POST(data)
+      );
+    },
   };
 
   return {

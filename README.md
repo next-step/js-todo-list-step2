@@ -7,7 +7,7 @@
 - [x] 1. User 추가하기
 - [x] 2. User의 투두리스트 불러오기
 - [ ] 3. User 삭제하기
-- [ ] 3. todoItem 추가하기
+- [x] 3. todoItem 추가하기
 - [x] 4. todoItem 불러오기
 - [ ] 5. todoItem complete하기
 - [ ] 6. todoItem 삭제하기

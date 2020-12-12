@@ -66,11 +66,16 @@ const TodoListItem = ({ _id, contents, priority, isCompleted, isEditing }) => {
 export default class TodoList extends Component {
   init() {
     $store.user.subscribe("selected", this.setState.bind(this));
+    $store.todo.subscribe("todos", this.setState.bind(this));
   }
 
   async render() {
     this.dom.innerHTML = TodoListLoadingBar();
     const todos = await $store.todo.getAll();
+
+    if (!Array.isArray(todos)) {
+      return TodoListLoadingBar();
+    }
 
     return `
       <ul class="todo-list">
