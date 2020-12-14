@@ -1,6 +1,7 @@
 import $api from "../../api/index.js";
 
 const user = (() => {
+  const watch = {};
   let selected = {};
 
   const mapUser = (user) => {
@@ -10,46 +11,58 @@ const user = (() => {
     };
   };
 
+  const getAll = async () => {
+    const users = await $api.user.getAll();
+    if (!selected._id) {
+      selected = users[0];
+    }
+
+    return users.map(mapUser);
+  };
+
+  const create = async (name) => {
+    const user = await $api.user.create({ name });
+    return mapUser(user);
+  };
+
+  const subscribe = (target, method) => {
+    if (!watch[target]) {
+      watch[target] = [method];
+    }
+    watch[target].push(method);
+  };
+
+  const setSelected = (value) => {
+    selected = value;
+    watch.selected.forEach(async (method) => await method());
+  };
+
+  const getSelected = async () => {
+    if (!selected._id) {
+      const users = await getAll();
+      selected = users[0];
+    }
+    return selected;
+  };
+
+  const getSelectedId = async () => {
+    const { _id } = await getSelected();
+    return _id;
+  };
+
+  const getSelectedName = async () => {
+    const { name } = await getSelected();
+    return name;
+  };
+
   return {
-    get selected() {
-      return selected;
-    },
-    set selected(value) {
-      selected = value;
-      this.watch.selected.forEach((method) => method());
-    },
-
-    subscribe(target, method) {
-      if (!this["watch"]) {
-        this["watch"] = {};
-      }
-      if (!this["watch"][target]) {
-        this.watch[target] = [method];
-      }
-      this.watch[target].push(method);
-    },
-
-    async getAll() {
-      const users = await $api.user.getAll();
-      if (!selected._id) {
-        user.selected = users[0];
-      }
-
-      return users.map(mapUser);
-    },
-
-    async create(name) {
-      const user = await $api.user.create({ name });
-      return mapUser(user);
-    },
-
-    async getSelectedId() {
-      if (!selected._id) {
-        const users = await user.getAll();
-        user.selected = users[0];
-      }
-      return selected._id;
-    },
+    getAll,
+    create,
+    subscribe,
+    setSelected,
+    getSelected,
+    getSelectedId,
+    getSelectedName,
   };
 })();
 

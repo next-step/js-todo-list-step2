@@ -20,6 +20,8 @@ export default class UserList extends Component {
     this.events = {
       click: [this.createUser, this.selectUser],
     };
+
+    $store.user.subscribe("selected", this.setState.bind(this));
   }
 
   async createUser({ target }) {
@@ -35,8 +37,8 @@ export default class UserList extends Component {
       return;
     }
 
-    $store.user.selected = await $store.user.create(name);
-    await this.setState();
+    const newUser = await $store.user.create(name);
+    $store.user.setSelected(newUser);
   }
 
   findUser(id) {
@@ -47,8 +49,9 @@ export default class UserList extends Component {
     if (target.dataset.action !== "selectUser") {
       return;
     }
-    $store.user.selected = this.findUser(target.dataset.id);
-    this.setState();
+
+    const user = this.findUser(target.dataset.id);
+    $store.user.setSelected(user);
   }
 
   async render() {

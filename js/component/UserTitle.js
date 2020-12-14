@@ -7,10 +7,10 @@ export default class UserTitle extends Component {
   }
 
   async render() {
-    const { name } = $store.user.selected;
+    const name = await $store.user.getSelectedName();
 
     return `
-      <span><strong>${name ? name : ""}</strong>'s Todo List</span>
+      <span><strong>${name}</strong>'s Todo List</span>
     `;
   }
 }
