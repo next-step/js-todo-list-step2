@@ -4,6 +4,11 @@ import watch from "../../utils/watch.js";
 const user = (() => {
   let selected = {};
 
+  const init = async () => {
+    const users = await user.getAll();
+    selected = users[0];
+  };
+
   const mapUser = (user) => {
     return {
       ...user,
@@ -13,10 +18,6 @@ const user = (() => {
 
   const getAll = async () => {
     const users = await $api.user.getAll();
-    if (!selected._id) {
-      selected = users[0];
-    }
-
     return users.map(mapUser);
   };
 
@@ -30,22 +31,16 @@ const user = (() => {
     publish();
   };
 
-  const getSelected = async () => {
-    if (!selected._id) {
-      const users = await getAll();
-      selected = users[0];
-    }
+  const getSelected = () => {
     return selected;
   };
 
-  const getSelectedId = async () => {
-    const { _id } = await getSelected();
-    return _id;
+  const getSelectedId = () => {
+    return selected._id;
   };
 
-  const getSelectedName = async () => {
-    const { name } = await getSelected();
-    return name;
+  const getSelectedName = () => {
+    return selected.name;
   };
 
   const subscribe = (method) => {
@@ -57,6 +52,7 @@ const user = (() => {
   };
 
   return {
+    init,
     getAll,
     create,
     subscribe,

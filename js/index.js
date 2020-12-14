@@ -1,3 +1,9 @@
 import App from "./App.js";
+import $store from "./store/index.js";
 
-new App("#app");
+const init = async () => {
+  await $store.user.init();
+  new App("#app");
+};
+
+init();
