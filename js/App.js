@@ -20,12 +20,7 @@ export default class App extends Component {
     };
   }
 
-  //TODO: 전체 삭제 버튼 별도 컴포넌트로 분리
-  async deleteAllTodo({ target }) {
-    if (target.dataset.action !== "deleteAllTodo") {
-      return;
-    }
-
+  async deleteAllTodo() {
     await $store.todo.deleteAll();
   }
 
