@@ -14,10 +14,17 @@ export default class Component {
     this.dom.innerHTML = await this.render();
 
     this.init();
+    await this.setComponents();
     this.setEvents();
   }
 
   init() {}
+
+  async setComponents() {
+    Object.entries(this.components).forEach(([key, value]) => {
+      this.components[key] = new value(key);
+    });
+  }
 
   async setState() {
     this.dom = document.querySelector(this.target);

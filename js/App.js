@@ -9,10 +9,10 @@ import TodoList from "./component/TodoList.js";
 export default class App extends Component {
   init() {
     this.components = {
-      UserTitle: new UserTitle("#user-title"),
-      UserList: new UserList("#user-list"),
-      TodoInput: new TodoInput("#todo-input"),
-      TodoList: new TodoList("#todo-list"),
+      "#user-title": UserTitle,
+      "#user-list": UserList,
+      "#todo-input": TodoInput,
+      "#todo-list": TodoList,
     };
 
     this.events = {
