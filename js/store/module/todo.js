@@ -36,6 +36,15 @@ const todo = (() => {
     publish();
   };
 
+  const edit = async (todoId, contents) => {
+    const editedTodo = await $api.todo.edit(selectedUserId, todoId, {
+      contents,
+    });
+    console.log(editedTodo);
+    publish();
+    return editedTodo;
+  };
+
   const subscribe = (method) => {
     watch.subscribe("todo", method);
   };
@@ -51,6 +60,7 @@ const todo = (() => {
     delete: deleteTodo,
     deleteAll,
     toggle,
+    edit,
     subscribe,
   };
 })();

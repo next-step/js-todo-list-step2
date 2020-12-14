@@ -43,13 +43,9 @@ function renderPriority(priority) {
   }
 }
 
-const TodoListItem = ({ _id, contents, priority, isCompleted, isEditing }) => {
-  const classList = [isCompleted ? "completed" : "", isEditing ? "editing" : ""]
-    .join(" ")
-    .trim();
-
+const TodoListItem = ({ _id, contents, priority, isCompleted }) => {
   return `
-    <li class="${classList}" data-id="${_id}">
+    <li class="${isCompleted ? "completed" : ""}" data-id="${_id}">
       <div class="view">
         <input class="toggle" type="checkbox" ${isCompleted ? "checked" : ""}/>
         <label class="label">
@@ -64,9 +60,13 @@ const TodoListItem = ({ _id, contents, priority, isCompleted, isEditing }) => {
 };
 
 export default class TodoList extends Component {
+  submitEditingEvent;
+  cancelEditingEvent;
+
   init() {
     this.events = {
       click: [this.deleteTodo, this.toggleTodo],
+      dblclick: [this.toggleEditingTodo],
     };
 
     $store.user.subscribe(this.setState.bind(this));
@@ -89,6 +89,41 @@ export default class TodoList extends Component {
 
     const targetTodo = target.closest("li");
     await $store.todo.toggle(targetTodo.dataset.id);
+  }
+
+  async toggleEditingTodo({ target }) {
+    if (!target.classList.contains("label")) {
+      return;
+    }
+
+    const targetTodo = target.closest("li");
+    targetTodo.classList.add("editing");
+
+    const editingInput = targetTodo.querySelector(".edit");
+    this.submitEditingEvent = this.submitEditingTodo.bind(this);
+    this.cancelEditingEvent = this.cancelEditingTodo.bind(this);
+    editingInput.addEventListener("keypress", this.submitEditingEvent);
+    editingInput.addEventListener("keydown", this.cancelEditingEvent);
+  }
+
+  async submitEditingTodo({ target, key }) {
+    if (key !== "Enter") {
+      return;
+    }
+    target.removeEventListener("keypress", this.submitEditingEvent);
+    target.removeEventListener("keydown", this.cancelEditingEvent);
+    const targetTodo = target.closest("li");
+    await $store.todo.edit(targetTodo.dataset.id, target.value);
+  }
+
+  cancelEditingTodo({ target, key }) {
+    if (key !== "Escape") {
+      return;
+    }
+    target.removeEventListener("keypress", this.submitEditingEvent);
+    target.removeEventListener("keydown", this.cancelEditingEvent);
+    const targetTodo = target.closest("li");
+    targetTodo.classList.remove("editing");
   }
 
   async render() {

@@ -43,6 +43,12 @@ const $api = (() => {
         HTTP_METHOD.PUT()
       );
     },
+    edit(userId, todoId, data) {
+      return requestWithJsonData(
+        BASE_URL + `/${userId}/items/${todoId}`,
+        HTTP_METHOD.PUT(data)
+      );
+    },
   };
 
   return {
