@@ -31,6 +31,10 @@ const user = (() => {
 
     async getAll() {
       const users = await $api.user.getAll();
+      if (!selected._id) {
+        user.selected = users[0];
+      }
+
       return users.map(mapUser);
     },
 
