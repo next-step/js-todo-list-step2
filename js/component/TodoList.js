@@ -1,6 +1,8 @@
 import Component from "../core/Component.js";
 import $store from "../store/index.js";
 
+import { PRIORITY } from "../utils/priority.js";
+
 const TodoListLoadingBar = () => {
   return `
     <ul class="todo-list">
@@ -21,17 +23,20 @@ const TodoListLoadingBar = () => {
 
 const TodoListItemPrioritySelector = () => {
   return `
-    <select class="chip select">
-      <option value="0" selected>순위</option>
-      <option value="1">1순위</option>
-      <option value="2">2순위</option>
+    <select class="chip select" data-action="selectPriority">
+      <option value="NONE" selected>순위</option>
+      <option value="FIRST">1순위</option>
+      <option value="SECOND">2순위</option>
     </select>
   `;
 };
 
 const TodoListItemPriority = (priority) => {
+  const { className, text } = Object.values(PRIORITY).find(
+    ({ value }) => value === priority
+  );
   return `
-    <span class="chip ${priority}">1순위</span>
+    <span class="chip ${className}">${text}</span>
   `;
 };
 
@@ -74,6 +79,7 @@ export default class TodoList extends Component {
     this.events = {
       click: [this.deleteTodo, this.toggleTodo],
       dblclick: [this.toggleEditingTodo],
+      change: [this.selectPriority],
     };
 
     $store.user.subscribe(this.setState.bind(this));
@@ -138,6 +144,15 @@ export default class TodoList extends Component {
     this.editTarget.removeEventListener("keypress", this.submitEditing);
     this.editTarget.removeEventListener("keydown", this.cancelEditingByKeyDown);
     window.removeEventListener("click", this.cancelEditingByClick);
+  }
+
+  async selectPriority({ target }) {
+    const targetTodo = target.closest("li");
+    const selected = Object.values(PRIORITY).find(
+      ({ value }) => value === target.value
+    );
+
+    await $store.todo.setPriority(targetTodo.dataset.id, selected.value);
   }
 
   async render() {

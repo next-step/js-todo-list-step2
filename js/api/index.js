@@ -49,6 +49,12 @@ const $api = (() => {
         HTTP_METHOD.PUT(data)
       );
     },
+    priority(userId, todoId, data) {
+      return requestWithJsonData(
+        BASE_URL + `/${userId}/items/${todoId}/priority`,
+        HTTP_METHOD.PUT(data)
+      );
+    },
   };
 
   return {

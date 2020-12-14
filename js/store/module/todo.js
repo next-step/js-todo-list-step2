@@ -44,6 +44,12 @@ const todo = (() => {
     return editedTodo;
   };
 
+  const setPriority = async (todoId, priority) => {
+    const todo = await $api.todo.priority(selectedUserId, todoId, { priority });
+    publish();
+    return todo;
+  };
+
   const subscribe = (method) => {
     watch.subscribe("todo", method);
   };
@@ -60,6 +66,7 @@ const todo = (() => {
     deleteAll,
     toggle,
     edit,
+    setPriority,
     subscribe,
   };
 })();
