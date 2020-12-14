@@ -47,6 +47,12 @@ const todo = (() => {
 
       return deletedTodo;
     },
+
+    async deleteAll() {
+      const selectedId = await user.getSelectedId();
+      await $api.todo.deleteAll(selectedId);
+      todo.todos = [];
+    },
   };
 })();
 

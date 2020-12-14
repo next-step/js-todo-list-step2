@@ -31,6 +31,12 @@ const $api = (() => {
         HTTP_METHOD.DELETE()
       );
     },
+    deleteAll(userId) {
+      return requestWithJsonData(
+        BASE_URL + `/${userId}/items`,
+        HTTP_METHOD.DELETE()
+      );
+    },
   };
 
   return {

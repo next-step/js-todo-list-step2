@@ -1,4 +1,5 @@
 import Component from "./core/Component.js";
+import $store from "./store/index.js";
 
 import UserTitle from "./component/UserTitle.js";
 import UserList from "./component/UserList.js";
@@ -13,6 +14,19 @@ export default class App extends Component {
       TodoInput: new TodoInput("#todo-input"),
       TodoList: new TodoList("#todo-list"),
     };
+
+    this.events = {
+      click: [this.deleteAllTodo],
+    };
+  }
+
+  //TODO: 전체 삭제 버튼 별도 컴포넌트로 분리
+  async deleteAllTodo({ target }) {
+    if (target.dataset.action !== "deleteAllTodo") {
+      return;
+    }
+
+    await $store.todo.deleteAll();
   }
 
   render() {
@@ -42,7 +56,7 @@ export default class App extends Component {
               <a href="#completed" class="completed">완료한 일</a>
             </li>
           </ul>
-          <button class="clear-completed">모두 삭제</button>
+          <button class="clear-completed" data-action="deleteAllTodo">모두 삭제</button>
         </div>
       </section>
     `;
