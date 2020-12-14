@@ -29,11 +29,11 @@ const todo = (() => {
   };
 
   const subscribe = (method) => {
-    watch.subscribe(todo, method);
+    watch.subscribe("todo", method);
   };
 
   const publish = () => {
-    watch.publish(todo);
+    watch.publish("todo");
   };
 
   return {

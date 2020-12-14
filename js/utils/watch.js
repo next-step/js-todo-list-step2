@@ -2,19 +2,17 @@ const watch = (() => {
   let watch = {};
 
   const subscribe = (target, method) => {
-    const key = `${target}`;
-    if (!watch[key]) {
-      watch[key] = [method];
+    if (!watch[target]) {
+      watch[target] = [];
     }
-    watch[key].push(method);
+    watch[target].push(method);
   };
 
   const publish = (target) => {
-    const key = `${target}`;
-    if (!watch[key]) {
+    if (!watch[target]) {
       return;
     }
-    watch[key].forEach(async (method) => await method());
+    watch[target].forEach(async (method) => await method());
   };
 
   return {

@@ -44,11 +44,11 @@ const user = (() => {
   };
 
   const subscribe = (method) => {
-    watch.subscribe(user, method);
+    watch.subscribe("user", method);
   };
 
   const publish = () => {
-    watch.publish(user);
+    watch.publish("user");
   };
 
   return {
