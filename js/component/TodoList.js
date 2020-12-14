@@ -60,9 +60,9 @@ const TodoListItem = ({ _id, contents, priority, isCompleted }) => {
 };
 
 export default class TodoList extends Component {
-  submitEditingEvent;
-  cancelEditingEventByKeyDown;
-  cancelEditingEventByClick;
+  submitEditing;
+  cancelEditingByKeyDown;
+  cancelEditingByClick;
   editTarget;
 
   init() {
@@ -100,46 +100,51 @@ export default class TodoList extends Component {
 
     this.editTarget = target.closest("li");
     this.editTarget.classList.add("editing");
+    this.setEditingEvents();
+  }
 
+  setEditingEvents() {
     const editingInput = this.editTarget.querySelector(".edit");
-    this.submitEditingEvent = this.submitEditingTodo.bind(this);
-    this.cancelEditingEventByKeyDown = this.cancelEditingTodoOnKeyDown.bind(
-      this
-    );
-    this.cancelEditingEventByClick = this.cancelEditingTodoOnClick.bind(this);
-    editingInput.addEventListener("keypress", this.submitEditingEvent);
-    editingInput.addEventListener("keydown", this.cancelEditingEventByKeyDown);
-    window.addEventListener("click", this.cancelEditingEventByClick);
+    this.submitEditing = this.submitEditingTodo.bind(this);
+    this.cancelEditingByKeyDown = this.cancelEditingTodoByKeyDown.bind(this);
+    this.cancelEditingByClick = this.cancelEditingTodoByClick.bind(this);
+    editingInput.addEventListener("keypress", this.submitEditing);
+    editingInput.addEventListener("keydown", this.cancelEditingByKeyDown);
+    window.addEventListener("click", this.cancelEditingByClick);
   }
 
   async submitEditingTodo({ target, key }) {
     if (key !== "Enter") {
       return;
     }
-    target.removeEventListener("keypress", this.submitEditingEvent);
-    target.removeEventListener("keydown", this.cancelEditingEventByKeyDown);
-    window.removeEventListener("click", this.cancelEditingEventByClick);
-    await $store.todo.edit(this.editTarget.dataset.id, target.value);
+
+    this.removeEditingEvents();
+    const todoId = this.editTarget.dataset.id;
+    await $store.todo.edit(todoId, target.value);
   }
 
-  cancelEditingTodoOnKeyDown({ target, key }) {
+  cancelEditingTodoByKeyDown({ key }) {
     if (key !== "Escape") {
       return;
     }
-    target.removeEventListener("keypress", this.submitEditingEvent);
-    target.removeEventListener("keydown", this.cancelEditingEventByKeyDown);
-    window.removeEventListener("click", this.cancelEditingEventByKeyDown);
+
+    this.removeEditingEvents();
     this.editTarget.classList.remove("editing");
   }
 
-  cancelEditingTodoOnClick({ target }) {
+  cancelEditingTodoByClick({ target }) {
     if (target.classList.contains("edit")) {
       return;
     }
-    target.removeEventListener("keypress", this.submitEditingEvent);
-    target.removeEventListener("keydown", this.cancelEditingEventByKeyDown);
-    window.removeEventListener("click", this.cancelEditingEventByClick);
+
+    this.removeEditingEvents();
     this.editTarget.classList.remove("editing");
+  }
+
+  removeEditingEvents() {
+    this.editTarget.removeEventListener("keypress", this.submitEditing);
+    this.editTarget.removeEventListener("keydown", this.cancelEditingByKeyDown);
+    window.removeEventListener("click", this.cancelEditingByClick);
   }
 
   async render() {
