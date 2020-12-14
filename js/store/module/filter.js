@@ -1,4 +1,5 @@
 import { FILTER } from "../../utils/constants.js";
+import watch from "../../utils/watch.js";
 
 const filter = (() => {
   let item = FILTER.ALL;
@@ -19,10 +20,19 @@ const filter = (() => {
 
   const setFilter = (newState) => {
     item = newState;
+    publish();
   };
 
   const getFilter = () => {
     return item;
+  };
+
+  const subscribe = (method) => {
+    watch.subscribe("filter", method);
+  };
+
+  const publish = () => {
+    watch.publish("filter");
   };
 
   return {
@@ -30,6 +40,7 @@ const filter = (() => {
     isSameState,
     getFilter,
     setFilter,
+    subscribe,
   };
 })();
 

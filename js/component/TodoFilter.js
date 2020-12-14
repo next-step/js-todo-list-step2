@@ -5,16 +5,37 @@ import { FILTER } from "../utils/constants.js";
 
 const TodoFilterItem = ({ href, state, text }) => {
   const isSelected = $store.filter.isSameState(state);
-  const className = [state, isSelected ? "selected" : ""].join(" ");
 
   return `
     <li>
-      <a href="${href}" class="${className}">${text}</a>
+      <a 
+        href="${href}" 
+        class="${isSelected ? "selected" : ""}"
+        data-state="${state}"
+        data-action="selectFilter"
+      >
+        ${text}
+      </a>
     </li>
   `;
 };
 
 export default class TodoFilter extends Component {
+  init() {
+    this.events = {
+      click: [this.selectFilter],
+    };
+
+    $store.filter.subscribe(this.setState.bind(this));
+  }
+
+  selectFilter({ target }) {
+    const selected = Object.values(FILTER).find(
+      ({ state }) => state === target.dataset.state
+    );
+    $store.filter.setFilter(selected);
+  }
+
   async render() {
     return `
       ${Object.values(FILTER).map(TodoFilterItem).join("")}
