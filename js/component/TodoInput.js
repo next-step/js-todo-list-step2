@@ -15,6 +15,7 @@ export default class TodoInput extends Component {
 
     const contents = target.value;
     if (contents.trim().length < 2) {
+      alert("2글자 이상이어야 합니다.");
       return;
     }
 
