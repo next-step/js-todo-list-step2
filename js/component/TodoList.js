@@ -51,7 +51,7 @@ const TodoListItem = ({ _id, contents, priority, isCompleted, isEditing }) => {
   return `
     <li class="${classList}" data-id="${_id}">
       <div class="view">
-        <input class="toggle" type="checkbox" />
+        <input class="toggle" type="checkbox" ${isCompleted ? "checked" : ""}/>
         <label class="label">
           ${renderPriority(priority)}
           ${contents}
