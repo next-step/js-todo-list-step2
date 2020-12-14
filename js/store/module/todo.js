@@ -3,34 +3,36 @@ import user from "./user.js";
 import watch from "../../utils/watch.js";
 
 const todo = (() => {
+  let selectedUserId;
+
+  const init = async () => {
+    selectedUserId = user.getSelectedId();
+    user.subscribe(() => (selectedUserId = user.getSelectedId()));
+  };
+
   const getAll = async () => {
-    const selectedId = await user.getSelectedId();
-    return await $api.todo.getAll(selectedId);
+    return await $api.todo.getAll(selectedUserId);
   };
 
   const create = async (contents) => {
-    const selectedId = await user.getSelectedId();
-    const newTodo = await $api.todo.create(selectedId, { contents });
+    const newTodo = await $api.todo.create(selectedUserId, { contents });
     publish();
     return newTodo;
   };
 
   const deleteTodo = async (todoId) => {
-    const selectedId = await user.getSelectedId();
-    const deletedTodo = await $api.todo.delete(selectedId, todoId);
+    const deletedTodo = await $api.todo.delete(selectedUserId, todoId);
     publish();
     return deletedTodo;
   };
 
   const deleteAll = async () => {
-    const selectedId = await user.getSelectedId();
-    await $api.todo.deleteAll(selectedId);
+    await $api.todo.deleteAll(selectedUserId);
     publish();
   };
 
   const toggle = async (todoId) => {
-    const selectedId = await user.getSelectedId();
-    await $api.todo.toggle(selectedId, todoId);
+    await $api.todo.toggle(selectedUserId, todoId);
     publish();
   };
 
@@ -43,6 +45,7 @@ const todo = (() => {
   };
 
   return {
+    init,
     getAll,
     create,
     delete: deleteTodo,
