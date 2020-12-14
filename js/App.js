@@ -5,6 +5,7 @@ import UserTitle from "./component/UserTitle.js";
 import UserList from "./component/UserList.js";
 import TodoInput from "./component/TodoInput.js";
 import TodoList from "./component/TodoList.js";
+import TodoFilter from "./component/TodoFilter.js";
 
 export default class App extends Component {
   init() {
@@ -13,6 +14,7 @@ export default class App extends Component {
       "#user-list": UserList,
       "#todo-input": TodoInput,
       "#todo-list": TodoList,
+      "#todo-filter": TodoFilter,
     };
 
     this.events = {
@@ -40,16 +42,7 @@ export default class App extends Component {
         </section>
         <div class="count-container">
           <span class="todo-count">총 <strong>0</strong> 개</span>
-          <ul class="filters">
-            <li>
-              <a href="/#" class="all selected">전체보기</a>
-            </li>
-            <li>
-              <a href="#active" class="active">해야할 일</a>
-            </li>
-            <li>
-              <a href="#completed" class="completed">완료한 일</a>
-            </li>
+          <ul id="todo-filter" class="filters">
           </ul>
           <button class="clear-completed" data-action="deleteAllTodo">모두 삭제</button>
         </div>

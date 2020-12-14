@@ -1,7 +1,7 @@
 import Component from "../core/Component.js";
 import $store from "../store/index.js";
 
-import { PRIORITY } from "../utils/priority.js";
+import { Constants } from "../utils/constants.js";
 
 const TodoListLoadingBar = () => {
   return `
@@ -32,7 +32,7 @@ const TodoListItemPrioritySelector = () => {
 };
 
 const TodoListItemPriority = (priority) => {
-  const { className, text } = Object.values(PRIORITY).find(
+  const { className, text } = Object.values(Constants).find(
     ({ value }) => value === priority
   );
   return `
@@ -148,7 +148,7 @@ export default class TodoList extends Component {
 
   async selectPriority({ target }) {
     const targetTodo = target.closest("li");
-    const selected = Object.values(PRIORITY).find(
+    const selected = Object.values(Constants).find(
       ({ value }) => value === target.value
     );
 
