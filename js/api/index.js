@@ -37,6 +37,12 @@ const $api = (() => {
         HTTP_METHOD.DELETE()
       );
     },
+    toggle(userId, todoId) {
+      return requestWithJsonData(
+        BASE_URL + `/${userId}/items/${todoId}/toggle`,
+        HTTP_METHOD.PUT()
+      );
+    },
   };
 
   return {

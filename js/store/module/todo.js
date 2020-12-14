@@ -28,6 +28,12 @@ const todo = (() => {
     publish();
   };
 
+  const toggle = async (todoId) => {
+    const selectedId = await user.getSelectedId();
+    await $api.todo.toggle(selectedId, todoId);
+    publish();
+  };
+
   const subscribe = (method) => {
     watch.subscribe("todo", method);
   };
@@ -41,6 +47,7 @@ const todo = (() => {
     create,
     delete: deleteTodo,
     deleteAll,
+    toggle,
     subscribe,
   };
 })();

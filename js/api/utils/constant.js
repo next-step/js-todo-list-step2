@@ -10,6 +10,14 @@ const HTTP_METHOD = {
       }),
     };
   },
+  PUT() {
+    return {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+  },
   DELETE() {
     return {
       method: "DELETE",

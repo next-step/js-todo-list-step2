@@ -66,7 +66,7 @@ const TodoListItem = ({ _id, contents, priority, isCompleted, isEditing }) => {
 export default class TodoList extends Component {
   init() {
     this.events = {
-      click: [this.deleteTodo],
+      click: [this.deleteTodo, this.toggleTodo],
     };
 
     $store.user.subscribe(this.setState.bind(this));
@@ -80,6 +80,15 @@ export default class TodoList extends Component {
 
     const targetTodo = target.closest("li");
     await $store.todo.delete(targetTodo.dataset.id);
+  }
+
+  async toggleTodo({ target }) {
+    if (!target.classList.contains("toggle")) {
+      return;
+    }
+
+    const targetTodo = target.closest("li");
+    await $store.todo.toggle(targetTodo.dataset.id);
   }
 
   async render() {
