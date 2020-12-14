@@ -1,9 +1,8 @@
 import $api from "../../api/index.js";
 import user from "./user.js";
+import watch from "../../utils/watch.js";
 
 const todo = (() => {
-  const watch = {};
-
   const getAll = async () => {
     const selectedId = await user.getSelectedId();
     return await $api.todo.getAll(selectedId);
@@ -12,32 +11,29 @@ const todo = (() => {
   const create = async (contents) => {
     const selectedId = await user.getSelectedId();
     const newTodo = await $api.todo.create(selectedId, { contents });
-    publish("todos");
+    publish();
     return newTodo;
   };
 
   const deleteTodo = async (todoId) => {
     const selectedId = await user.getSelectedId();
     const deletedTodo = await $api.todo.delete(selectedId, todoId);
-    publish("todos");
+    publish();
     return deletedTodo;
   };
 
   const deleteAll = async () => {
     const selectedId = await user.getSelectedId();
     await $api.todo.deleteAll(selectedId);
-    publish("todos");
+    publish();
   };
 
-  const subscribe = (target, method) => {
-    if (!watch[target]) {
-      watch[target] = [method];
-    }
-    watch[target].push(method);
+  const subscribe = (method) => {
+    watch.subscribe(todo, method);
   };
 
-  const publish = (target) => {
-    watch[target].forEach(async (method) => await method());
+  const publish = () => {
+    watch.publish(todo);
   };
 
   return {

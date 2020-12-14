@@ -69,8 +69,8 @@ export default class TodoList extends Component {
       click: [this.deleteTodo],
     };
 
-    $store.user.subscribe("selected", this.setState.bind(this));
-    $store.todo.subscribe("todos", this.setState.bind(this));
+    $store.user.subscribe(this.setState.bind(this));
+    $store.todo.subscribe(this.setState.bind(this));
   }
 
   async deleteTodo({ target }) {

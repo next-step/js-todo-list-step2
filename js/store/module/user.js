@@ -1,7 +1,7 @@
 import $api from "../../api/index.js";
+import watch from "../../utils/watch.js";
 
 const user = (() => {
-  const watch = {};
   let selected = {};
 
   const mapUser = (user) => {
@@ -25,16 +25,9 @@ const user = (() => {
     return mapUser(user);
   };
 
-  const subscribe = (target, method) => {
-    if (!watch[target]) {
-      watch[target] = [method];
-    }
-    watch[target].push(method);
-  };
-
   const setSelected = (value) => {
     selected = value;
-    watch.selected.forEach(async (method) => await method());
+    publish();
   };
 
   const getSelected = async () => {
@@ -53,6 +46,14 @@ const user = (() => {
   const getSelectedName = async () => {
     const { name } = await getSelected();
     return name;
+  };
+
+  const subscribe = (method) => {
+    watch.subscribe(user, method);
+  };
+
+  const publish = () => {
+    watch.publish(user);
   };
 
   return {

@@ -21,7 +21,7 @@ export default class UserList extends Component {
       click: [this.createUser, this.selectUser],
     };
 
-    $store.user.subscribe("selected", this.setState.bind(this));
+    $store.user.subscribe(this.setState.bind(this));
   }
 
   async createUser({ target }) {

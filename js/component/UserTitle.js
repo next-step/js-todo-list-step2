@@ -3,7 +3,7 @@ import $store from "../store/index.js";
 
 export default class UserTitle extends Component {
   init() {
-    $store.user.subscribe("selected", this.setState.bind(this));
+    $store.user.subscribe(this.setState.bind(this));
   }
 
   async render() {
