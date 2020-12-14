@@ -15,7 +15,6 @@ export default class Component {
 
     this.init();
     this.setEvents();
-    await this.setState();
   }
 
   init() {}
