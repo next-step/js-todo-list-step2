@@ -6,6 +6,7 @@ import UserList from "./component/UserList.js";
 import TodoInput from "./component/TodoInput.js";
 import TodoList from "./component/TodoList.js";
 import TodoFilter from "./component/TodoFilter.js";
+import TodoCount from "./component/TodoCount.js";
 
 export default class App extends Component {
   init() {
@@ -15,11 +16,14 @@ export default class App extends Component {
       "#todo-input": TodoInput,
       "#todo-list": TodoList,
       "#todo-filter": TodoFilter,
+      "#todo-count": TodoCount,
     };
 
     this.events = {
       click: [this.deleteAllTodo],
     };
+
+    $store.filter.subscribe(this.setState.bind(this));
   }
 
   async deleteAllTodo() {
@@ -41,7 +45,7 @@ export default class App extends Component {
         <section id="todo-list" class="main">
         </section>
         <div class="count-container">
-          <span class="todo-count">총 <strong>0</strong> 개</span>
+          <span id="todo-count" class="todo-count"></span>
           <ul id="todo-filter" class="filters">
           </ul>
           <button class="clear-completed" data-action="deleteAllTodo">모두 삭제</button>
