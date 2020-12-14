@@ -84,6 +84,7 @@ export default class TodoList extends Component {
 
     $store.user.subscribe(this.setState.bind(this));
     $store.todo.subscribe(this.setState.bind(this));
+    $store.filter.subscribe(this.setState.bind(this));
   }
 
   async deleteTodo({ target }) {
@@ -157,7 +158,7 @@ export default class TodoList extends Component {
 
   async render() {
     this.dom.innerHTML = TodoListLoadingBar();
-    const todos = await $store.todo.getAll();
+    const todos = await $store.todo.getFiltered();
 
     if (!Array.isArray(todos)) {
       return TodoListLoadingBar();

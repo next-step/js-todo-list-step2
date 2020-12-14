@@ -1,5 +1,6 @@
 import $api from "../../api/index.js";
 import user from "./user.js";
+import filter from "./filter.js";
 import watch from "../../utils/watch.js";
 
 const todo = (() => {
@@ -8,6 +9,17 @@ const todo = (() => {
   const init = async () => {
     selectedUserId = user.getSelectedId();
     user.subscribe(() => (selectedUserId = user.getSelectedId()));
+  };
+
+  const getFiltered = async () => {
+    const todos = await getAll();
+
+    if (filter.isActive()) {
+      return todos.filter((todo) => !todo.isCompleted);
+    } else if (filter.isCompleted()) {
+      return todos.filter((todo) => todo.isCompleted);
+    }
+    return todos;
   };
 
   const getAll = async () => {
@@ -60,6 +72,7 @@ const todo = (() => {
 
   return {
     init,
+    getFiltered,
     getAll,
     create,
     delete: deleteTodo,
