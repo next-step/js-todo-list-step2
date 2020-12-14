@@ -40,7 +40,6 @@ const todo = (() => {
     const editedTodo = await $api.todo.edit(selectedUserId, todoId, {
       contents,
     });
-    console.log(editedTodo);
     publish();
     return editedTodo;
   };
