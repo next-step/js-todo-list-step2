@@ -47,12 +47,17 @@ const TodoListItem = ({ _id, contents, priority, isCompleted }) => {
   return `
     <li class="${isCompleted ? "completed" : ""}" data-id="${_id}">
       <div class="view">
-        <input class="toggle" type="checkbox" ${isCompleted ? "checked" : ""}/>
-        <label class="label">
+        <input 
+          class="toggle" 
+          type="checkbox" 
+          ${isCompleted ? "checked" : ""}
+          data-action="toggleTodo"
+        />
+        <label class="label" data-action="toggleEditingTodo">
           ${renderPriority(priority)}
           ${contents}
         </label>
-        <button class="destroy"></button>
+        <button class="destroy" data-action="deleteTodo"></button>
       </div>
       <input class="edit" value="${contents}" />
     </li>
@@ -76,28 +81,16 @@ export default class TodoList extends Component {
   }
 
   async deleteTodo({ target }) {
-    if (!target.classList.contains("destroy")) {
-      return;
-    }
-
     const targetTodo = target.closest("li");
     await $store.todo.delete(targetTodo.dataset.id);
   }
 
   async toggleTodo({ target }) {
-    if (!target.classList.contains("toggle")) {
-      return;
-    }
-
     const targetTodo = target.closest("li");
     await $store.todo.toggle(targetTodo.dataset.id);
   }
 
   async toggleEditingTodo({ target }) {
-    if (!target.classList.contains("label")) {
-      return;
-    }
-
     this.editTarget = target.closest("li");
     this.editTarget.classList.add("editing");
     this.setEditingEvents();

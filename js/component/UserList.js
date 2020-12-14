@@ -24,11 +24,7 @@ export default class UserList extends Component {
     $store.user.subscribe(this.setState.bind(this));
   }
 
-  async createUser({ target }) {
-    if (target.dataset.action !== "createUser") {
-      return;
-    }
-
+  async createUser() {
     const name = prompt("추가하고 싶은 이름을 입력해주세요.");
 
     if (!name) return;
@@ -41,17 +37,13 @@ export default class UserList extends Component {
     $store.user.setSelected(newUser);
   }
 
-  findUser(id) {
-    return this.users.find((user) => user._id === id);
-  }
-
   selectUser({ target }) {
-    if (target.dataset.action !== "selectUser") {
-      return;
-    }
-
     const user = this.findUser(target.dataset.id);
     $store.user.setSelected(user);
+  }
+
+  findUser(id) {
+    return this.users.find((user) => user._id === id);
   }
 
   async render() {

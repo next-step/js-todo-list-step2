@@ -35,26 +35,24 @@ export default class Component {
     this.setEvents();
   }
 
+  setEvents() {
+    Object.entries(this.events).forEach(([type, methods]) =>
+      methods.forEach((method) => this.#addEventListener(type, method))
+    );
+  }
+
+  #addEventListener(type, method) {
+    const targets = this.dom.querySelectorAll(`[data-action="${method.name}"]`);
+    targets.forEach((target) =>
+      this.#addEventListenerOnce(target, type, method)
+    );
+  }
+
   #addEventListenerOnce(target, type, method) {
     if (!target.getAttribute(method.name)) {
       target.addEventListener(type, method.bind(this));
       target.setAttribute(method.name, type);
     }
-  }
-
-  #addEventListener(type, method) {
-    if (type.includes("key")) {
-      const $input = this.dom.querySelector("input");
-      this.#addEventListenerOnce($input, type, method);
-    } else {
-      this.#addEventListenerOnce(this.dom, type, method);
-    }
-  }
-
-  setEvents() {
-    Object.entries(this.events).forEach(([type, methods]) =>
-      methods.forEach((method) => this.#addEventListener(type, method))
-    );
   }
 
   async render() {}
