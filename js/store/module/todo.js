@@ -27,33 +27,33 @@ const todo = (() => {
   };
 
   const create = async (contents) => {
-    const newTodo = await $api.todo.create(selectedUserId, { contents });
+    const todos = await $api.todo.create(selectedUserId, { contents });
     publish();
-    return newTodo;
+    return todos;
   };
 
   const deleteTodo = async (todoId) => {
-    const deletedTodo = await $api.todo.delete(selectedUserId, todoId);
+    const todos = await $api.todo.delete(selectedUserId, todoId);
     publish();
-    return deletedTodo;
+    return todos;
   };
 
   const deleteAll = async () => {
-    await $api.todo.deleteAll(selectedUserId);
+    const todos = await $api.todo.deleteAll(selectedUserId);
     publish();
+    return todos;
   };
 
   const toggle = async (todoId) => {
-    await $api.todo.toggle(selectedUserId, todoId);
+    const todo = await $api.todo.toggle(selectedUserId, todoId);
     publish();
+    return todo;
   };
 
   const edit = async (todoId, contents) => {
-    const editedTodo = await $api.todo.edit(selectedUserId, todoId, {
-      contents,
-    });
+    const todo = await $api.todo.edit(selectedUserId, todoId, { contents });
     publish();
-    return editedTodo;
+    return todo;
   };
 
   const setPriority = async (todoId, priority) => {
