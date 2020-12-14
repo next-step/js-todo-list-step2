@@ -26,6 +26,13 @@ const user = (() => {
     return mapUser(user);
   };
 
+  const deleteUser = async (id) => {
+    await $api.user.delete(id);
+    const users = await getAll();
+    selected = users[0];
+    publish();
+  };
+
   const setSelected = (value) => {
     selected = value;
     publish();
@@ -55,6 +62,7 @@ const user = (() => {
     init,
     getAll,
     create,
+    delete: deleteUser,
     subscribe,
     setSelected,
     getSelected,

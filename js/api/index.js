@@ -3,6 +3,8 @@ import { HTTP_METHOD } from "./utils/constant.js";
 const BASE_URL = "https://js-todo-list-9ca3a.df.r.appspot.com/api/users";
 
 const $api = (() => {
+  const request = (uri, config) => fetch(uri, config);
+
   const requestWithJsonData = (uri, config) =>
     fetch(uri, config).then((data) => data.json());
 
@@ -12,6 +14,9 @@ const $api = (() => {
     },
     create(data) {
       return requestWithJsonData(BASE_URL, HTTP_METHOD.POST(data));
+    },
+    delete(id) {
+      return request(BASE_URL + `/${id}`, HTTP_METHOD.DELETE());
     },
   };
 

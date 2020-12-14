@@ -18,7 +18,7 @@ export default class UserList extends Component {
 
   init() {
     this.events = {
-      click: [this.createUser, this.selectUser],
+      click: [this.createUser, this.selectUser, this.deleteUser],
     };
 
     $store.user.subscribe(this.setState.bind(this));
@@ -42,6 +42,15 @@ export default class UserList extends Component {
     $store.user.setSelected(user);
   }
 
+  async deleteUser() {
+    const { _id, name } = $store.user.getSelected();
+    const isYes = confirm(`${name}을 삭제하시겠습니까?`);
+    if (!isYes) {
+      return;
+    }
+    await $store.user.delete(_id);
+  }
+
   findUser(id) {
     return this.users.find((user) => user._id === id);
   }
@@ -50,9 +59,12 @@ export default class UserList extends Component {
     this.users = await $store.user.getAll();
 
     return `
-      <div id="user-list">
+      <div class="user-list">
         ${this.users.map(UserListItem).join("")}
-        <button class="ripple user-create-button" data-action="createUser">+ 유저 생성</button>
+        <div>
+          <button class="ripple user-create-button" data-action="createUser">+ 유저 생성</button>
+          <button class="ripple user-delete-button" data-action="deleteUser">삭제 -</button>
+        </div>
       </div>
     `;
   }
