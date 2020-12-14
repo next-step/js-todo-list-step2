@@ -165,9 +165,11 @@ export default class TodoList extends Component {
     }
 
     return `
-      <ul class="todo-list">
-        ${todos.map(TodoListItem).join("")}
-      </ul>
+      <section class="main">
+        <ul class="todo-list">
+          ${todos.map(TodoListItem).join("")}
+        </ul>
+      </section>
     `;
   }
 }

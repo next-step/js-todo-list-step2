@@ -38,7 +38,9 @@ export default class TodoFilter extends Component {
 
   async render() {
     return `
-      ${Object.values(FILTER).map(TodoFilterItem).join("")}
+      <ul id="todo-filter" class="filters">
+        ${Object.values(FILTER).map(TodoFilterItem).join("")}
+      </ul>
     `;
   }
 }

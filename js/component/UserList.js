@@ -50,8 +50,10 @@ export default class UserList extends Component {
     this.users = await $store.user.getAll();
 
     return `
-      ${this.users.map(UserListItem).join("")}
-      <button class="ripple user-create-button" data-action="createUser">+ 유저 생성</button>
+      <div id="user-list">
+        ${this.users.map(UserListItem).join("")}
+        <button class="ripple user-create-button" data-action="createUser">+ 유저 생성</button>
+      </div>
     `;
   }
 }

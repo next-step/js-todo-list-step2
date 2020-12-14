@@ -11,7 +11,7 @@ export default class TodoCount extends Component {
   async render() {
     const todos = await $store.todo.getFiltered();
     return `
-      총 <strong>${todos.length}</strong> 개
+      <span class="todo-count">총 <strong>${todos.length}</strong> 개</span>
     `;
   }
 }

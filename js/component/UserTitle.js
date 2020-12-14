@@ -10,7 +10,9 @@ export default class UserTitle extends Component {
     const name = await $store.user.getSelectedName();
 
     return `
-      <span><strong>${name}</strong>'s Todo List</span>
+      <h1>
+        <span><strong>${name}</strong>'s Todo List</span>
+      </h1>
     `;
   }
 }
