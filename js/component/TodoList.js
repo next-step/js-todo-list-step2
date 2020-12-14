@@ -61,7 +61,9 @@ const TodoListItem = ({ _id, contents, priority, isCompleted }) => {
 
 export default class TodoList extends Component {
   submitEditingEvent;
-  cancelEditingEvent;
+  cancelEditingEventByKeyDown;
+  cancelEditingEventByClick;
+  editTarget;
 
   init() {
     this.events = {
@@ -96,14 +98,18 @@ export default class TodoList extends Component {
       return;
     }
 
-    const targetTodo = target.closest("li");
-    targetTodo.classList.add("editing");
+    this.editTarget = target.closest("li");
+    this.editTarget.classList.add("editing");
 
-    const editingInput = targetTodo.querySelector(".edit");
+    const editingInput = this.editTarget.querySelector(".edit");
     this.submitEditingEvent = this.submitEditingTodo.bind(this);
-    this.cancelEditingEvent = this.cancelEditingTodo.bind(this);
+    this.cancelEditingEventByKeyDown = this.cancelEditingTodoOnKeyDown.bind(
+      this
+    );
+    this.cancelEditingEventByClick = this.cancelEditingTodoOnClick.bind(this);
     editingInput.addEventListener("keypress", this.submitEditingEvent);
-    editingInput.addEventListener("keydown", this.cancelEditingEvent);
+    editingInput.addEventListener("keydown", this.cancelEditingEventByKeyDown);
+    window.addEventListener("click", this.cancelEditingEventByClick);
   }
 
   async submitEditingTodo({ target, key }) {
@@ -111,19 +117,29 @@ export default class TodoList extends Component {
       return;
     }
     target.removeEventListener("keypress", this.submitEditingEvent);
-    target.removeEventListener("keydown", this.cancelEditingEvent);
-    const targetTodo = target.closest("li");
-    await $store.todo.edit(targetTodo.dataset.id, target.value);
+    target.removeEventListener("keydown", this.cancelEditingEventByKeyDown);
+    window.removeEventListener("click", this.cancelEditingEventByClick);
+    await $store.todo.edit(this.editTarget.dataset.id, target.value);
   }
 
-  cancelEditingTodo({ target, key }) {
+  cancelEditingTodoOnKeyDown({ target, key }) {
     if (key !== "Escape") {
       return;
     }
     target.removeEventListener("keypress", this.submitEditingEvent);
-    target.removeEventListener("keydown", this.cancelEditingEvent);
-    const targetTodo = target.closest("li");
-    targetTodo.classList.remove("editing");
+    target.removeEventListener("keydown", this.cancelEditingEventByKeyDown);
+    window.removeEventListener("click", this.cancelEditingEventByKeyDown);
+    this.editTarget.classList.remove("editing");
+  }
+
+  cancelEditingTodoOnClick({ target }) {
+    if (target.classList.contains("edit")) {
+      return;
+    }
+    target.removeEventListener("keypress", this.submitEditingEvent);
+    target.removeEventListener("keydown", this.cancelEditingEventByKeyDown);
+    window.removeEventListener("click", this.cancelEditingEventByClick);
+    this.editTarget.classList.remove("editing");
   }
 
   async render() {
