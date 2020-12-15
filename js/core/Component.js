@@ -21,8 +21,8 @@ export default class Component {
   init() {}
 
   async setComponents() {
-    Object.entries(this.components).forEach(([key, value]) => {
-      this.components[key] = new value(key);
+    Object.entries(this.components).forEach(([target, Component]) => {
+      this.components[target] = new Component(target);
     });
   }
 
