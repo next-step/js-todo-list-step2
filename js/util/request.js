@@ -5,10 +5,10 @@ export const request = (method, url = '/', payload = '') => {
   const option = {
     method,
     headers: {
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
     },
   };
-  if(payload){
+  if (payload) {
     option.body = JSON.stringify(payload);
   }
 
@@ -16,19 +16,14 @@ export const request = (method, url = '/', payload = '') => {
 };
 
 export const HTTP_METHOD = {
-  GET : 'GET',
-  POST : 'POST',
-  PUT : 'PUT',
-  DELETE : 'DELETE'
-}
+  GET: 'GET',
+  POST: 'POST',
+  PUT: 'PUT',
+  DELETE: 'DELETE',
+};
 
 export const PRIORITY = [
   'NONE',
   'FIRST',
-  'SECOND'
+  'SECOND',
 ];
-
-
-
-
-
