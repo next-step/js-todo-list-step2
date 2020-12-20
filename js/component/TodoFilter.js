@@ -1,27 +1,15 @@
-import Component from "../core/Component.js";
+import Component, { props } from "../core/Component.js";
 import $store from "../store/index.js";
 
+import TodoFilterItem from "./TodoFilterItem.js";
 import { FILTER } from "../utils/constants.js";
-
-const TodoFilterItem = ({ href, state, text }) => {
-  const isSelected = $store.filter.isSameState(state);
-
-  return `
-    <li>
-      <a 
-        href="${href}" 
-        class="${isSelected ? "selected" : ""}"
-        data-state="${state}"
-        data-action="selectFilter"
-      >
-        ${text}
-      </a>
-    </li>
-  `;
-};
 
 export default class TodoFilter extends Component {
   init() {
+    this.components = {
+      "todo-filter-item": TodoFilterItem,
+    };
+
     this.events = {
       click: [this.selectFilter],
     };
@@ -36,10 +24,23 @@ export default class TodoFilter extends Component {
     $store.filter.setFilter(selected);
   }
 
+  todoFilterItem(filter) {
+    return `
+      <todo-filter-item 
+        key="${filter.href}" 
+        ${props(filter)}
+      >
+      </todo-filter-item>`;
+  }
+
   async render() {
+    const todoFilterItems = Object.values(FILTER)
+      .map(this.todoFilterItem)
+      .join("");
+
     return `
       <ul id="todo-filter" class="filters">
-        ${Object.values(FILTER).map(TodoFilterItem).join("")}
+        ${todoFilterItems}
       </ul>
     `;
   }
