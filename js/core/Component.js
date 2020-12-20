@@ -1,21 +1,39 @@
 export default class Component {
   target;
+  props = {};
   dom;
   components = {};
   events = {};
 
   constructor(target) {
     this.target = target;
+    this.dom = document.querySelector(target);
+    this.setProps();
     this.#load();
   }
 
   async #load() {
-    this.dom = document.querySelector(this.target);
     this.dom.innerHTML = await this.render();
 
     this.init();
     await this.setComponents();
     this.setEvents();
+  }
+
+  setProps() {
+    const attributes = Array.from(this.dom.attributes);
+    const props = attributes.filter(({ name }) => name.includes("data-"));
+    if (props.length === 0) {
+      return;
+    }
+
+    props
+      .map(this.#mapProp)
+      .forEach(({ key, value }) => (this.props[key] = value));
+  }
+
+  #mapProp({ name, value }) {
+    return { key: name.slice(5), value };
   }
 
   init() {}
@@ -57,3 +75,11 @@ export default class Component {
 
   async render() {}
 }
+
+function props(obj) {
+  return Object.entries(obj)
+    .map(([key, value]) => `data-${key}="${value}"`)
+    .join(" ");
+}
+
+export { props };
