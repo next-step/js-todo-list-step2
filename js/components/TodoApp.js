@@ -1,7 +1,7 @@
 import TodoList from "./TodoList.js";
 import TodoInput from "./TodoInput.js";
 import TodoCount from "./TodoCount.js";
-import { addTodo, changeTodoPriority, checkTodo, deleteTodo, getTodoListByUserId, deleteAllTodos } from '../api/todoAPI.js';
+import { addTodo, changeTodoPriority, checkTodo, deleteTodo, editTodo, getTodoListByUserId, deleteAllTodos } from '../api/todoAPI.js';
 
 export default function TodoApp($element){
 
@@ -22,13 +22,13 @@ export default function TodoApp($element){
 
     this.setState = ({ todos, filter, loading }) => {
         if(todos){
-            this.state.todos = todos ?? [];
+            this.state.todos = todos;
         }
         if(filter){
-            this.state.filter = filter ?? 'all';
+            this.state.filter = filter;
         }
         if(loading !== null && loading !== 'undefined'){
-            this.state.loading = loading ?? false;
+            this.state.loading = loading;
         }
         this.render();
     }
@@ -54,7 +54,7 @@ export default function TodoApp($element){
                 todos : todoList ?? [],
             })
         }catch(err){
-            console.log('err', err)
+            console.error('err', err)
         }
         this.setState({
             loading : false,
@@ -78,7 +78,7 @@ export default function TodoApp($element){
                             todos: [...this.state.todos, newTodos],
                         })
                         }catch(err){
-                            console.log('err', err);
+                            console.error('err', err);
                         }
                     this.setState({
                         loading : false,
@@ -107,7 +107,7 @@ export default function TodoApp($element){
                             })
                         }
                     }catch(err){
-                        console.log("err", err);
+                        console.error("err", err);
                     }
                     this.setState({
                         loading : false,
@@ -125,7 +125,7 @@ export default function TodoApp($element){
                             })
                         }
                     }catch(err){
-                        console.log("err", err);
+                        console.error("err", err);
                     }
                     this.setState({
                         loading : false,
@@ -140,16 +140,17 @@ export default function TodoApp($element){
                         if(response){
                             const todos = this.state.todos.map(todo => {
                                 if(todo._id === response._id){
-                                    todo.content = response.content;
+                                    todo.contents = response.contents;
                                 }
                                 return todo;
-                            })
+                            });
+                            
                             this.setState({
                                 todos
                             })
                         }
                     }catch(err){
-                        console.log("err", err);
+                        console.error("err", err);
                     }
                     this.setState({
                         loading : false,
@@ -168,13 +169,12 @@ export default function TodoApp($element){
                                 }
                                 return todo;
                             });
-                            console.log("todos", todos);
                             this.setState({
                                 todos 
                             })
                         }
                     }catch(err){
-                        console.log("err", err);
+                        console.error("err", err);
                     }
                     this.setState({
                         loading : false,

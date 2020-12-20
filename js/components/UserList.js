@@ -18,7 +18,7 @@ export default function UserList($userList, $userBin, {setUserInfo} ) {
         try{
             this.state.users = await getUserList() ?? [];
         }catch(err){
-            console.log("err", err);
+            console.error("err", err);
         }
 
         if(this.state.users.length > 0){
@@ -31,7 +31,7 @@ export default function UserList($userList, $userBin, {setUserInfo} ) {
         try{
             this.activeUser = await getUser(this.initialIdForTest);
         }catch(err){
-            console.log("err", err);
+            console.error("err", err);
         }
     }
 
@@ -41,7 +41,7 @@ export default function UserList($userList, $userBin, {setUserInfo} ) {
             this.activeUser = response;
             this.getUserList();
         }catch(err){
-            console.log("err", err);
+            console.error("err", err);
         }
     }
 
@@ -52,7 +52,7 @@ export default function UserList($userList, $userBin, {setUserInfo} ) {
                 this.getUserList();
             }
         }catch(err){
-            console.log("err",err);
+            console.error("err",err);
         }
     }
 

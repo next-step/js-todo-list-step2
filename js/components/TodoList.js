@@ -1,21 +1,25 @@
 export default function TodoList($element, { deleteTodo, checkTodo, editTodo, changeTodoPriority}) {
 
-    const onClickTodo = ({target}) => {
+    const onToggleTodo = ({target}) => {
         if(target.classList.contains('toggle') && target.nodeName === 'INPUT'){
             const $li = target.closest('li');
             checkTodo($li.id);
         }
+    }
 
+    const onDeleteTodo = ({target}) => {
         if(target.classList.contains('destroy') && target.nodeName === 'BUTTON'){
             const $li = target.closest('li');
             deleteTodo($li.id);
         }
     }
+        
 
-    const onDblClickTodo = ({target}) => {
+    const onEditTodo = ({target}) => {
         const $li = target.closest('li');
+        // debugger;
 
-        if($li.classList.contains('view') && target.nodeName === 'DIV'){
+        if($li.classList.contains('view') && target.nodeName === 'SPAN'){
             $element.querySelectorAll('.editing').forEach( $editLabel => {
                 $editLabel.classList.remove('editing');
             })
@@ -27,14 +31,13 @@ export default function TodoList($element, { deleteTodo, checkTodo, editTodo, ch
         }
     }
 
-    const onKeyupTodo = ({target, code}) => {
+    const onSubmitEditTodo = ({target, code}) => {
         const $li = target.closest('li');
-
-        if(target.classList.contains('edit') && target.nodeName === 'LABEL'){
-            if(code === 'ENTER' && target.value){
+        if(target.classList.contains('edit') && target.nodeName === 'INPUT'){
+            if(code === 'Enter' && target.value){
                 editTodo($li.id, target.value);
             }
-            if(code === 'ESCAPE'){
+            if(code === 'Escape'){
                 $li.classList.contains('editing') && $li.classList.remove('editing')
             }
         }
@@ -49,9 +52,10 @@ export default function TodoList($element, { deleteTodo, checkTodo, editTodo, ch
 
 
     this.bindEvents = () => {
-        $element.addEventListener('click', onClickTodo);
-        $element.addEventListener('dblclick', onDblClickTodo);
-        $element.addEventListener('keyup', onKeyupTodo);
+        $element.addEventListener('click', onToggleTodo);
+        $element.addEventListener('click', onDeleteTodo);
+        $element.addEventListener('dblclick', onEditTodo);
+        $element.addEventListener('keyup', onSubmitEditTodo);
         $element.addEventListener('change', onChangePriority);
     }
 
