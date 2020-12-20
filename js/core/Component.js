@@ -1,15 +1,25 @@
 export default class Component {
   target;
+  key;
   props = {};
   dom;
   components = {};
   events = {};
 
-  constructor(target) {
+  constructor(target, key) {
     this.target = target;
-    this.dom = document.querySelector(target);
+    this.key = key;
+    this.setDom();
     this.setProps();
     this.#load();
+  }
+
+  setDom() {
+    if (!this.key) {
+      this.dom = document.querySelector(this.target);
+      return;
+    }
+    this.dom = document.querySelector(`${this.target}[key="${this.key}"]`);
   }
 
   async #load() {
@@ -39,13 +49,27 @@ export default class Component {
   init() {}
 
   async setComponents() {
-    Object.entries(this.components).forEach(([target, Component]) => {
+    Object.entries(this.components).forEach(([target, Component]) =>
+      this.#drawComponents(target, Component)
+    );
+  }
+
+  #drawComponents(target, Component) {
+    const targets = Array.from(document.querySelectorAll(target));
+    if (targets.length < 2) {
       this.components[target] = new Component(target);
+      return;
+    }
+
+    targets.forEach((t) => {
+      const key = t.attributes.key.value;
+      this.components[`${target}-${key}`] = new Component(target, key);
+      delete this.components[target];
     });
   }
 
   async setState() {
-    this.dom = document.querySelector(this.target);
+    this.setDom();
     this.dom.innerHTML = await this.render();
     for (const component of Object.values(this.components)) {
       await component.setState();
