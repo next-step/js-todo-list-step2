@@ -43,37 +43,48 @@ export default class Component {
   }
 
   #mapProp({ name, value }) {
+    if (value === "true") {
+      value = true;
+    } else if (value === "false") {
+      value = false;
+    } else if (!isNaN(value)) {
+      value = parseInt(value);
+    }
     return { key: name.slice(5), value };
   }
 
   init() {}
 
   async setComponents() {
-    Object.entries(this.components).forEach(([target, Component]) =>
-      this.#drawComponents(target, Component)
+    this.#resetComponents();
+    Object.entries(this.components).forEach(([target, SubComponent]) =>
+      this.#drawComponents(target, SubComponent)
     );
   }
 
-  #drawComponents(target, Component) {
+  #resetComponents() {
+    Object.keys(this.components)
+      .filter((key) => this.components[key] instanceof Component)
+      .forEach((key) => delete this.components[key]);
+  }
+
+  async #drawComponents(target, SubComponent) {
     const targets = Array.from(document.querySelectorAll(target));
     if (targets.length < 2) {
-      this.components[target] = new Component(target);
+      this.components[`${target}-component`] = new SubComponent(target);
       return;
     }
 
     targets.forEach((t) => {
       const key = t.attributes.key.value;
-      this.components[`${target}-${key}`] = new Component(target, key);
-      delete this.components[target];
+      this.components[`${target}-${key}`] = new SubComponent(target, key);
     });
   }
 
   async setState() {
     this.setDom();
     this.dom.innerHTML = await this.render();
-    for (const component of Object.values(this.components)) {
-      await component.setState();
-    }
+    await this.setComponents();
     this.setEvents();
   }
 

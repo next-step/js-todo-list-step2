@@ -1,6 +1,7 @@
-import Component from "../core/Component.js";
+import Component, { props } from "../core/Component.js";
 import $store from "../store/index.js";
 
+import TodoListItem from "./TodoListItem.js";
 import { Constants } from "../utils/constants.js";
 
 const TodoListLoadingBar = () => {
@@ -21,54 +22,6 @@ const TodoListLoadingBar = () => {
   `;
 };
 
-const TodoListItemPrioritySelector = () => {
-  return `
-    <select class="chip select" data-action="selectPriority">
-      <option value="NONE" selected>순위</option>
-      <option value="FIRST">1순위</option>
-      <option value="SECOND">2순위</option>
-    </select>
-  `;
-};
-
-const TodoListItemPriority = (priority) => {
-  const { className, text } = Object.values(Constants).find(
-    ({ value }) => value === priority
-  );
-  return `
-    <span class="chip ${className}">${text}</span>
-  `;
-};
-
-function renderPriority(priority) {
-  if (priority === "NONE") {
-    return TodoListItemPrioritySelector();
-  } else {
-    return TodoListItemPriority(priority);
-  }
-}
-
-const TodoListItem = ({ _id, contents, priority, isCompleted }) => {
-  return `
-    <li class="${isCompleted ? "completed" : ""}" data-id="${_id}">
-      <div class="view">
-        <input 
-          class="toggle" 
-          type="checkbox" 
-          ${isCompleted ? "checked" : ""}
-          data-action="toggleTodo"
-        />
-        <label class="label" data-action="toggleEditingTodo">
-          ${renderPriority(priority)}
-          ${contents}
-        </label>
-        <button class="destroy" data-action="deleteTodo"></button>
-      </div>
-      <input class="edit" value="${contents}" />
-    </li>
-  `;
-};
-
 export default class TodoList extends Component {
   submitEditing;
   cancelEditingByKeyDown;
@@ -76,6 +29,10 @@ export default class TodoList extends Component {
   editTarget;
 
   init() {
+    this.components = {
+      "todo-list-item": TodoListItem,
+    };
+
     this.events = {
       click: [this.deleteTodo, this.toggleTodo],
       dblclick: [this.toggleEditingTodo],
@@ -156,6 +113,16 @@ export default class TodoList extends Component {
     await $store.todo.setPriority(targetTodo.dataset.id, selected.value);
   }
 
+  todoListItem(todo) {
+    return `
+      <todo-list-item
+        key="${todo._id}"
+        ${props(todo)}
+      >
+      </todo-list-item>
+    `;
+  }
+
   async render() {
     this.dom.innerHTML = TodoListLoadingBar();
     const todos = await $store.todo.getFiltered();
@@ -167,7 +134,7 @@ export default class TodoList extends Component {
     return `
       <section class="main">
         <ul class="todo-list">
-          ${todos.map(TodoListItem).join("")}
+          ${todos.map(this.todoListItem).join("")}
         </ul>
       </section>
     `;
