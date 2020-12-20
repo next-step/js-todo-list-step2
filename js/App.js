@@ -31,12 +31,14 @@ export default function App ($element) {
     this.init = () => {
         const $userTitle = $element.querySelector('#user-title');
         const $userList = $element.querySelector('#user-list');
+        const $userBin = $element.querySelector('#user-bin');
         const $todoApp = $element.querySelector('#todoapp');
 
         
         this.userTitle = new UserTitle($userTitle);
         this.userList = new UserList(
             $userList,
+            $userBin,
             {
                 setUserInfo: userInfo => {
                     this.setState({

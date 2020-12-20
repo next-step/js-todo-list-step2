@@ -1,20 +1,30 @@
-import { getUserList, getUser, addUser } from '../api/todoAPI.js';
+import { getUserList, getUser, addUser, deleteUser } from '../api/todoAPI.js';
 
-export default function UserList($element, {setUserInfo} ) {
-    this.users = [];
-    this.activeUser = {}
-    this.initialIdForTest = 'woSRmp5oh';
+export default function UserList($userList, $userBin, {setUserInfo} ) {
+    this.state = { 
+        users : [],
+    }
+    this.activeUser = {};
+    this.$draggingElement = null;
+
+    this.setState = ({ users }) => {
+        if(users){
+            this.state.users = users ?? [];
+        }
+        this.render();
+    }
 
     this.getUserList = async () => {
         try{
-            this.users = await getUserList();
+            this.state.users = await getUserList() ?? [];
         }catch(err){
             console.log("err", err);
         }
 
-        setUserInfo(this.activeUser)
-
-        console.log(this.users, this.activeUser);
+        if(this.state.users.length > 0){
+            this.activeUser = this.state.users[0];
+            setUserInfo(this.activeUser);
+        }
     }
 
     this.getUserInfo = async () => {
@@ -35,12 +45,23 @@ export default function UserList($element, {setUserInfo} ) {
         }
     }
 
+    this.deleteUser = async (userId) => {
+        try{
+            const response = await deleteUser(userId);
+            if(response.message){ // which means delete success
+                this.getUserList();
+            }
+        }catch(err){
+            console.log("err",err);
+        }
+    }
+
     this.bindEvents = () => {
 
         const onUsernameSet = ({target}) => {
             if(target.classList.contains('ripple') && target.nodeName === 'BUTTON'){
                 const userId = target.dataset.id; 
-                this.activeUser = this.users.find(user => user._id === userId);
+                this.activeUser = this.state.users.find(user => user._id === userId);
                 setUserInfo(this.activeUser);
             }
         }
@@ -54,20 +75,90 @@ export default function UserList($element, {setUserInfo} ) {
             }
         }
 
-        $element.addEventListener("click", onUsernameSet);
-        $element.addEventListener("click", onAddUser);
+
+        $userList.addEventListener("click", onUsernameSet);
+        $userList .addEventListener("click", onAddUser);
+    }
+
+
+    this.bindDragEvents = () => {
+
+        const handleDragStart = (e) => {
+            this.$draggingElement = e.target;
+            e.dataTransfer.effectAllowed = 'move';
+            return;
+        }
+    
+        const handleDragOver = (e) => {
+            if(e.target.nodeName === 'IMG' && e.target.classList.contains('bin')){
+                if (e.preventDefault) {
+                e.preventDefault();
+                }
+                e.dataTransfer.dropEffect = 'move';
+            }
+            return;
+        }
+    
+        const handleDragEnter = ({target}) => {
+            if(target.nodeName === 'IMG' && target.classList.contains('bin')){
+                target.classList.add('over');
+            }
+            return;
+        }
+        
+        const handleDragLeave = ({target}) => {
+            if(target.nodeName === 'IMG' && target.classList.contains('bin')){
+                target.classList.remove('over');
+            }
+            return;
+        }
+    
+        const handleDrop = (e) => {
+            if (e.stopPropagation) {
+            e.stopPropagation();
+            }
+
+            if(e.target.nodeName === 'IMG' && e.target.classList.contains('over')){
+                const userId = this.$draggingElement?.dataset?.id ?? null;
+                
+                if(!userId){
+                    e.target.classList.remove('over');
+                    return;
+                }
+
+                this.deleteUser(userId);
+                e.target.classList.remove('over');
+                
+            }
+
+            return;
+        }
+    
+        const handleDragEnd = (e) => {
+            this.$draggingElement = null;
+            e.dataTransfer.effectAllowed = 'uninitialized';
+        }
+        
+        $userList.addEventListener('dragstart', handleDragStart, false);
+        $userList.addEventListener('dragend', handleDragEnd, false);
+        $userBin.addEventListener('dragenter', handleDragEnter, false);
+        $userBin.addEventListener('dragover', handleDragOver, false);
+        $userBin.addEventListener('dragleave', handleDragLeave, false);
+        $userBin.addEventListener('drop', handleDrop, false);
+
     }
 
     this.init = () => {
         this.getUserInfo();
         this.getUserList();
         this.bindEvents();
+        this.bindDragEvents();
     }
 
     this.init();
 
     const UserComponent = ( user, activeUserId ) => `
-        <button class="ripple ${user._id === activeUserId && 'active'}" data-id="${user._id}">
+        <button class="ripple draggable ${user._id === activeUserId && 'active'}" data-id="${user._id}" draggable="true">
         ${user.name}</button>
     `
     const UserAddComponent = () => `
@@ -75,8 +166,8 @@ export default function UserList($element, {setUserInfo} ) {
     `
 
     this.render = () => {
-        const template = (this.users.map(user => UserComponent(user, this.activeUser._id))).join("");
-        $element.innerHTML = template + UserAddComponent();
+        const template = (this.state.users.map(user => UserComponent(user, this.activeUser._id))).join("");
+        $userList.innerHTML = template + UserAddComponent();
     }
 
 }
