@@ -1,22 +1,16 @@
-import Component from "../core/Component.js";
+import Component, { props } from "../core/Component.js";
 import $store from "../store/index.js";
 
-const UserListItem = ({ _id, name, active }) => {
-  return `
-    <button 
-      class="ripple  ${active ? " active" : ""}"
-      data-id=${_id}
-      data-action="selectUser"
-    >
-      ${name}
-    </button>
-  `;
-};
+import UserListItem from "./UserListItem.js";
 
 export default class UserList extends Component {
   users = [];
 
   init() {
+    this.components = {
+      "user-list-item": UserListItem,
+    };
+
     this.events = {
       click: [this.createUser, this.selectUser, this.deleteUser],
     };
@@ -55,12 +49,22 @@ export default class UserList extends Component {
     return this.users.find((user) => user._id === id);
   }
 
+  userListItem(user) {
+    return `
+      <user-list-item
+        key="${user._id}"
+        ${props(user)}
+      >
+      </user-list-item>
+    `;
+  }
+
   async render() {
     this.users = await $store.user.getAll();
 
     return `
       <div class="user-list">
-        ${this.users.map(UserListItem).join("")}
+        ${this.users.map(this.userListItem).join("")}
         <div>
           <button class="ripple user-create-button" data-action="createUser">+ 유저 생성</button>
           <button class="ripple user-delete-button" data-action="deleteUser">삭제 -</button>

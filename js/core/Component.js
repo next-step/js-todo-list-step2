@@ -70,6 +70,10 @@ export default class Component {
 
   async #drawComponents(target, SubComponent) {
     const targets = Array.from(document.querySelectorAll(target));
+    if (targets.length === 0) {
+      return;
+    }
+
     if (targets.length < 2) {
       this.components[`${target}-component`] = new SubComponent(target);
       return;
