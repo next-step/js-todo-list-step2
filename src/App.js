@@ -1,50 +1,24 @@
-const userTemplate = ({ name, active }) => {
-  const className = ["ripple", active ? "active" : ""].join(" ");
-  return `<button class="${className}">${name}</button>`;
-};
+import UserTitle from "./component/UserTitle.js";
+import UserList from "./component/UserList.js";
 
 export default function App() {
   const users = [{ name: "eastjun", active: true }];
-
-  const $userTitle = document.querySelector("#user-title");
-  const $userList = document.querySelector("#user-list");
-  const $userCreateBtn = document.querySelector(".user-create-button");
-
-  const renderUserTitle = () => {
-    const { name } = users.find(({ active }) => active);
-
-    $userTitle.innerHTML = `<span><strong>${name}</strong>'s Todo List</span>`;
-  };
-
-  const renderUserList = () => {
-    $userList.innerHTML = users.map(userTemplate).join("");
-    $userList.insertAdjacentElement("beforeend", $userCreateBtn);
-  };
 
   const activeUser = (selectedUser) => {
     users.forEach((user) => (user.active = false));
     selectedUser.active = true;
   };
 
-  const handleSelectUser = ({ target }) => {
-    if (!target.classList.contains("ripple") || target === $userCreateBtn) {
-      return;
-    }
-
-    const selectedUser = users.find(({ name }) => name === target.innerText);
+  const selectUser = (userName) => {
+    const selectedUser = users.find(({ name }) => name === userName);
     activeUser(selectedUser);
     render();
   };
 
-  const handleCreateUser = () => {
-    const userName = prompt("추가하고 싶은 이름을 입력해주세요.");
-    if (!userName?.trim()) {
-      return;
-    }
-
+  const createUser = (userName) => {
     const newUser = {
       name: userName,
-      active: false,
+      active: true,
     };
     users.push(newUser);
     activeUser(newUser);
@@ -52,13 +26,13 @@ export default function App() {
     render();
   };
 
-  const render = () => {
-    renderUserList();
-    renderUserTitle();
-  };
+  const userTitle = UserTitle();
+  const userList = UserList({ selectUser, createUser });
 
-  $userList.addEventListener("click", handleSelectUser);
-  $userCreateBtn.addEventListener("click", handleCreateUser);
+  const render = () => {
+    userList.render(users);
+    userTitle.render(users);
+  };
 
   render();
 }
