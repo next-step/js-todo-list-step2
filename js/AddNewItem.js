@@ -1,7 +1,7 @@
 import { renewStrong } from "./ControlTodoButton.js";
 
 const getWork = document.querySelector(".new-todo"); 
-const todoList = document.querySelector(".todo-list"); 
+export const todoList = document.querySelector(".todo-list"); 
 
 export function initAddNewItem() {
   getWork.addEventListener("keypress", AddNewList);
@@ -14,6 +14,8 @@ export function AddNewList(e) {
     e.target.value = null;
 
     const item = listAssemble(text);
+    item.setAttribute('id', String(Date.now()));
+    item.querySelector('span.chip').style.display = "none";
     console.log(item);
 
     if (!/(completed)/.exec(window.location.href))
@@ -27,6 +29,7 @@ export function AddNewList(e) {
 
 export function listAssemble(content) {
   const li = document.createElement("li");
+  
 
   const listTemplate = `<div class="view">
                         <input class="toggle" type="checkbox"/>

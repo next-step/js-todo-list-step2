@@ -1,7 +1,7 @@
 import { renewStrong } from "./ControlTodoButton.js";
 import { chooseButton } from "./ControlTodoButton.js";
 
-const todoList = document.querySelector(".todo-list"); // 작성한 할 일이 삽입되는 ul 태그
+const todoList = document.querySelector(".todo-list");
 
 export function initTodolistItems() {
   todoList.addEventListener("click", itemClickControl);
@@ -17,21 +17,16 @@ function itemClickControl({ target }) {
     target.classList.contains("primary") ||
     target.classList.contains("secondary")
   )
-  labelApply({ target });
+    labelChange({ target });
 }
 
 function workCheck({ target }) {
-  // 등록된 항목들을 체크하거나 푸는 기능
   const li = target.closest("li");
   li.classList.toggle("completed");
 
-  if (target.checked) {
-    target.setAttribute("checked", "");
-    //li.querySelector('span.chip').style.display= 'none';
-  } else {
-    target.removeAttribute("checked");
-    //li.querySelector('span.chip').style.display= 'block';
-  }
+  if (target.checked) target.setAttribute("checked", "");
+  else target.removeAttribute("checked");
+
   if (/(active)/.exec(window.location.href)) chooseButton("active");
   else if (/(completed)/.exec(window.location.href)) chooseButton("completed");
 }
@@ -73,23 +68,30 @@ function workUpdate({ target, key }) {
 }
 
 function labelApply({ target }) {
+  if (target.nodeName !== "SELECT") {
+    return;
+  }
   const li = target.closest("li");
   const span = li.querySelector("span.chip");
   const selecter = li.querySelector("select");
 
-  if (target.classList.contains("primary") ||
-    target.classList.contains("secondary")
-  ) {
-    selecter.style.display = "block";
-    selecter.value =0;
-  }
-
-  span.classList.remove("primary", "secondary");
   if (selecter.value !== "0") {
     if (selecter.value === "1") span.classList.add("primary");
     if (selecter.value === "2") span.classList.add("secondary");
     span.innerText = selecter.value + "순위";
     selecter.style.display = "none";
+    span.style.display = "block";
   }
 }
 
+function labelChange({ target }) {
+  const selecter = target.closest("li").querySelector("select");
+
+  target.classList.remove("primary", "secondary");
+  target.style.display = "none";
+
+  selecter.style.display = "block";
+  selecter.value = 0;
+
+  labelApply({ target });
+}

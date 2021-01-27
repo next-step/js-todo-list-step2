@@ -1,45 +1,52 @@
 import {chooseButton} from './ControlTodoButton.js'
 import {listAssemble} from './AddNewItem.js'
+import {currentUserName} from './index.js'
 
 
 export function initControlLocalStorage(){
+  initLocalStorage();
   window.addEventListener("beforeunload", saveLocalStorage);
   window.addEventListener("DOMContentLoaded", loadLocalStorage);
 };
 
-function createUniqueId() {
-  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-    var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
-    return v.toString(16);
-  });
+function initLocalStorage(){
+  if(localStorage.getItem("json")===null){
+    let listArray = [];
+    const jsonArray = JSON.stringify(listArray);
+    localStorage.setItem("json", jsonArray);
+  }
 }
 
 
-
-
-
-function saveLocalStorage() {
-    // 페이지 종료 시 현재 리스트를 저장하는 기능
+export function saveLocalStorage() {  
+    // 페이지 종료 시 현재 리스트를 저장하는 기능 
     const list = document.querySelectorAll(".todo-list>li");
     let listArray = [];
   
     for (let i = 0; i < list.length; i++) {
-      let dataset = {Checked: "", label: "" };
+      let dataset = {__id : "", Checked: "", label: "", priority: "NONE"};
       if (list[i].classList.contains("completed")) {
         dataset.Checked = "checked";
       }
+      dataset.__id = list[i].getAttribute('id');
       dataset.label = list[i].querySelector(".label>.text").innerText;
+
+      const chip = list[i].querySelector("span.chip");
+      if(chip.classList.contains("primary")) dataset.priority = "FIRST";
+      else if (chip.classList.contains("secondary")) dataset.priority = "SECOND";
       listArray.push(dataset);
     }
   
     const jsonArray = JSON.stringify(listArray);
   
-    localStorage.setItem("json", jsonArray);
+    localStorage.setItem(currentUserName, jsonArray);
   }
   
-  function loadLocalStorage() {
+  export function loadLocalStorage() {
     // 페이지 실행 시 현재 리스트를 불러오는 기능
-    const load = JSON.parse(localStorage.getItem("json"));
+    const load = JSON.parse(localStorage.getItem(currentUserName));
+    console.log(currentUserName);
+    console.log(load);
     for (let i in load) {
       getLocalStorageList(load[i]);
     }
@@ -52,12 +59,29 @@ function saveLocalStorage() {
     // 페이지 실행 시 현재 리스트를 불러오는 기능
     const Checked = e["Checked"];
     const Label = e["label"];
+    const Id = e["__id"];
+    const Priority = e["priority"]
   
     const li = listAssemble(Label);
+    li.setAttribute('id', Id);
+
     const checkbox = li.querySelector(".toggle");
+    const span = li.querySelector("span.chip");
   
     if (Checked === "checked") {
       checkbox.setAttribute("checked", "");
       li.classList.add("completed");
     }
+    if(Priority!=="NONE"){
+      if(Priority==="FIRST") {
+        span.classList.add("primary");
+        span.innerText = "1순위";
+      }
+      else if (Priority==="SECOND") {
+        span.classList.add("secondary");
+        span.innerText = "2순위";
+      }
+      li.querySelector("select").style.display="none";
+    }
+    
   }
