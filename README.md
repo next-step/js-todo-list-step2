@@ -1,211 +1,3 @@
-# 🚀 두번째 미션 - Todo List for Team!
-
-이번 미션은 Ajax를 이용하여 TodoList를 발전시키는 미션입니다. 비동기 통신으로 데이터를 관리할 경우 자바스크립트의 비동기라는 특성을 더욱 깊이있게 이해할 수 있습니다
-
-## 🎯 요구사항
-
-- [ ] 1. User 추가하기
-- [ ] 2. User의 투두리스트 불러오기
-- [ ] 3. User 삭제하기
-- [ ] 3. todoItem 추가하기
-- [ ] 4. todoItem 불러오기
-- [ ] 5. todoItem complete하기
-- [ ] 6. todoItem 삭제하기
-- [ ] 7. todoItem contents 내용 수정하기
-
-
-## 🎯🎯 심화 요구사항
-
-- [ ] 1. 데이터를 불러오기전 로딩바를 이용해, 사용자가 데이터가 불러와지고 있다는 것을 보여줍니다.
-- [ ] 2. fetch api 사용하는 부분을 async await을 사용하여 리팩토링합니다.
-- [ ] 3. github issue에서 라벨을 붙이는 것처럼, 우선순위에 따라서 badge를 추가합니다.
-- [ ] 4. ES6 impot & export를 이용해 자바스크립트 파일을 리팩토링합니다.
-
-## 🕵️‍♂️ 제약사항
-
-- [ ] 1. User의 이름은 최소 2글자 이상이어야 합니다.
-
-<br/><br/>
-
-## 📝 API
-
-### User list 불러오기
-
-| method | uri |
-|---|---|
-|GET|/api/users|
-
-```javascript
-{
- response: [...]
-}
-```
-
-### User 추가하기
-
-| method | uri |
-|---|---|
-|POST|/api/users|
-
-```javascript
-{
- requestBody: {
-   "name": "string"
- },
- response: {
-   "_id": "string",
-   "name": "string",
-   "todoList": []
-  }
-}
-```
-
-### User 불러오기
-
-| method | uri |
-|---|---|
-|GET|/api/users/:userId|
-
-```javascript
-{
- response: {
-   "_id": "string",
-   "name": "string",
-   "todoList": [...]
-  }
-}
-```
-
-### User 삭제하기
-
-| method | uri |
-|---|---|
-|DELETE|/api/users/:userId|
-
-```javascript
-{
- response: {}
-}
-```
-
-### User의 Todo Item 불러오기
-
-| method | uri |
-|---|---|
-|GET|/api/users/:userId/items/|
-```javascript
-{
- response: [...]
-}
-```
-
-
-### User의 Todo Item 추가하기
-
-| method | uri |
-|---|---|
-|POST|/api/users/:userId/items/|
-```javascript
-{
- requestBody: {
-   "contents": "string"
- },
- response: {
-   "_id": "string",
-   "name": "string",
-   "todoList": [...]
-  }
-}
-```
-
-
-### User의 Todo Item 전부 삭제하기
-
-| method | uri |
-|---|---|
-|DELETE|/api/users/:userId/items/|
-```javascript
-{
- response: {
-   "_id": "string",
-   "name": "string",
-   "todoList": []
-  }
-}
-```
-
-### User의 Todo Item 1개 삭제하기
-
-| method | uri |
-|---|---|
-|DELETE|/api/users/:userId/items/:itemId|
-```javascript
-{
- response: {
-   "_id": "string",
-   "name": "string",
-   "todoList": [...]
-  }
-}
-```
-
-### User의 Todo Item 내용 수정하기
-
-| method | uri |
-|---|---|
-|PUT|/api/users/:userId/items/:itemId|
-```javascript
-{
- requestBody: {
-   "contents": "string"
- },
- response: {
-  "_id": "string",
-   "contents": "string",
-   "priority": "string",
-   "isCompleted": "boolean"
-  }
-}
-```
-
-### User의 Todo Item 우선순위 수정하기
-
-| method | uri |
-|---|---|
-|PUT|/api/users/:userId/items/:itemId/priority|
-```javascript
-{
- requestBody: {
-   "priority": "string" // 'NONE', 'FIRST', 'SECOND'
- },
- response: {
-   "_id": "string",
-   "contents": "string",
-   "priority": "string",
-   "isCompleted": "boolean"
-  }
-}
-```
-
-
-### User의 Todo Item complete toggle
-
-| method | uri |
-|---|---|
-|PUT|/api/users/:userId/items/:itemId/toggle|
-```javascript
-{
- response: {
-   "_id": "string",
-   "contents": "string",
-   "priority": "string",
-   "isCompleted": "boolean"
-  }
-}
-```
-
-
-<br/><br/>
 
 # ☕️ 코드리뷰 모임 - Black Coffee
 <br>
@@ -218,6 +10,25 @@
 **프론트엔드 코드리뷰 모임** ☕️ **Black Coffee**입니다.
 
 <br>
+
+# 🏴 첫번째 미션 - Todo List for Team!
+
+이번 미션은 팀을 위한 TodoList를 작성하는 미션입니다. 여러개의 컴포넌트의 상태값을 관리해야하는데요. TodoList가 1개 존재할 때보다 훨씬 더 고려할 것이 많습니다 😀
+
+## 🚀 기본 요구사항
+
+- [ ] todo list에 todoItem을 키보드로 입력하여 추가하기
+- [ ] todo list의 체크박스를 클릭하여 complete 상태로 변경. (li tag 에 completed class 추가, input 태그에 checked 속성 추가)
+- [ ] todo list의 x버튼을 이용해서 해당 엘리먼트를 삭제
+- [ ]  todo list를 더블클릭했을 때 input 모드로 변경. (li tag 에 editing class 추가) 단 이때 수정을 완료하지 않은 상태에서 esc키를 누르면 수정되지 않은 채로 다시 view 모드로 복귀
+- [ ] todo list의 item갯수를 count한 갯수를 리스트의 하단에 보여주기
+- [ ] todo list의 상태값을 확인하여, 해야할 일과, 완료한 일을 클릭하면 해당 상태의 아이템만 보여주기
+
+## 🚀🚀 심화 요구사항
+
+- [ ] localStorage에 데이터를 저장하여, TodoItem의 CRUD를 반영하기. 따라서 새로고침하여도 저장된 데이터를 확인할 수 있어야 함
+
+<br/><br/>
 
 ## ⚙️ Before Started
 
@@ -244,6 +55,11 @@ live-server 폴더명
 
 <br>
 
+## 👨‍💻 1주차 미션 후기 블로그 👩‍💻
+아래 링크는 1주차 미션을 진행하면서 블로그를 작성해주신 분들의 글입니다. 미션을 진행하면서, 다른 분들의 문제 해결 과정이 궁금하다면 참고해주세요 😄
+- [1주차 미션후기 ](https://www.notion.so/1-2-8b624729fbce4174b8b583efb10c3200)
+<br>
+
 ## 👏 Contributing
 만약 미션 수행 중에 개선사항이 보인다면, 언제든 자유롭게 PR을 보내주세요. 
 
@@ -251,13 +67,10 @@ live-server 폴더명
 
 ## 🐞 Bug Report
 
-버그를 발견한다면, [Issues](https://github.com/next-step/js-todo-list-step3/issues) 에 등록 후 @eastjun에게 dm을 보내주세요.
+버그를 발견한다면, [Issues](https://github.com/next-step/js-todo-list-step1/issues) 에 등록 후 @eastjun에게 dm을 보내주세요.
 
 <br>
 
 ## 📝 License
 
-This project is [MIT](https://github.com/next-step/js-todo-list-step3/blob/master/LICENSE) licensed.
-
-
-
+This project is [MIT](https://github.com/next-step/js-todo-list-step1/blob/master/LICENSE) licensed.
