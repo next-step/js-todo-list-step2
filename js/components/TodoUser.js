@@ -1,6 +1,8 @@
 export default function TodoUser(titleEl, userListEl, todoApp) {
   const checkButton = ({ classList }) =>
-    !classList.contains("ripple") || classList.contains("user-create-button");
+    !classList.contains("ripple") ||
+    classList.contains("user-create-button") ||
+    classList.contains("user-delete-button");
 
   this.chooseUser = ({ target }) => {
     if (checkButton(target)) {
@@ -36,7 +38,9 @@ export default function TodoUser(titleEl, userListEl, todoApp) {
             _id === chosenId ? "active" : ""
           }" data-id="${_id}">${name}</button>`
       )
-      .join("")}<button class="ripple user-create-button">+ 유저 생성</button>`;
+      .join("")}
+      <button class="ripple user-create-button">+ 유저 생성</button>
+      <button class="ripple user-delete-button">- 유저 삭제</button>`;
   };
 
   userListEl.addEventListener("click", this.chooseUser);

@@ -476,6 +476,7 @@ select.chip {
   width: 45px;
 }
 
+button.user-delete-button.ripple,
 button.user-create-button.ripple {
   border-radius: 15px;
   padding-left: 10px;
