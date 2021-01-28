@@ -34,4 +34,10 @@ export const API = {
   loadUsers: () => {
     return request(`${BASE_URL}/users`);
   },
+  addUser: (userName) => {
+    const content = {
+      name: userName,
+    };
+    return request(`${BASE_URL}/users`, option.post(content));
+  },
 };
