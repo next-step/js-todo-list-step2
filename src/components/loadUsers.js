@@ -4,9 +4,9 @@ const userTemplate = ({ name, _id }) => {
   return `<button class="ripple" data-id=${_id}>${name}</button>`;
 };
 
-export const loadUser = () => {
+export const loadUsers = () => {
   const $userList = document.querySelector('#user-list');
-  const users = API.loadUsers();
+  const users = API.getUsers();
 
   users.then((users) => {
     users.map((user) => {

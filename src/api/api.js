@@ -31,14 +31,22 @@ const request = async (url, option = {}) => {
 };
 
 export const API = {
-  loadUsers: () => {
-    console.log('init');
+  getUsers: () => {
     return request(`${BASE_URL}/users`);
   },
+
   addUser: (userName) => {
     const content = {
       name: userName,
     };
     return request(`${BASE_URL}/users`, option.post(content));
+  },
+
+  getUser: (userId) => {
+    return request(`${BASE_URL}/users/${userId}`);
+  },
+
+  getUserTodos: (userId) => {
+    return request(`${BASE_URL}/users/${userId}/items`);
   },
 };

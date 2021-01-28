@@ -1,9 +1,11 @@
 import { addUser } from './components/addUser.js';
-import { loadUser } from './components/loadUser.js';
+import { loadTodo } from './components/loadTodo.js';
+import { loadUsers } from './components/loadUsers.js';
 
 export const todoApp = () => {
-  loadUser();
+  loadUsers();
   addUser();
+  loadTodo();
 };
 
 window.onload = () => {
