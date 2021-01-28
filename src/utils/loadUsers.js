@@ -1,10 +1,11 @@
 import { API } from '../api/api.js';
+// import { loadTodo } from '../components/userList/loadTodo.js';
 
 const userTemplate = ({ name, _id }) => {
   return `<button class="ripple" data-id=${_id}>${name}</button>`;
 };
 
-export const loadUsers = () => {
+export const loadUsers = (selectedUser = '') => {
   const $userList = document.querySelector('#user-list');
   const users = API.getUsers();
 
@@ -13,4 +14,9 @@ export const loadUsers = () => {
       $userList.insertAdjacentHTML('afterbegin', userTemplate(user));
     });
   });
+
+  if (!selectedUser) {
+    // loadTodo($userList.querySelector('button'));
+    console.log($userList.querySelector('.ripple'));
+  }
 };

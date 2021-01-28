@@ -1,4 +1,5 @@
-import { API } from '../api/api.js';
+import { API } from '../../api/api.js';
+import { addTodo } from './addTodo.js';
 
 const todoPriority = (priority) => {
   const priorityList = {
@@ -30,12 +31,7 @@ const renderTitle = (name) => {
 
 const renderTodos = (todos) => {
   const $todoList = document.querySelector('.todo-list');
-  $todoList.innerText = '';
-
-  todos.map((todo) => {
-    console.log(todo);
-    $todoList.insertAdjacentHTML('beforeend', todoTemplate(todo));
-  });
+  $todoList.innerHTML = todos.map((todo) => todoTemplate(todo)).join('');
 };
 
 const getUser = ({ target }) => {
@@ -47,6 +43,8 @@ const getUser = ({ target }) => {
     user.then((user) => {
       renderTitle(user.name);
       renderTodos(user.todoList);
+
+      addTodo(user);
     });
   }
 };

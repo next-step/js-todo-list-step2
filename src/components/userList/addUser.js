@@ -1,5 +1,5 @@
-import { API } from '../api/api.js';
-import { MINIMUM_USER_NAME_LENGTH } from '../constant/user.js';
+import { API } from '../../api/api.js';
+import { MINIMUM_USER_NAME_LENGTH } from '../../constant/user.js';
 
 const inputUserName = () => {
   const userName = prompt('유저 이름을 입력해주세요.');

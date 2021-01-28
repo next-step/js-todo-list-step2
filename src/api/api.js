@@ -20,7 +20,7 @@ const option = {
 
 const request = async (url, option = {}) => {
   try {
-    const response = await fetch(url, option);
+    const response = await fetch(`${BASE_URL}${url}`, option);
     if (!response.ok) {
       throw new Error(response.status);
     }
@@ -32,21 +32,33 @@ const request = async (url, option = {}) => {
 
 export const API = {
   getUsers: () => {
-    return request(`${BASE_URL}/users`);
+    return request('/users');
   },
 
   addUser: (userName) => {
     const content = {
       name: userName,
     };
-    return request(`${BASE_URL}/users`, option.post(content));
+    return request('/users', option.post(content));
   },
 
   getUser: (userId) => {
-    return request(`${BASE_URL}/users/${userId}`);
+    return request(`/users/${userId}`);
   },
 
   getUserTodos: (userId) => {
-    return request(`${BASE_URL}/users/${userId}/items`);
+    return request(`/users/${userId}/items`);
+  },
+
+  deleteUser: (userId) => {
+    return request(`/users/${userId}`);
+  },
+
+  addTodo: (userId, title) => {
+    const content = {
+      contents: title,
+    };
+
+    return request(`/users/${userId}`, option.post(content));
   },
 };
