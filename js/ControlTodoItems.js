@@ -26,6 +26,9 @@ function workCheck({ target }) {
   const li = target.closest("li");
   li.classList.toggle("completed");
 
+  if (target.checked) target.setAttribute("checked", "");
+  else target.removeAttribute("checked");
+
   ajaxPostFunctions(li, "checkitem");
 
   if (/(active)/.exec(window.location.href)) chooseButton("active");
@@ -36,6 +39,7 @@ function workDelete({ target }) {
   if (confirm("정말 삭제하시겠습니까?")) {
     const li = target.closest("li");
     ajaxPostFunctions(li,'deleteitem');
+    li.parentNode.removeChild(li);
     renewStrong();
   }
 }

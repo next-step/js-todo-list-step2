@@ -46,14 +46,13 @@ const onUserCreateHandler = ({ target }) => {
   userTemplate.classList.add("ripple");
   userTemplate.innerText = userName;
 
-  ajaxPostFunctions(userName, 'username');
-
+  ajaxPostFunctions(userName, "username");
 };
 
 const resetUserList = () => {
   userList.innerHTML =
     '<button class="ripple user-create-button">+ 유저 생성</button>';
-    ajaxGetFunctions('userlist');
+  ajaxGetFunctions("userlist");
 };
 
 const onAjaxCreateUserList = (dataset) => {
@@ -65,7 +64,7 @@ const onAjaxCreateUserList = (dataset) => {
   userList.insertBefore(userTemplate, createbutton);
 };
 
-export const ajaxGetFunctions = (type) => {
+export const ajaxGetFunctions = async (type, data) => {
   let url = "";
   if (type === "userlist") {
     url = "https://js-todo-list-9ca3a.df.r.appspot.com/api/users";
@@ -76,8 +75,9 @@ export const ajaxGetFunctions = (type) => {
       "/items/";
     todoList.innerHTML = "";
   }
+  todoList.innerHTML = showLoadingBar();
 
-  fetch(url)
+  await fetch(url)
     .then((data) => {
       if (!data.ok) {
         throw new Error(data.status);
@@ -85,9 +85,9 @@ export const ajaxGetFunctions = (type) => {
       return data.json();
     })
     .then((post) => {
-      console.log(post);
+      todoList.innerHTML ='';
       if (type === "userlist") assembleUserList(post);
-      else assembleUserItems(post);
+      else if(type === "useritems") assembleUserItems(post); 
     })
     .catch((error) => {
       console.log(error);
@@ -114,8 +114,19 @@ const assembleUserItems = (useritems) => {
   else chooseButton("all");
 };
 
-const reflectUserItems = (item) => {
-  const li = listAssemble(item.contents);
+const assembleSingleItem = (useritem, type) =>{
+  reflectUserItems(useritem, type);
+
+  if (/(active)/.exec(window.location.href)) chooseButton("active");
+  else if (/(completed)/.exec(window.location.href)) chooseButton("completed");
+  else chooseButton("all");
+}
+
+const reflectUserItems = (item, type) => {
+  let li= listAssemble(item.contents, type);
+  // if(type === undefined) li = listAssemble(item.contents);
+  // else li = listAssemble(item.contents, type);
+  
   const checkbox = li.querySelector(".toggle");
   const span = li.querySelector("span.chip");
   const selecter = li.querySelector("select");
@@ -140,41 +151,46 @@ const reflectUserItems = (item) => {
   }
 };
 
-
-export const ajaxPostFunctions = (data, type) =>{
-  let url = '';
-  let method = '';
+export const ajaxPostFunctions = async (data, type) => {
+  let url = "";
+  let method = "";
   let dataset = {};
   let option = {};
-  if(type==="username"){
+  if (type === "username") {
     method = "POST";
     url = "https://js-todo-list-9ca3a.df.r.appspot.com/api/users";
     dataset = {
-      name: data
+      name: data,
     };
-  }
-  else if(type==="useritem"){
+  } else if (type === "useritem") {
     method = "POST";
-    url ="https://js-todo-list-9ca3a.df.r.appspot.com/api/users/" + currentUserID +"/items/";
+    url =
+      "https://js-todo-list-9ca3a.df.r.appspot.com/api/users/" +
+      currentUserID +
+      "/items/";
     dataset = {
-      contents: data
+      contents: data,
     };
-  }
-  else if(type==="changeitem"){
+  } else if (type === "changeitem") {
     method = "PUT";
     let str = data.querySelector(".edit").value;
     dataset = {
-      contents: str
+      contents: str,
     };
-    url ="https://js-todo-list-9ca3a.df.r.appspot.com/api/users/" +
-    currentUserID + "/items/" + data.getAttribute("id")
-  }
-  else if(type==="checkitem"){
+    url =
+      "https://js-todo-list-9ca3a.df.r.appspot.com/api/users/" +
+      currentUserID +
+      "/items/" +
+      data.getAttribute("id");
+  } else if (type === "checkitem") {
     method = "PUT";
-    url = "https://js-todo-list-9ca3a.df.r.appspot.com/api/users/" +
-    currentUserID + "/items/" + data.getAttribute("id") + "/toggle";
-  }
-  else if(type==="prioritem"){
+    url =
+      "https://js-todo-list-9ca3a.df.r.appspot.com/api/users/" +
+      currentUserID +
+      "/items/" +
+      data.getAttribute("id") +
+      "/toggle";
+  } else if (type === "prioritem") {
     method = "PUT";
     let tag = "NONE";
     const span = data.querySelector("span.chip");
@@ -183,24 +199,29 @@ export const ajaxPostFunctions = (data, type) =>{
     dataset = {
       priority: tag,
     };
-    url ="https://js-todo-list-9ca3a.df.r.appspot.com/api/users/" +
-    currentUserID + "/items/" + data.getAttribute("id") + "/priority";
-  }
-  else if(type==="deleteitem"){
+    url =
+      "https://js-todo-list-9ca3a.df.r.appspot.com/api/users/" +
+      currentUserID +
+      "/items/" +
+      data.getAttribute("id") +
+      "/priority";
+  } else if (type === "deleteitem") {
     method = "DELETE";
-    url ="https://js-todo-list-9ca3a.df.r.appspot.com/api/users/" +
-    currentUserID + "/items/" + data.getAttribute("id");
+    url =
+      "https://js-todo-list-9ca3a.df.r.appspot.com/api/users/" +
+      currentUserID +
+      "/items/" +
+      data.getAttribute("id");
   }
 
-  if(type==="checkitem" || type==="deleteitem") {
+  if (type === "checkitem" || type === "deleteitem") {
     option = {
       method: method,
       headers: {
         "Content-Type": "application/json",
-      }
+      },
     };
-  }
-  else {
+  } else {
     option = {
       method: method,
       headers: {
@@ -209,8 +230,8 @@ export const ajaxPostFunctions = (data, type) =>{
       body: JSON.stringify(dataset),
     };
   }
-  
-  fetch(url, option)
+
+  await fetch(url, option)
     .then((data) => {
       if (!data.ok) {
         throw new Error(data.status);
@@ -219,17 +240,18 @@ export const ajaxPostFunctions = (data, type) =>{
     })
     .then((post) => {
       console.log(post);
-      if(type==="username") resetUserList();
-      else ajaxGetFunctions("useritems");
+      if (type === "username")  resetUserList();
+      else if(type==='useritem') assembleSingleItem(post, 'add');
+      else {
+        assembleSingleItem(post, 'change');
+      }
     })
     .catch((error) => {
       console.log(error);
     });
-
 };
 
-
-const ajaxDeleteAllItem = () => {
+const ajaxDeleteAllItem = async () => {
   if (!confirm("정말로 모두 삭제하시겠습니까?")) return;
   const option = {
     method: "DELETE",
@@ -243,7 +265,7 @@ const ajaxDeleteAllItem = () => {
     currentUserID +
     "/items/";
 
-  fetch(url, option)
+    await fetch(url, option)
     .then((data) => {
       if (!data.ok) {
         throw new Error(data.status);
@@ -259,7 +281,7 @@ const ajaxDeleteAllItem = () => {
     });
 };
 
-const ajaxDeleteUser = (e) => {
+ const ajaxDeleteUser = async (e) => {
   if (!e.ctrlKey) return;
   if (!confirm("정말 유저를 삭제하시겠습니까?")) return;
   const option = {
@@ -273,7 +295,7 @@ const ajaxDeleteUser = (e) => {
     "https://js-todo-list-9ca3a.df.r.appspot.com/api/users/" +
     e.target.getAttribute("id");
 
-  fetch(url, option)
+    await fetch(url, option)
     .then((data) => {
       if (!data.ok) {
         throw new Error(data.status);
@@ -287,4 +309,20 @@ const ajaxDeleteUser = (e) => {
     .catch((error) => {
       console.log(error);
     });
+};
+
+const showLoadingBar = () => {
+  const loadingtemplate = `<li>
+                            <div class="view">
+                              <label class="label">
+                                <div class="animated-background">
+                                  <div class="skel-mask-container">
+                                    <div class="skel-mask"></div>
+                                  </div>
+                                </div>
+                              </label>
+                            </div>
+                          </li>`;
+  console.log('loading....');
+  return loadingtemplate;
 };
