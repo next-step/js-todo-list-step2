@@ -6,13 +6,13 @@ export default function TodoInput(inputEl, todoApp) {
       return;
     }
 
-    const value = inputEl.value.trim();
-    if (!value) {
+    const contents = inputEl.value.trim();
+    if (!contents) {
       return;
     }
 
     inputEl.dispatchEvent(new CompositionEvent("compositionend"));
-    todoApp.addTodo(value);
+    todoApp.addTodo(contents);
     inputEl.value = "";
   };
 

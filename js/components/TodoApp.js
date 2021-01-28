@@ -53,21 +53,21 @@ export default function TodoApp(appEl) {
     this.render();
   };
 
-  this.getTodo = (targetId) => this.todos.find(({ id }) => id === targetId);
+  this.getTodo = (targetId) => this.todos.find(({ _id }) => _id === targetId);
 
-  this.addTodo = (value) =>
+  this.addTodo = (contents) =>
     this.setTodos([
-      { id: generateId(), value, completed: this.filter ?? false },
+      { _id: "", contents, isCompleted: this.filter ?? false },
       ...this.todos,
     ]);
 
   this.updateTodo = (todo) =>
     this.setTodos(
-      this.todos.map((_todo) => (_todo.id !== todo.id ? _todo : todo))
+      this.todos.map((_todo) => (_todo._id !== todo._id ? _todo : todo))
     );
 
   this.deleteTodo = (targetId) =>
-    this.setTodos(this.todos.filter(({ id }) => id !== targetId));
+    this.setTodos(this.todos.filter(({ _id }) => _id !== targetId));
 
   this.setFilter = (filter = null) => {
     this.filter = filter;
@@ -90,7 +90,7 @@ export default function TodoApp(appEl) {
 
   this.render = () => {
     const filteredTodos = this.todos.filter(
-      ({ completed }) => this.filter === null || completed === this.filter
+      ({ isCompleted }) => this.filter === null || isCompleted === this.filter
     );
 
     this.todoUser.render();

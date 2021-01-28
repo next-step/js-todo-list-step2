@@ -12,30 +12,30 @@ const renderSkelMask = () => `
   </li>
 `;
 
-const renderTodoItem = ({ id, value, completed }, editingId) => `
+const renderTodoItem = ({ _id, contents, isCompleted }, editingId) => `
   <li class="${
-    id === editingId ? "editing" : completed ? "completed" : ""
-  }" data-id="${id}">
+    _id === editingId ? "editing" : isCompleted ? "completed" : ""
+  }" data-id="${_id}">
     <div class="view">
-      <input class="toggle" type="checkbox" ${completed ? "checked" : ""}>
-      <label class="label">${value}</label>
+      <input class="toggle" type="checkbox" ${isCompleted ? "checked" : ""}>
+      <label class="label">${contents}</label>
       <button class="destroy"></button>
     </div>
-    <input class="edit" value="${value}">
+    <input class="edit" value="${contents}">
   </li>
 `;
 
 export default function TodoList(listEl, todoApp) {
   const getTodoItemId = (childEl) => childEl.closest("li")?.dataset?.id;
 
-  this.toggleCompleted = ({ target }) => {
+  this.toggleIsCompleted = ({ target }) => {
     if (!target.classList.contains("toggle")) {
       return;
     }
 
     const id = getTodoItemId(target);
     const todo = todoApp.getTodo(id);
-    todoApp.updateTodo({ ...todo, completed: !todo.completed });
+    todoApp.updateTodo({ ...todo, isCompleted: !todo.isCompleted });
   };
 
   this.deleteTodo = ({ target }) => {
@@ -44,8 +44,8 @@ export default function TodoList(listEl, todoApp) {
     }
 
     const id = getTodoItemId(target);
-    const { value } = todoApp.getTodo(id);
-    if (!confirm(`정말로 삭제하시겠습니까?\n\n${value}`)) {
+    const { contents } = todoApp.getTodo(id);
+    if (!confirm(`정말로 삭제하시겠습니까?\n\n${contents}`)) {
       return;
     }
 
@@ -63,18 +63,18 @@ export default function TodoList(listEl, todoApp) {
 
   this.convertToViewer = () => todoApp.setEditingId();
 
-  this.updateValue = ({ code, target }) => {
+  this.updateContents = ({ code, target }) => {
     if (code !== "Enter") {
       return;
     }
 
-    const value = target.value.trim();
-    if (!value) {
+    const contents = target.value.trim();
+    if (!contents) {
       return;
     }
 
     const todo = todoApp.getTodo(todoApp.editingId);
-    todoApp.updateTodo({ ...todo, value });
+    todoApp.updateTodo({ ...todo, contents });
     this.convertToViewer();
   };
 
@@ -98,10 +98,10 @@ export default function TodoList(listEl, todoApp) {
     listEl.querySelector(`li[data-id="${todoApp.editingId}"] .edit`)?.focus();
   };
 
-  listEl.addEventListener("click", this.toggleCompleted);
+  listEl.addEventListener("click", this.toggleIsCompleted);
   listEl.addEventListener("click", this.deleteTodo);
   listEl.addEventListener("dblclick", this.convertToEditor);
   listEl.addEventListener("focusout", this.convertToViewer);
-  listEl.addEventListener("keypress", this.updateValue);
+  listEl.addEventListener("keypress", this.updateContents);
   listEl.addEventListener("keypress", this.convertToViewerWhenPressingEsc);
 }
