@@ -7,7 +7,7 @@ import { TodoState, Todo } from "./types/index.js";
 import LocalStorage from "./services/LocalStorage.js";
 
 class App extends Reilly.Component {
-  state = new TodoState([], FILTER_ENUM.ALL, null);
+  _state = new TodoState([], FILTER_ENUM.ALL, null);
 
   constructor(props) {
     super(props);
@@ -30,7 +30,7 @@ class App extends Reilly.Component {
     const content = e.target.elements["new-todo"].value.trim();
     if (!content) return;
 
-    const todos = [new Todo(content), ...this.state.todos];
+    const todos = [new Todo(content), ...this._state.todos];
     this.setState({ todos });
     LocalStorage.setTodos(todos);
   }
@@ -39,7 +39,7 @@ class App extends Reilly.Component {
     e.stopPropagation();
     if (!e.target.matches(".toggle")) return;
     const targetId = e.path.find((elm) => elm.matches("li")).id;
-    const todos = this.state.todos.map((todo) =>
+    const todos = this._state.todos.map((todo) =>
       todo.id !== targetId
         ? todo
         : {
@@ -57,7 +57,7 @@ class App extends Reilly.Component {
     if (!e.target.matches(".destroy")) return;
     if (!confirm("destroy this for real?")) return;
     const targetId = e.target.closest("li").id;
-    const todos = this.state.todos.filter((todo) => todo.id !== targetId);
+    const todos = this._state.todos.filter((todo) => todo.id !== targetId);
     this.setState({ todos });
     LocalStorage.setTodos(todos);
   }
@@ -89,7 +89,7 @@ class App extends Reilly.Component {
     const content = e.target.value;
     // content validation
     this.setState({
-      todos: this.state.todos.map((todo) =>
+      todos: this._state.todos.map((todo) =>
         todo.id !== targetId
           ? todo
           : { ...todo, content, _updatedAt: new Date().toISOString() }
@@ -99,7 +99,7 @@ class App extends Reilly.Component {
   }
 
   componentDidUpdate() {
-    const targetId = this.state.edittingId;
+    const targetId = this._state.edittingId;
     if (targetId) {
       window.onbeforeunload = () => "작성 중인 메시지가 있습니다.";
       document.getElementById(targetId).querySelector(".edit").focus();
@@ -110,7 +110,7 @@ class App extends Reilly.Component {
   }
 
   render() {
-    const { todos, mode, edittingId } = this.state;
+    const { todos, mode, edittingId } = this._state;
 
     return createElement(
       "div",
