@@ -5,7 +5,7 @@ class TodoList extends Reilly.Component {
   render() {
     const {
       todos,
-      edittingId,
+      editingId,
       onToggle,
       onRemove,
       onStartEdit,
@@ -22,7 +22,7 @@ class TodoList extends Reilly.Component {
         ondblclick: onStartEdit,
         onkeyup: onConfirmEdit
       },
-      ...todos.map((todo) => createElement(TodoItem, { todo, edittingId }))
+      ...todos.map((todo) => createElement(TodoItem, { todo, editingId }))
     );
   }
 }

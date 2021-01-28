@@ -2,14 +2,14 @@ import Reilly, { createElement } from "../lib/reilly/Reilly.js";
 
 class TodoItem extends Reilly.Component {
   render() {
-    const { todo, edittingId } = this.props;
+    const { todo, editingId } = this.props;
 
     return createElement(
       "li",
       {
         id: todo.id,
         className: `${todo.completed ? "completed" : ""} ${
-          todo.id === edittingId ? "editing" : ""
+          todo.id === editingId ? "editing" : ""
         }`
       },
       createElement(

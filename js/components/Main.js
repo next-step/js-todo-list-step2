@@ -9,7 +9,7 @@ class Main extends Reilly.Component {
     const {
       todos,
       mode,
-      edittingId,
+      editingId,
       onStartEdit,
       onConfirmEdit,
       onToggle,
@@ -30,7 +30,7 @@ class Main extends Reilly.Component {
       createElement(ToggleAll),
       createElement(TodoList, {
         todos: filteredTodos,
-        edittingId,
+        editingId,
         onToggle,
         onRemove,
         onStartEdit,
