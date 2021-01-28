@@ -14,6 +14,7 @@ export default function TodoApp(appEl) {
   this.todos = getData() ?? [];
   this.filter = null;
   this.editingId = null;
+  this.isLoading = false;
 
   this.todoInput = new TodoInput(inputEl, this);
   this.todoList = new TodoList(listEl, this);
@@ -49,6 +50,11 @@ export default function TodoApp(appEl) {
 
   this.setEditingId = (id = null) => {
     this.editingId = id;
+    this.render();
+  };
+
+  this.toggleIsLoading = () => {
+    this.isLoading = !this.isLoading;
     this.render();
   };
 

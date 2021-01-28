@@ -1,3 +1,17 @@
+const renderSkelMask = () => `
+  <li>
+    <div class="view">
+      <label class="label">
+        <div class="animated-background">
+          <div class="skel-mask-container">
+            <div class="skel-mask"></div>
+          </div>
+        </div>
+      </label>
+    </div>
+  </li>
+`;
+
 const renderTodoItem = ({ id, value, completed }, editingId) => `
   <li class="${
     id === editingId ? "editing" : completed ? "completed" : ""
@@ -73,9 +87,9 @@ export default function TodoList(listEl, todoApp) {
   };
 
   this.render = (todos) => {
-    listEl.innerHTML = todos
-      .map((todo) => renderTodoItem(todo, todoApp.editingId))
-      .join("");
+    listEl.innerHTML = `${
+      todoApp.isLoading ? renderSkelMask() : ""
+    }${todos.map((todo) => renderTodoItem(todo, todoApp.editingId)).join("")}`;
 
     if (!todoApp.editingId) {
       return;
