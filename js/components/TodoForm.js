@@ -1,4 +1,4 @@
-import { createElement } from "../lib/Reilly.js";
+import { createElement } from "../lib/reilly/Reilly.js";
 
 function TodoForm(props) {
   return createElement(

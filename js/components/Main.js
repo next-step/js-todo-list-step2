@@ -1,4 +1,4 @@
-import Reilly, { createElement } from "../lib/Reilly.js";
+import Reilly, { createElement } from "../lib/reilly/Reilly.js";
 import CountContainer from "./CountContainer.js";
 import TodoList from "./TodoList.js";
 import { ToggleAll } from "./ToggleAll.js";

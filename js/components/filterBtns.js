@@ -1,4 +1,4 @@
-import { createElement } from "../lib/Reilly.js";
+import { createElement } from "../lib/reilly/Reilly.js";
 import { FILTER_NAMES } from "../types/constants.js";
 
 export function filterBtns({ name, mode, onModeChange }) {

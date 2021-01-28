@@ -1,4 +1,4 @@
-import Reilly, { createElement } from "../lib/Reilly.js";
+import Reilly, { createElement } from "../lib/reilly/Reilly.js";
 import FilterList from "./FilterList.js";
 
 class CountContainer extends Reilly.Component {

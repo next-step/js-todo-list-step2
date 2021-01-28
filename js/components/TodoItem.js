@@ -1,4 +1,4 @@
-import Reilly, { createElement } from "../lib/Reilly.js";
+import Reilly, { createElement } from "../lib/reilly/Reilly.js";
 
 class TodoItem extends Reilly.Component {
   render() {
