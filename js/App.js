@@ -1,10 +1,10 @@
+import Reilly, { createElement } from "./lib/reilly/Reilly.js";
 import Main from "./components/Main.js";
 import Title from "./components/Title.js";
 import TodoForm from "./components/TodoForm.js";
-import Reilly, { createElement } from "./lib/Reilly.js";
 import { FILTER_ENUM } from "./types/constants.js";
 import { TodoState, Todo } from "./types/index.js";
-import LocalStorage from "./utils/LocalStorage.js";
+import LocalStorage from "./services/LocalStorage.js";
 
 class App extends Reilly.Component {
   state = new TodoState([], FILTER_ENUM.ALL, null);
