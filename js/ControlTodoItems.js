@@ -1,7 +1,5 @@
 import { renewStrong, chooseButton } from "./ControlTodoButton.js";
-import {
-  ajaxPostFunctions
-} from "./ControlUserList.js";
+import { ajaxPostFunctions } from "./AjaxPost.js";
 
 const todoList = document.querySelector(".todo-list");
 

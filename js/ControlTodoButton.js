@@ -21,7 +21,6 @@ export function chooseButton(button){
 
 
 function viewAll() {
-  console.log('viewAll');
   // "전체보기" 버튼 클릭 시의 기능
   const list = document.querySelectorAll(".todo-list>li");
   for (let i = 0; i < list.length; i++) {
@@ -32,7 +31,6 @@ function viewAll() {
 }
 
 function viewTodo() {
-  console.log('viewTodo');
   // "해야할 일" 버튼 클릭 시의 기능
   const list = document.querySelectorAll(".todo-list>li");
   for (let i = 0; i < list.length; i++) {
@@ -47,7 +45,6 @@ function viewTodo() {
 }
 
 function viewDone() {
-  console.log('viewDone');
   // "완료한 일" 버튼 클릭 시의 기능
   const list = document.querySelectorAll(".todo-list>li");
   for (let i = 0; i < list.length; i++) {

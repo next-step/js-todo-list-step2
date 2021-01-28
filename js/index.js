@@ -1,7 +1,8 @@
 import { initAddNewItem } from "./AddNewItem.js";
 import { initTodolistButton } from "./ControlTodoButton.js";
 import { initTodolistItems } from "./ControlTodoItems.js";
-import { initControlUserList, ajaxGetFunctions } from "./ControlUserList.js";
+import { initControlUserList } from "./ControlUserList.js";
+import { ajaxGetFunctions } from "./AjaxGet.js"
 
 
 
