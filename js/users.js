@@ -1,6 +1,11 @@
 import {serverURL} from './common.js'
 
 
+export function getActiveUserID(){
+    const selectedUser = document.querySelector('div#user-list button.active')
+    return selectedUser === null ? null : selectedUser.id
+}
+
 export async function loadUser(userid){
     let userInfo = {}
     await fetch(`${serverURL}/api/users/${userid}`)

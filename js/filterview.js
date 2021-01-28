@@ -46,3 +46,11 @@ export function changeFilterView({ target }){
     selectedFilter.classList.add('selected')
     updateCountText()
 }
+
+export function getSelectedFilter(){
+    return document.querySelector('ul.filters li a[class*="selected"')
+}
+
+export function applySelectedFilter(){
+    getSelectedFilter().dispatchEvent(new Event('click', {bubbles: true}))
+}
