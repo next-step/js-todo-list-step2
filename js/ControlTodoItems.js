@@ -1,5 +1,10 @@
-import { renewStrong } from "./ControlTodoButton.js";
-import { chooseButton } from "./ControlTodoButton.js";
+import { renewStrong, chooseButton } from "./ControlTodoButton.js";
+import {
+  ajaxPostItemChecked,
+  ajaxPostItemPriority,
+  ajaxDeleteItem,
+  ajaxPostItemChange
+} from "./ControlUserList.js";
 
 const todoList = document.querySelector(".todo-list");
 
@@ -24,8 +29,7 @@ function workCheck({ target }) {
   const li = target.closest("li");
   li.classList.toggle("completed");
 
-  if (target.checked) target.setAttribute("checked", "");
-  else target.removeAttribute("checked");
+  ajaxPostItemChecked(li);
 
   if (/(active)/.exec(window.location.href)) chooseButton("active");
   else if (/(completed)/.exec(window.location.href)) chooseButton("completed");
@@ -34,7 +38,8 @@ function workCheck({ target }) {
 function workDelete({ target }) {
   if (confirm("정말 삭제하시겠습니까?")) {
     const li = target.closest("li");
-    li.parentNode.removeChild(li);
+    ajaxDeleteItem(li);
+    //li.parentNode.removeChild(li);
     renewStrong();
   }
 }
@@ -59,6 +64,7 @@ function workUpdate({ target, key }) {
     if (target.value !== "" && !/^\s+|\s+$/g.exec(target.value)) {
       let label = target.parentNode.querySelector(".text");
       label.innerText = target.value;
+      ajaxPostItemChange(li);
       target.value = "";
       li.classList.remove("editing");
     } else {
@@ -71,17 +77,17 @@ function labelApply({ target }) {
   if (target.nodeName !== "SELECT") {
     return;
   }
+
   const li = target.closest("li");
   const span = li.querySelector("span.chip");
   const selecter = li.querySelector("select");
 
-  if (selecter.value !== "0") {
-    if (selecter.value === "1") span.classList.add("primary");
-    if (selecter.value === "2") span.classList.add("secondary");
-    span.innerText = selecter.value + "순위";
-    selecter.style.display = "none";
-    span.style.display = "block";
-  }
+  if (selecter.value === "1") span.classList.add("primary");
+  else if (selecter.value === "2") span.classList.add("secondary");
+  span.innerText = selecter.value + "순위";
+  selecter.style.display = "none";
+  span.style.display = "block";
+  ajaxPostItemPriority(li);
 }
 
 function labelChange({ target }) {
@@ -92,6 +98,8 @@ function labelChange({ target }) {
 
   selecter.style.display = "block";
   selecter.value = 0;
+
+  ajaxPostItemPriority(target.closest("li"));
 
   labelApply({ target });
 }

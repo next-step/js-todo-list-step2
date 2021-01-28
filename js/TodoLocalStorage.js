@@ -1,6 +1,9 @@
+// 지금은 사용하지 않는 스크립트. 삭제는 보류
+
+
+
 import {chooseButton} from './ControlTodoButton.js'
 import {listAssemble} from './AddNewItem.js'
-import {currentUserName} from './index.js'
 
 
 export function initControlLocalStorage(){
@@ -19,6 +22,7 @@ function initLocalStorage(){
 
 
 export function saveLocalStorage() {  
+  //console.log(currentUserName);
     // 페이지 종료 시 현재 리스트를 저장하는 기능 
     const list = document.querySelectorAll(".todo-list>li");
     let listArray = [];
@@ -39,14 +43,13 @@ export function saveLocalStorage() {
   
     const jsonArray = JSON.stringify(listArray);
   
-    localStorage.setItem(currentUserName, jsonArray);
+    //localStorage.setItem(currentUserName, jsonArray);
   }
   
   export function loadLocalStorage() {
     // 페이지 실행 시 현재 리스트를 불러오는 기능
-    const load = JSON.parse(localStorage.getItem(currentUserName));
-    console.log(currentUserName);
-    console.log(load);
+    //const load = JSON.parse(localStorage.getItem(currentUserName));
+    const load = JSON.parse(localStorage.getItem(''));
     for (let i in load) {
       getLocalStorageList(load[i]);
     }

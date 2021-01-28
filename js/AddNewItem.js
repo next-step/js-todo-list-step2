@@ -1,4 +1,5 @@
 import { renewStrong } from "./ControlTodoButton.js";
+import { ajaxPostUserItem } from "./ControlUserList.js"
 
 const getWork = document.querySelector(".new-todo"); 
 export const todoList = document.querySelector(".todo-list"); 
@@ -9,18 +10,20 @@ export function initAddNewItem() {
 
 export function AddNewList(e) {
   if (e.key !== "Enter") return;
-  if (e.target.value !== "" && !/^\s+|\s+$/g.exec(e.target.value)) {
+  if(e.target.value.length===1){
+    alert("두 글자 이상 입력해주세요!");
+    return;
+  }
+  else if (e.target.value !== "" && !/^\s+|\s+$/g.exec(e.target.value)) {
     const text = e.target.value;
     e.target.value = null;
 
-    const item = listAssemble(text);
-    item.setAttribute('id', String(Date.now()));
-    item.querySelector('span.chip').style.display = "none";
-    console.log(item);
+    let dataset = {
+      contents: text
+    };
 
-    if (!/(completed)/.exec(window.location.href))
-      item.classList.add("selected");
-    else item.style.display = "none";
+    ajaxPostUserItem(dataset);
+
   } else {
     alert("불필요한 공백을 제거해주세요!");
   }
@@ -30,7 +33,6 @@ export function AddNewList(e) {
 export function listAssemble(content) {
   const li = document.createElement("li");
   
-
   const listTemplate = `<div class="view">
                         <input class="toggle" type="checkbox"/>
                         <label class="label">
