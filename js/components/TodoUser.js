@@ -11,15 +11,15 @@ export default function TodoUser(titleEl, userListEl, todoApp) {
   };
 
   this.render = () => {
-    const { _id: selectedId, name: selectedName } = todoApp.selectedUser;
-    titleEl.dataset.username = selectedName;
-    titleEl.innerHTML = `<span><strong>${selectedName}</strong>'s Todo List</span>`;
+    const { _id: chosenId, name: chosenName } = todoApp.chosenUser;
+    titleEl.dataset.username = chosenName;
+    titleEl.innerHTML = `<span><strong>${chosenName}</strong>'s Todo List</span>`;
 
-    userListEl.innerHTML = `${todoApp.userList
+    userListEl.innerHTML = `${todoApp.users
       .map(
         ({ _id, name }) =>
           `<button class="ripple ${
-            _id === selectedId ? "active" : ""
+            _id === chosenId ? "active" : ""
           }" data-id="${_id}">${name}</button>`
       )
       .join("")}<button class="ripple user-create-button">+ 유저 생성</button>`;
