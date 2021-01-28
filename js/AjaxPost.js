@@ -1,8 +1,9 @@
 import { currentUserID } from "./ControlUserList.js";
-import { reflectUserItems } from "./AjaxGet.js"
+import { reflectUserItems, ajaxGetFunctions } from "./AjaxGet.js"
 import { chooseButton } from "./ControlTodoButton.js";
 
 const baseurl = "https://js-todo-list-9ca3a.df.r.appspot.com/api/users"
+const userList = document.querySelector("#user-list");
 
 export const ajaxPostFunctions = async (data, type) => {
   let url = baseurl;

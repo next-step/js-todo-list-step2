@@ -9,7 +9,6 @@ export const ajaxGetFunctions = async (type, data) => {
     let url = baseurl;
     if (type === "useritems") {
       url += `/${currentUserID}/items/`;
-      console.log(url);
       todoList.innerHTML = "";
     }
     todoList.innerHTML = showLoadingBar();
