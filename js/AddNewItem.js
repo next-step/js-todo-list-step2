@@ -1,5 +1,5 @@
 import { renewStrong } from "./ControlTodoButton.js";
-import { ajaxPostUserItem } from "./ControlUserList.js"
+import { ajaxPostFunctions } from "./ControlUserList.js"
 
 const getWork = document.querySelector(".new-todo"); 
 export const todoList = document.querySelector(".todo-list"); 
@@ -18,11 +18,7 @@ export function AddNewList(e) {
     const text = e.target.value;
     e.target.value = null;
 
-    let dataset = {
-      contents: text
-    };
-
-    ajaxPostUserItem(dataset);
+    ajaxPostFunctions(text, 'useritem');
 
   } else {
     alert("불필요한 공백을 제거해주세요!");
