@@ -390,6 +390,7 @@ html .clear-completed:active {
     center/15000%;
   color: white;
 }
+
 .ripple:active {
   background-color: #9e9e9e;
   background-size: 100%;
@@ -482,6 +483,12 @@ button.user-delete-button.ripple {
   padding-left: 10px;
   padding-right: 10px;
   margin-left: 10px;
+}
+
+button.user-create-button.ripple:hover,
+button.user-delete-button.ripple:hover {
+  background: #d2edfc radial-gradient(circle, transparent 1%, #616161 1%)
+    center/15000%;
 }
 
 button.user-create-button.ripple {
