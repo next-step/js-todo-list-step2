@@ -26,6 +26,19 @@ export default function TodoUser(titleEl, userListEl, todoApp) {
     todoApp.createUser(userName);
   };
 
+  this.deleteUser = ({ target }) => {
+    if (!target.classList.contains("user-delete-button")) {
+      return;
+    }
+
+    const { name, _id } = todoApp.chosenUser;
+    if (!confirm(`정말로 삭제하시겠습니까?\n\n${name}`)) {
+      return;
+    }
+
+    todoApp.deleteUser(_id);
+  };
+
   this.render = () => {
     const { _id: chosenId, name: chosenName } = todoApp.chosenUser;
     titleEl.dataset.username = chosenName;
@@ -45,4 +58,5 @@ export default function TodoUser(titleEl, userListEl, todoApp) {
 
   userListEl.addEventListener("click", this.chooseUser);
   userListEl.addEventListener("click", this.createUser);
+  userListEl.addEventListener("click", this.deleteUser);
 }

@@ -12,8 +12,10 @@ export default function TodoApp(appEl) {
     const listEl = appEl.querySelector(".todo-list");
     const countContainerEl = appEl.querySelector(".count-container");
 
-    this.users = (await User.getUsers()) ?? [];
-    this.chosenUser = this.users[0] ?? { _id: "", name: "", todoList: [] };
+    this.users = (await User.getUsers()) ?? [
+      { _id: "", name: "", todoList: [] },
+    ];
+    this.chosenUser = this.users[0];
     this.todos = this.chosenUser.todoList;
     this.filter = null;
     this.editingId = null;
@@ -44,6 +46,16 @@ export default function TodoApp(appEl) {
 
     this.users = await User.getUsers();
     this.chosenUser = this.users.find(({ _id }) => _id === user._id);
+    this.todos = this.chosenUser.todoList;
+    this.setIsLoading(false);
+  };
+
+  this.deleteUser = async (userId) => {
+    this.setIsLoading(true);
+    await User.deleteUser(userId);
+
+    this.users = await User.getUsers();
+    this.chosenUser = this.users[0];
     this.todos = this.chosenUser.todoList;
     this.setIsLoading(false);
   };
