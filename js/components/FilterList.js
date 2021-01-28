@@ -1,4 +1,4 @@
-import Reilly, { createElement } from "../lib/Reilly.js";
+import Reilly, { createElement } from "../lib/reilly/Reilly.js";
 import { FILTER_ENUM } from "../types/constants.js";
 import { filterBtns } from "./filterBtns.js";
 

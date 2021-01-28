@@ -1,4 +1,4 @@
-import { createElement } from "../lib/Reilly.js";
+import { createElement } from "../lib/reilly/Reilly.js";
 
 export function ToggleAll() {
   return createElement("input", {
