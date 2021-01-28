@@ -1,4 +1,5 @@
 import Reilly, { createElement } from "../lib/reilly/Reilly.js";
+import { Skeleton } from "./Skeleton.js";
 import TodoItem from "./TodoItem.js";
 
 class TodoList extends Reilly.Component {
@@ -22,6 +23,7 @@ class TodoList extends Reilly.Component {
         ondblclick: onStartEdit,
         onkeyup: onConfirmEdit
       },
+      createElement(Skeleton),
       ...todos.map((todo) => createElement(TodoItem, { todo, editingId }))
     );
   }
