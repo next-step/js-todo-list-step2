@@ -8,7 +8,10 @@ const METHOD = {
 
 const fetchApi = async ({ uri = "", method = METHOD.GET, body = {} }) => {
   try {
-    const option = { method };
+    const option = {
+      method,
+      headers: { "Content-Type": "application/json;charset=utf-8" },
+    };
     if (method !== METHOD.GET) {
       option.body = JSON.stringify(body);
     }
@@ -32,12 +35,12 @@ export const User = {
     return this.getUsers();
   },
   async addUser(name) {
-    return fetchApi({ uri: this.URI, body: { name } });
+    return fetchApi({ uri: this.URI, method: METHOD.POST, body: { name } });
   },
   async getUser(userId) {
     return fetchApi({ uri: `${this.URI}/${userId}` });
   },
   async deleteUser(userId) {
-    return fetchApi({ uri: `${this.URI}/${userId}` });
+    return fetchApi({ uri: `${this.URI}/${userId}`, method: METHOD.DELETE });
   },
 };

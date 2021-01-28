@@ -37,6 +37,16 @@ export default function TodoApp(appEl) {
     this.toggleIsLoading();
   };
 
+  this.createUser = async (userName) => {
+    this.toggleIsLoading();
+    const user = await User.addUser(userName);
+    this.users = await User.getUsers();
+
+    this.chosenUser = this.users.find(({ _id }) => user._id === _id);
+    this.todos = this.chosenUser.todoList;
+    this.toggleIsLoading();
+  };
+
   this.setTodos = (todos) => {
     this.todos = todos;
     this.render();
