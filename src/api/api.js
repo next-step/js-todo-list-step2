@@ -1,8 +1,8 @@
 const BASE_URL = 'https://js-todo-list-9ca3a.df.r.appspot.com';
 const ADD_USER = '/api/users';
+const GET_USERS = '/api/users';
 
-export const addUser = async (name) => {
-  console.log('I`m addUser');
+const addUser = async (name) => {
   try {
     const response = await fetch(`${BASE_URL}${ADD_USER}`, {
       method: 'POST',
@@ -19,6 +19,22 @@ export const addUser = async (name) => {
   }
 };
 
-// export default {
-//   addUser,
-// };
+const getUsers = async () => {
+  try {
+    const response = await fetch(`${BASE_URL}${GET_USERS}`, {
+      method: 'GET',
+    });
+
+    if (!response.ok) {
+      throw new Error(response.status);
+    }
+    return response.json();
+  } catch (err) {
+    alert(err);
+  }
+};
+
+export default {
+  addUser,
+  getUsers,
+};

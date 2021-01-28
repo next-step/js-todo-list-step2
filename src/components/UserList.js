@@ -1,4 +1,5 @@
-import { addUser } from '../api/api.js';
+import api from '../api/api.js';
+import UserItem from './UserItem.js';
 
 const MINIMUN_USER_LENGTH = 2;
 
@@ -9,7 +10,14 @@ class UserList {
   }
 
   init() {
+    this.renderUsers();
     this.$userCreateButton.addEventListener('click', this.addUser);
+  }
+
+  async renderUsers() {
+    const users = await api.getUsers();
+    const usersHTML = users.map((user) => UserItem.render(user.name));
+    this.$userList.insertAdjacentHTML('afterbegin', usersHTML.join('\n'));
   }
 
   async addUser() {
@@ -17,7 +25,8 @@ class UserList {
     userName.trim();
 
     if (userName.length > MINIMUN_USER_LENGTH) {
-      console.log(await addUser(userName));
+      const newUser = await api.addUser(userName);
+      this.renderUsers();
     }
   }
 }

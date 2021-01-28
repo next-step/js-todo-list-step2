@@ -4,7 +4,9 @@ class UserItem {
     this.name = name;
   }
 
-  render() {
-    return `<button class="ripple">${this.name}</button>`;
+  static render(name) {
+    return `<button class="ripple">${name}</button>`;
   }
 }
+
+export default UserItem;
