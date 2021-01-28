@@ -30,21 +30,22 @@ export default function TodoApp(appEl) {
   this.chooseUser = async (userId) => {
     this.chosenUser = this.users.find(({ _id }) => _id === userId);
     this.todos = [];
-    this.toggleIsLoading();
+    this.setIsLoading(true);
 
-    this.chosenUser = await User.getUser(userId);
+    this.users = await User.getUsers();
+    this.chosenUser = this.users.find(({ _id }) => _id === userId);
     this.todos = this.chosenUser.todoList;
-    this.toggleIsLoading();
+    this.setIsLoading(false);
   };
 
   this.createUser = async (userName) => {
-    this.toggleIsLoading();
+    this.setIsLoading(true);
     const user = await User.addUser(userName);
-    this.users = await User.getUsers();
 
-    this.chosenUser = this.users.find(({ _id }) => user._id === _id);
+    this.users = await User.getUsers();
+    this.chosenUser = this.users.find(({ _id }) => _id === user._id);
     this.todos = this.chosenUser.todoList;
-    this.toggleIsLoading();
+    this.setIsLoading(false);
   };
 
   this.setTodos = (todos) => {
@@ -78,8 +79,12 @@ export default function TodoApp(appEl) {
     this.render();
   };
 
-  this.toggleIsLoading = () => {
-    this.isLoading = !this.isLoading;
+  this.setIsLoading = (isLoading) => {
+    if (this.isLoading === isLoading) {
+      return;
+    }
+
+    this.isLoading = isLoading;
     this.render();
   };
 
