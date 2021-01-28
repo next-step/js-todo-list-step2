@@ -1,4 +1,15 @@
 export default function TodoUser(titleEl, userListEl, todoApp) {
+  const checkButton = ({ classList }) =>
+    !classList.contains("ripple") || classList.contains("user-create-button");
+
+  this.chooseUser = ({ target }) => {
+    if (checkButton(target)) {
+      return;
+    }
+
+    todoApp.chooseUser(target.dataset.id);
+  };
+
   this.createUser = ({ target }) => {
     if (!target.classList.contains("user-create-button")) {
       return;
@@ -25,5 +36,6 @@ export default function TodoUser(titleEl, userListEl, todoApp) {
       .join("")}<button class="ripple user-create-button">+ 유저 생성</button>`;
   };
 
+  userListEl.addEventListener("click", this.chooseUser);
   userListEl.addEventListener("click", this.createUser);
 }
