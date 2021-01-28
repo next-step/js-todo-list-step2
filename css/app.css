@@ -464,16 +464,18 @@ button.ripple {
 
 .chip.primary {
   background-color: #d63a49;
+  color:#FFFFFF;
 }
 
 .chip.secondary {
   background-color: #26c6da;
+  color:#FFFFFF;
 }
 
 select.chip {
   border-color: #e0e0e0;
   color: #bdbdbd;
-  width: 45px;
+  width: 50px;
 }
 
 button.user-create-button.ripple {
