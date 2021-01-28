@@ -56,7 +56,7 @@ class Reilly {
     }
 
     setState(newState) {
-      this.state = { ...this.state, ...newState };
+      this._state = { ...this._state, ...newState };
 
       ReillyDOM.render(this.render(), this._owner);
       this.componentDidUpdate();
