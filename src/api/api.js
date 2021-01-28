@@ -32,6 +32,7 @@ const request = async (url, option = {}) => {
 
 export const API = {
   loadUsers: () => {
+    console.log('init');
     return request(`${BASE_URL}/users`);
   },
   addUser: (userName) => {

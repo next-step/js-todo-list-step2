@@ -1,7 +1,7 @@
 import { API } from '../api/api.js';
 
-const userTemplate = ({ name, todoList }) => {
-  return `<button class="ripple">${name}</button>`;
+const userTemplate = ({ name, _id }) => {
+  return `<button class="ripple" data-id=${_id}>${name}</button>`;
 };
 
 export const loadUser = () => {

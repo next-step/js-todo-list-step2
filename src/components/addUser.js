@@ -7,7 +7,6 @@ const inputUserName = () => {
     return alert('유저 이름은 두글자 이상이어야 합니다!');
   }
   API.addUser(userName);
-  API.loadUsers();
 };
 
 export const addUser = async () => {
