@@ -26,13 +26,7 @@ const fetchApi = async ({ uri = "", method = METHOD.GET, body = {} }) => {
 export const User = {
   URI: "/users",
   async getUsers() {
-    const users = await fetchApi({ uri: this.URI });
-    if (users.length) {
-      return users;
-    }
-
-    await this.addUser("default");
-    return this.getUsers();
+    return fetchApi({ uri: this.URI });
   },
   async addUser(name) {
     return fetchApi({ uri: this.URI, method: METHOD.POST, body: { name } });
@@ -42,5 +36,49 @@ export const User = {
   },
   async deleteUser(userId) {
     return fetchApi({ uri: `${this.URI}/${userId}`, method: METHOD.DELETE });
+  },
+};
+
+export const Todo = {
+  priority: { NONE: "NONE", FIRST: "FIRST", SECOND: "SECOND" },
+  setUri: (userId, itemId = "") => `/api/users/${userId}/items/${itemId}`,
+  async getTodos(userId) {
+    return fetchApi({ uri: this.setUri(userId) });
+  },
+  async addTodo(userId, contents) {
+    return fetchApi({
+      uri: this.setUri(userId),
+      method: METHOD.POST,
+      body: { contents },
+    });
+  },
+  async deleteAllTodos(userId) {
+    return fetchApi({ uri: this.setUri(userId), method: METHOD.DELETE });
+  },
+  async deleteTodo(userId, itemId) {
+    return fetchApi({
+      uri: this.setUri(userId, itemId),
+      method: METHOD.DELETE,
+    });
+  },
+  async updateContents(userId, { _id: itemId, contents }) {
+    return fetchApi({
+      uri: this.setUri(userId, itemId),
+      method: METHOD.PUT,
+      body: { contents },
+    });
+  },
+  async updatePriority(userId, { _id: itemId, priority }) {
+    return fetchApi({
+      uri: `${this.setUri(userId, itemId)}/priority`,
+      method: METHOD.PUT,
+      body: { priority },
+    });
+  },
+  async toggleIsComplete(userId, itemId) {
+    return fetchApi({
+      uri: `${this.setUri(userId, itemId)}/toggle`,
+      method: METHOD.PUT,
+    });
   },
 };

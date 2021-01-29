@@ -12,10 +12,8 @@ export default function TodoApp(appEl) {
     const listEl = appEl.querySelector(".todo-list");
     const countContainerEl = appEl.querySelector(".count-container");
 
-    this.users = (await User.getUsers()) ?? [
-      { _id: "", name: "", todoList: [] },
-    ];
-    this.chosenUser = this.users[0];
+    this.users = (await User.getUsers()) ?? [];
+    this.chosenUser = this.users[0] ?? { _id: "", name: "", todoList: [] };
     this.todos = this.chosenUser.todoList;
     this.filter = null;
     this.editingId = null;
