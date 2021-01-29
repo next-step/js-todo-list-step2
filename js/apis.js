@@ -41,7 +41,7 @@ export const User = {
 
 export const Todo = {
   priority: { NONE: "NONE", FIRST: "FIRST", SECOND: "SECOND" },
-  setUri: (userId, itemId = "") => `/api/users/${userId}/items/${itemId}`,
+  setUri: (userId, itemId = "") => `/users/${userId}/items/${itemId}`,
   async getTodos(userId) {
     return fetchApi({ uri: this.setUri(userId) });
   },
