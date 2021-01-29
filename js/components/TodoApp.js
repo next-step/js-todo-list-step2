@@ -73,6 +73,7 @@ export default function TodoApp(appEl) {
     this.todos = await Todo.getTodos(userId);
     this.setIsLoading(false);
   };
+
   this.toggleIsComplete = async ({ _id: itemId }) => {
     this.setIsLoading(true);
     const { _id: userId } = this.chosenUser;
@@ -87,8 +88,14 @@ export default function TodoApp(appEl) {
       this.todos.map((_todo) => (_todo._id !== todo._id ? _todo : todo))
     );
 
-  this.deleteTodo = (targetId) =>
-    this.setTodos(this.todos.filter(({ _id }) => _id !== targetId));
+  this.deleteTodo = async (itemId) => {
+    this.setIsLoading(true);
+    const { _id: userId } = this.chosenUser;
+    await Todo.deleteTodo(userId, itemId);
+
+    this.todos = await Todo.getTodos(userId);
+    this.setIsLoading(false);
+  };
 
   this.setFilter = (filter = null) => {
     this.filter = filter;
