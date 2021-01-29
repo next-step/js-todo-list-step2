@@ -2,7 +2,7 @@ import TodoUser from "./TodoUser.js";
 import TodoInput from "./TodoInput.js";
 import TodoList from "./TodoList.js";
 import TodoCount from "./TodoCount.js";
-import { User } from "../apis.js";
+import { User, Todo } from "../apis.js";
 
 export default function TodoApp(appEl) {
   this.init = async () => {
@@ -65,11 +65,14 @@ export default function TodoApp(appEl) {
 
   this.getTodo = (targetId) => this.todos.find(({ _id }) => _id === targetId);
 
-  this.addTodo = (contents) =>
-    this.setTodos([
-      { _id: "", contents, isCompleted: this.filter ?? false },
-      ...this.todos,
-    ]);
+  this.addTodo = async (contents) => {
+    this.setIsLoading(true);
+    const { _id: userId } = this.chosenUser;
+    await Todo.addTodo(userId, contents);
+
+    this.todos = await Todo.getTodos(userId);
+    this.setIsLoading(false);
+  };
 
   this.updateTodo = (todo) =>
     this.setTodos(
