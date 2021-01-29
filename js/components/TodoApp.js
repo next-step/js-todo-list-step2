@@ -90,6 +90,14 @@ export default function TodoApp(appEl) {
       this.todos = await Todo.getTodos(userId);
     });
 
+  this.deleteAllTodos = async () =>
+    this.toggleIsLoading(async () => {
+      const { _id: userId } = this.chosenUser;
+      await Todo.deleteAllTodos(userId);
+
+      this.todos = await Todo.getTodos(userId);
+    });
+
   this.setFilter = (filter = null) => {
     this.filter = filter;
     this.render();

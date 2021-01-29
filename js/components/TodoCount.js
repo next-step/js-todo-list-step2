@@ -2,6 +2,7 @@ export default function TodoCount(countContainerEl, todoApp) {
   const countEl = countContainerEl.querySelector(".todo-count");
   const filtersEl = countContainerEl.querySelector(".filters");
   const filterEls = Array.from(filtersEl.querySelectorAll("a"));
+  const buttonEl = countContainerEl.querySelector(".clear-completed");
 
   const checkFilterEl = ({ classList }) =>
     Array.from(classList).some((className) =>
@@ -24,6 +25,8 @@ export default function TodoCount(countContainerEl, todoApp) {
     event.preventDefault();
   };
 
+  this.deleteAllTodos = () => todoApp.deleteAllTodos();
+
   const checkFilterElSelected = ({ classList }) =>
     (todoApp.filter === null && classList.contains("all")) ||
     (todoApp.filter === false && classList.contains("active")) ||
@@ -45,4 +48,5 @@ export default function TodoCount(countContainerEl, todoApp) {
   };
 
   filtersEl.addEventListener("click", this.setFilter);
+  buttonEl.addEventListener("click", this.deleteAllTodos);
 }
