@@ -83,10 +83,14 @@ export default function TodoApp(appEl) {
     this.setIsLoading(false);
   };
 
-  this.updateTodo = (todo) =>
-    this.setTodos(
-      this.todos.map((_todo) => (_todo._id !== todo._id ? _todo : todo))
-    );
+  this.updateContents = async (todo) => {
+    this.setIsLoading(true);
+    const { _id: userId } = this.chosenUser;
+    await Todo.updateContents(userId, todo);
+
+    this.todos = await Todo.getTodos(userId);
+    this.setIsLoading(false);
+  };
 
   this.deleteTodo = async (itemId) => {
     this.setIsLoading(true);

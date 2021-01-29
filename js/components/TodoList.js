@@ -74,7 +74,7 @@ export default function TodoList(listEl, todoApp) {
     }
 
     const todo = todoApp.getTodo(todoApp.editingId);
-    todoApp.updateTodo({ ...todo, contents });
+    todoApp.updateContents({ ...todo, contents });
     this.convertToViewer();
   };
 
