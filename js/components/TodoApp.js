@@ -30,71 +30,65 @@ export default function TodoApp(appEl) {
   this.chooseUser = async (userId) => {
     this.chosenUser = this.users.find(({ _id }) => _id === userId);
     this.todos = [];
-    this.setIsLoading(true);
 
-    this.users = await User.getUsers();
-    this.chosenUser = this.users.find(({ _id }) => _id === userId);
-    this.todos = this.chosenUser.todoList;
-    this.setIsLoading(false);
+    this.toggleIsLoading(async () => {
+      this.users = await User.getUsers();
+      this.chosenUser = this.users.find(({ _id }) => _id === userId);
+      this.todos = this.chosenUser.todoList;
+    });
   };
 
-  this.createUser = async (userName) => {
-    this.setIsLoading(true);
-    const user = await User.addUser(userName);
+  this.createUser = async (userName) =>
+    this.toggleIsLoading(async () => {
+      const user = await User.addUser(userName);
 
-    this.users = await User.getUsers();
-    this.chosenUser = this.users.find(({ _id }) => _id === user._id);
-    this.todos = this.chosenUser.todoList;
-    this.setIsLoading(false);
-  };
+      this.users = await User.getUsers();
+      this.chosenUser = this.users.find(({ _id }) => _id === user._id);
+      this.todos = this.chosenUser.todoList;
+    });
 
-  this.deleteUser = async (userId) => {
-    this.setIsLoading(true);
-    await User.deleteUser(userId);
+  this.deleteUser = async (userId) =>
+    this.toggleIsLoading(async () => {
+      await User.deleteUser(userId);
 
-    this.users = await User.getUsers();
-    this.chosenUser = this.users[0];
-    this.todos = this.chosenUser.todoList;
-    this.setIsLoading(false);
-  };
+      this.users = await User.getUsers();
+      this.chosenUser = this.users[0];
+      this.todos = this.chosenUser.todoList;
+    });
 
   this.getTodo = (targetId) => this.todos.find(({ _id }) => _id === targetId);
 
-  this.addTodo = async (contents) => {
-    this.setIsLoading(true);
-    const { _id: userId } = this.chosenUser;
-    await Todo.addTodo(userId, contents);
+  this.addTodo = async (contents) =>
+    this.toggleIsLoading(async () => {
+      const { _id: userId } = this.chosenUser;
+      await Todo.addTodo(userId, contents);
 
-    this.todos = await Todo.getTodos(userId);
-    this.setIsLoading(false);
-  };
+      this.todos = await Todo.getTodos(userId);
+    });
 
-  this.toggleIsComplete = async ({ _id: itemId }) => {
-    this.setIsLoading(true);
-    const { _id: userId } = this.chosenUser;
-    await Todo.toggleIsComplete(userId, itemId);
+  this.toggleIsComplete = async ({ _id: itemId }) =>
+    this.toggleIsLoading(async () => {
+      const { _id: userId } = this.chosenUser;
+      await Todo.toggleIsComplete(userId, itemId);
 
-    this.todos = await Todo.getTodos(userId);
-    this.setIsLoading(false);
-  };
+      this.todos = await Todo.getTodos(userId);
+    });
 
-  this.updateContents = async (todo) => {
-    this.setIsLoading(true);
-    const { _id: userId } = this.chosenUser;
-    await Todo.updateContents(userId, todo);
+  this.updateContents = async (todo) =>
+    this.toggleIsLoading(async () => {
+      const { _id: userId } = this.chosenUser;
+      await Todo.updateContents(userId, todo);
 
-    this.todos = await Todo.getTodos(userId);
-    this.setIsLoading(false);
-  };
+      this.todos = await Todo.getTodos(userId);
+    });
 
-  this.deleteTodo = async (itemId) => {
-    this.setIsLoading(true);
-    const { _id: userId } = this.chosenUser;
-    await Todo.deleteTodo(userId, itemId);
+  this.deleteTodo = async (itemId) =>
+    this.toggleIsLoading(async () => {
+      const { _id: userId } = this.chosenUser;
+      await Todo.deleteTodo(userId, itemId);
 
-    this.todos = await Todo.getTodos(userId);
-    this.setIsLoading(false);
-  };
+      this.todos = await Todo.getTodos(userId);
+    });
 
   this.setFilter = (filter = null) => {
     this.filter = filter;
@@ -113,6 +107,12 @@ export default function TodoApp(appEl) {
 
     this.isLoading = isLoading;
     this.render();
+  };
+
+  this.toggleIsLoading = async (exec) => {
+    this.setIsLoading(true);
+    await exec();
+    this.setIsLoading(false);
   };
 
   this.render = () => {
