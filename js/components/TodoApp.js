@@ -58,11 +58,6 @@ export default function TodoApp(appEl) {
     this.setIsLoading(false);
   };
 
-  this.setTodos = (todos) => {
-    this.todos = todos;
-    this.render();
-  };
-
   this.getTodo = (targetId) => this.todos.find(({ _id }) => _id === targetId);
 
   this.addTodo = async (contents) => {
