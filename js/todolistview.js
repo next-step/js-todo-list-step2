@@ -166,6 +166,15 @@ function drawTodo({ _id, contents, priority, isCompleted }) {
             </label>
             <button class="destroy"></button>
         </div>
+        <div class="view loading-animation" style="display:none">
+          <label class="label">
+            <div class="animated-background">
+              <div class="skel-mask-container">
+                <div class="skel-mask"></div>
+              </div>
+            </div>
+          </label>
+        </div>
         <input class="edit" value="${contents}"></input>
     `;
   // 추후 접근 편의를 위해 <li> 태그의 id를 해당 할 일의 고유값으로 설정.
@@ -235,10 +244,13 @@ function onTodoElementKeyupped(event) {
 
 // 할 일의 우선순위 변경.
 async function changeTodoElementPriority({ target }) {
-  target.toggleAttribute("disabled");
   const selectedPriority = parseInt(target.value); // 선택된 option 값은 select 요소의 value로 존재!
   const userID = getActiveUserID();
-  const todoElementID = target.closest("li").getAttribute("id");
+  const todoElement = target.closest("li");
+  const todoElementID = todoElement.id;
+
+  const animationToggler = getTodoElementLoadingAnimationToggler(todoElement);
+  animationToggler();
 
   const updatedTodoElement = await updateTodoElementPriority(
     userID,
@@ -262,13 +274,17 @@ async function changeTodoElementPriority({ target }) {
       target.classList.remove("primary");
       target.classList.remove("secondary");
   }
-  target.toggleAttribute("disabled");
+
+  animationToggler();
 }
 
 // 할 일 완료 여부 설정/해제.
 async function toggleTodoElementStatus({ target }) {
-  target.toggleAttribute("disabled");
   const todoElement = target.closest("li");
+
+  const animationToggler = getTodoElementLoadingAnimationToggler(todoElement);
+  animationToggler();
+
   const updatedTodoElement = await updateTodoElementStatus(
     getActiveUserID(),
     todoElement.id
@@ -281,9 +297,10 @@ async function toggleTodoElementStatus({ target }) {
     // target.removeAttribute('checked')
     todoElement.classList.remove("completed");
   }
-  target.toggleAttribute("disabled");
   applySelectedFilter();
   updateCountText();
+
+  animationToggler();
 }
 
 // 할 일을 더블클릭 했을 때 편집 모드 토글.
@@ -300,14 +317,18 @@ async function updateTodoEdit({ target, key }) {
     const newTodoText = target.value.trimStart().trimEnd();
     if (newTodoText.length === 0) {
       target.focus();
-    }
-
-    target.toggleAttribute("disabled");
-    if (await checkDuplicates(getActiveUserID(), newTodoText)) {
-      alert("That ToDo already exists!");
-      target.toggleAttribute("disabled");
       return;
     }
+
+    if (await checkDuplicates(getActiveUserID(), newTodoText)) {
+      alert("That ToDo already exists!");
+      target.focus();
+      return;
+    }
+
+    todoElement.classList.toggle("editing");
+    const animationToggler = getTodoElementLoadingAnimationToggler(todoElement);
+    animationToggler();
 
     const updatedTodoElement = await updateTodoElementText(
       getActiveUserID(),
@@ -317,8 +338,8 @@ async function updateTodoEdit({ target, key }) {
     // HTML 요소에서도 변경사항 적용 후 편집모드 종료.
     todoElement.querySelector("div label span").textContent =
       updatedTodoElement.contents;
-    todoElement.classList.toggle("editing");
-    target.toggleAttribute("disabled");
+
+    animationToggler();
   }
 }
 
@@ -331,18 +352,36 @@ function removeCurrentTodoElement({ target }) {
   updateCountText();
 }
 
+function getTodoElementLoadingAnimationToggler(todoElement) {
+  const todoElementContent = todoElement.querySelector("div.view");
+  const todoElementAnimation = todoElementContent.nextElementSibling;
+
+  let loading = false;
+
+  return function () {
+    loading = !loading;
+    if (loading) {
+      todoElementContent.style.display = "none";
+      todoElementAnimation.style.display = "";
+    } else {
+      todoElementContent.style.display = "";
+      todoElementAnimation.style.display = "none";
+    }
+  };
+}
+
 // 로딩 애니메이션 표시. 할 일 리스트 전체를 불러올때만 적용.
 function showTodoListLoadingAnimation() {
   const animationElement = `
     <li>
         <div class="view">
-        <label class="label">
+          <label class="label">
             <div class="animated-background">
             <div class="skel-mask-container">
                 <div class="skel-mask"></div>
             </div>
             </div>
-        </label>
+          </label>
         </div>
     </li>`;
   clearTodoList(animationElement);
