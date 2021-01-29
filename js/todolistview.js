@@ -42,7 +42,8 @@ async function checkDuplicates(userid, text) {
 async function onClickUserList({ target }) {
   if (target && target.nodeName === "BUTTON") {
     // 사용자 선택.
-    if (target.getAttribute("id")) {
+    // TODO: what about hasAttribute()?
+    if (target.hasAttribute("id")) {
       // 선택된 사용자만 강조 표시.
       document
         .getElementById(getActiveUserID() ?? target.id)
@@ -54,8 +55,8 @@ async function onClickUserList({ target }) {
       clearTodoList();
       todoList.map((todoElement) => drawTodo(todoElement));
       // 헤더 텍스트 변경.
-      document.querySelector("h1#user-title span strong").innerText =
-        target.innerText;
+      document.querySelector("h1#user-title span strong").textContent =
+        target.textContent;
       updateCountText();
       // 사용자 추가.
     } else {
@@ -75,10 +76,10 @@ async function onRightClickUser(event) {
   if (
     event.target &&
     event.target.nodeName === "BUTTON" &&
-    event.target.getAttribute("id")
+    event.target.hasAttribute("id")
   ) {
     event.preventDefault();
-    if (!confirm(`Delete user ${event.target.innerText}?`)) return;
+    if (!confirm(`Delete user ${event.target.textContent}?`)) return;
     const userID = event.target.id;
     deleteUser(userID);
     // 만약 현재 선택된 사용자를 제거한다면 할 일 목록도 초기화.
@@ -96,7 +97,7 @@ function drawUser({ _id, name }) {
   const newUserButton = document.createElement("button");
   newUserButton.classList.add("ripple");
   newUserButton.id = _id;
-  newUserButton.innerText = name;
+  newUserButton.textContent = name;
   userList.insertBefore(
     newUserButton,
     userList.querySelector('button[class*="user-create-button"]')
@@ -197,7 +198,8 @@ async function onRemoveAllTodoClick(event) {
   if (await deteleAllTodoElement(getActiveUserID())) {
     clearTodoList();
   } else {
-    // TODO: notify user that operation is failed.
+    // notify user that operation is failed.
+    alert("할 일을 제거하는 데 실패했습니다!");
   }
 }
 
@@ -295,14 +297,15 @@ async function updateTodoEdit({ target, key }) {
   if (key === "Escape") {
     todoElement.classList.toggle("editing");
   } else if (key === "Enter") {
-    target.toggleAttribute("disabled");
     const newTodoText = target.value.trimStart().trimEnd();
     if (newTodoText.length === 0) {
       target.focus();
     }
 
+    target.toggleAttribute("disabled");
     if (await checkDuplicates(getActiveUserID(), newTodoText)) {
       alert("That ToDo already exists!");
+      target.toggleAttribute("disabled");
       return;
     }
 
@@ -312,7 +315,7 @@ async function updateTodoEdit({ target, key }) {
       newTodoText
     );
     // HTML 요소에서도 변경사항 적용 후 편집모드 종료.
-    todoElement.querySelector("div label span").innerText =
+    todoElement.querySelector("div label span").textContent =
       updatedTodoElement.contents;
     todoElement.classList.toggle("editing");
     target.toggleAttribute("disabled");
