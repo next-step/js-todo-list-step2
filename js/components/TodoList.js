@@ -35,7 +35,7 @@ export default function TodoList(listEl, todoApp) {
 
     const id = getTodoItemId(target);
     const todo = todoApp.getTodo(id);
-    todoApp.updateTodo({ ...todo, isCompleted: !todo.isCompleted });
+    todoApp.toggleIsComplete(todo);
   };
 
   this.deleteTodo = ({ target }) => {

@@ -73,6 +73,14 @@ export default function TodoApp(appEl) {
     this.todos = await Todo.getTodos(userId);
     this.setIsLoading(false);
   };
+  this.toggleIsComplete = async ({ _id: itemId }) => {
+    this.setIsLoading(true);
+    const { _id: userId } = this.chosenUser;
+    await Todo.toggleIsComplete(userId, itemId);
+
+    this.todos = await Todo.getTodos(userId);
+    this.setIsLoading(false);
+  };
 
   this.updateTodo = (todo) =>
     this.setTodos(
