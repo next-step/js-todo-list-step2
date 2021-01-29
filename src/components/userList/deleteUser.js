@@ -6,7 +6,7 @@ export const deleteUser = async () => {
 
   if (confirm) {
     const selectedUser = document.querySelector('.active');
-    await API.deleteUser(selectedUser.dataset.id);
+    await API.deleteUser(selectedUser.id);
     loadUsers();
   }
 };

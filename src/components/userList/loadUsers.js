@@ -7,7 +7,7 @@ const addDeleteButtonTemplate = () => {
 };
 
 const userButtonTemplate = ({ name, _id }) => {
-  return `<button class="ripple" data-id=${_id}>${name}</button>`;
+  return `<button class="ripple" id=${_id}>${name}</button>`;
 };
 
 export const loadUsers = async (selectedUser = '') => {
@@ -21,8 +21,11 @@ export const loadUsers = async (selectedUser = '') => {
     const firstUser = $userList.firstChild;
     firstUser.classList.add('active');
 
-    loadTodos(firstUser.dataset.id);
+    loadTodos(firstUser.id);
   } else {
-    // $userList.querySelector('')
+    const currentActiveUser = document.querySelector(`#${selectedUser}`);
+    currentActiveUser.classList.add('active');
+
+    loadTodos(selectedUser);
   }
 };
