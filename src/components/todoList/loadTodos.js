@@ -1,5 +1,4 @@
 import { API } from '../../api/api.js';
-import { addTodo } from './addTodo.js';
 
 const todoPriority = (priority) => {
   const priorityList = {
@@ -34,22 +33,11 @@ const renderTodos = (todos) => {
   $todoList.innerHTML = todos.map((todo) => todoTemplate(todo)).join('');
 };
 
-const getUser = ({ target }) => {
-  if (
-    target.classList.contains('ripple') &&
-    !target.classList.contains('user-create-button')
-  ) {
-    const user = API.getUser(target.dataset.id);
-    user.then((user) => {
-      renderTitle(user.name);
-      renderTodos(user.todoList);
+export const loadTodos = (userId) => {
+  const user = API.getUser(userId);
 
-      addTodo(user);
-    });
-  }
-};
-
-export const loadTodo = () => {
-  const $userList = document.querySelector('#user-list');
-  $userList.addEventListener('click', getUser);
+  user.then((user) => {
+    renderTitle(user.name);
+    renderTodos(user.todoList);
+  });
 };

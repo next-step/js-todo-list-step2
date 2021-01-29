@@ -1,18 +1,7 @@
 import { API } from '../api/api.js';
 
-export const getUser = (target) => {
-  if (
-    target.classList.contains('ripple') &&
-    !target.classList.contains('user-create-button')
-  ) {
-    API.getUser(target.dataset.id).then((user) => {
-      return user;
-    });
-    // user.then((user) => {
-    //   renderTitle(user.name);
-    //   renderTodos(user.todoList);
+export const getUser = (userId) => {
+  const userTodos = API.getUserTodos(userId);
 
-    //   addTodo(user);
-    // });
-  }
+  userTodos.then((todos) => console.log(todos));
 };

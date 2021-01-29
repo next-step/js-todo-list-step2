@@ -1,4 +1,4 @@
-const BASE_URL = 'https://js-todo-list-9ca3a.df.r.appspot.com/api';
+import { BASE_URL } from '../constant/api.js';
 
 const option = {
   post: (contents) => ({
@@ -51,7 +51,7 @@ export const API = {
   },
 
   deleteUser: (userId) => {
-    return request(`/users/${userId}`);
+    return request(`/users/${userId}`, option.delete());
   },
 
   addTodo: (userId, title) => {
