@@ -2,6 +2,7 @@ import { createElement } from "./utils/createElement.js";
 
 import UserTitle from "./component/UserTitle.js";
 import UserList from "./component/UserList.js";
+import TodoList from "./component/TodoList.js";
 
 const template = () => `
   <div>
@@ -42,10 +43,12 @@ export default function App() {
   const dom = createElement(template());
   const userTitle = dom.querySelector("#user-title");
   const userList = dom.querySelector("#user-list");
+  const todoList = dom.querySelector(".todo-list");
 
   const init = () => {
     userTitle.appendChild(new UserTitle());
     userList.appendChild(new UserList());
+    todoList.appendChild(new TodoList());
   };
 
   init();
