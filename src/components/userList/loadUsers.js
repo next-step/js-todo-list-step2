@@ -1,4 +1,5 @@
 import { API } from '../../api/api.js';
+import { setCurrentUser } from '../../utils/localStorage.js';
 import { loadTodos } from '../todoList/loadTodos.js';
 import { todoList } from '../todoList/todoList.js';
 
@@ -23,12 +24,13 @@ export const loadUsers = async (selectedUser = '') => {
     firstUser.classList.add('active');
 
     await loadTodos(firstUser.id);
-    todoList(firstUser.id);
+    setCurrentUser(firstUser.id);
   } else {
     const currentActiveUser = document.querySelector(`#${selectedUser}`);
     currentActiveUser.classList.add('active');
 
     await loadTodos(selectedUser);
-    todoList(currentActiveUser.id);
+    localStorage.setItem('currentUser', currentActiveUser.id);
+    setCurrentUser(currentActiveUser.id);
   }
 };

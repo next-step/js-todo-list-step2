@@ -5,6 +5,7 @@ import { todoList } from './components/todoList/todoList.js';
 export const todoApp = async () => {
   await loadUsers();
   userList();
+  todoList();
 };
 
 window.onload = () => {

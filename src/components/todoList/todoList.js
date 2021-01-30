@@ -1,7 +1,7 @@
 import { addTodo } from './addTodo.js';
 
-export const todoList = (currentUser) => {
+export const todoList = () => {
   const $newTodo = document.querySelector('.new-todo');
 
-  $newTodo.addEventListener('keyup', (e) => addTodo(e, currentUser));
+  $newTodo.addEventListener('keyup', addTodo);
 };
