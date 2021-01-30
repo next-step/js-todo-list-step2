@@ -33,40 +33,47 @@ const request = async (url, option = {}) => {
 
 export const API = {
   getUser: (userId) => {
-    return request(`/users/${userId}`);
+    return request(`api/users/${userId}`);
   },
 
   getUsers: () => {
-    return request('/users');
+    return request('api/users');
   },
 
   addUser: (userName) => {
     const content = {
       name: userName,
     };
-    return request('/users', option.post(content));
+    return request('api/users', option.post(content));
   },
 
   deleteUser: (userId) => {
-    return request(`/users/${userId}`, option.delete());
+    return request(`api/users/${userId}`, option.delete());
   },
 
   getUserTodos: (userId) => {
-    return request(`/users/${userId}/items`);
+    return request(`api/users/${userId}/items`);
   },
 
   addTodo: (title, userId) => {
     const content = {
       contents: title,
     };
-    return request(`/users/${userId}/items`, option.post(content));
+    return request(`api/users/${userId}/items`, option.post(content));
   },
 
   toggleTodo: (userId, itemId) => {
-    return request(`/users/${userId}/items/${itemId}/toggle`, option.put());
+    return request(`api/users/${userId}/items/${itemId}/toggle`, option.put());
   },
 
   deleteTodo: (userId, itemId) => {
-    return request(`/users/${userId}/items/${itemId}`, option.delete());
+    return request(`api/users/${userId}/items/${itemId}`, option.delete());
+  },
+
+  editTodo: (newTitle, userId, itemId) => {
+    const content = {
+      contents: newTitle,
+    };
+    return request(`/api/users/${userId}/items/${itemId}`, option.put(content));
   },
 };

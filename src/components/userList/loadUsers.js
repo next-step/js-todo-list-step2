@@ -19,7 +19,6 @@ export const loadUsers = async (selectedUser = '') => {
   $userList.innerHTML = userButtons.join('\n') + addDeleteButtonTemplate();
 
   if (!selectedUser) {
-    console.log('init');
     const firstUser = $userList.firstChild;
     firstUser.classList.add('active');
 
