@@ -6,10 +6,10 @@ export const MINIMUN_INPUT_LENGTH = 2;
 export const todoList = document.querySelector(".todo-list"); 
 
 export function initAddNewItem() {
-  getWork.addEventListener("keypress", AddNewList);
+  getWork.addEventListener("keypress", addNewList);
 }
 
-export function AddNewList(e) {
+function addNewList(e) {
   if (e.key !== "Enter") return;
   if(e.target.value.length < MINIMUN_INPUT_LENGTH){
     alert(`${MINIMUN_INPUT_LENGTH}글자 이상 입력해주세요!`);
