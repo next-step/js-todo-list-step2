@@ -1,4 +1,4 @@
-import { todoList } from "./AddNewItem.js";
+import { todoList, MINIMUN_INPUT_LENGTH } from "./AddNewItem.js";
 import { ajaxPostFunctions } from "./AjaxPost.js";
 import { ajaxDeleteFunctions, ajaxDeleteUser } from "./AjaxDelete.js"
 import { ajaxGetFunctions } from "./AjaxGet.js";
@@ -41,8 +41,8 @@ const onUserCreateHandler = ({ target }) => {
 
   const userName = prompt("추가하고 싶은 이름을 입력해주세요.");
   if (userName === null) return;
-  else if (userName.length === 1) {
-    alert("두 글자 이상 입력해주세요!");
+  else if (userName.length < MINIMUN_INPUT_LENGTH) {
+    alert(`${MINIMUN_INPUT_LENGTH} 글자 이상 입력해주세요!`);
     return;
   }
   const userTemplate = document.createElement("button");

@@ -2,6 +2,7 @@ import { renewStrong } from "./ControlTodoButton.js";
 import { ajaxPostFunctions } from "./AjaxPost.js"
 
 const getWork = document.querySelector(".new-todo"); 
+export const MINIMUN_INPUT_LENGTH = 2;
 export const todoList = document.querySelector(".todo-list"); 
 
 export function initAddNewItem() {
@@ -10,8 +11,8 @@ export function initAddNewItem() {
 
 export function AddNewList(e) {
   if (e.key !== "Enter") return;
-  if(e.target.value.length===1){
-    alert("두 글자 이상 입력해주세요!");
+  if(e.target.value.length < MINIMUN_INPUT_LENGTH){
+    alert(`${MINIMUN_INPUT_LENGTH}글자 이상 입력해주세요!`);
     return;
   }
   else if (e.target.value !== "" && !/^\s+|\s+$/g.exec(e.target.value)) {
