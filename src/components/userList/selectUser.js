@@ -1,9 +1,9 @@
 import { loadTodos } from '../todoList/loadTodos.js';
 import { loadUsers } from './loadUsers.js';
 
-export const selectUser = (target) => {
+export const selectUser = async (target) => {
   const userId = target.id;
 
-  loadTodos(userId);
+  await loadTodos(userId);
   loadUsers(userId);
 };

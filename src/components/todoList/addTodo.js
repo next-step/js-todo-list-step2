@@ -1,9 +1,10 @@
-const addTodoItem = (e, _id) => {
-  console.log(e, _id);
-};
+import { API } from '../../api/api.js';
+import { loadUsers } from '../userList/loadUsers.js';
 
-export const addTodo = ({ _id }) => {
-  const $newTodo = document.querySelector('.new-todo');
-
-  $newTodo.addEventListener('keyup', (event) => addTodoItem(event, _id));
+export const addTodo = async ({ target, key }, currentUser) => {
+  if (key === 'Enter' && target.value) {
+    await API.addTodo(target.value, currentUser);
+    await loadUsers(currentUser);
+    target.value = '';
+  }
 };

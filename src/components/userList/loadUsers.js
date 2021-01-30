@@ -1,5 +1,6 @@
 import { API } from '../../api/api.js';
 import { loadTodos } from '../todoList/loadTodos.js';
+import { todoList } from '../todoList/todoList.js';
 
 const addDeleteButtonTemplate = () => {
   return `<button class="ripple user-create-button">유저 생성 ✚</button>
@@ -21,11 +22,13 @@ export const loadUsers = async (selectedUser = '') => {
     const firstUser = $userList.firstChild;
     firstUser.classList.add('active');
 
-    loadTodos(firstUser.id);
+    await loadTodos(firstUser.id);
+    todoList(firstUser.id);
   } else {
     const currentActiveUser = document.querySelector(`#${selectedUser}`);
     currentActiveUser.classList.add('active');
 
-    loadTodos(selectedUser);
+    await loadTodos(selectedUser);
+    todoList(currentActiveUser.id);
   }
 };

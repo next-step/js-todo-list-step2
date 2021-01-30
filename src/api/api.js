@@ -24,9 +24,10 @@ const request = async (url, option = {}) => {
     if (!response.ok) {
       throw new Error(response.status);
     }
+
     return await response.json();
   } catch (err) {
-    alert(`💣 Error : ${err}💣`);
+    alert(`💣 Error : ${err} 💣`);
   }
 };
 
@@ -54,11 +55,13 @@ export const API = {
     return request(`/users/${userId}`, option.delete());
   },
 
-  addTodo: (userId, title) => {
+  addTodo: (title, userId) => {
     const content = {
       contents: title,
     };
 
-    return request(`/users/${userId}`, option.post(content));
+    console.log(title, userId);
+
+    return request(`/users/${userId}/items`, option.post(content));
   },
 };
