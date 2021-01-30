@@ -12,6 +12,10 @@ const getPriorityContent = (value) => {
 };
 
 export const changePriority = async ({ target }) => {
+  if (!target.classList.contains('chip')) {
+    return;
+  }
+
   const currentUser = getCurrentUser();
   const currentTarget = target.closest('li').id;
   const priorityContent = getPriorityContent(target.value);

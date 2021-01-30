@@ -5,6 +5,7 @@ const priorityTemplate = (priority) => {
   const priorityClassList = {
     FIRST: 'primary',
     SECOND: 'secondary',
+    NONE: '',
   };
 
   return `<select class="chip select ${priorityClassList[priority]}" >
@@ -61,7 +62,7 @@ const renderCount = () => {
 
 export const loadTodos = async (userId, option = ALL) => {
   const user = await API.getUser(userId);
-  const currentTodoList = filterTodos(user.todoList, option);
+  const currentTodoList = await filterTodos(user.todoList, option);
 
   renderTitle(user.name);
   renderTodos(currentTodoList);
