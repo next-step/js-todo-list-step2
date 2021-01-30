@@ -1,5 +1,5 @@
 import {api} from '../api.js';
-import {$userCreateButton, $userList} from '../todoDOM.js';
+import {$userList} from '../todoDOM.js';
 
 export const createUser = (userName) => {
     const newUser = {
