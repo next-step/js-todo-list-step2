@@ -1,9 +1,7 @@
 import { todoList, listAssemble } from "./AddNewItem.js";
 import { chooseButton } from "./ControlTodoButton.js";
-import { currentUserID } from "./ControlUserList.js"
+import { currentUserID, baseurl, userList } from "./ControlUserList.js";
 
-const userList = document.querySelector("#user-list");
-const baseurl = "https://js-todo-list-9ca3a.df.r.appspot.com/api/users"
 
 export const ajaxGetFunctions = async (type, data) => {
     let url = baseurl;
@@ -52,8 +50,8 @@ export const ajaxGetFunctions = async (type, data) => {
 
 
 
-  export const reflectUserItems = (item, type) => {
-    let li= listAssemble(item.contents, type);
+  export const reflectUserItems = (item) => {
+    let li= listAssemble(item.contents);
     
     const checkbox = li.querySelector(".toggle");
     const span = li.querySelector("span.chip");
@@ -100,6 +98,5 @@ export const ajaxGetFunctions = async (type, data) => {
                                 </label>
                               </div>
                             </li>`;
-    console.log('loading....');
     return loadingtemplate;
   };

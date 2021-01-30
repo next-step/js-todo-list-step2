@@ -26,7 +26,7 @@ export function AddNewList(e) {
   renewStrong();
 }
 
-export function listAssemble(content, type) {
+export function listAssemble(content) {
   const li = document.createElement("li");
   
   const listTemplate = `<div class="view">
@@ -45,7 +45,7 @@ export function listAssemble(content, type) {
                       <input class="edit" value="${content}" />`;
 
   li.innerHTML = listTemplate;
-  if(type==='add' || type === undefined) todoList.append(li);
+  todoList.append(li);
   
   return li;
 }

@@ -1,8 +1,10 @@
 import { todoList } from "./AddNewItem.js";
-import { ajaxDeleteUser, ajaxDeleteAllItem, ajaxPostFunctions } from "./AjaxPost.js";
+import { ajaxPostFunctions } from "./AjaxPost.js";
+import { ajaxDeleteFunctions, ajaxDeleteUser } from "./AjaxDelete.js"
 import { ajaxGetFunctions } from "./AjaxGet.js";
 
-const userList = document.querySelector("#user-list");
+export const userList = document.querySelector("#user-list");
+export const baseurl = "https://js-todo-list-9ca3a.df.r.appspot.com/api/users"
 const topTitle = document.querySelector("#user-title>span>strong");
 const deletebutton = document.querySelector(".clear-completed");
 
@@ -12,7 +14,7 @@ export const initControlUserList = () => {
   userList.addEventListener("click", onUserCreateHandler);
   userList.addEventListener("click", setCurrentUser);
   userList.addEventListener("click", ajaxDeleteUser);
-  deletebutton.addEventListener("click", ajaxDeleteAllItem);
+  deletebutton.addEventListener("click", ajaxDeleteFunctions);
 };
 
 const setCurrentUser = ({ target }) => {

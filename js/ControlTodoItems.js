@@ -1,5 +1,6 @@
 import { renewStrong, chooseButton } from "./ControlTodoButton.js";
-import { ajaxPostFunctions } from "./AjaxPost.js";
+import { ajaxDeleteFunctions } from "./AjaxDelete.js";
+import { ajaxPutFunctions } from "./AjaxPut.js"
 
 const todoList = document.querySelector(".todo-list");
 
@@ -27,7 +28,7 @@ function workCheck({ target }) {
   if (target.checked) target.setAttribute("checked", "");
   else target.removeAttribute("checked");
 
-  ajaxPostFunctions(li, "checkitem");
+  ajaxPutFunctions(li, "checkitem");
 
   if (/(active)/.exec(window.location.href)) chooseButton("active");
   else if (/(completed)/.exec(window.location.href)) chooseButton("completed");
@@ -36,7 +37,7 @@ function workCheck({ target }) {
 function workDelete({ target }) {
   if (confirm("정말 삭제하시겠습니까?")) {
     const li = target.closest("li");
-    ajaxPostFunctions(li,'deleteitem');
+    ajaxDeleteFunctions(li,'deleteitem');
     li.parentNode.removeChild(li);
     renewStrong();
   }
@@ -62,7 +63,7 @@ function workUpdate({ target, key }) {
     if (target.value !== "" && !/^\s+|\s+$/g.exec(target.value)) {
       let label = target.parentNode.querySelector(".text");
       label.innerText = target.value;
-      ajaxPostFunctions(li, 'changeitem');
+      ajaxPutFunctions(li, 'changeitem');
       target.value = "";
       li.classList.remove("editing");
     } else {
@@ -85,7 +86,7 @@ function labelApply({ target }) {
   span.innerText = selecter.value + "순위";
   selecter.style.display = "none";
   span.style.display = "block";
-  ajaxPostFunctions(li, 'prioritem');
+  ajaxPutFunctions(li, 'prioritem');
 }
 
 function labelChange({ target }) {
@@ -97,7 +98,7 @@ function labelChange({ target }) {
   selecter.style.display = "block";
   selecter.value = 0;
 
-  ajaxPostFunctions(target.closest("li"), 'prioritem');
+  ajaxPutFunctions(target.closest("li"), 'prioritem');
 
   labelApply({ target });
 }
