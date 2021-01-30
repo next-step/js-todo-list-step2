@@ -8,6 +8,7 @@ export const createUser = (userName) => {
         todolist: []
     }
 
+    
     api.addUser(newUser);
     addToList(newUser.name);
     setStateActive();
