@@ -1,35 +1,25 @@
+import store from "./store/index.js";
+
 import UserTitle from "./component/UserTitle.js";
 import UserList from "./component/UserList.js";
 
 export default function App() {
-  const users = [{ name: "eastjun", active: true }];
-
-  const activeUser = (selectedUser) => {
-    users.forEach((user) => (user.active = false));
-    selectedUser.active = true;
-  };
-
   const selectUser = (user) => {
-    activeUser(user);
+    store.userState.selectUser(user);
     render();
   };
 
   const createUser = (userName) => {
-    const newUser = {
-      name: userName,
-      active: true,
-    };
-    users.push(newUser);
-    activeUser(newUser);
-
+    store.userState.createUser(userName);
     render();
   };
 
-  const userTitle = UserTitle(users[0]);
-  const userList = UserList({ selectUser, createUser });
+  const userTitle = new UserTitle(store.userState.getSelectedUser());
+  const userList = new UserList({ selectUser, createUser });
 
   const render = () => {
-    const { name } = users.find(({ active }) => active);
+    const users = store.userState.getUsers();
+    const { name } = store.userState.getSelectedUser();
     userList.render(users);
     userTitle.render(name);
   };
