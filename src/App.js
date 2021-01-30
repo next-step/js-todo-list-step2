@@ -26,12 +26,13 @@ export default function App() {
     render();
   };
 
-  const userTitle = UserTitle();
+  const userTitle = UserTitle(users[0]);
   const userList = UserList({ selectUser, createUser });
 
   const render = () => {
+    const { name } = users.find(({ active }) => active);
     userList.render(users);
-    userTitle.render(users);
+    userTitle.render(name);
   };
 
   render();
