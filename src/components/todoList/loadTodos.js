@@ -10,9 +10,11 @@ const todoPriority = (priority) => {
 };
 
 const todoTemplate = (todo) => {
-  return `<li class=${todo.isCompleted ? 'completed' : ''}>
+  return `<li id=${todo._id} class=${todo.isCompleted ? 'completed' : ''}>
             <div class="view">
-              <input class="toggle" type="checkbox" />
+              <input class="toggle" type="checkbox" ${
+                todo.isCompleted ? 'checked' : ''
+              }/>
               <label class="label">
                 <span class="chip ${todoPriority(todo.priority)}"></span>
                 ${todo.contents}

@@ -32,6 +32,10 @@ const request = async (url, option = {}) => {
 };
 
 export const API = {
+  getUser: (userId) => {
+    return request(`/users/${userId}`);
+  },
+
   getUsers: () => {
     return request('/users');
   },
@@ -43,25 +47,22 @@ export const API = {
     return request('/users', option.post(content));
   },
 
-  getUser: (userId) => {
-    return request(`/users/${userId}`);
+  deleteUser: (userId) => {
+    return request(`/users/${userId}`, option.delete());
   },
 
   getUserTodos: (userId) => {
     return request(`/users/${userId}/items`);
   },
 
-  deleteUser: (userId) => {
-    return request(`/users/${userId}`, option.delete());
-  },
-
   addTodo: (title, userId) => {
     const content = {
       contents: title,
     };
-
-    console.log(title, userId);
-
     return request(`/users/${userId}/items`, option.post(content));
+  },
+
+  toggleTodo: (userId, itemId) => {
+    return request(`/users/${userId}/items/${itemId}/toggle`, option.put());
   },
 };

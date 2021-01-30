@@ -1,7 +1,6 @@
 import { API } from '../../api/api.js';
 import { setCurrentUser } from '../../utils/localStorage.js';
 import { loadTodos } from '../todoList/loadTodos.js';
-import { todoList } from '../todoList/todoList.js';
 
 const addDeleteButtonTemplate = () => {
   return `<button class="ripple user-create-button">유저 생성 ✚</button>
@@ -20,6 +19,7 @@ export const loadUsers = async (selectedUser = '') => {
   $userList.innerHTML = userButtons.join('\n') + addDeleteButtonTemplate();
 
   if (!selectedUser) {
+    console.log('init');
     const firstUser = $userList.firstChild;
     firstUser.classList.add('active');
 
