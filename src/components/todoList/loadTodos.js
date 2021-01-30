@@ -1,4 +1,6 @@
 import { API } from '../../api/api.js';
+import { ALL, ACTIVE, COMPLETED } from '../../constant/todo.js';
+import { getCurrentUser } from '../../utils/localStorage.js';
 
 const todoPriority = (priority) => {
   const priorityList = {
@@ -35,15 +37,26 @@ const renderTodos = (todos) => {
   $todoList.innerHTML = todos.map((todo) => todoTemplate(todo)).join('');
 };
 
+const filterTodos = (todos, option) => {
+  const filters = {
+    all: () => todos,
+    active: () => todos.filter((todo) => todo.isCompleted === false),
+    completed: () => todos.filter((todo) => todo.isCompleted === true),
+  };
+
+  return filters[option]();
+};
+
 const renderCount = () => {
   const $todoCount = document.querySelector('.todo-count > strong');
   $todoCount.innerText = document.querySelectorAll('.todo-list > li').length;
 };
 
-export const loadTodos = async (userId) => {
+export const loadTodos = async (userId, option = ALL) => {
   const user = await API.getUser(userId);
+  const currentTodoList = filterTodos(user.todoList, option);
 
   renderTitle(user.name);
-  renderTodos(user.todoList);
+  renderTodos(currentTodoList);
   renderCount();
 };

@@ -2,6 +2,7 @@ import { addTodo } from './addTodo.js';
 import { toggleTodo } from './toggleTodo.js';
 import { deleteTodo } from './deleteTodo.js';
 import { editTodo } from './editTodo.js';
+import { filterTodo } from './filterTodo.js';
 
 const triggerClickTodoItem = ({ target }) => {
   const classList = {
@@ -27,8 +28,10 @@ const triggerDobuleClickTodoItem = ({ target }) => {
 export const todoList = () => {
   const $newTodo = document.querySelector('.new-todo');
   const $todoList = document.querySelector('.todo-list');
+  const $filters = document.querySelector('.filters');
 
   $newTodo.addEventListener('keyup', addTodo);
   $todoList.addEventListener('click', triggerClickTodoItem);
   $todoList.addEventListener('dblclick', triggerDobuleClickTodoItem);
+  $filters.addEventListener('click', filterTodo);
 };

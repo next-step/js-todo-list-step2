@@ -7,6 +7,7 @@ export const addTodo = async ({ target, key }) => {
   if (key !== 'Enter' || target.value.length < MIMUN_TODO_LENGTH) {
     return;
   }
+
   const currentUser = getCurrentUser();
   await API.addTodo(target.value, currentUser);
   await loadTodos(currentUser);
