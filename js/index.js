@@ -1,10 +1,20 @@
 let currentUser = '';
+let users = [];
 let todoList = [];
 let todoComplete = [];
 let todoFilter = 'all';
 
+const baseURL = 'https://js-todo-list-9ca3a.df.r.appspot.com';
+
+const userCreateButton = document.querySelector('.user-create-button');
+const userList = document.querySelector('div#user-list');
+
 const onUserCreateHandler = () => {
   const userName = prompt("추가하고 싶은 이름을 입력해주세요.");
+  if(userName.length < 2){
+    alert("User의 이름은 최소 2글자 이상이어야 합니다.");
+    return;
+  }
 
   const $newUser = document.createElement('button');
   $newUser.className = 'ripple'
@@ -14,20 +24,43 @@ const onUserCreateHandler = () => {
   userCreateButton.insertAdjacentElement('beforebegin', $newUser);
 }
 
-const userCreateButton = document.querySelector('.user-create-button');
-const userList = document.querySelector('div#user-list');
-
 userCreateButton.addEventListener('click', onUserCreateHandler);
 userList.addEventListener('click', event => {
   userList.querySelectorAll('button.ripple').forEach($user => onUserSelectHandler($user, event));
 })
 
 window.onload = () => {
+  loadUserList();
+}
+
+const loadUserList = () => {
+  fetch(baseURL + '/api/users')
+    .then(response => response.json())
+    .then(data => {
+      users = data;
+      init();
+    })
+    .catch(err => console.error(err));
+}
+
+const init = () => {
+  renderUsers();
   const currentUserButton = document.querySelector('button.ripple.active');
   currentUser = (currentUserButton) ? currentUserButton.innerText : document.querySelector('button.ripple');
+  currentUser.classList.add('active');
   todoList = localStorage.getItem(currentUser + '_todoList') ?? [];
   todoComplete = localStorage.getItem(currentUser + '_todoComplete') ?? [];
   render();
+}
+
+const renderUsers = () => {
+  console.log(users);
+  userList.innerHTML = users.map(user => `<button class="ripple">${user.name}</button>`).join(' ')
+   + '<button class="ripple user-create-button">+ 유저 생성</button>';
+}
+
+const onUserDeleteHandler = () => {
+
 }
 
 const onUserSelectHandler = ($user, event) => {
