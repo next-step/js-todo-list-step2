@@ -39,16 +39,16 @@ const template = () => `
 `;
 
 export default function App() {
-  const $dom = createElement(template());
-  const $userTitle = $dom.querySelector("#user-title");
-  const $userList = $dom.querySelector("#user-list");
+  const dom = createElement(template());
+  const userTitle = dom.querySelector("#user-title");
+  const userList = dom.querySelector("#user-list");
 
   const init = () => {
-    $userTitle.appendChild(new UserTitle());
-    $userList.appendChild(new UserList());
+    userTitle.appendChild(new UserTitle());
+    userList.appendChild(new UserList());
   };
 
   init();
 
-  return $dom;
+  return dom;
 }

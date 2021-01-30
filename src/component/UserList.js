@@ -1,6 +1,6 @@
 import UserListItem from "./UserListItem.js";
 import { createElement } from "../utils/createElement.js";
-import store from "../store/index.js";
+import $store from "../store/index.js";
 
 const template = () => `
   <div>
@@ -9,27 +9,27 @@ const template = () => `
 `;
 
 export default function UserList() {
-  const $dom = createElement(template());
-  const $userCreateBtn = $dom.querySelector(".user-create-button");
+  const dom = createElement(template());
+  const userCreateBtn = dom.querySelector(".user-create-button");
 
   const init = () => {
-    $userCreateBtn.addEventListener("click", handleCreateUser);
+    userCreateBtn.addEventListener("click", handleCreateUser);
     render();
-    store.userState.subscribe(render);
+    $store.userState.subscribe(render);
   };
 
   const render = () => {
-    const users = store.userState.getUsers();
+    const users = $store.userState.getUsers();
 
-    $dom.innerHTML = "";
+    dom.innerHTML = "";
     users.forEach(renderEachUser);
-    $dom.appendChild($userCreateBtn);
+    dom.appendChild(userCreateBtn);
   };
 
   const renderEachUser = (user) => {
-    const selectUser = store.userState.selectUser;
+    const selectUser = $store.userState.selectUser;
     const $userListItem = new UserListItem({ user, selectUser });
-    $dom.appendChild($userListItem);
+    dom.appendChild($userListItem);
   };
 
   const handleCreateUser = () => {
@@ -38,10 +38,10 @@ export default function UserList() {
       return;
     }
 
-    store.userState.createUser(userName);
+    $store.userState.createUser(userName);
   };
 
   init();
 
-  return $dom;
+  return dom;
 }

@@ -1,7 +1,7 @@
 import userState from "./module/userState.js";
 
-const store = (() => {
+const $store = (() => {
   return { userState };
 })();
 
-export default store;
+export default $store;
