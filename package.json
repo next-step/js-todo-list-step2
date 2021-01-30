@@ -1,7 +1,7 @@
 {
   "name": "js-todo-list-step2",
   "version": "1.0.0",
-  "description": "## 🎯 요구사항",
+  "description": "블랙커피 레벨1 2주차 미션",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -10,7 +10,7 @@
     "type": "git",
     "url": "git+https://github.com/YUJO42/js-todo-list-step2.git"
   },
-  "author": "",
+  "author": "YUJO42",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/YUJO42/js-todo-list-step2/issues"

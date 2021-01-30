@@ -17,7 +17,6 @@
     "no-param-reassign": "off",
     "no-return-assign": "off",
     "import/extensions": "off",
-    "require-jsdoc": "off",
     "max-depth": ["error", 1],
     "max-lines-per-function": ["error", 15]
   }
