@@ -1,18 +1,35 @@
 import UserListItem from "./UserListItem.js";
+import { createElement } from "../utils/createElement.js";
+import store from "../store/index.js";
 
-export default function UserList({ selectUser, createUser }) {
-  const $userList = document.querySelector("#user-list");
-  const $userCreateBtn = document.querySelector(".user-create-button");
+const template = () => `
+  <div>
+    <button class="ripple user-create-button">+ 유저 생성</button>
+  </div>
+`;
 
-  const renderEachUser = (user) => {
-    const userListItem = new UserListItem({ user, selectUser });
-    $userList.appendChild(userListItem.$dom);
+export default function UserList() {
+  const $dom = createElement(template());
+  const $userCreateBtn = $dom.querySelector(".user-create-button");
+
+  const init = () => {
+    $userCreateBtn.addEventListener("click", handleCreateUser);
+    render();
+    store.userState.subscribe(render);
   };
 
-  const render = (users) => {
-    $userList.innerHTML = "";
+  const render = () => {
+    const users = store.userState.getUsers();
+
+    $dom.innerHTML = "";
     users.forEach(renderEachUser);
-    $userList.appendChild($userCreateBtn);
+    $dom.appendChild($userCreateBtn);
+  };
+
+  const renderEachUser = (user) => {
+    const selectUser = store.userState.selectUser;
+    const $userListItem = new UserListItem({ user, selectUser });
+    $dom.appendChild($userListItem);
   };
 
   const handleCreateUser = () => {
@@ -21,12 +38,10 @@ export default function UserList({ selectUser, createUser }) {
       return;
     }
 
-    createUser(userName);
+    store.userState.createUser(userName);
   };
 
-  $userCreateBtn.addEventListener("click", handleCreateUser);
+  init();
 
-  return {
-    render,
-  };
+  return $dom;
 }

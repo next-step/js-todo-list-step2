@@ -14,7 +14,5 @@ export default function UserListItem({ user, selectUser }) {
 
   $dom.addEventListener("click", onSelectUser);
 
-  return {
-    $dom,
-  };
+  return $dom;
 }

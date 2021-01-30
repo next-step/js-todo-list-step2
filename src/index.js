@@ -1,3 +1,4 @@
 import App from "./App.js";
 
-App();
+const app = document.querySelector("#app");
+app.appendChild(new App());
