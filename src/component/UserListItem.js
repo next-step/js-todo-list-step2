@@ -8,11 +8,15 @@ const template = ({ name, active }) => {
 export default function UserListItem({ user, selectUser }) {
   const $dom = createElement(template(user));
 
+  const init = () => {
+    $dom.addEventListener("click", onSelectUser);
+  };
+
   const onSelectUser = () => {
     selectUser(user);
   };
 
-  $dom.addEventListener("click", onSelectUser);
+  init();
 
   return $dom;
 }
