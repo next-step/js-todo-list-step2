@@ -70,10 +70,25 @@ export const API = {
     return request(`api/users/${userId}/items/${itemId}`, option.delete());
   },
 
+  deleAllTodo: (userId) => {
+    return request(`/api/users/${userId}/items/`, option.delete());
+  },
+
   editTodo: (newTitle, userId, itemId) => {
     const content = {
       contents: newTitle,
     };
     return request(`/api/users/${userId}/items/${itemId}`, option.put(content));
+  },
+
+  changePriority: (priority, userId, itemId) => {
+    const content = {
+      priority: priority,
+    };
+
+    return request(
+      `/api/users/${userId}/items/${itemId}/priority`,
+      option.put(content),
+    );
   },
 };

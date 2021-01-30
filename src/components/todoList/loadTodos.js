@@ -1,14 +1,21 @@
 import { API } from '../../api/api.js';
-import { ALL, ACTIVE, COMPLETED } from '../../constant/todo.js';
-import { getCurrentUser } from '../../utils/localStorage.js';
+import { ALL } from '../../constant/todo.js';
 
-const todoPriority = (priority) => {
-  const priorityList = {
+const priorityTemplate = (priority) => {
+  const priorityClassList = {
     FIRST: 'primary',
     SECOND: 'secondary',
   };
 
-  return priorityList[priority];
+  return `<select class="chip select ${priorityClassList[priority]}" >
+            <option value="0" ${priority === 'NONE' && 'selected'}>순위</option>
+            <option value="1" ${
+              priority === 'FIRST' && 'selected'
+            }>1순위</option>
+            <option value="2" ${
+              priority === 'SECOND' && 'selected'
+            }>2순위</option>
+          </select>`;
 };
 
 const todoTemplate = (todo) => {
@@ -18,7 +25,7 @@ const todoTemplate = (todo) => {
                 todo.isCompleted ? 'checked' : ''
               }/>
               <label class="label">
-                <span class="chip ${todoPriority(todo.priority)}"></span>
+                ${priorityTemplate(todo.priority)}
                 ${todo.contents}
               </label>
               <button class="destroy"></button>

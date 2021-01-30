@@ -14,12 +14,12 @@ const getCurrentOption = (classList) => {
     return 'all';
   } else if (classList.contains('active')) {
     return 'active';
-  } else {
+  } else if (classList.contains('completed')) {
     return 'completed';
   }
 };
 
-export const filterTodo = ({ target }) => {
+export const filterTodo = (target) => {
   if (target.nodeName !== 'A') {
     return;
   }

@@ -472,8 +472,9 @@ button.ripple {
 }
 
 select.chip {
-  border-color: #e0e0e0;
-  color: #bdbdbd;
+  font-weight: bold;
+  border-color: white;
+  color: black;
   width: 45px;
 }
 

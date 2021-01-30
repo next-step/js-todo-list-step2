@@ -3,6 +3,8 @@ import { toggleTodo } from './toggleTodo.js';
 import { deleteTodo } from './deleteTodo.js';
 import { editTodo } from './editTodo.js';
 import { filterTodo } from './filterTodo.js';
+import { deleteAllTodo } from './deleteAllTodo.js';
+import { changePriority } from './changePriority.js';
 
 const triggerClickTodoItem = ({ target }) => {
   const classList = {
@@ -25,13 +27,23 @@ const triggerDobuleClickTodoItem = ({ target }) => {
     .addEventListener('keyup', (event) => editTodo(event, originalValue));
 };
 
+const triggerClickCountContainer = ({ target }) => {
+  const nodeList = {
+    A: filterTodo,
+    BUTTON: deleteAllTodo,
+  };
+
+  return nodeList[target.nodeName] && nodeList[target.nodeName](target);
+};
+
 export const todoList = () => {
   const $newTodo = document.querySelector('.new-todo');
   const $todoList = document.querySelector('.todo-list');
-  const $filters = document.querySelector('.filters');
+  const $countContainer = document.querySelector('.count-container');
 
   $newTodo.addEventListener('keyup', addTodo);
   $todoList.addEventListener('click', triggerClickTodoItem);
   $todoList.addEventListener('dblclick', triggerDobuleClickTodoItem);
-  $filters.addEventListener('click', filterTodo);
+  $todoList.addEventListener('change', changePriority);
+  $countContainer.addEventListener('click', triggerClickCountContainer);
 };
