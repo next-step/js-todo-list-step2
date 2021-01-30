@@ -65,4 +65,8 @@ export const API = {
   toggleTodo: (userId, itemId) => {
     return request(`/users/${userId}/items/${itemId}/toggle`, option.put());
   },
+
+  deleteTodo: (userId, itemId) => {
+    return request(`/users/${userId}/items/${itemId}`, option.delete());
+  },
 };
