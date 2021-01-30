@@ -9,9 +9,8 @@ export default function App() {
     selectedUser.active = true;
   };
 
-  const selectUser = (userName) => {
-    const selectedUser = users.find(({ name }) => name === userName);
-    activeUser(selectedUser);
+  const selectUser = (user) => {
+    activeUser(user);
     render();
   };
 

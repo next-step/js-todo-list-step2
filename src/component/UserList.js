@@ -1,23 +1,18 @@
-const userTemplate = ({ name, active }) => {
-  const className = ["ripple", active ? "active" : ""].join(" ");
-  return `<button class="${className}">${name}</button>`;
-};
+import UserListItem from "./UserListItem.js";
 
 export default function UserList({ selectUser, createUser }) {
   const $userList = document.querySelector("#user-list");
   const $userCreateBtn = document.querySelector(".user-create-button");
 
-  const render = (users) => {
-    $userList.innerHTML = users.map(userTemplate).join("");
-    $userList.insertAdjacentElement("beforeend", $userCreateBtn);
+  const renderEachUser = (user) => {
+    const userListItem = new UserListItem({ user, selectUser });
+    $userList.appendChild(userListItem.$dom);
   };
 
-  const handleSelectUser = ({ target }) => {
-    if (!target.classList.contains("ripple") || target === $userCreateBtn) {
-      return;
-    }
-
-    selectUser(target.innerText);
+  const render = (users) => {
+    $userList.innerHTML = "";
+    users.forEach(renderEachUser);
+    $userList.appendChild($userCreateBtn);
   };
 
   const handleCreateUser = () => {
@@ -29,7 +24,6 @@ export default function UserList({ selectUser, createUser }) {
     createUser(userName);
   };
 
-  $userList.addEventListener("click", handleSelectUser);
   $userCreateBtn.addEventListener("click", handleCreateUser);
 
   return {
