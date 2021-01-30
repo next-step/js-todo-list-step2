@@ -35,11 +35,15 @@ const renderTodos = (todos) => {
   $todoList.innerHTML = todos.map((todo) => todoTemplate(todo)).join('');
 };
 
-export const loadTodos = (userId) => {
-  const user = API.getUser(userId);
+const renderCount = () => {
+  const $todoCount = document.querySelector('.todo-count > strong');
+  $todoCount.innerText = document.querySelectorAll('.todo-list > li').length;
+};
 
-  user.then((user) => {
-    renderTitle(user.name);
-    renderTodos(user.todoList);
-  });
+export const loadTodos = async (userId) => {
+  const user = await API.getUser(userId);
+
+  renderTitle(user.name);
+  renderTodos(user.todoList);
+  renderCount();
 };
