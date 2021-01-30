@@ -26,6 +26,12 @@ const userState = (() => {
     publish();
   };
 
+  const deleteUser = async (id) => {
+    await $api.user.delete(id);
+    const users = await getUsers();
+    selectUser(users[0]);
+  };
+
   const getSelectedUser = () => {
     return selected;
   };
@@ -47,6 +53,7 @@ const userState = (() => {
     init,
     createUser,
     selectUser,
+    deleteUser,
     getSelectedUser,
     getUsers,
     subscribe,
