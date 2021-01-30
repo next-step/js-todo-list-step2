@@ -12,14 +12,14 @@ export default function UserList() {
   const dom = createElement(template());
   const userCreateBtn = dom.querySelector(".user-create-button");
 
-  const init = () => {
+  const init = async () => {
     userCreateBtn.addEventListener("click", handleCreateUser);
-    render();
+    await render();
     $store.userState.subscribe(render);
   };
 
-  const render = () => {
-    const users = $store.userState.getUsers();
+  const render = async () => {
+    const users = await $store.userState.getUsers();
 
     dom.innerHTML = "";
     users.forEach(renderEachUser);
@@ -32,13 +32,14 @@ export default function UserList() {
     dom.appendChild($userListItem);
   };
 
-  const handleCreateUser = () => {
+  const handleCreateUser = async () => {
     const userName = prompt("추가하고 싶은 이름을 입력해주세요.");
     if (!userName?.trim()) {
       return;
     }
 
-    $store.userState.createUser(userName);
+    const newUser = await $store.userState.createUser(userName);
+    $store.userState.selectUser(newUser);
   };
 
   init();
