@@ -1,11 +1,26 @@
 import { serverURL } from "./common.js";
 
-export function getActiveUserID() {
+export const API = {
+  getActiveUserID,
+  loadUser,
+  loadUsers,
+  addUser,
+  deleteUser,
+  loadTodoList,
+  addTodoElement,
+  deteleAllTodoElement,
+  deleteTodoElement,
+  updateTodoElementText,
+  updateTodoElementPriority,
+  updateTodoElementStatus,
+};
+
+function getActiveUserID() {
   const selectedUser = document.querySelector("div#user-list button.active");
   return selectedUser === null ? null : selectedUser.id;
 }
 
-export async function loadUser(userid) {
+async function loadUser(userid) {
   let userInfo = {};
   await fetch(`${serverURL}/api/users/${userid}`)
     .then(jsonifyData)
@@ -14,7 +29,7 @@ export async function loadUser(userid) {
   return userInfo;
 }
 
-export async function loadUsers() {
+async function loadUsers() {
   let todoListBulk = [];
   await fetch(`${serverURL}/api/users`)
     .then(jsonifyData)
@@ -23,7 +38,7 @@ export async function loadUsers() {
   return todoListBulk;
 }
 
-export async function addUser(newUsername) {
+async function addUser(newUsername) {
   let addedUserInfo = {};
   await fetch(
     `${serverURL}/api/users`,
@@ -36,11 +51,11 @@ export async function addUser(newUsername) {
   return addedUserInfo;
 }
 
-export function deleteUser(userid) {
+function deleteUser(userid) {
   fetch(`${serverURL}/api/users/${userid}`, requestOption("DELETE"));
 }
 
-export async function loadTodoList(userid) {
+async function loadTodoList(userid) {
   let todoList = [];
   await fetch(`${serverURL}/api/users/${userid}/items/`)
     .then(jsonifyData)
@@ -49,7 +64,7 @@ export async function loadTodoList(userid) {
   return todoList;
 }
 
-export async function addTodoElement(userid, text) {
+async function addTodoElement(userid, text) {
   let todoElement = {};
   await fetch(
     `${serverURL}/api/users/${userid}/items/`,
@@ -61,7 +76,7 @@ export async function addTodoElement(userid, text) {
   return todoElement;
 }
 
-export async function deteleAllTodoElement(userid) {
+async function deteleAllTodoElement(userid) {
   let result = false;
   await fetch(
     `${serverURL}/api/users/${userid}/items/`,
@@ -72,14 +87,14 @@ export async function deteleAllTodoElement(userid) {
   return result;
 }
 
-export async function deleteTodoElement(userid, itemid) {
+async function deleteTodoElement(userid, itemid) {
   await fetch(
     `${serverURL}/api/users/${userid}/items/${itemid}`,
     requestOption("DELETE")
   );
 }
 
-export async function updateTodoElementText(userid, itemid, text) {
+async function updateTodoElementText(userid, itemid, text) {
   let updatedTodoElement = {};
   await fetch(
     `${serverURL}/api/users/${userid}/items/${itemid}`,
@@ -93,7 +108,7 @@ export async function updateTodoElementText(userid, itemid, text) {
   return updatedTodoElement;
 }
 
-export async function updateTodoElementPriority(userid, itemid, priority) {
+async function updateTodoElementPriority(userid, itemid, priority) {
   let updatedTodoElement = {};
   await fetch(
     `${serverURL}/api/users/${userid}/items/${itemid}/priority`,
@@ -107,7 +122,7 @@ export async function updateTodoElementPriority(userid, itemid, priority) {
   return updatedTodoElement;
 }
 
-export async function updateTodoElementStatus(userid, itemid) {
+async function updateTodoElementStatus(userid, itemid) {
   let updatedTodoElement = {};
   await fetch(
     `${serverURL}/api/users/${userid}/items/${itemid}/toggle`,

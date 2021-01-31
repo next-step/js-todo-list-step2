@@ -1,18 +1,5 @@
 import { updateCountText } from "./common.js";
-import {
-  loadUser,
-  loadUsers,
-  loadTodoList,
-  addUser,
-  deleteUser,
-  addTodoElement,
-  deleteTodoElement,
-  deteleAllTodoElement,
-  updateTodoElementPriority,
-  updateTodoElementStatus,
-  updateTodoElementText,
-  getActiveUserID,
-} from "./users.js";
+import { API as UserAPI } from "./users.js";
 import { getSelectedFilter, applySelectedFilter } from "./filterview.js";
 
 export async function initTodos() {
@@ -25,7 +12,7 @@ export async function initTodos() {
     .addEventListener("click", onRemoveAllTodoClick);
 
   // 사용자 추가 및 제거 이벤트 처리기 등록.
-  const allData = await loadUsers();
+  const allData = await UserAPI.loadUsers();
   allData.map((data) => drawUser(data));
   const userList = document.getElementById("user-list");
   userList.addEventListener("click", onClickUserList);
@@ -33,7 +20,7 @@ export async function initTodos() {
 }
 
 async function checkDuplicates(userid, text) {
-  const todoList = await loadTodoList(userid);
+  const todoList = await UserAPI.loadTodoList(userid);
   return (
     todoList.filter((todoElement) => todoElement.contents === text).length > 0
   );
@@ -46,12 +33,12 @@ async function onClickUserList({ target }) {
     if (target.hasAttribute("id")) {
       // 선택된 사용자만 강조 표시.
       document
-        .getElementById(getActiveUserID() ?? target.id)
+        .getElementById(UserAPI.getActiveUserID() ?? target.id)
         .classList.remove("active");
       target.classList.add("active");
       // 선택된 사용자의 할 일 표시.
       showTodoListLoadingAnimation();
-      const todoList = await loadTodoList(target.id);
+      const todoList = await UserAPI.loadTodoList(target.id);
       clearTodoList();
       todoList.map((todoElement) => drawTodo(todoElement));
       // 헤더 텍스트 변경.
@@ -64,7 +51,7 @@ async function onClickUserList({ target }) {
         "What is your name?",
         "DEFAULT_ACCOUNT"
       ).padStart(2, "_");
-      const newUserInfo = await addUser(newUsername);
+      const newUserInfo = await UserAPI.addUser(newUsername);
       alert(`New user ${newUserInfo.name}#${newUserInfo._id} added!`);
       drawUser(newUserInfo);
     }
@@ -81,9 +68,9 @@ async function onRightClickUser(event) {
     event.preventDefault();
     if (!confirm(`Delete user ${event.target.textContent}?`)) return;
     const userID = event.target.id;
-    deleteUser(userID);
+    UserAPI.deleteUser(userID);
     // 만약 현재 선택된 사용자를 제거한다면 할 일 목록도 초기화.
-    if (userID === getActiveUserID()) {
+    if (userID === UserAPI.getActiveUserID()) {
       clearTodoList();
     }
     event.target.remove();
@@ -114,7 +101,7 @@ async function onAddTodo(event) {
     return;
   }
 
-  const userID = getActiveUserID();
+  const userID = UserAPI.getActiveUserID();
   if (userID === null) {
     alert("Select user first!");
     return;
@@ -126,7 +113,7 @@ async function onAddTodo(event) {
   }
 
   newTodoInput.value = "";
-  const addedTodo = await addTodoElement(userID, newTodoText);
+  const addedTodo = await UserAPI.addTodoElement(userID, newTodoText);
   drawTodo(addedTodo);
 
   // 현재 보고 있는 할 일들이 완료된 할 일일 경우를 고려, 할 일 추가 후 필터를 다시 적용.
@@ -204,7 +191,7 @@ function drawTodo({ _id, contents, priority, isCompleted }) {
 
 // 모든 할 일들 제거.
 async function onRemoveAllTodoClick(event) {
-  if (await deteleAllTodoElement(getActiveUserID())) {
+  if (await UserAPI.deteleAllTodoElement(UserAPI.getActiveUserID())) {
     clearTodoList();
   } else {
     // notify user that operation is failed.
@@ -245,14 +232,14 @@ function onTodoElementKeyupped(event) {
 // 할 일의 우선순위 변경.
 async function changeTodoElementPriority({ target }) {
   const selectedPriority = parseInt(target.value); // 선택된 option 값은 select 요소의 value로 존재!
-  const userID = getActiveUserID();
+  const userID = UserAPI.getActiveUserID();
   const todoElement = target.closest("li");
   const todoElementID = todoElement.id;
 
   const animationToggler = getTodoElementLoadingAnimationToggler(todoElement);
   animationToggler();
 
-  const updatedTodoElement = await updateTodoElementPriority(
+  const updatedTodoElement = await UserAPI.updateTodoElementPriority(
     userID,
     todoElementID,
     selectedPriority == 0 ? "NONE" : selectedPriority == 1 ? "FIRST" : "SECOND"
@@ -285,8 +272,8 @@ async function toggleTodoElementStatus({ target }) {
   const animationToggler = getTodoElementLoadingAnimationToggler(todoElement);
   animationToggler();
 
-  const updatedTodoElement = await updateTodoElementStatus(
-    getActiveUserID(),
+  const updatedTodoElement = await UserAPI.updateTodoElementStatus(
+    UserAPI.getActiveUserID(),
     todoElement.id
   );
   // checked 속성을 toggle input에 넣어줄 필요가 없는듯?
@@ -320,7 +307,7 @@ async function updateTodoEdit({ target, key }) {
       return;
     }
 
-    if (await checkDuplicates(getActiveUserID(), newTodoText)) {
+    if (await checkDuplicates(UserAPI.getActiveUserID(), newTodoText)) {
       alert("That ToDo already exists!");
       target.focus();
       return;
@@ -330,8 +317,8 @@ async function updateTodoEdit({ target, key }) {
     const animationToggler = getTodoElementLoadingAnimationToggler(todoElement);
     animationToggler();
 
-    const updatedTodoElement = await updateTodoElementText(
-      getActiveUserID(),
+    const updatedTodoElement = await UserAPI.updateTodoElementText(
+      UserAPI.getActiveUserID(),
       todoElement.id,
       newTodoText
     );
@@ -347,7 +334,7 @@ async function updateTodoEdit({ target, key }) {
 function removeCurrentTodoElement({ target }) {
   const todoElement = target.closest("li");
   const itemID = todoElement.id;
-  deleteTodoElement(getActiveUserID(), itemID);
+  UserAPI.deleteTodoElement(UserAPI.getActiveUserID(), itemID);
   target.closest("li").remove();
   updateCountText();
 }
