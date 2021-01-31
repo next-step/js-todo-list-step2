@@ -6,6 +6,11 @@ const todoState = (() => {
   const subscriber = [];
 
   const init = async () => {
+    userState.subscribe(setSelectedUserId);
+    await setSelectedUserId();
+  };
+
+  const setSelectedUserId = async () => {
     const { _id } = userState.getSelectedUser();
     selectedUserId = _id;
   };
