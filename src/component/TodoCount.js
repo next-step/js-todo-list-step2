@@ -17,7 +17,7 @@ export default function TodoCount() {
   };
 
   const render = async () => {
-    const { length } = await $store.todoState.getTodos();
+    const { length } = await $store.todoState.getFilteredTodos();
     counter.innerText = length;
   };
 

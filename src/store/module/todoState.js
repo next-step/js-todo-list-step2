@@ -1,19 +1,16 @@
 import $api from "../../api/index.js";
 import userState from "./userState.js";
 
+import { FILTER } from "../../utils/constants.js";
+
 const todoState = (() => {
   let selectedUserId = {};
+  let selectedFilter = FILTER.ALL;
   const subscriber = [];
 
   const init = async () => {
     userState.subscribe(setSelectedUserId);
     await setSelectedUserId();
-  };
-
-  const setSelectedUserId = async () => {
-    const { _id } = userState.getSelectedUser();
-    selectedUserId = _id;
-    publish();
   };
 
   const createTodo = async (contents) => {
@@ -41,6 +38,31 @@ const todoState = (() => {
     publish();
   };
 
+  const setSelectedUserId = async () => {
+    const { _id } = userState.getSelectedUser();
+    selectedUserId = _id;
+    publish();
+  };
+
+  const setSelectedFilter = (filter) => {
+    selectedFilter = filter;
+    publish();
+  };
+
+  const getSelectedFilter = () => {
+    return selectedFilter;
+  };
+
+  const getFilteredTodos = async () => {
+    const todos = await getTodos();
+    if (selectedFilter === FILTER.ACTIVE) {
+      return todos.filter((todo) => !todo.isCompleted);
+    } else if (selectedFilter === FILTER.COMPLETED) {
+      return todos.filter((todo) => todo.isCompleted);
+    }
+    return todos;
+  };
+
   const getTodos = async () => {
     return await $api.todo.getAll(selectedUserId);
   };
@@ -60,6 +82,9 @@ const todoState = (() => {
     deleteTodo,
     deleteAllTodo,
     editTodo,
+    setSelectedFilter,
+    getSelectedFilter,
+    getFilteredTodos,
     getTodos,
     subscribe,
   };

@@ -12,7 +12,7 @@ export default function TodoList() {
   };
 
   const render = async () => {
-    const todos = await $store.todoState.getTodos();
+    const todos = await $store.todoState.getFilteredTodos();
 
     dom.innerHTML = "";
     todos.forEach(renderEachTodo);
