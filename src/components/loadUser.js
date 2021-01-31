@@ -15,7 +15,7 @@ export const loadUserList = async () => {
 
 }
 
-const addToUserList = (name) => {
+export const addToUserList = (name) => {
     $userList.insertAdjacentHTML('afterbegin', userButtonTemplate(name));
 }
 
