@@ -22,3 +22,45 @@
 ## 🕵️‍♂️ 제약사항
 
 - [X] 1. User의 이름은 최소 2글자 이상이어야 합니다.
+
+## 🗂 디렉토리 구조
+
+```plantext
+├── LICENSE
+├── README.md
+├── css
+│   └── app.css
+├── index.html
+├── package-lock.json
+├── package.json
+└── src
+   ├── api
+   │   └── api.js - fetch를 통해 API와 통신하는 기능을 모아놓은 모듈
+   ├── components
+   │   ├── todoList - todoList와 관련된 모듈을 모아놓은 폴더
+   │   │   ├── addTodo.js 
+   │   │   ├── changePriority.js
+   │   │   ├── deleteAllTodo.js
+   │   │   ├── deleteTodo.js
+   │   │   ├── editTodo.js
+   │   │   ├── filterTodo.js
+   │   │   ├── loadTodos.js
+   │   │   ├── toggleTodo.js
+   │   │   └── todoList.js - todoList와 관련된 모듈들을 초기화하고 EventListener를 등록하는 모듈
+   │   └── userList
+   │       ├── addUser.js
+   │       ├── deleteUser.js
+   │       ├── loadUsers.js
+   │       ├── selectUser.js
+   │       └── userList.js - userList와 관련된 모듈들을 초기화하고 EventListener를 등록하는 모듈
+   ├── constant - 상수들을 모아놓은 폴더
+   │   ├── api.js
+   │   ├── todo.js
+   │   └── user.js
+   ├── index.js
+   └── utils
+       └── localStorage.js
+
+
+8 directories, 27 files
+```
