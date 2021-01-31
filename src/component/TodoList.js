@@ -8,7 +8,6 @@ export default function TodoList() {
 
   const init = async () => {
     $store.todoState.subscribe(render);
-    $store.userState.subscribe(render);
     await render();
   };
 

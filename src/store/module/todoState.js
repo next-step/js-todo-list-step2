@@ -13,6 +13,7 @@ const todoState = (() => {
   const setSelectedUserId = async () => {
     const { _id } = userState.getSelectedUser();
     selectedUserId = _id;
+    publish();
   };
 
   const createTodo = async (contents) => {

@@ -5,6 +5,7 @@ import UserTitle from "./component/UserTitle.js";
 import UserList from "./component/UserList.js";
 import TodoInput from "./component/TodoInput.js";
 import TodoList from "./component/TodoList.js";
+import TodoCount from "./component/TodoCount.js";
 
 const template = () => `
   <div>
@@ -18,7 +19,7 @@ const template = () => `
         </ul>
       </section>
       <div class="count-container">
-        <span class="todo-count">총 <strong>0</strong> 개</span>
+        <span class="todo-count"></span>
         <ul class="filters">
           <li>
             <a href="/#" class="all selected">전체보기</a>
@@ -42,6 +43,7 @@ export default function App() {
   const userList = dom.querySelector("#user-list");
   const todoInput = dom.querySelector(".input-container");
   const todoList = dom.querySelector(".todo-list");
+  const todoCount = dom.querySelector(".todo-count");
   const deleteAllBtn = dom.querySelector(".clear-completed");
 
   const init = () => {
@@ -49,6 +51,8 @@ export default function App() {
     userList.appendChild(new UserList());
     todoInput.appendChild(new TodoInput());
     todoList.appendChild(new TodoList());
+    todoCount.appendChild(new TodoCount());
+
     deleteAllBtn.addEventListener("click", onDeleteAllTodo);
   };
 
