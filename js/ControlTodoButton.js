@@ -81,7 +81,7 @@ function reflectView() {
   const list = document.querySelectorAll(".todo-list>li");
   list.forEach((li)=>{
     if (li.classList.contains("selected")) {
-      li.style.display = "block";
+      li.style.display = "";
     } else {
       li.style.display = "none";
     }

@@ -85,7 +85,7 @@ function labelApply({ target }) {
   else if (selecter.value === "2") span.classList.add("secondary");
   span.innerText = selecter.value + "순위";
   selecter.style.display = "none";
-  span.style.display = "block";
+  span.style.display = "";
   ajaxPutFunctions(li, 'prioritem');
 }
 
@@ -95,7 +95,7 @@ function labelChange({ target }) {
   target.classList.remove("primary", "secondary");
   target.style.display = "none";
 
-  selecter.style.display = "block";
+  selecter.style.display = "";
   selecter.value = 0;
 
   ajaxPutFunctions(target.closest("li"), 'prioritem');
