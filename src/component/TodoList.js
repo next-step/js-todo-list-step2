@@ -34,8 +34,8 @@ export default function TodoList() {
   };
 
   const renderEachTodo = (todo) => {
-    const $todoListItem = TodoListItem({ todo });
-    dom.appendChild($todoListItem);
+    const todoListItem = TodoListItem({ todo });
+    dom.appendChild(todoListItem);
   };
 
   init();
