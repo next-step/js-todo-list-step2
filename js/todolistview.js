@@ -242,21 +242,18 @@ async function changeTodoElementPriority({ target }) {
     selectedPriority == 0 ? "NONE" : selectedPriority == 1 ? "FIRST" : "SECOND"
   );
   // 서버측 결과에 따라 스타일, 선택 항목 적용.
+  target.classList.remove("primary", "secondary");
   switch (updatedTodoElement.priority) {
     case "FIRST":
       target.value = 1;
-      target.classList.remove("secondary");
       target.classList.add("primary");
       break;
     case "SECOND":
       target.value = 2;
-      target.classList.remove("primary");
       target.classList.add("secondary");
       break;
     case "NONE":
       target.value = 0;
-      target.classList.remove("primary");
-      target.classList.remove("secondary");
   }
 
   animationToggler();
