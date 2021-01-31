@@ -11,12 +11,12 @@ const template = `
 
 export default function UserList() {
   const dom = createElement(template);
-  const userCreateBtn = dom.querySelector(".user-create-button");
-  const userDeleteBtn = dom.querySelector(".user-delete-button");
+  const createBtn = dom.querySelector(".user-create-button");
+  const deleteBtn = dom.querySelector(".user-delete-button");
 
   const init = async () => {
-    userCreateBtn.addEventListener("click", onCreateUser);
-    userDeleteBtn.addEventListener("click", onDeleteUser);
+    createBtn.addEventListener("click", onCreateUser);
+    deleteBtn.addEventListener("click", onDeleteUser);
     $store.userState.subscribe(render);
 
     await render();
@@ -27,8 +27,8 @@ export default function UserList() {
 
     dom.innerHTML = "";
     users.forEach(renderEachUser);
-    dom.appendChild(userCreateBtn);
-    dom.appendChild(userDeleteBtn);
+    dom.appendChild(createBtn);
+    dom.appendChild(deleteBtn);
   };
 
   const renderEachUser = (user) => {
