@@ -11,7 +11,7 @@ export const serverURL = "https://js-todo-list-9ca3a.df.r.appspot.com";
 
 // 할 일이 몇 개 있는지 출력하는 텍스트(총 n 개)를 업데이트하는 로직.
 export function updateCountText() {
-  const todoListCountText = document.querySelector("span.todo-count strong");
+  const todoListCountText = document.querySelector(".todo-count > strong");
   const selectedFilter = document.querySelector(
     'ul.filters li a[class*="selected"]'
   );
