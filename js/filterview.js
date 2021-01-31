@@ -28,33 +28,39 @@ export function changeFilterView({ target }) {
   // 이후 현재 선택된 필터에 따라 선택된 필터를 저장하는 변수 업데이트, 해당하는 할 일 display 속성 변경.
   if (target.classList.contains("all")) {
     selectedFilter = filterAll;
-    for (let index = 0; index < todoListCount; index++) {
-      todoElements[index].style.display = "";
-    }
+    applyTodoElementsFilter(todoElements, applyFilterAll);
   } else if (target.classList.contains("active")) {
     selectedFilter = filterActive;
-    for (let index = 0; index < todoListCount; index++) {
-      todoElements[index].style.display =
-        todoElements[index]
-          .querySelector("div.view input")
-          .getAttribute("checked") === null
-          ? ""
-          : "none";
-    }
+    applyTodoElementsFilter(todoElements, applyFilterActive);
   } else if (target.classList.contains("completed")) {
     selectedFilter = filterCompleted;
-    for (let index = 0; index < todoListCount; index++) {
-      todoElements[index].style.display =
-        todoElements[index]
-          .querySelector("div.view input")
-          .getAttribute("checked") === null
-          ? "none"
-          : "";
-    }
+    applyTodoElementsFilter(todoElements, applyFilterCompleted);
   }
   // 새로 선택된 필터에 selected 클래스 추가 후 카운터 업데이트.
   selectedFilter.classList.add("selected");
   updateCountText();
+}
+
+function applyFilterAll(todoElement) {
+  todoElement.style.display = "";
+}
+
+function applyFilterActive(todoElement) {
+  const isChecked = todoElement
+    .querySelector("div.view input")
+    .hasAttribute("checked");
+  todoElement.style.display = isChecked ? "none" : "";
+}
+
+function applyFilterCompleted(todoElement) {
+  const isChecked = todoElement
+    .querySelector("div.view input")
+    .hasAttribute("checked");
+  todoElement.style.display = isChecked ? "" : "none";
+}
+
+function applyTodoElementsFilter(todoElements, action) {
+  Array.apply([], todoElements).map(action);
 }
 
 export function getSelectedFilter() {
