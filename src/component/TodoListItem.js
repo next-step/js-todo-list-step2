@@ -22,10 +22,15 @@ export default function TodoListItem({ todo }) {
   const dom = createElement(template(todo));
   const toggleBtn = dom.querySelector(".toggle");
   const deleteBtn = dom.querySelector(".destroy");
+  const label = dom.querySelector(".label");
+  const editInput = dom.querySelector(".edit");
 
   const init = () => {
     toggleBtn.addEventListener("click", onToggleTodo);
     deleteBtn.addEventListener("click", onDeleteTodo);
+    label.addEventListener("dblclick", onToggleEditingTodo);
+    editInput.addEventListener("keypress", onEditTodo);
+    editInput.addEventListener("focusout", onCancelEditingTodo);
   };
 
   const onToggleTodo = async () => {
@@ -36,6 +41,34 @@ export default function TodoListItem({ todo }) {
   const onDeleteTodo = async () => {
     dom.remove();
     await $store.todoState.deleteTodo(todo._id);
+  };
+
+  const onToggleEditingTodo = () => {
+    const editingItem = document.querySelector(".editing");
+    editingItem?.classList.remove("editing");
+
+    dom.classList.add("editing");
+  };
+
+  const onEditTodo = async ({ key, target }) => {
+    if (key !== "Enter") {
+      return;
+    }
+
+    const contents = target.value.trim();
+    if (contents === "") {
+      return;
+    }
+
+    label.innerText = contents;
+    dom.classList.remove("editing");
+
+    await $store.todoState.editTodo(todo._id, contents);
+  };
+
+  const onCancelEditingTodo = () => {
+    editInput.value = todo.contents;
+    dom.classList.remove("editing");
   };
 
   init();
