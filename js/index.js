@@ -1,9 +1,10 @@
 const User_List = document.getElementById('user-list');
 let USER_COUNT =0;
+const BASE_URL = 'https://js-todo-list-9ca3a.df.r.appspot.com/'
 
 // 해당 서버에 데이터 가져와 처리
 function Response_Api(){
-  fetch('https://js-todo-list-9ca3a.df.r.appspot.com/api/users')
+  fetch(`${BASE_URL}api/users`)
       .then((response) => response.json())
       .then((myJson)=> {
         for(let i=0;i<myJson.length;i++)
@@ -36,8 +37,7 @@ function Delete_User(){
 const onUserCreateHandler = () => {
   const userName = prompt("추가하고 싶은 이름을 입력해주세요.");
   // User의 이름은 최소 2글자 이상체크
-  let User_Enough_Length = userName.length>1 ? true : false;
-  if(User_Enough_Length) {
+  if(userName.length>1) {
     const button = document.createElement('button');
     button.innerText = userName;
     button.classList.add('ripple');
@@ -46,7 +46,6 @@ const onUserCreateHandler = () => {
     POST_USER(userName);
 
     //추가된 만큼 핸들러 다시 추가
-    USER_COUNT++;
     Click_User();
   }
 }
@@ -54,25 +53,24 @@ const onUserCreateHandler = () => {
 //삭제한 이름을 가진 데이터를 브라우저 및 서버에 적용
 const onUserDeleteHandler = ()=>{
   const userName = prompt("삭제하고 싶은 이름을 입력해주세요.");
-  document.querySelectorAll('#user-list > button').forEach(x=>{
-    if(x.innerText === userName){
-      if(x.classList.contains('user-create-button')==true || x.classList.contains('user-delete-button')==true){
+  document.querySelectorAll('#user-list > button').forEach((x)=>Check_To_Delete(x,userName))
+}
+function Check_To_Delete(x,userName){
+    if(x.innerText === userName) {
+      if (x.classList.contains('user-create-button') || x.classList.contains('user-delete-button')) {
         alert('삭제 불가능');
-      }
-      else if(x.classList.contains('active')==true){
+      } else if (x.classList.contains('active') == true) {
         alert('활성화 삭제 불가능');
-      }
-      else {
+      } else {
         x.remove();
         GET_USER_ID_AND_DELETE(userName);
       }
     }
-  })
 }
 
 //해당 이름을 가진 내용을 서버에 추가하기
 function POST_USER(name){
-  fetch('https://js-todo-list-9ca3a.df.r.appspot.com/api/users',{
+  fetch(`${BASE_URL}api/users`,{
     method:"POST",
     headers:{"Content-Type":"application/json"},
     body:JSON.stringify({
@@ -85,7 +83,7 @@ function POST_USER(name){
 //해당 이름을 가진 데이터의 ID를 서버에서 가져온 후 DELETE_USER 함수 실행
 function GET_USER_ID_AND_DELETE(name){
   let ID;
-  fetch('https://js-todo-list-9ca3a.df.r.appspot.com/api/users')
+  fetch(`${BASE_URL}api/users`)
       .then(response=>response.json())
       .then(data=>{
         data.map((value)=>{
@@ -99,7 +97,7 @@ function GET_USER_ID_AND_DELETE(name){
 
 //해당 ID와 같은 내용의 데이터를 삭제
 function DELETE_USER(_id){
-  fetch(`https://js-todo-list-9ca3a.df.r.appspot.com/api/users/${_id}`,{method:"DELETE"})
+  fetch(`${BASE_URL}api/users/${_id}`,{method:"DELETE"})
       .then(response=>response.json())
       .then(()=>{alert('서버 데이터 정상 삭제')})
       .catch(()=>{alert('오류 발생')});
@@ -126,7 +124,7 @@ function OnUserClickHandler(Name,event){
 //해당 이름을 가진 데이터의 ID를 서버에서 가져온 후 GET_TODOITEMS 함수 실행
 function GET_USER_ID_AND_TODOITEMS(name){
   let ID;
-  fetch('https://js-todo-list-9ca3a.df.r.appspot.com/api/users')
+  fetch(`${BASE_URL}api/users`)
       .then(response=>response.json())
       .then(data=>{
         data.map((value)=>{
@@ -142,7 +140,7 @@ function GET_USER_ID_AND_TODOITEMS(name){
 function GET_TODOITEMS(ID){
   Remove_localStorage();
   Remove_li_tag();
-  fetch(`https://js-todo-list-9ca3a.df.r.appspot.com/api/users/${ID}/items`)
+  fetch(`${BASE_URL}api/users/${ID}/items`)
       .then(response=>response.json())
       .then(data=>data.map(val=>{
         init_Element(val.contents,'F','F')
@@ -172,7 +170,7 @@ function Remove_li_tag(){
 //   유저 ID 가져온 후 TODOLIST 추가하기 함수 실행
 function GET_USER_ID_AND_ADD_TODOLIST(name,content){
   let ID;
-  fetch('https://js-todo-list-9ca3a.df.r.appspot.com/api/users')
+  fetch(`${BASE_URL}api/users`)
       .then(response=>response.json())
       .then(data=>{
         data.map((value)=>{
@@ -186,7 +184,7 @@ function GET_USER_ID_AND_ADD_TODOLIST(name,content){
 
 //서버에 TODOLIST 추가
 function ADD_TODOLIST(ID,value){
-  fetch(`https://js-todo-list-9ca3a.df.r.appspot.com/api/users/${ID}/items/`,
+  fetch(`${BASE_URL}api/users/${ID}/items/`,
       {
         method:"POST",
         headers: {
@@ -196,6 +194,38 @@ function ADD_TODOLIST(ID,value){
           'contents':value})})
       .then(response=>response.json())
       .then(()=>alert('정상 작동'))
+      .catch(()=>alert('오류 작동'))
+}
+
+// 삭제버튼 클릭시 해당 TODOLIST의 item삭제하는 DELETE_TODOLIST함수 실행
+function GET_USER_ID_AND_DELETE_TODOLIST(name,content){
+  let ID,itemID;
+  fetch(`${BASE_URL}api/users`)
+      .then(response=>response.json())
+      .then(data=>{
+        data.map((value)=>{
+
+          value['todoList'].forEach(val => {
+            if(val.contents === content && value.name === name)
+            {
+              ID = value._id;
+              itemID = val._id;
+            }
+          });
+        })
+        return [ID,itemID];
+      })
+      .then(([ID,itemID])=>{DELETE_TODOLIST(ID,itemID)});
+}
+
+//해당되는 ID와 todoitem의 ID를 가져와 처리한다.
+function DELETE_TODOLIST(ID,itemID){
+  fetch(`${BASE_URL}api/users/${ID}/items/${itemID}`,
+      {
+        method:"DELETE",
+        })
+      .then(response=>response.json())
+      .then((data)=>alert(data))
       .catch(()=>alert('오류 작동'))
 }
 
@@ -298,6 +328,7 @@ function init_Element(value,item,cause_of_add) {
     event.target.closest('li').remove();
     document.querySelector('.todo-count > strong').innerText = --count;
     localStorage.removeItem(event.target.closest('div').children[1].innerText);
+    GET_USER_ID_AND_DELETE_TODOLIST(document.querySelector('#user-list > .active').innerHTML, $el.parentNode.children[1].innerText);
   }))
 
   // 체크박스 클릭시 li태그에 class속성 추가 및 text에 중간작대기 생성 (클릭 취소하면 class속성 completed 추가 및 text원래대로)
