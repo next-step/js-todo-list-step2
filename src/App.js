@@ -2,6 +2,7 @@ import { createElement } from "./utils/createElement.js";
 
 import UserTitle from "./component/UserTitle.js";
 import UserList from "./component/UserList.js";
+import TodoInput from "./component/TodoInput.js";
 import TodoList from "./component/TodoList.js";
 
 const template = () => `
@@ -10,11 +11,6 @@ const template = () => `
     <section id="user-list"></section> 
     <section class="todoapp">
       <section class="input-container">
-        <input
-          class="new-todo"
-          placeholder="할 일을 입력해주세요."
-          autofocus
-        />
       </section>
       <section class="main">
         <ul class="todo-list">
@@ -43,11 +39,13 @@ export default function App() {
   const dom = createElement(template());
   const userTitle = dom.querySelector("#user-title");
   const userList = dom.querySelector("#user-list");
+  const todoInput = dom.querySelector(".input-container");
   const todoList = dom.querySelector(".todo-list");
 
   const init = () => {
     userTitle.appendChild(new UserTitle());
     userList.appendChild(new UserList());
+    todoInput.appendChild(new TodoInput());
     todoList.appendChild(new TodoList());
   };
 

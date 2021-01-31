@@ -10,6 +10,11 @@ const todoState = (() => {
     selectedUserId = _id;
   };
 
+  const createTodo = async (contents) => {
+    await $api.todo.create(selectedUserId, { contents });
+    publish();
+  };
+
   const getTodos = async () => {
     return await $api.todo.getAll(selectedUserId);
   };
@@ -24,6 +29,7 @@ const todoState = (() => {
 
   return {
     init,
+    createTodo,
     getTodos,
     subscribe,
   };
