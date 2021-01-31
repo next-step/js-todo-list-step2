@@ -1,7 +1,31 @@
 import { createElement } from "../utils/createElement.js";
 import $store from "../store/index.js";
 
-const template = ({ contents, isCompleted }) => `
+import { PRIORITY } from "../utils/constants.js";
+
+const todoListItemPrioritySelector = `
+  <select class="chip select">
+    <option value="NONE" selected>순위</option>
+    <option value="FIRST">1순위</option>
+    <option value="SECOND">2순위</option>
+  </select>
+`;
+
+const todoListItemPriority = (priority) => {
+  const { className, text } = Object.values(PRIORITY).find(
+    ({ value }) => value === priority
+  );
+  return `
+      <span class="chip ${className}">${text}</span>
+    `;
+};
+
+const todoPriority = (priority) =>
+  priority === "NONE"
+    ? todoListItemPrioritySelector
+    : todoListItemPriority(priority);
+
+const template = ({ priority, contents, isCompleted }) => `
   <li class="${isCompleted ? "completed" : ""}"">
     <div class="view">
       <input 
@@ -10,6 +34,7 @@ const template = ({ contents, isCompleted }) => `
         ${isCompleted ? "checked" : ""}
       />
       <label class="label">
+        ${todoPriority(priority)}
         ${contents}
       </label>
       <button class="destroy"></button>
@@ -24,6 +49,7 @@ export default function TodoListItem({ todo }) {
   const deleteBtn = dom.querySelector(".destroy");
   const label = dom.querySelector(".label");
   const editInput = dom.querySelector(".edit");
+  const prioritySelector = dom.querySelector(".select");
 
   const init = () => {
     toggleBtn.addEventListener("click", onToggleTodo);
@@ -31,6 +57,7 @@ export default function TodoListItem({ todo }) {
     label.addEventListener("dblclick", onToggleEditingTodo);
     editInput.addEventListener("keypress", onEditTodo);
     editInput.addEventListener("focusout", onCancelEditingTodo);
+    prioritySelector?.addEventListener("change", onSelectPriority);
   };
 
   const onToggleTodo = async () => {
@@ -69,6 +96,14 @@ export default function TodoListItem({ todo }) {
   const onCancelEditingTodo = () => {
     editInput.value = todo.contents;
     dom.classList.remove("editing");
+  };
+
+  const onSelectPriority = async () => {
+    const selected = Object.values(PRIORITY).find(
+      ({ value }) => value === prioritySelector.value
+    );
+
+    await $store.todoState.setPriority(todo._id, selected.value);
   };
 
   init();

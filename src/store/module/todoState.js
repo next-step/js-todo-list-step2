@@ -38,6 +38,11 @@ const todoState = (() => {
     publish();
   };
 
+  const setPriority = async (id, priority) => {
+    await $api.todo.priority(selectedUserId, id, { priority });
+    publish();
+  };
+
   const setSelectedUserId = async () => {
     const { _id } = userState.getSelectedUser();
     selectedUserId = _id;
@@ -82,6 +87,7 @@ const todoState = (() => {
     deleteTodo,
     deleteAllTodo,
     editTodo,
+    setPriority,
     setSelectedFilter,
     getSelectedFilter,
     getFilteredTodos,
