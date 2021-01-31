@@ -6,10 +6,10 @@ const template = ({ name, active }) => {
 };
 
 export default function UserListItem({ user, selectUser }) {
-  const $dom = createElement(template(user));
+  const dom = createElement(template(user));
 
   const init = () => {
-    $dom.addEventListener("click", onSelectUser);
+    dom.addEventListener("click", onSelectUser);
   };
 
   const onSelectUser = () => {
@@ -18,5 +18,5 @@ export default function UserListItem({ user, selectUser }) {
 
   init();
 
-  return $dom;
+  return dom;
 }
