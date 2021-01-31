@@ -22,10 +22,12 @@ const todoState = (() => {
 
   const toggleTodo = async (id) => {
     await $api.todo.toggle(selectedUserId, id);
+    publish();
   };
 
   const deleteTodo = async (id) => {
     await $api.todo.delete(selectedUserId, id);
+    publish();
   };
 
   const getTodos = async () => {
