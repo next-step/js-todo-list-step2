@@ -95,7 +95,7 @@ function drawUser({ _id, name }) {
 async function onAddTodo(event) {
   // 기본적인 예외 처리(공백 문자열, 중복 할 일 등)
   const newTodoInput = event.target;
-  const newTodoText = newTodoInput.value.trimStart().trimEnd();
+  const newTodoText = newTodoInput.value.trim();
   if (event.key != "Enter" || newTodoText.length === 0) {
     newTodoInput.focus();
     return;
@@ -301,7 +301,7 @@ async function updateTodoEdit({ target, key }) {
   if (key === "Escape") {
     todoElement.classList.toggle("editing");
   } else if (key === "Enter") {
-    const newTodoText = target.value.trimStart().trimEnd();
+    const newTodoText = target.value.trim();
     if (newTodoText.length === 0) {
       target.focus();
       return;
