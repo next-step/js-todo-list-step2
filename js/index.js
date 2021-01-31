@@ -1,4 +1,7 @@
 const User_List = document.getElementById('user-list');
+const User_Create_Button = document.querySelector('.user-create-button')
+const User_Delete_Button = document.querySelector('.user-delete-button')
+
 let USER_COUNT =0;
 const BASE_URL = 'https://js-todo-list-9ca3a.df.r.appspot.com/'
 
@@ -10,8 +13,8 @@ function Response_Api(){
         for(let i=0;i<myJson.length;i++)
           Get_Users(myJson,i);
         Click_User();
-        document.querySelector('.user-create-button').addEventListener('click',Make_User);
-        document.querySelector('.user-delete-button').addEventListener('click',Delete_User);
+        User_Create_Button.addEventListener('click',Make_User);
+        User_Delete_Button.addEventListener('click',Delete_User);
       })
 };
 
