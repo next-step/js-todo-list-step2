@@ -1,14 +1,14 @@
 import { createElement } from "../utils/createElement.js";
 import $store from "../store/index.js";
 
-const template = () => `
+const template = `
   <div>
     총 <strong>0</strong> 개
   </div>
 `;
 
 export default function TodoCount() {
-  const dom = createElement(template());
+  const dom = createElement(template);
   const counter = dom.querySelector("strong");
 
   const init = async () => {

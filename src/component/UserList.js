@@ -2,7 +2,7 @@ import UserListItem from "./UserListItem.js";
 import { createElement } from "../utils/createElement.js";
 import $store from "../store/index.js";
 
-const template = () => `
+const template = `
   <div>
     <button class="ripple user-create-button">+ 유저 생성</button>
     <button class="ripple user-delete-button">- 유저 삭제</button>
@@ -10,7 +10,7 @@ const template = () => `
 `;
 
 export default function UserList() {
-  const dom = createElement(template());
+  const dom = createElement(template);
   const userCreateBtn = dom.querySelector(".user-create-button");
   const userDeleteBtn = dom.querySelector(".user-delete-button");
 

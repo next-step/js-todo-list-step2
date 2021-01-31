@@ -1,7 +1,7 @@
 import { createElement } from "../utils/createElement.js";
 import $store from "../store/index.js";
 
-const template = () => `
+const template = `
   <input
     class="new-todo"
     placeholder="할 일을 입력해주세요."
@@ -10,7 +10,7 @@ const template = () => `
 `;
 
 export default function TodoInput() {
-  const dom = createElement(template());
+  const dom = createElement(template);
 
   const init = () => {
     dom.addEventListener("keypress", onAddTodo);
