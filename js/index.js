@@ -10,11 +10,19 @@ const onUserCreateHandler = () => {
     },
     body: requestBody,
   };
+  const userBtn = document.createElement("button");
+  userBtn.classList.add("ripple");
+  userBtn.innerText = userName;
+  const userList = document.getElementById("user-list");
+  const userCreateBtn = document.querySelector(".user-create-button");
+  userList.insertBefore(userBtn, userCreateBtn);
+
   fetch("https://js-todo-list-9ca3a.df.r.appspot.com/api/users", options).then(
     (res) => {
       if (!res.ok) return new Error(res.status);
       const userBtn = document.createElement("button");
       userBtn.classList.add("ripple");
+      userBtn.innerText = res.name;
 
       const userList = document.getElementById("user-list");
       userList.appendChild(userBtn);
