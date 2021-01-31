@@ -1,146 +1,151 @@
-import {serverURL} from './common.js'
+import { serverURL } from "./common.js";
 
-
-export function getActiveUserID(){
-    const selectedUser = document.querySelector('div#user-list button.active')
-    return selectedUser === null ? null : selectedUser.id
+export function getActiveUserID() {
+  const selectedUser = document.querySelector("div#user-list button.active");
+  return selectedUser === null ? null : selectedUser.id;
 }
 
-export async function loadUser(userid){
-    let userInfo = {}
-    await fetch(`${serverURL}/api/users/${userid}`)
-        .then(data => {return data.json()})
-        .then(jsonResponse => {
-            if(jsonResponse.message){
-                throw new Error(jsonResponse.message)
-            }
-            userInfo = jsonResponse 
-        })
-        .catch(error => alert(error))
-    return userInfo
+export async function loadUser(userid) {
+  let userInfo = {};
+  await fetch(`${serverURL}/api/users/${userid}`)
+    .then(jsonifyData)
+    .then((jsonResponse) => (userInfo = responseChecker(jsonResponse)))
+    .catch(errorHandler);
+  return userInfo;
 }
 
-
-export async function loadUsers(){
-    let todoListBulk = []
-    await fetch(`${serverURL}/api/users`)
-        .then(data => { return data.json() })
-        .then(jsonResponse => todoListBulk = jsonResponse)
-        .catch(() => loadUsers())
-    return todoListBulk
+export async function loadUsers() {
+  let todoListBulk = [];
+  await fetch(`${serverURL}/api/users`)
+    .then(jsonifyData)
+    .then((jsonResponse) => (todoListBulk = jsonResponse))
+    .catch(errorHandler);
+  return todoListBulk;
 }
 
+export async function addUser(newUsername) {
+  let addedUserInfo = {};
+  await fetch(
+    `${serverURL}/api/users`,
+    requestOptionWithJsonData("POST", { name: newUsername })
+  )
+    .then(jsonifyData)
+    .then((jsonResponse) => (addedUserInfo = responseChecker(jsonResponse)))
+    .catch(errorHandler);
 
-export async function addUser(newUsername){
-    let addedUserInfo = {}
-    await fetch(`${serverURL}/api/users`, {
-        method: 'POST',
-        headers:{
-            'Content-Type':'application/json'
-        },
-        body:JSON.stringify({'name':newUsername})})
-        .then(returnValue => { return returnValue.json() })
-        .then(jsonResponse => { addedUserInfo = jsonResponse })
-
-    return addedUserInfo
+  return addedUserInfo;
 }
 
-
-export function deleteUser(userid){
-    fetch(`${serverURL}/api/users/${userid}`, {
-        method: 'DELETE'
-    })
+export function deleteUser(userid) {
+  fetch(`${serverURL}/api/users/${userid}`, requestOption("DELETE"));
 }
 
-
-export async function loadTodoList(userid){
-    let todoList = []
-    await fetch(`${serverURL}/api/users/${userid}/items/`)
-        .then(data => { return data.json() })
-        .then(jsonResponse => todoList = responseChecker(jsonResponse))
-        .catch(error => alert(error))
-    return todoList
+export async function loadTodoList(userid) {
+  let todoList = [];
+  await fetch(`${serverURL}/api/users/${userid}/items/`)
+    .then(jsonifyData)
+    .then((jsonResponse) => (todoList = responseChecker(jsonResponse)))
+    .catch(errorHandler);
+  return todoList;
 }
 
-
-export async function addTodoElement(userid, text){
-    let todoElement = {}
-    await fetch(`${serverURL}/api/users/${userid}/items/`, {
-        method: 'POST',
-        headers:{
-            'Content-Type':'application/json'
-        },
-        body:JSON.stringify({'contents':text})})
-        .then(data => { return data.json() })
-        .then(jsonResponse => todoElement = responseChecker(jsonResponse))
-        .catch(error => alert(error))
-    return todoElement
+export async function addTodoElement(userid, text) {
+  let todoElement = {};
+  await fetch(
+    `${serverURL}/api/users/${userid}/items/`,
+    requestOptionWithJsonData("POST", { contents: text })
+  )
+    .then(jsonifyData)
+    .then((jsonResponse) => (todoElement = responseChecker(jsonResponse)))
+    .catch(errorHandler);
+  return todoElement;
 }
 
-
-export async function deteleAllTodoElement(userid){
-    let result = false
-    await fetch(`${serverURL}/api/users/${userid}/items/`, {
-        method: 'DELETE'
-    })
-    .then(data => { return data.json() })
-    .then(jsonResponse => result = jsonResponse.success)
-    return result
+export async function deteleAllTodoElement(userid) {
+  let result = false;
+  await fetch(
+    `${serverURL}/api/users/${userid}/items/`,
+    requestOption("DELETE")
+  )
+    .then(jsonifyData)
+    .then((jsonResponse) => (result = jsonResponse.success));
+  return result;
 }
 
-
-export async function deleteTodoElement(userid, itemid){
-    await fetch(`${serverURL}/api/users/${userid}/items/${itemid}`, {
-        method: 'DELETE'
-    })
+export async function deleteTodoElement(userid, itemid) {
+  await fetch(
+    `${serverURL}/api/users/${userid}/items/${itemid}`,
+    requestOption("DELETE")
+  );
 }
 
-
-export async function updateTodoElementText(userid, itemid, text){
-    let updatedTodoElement = {}
-    await fetch(`${serverURL}/api/users/${userid}/items/${itemid}`, {
-        method: 'PUT',
-        headers:{
-            'Content-Type':'application/json',
-        },
-        body:JSON.stringify({'contents':text})})
-        .then(data => { return data.json() })
-        .then(jsonResponse => updatedTodoElement = responseChecker(jsonResponse))
-        .catch(error => alert(error))
-    return updatedTodoElement
+export async function updateTodoElementText(userid, itemid, text) {
+  let updatedTodoElement = {};
+  await fetch(
+    `${serverURL}/api/users/${userid}/items/${itemid}`,
+    requestOptionWithJsonData("PUT", { contents: text })
+  )
+    .then(jsonifyData)
+    .then(
+      (jsonResponse) => (updatedTodoElement = responseChecker(jsonResponse))
+    )
+    .catch(errorHandler);
+  return updatedTodoElement;
 }
 
-
-export async function updateTodoElementPriority(userid, itemid, priority){
-    let updatedTodoElement = {}
-    await fetch(`${serverURL}/api/users/${userid}/items/${itemid}/priority`, {
-        method: 'PUT',
-        headers:{
-            'Content-Type':'application/json',
-        },
-        body:JSON.stringify({'priority':priority})})
-        .then(data => { return data.json() })
-        .then(jsonResponse => updatedTodoElement = responseChecker(jsonResponse))
-        .catch(error => alert(error))
-    return updatedTodoElement
+export async function updateTodoElementPriority(userid, itemid, priority) {
+  let updatedTodoElement = {};
+  await fetch(
+    `${serverURL}/api/users/${userid}/items/${itemid}/priority`,
+    requestOptionWithJsonData("PUT", { priority: priority })
+  )
+    .then(jsonifyData)
+    .then(
+      (jsonResponse) => (updatedTodoElement = responseChecker(jsonResponse))
+    )
+    .catch(errorHandler);
+  return updatedTodoElement;
 }
 
-
-export async function updateTodoElementStatus(userid, itemid){
-    let updatedTodoElement = {}
-    await fetch(`${serverURL}/api/users/${userid}/items/${itemid}/toggle`, {
-        method: 'PUT'})
-        .then(data => { return data.json() })
-        .then(jsonResponse => updatedTodoElement = responseChecker(jsonResponse))
-        .catch(error => alert(error))
-    return updatedTodoElement
+export async function updateTodoElementStatus(userid, itemid) {
+  let updatedTodoElement = {};
+  await fetch(
+    `${serverURL}/api/users/${userid}/items/${itemid}/toggle`,
+    requestOption("PUT")
+  )
+    .then(jsonifyData)
+    .then(
+      (jsonResponse) => (updatedTodoElement = responseChecker(jsonResponse))
+    )
+    .catch(errorHandler);
+  return updatedTodoElement;
 }
 
+function requestOption(method) {
+  return { method: method };
+}
 
-// 함수를 넘겨서 jsonResponse에 대해 좀 더 세부적으로 검사할 수 있도록?
-function responseChecker(jsonResponse){
-    if(jsonResponse.message){
-        throw new Error(jsonResponse.message)
-    } 
-    return jsonResponse
+function requestOptionWithJsonData(method, data) {
+  return {
+    method: method,
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  };
+}
+
+function jsonifyData(data) {
+  return data.json();
+}
+
+function responseChecker(jsonResponse) {
+  if (jsonResponse.message) {
+    throw new Error(jsonResponse.message);
+  }
+  return jsonResponse;
+}
+
+function errorHandler(error) {
+  alert(error);
 }
