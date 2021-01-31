@@ -1,5 +1,6 @@
 import { renewItemCount } from "./ControlTodoButton.js";
 import { ajaxPostFunctions } from "./AjaxPost.js"
+import { currentUserID } from "./ControlUserList.js";
 
 const getWork = document.querySelector(".new-todo"); 
 export const MINIMUN_INPUT_LENGTH = 2;
@@ -10,6 +11,10 @@ export function initAddNewItem() {
 }
 
 function addNewList(e) {
+  if(currentUserID ===""){
+    alert('유저를 먼저 선택해주세요!');
+    return;
+  }
   if (e.key !== "Enter") return;
   if(e.target.value.length < MINIMUN_INPUT_LENGTH){
     alert(`${MINIMUN_INPUT_LENGTH}글자 이상 입력해주세요!`);
