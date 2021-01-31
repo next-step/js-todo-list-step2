@@ -30,6 +30,11 @@ const todoState = (() => {
     publish();
   };
 
+  const deleteAllTodo = async () => {
+    await $api.todo.deleteAll(selectedUserId);
+    publish();
+  };
+
   const editTodo = async (id, contents) => {
     await $api.todo.edit(selectedUserId, id, { contents });
     publish();
@@ -52,6 +57,7 @@ const todoState = (() => {
     createTodo,
     toggleTodo,
     deleteTodo,
+    deleteAllTodo,
     editTodo,
     getTodos,
     subscribe,

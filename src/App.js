@@ -1,4 +1,5 @@
 import { createElement } from "./utils/createElement.js";
+import $store from "./store/index.js";
 
 import UserTitle from "./component/UserTitle.js";
 import UserList from "./component/UserList.js";
@@ -41,12 +42,18 @@ export default function App() {
   const userList = dom.querySelector("#user-list");
   const todoInput = dom.querySelector(".input-container");
   const todoList = dom.querySelector(".todo-list");
+  const deleteAllBtn = dom.querySelector(".clear-completed");
 
   const init = () => {
     userTitle.appendChild(new UserTitle());
     userList.appendChild(new UserList());
     todoInput.appendChild(new TodoInput());
     todoList.appendChild(new TodoList());
+    deleteAllBtn.addEventListener("click", onDeleteAllTodo);
+  };
+
+  const onDeleteAllTodo = async () => {
+    await $store.todoState.deleteAllTodo();
   };
 
   init();
