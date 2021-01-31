@@ -92,11 +92,11 @@ function drawUser({ _id, name }) {
 }
 
 // 사용자 입력으로 새로운 할 일이 추가되는 함수
-async function onAddTodo(event) {
+async function onAddTodo({ target, key }) {
   // 기본적인 예외 처리(공백 문자열, 중복 할 일 등)
-  const newTodoInput = event.target;
+  const newTodoInput = target;
   const newTodoText = newTodoInput.value.trim();
-  if (event.key != "Enter" || newTodoText.length === 0) {
+  if (key != "Enter" || newTodoText.length === 0) {
     newTodoInput.focus();
     return;
   }
@@ -200,32 +200,29 @@ async function onRemoveAllTodoClick(event) {
 }
 
 // 할 일을 클릭했을때 이벤트 위임.
-function onTodoElementClicked(event) {
-  if (!event.target) {
+function onTodoElementClicked({ target }) {
+  if (!target) {
     return;
   }
 
-  if (
-    event.target.nodeName === "INPUT" &&
-    event.target.classList.contains("toggle")
-  ) {
-    toggleTodoElementStatus(event);
-  } else if (event.target.nodeName === "BUTTON") {
-    removeCurrentTodoElement(event);
+  if (target.nodeName === "INPUT" && target.classList.contains("toggle")) {
+    toggleTodoElementStatus(target);
+  } else if (target.nodeName === "BUTTON") {
+    removeCurrentTodoElement(target);
   }
 }
 
 // 할 일을 더블클릭했을때 이벤트 위임.
-function onTodoElementDblclicked(event) {
-  if (event.target && event.target.nodeName === "LABEL") {
-    toggleTodoElementMode(event);
+function onTodoElementDblclicked({ target }) {
+  if (target && target.nodeName === "LABEL") {
+    toggleTodoElementMode(target);
   }
 }
 
 // 할 일을 조작 중 키를 입력했을때 이벤트 위임.
-function onTodoElementKeyupped(event) {
-  if (event.target && event.target.nodeName === "INPUT") {
-    updateTodoEdit(event);
+function onTodoElementKeyupped({ target, key }) {
+  if (target && target.nodeName === "INPUT") {
+    updateTodoEdit({ target, key });
   }
 }
 
@@ -266,7 +263,7 @@ async function changeTodoElementPriority({ target }) {
 }
 
 // 할 일 완료 여부 설정/해제.
-async function toggleTodoElementStatus({ target }) {
+async function toggleTodoElementStatus(target) {
   const todoElement = target.closest("li");
 
   const animationToggler = getTodoElementLoadingAnimationToggler(todoElement);
@@ -291,7 +288,7 @@ async function toggleTodoElementStatus({ target }) {
 }
 
 // 할 일을 더블클릭 했을 때 편집 모드 토글.
-function toggleTodoElementMode({ target }) {
+function toggleTodoElementMode(target) {
   target.closest("li").classList.toggle("editing");
 }
 
@@ -331,7 +328,7 @@ async function updateTodoEdit({ target, key }) {
 }
 
 // 할 일 삭제 이벤트 처리기.
-function removeCurrentTodoElement({ target }) {
+function removeCurrentTodoElement(target) {
   const todoElement = target.closest("li");
   const itemID = todoElement.id;
   UserAPI.deleteTodoElement(UserAPI.getActiveUserID(), itemID);
