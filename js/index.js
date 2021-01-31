@@ -168,9 +168,8 @@ function Remove_li_tag(){
   todolist.forEach(x=>x.remove());
 }
 
-// 해당 아래 두 함수는 POST로 TODOLIST 수정부분에서 오류 발생
 
-//    GET_USER_ID_AND_ADD_TODOLIST(document.querySelector('#user-list > .active').innerHTML,value)
+//   유저 ID 가져온 후 TODOLIST 추가하기 함수 실행
 function GET_USER_ID_AND_ADD_TODOLIST(name,content){
   let ID;
   fetch('https://js-todo-list-9ca3a.df.r.appspot.com/api/users')
