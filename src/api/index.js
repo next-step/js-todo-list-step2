@@ -3,10 +3,12 @@ import { HTTP_METHOD } from "./utils/constants.js";
 const BASE_URL = "https://js-todo-list-9ca3a.df.r.appspot.com/api/users";
 
 const api = (() => {
-  const request = (uri, config) => fetch(uri, config);
+  const request = (uri, config) => fetch(uri, config).catch(console.error);
 
   const requestWithJsonData = (uri, config) =>
-    fetch(uri, config).then((data) => data.json());
+    fetch(uri, config)
+      .then((data) => data.json())
+      .catch(console.error);
 
   const user = {
     getAll() {
