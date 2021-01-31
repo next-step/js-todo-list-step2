@@ -3,7 +3,7 @@ import { chooseButton } from "./ControlTodoButton.js";
 import { currentUserID, baseurl, userList } from "./ControlUserList.js";
 
 
-export const ajaxGetFunctions = async (type, data) => {
+export const ajaxGetFunctions = async (type) => {
     let url = baseurl;
     if (type === "useritems") {
       url += `/${currentUserID}/items/`;
@@ -13,36 +13,32 @@ export const ajaxGetFunctions = async (type, data) => {
   
     await fetch(url)
       .then((data) => {
-        if (!data.ok) {
-          throw new Error(data.status);
-        }
+        if (!data.ok) throw new Error(data.status);
         return data.json();
       })
       .then((post) => {
         todoList.innerHTML ='';
         if (type === "userlist") assembleUserList(post);
-        else if(type === "useritems") assembleUserItems(post); 
+        else assembleUserItems(post); 
       })
-      .catch((error) => {
-        console.log(error);
-      });
+      .catch(error => console.log(error));
   };
   
   const assembleUserList = (userlist) => {
-    for (let i in userlist) {
+    userlist.forEach((user)=>{
       let dataset = {
-        _id: userlist[i]._id,
-        name: userlist[i].name,
-        todoList: userlist[i].todoList,
+        _id: user._id,
+        name: user.name,
+        todoList: user.todoList,
       };
-      onAjaxCreateUserList(dataset);
-    }
+      ajaxCreateUserList(dataset);
+    })
+
   };
   
   const assembleUserItems = (useritems) => {
-    for (let i in useritems) {
-      reflectUserItems(useritems[i]);
-    }
+    useritems.forEach((item)=> reflectUserItems(item));
+
     if (/(active)/.exec(window.location.href)) chooseButton("active");
     else if (/(completed)/.exec(window.location.href)) chooseButton("completed");
     else chooseButton("all");
@@ -72,12 +68,11 @@ export const ajaxGetFunctions = async (type, data) => {
         span.innerText = "2순위";
       }
       selecter.style.display = "none";
-    } else {
-      span.style.display = "none";
-    }
+    } else span.style.display = "none";
+    
   };
 
-  const onAjaxCreateUserList = (dataset) => {
+  const ajaxCreateUserList = (dataset) => {
     const createbutton = document.querySelector(".user-create-button");
     const userTemplate = document.createElement("button");
     userTemplate.classList.add("ripple");

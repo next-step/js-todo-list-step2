@@ -5,10 +5,13 @@ import { ajaxGetFunctions } from "./AjaxGet.js";
 
 export const userList = document.querySelector("#user-list");
 export const baseurl = "https://js-todo-list-9ca3a.df.r.appspot.com/api/users"
+export var currentUserID = "";
+
+
 const topTitle = document.querySelector("#user-title>span>strong");
 const deletebutton = document.querySelector(".clear-completed");
 
-export var currentUserID = "";
+
 
 export const initControlUserList = () => {
   userList.addEventListener("click", onUserCreateHandler);
@@ -22,11 +25,10 @@ const setCurrentUser = ({ target }) => {
   if (!target.classList.contains("ripple")) return;
 
   const users = document.querySelectorAll("#user-list>.ripple");
-
-  for (let i = 0; i < users.length; i++) {
-    if (users[i].classList.contains("active"))
-      users[i].classList.remove("active");
-  }
+  users.forEach((user)=>{
+    if (user.classList.contains("active"))
+    user.classList.remove("active");
+  });
 
   target.classList.add("active");
 

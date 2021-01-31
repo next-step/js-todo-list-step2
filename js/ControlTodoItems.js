@@ -1,4 +1,4 @@
-import { renewStrong, chooseButton } from "./ControlTodoButton.js";
+import { renewItemCount, chooseButton } from "./ControlTodoButton.js";
 import { ajaxDeleteFunctions } from "./AjaxDelete.js";
 import { ajaxPutFunctions } from "./AjaxPut.js"
 
@@ -39,7 +39,7 @@ function workDelete({ target }) {
     const li = target.closest("li");
     ajaxDeleteFunctions(li,'deleteitem');
     li.parentNode.removeChild(li);
-    renewStrong();
+    renewItemCount();
   }
 }
 

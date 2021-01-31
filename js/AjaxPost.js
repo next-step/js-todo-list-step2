@@ -6,9 +6,8 @@ import { chooseButton } from "./ControlTodoButton.js";
 export const ajaxPostFunctions = async (data, type) => {
   let url = baseurl;
   let dataset = {};
-  if (type === "username") {
-    dataset = { name: data };
-  } else if (type === "useritem") {
+  if (type === "username") dataset = { name: data };
+  else if (type === "useritem") {
     url += `/${currentUserID}/items/`;
     dataset = { contents: data };
   }
@@ -22,18 +21,14 @@ export const ajaxPostFunctions = async (data, type) => {
   
   await fetch(url, option)
     .then((data) => {
-      if (!data.ok) {
-        throw new Error(data.status);
-      }
+      if (!data.ok) throw new Error(data.status);
       return data.json();
     })
     .then((post) => {
       if (type === "username") resetUserList();
       else if (type === "useritem") assembleSingleItem(post);
     })
-    .catch((error) => {
-      console.log(error);
-    });
+    .catch(error => console.log(error));
 };
 
 const assembleSingleItem = (useritem) => {

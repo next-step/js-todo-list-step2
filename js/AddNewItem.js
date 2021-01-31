@@ -1,4 +1,4 @@
-import { renewStrong } from "./ControlTodoButton.js";
+import { renewItemCount } from "./ControlTodoButton.js";
 import { ajaxPostFunctions } from "./AjaxPost.js"
 
 const getWork = document.querySelector(".new-todo"); 
@@ -24,7 +24,7 @@ function addNewList(e) {
   } else {
     alert("불필요한 공백을 제거해주세요!");
   }
-  renewStrong();
+  renewItemCount();
 }
 
 export function listAssemble(content) {
