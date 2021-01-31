@@ -24,6 +24,10 @@ const todoState = (() => {
     await $api.todo.toggle(selectedUserId, id);
   };
 
+  const deleteTodo = async (id) => {
+    await $api.todo.delete(selectedUserId, id);
+  };
+
   const getTodos = async () => {
     return await $api.todo.getAll(selectedUserId);
   };
@@ -40,6 +44,7 @@ const todoState = (() => {
     init,
     createTodo,
     toggleTodo,
+    deleteTodo,
     getTodos,
     subscribe,
   };
