@@ -20,6 +20,10 @@ const todoState = (() => {
     publish();
   };
 
+  const toggleTodo = async (id) => {
+    await $api.todo.toggle(selectedUserId, id);
+  };
+
   const getTodos = async () => {
     return await $api.todo.getAll(selectedUserId);
   };
@@ -35,6 +39,7 @@ const todoState = (() => {
   return {
     init,
     createTodo,
+    toggleTodo,
     getTodos,
     subscribe,
   };

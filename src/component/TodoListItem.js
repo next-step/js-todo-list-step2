@@ -1,4 +1,5 @@
 import { createElement } from "../utils/createElement.js";
+import $store from "../store/index.js";
 
 const template = ({ contents, isCompleted }) => `
   <li class="${isCompleted ? "completed" : ""}"">
@@ -19,8 +20,16 @@ const template = ({ contents, isCompleted }) => `
 
 export default function TodoListItem({ todo }) {
   const dom = createElement(template(todo));
+  const toggleBtn = dom.querySelector(".toggle");
 
-  const init = () => {};
+  const init = () => {
+    toggleBtn.addEventListener("click", onToggleTodo);
+  };
+
+  const onToggleTodo = async () => {
+    dom.classList.toggle("completed");
+    await $store.todoState.toggleTodo(todo._id);
+  };
 
   init();
 
