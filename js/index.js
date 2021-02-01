@@ -1,10 +1,12 @@
+import { API } from './API.js';
+import { userTemplate } from './template.js';
+
 let currentUser = '';
+let currentUserID = '';
 let users = [];
 let todoList = [];
 let todoComplete = [];
 let todoFilter = 'all';
-
-const baseURL = 'https://js-todo-list-9ca3a.df.r.appspot.com';
 
 const userCreateButton = document.querySelector('.user-create-button');
 const userList = document.querySelector('div#user-list');
@@ -16,17 +18,31 @@ const onUserCreateHandler = () => {
     return;
   }
 
-  const $newUser = document.createElement('button');
-  $newUser.className = 'ripple'
-  $newUser.innerText = userName;
+  const newUser = userTemplate;
+  newUser.name = userName;
+  newUser.todoList = [];
+  newUser._id = Math.random().toString(36).substr(2,10);
+  users.push(newUser);
+  addUser(newUser);
+  API.addUser(newUser);
 
-  const userCreateButton = document.querySelector('button.user-create-button');
-  userCreateButton.insertAdjacentElement('beforebegin', $newUser);
+  const currentUserButton = document.querySelector('button.ripple.active');
+  if(currentUserButton){
+    currentUser = currentUserButton.innerText;
+  }
+  else{
+    currentUser = document.querySelector('button.ripple');
+    currentUser.classList.add('active');
+  }
 }
 
 userCreateButton.addEventListener('click', onUserCreateHandler);
 userList.addEventListener('click', event => {
-  userList.querySelectorAll('button.ripple').forEach($user => onUserSelectHandler($user, event));
+  userList.querySelectorAll('button.ripple').forEach(($user, index) => {
+    if($user.contains(event.target)){
+      onUserSelectHandler($user, index);
+    }
+  });
 })
 
 window.onload = () => {
@@ -34,7 +50,7 @@ window.onload = () => {
 }
 
 const loadUserList = () => {
-  fetch(baseURL + '/api/users')
+  API.fetchUserList()
     .then(response => response.json())
     .then(data => {
       users = data;
@@ -45,35 +61,53 @@ const loadUserList = () => {
 
 const init = () => {
   renderUsers();
-  const currentUserButton = document.querySelector('button.ripple.active');
-  currentUser = (currentUserButton) ? currentUserButton.innerText : document.querySelector('button.ripple');
-  currentUser.classList.add('active');
-  todoList = localStorage.getItem(currentUser + '_todoList') ?? [];
-  todoComplete = localStorage.getItem(currentUser + '_todoComplete') ?? [];
+  onUserSelectHandler(userList.querySelectorAll('button.ripple')[0], 0);
+  // todoList = localStorage.getItem(currentUser + '_todoList') ?? [];
+  // todoComplete = localStorage.getItem(currentUser + '_todoComplete') ?? [];
   render();
 }
 
 const renderUsers = () => {
   console.log(users);
-  userList.innerHTML = users.map(user => `<button class="ripple">${user.name}</button>`).join(' ')
-   + '<button class="ripple user-create-button">+ 유저 생성</button>';
+  users.forEach(user => addUser(user));
+
+  const currentUserButton = document.querySelector('button.ripple.active');
+  if(currentUserButton){
+    currentUser = currentUserButton.innerText;
+  }
+  else{
+    currentUser = document.querySelector('button.ripple');
+    currentUser.classList.add('active');
+  }
+}
+
+const addUser = user => {
+  const newUserButton = document.createElement('button');
+  newUserButton.classList.add('ripple');
+  newUserButton.innerText = user.name;
+  userCreateButton.insertAdjacentElement('beforebegin', newUserButton);
 }
 
 const onUserDeleteHandler = () => {
 
 }
 
-const onUserSelectHandler = ($user, event) => {
-  if(!$user.contains(event.target)){
-    return;
-  }
+const onUserSelectHandler = ($user, index) => {
   const currentUserButton = document.querySelector('button.ripple.active');
   if(currentUserButton) currentUserButton.classList.remove('active');
   $user.classList.add('active');
 
-  currentUser = $user.innerText;
-  todoList = localStorage.getItem(currentUser + '_todoList') ?? [];
-  todoComplete = localStorage.getItem(currentUser + '_todoComplete') ?? [];
+  // currentUser = $user.innerText;
+  currentUserID = users[index];
+
+  API.fetchTodoList(currentUserID)
+    .then(response => response.json())
+    .then(data => {
+      console.log(data)
+    })
+
+  // todoList = localStorage.getItem(currentUser + '_todoList') ?? [];
+  // todoComplete = localStorage.getItem(currentUser + '_todoComplete') ?? [];
   render();
 }
 
