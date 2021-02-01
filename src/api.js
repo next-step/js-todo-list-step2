@@ -39,6 +39,18 @@ export const api = {
 
     addUser(newUser){
         return request(`${url}/api/users`, option.post(newUser));
+    },
+
+    getUser(){
+        return request(`${url}/api/${userId}`);
+    },
+
+    loadTodoList(userId){
+        return request(`${url}/api/users/${userId}/items/`);
+    },
+
+    addTodo(userId, content){
+        return request(`${url}/api/users/${userId}/items/`, option.post(content));
     }
 
 }
