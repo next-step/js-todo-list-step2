@@ -1,11 +1,12 @@
-class UserItem {
-  constructor(id, name) {
-    this.id = id;
-    this.name = name;
-  }
+import selectedUserStore from '../modules/selectedUser.js';
 
-  static render(name) {
-    return `<button class="ripple">${name}</button>`;
+class UserItem {
+  static render(userId, name) {
+    const isSelected = userId === selectedUserStore.getState()._id;
+
+    return `<button data-id="${userId}" class="ripple${
+      isSelected ? ' active' : ''
+    }" >${name}</button>`;
   }
 }
 
