@@ -1,33 +1,27 @@
-import Hermes from "../lib/hermes/Hermes.js";
-
-const TODO_SERVER_URI = "https://jsonplaceholder.typicode.com/todos";
-
-const hermes = Hermes.create({
-  baseURL: TODO_SERVER_URI,
-  timeout: 3000
-});
+import hermes from './index.js';
 
 /**
  * @namespace TodoService at your service!
  */
 class TodoService {
-  static async read(url) {
-    try {
-      const { data } = await hermes.get(url);
-      return data;
-    } catch (error) {
-      console.warn(error);
-    }
-  }
-  static async add(url, payload) {
-    return await hermes.post(url, payload);
-  }
-  static async update(url, payload) {
-    return await hermes.patch(url, payload);
-  }
-  static async delete(url) {
-    return await hermes.delete(url);
-  }
+  static fetchAll = async userId => await hermes.get(userId + '/items/');
+
+  static add = async (userId, payload) =>
+    await hermes.post(userId + '/items/', payload);
+
+  static updateOne = async (userId, itemId, payload) =>
+    await hermes.put(userId + '/items/' + itemId, payload);
+
+  static deleteAll = async userId => await hermes.delete(userId + '/items/');
+
+  static deleteOne = async (userId, itemId) =>
+    await hermes.delete(userId + '/items/' + itemId);
+
+  static setPriority = async (userId, itemId, payload) =>
+    await hermes.put(userId + '/items/' + itemId + '/priority', payload);
+
+  static toggleOne = async (userId, itemId) =>
+    await hermes.put(userId + '/items/' + itemId + '/toggle');
 }
 
 export default TodoService;
