@@ -34,7 +34,6 @@ const UserList = async () => {
 
   const selectFirstUser = async () => {
     const { _id: firstUserId } = await usersStore.getState()[0];
-    // console.log(usersStore.getState()[0]);
     await selectedUserStore.dispatch({ type: GET_USER, payload: firstUserId });
   };
 
