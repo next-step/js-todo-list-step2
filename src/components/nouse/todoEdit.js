@@ -1,4 +1,4 @@
-import {$todoList} from '../todoDOM.js';
+//import {$todoList} from '../todoDOM.js';
 
 export const clearTodo = () =>{
     while($todoList.firstChild){

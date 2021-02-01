@@ -1,9 +1,8 @@
 import {$userList} from '../todoDOM.js';
-import {editTitleName} from './todoTitle.js';
-import {api} from '../api.js';
-import {insertTodo} from './todoInput.js';
-import {clearTodo} from './todoEdit.js';
 import {template} from '../template.js';
+import {api} from '../api.js';
+import {todo} from './todo.js';
+import {editTitleName} from './todoTitle.js';
 
 export const newUser = {
     handler () {
@@ -39,28 +38,11 @@ export const loadUser = {
         })
 
         userState.set();
-        loadUser.todo(users[7]._id);
+        todo.load(users[9]._id);
     },
 
     addToList(name, userId){
         $userList.insertAdjacentHTML('afterbegin', template.userButtons(name, userId));
-    },
-
-    todo: async (userId) => {
-        const array = await api.loadTodoList(userId);
-        console.log(array);
-
-        let todos = [];
-        for(let i in array){
-            const newTodo = array[i].contents;
-            todos = [...todos, newTodo];
-        }
-
-        //console.log(todos);
-        clearTodo();
-        todos.forEach(todo => {
-            insertTodo(todo);
-        });
     }
 }
 
