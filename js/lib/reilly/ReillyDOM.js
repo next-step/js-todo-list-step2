@@ -47,11 +47,11 @@ class ReillyDOM {
     }
 
     reillyNode.children
-      .map((child) =>
-        Object.assign(this.renderElement.call(this, child), {
+      .map((child) => {
+        return Object.assign(this.renderElement.call(this, child || ""), {
           _container: $element
-        })
-      )
+        });
+      })
       .forEach((elem) => {
         $element.appendChild(elem);
       });

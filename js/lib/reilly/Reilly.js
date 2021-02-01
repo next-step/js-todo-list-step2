@@ -1,4 +1,4 @@
-import ReillyDOM from "./ReillyDOM.js";
+import ReillyDOM from './ReillyDOM.js';
 
 /**
  * @typedef { Object } ReillyNode
@@ -29,12 +29,12 @@ class Reilly {
    */
 
   static createElement(nodeType, props, ...children) {
-    if (typeof nodeType === "function") {
+    if (typeof nodeType === 'function') {
       if (nodeType.prototype instanceof this.Component) {
         const component = new nodeType({ ...props, children });
-        if (component.constructor.name === "App")
-          component._owner = document.querySelector("#root");
-        else component._owner = document.querySelector(".view");
+        if (component.constructor.name === 'App')
+          component._owner = document.querySelector('#root');
+        else component._owner = document.querySelector('.view');
         return component.render();
       }
       return nodeType({ ...props, children });
@@ -43,7 +43,7 @@ class Reilly {
     return {
       nodeType,
       props,
-      children
+      children,
     };
   }
 
