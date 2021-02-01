@@ -1,3 +1,3 @@
-import userList from './components/UserList.js';
+import App from './App.js';
 
-userList.init();
+App();
