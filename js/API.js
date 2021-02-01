@@ -18,13 +18,13 @@ export const API = {
         }
     ),
 
-    addTodo: user => fetch(baseURL + `/api/users/${user}/items/`,
+    addTodo: (user, todoItem) => fetch(baseURL + `/api/users/${user}/items`,
         {
             method: 'POST',
             headers: {
                 "Content-Type": "application/json",
             },
-            body: JSON.stringify(user),
+            body: JSON.stringify(todoItem),
         }   
     ),
 }

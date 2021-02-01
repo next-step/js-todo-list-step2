@@ -25,7 +25,8 @@ userList.addEventListener('click', event => {
 
 $newTodo.addEventListener('keyup', event => {
   if(event.key === 'Enter'){
-    addTodo($newTodo.innerText);
+    console.log($newTodo)
+    addTodo($newTodo.value);
   }
 })
 
@@ -140,13 +141,14 @@ const addTodo = todoItem => {
   newItem._id = Math.random().toString(36).substr(2,10);
   newItem.contents = todoItem;
   
-  todoList.push(todoItem);
+  todoList.push(newItem);
 
   render();
 
-  API.addTodo(currentUserID)
+  API.addTodo(currentUserID, newItem)
     .then(response => response.json())
-    .then(data => console.log(data));
+    .then(data => console.log(data))
+    .catch(err => console.error(err));
 }
 
 const filterList = () => {
