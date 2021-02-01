@@ -1,4 +1,4 @@
-import {$userList} from '../todoDOM.js';
+import {$userCreateButton, $userList} from '../todoDOM.js';
 import {template} from '../template.js';
 import {api} from '../api.js';
 import {todo} from './todo.js';
@@ -12,33 +12,27 @@ export const newUser = {
         userState.set();
     },
 
-    create (userName) {
+    create: async (userName) => {
         const user = {
-            _id: newUser.newId(),
-            name: userName,
-            todolist: []
-        }
+            name: userName
+        };
     
-        api.addUser(user);
-        loadUser.addToList(user.name);
-    },
-
-    newId () {
-        return Math.random().toString(36).substr(2,16);
+        const response = await api.addUser(user);
+        userList.clear();
+        userList.list();
     }
 }
 
-export const loadUser = {
+export const userList = {
     list: async () => {
         const users = await api.loadUserList();
         console.log(users);
     
         users.map((user) => {
-            loadUser.addToList(user.name, user._id);
+            userList.addToList(user.name, user._id);
         })
 
         userState.set();
-        todo.load(users[9]._id);
     },
 
     addToList (name, userId) {
@@ -48,8 +42,16 @@ export const loadUser = {
     getId (target) {
         const userId = target.dataset.userid;
         return userId;
-    }
+    },
+
+    clear () {
+        while($userList.firstChild !== $userCreateButton){
+            $userList.firstChild.remove();
+        }
+    },
+    
 }
+
 
 
 export const userState = {
@@ -57,10 +59,12 @@ export const userState = {
         const $firstUser = $userList.querySelector('button');
         const $secondUser = $firstUser.nextSibling;
         const firstUserName = $firstUser.innerText;
+        const firstUserId = userList.getId($firstUser);
 
         userState.addActive($firstUser);
         userState.removeActive($secondUser);
         editTitleName(firstUserName);
+        todo.load(firstUserId)
     },
 
     change ({target}) {

@@ -1,6 +1,6 @@
-export const url = 'https://js-todo-list-9ca3a.df.r.appspot.com/';
+const url = 'https://js-todo-list-9ca3a.df.r.appspot.com';
 
-export const option = {
+const option = {
     post: (data) => ({
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
@@ -18,9 +18,9 @@ export const option = {
     })
 };
 
-export const request = async (url, option={}) => {
+const request = async (url, option={}) => {
     try {
-        const response = await fetch(`${url}`, option);
+        const response = await fetch(url, option);
 
         if(!response.ok) {
             throw new Error(response.status);
@@ -37,11 +37,15 @@ export const api = {
         return request(`${url}/api/users`);
     },
 
-    addUser(newUser){
-        return request(`${url}/api/users`, option.post(newUser));
+    addUser(user){
+        return request(`${url}/api/users`, option.post(user));
     },
 
     getUser(){
+        return request(`${url}/api/${userId}`);
+    },
+
+    deleteUser(){
         return request(`${url}/api/${userId}`);
     },
 

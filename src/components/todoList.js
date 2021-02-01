@@ -1,8 +1,12 @@
-import {loadUser} from './user.js';
+import {userList} from './user.js';
 import {todo} from './todo.js';
 
 export const getSelectedUserTodo = ({target}) => {
-    const userId = loadUser.getId(target);
+    const targetValue = target.innerText;
     
-    todo.load(userId);
+    if(targetValue !== '+ 유저 생성'){
+        const userId = userList.getId(target);
+    
+        todo.load(userId);
+    }
 }

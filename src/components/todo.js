@@ -13,7 +13,7 @@ export const todo = {
             todos = [...todos, newTodo];
         }
 
-        todo.allClear();
+        todo.clear();
         todos.forEach(item => {todo.input(item)});
     },
 
@@ -28,7 +28,7 @@ export const todo = {
         $todoList.insertAdjacentHTML('beforeend', template.todo(contents));
     },
 
-    allClear () {
+    clear () {
         while($todoList.firstChild){
             $todoList.lastChild.remove();
         }

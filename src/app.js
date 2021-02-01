@@ -1,5 +1,5 @@
 import {$userCreateButton, $userList, $todoInput} from './todoDOM.js';
-import {loadUser, userState, newUser} from './components/user.js';
+import {userList, userState, newUser} from './components/user.js';
 import {todo} from './components/todo.js';
 
 import {getSelectedUserTodo} from './components/todoList.js';
@@ -7,7 +7,7 @@ import {getSelectedUserTodo} from './components/todoList.js';
 
 export const app = () => {
   
-  loadUser.list();
+  userList.list();
 
   $userCreateButton.addEventListener('click', newUser.handler);
   $userList.addEventListener('click', userState.change);
