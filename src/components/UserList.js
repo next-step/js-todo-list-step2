@@ -1,8 +1,8 @@
 import api from '../api/api.js';
 import UserAddButton from './UserAddButton.js';
-import UserRemoveButton from './UserRemoveButton.js';
+import UserDeleteButton from './UserDeleteButton.js';
 import UserItem from './UserItem.js';
-import usersStore, { ADD_USER } from '../modules/users.js';
+import usersStore, { ADD_USER, DELETE_USER } from '../modules/users.js';
 import selectedUserStore, { GET_USER } from '../modules/selectedUser.js';
 
 const MINIMUN_USER_LENGTH = 2;
@@ -27,28 +27,43 @@ const UserList = async () => {
 
   const onSelectUser = async ({ target }) => {
     const userId = target.dataset.id;
-    if (!target.classList.contains('user-create-button')) {
+    if (target.classList.contains('user')) {
       selectedUserStore.dispatch({ type: GET_USER, payload: userId });
+    }
+  };
+
+  const selectFirstUser = async () => {
+    const { _id: firstUserId } = await usersStore.getState()[0];
+    // console.log(usersStore.getState()[0]);
+    await selectedUserStore.dispatch({ type: GET_USER, payload: firstUserId });
+  };
+
+  const onDeleteUser = async ({ target }) => {
+    if (target.classList.contains('user-delete-button')) {
+      const userId = await selectedUserStore.getState()._id;
+      await usersStore.dispatch({ type: DELETE_USER, payload: userId });
+      await selectFirstUser();
     }
   };
 
   const render = async () => {
     const users = await usersStore.getState();
     const userButtons = users.map((user) => UserItem.render(user._id, user.name));
-    userButtons.push(UserAddButton.render(), UserRemoveButton.render());
+    userButtons.push(UserAddButton.render(), UserDeleteButton.render());
     $userList.innerHTML = userButtons.join('\n');
   };
 
   $userList.addEventListener('click', onAddUser);
   $userList.addEventListener('click', onSelectUser);
+  $userList.addEventListener('click', onDeleteUser);
 
   usersStore.subscribe(ADD_USER, render);
+  usersStore.subscribe(DELETE_USER, render);
   selectedUserStore.subscribe(GET_USER, render);
 
   // initialize
   if (selectedUserStore.getState()._id === null) {
-    const { _id: firstUserId } = usersStore.getState()[0];
-    await selectedUserStore.dispatch({ type: GET_USER, payload: firstUserId });
+    await selectFirstUser();
   }
   render();
 };
