@@ -1,54 +1,64 @@
-import Reilly, { createElement } from "../lib/reilly/Reilly.js";
+import Reilly, { createElement } from '../lib/reilly/Reilly.js';
+import { PRIORITY_CLASS, PRIORITY_ENUM } from '../types/constants.js';
 
 class TodoItem extends Reilly.Component {
   render() {
-    const { todo, editingId } = this.props;
+    const {
+      todo: { _id, isCompleted, contents, priority },
+      editingId,
+      onSetPriority,
+    } = this.props;
 
     return createElement(
-      "li",
+      'li',
       {
-        id: todo.id,
-        className: `${todo.completed ? "completed" : ""} ${
-          todo.id === editingId ? "editing" : ""
-        }`
+        id: _id,
+        className: `${isCompleted ? 'completed' : ''} ${
+          _id === editingId ? 'editing' : ''
+        }`,
       },
       createElement(
-        "div",
-        { className: "view" },
-        createElement("input", {
-          type: "checkbox",
-          className: `toggle ${todo.completed ? "checked" : ""}`,
-          checked: todo.completed
+        'div',
+        { className: 'view' },
+        createElement('input', {
+          type: 'checkbox',
+          className: `toggle ${isCompleted ? 'checked' : ''}`,
+          checked: isCompleted,
         }),
-        //   <select class="chip select">
-        //   <option value="0" selected>순위</option>
-        //   <option value="1">1순위</option>
-        //   <option value="2">2순위</option>
-        // </select>
+
         createElement(
-          "label",
-          { className: "label" },
+          'label',
+          { className: 'label' },
           createElement(
-            "select",
-            { className: "chip select" },
-            createElement(
-              "option",
-              { value: "0", selected: "selected" },
-              "순위"
-            ),
-            createElement("option", { value: "1" }, "1순위"),
-            createElement("option", { value: "2" }, "2순위")
+            'select',
+            {
+              className: `chip select ${PRIORITY_CLASS.get(priority)}`,
+              onchange: onSetPriority,
+            },
+            ...[0, 1, 2].map(value =>
+              createElement(
+                'option',
+                optionConfig(value, priority),
+                (value === 0 ? '' : value) + '순위'
+              )
+            )
           ),
-          todo.content
+          contents
         ),
-        createElement("button", { className: "destroy" })
+        createElement('button', { className: 'destroy' })
       ),
-      createElement("input", {
-        className: "edit",
-        value: todo.content
+      createElement('input', {
+        className: 'edit',
+        value: contents,
       })
     );
   }
 }
+
+const optionConfig = (value, priority) => {
+  let res = { value };
+  if (value === PRIORITY_ENUM.get(priority)) res.selected = '';
+  return res;
+};
 
 export default TodoItem;

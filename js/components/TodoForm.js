@@ -1,14 +1,14 @@
-import { createElement } from "../lib/reilly/Reilly.js";
+import { createElement } from '../lib/reilly/Reilly.js';
 
 function TodoForm(props) {
   return createElement(
-    "form",
-    { onsubmit: props.onsubmit },
-    createElement("input", {
-      id: "new-todo-title",
-      name: "new-todo",
-      className: "new-todo",
-      placeholder: "할일을 추가해주세요"
+    'form',
+    { onsubmit: props.onsubmit() },
+    createElement('input', {
+      id: 'new-todo-title',
+      name: 'new-todo',
+      className: 'new-todo',
+      placeholder: '할일을 추가해주세요',
     })
   );
 }

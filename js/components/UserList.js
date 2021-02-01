@@ -1,32 +1,49 @@
-import Reilly, { createElement } from "../lib/reilly/Reilly.js";
+import Reilly, { createElement } from '../lib/reilly/Reilly.js';
+import { Skeleton } from './Skeleton.js';
 
 export class UserList extends Reilly.Component {
   render() {
+    const {
+      users,
+      isUsersLoading,
+      isUserLoaded,
+      onSelectUser,
+      onCreateUser,
+      onDeleteUser,
+    } = this.props;
+
     return createElement(
-      "section",
+      'section',
       null,
       createElement(
-        "button",
-        { className: "ripple user-create-button" },
-        "유저 생성"
+        'button',
+        {
+          className: 'ripple user-create-button',
+          onclick: onCreateUser,
+        },
+        '유저 생성'
       ),
-      createElement(
-        "div",
-        { id: "user-list" },
-        createElement("button", { className: "ripple active" }, "eastjun"),
-        createElement("button", { className: "ripple" }, "westjun"),
-        createElement("button", { className: "ripple" }, "hojun"),
-        createElement("button", { className: "ripple" }, "hojun"),
-        createElement("button", { className: "ripple" }, "westjun"),
-        createElement("button", { className: "ripple" }, "hojun"),
-        createElement("button", { className: "ripple" }, "hojun"),
-        createElement("button", { className: "ripple" }, "westjun"),
-        createElement("button", { className: "ripple" }, "hojun"),
-        createElement("button", { className: "ripple" }, "hojun"),
-        createElement("button", { className: "ripple" }, "westjun"),
-        createElement("button", { className: "ripple" }, "hojun"),
-        createElement("button", { className: "ripple" }, "hojun")
-      )
+      isUsersLoading
+        ? createElement(Skeleton)
+        : createElement(
+            'ul',
+            {
+              id: 'user-list',
+              className: isUserLoaded ? 'folded' : '',
+            },
+            ...(users?.map(user =>
+              createElement(
+                'button',
+                {
+                  className: 'ripple',
+                  onclick: onSelectUser,
+                  oncontextmenu: onDeleteUser,
+                  id: user._id,
+                },
+                user.name
+              )
+            ) || [])
+          )
     );
   }
 }

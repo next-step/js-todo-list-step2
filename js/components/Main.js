@@ -1,44 +1,57 @@
-import Reilly, { createElement } from "../lib/reilly/Reilly.js";
-import CountContainer from "./CountContainer.js";
-import TodoList from "./TodoList.js";
-import { ToggleAll } from "./ToggleAll.js";
-import { FILTER_ENUM } from "../types/constants.js";
+import Reilly, { createElement } from '../lib/reilly/Reilly.js';
+import CountContainer from './CountContainer.js';
+import TodoList from './TodoList.js';
+import { FILTER_STATUS } from '../types/constants.js';
+import { Skeleton } from './Skeleton.js';
 
 class Main extends Reilly.Component {
   render() {
     const {
-      todos,
+      todoList,
       mode,
       editingId,
       onStartEdit,
       onConfirmEdit,
       onToggle,
       onRemove,
-      onModeChange
+      onDeleteAll,
+      onSetPriority,
+      onModeChange,
     } = this.props;
 
-    const filteredTodos =
-      mode === FILTER_ENUM.ALL
-        ? [...todos]
-        : todos.filter((todo) =>
-            mode === FILTER_ENUM.COMPLETED ? todo.completed : !todo.completed
-          );
+    const filteredTodos = todoList?.filter(by(mode)) || [];
 
     return createElement(
-      "main",
+      'main',
       null,
-      createElement(ToggleAll),
       createElement(TodoList, {
-        todos: filteredTodos,
+        todoList: filteredTodos,
         editingId,
         onToggle,
         onRemove,
+        onSetPriority,
         onStartEdit,
-        onConfirmEdit
+        onConfirmEdit,
       }),
-      createElement(CountContainer, { mode, todos, onModeChange })
+      createElement(CountContainer, {
+        mode,
+        todoList,
+        onModeChange,
+        onDeleteAll,
+      })
     );
   }
 }
+
+const by = mode => todo => {
+  switch (mode) {
+    case FILTER_STATUS.ALL:
+      return todo;
+    case FILTER_STATUS.ACTIVE:
+      return todo.isCompleted;
+    case FILTER_STATUS.COMPLETED:
+      return !todo.isCompleted;
+  }
+};
 
 export default Main;

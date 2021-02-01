@@ -1,22 +1,23 @@
-import { createElement } from "../lib/reilly/Reilly.js";
+import { createElement } from '../lib/reilly/Reilly.js';
 
 export function Skeleton() {
   return createElement(
-    "li",
+    'li',
     null,
     createElement(
-      "div",
-      { className: "view" },
+      'div',
+      { className: 'view' },
       createElement(
-        "label",
-        null,
+        'label',
+        { className: 'label' },
         createElement(
-          "div",
-          { className: "animated-background" },
+          'div',
+          { className: 'animated-background' },
           createElement(
-            "div",
-            { className: "skel-mask-container" },
-            createElement("div", { className: "skel-mask" })
+            'div',
+            { className: 'skel-mask-container' },
+            createElement('div', { className: 'skel-mask' }),
+            'loading...'
           )
         )
       )

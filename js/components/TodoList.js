@@ -1,30 +1,32 @@
-import Reilly, { createElement } from "../lib/reilly/Reilly.js";
-import { Skeleton } from "./Skeleton.js";
-import TodoItem from "./TodoItem.js";
+import Reilly, { createElement } from '../lib/reilly/Reilly.js';
+import { Skeleton } from './Skeleton.js';
+import TodoItem from './TodoItem.js';
 
 class TodoList extends Reilly.Component {
   render() {
     const {
-      todos,
+      todoList,
       editingId,
       onToggle,
       onRemove,
+      onSetPriority,
       onStartEdit,
-      onConfirmEdit
+      onConfirmEdit,
     } = this.props;
 
     return createElement(
-      "ul",
+      'ul',
       {
-        id: "todo-list",
-        className: "todo-list",
+        id: 'todo-list',
+        className: 'todo-list',
         onchange: onToggle,
         onclick: onRemove,
         ondblclick: onStartEdit,
-        onkeyup: onConfirmEdit
+        onkeyup: onConfirmEdit,
       },
-      createElement(Skeleton),
-      ...todos.map((todo) => createElement(TodoItem, { todo, editingId }))
+      ...todoList?.map(todo =>
+        createElement(TodoItem, { todo, editingId, onSetPriority })
+      )
     );
   }
 }
