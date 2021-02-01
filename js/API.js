@@ -11,5 +11,10 @@ export const API = {
             },
             body: JSON.stringify(newUser),
         }   
-    )
+    ),
+    deleteUser: user => fetch(baseURL + `/api/users/${user}`,
+        {
+            method: 'DELETE',
+        }
+    ),
 }
