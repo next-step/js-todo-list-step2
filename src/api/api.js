@@ -7,6 +7,7 @@ const GET_TODO = (userId) => `/api/users/${userId}/items`;
 const ADD_TODO = (userId) => `/api/users/${userId}/items`;
 const DELETE_TODO = (userId, itemId) => `/api/users/${userId}/items/${itemId}`;
 const EDIT_TODO_CONTENTS = (userId, itemId) => `/api/users/${userId}/items/${itemId}`;
+const TOGGLE_COMPLETE = (userId, itemId) => `/api/users/${userId}/items/${itemId}/toggle`;
 
 const addUser = async (name) => {
   try {
@@ -142,6 +143,22 @@ const editTodoContents = async ({ userId, itemId, contents }) => {
   }
 };
 
+const toggleComplete = async ({ userId, itemId }) => {
+  try {
+    const response = await fetch(`${BASE_URL}${TOGGLE_COMPLETE(userId, itemId)}`, {
+      method: 'PUT',
+    });
+
+    if (!response.ok) {
+      throw new Error(response.status);
+    }
+    return response.json();
+  } catch (err) {
+    alert(err);
+    return err;
+  }
+};
+
 export default {
   addUser,
   getUsers,
@@ -151,4 +168,5 @@ export default {
   getTodo,
   deleteTodo,
   editTodoContents,
+  toggleComplete,
 };

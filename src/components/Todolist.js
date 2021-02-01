@@ -4,6 +4,7 @@ import selectedUserStore, {
   ADD_TODO,
   DELETE_TODO,
   EDIT_TODO_CONTENTS,
+  TOGGLE_COMPLETE,
 } from '../modules/selectedUser.js';
 
 const Todolist = () => {
@@ -26,7 +27,6 @@ const Todolist = () => {
 
   const onOpenTodoEdit = (e) => {
     const closestLi = e.target.closest('li');
-    console.log(closestLi);
     const inputEdit = closestLi.querySelector('input.edit');
     inputEdit.style.display = 'block';
     inputEdit.focus();
@@ -63,9 +63,26 @@ const Todolist = () => {
     }
   };
 
+  const onToggleComplete = (e) => {
+    if (e.target.type === 'checkbox') {
+      const closestLi = e.target.closest('li');
+      const userId = selectedUserStore.getState()._id;
+      const itemId = closestLi.dataset.id;
+      selectedUserStore.dispatch({
+        type: TOGGLE_COMPLETE,
+        payload: {
+          userId,
+          itemId,
+        },
+      });
+      closestLi.classList.toggle('completed');
+    }
+  };
+
   $todolist.addEventListener('click', onDeleteTodo);
   $todolist.addEventListener('dblclick', onOpenTodoEdit);
   $todolist.addEventListener('keyup', onKeyupTodoEdit);
+  $todolist.addEventListener('click', onToggleComplete);
 
   selectedUserStore.subscribe(GET_USER, render);
   selectedUserStore.subscribe(ADD_TODO, render);

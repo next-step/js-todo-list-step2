@@ -5,6 +5,7 @@ export const GET_USER = 'GET_USER';
 export const ADD_TODO = 'ADD_TODO';
 export const DELETE_TODO = 'DELETE_TODO';
 export const EDIT_TODO_CONTENTS = 'EDIT_TODO_CONTENTS';
+export const TOGGLE_COMPLETE = 'TOGGLE_COMPLETE';
 
 const reducer = async (state, action) => {
   switch (action.type) {
@@ -28,6 +29,13 @@ const reducer = async (state, action) => {
         ...state,
         todoList: await api.getTodo(action.payload),
       };
+    case TOGGLE_COMPLETE:
+      await api.toggleComplete(action.payload);
+      return {
+        ...state,
+        todoList: await api.getTodo(action.payload),
+      };
+
     default:
       return state;
   }

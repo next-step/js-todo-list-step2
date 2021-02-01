@@ -1,8 +1,8 @@
 const TodoItem = () => {
   const render = (todo) => `
-        <li data-id="${todo._id}">
+        <li data-id="${todo._id}" ${todo.isCompleted ? 'class="completed"' : ''}">
           <div class="view">
-            <input class="toggle" type="checkbox"  ${todo.isCompleted ? 'checked' : ''}/>
+            <input class="toggle" type="checkbox" ${todo.isCompleted ? 'checked' : ''}/>
             <label class="label">
               <select class="chip select">
                 <option value="0" ${todo.priority === 'NONE' ? 'selected' : ''}>순위</option>
