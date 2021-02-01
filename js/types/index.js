@@ -35,7 +35,6 @@ import { FILTER_STATUS, PRORITY_TYPE } from './constants.js';
 export function Todo(contents) {
   if (!new.target) return new Todo(contents);
 
-  this._id = uuid();
   this.contents = contents;
   this.isCompleted = false;
   this.priority = 'NONE';
