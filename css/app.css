@@ -191,6 +191,7 @@ body {
 
 .todo-list li .toggle {
   text-align: center;
+  cursor: pointer;
   width: 40px;
   height: auto;
   position: absolute;
@@ -242,6 +243,7 @@ body {
   color: #cc9a9a;
   margin-bottom: 11px;
   transition: color 0.2s ease-out;
+  cursor: pointer;
 }
 
 .todo-list li .destroy:hover {
@@ -460,6 +462,7 @@ button.ripple {
   text-align: center;
   left: 60px;
   top: 3px;
+  cursor: pointer;
 }
 
 .chip.primary {
