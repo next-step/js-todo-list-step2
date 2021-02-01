@@ -32,8 +32,7 @@ export default function UserList() {
   };
 
   const renderEachUser = (user) => {
-    const selectUser = $store.userState.selectUser;
-    const $userListItem = new UserListItem({ user, selectUser });
+    const $userListItem = new UserListItem({ user });
     dom.appendChild($userListItem);
   };
 
