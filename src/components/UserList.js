@@ -1,4 +1,3 @@
-import api from '../api/api.js';
 import UserAddButton from './UserAddButton.js';
 import UserDeleteButton from './UserDeleteButton.js';
 import UserItem from './UserItem.js';
