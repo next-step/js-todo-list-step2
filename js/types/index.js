@@ -1,11 +1,30 @@
-import { uuid } from "../utils/uuid.js";
-import { FILTER_ENUM } from "./constants.js";
+import { uuid } from '../utils/uuid.js';
+import { FILTER_STATUS, PRORITY_TYPE } from './constants.js';
+
+/**
+ * @typedef {Object} IState
+ * @property {boolean} isLoading
+ * @property {UserType || null} user
+ * @property {UserType[] || []} users
+ * @property {Error || null} error
+ * @property {FILTER_STATUS} defaultMode
+ */
+
+/**
+ * @typedef {Object} UserType
+ * @property {string} _id
+ * @property {string} name
+ * @property {TodoType[]} todoList
+ * @param {FILTER_STATUS} mode
+ * @property {string} editingId
+ */
 
 /**
  * @typedef {Object} TodoType
  * @property {string} id
  * @property {string} content
  * @property {boolean} completed
+ * @property {PRORITY_TYPE} priority
  */
 
 /**
@@ -13,29 +32,43 @@ import { FILTER_ENUM } from "./constants.js";
  * @param {string} content
  * @returns {TodoType}
  */
-export function Todo(content) {
-  if (!new.target)
-    throw new Error("this is constructor, call with the new keyword");
+export function Todo(contents) {
+  if (!new.target) return new Todo(contents);
 
-  this.id = uuid();
-  this.content = content;
-  this.completed = false;
+  this._id = uuid();
+  this.contents = contents;
+  this.isCompleted = false;
+  this.priority = 'NONE';
   this._createdAt = new Date().toISOString();
   this._updatedAt = new Date().toISOString();
 }
 
+export function User({ name }) {
+  if (!new.target) return new Todo(contents);
+
+  this.name = name || 'randomUser';
+  this.todoList = [];
+}
+
 /**
- * @constructor construct initial state
+ * @param {IState} initialState
  */
-export class TodoState {
-  /**
-   * @param {TodoType[]} todos
-   * @param {FILTER_ENUM} mode
-   * @param {null | string} edittingId
-   */
-  constructor(todos, mode, edittingId) {
-    this.todos = todos;
-    this.mode = mode;
-    this.edittingId = edittingId;
-  }
+export function AppState({
+  isUsersLoading,
+  todoList,
+  user,
+  users,
+  editingId,
+  mode = FILTER_STATUS.ALL,
+  error = null,
+}) {
+  if (!new.target) return new AppState({ isLoading, user, users, mode });
+
+  this.isUsersLoading = isUsersLoading;
+  this.user = user;
+  this.todoList = todoList;
+  this.users = users;
+  this.mode = mode;
+  this.error = error;
+  this.editingId = editingId;
 }
