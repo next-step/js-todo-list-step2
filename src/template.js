@@ -3,7 +3,7 @@ export const template = {
         return `<span><strong>${name}</strong>'s Todo List</span>`
     },
 
-    userButtons (name) {
-        return `<button class="ripple">${name}</button>`
+    userButtons (name, userId) {
+        return `<button class="ripple" data-userId="${userId}">${name}</button>`
     }
 }

@@ -9,11 +9,11 @@ export const newUser = {
     handler () {
         const userName = prompt("추가하고 싶은 이름을 입력해주세요.");
   
-        newUser(userName);
-        setActive();
+        newUser.create(userName);
+        userState.set();
     },
 
-    create () {
+    create (userName) {
         const user = {
             _id: newUser.newId(),
             name: userName,
@@ -35,19 +35,15 @@ export const loadUser = {
         console.log(users);
     
         users.map((user) => {
-            const name = user.name;
-            //const userId = user._id;
-
-            //addToUserIdList(userId);
-            loadUser.addToList(name);
+            loadUser.addToList(user.name, user._id);
         })
 
         userState.set();
         loadUser.todo(users[7]._id);
     },
 
-    addToList(name){
-        $userList.insertAdjacentHTML('afterbegin', template.userButtons(name));
+    addToList(name, userId){
+        $userList.insertAdjacentHTML('afterbegin', template.userButtons(name, userId));
     },
 
     todo: async (userId) => {
@@ -72,24 +68,22 @@ export const loadUser = {
 export const userState = {
     set () {
         const $firstUser = $userList.querySelector('button');
+        const $secondUser = $firstUser.nextSibling;
         const firstUserName = $firstUser.innerText;
 
         userState.addActive($firstUser);
+        userState.removeActive($secondUser);
         editTitleName(firstUserName);
     },
 
     change ({target}) {
         if(target.classList.item(1) !== 'user-create-button'){
             const targetUserName= target.innerText;
-            //const targetIndex = getIndexOfUser(targetUserName);
-            //console.log(targetIndex);
-        
+     
             userState.init();
             userState.addActive(target);
         
             editTitleName(targetUserName);
-            //getUserTodo(userIdList[targetIndex]);
-            //console.log(userIdList[targetIndex]);
         }
     },
 

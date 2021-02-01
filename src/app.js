@@ -7,7 +7,7 @@ export const app = () => {
   
   loadUser.list();
 
-  $userCreateButton.addEventListener('click', newUser.create);
+  $userCreateButton.addEventListener('click', newUser.handler);
   $userList.addEventListener('click', userState.change);
   $todoInput.addEventListener('keyup', addTodoItem);
 }
