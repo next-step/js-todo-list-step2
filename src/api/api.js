@@ -16,6 +16,7 @@ const addUser = async (name) => {
     return response.json();
   } catch (err) {
     alert(err);
+    return err;
   }
 };
 
@@ -31,6 +32,7 @@ const getUsers = async () => {
     return response.json();
   } catch (err) {
     alert(err);
+    return err;
   }
 };
 
