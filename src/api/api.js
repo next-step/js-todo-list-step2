@@ -1,3 +1,5 @@
+import Loading from '../components/Loading.js';
+
 const BASE_URL = 'https://js-todo-list-9ca3a.df.r.appspot.com';
 const ADD_USER = '/api/users';
 const GET_USERS = '/api/users';
@@ -10,6 +12,9 @@ const EDIT_TODO_CONTENTS = (userId, itemId) => `/api/users/${userId}/items/${ite
 const TOGGLE_COMPLETE = (userId, itemId) => `/api/users/${userId}/items/${itemId}/toggle`;
 const DELETE_ALL = (userId) => `/api/users/${userId}/items`;
 const EDIT_PRIORITY = (userId, itemId) => `/api/users/${userId}/items/${itemId}/priority`;
+
+const $todolist = document.querySelector('ul.todo-list');
+const renderLoading = Loading().render;
 
 const addUser = async (name) => {
   try {
@@ -47,6 +52,7 @@ const getUsers = async () => {
 
 const getUser = async (userId) => {
   try {
+    $todolist.innerHTML = renderLoading();
     const response = await fetch(`${BASE_URL}${GET_USER}${userId}`, {
       method: 'GET',
     });
