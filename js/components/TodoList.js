@@ -1,3 +1,5 @@
+import { Todo } from "../apis.js";
+
 const renderSkelMask = () => `
   <li>
     <div class="view">
@@ -12,18 +14,39 @@ const renderSkelMask = () => `
   </li>
 `;
 
-const renderTodoItem = ({ _id, contents, isCompleted }, editingId) => `
+const renderTodoItem = (
+  { _id, contents, isCompleted, priority },
+  editingId
+) => {
+  const chipClasses = ["", "primary", "secondary"];
+  const priorityIndex = Todo.priorities.findIndex((p) => p === priority);
+  const optionsDOMString = Todo.priorities
+    .map(
+      (_priority, index) =>
+        `<option value="${index}" ${_priority === priority ? "selected" : ""}>${
+          index || ""
+        }순위</option>`
+    )
+    .join("");
+
+  return `
   <li class="${
     _id === editingId ? "editing" : isCompleted ? "completed" : ""
   }" data-id="${_id}">
     <div class="view">
       <input class="toggle" type="checkbox" ${isCompleted ? "checked" : ""}>
-      <label class="label">${contents}</label>
+      <label class="label">
+        <select class="chip select ${chipClasses[priorityIndex] ?? ""}">
+          ${optionsDOMString}
+        </select>
+        ${contents}
+      </label>
       <button class="destroy"></button>
     </div>
     <input class="edit" value="${contents}">
   </li>
 `;
+};
 
 export default function TodoList(listEl, todoApp) {
   const getTodoItemId = (childEl) => childEl.closest("li")?.dataset?.id;
@@ -86,6 +109,15 @@ export default function TodoList(listEl, todoApp) {
     this.convertToViewer();
   };
 
+  this.updatePriority = ({ target }) => {
+    if (!target.classList.contains("chip")) {
+      return;
+    }
+
+    const id = getTodoItemId(target);
+    todoApp.updatePriority(id, target.value);
+  };
+
   this.render = (todos) => {
     listEl.innerHTML = `${
       todoApp.isLoading ? renderSkelMask() : ""
@@ -104,4 +136,5 @@ export default function TodoList(listEl, todoApp) {
   listEl.addEventListener("focusout", this.convertToViewer);
   listEl.addEventListener("keypress", this.updateContents);
   listEl.addEventListener("keypress", this.convertToViewerWhenPressingEsc);
+  listEl.addEventListener("change", this.updatePriority);
 }

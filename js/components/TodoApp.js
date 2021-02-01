@@ -74,6 +74,15 @@ export default function TodoApp(appEl) {
       this.todos = await Todo.getTodos(userId);
     });
 
+  this.updatePriority = async (_id, priority) =>
+    this.toggleIsLoading(async () => {
+      const { _id: userId } = this.chosenUser;
+      priority = Todo.priorities[+priority];
+      await Todo.updatePriority(userId, { _id, priority });
+
+      this.todos = await Todo.getTodos(userId);
+    });
+
   this.updateContents = async (todo) =>
     this.toggleIsLoading(async () => {
       const { _id: userId } = this.chosenUser;
