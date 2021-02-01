@@ -41,8 +41,13 @@ export const loadUser = {
         todo.load(users[9]._id);
     },
 
-    addToList(name, userId){
+    addToList (name, userId) {
         $userList.insertAdjacentHTML('afterbegin', template.userButtons(name, userId));
+    },
+
+    getId (target) {
+        const userId = target.dataset.userid;
+        return userId;
     }
 }
 

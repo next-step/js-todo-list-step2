@@ -1,7 +1,6 @@
 import {$todoList} from '../todoDOM.js';
 import {template} from '../template.js';
 import {api} from '../api.js';
-import {loadUser} from './user.js';
 
 export const todo = {
     load : async (userId) => {

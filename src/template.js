@@ -4,7 +4,7 @@ export const template = {
     },
 
     userButtons (name, userId) {
-        return `<button class="ripple" data-userId="${userId}">${name}</button>`
+        return `<button class="ripple" data-userid="${userId}">${name}</button>`
     },
 
     todo (contents) {
