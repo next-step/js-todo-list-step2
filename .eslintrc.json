@@ -17,6 +17,7 @@
     "no-plusplus": "off",
     "class-methods-use-this": "off",
     "no-alert": "off",
-    "no-underscore-dangle": "off"
+    "no-underscore-dangle": "off",
+    "no-case-declarations": "off"
   }
 }
