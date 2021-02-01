@@ -25,7 +25,13 @@ export default function TodoCount(countContainerEl, todoApp) {
     event.preventDefault();
   };
 
-  this.deleteAllTodos = () => todoApp.deleteAllTodos();
+  this.deleteAllTodos = () => {
+    if (!confirm(`정말로 모두 삭제하시겠습니까?`)) {
+      return;
+    }
+
+    todoApp.deleteAllTodos();
+  };
 
   const checkFilterElSelected = ({ classList }) =>
     (todoApp.filter === null && classList.contains("all")) ||
