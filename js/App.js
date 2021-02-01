@@ -65,7 +65,8 @@ class App extends Reilly.Component {
 
   async createUser() {
     let name;
-    while (!name) name = prompt('please insert name', 'domuk').trim();
+    while (!name || name.length < 2)
+      name = prompt('please insert name', 'domuk')?.trim();
 
     try {
       const { data: user } = await UserService.add(new User({ name }));
@@ -127,7 +128,7 @@ class App extends Reilly.Component {
     if (!e.target.matches('.toggle')) return;
 
     const targetId = e.path.find(elm => elm.matches('li')).id;
-    const todoList = this._state.todoList.map(toggledBy(todo._id !== targetId));
+    const todoList = this._state.todoList.map(toggledBy(targetId));
 
     try {
       this.setState({ todoList });
@@ -213,9 +214,7 @@ class App extends Reilly.Component {
       return;
     }
 
-    const todoList = this._state.todoList.map(
-      confirmedBy(todo._id !== targetId, contents)
-    );
+    const todoList = this._state.todoList.map(confirmedBy(targetId, contents));
 
     try {
       this.setState({
@@ -291,20 +290,20 @@ class App extends Reilly.Component {
   }
 }
 
-const toggledBy = condition => todo => {
+const toggledBy = targetId => todo => {
   const newTodo = {
     ...todo,
     isCompleted: !todo.isCompleted,
     _updatedAt: new Date().toISOString(),
   };
 
-  return condition ? todo : newTodo;
+  return todo._id !== targetId ? todo : newTodo;
 };
 
-const confirmedBy = (condition, contents) => todo => {
+const confirmedBy = (targetId, contents) => todo => {
   const newTodo = { ...todo, contents, _updatedAt: new Date().toISOString() };
 
-  return condition ? todo : newTodo;
+  return todo._id !== targetId ? todo : newTodo;
 };
 
 export default App;
