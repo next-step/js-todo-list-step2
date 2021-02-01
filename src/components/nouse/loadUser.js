@@ -1,8 +1,11 @@
-import {$userList} from '../todoDOM.js';
-import {api} from '../api.js';
+/*
+import {$userList} from '../../todoDOM.js';
+import {api} from '../../api.js';
 import {setActive} from './userState.js';
-import {insertTodo} from './todoInput.js';
-import {clearTodo} from './todoEdit.js';
+import {insertTodo} from '../todoInput.js';
+import {clearTodo} from '../todoEdit.js';
+import {userState} from '../user.js';
+*/
 
 export let userIdList = [];
 // 새로고침할때 처음 한번만 작동하는 함수
@@ -18,7 +21,7 @@ export const loadUserList = async () => {
         addToUserList(name);
     })
 
-    setActive();
+    userState.setActive();
     getUserTodo(users[7]._id);
 }
 

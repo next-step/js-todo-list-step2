@@ -1,8 +1,8 @@
-import {$userList} from '../todoDOM.js';
-import {editTitleName} from './todoTitle.js';
-import {getUserTodo, userIdList} from './loadUser.js';
+//import {$userList} from '../todoDOM.js';
+//import {editTitleName} from './todoTitle.js';
+//import {getUserTodo, userIdList} from './loadUser.js';
 
-export const setActive = async () => {
+export const setActive = () => {
     const $firstUser = $userList.querySelector('button');
     const firstUserName = $firstUser.innerText;
 

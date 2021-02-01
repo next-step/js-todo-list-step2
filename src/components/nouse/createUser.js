@@ -1,6 +1,6 @@
-import {api} from '../api.js';
-import {addToUserList} from './loadUser.js';
-import {setActive} from './userState.js';
+//import {api} from '../api.js';
+//import {addToUserList} from './loadUser.js';
+//import {setActive} from './userState.js';
 
 export const onUserCreateHandler = () => {
     const userName = prompt("추가하고 싶은 이름을 입력해주세요.");
