@@ -127,7 +127,7 @@ class App extends Reilly.Component {
     if (!e.target.matches('.toggle')) return;
 
     const targetId = e.path.find(elm => elm.matches('li')).id;
-    const todoList = this._state.todoList.map(toggleBy(targetId));
+    const todoList = this._state.todoList.map(toggledBy(todo._id !== targetId));
 
     try {
       this.setState({ todoList });
@@ -213,11 +213,8 @@ class App extends Reilly.Component {
       return;
     }
 
-    // ✅ 방장님이 리팩토링 권유
-    const todoList = this._state.todoList.map(todo =>
-      todo._id !== targetId
-        ? todo
-        : { ...todo, contents, _updatedAt: new Date().toISOString() }
+    const todoList = this._state.todoList.map(
+      confirmedBy(todo._id !== targetId, contents)
     );
 
     try {
@@ -294,16 +291,20 @@ class App extends Reilly.Component {
   }
 }
 
-const toggleBy = targetId => {
-  return todo => {
-    return todo._id !== targetId
-      ? todo
-      : {
-          ...todo,
-          isCompleted: !todo.isCompleted,
-          _updatedAt: new Date().toISOString(),
-        };
+const toggledBy = condition => todo => {
+  const newTodo = {
+    ...todo,
+    isCompleted: !todo.isCompleted,
+    _updatedAt: new Date().toISOString(),
   };
+
+  return condition ? todo : newTodo;
+};
+
+const confirmedBy = (condition, contents) => todo => {
+  const newTodo = { ...todo, contents, _updatedAt: new Date().toISOString() };
+
+  return condition ? todo : newTodo;
 };
 
 export default App;
