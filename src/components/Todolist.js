@@ -3,13 +3,23 @@ import selectedUserStore, {
   GET_USER,
   ADD_TODO,
   DELETE_TODO,
+  GET_TODO,
   EDIT_TODO_CONTENTS,
   TOGGLE_COMPLETE,
+  FILTER_ACTIVE,
+  FILTER_COMPLETE,
+  DELETE_ALL,
+  EDIT_PRIORITY,
 } from '../modules/selectedUser.js';
 
 const Todolist = () => {
   const $todolist = document.querySelector('ul.todo-list');
   const { render: todoItemRender } = TodoItem();
+  const priorities = {
+    0: 'NONE',
+    1: 'FIRST',
+    2: 'SECOND',
+  };
 
   const render = () => {
     const todos = selectedUserStore.getState().todoList;
@@ -79,15 +89,38 @@ const Todolist = () => {
     }
   };
 
+  const onChangePriority = (e) => {
+    if (e.target.classList.contains('chip')) {
+      const { value } = e.target;
+      const closestLi = e.target.closest('li');
+      const userId = selectedUserStore.getState()._id;
+      const itemId = closestLi.dataset.id;
+      selectedUserStore.dispatch({
+        type: EDIT_PRIORITY,
+        payload: {
+          userId,
+          itemId,
+          priority: priorities[value],
+        },
+      });
+    }
+  };
+
   $todolist.addEventListener('click', onDeleteTodo);
   $todolist.addEventListener('dblclick', onOpenTodoEdit);
   $todolist.addEventListener('keyup', onKeyupTodoEdit);
   $todolist.addEventListener('click', onToggleComplete);
+  $todolist.addEventListener('change', onChangePriority);
 
   selectedUserStore.subscribe(GET_USER, render);
   selectedUserStore.subscribe(ADD_TODO, render);
   selectedUserStore.subscribe(DELETE_TODO, render);
+  selectedUserStore.subscribe(GET_TODO, render);
   selectedUserStore.subscribe(EDIT_TODO_CONTENTS, render);
+  selectedUserStore.subscribe(FILTER_ACTIVE, render);
+  selectedUserStore.subscribe(FILTER_COMPLETE, render);
+  selectedUserStore.subscribe(DELETE_ALL, render);
+  selectedUserStore.subscribe(EDIT_PRIORITY, render);
 };
 
 export default Todolist;

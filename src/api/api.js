@@ -8,6 +8,8 @@ const ADD_TODO = (userId) => `/api/users/${userId}/items`;
 const DELETE_TODO = (userId, itemId) => `/api/users/${userId}/items/${itemId}`;
 const EDIT_TODO_CONTENTS = (userId, itemId) => `/api/users/${userId}/items/${itemId}`;
 const TOGGLE_COMPLETE = (userId, itemId) => `/api/users/${userId}/items/${itemId}/toggle`;
+const DELETE_ALL = (userId) => `/api/users/${userId}/items`;
+const EDIT_PRIORITY = (userId, itemId) => `/api/users/${userId}/items/${itemId}/priority`;
 
 const addUser = async (name) => {
   try {
@@ -104,7 +106,7 @@ const getTodo = async ({ userId }) => {
     }
     return response.json();
   } catch (err) {
-    alert('addTodo fail');
+    alert('getTodo fail');
     return err;
   }
 };
@@ -159,6 +161,40 @@ const toggleComplete = async ({ userId, itemId }) => {
   }
 };
 
+const deleteAll = async ({ userId }) => {
+  try {
+    const response = await fetch(`${BASE_URL}${DELETE_ALL(userId)}`, {
+      method: 'DELETE',
+    });
+
+    if (!response.ok) {
+      throw new Error(response.status);
+    }
+    return response.json();
+  } catch (err) {
+    alert(err);
+    return err;
+  }
+};
+
+const editPriority = async ({ userId, itemId, priority }) => {
+  try {
+    const response = await fetch(`${BASE_URL}${EDIT_PRIORITY(userId, itemId)}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ priority }),
+    });
+
+    if (!response.ok) {
+      throw new Error(response.status);
+    }
+    return response.json();
+  } catch (err) {
+    alert(err);
+    return err;
+  }
+};
+
 export default {
   addUser,
   getUsers,
@@ -169,4 +205,6 @@ export default {
   deleteTodo,
   editTodoContents,
   toggleComplete,
+  deleteAll,
+  editPriority,
 };
