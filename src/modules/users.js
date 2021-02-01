@@ -4,7 +4,7 @@ import api from '../api/api.js';
 export const ADD_USER = 'ADD_USER';
 export const GET_USERS = 'GET_USERS';
 
-const userReducer = async (state, action) => {
+const reducer = async (state, action) => {
   switch (action.type) {
     case ADD_USER:
       await api.addUser(action.payload);
@@ -16,6 +16,8 @@ const userReducer = async (state, action) => {
   }
 };
 
-const usersStore = Store.createAsyncStore([], userReducer);
+const initialState = [];
+
+const usersStore = Store.createAsyncStore(initialState, reducer);
 
 export default usersStore;
