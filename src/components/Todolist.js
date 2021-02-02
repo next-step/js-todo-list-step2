@@ -35,8 +35,8 @@ const Todolist = () => {
     }
   };
 
-  const onOpenTodoEdit = (e) => {
-    const closestLi = e.target.closest('li');
+  const onOpenTodoEdit = ({ target }) => {
+    const closestLi = target.closest('li');
     const inputEdit = closestLi.querySelector('input.edit');
     inputEdit.style.display = 'block';
     inputEdit.focus();
@@ -73,9 +73,9 @@ const Todolist = () => {
     }
   };
 
-  const onToggleComplete = (e) => {
-    if (e.target.type === 'checkbox') {
-      const closestLi = e.target.closest('li');
+  const onToggleComplete = ({ target }) => {
+    if (target.type === 'checkbox') {
+      const closestLi = target.closest('li');
       const userId = selectedUserStore.getState()._id;
       const itemId = closestLi.dataset.id;
       selectedUserStore.dispatch({
@@ -89,10 +89,10 @@ const Todolist = () => {
     }
   };
 
-  const onChangePriority = (e) => {
-    if (e.target.classList.contains('chip')) {
-      const { value } = e.target;
-      const closestLi = e.target.closest('li');
+  const onChangePriority = ({ target }) => {
+    if (target.classList.contains('chip')) {
+      const { value } = target;
+      const closestLi = target.closest('li');
       const userId = selectedUserStore.getState()._id;
       const itemId = closestLi.dataset.id;
       selectedUserStore.dispatch({

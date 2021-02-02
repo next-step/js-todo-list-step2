@@ -16,7 +16,7 @@ const EDIT_PRIORITY = (userId, itemId) => `/api/users/${userId}/items/${itemId}/
 const $todolist = document.querySelector('ul.todo-list');
 const renderLoading = Loading().render;
 
-const addUser = async (name) => {
+const addUser = async ({ name }) => {
   try {
     const response = await fetch(`${BASE_URL}${ADD_USER}`, {
       method: 'POST',
@@ -50,7 +50,7 @@ const getUsers = async () => {
   }
 };
 
-const getUser = async (userId) => {
+const getUser = async ({ userId }) => {
   try {
     $todolist.innerHTML = renderLoading();
     const response = await fetch(`${BASE_URL}${GET_USER}${userId}`, {
@@ -67,7 +67,7 @@ const getUser = async (userId) => {
   }
 };
 
-const deleteUser = async (userId) => {
+const deleteUser = async ({ userId }) => {
   try {
     const response = await fetch(`${BASE_URL}${DELETE_USER}${userId}`, {
       method: 'DELETE',

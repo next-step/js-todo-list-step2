@@ -11,35 +11,35 @@ const UserList = async () => {
 
   const onAddUser = async ({ target }) => {
     if (target.classList.contains('user-create-button')) {
-      const userName = prompt('이름을 입력해주세요');
-      if (userName === null) {
+      const name = prompt('이름을 입력해주세요');
+      if (name === null) {
         return;
       }
-      if (userName.trim().length < MINIMUN_USER_LENGTH) {
-        alert('닉네임은 2자 이상 입력해야 합니다.');
+      if (name.trim().length < MINIMUN_USER_LENGTH) {
+        alert(`닉네임은 ${MINIMUN_USER_LENGTH}자 이상 입력해야 합니다.`);
         return;
       }
 
-      usersStore.dispatch({ type: ADD_USER, payload: userName });
+      usersStore.dispatch({ type: ADD_USER, payload: { name } });
     }
   };
 
   const onSelectUser = async ({ target }) => {
     const userId = target.dataset.id;
     if (target.classList.contains('user')) {
-      selectedUserStore.dispatch({ type: GET_USER, payload: userId });
+      selectedUserStore.dispatch({ type: GET_USER, payload: { userId } });
     }
   };
 
   const selectFirstUser = async () => {
-    const { _id: firstUserId } = await usersStore.getState()[0];
-    await selectedUserStore.dispatch({ type: GET_USER, payload: firstUserId });
+    const { _id: userId } = await usersStore.getState()[0];
+    await selectedUserStore.dispatch({ type: GET_USER, payload: { userId } });
   };
 
   const onDeleteUser = async ({ target }) => {
     if (target.classList.contains('user-delete-button')) {
       const userId = await selectedUserStore.getState()._id;
-      await usersStore.dispatch({ type: DELETE_USER, payload: userId });
+      await usersStore.dispatch({ type: DELETE_USER, payload: { userId } });
       await selectFirstUser();
     }
   };

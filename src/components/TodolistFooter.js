@@ -48,7 +48,7 @@ const TodolistFooter = () => {
     selectedUserStore.dispatch({ type: FILTER_COMPLETE, payload: { userId } });
   };
 
-  const onClickDeleteAll = (e) => {
+  const onClickDeleteAll = () => {
     const userId = selectedUserStore.getState()._id;
     selectedUserStore.dispatch({ type: DELETE_ALL, payload: { userId } });
   };
