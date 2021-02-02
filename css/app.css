@@ -55,9 +55,23 @@ body {
   margin-bottom: 50px;
 }
 
+#user-bin{
+  text-align: center;
+}
+
+img.bin {
+  margin: 15px 0 15px 0;
+  width: 70px;
+  height: auto;
+}
+
+img.over {
+  filter: brightness(50%);
+}
+
 .todoapp {
   background: #fff;
-  margin: 30px 0 40px 0;
+  margin: 0 0 40px 0;
   position: relative;
   box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 25px 50px 0 rgba(0, 0, 0, 0.1);
 }
