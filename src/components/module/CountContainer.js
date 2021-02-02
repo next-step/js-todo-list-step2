@@ -11,7 +11,7 @@ class CountContainer extends Reilly.Component {
     return (
       <div className="count-container">
         <span className="todo-count">
-          총 <strong>{length}</strong> 개
+          총 <strong>{length || '0'}</strong> 개
         </span>
         <FilterList mode={mode} onModeChange={onModeChange}></FilterList>
         <ToggleAll />

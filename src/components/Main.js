@@ -24,23 +24,19 @@ class Main extends Reilly.Component {
     return (
       <main>
         <TodoList
-          {...{
-            todoList: filteredTodos,
-            editingId,
-            onToggle,
-            onRemove,
-            onSetPriority,
-            onStartEdit,
-            onConfirmEdit,
-          }}
+          todoList={filteredTodos}
+          editingId={editingId}
+          onToggle={onToggle}
+          onRemove={onRemove}
+          onSetPriority={onSetPriority}
+          onStartEdit={onStartEdit}
+          onConfirmEdit={onConfirmEdit}
         />
         <CountContainer
-          {...{
-            mode,
-            length: filteredTodos.length,
-            onModeChange,
-            onDeleteAll,
-          }}
+          mode={mode}
+          length={todoList.length}
+          onModeChange={onModeChange}
+          onDeleteAll={onDeleteAll}
         />
       </main>
     );
@@ -52,9 +48,9 @@ const by = mode => todo => {
     case FILTER_STATUS.ALL:
       return todo;
     case FILTER_STATUS.ACTIVE:
-      return todo.isCompleted;
-    case FILTER_STATUS.COMPLETED:
       return !todo.isCompleted;
+    case FILTER_STATUS.COMPLETED:
+      return todo.isCompleted;
   }
 };
 
