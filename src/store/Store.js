@@ -14,7 +14,7 @@ const createStore = (initialState, reducer) => {
     if (!events[actionType]) {
       return;
     }
-    console.log(`publishing ${actionType}`);
+    // console.log(`publishing ${actionType}`);
     events[actionType].map((cb) => cb());
   };
 
@@ -49,14 +49,14 @@ const createAsyncStore = (initialState, reducer) => {
     if (!events[actionType]) {
       return;
     }
-    console.log(`async publishing ${actionType}`);
+    // console.log(`async publishing ${actionType}`);
     events[actionType].map((cb) => cb());
   };
 
   const dispatch = async (action) => {
     // action에는 type, payload(data)가 있음
     state = await reducer(state, action);
-    console.log(`async reducer for ${action.type}`);
+    // console.log(`async reducer for ${action.type}`);
     publish(action.type);
   };
 

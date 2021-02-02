@@ -1,4 +1,3 @@
-import UserItem from './components/UserItem.js';
 import UserList from './components/UserList.js';
 import Title from './components/Title.js';
 import Todolist from './components/Todolist.js';

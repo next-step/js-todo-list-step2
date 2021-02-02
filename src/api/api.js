@@ -1,10 +1,10 @@
 import Loading from '../components/Loading.js';
 
 const BASE_URL = 'https://js-todo-list-9ca3a.df.r.appspot.com';
-const ADD_USER = '/api/users';
-const GET_USERS = '/api/users';
-const GET_USER = '/api/users/';
-const DELETE_USER = '/api/users/';
+const ADD_USER = () => '/api/users';
+const GET_USERS = () => '/api/users';
+const GET_USER = (userId) => `/api/users/${userId}`;
+const DELETE_USER = (userId) => `/api/users/${userId}`;
 const GET_TODO = (userId) => `/api/users/${userId}/items`;
 const ADD_TODO = (userId) => `/api/users/${userId}/items`;
 const DELETE_TODO = (userId, itemId) => `/api/users/${userId}/items/${itemId}`;
@@ -18,7 +18,7 @@ const renderLoading = Loading().render;
 
 const addUser = async ({ name }) => {
   try {
-    const response = await fetch(`${BASE_URL}${ADD_USER}`, {
+    const response = await fetch(`${BASE_URL}${ADD_USER()}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ name }),
@@ -36,7 +36,7 @@ const addUser = async ({ name }) => {
 
 const getUsers = async () => {
   try {
-    const response = await fetch(`${BASE_URL}${GET_USERS}`, {
+    const response = await fetch(`${BASE_URL}${GET_USERS()}`, {
       method: 'GET',
     });
 
@@ -53,7 +53,7 @@ const getUsers = async () => {
 const getUser = async ({ userId }) => {
   try {
     $todolist.innerHTML = renderLoading();
-    const response = await fetch(`${BASE_URL}${GET_USER}${userId}`, {
+    const response = await fetch(`${BASE_URL}${GET_USER(userId)}`, {
       method: 'GET',
     });
 
@@ -69,7 +69,7 @@ const getUser = async ({ userId }) => {
 
 const deleteUser = async ({ userId }) => {
   try {
-    const response = await fetch(`${BASE_URL}${DELETE_USER}${userId}`, {
+    const response = await fetch(`${BASE_URL}${DELETE_USER(userId)}`, {
       method: 'DELETE',
     });
 

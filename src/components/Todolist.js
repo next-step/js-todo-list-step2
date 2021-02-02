@@ -46,6 +46,10 @@ const Todolist = () => {
   };
 
   const onKeyupTodoEdit = (e) => {
+    if (!e.target.classList.contains('edit')) {
+      return;
+    }
+
     const closestLi = e.target.closest('li');
 
     const switchBackToView = () => {
@@ -53,23 +57,21 @@ const Todolist = () => {
       closestLi.querySelector('input.edit').style.display = 'none';
     };
 
-    if (e.target.classList.contains('edit')) {
-      if (e.key === 'Enter' && e.target.value.trim() !== '') {
-        const userId = selectedUserStore.getState()._id;
-        const itemId = closestLi.dataset.id;
-        const contents = e.target.value;
-        selectedUserStore.dispatch({
-          type: EDIT_TODO_CONTENTS,
-          payload: {
-            userId,
-            itemId,
-            contents,
-          },
-        });
-      } else if (e.key === 'Escape') {
-        switchBackToView();
-        e.target.value = closestLi.querySelector('label span').innerText;
-      }
+    if (e.key === 'Enter' && e.target.value.trim() !== '') {
+      const userId = selectedUserStore.getState()._id;
+      const itemId = closestLi.dataset.id;
+      const contents = e.target.value;
+      selectedUserStore.dispatch({
+        type: EDIT_TODO_CONTENTS,
+        payload: {
+          userId,
+          itemId,
+          contents,
+        },
+      });
+    } else if (e.key === 'Escape') {
+      switchBackToView();
+      e.target.value = closestLi.querySelector('label span').innerText;
     }
   };
 
