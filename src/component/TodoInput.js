@@ -22,7 +22,7 @@ export default function TodoInput() {
     }
 
     const contents = target.value.trim();
-    if (contents === "") {
+    if (contents.length <= 2) {
       return;
     }
 
