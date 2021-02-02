@@ -281,8 +281,8 @@ body {
   height: 50px;
   overflow: hidden;
   box-shadow: 0 1px 1px rgba(0, 0, 0, 0.2), 0 8px 0 -3px #f6f6f6,
-  0 9px 1px -3px rgba(0, 0, 0, 0.2), 0 16px 0 -6px #f6f6f6,
-  0 17px 2px -6px rgba(0, 0, 0, 0.2);
+    0 9px 1px -3px rgba(0, 0, 0, 0.2), 0 16px 0 -6px #f6f6f6,
+    0 17px 2px -6px rgba(0, 0, 0, 0.2);
 }
 
 .todo-count {
@@ -387,7 +387,7 @@ html .clear-completed:active {
 }
 .ripple:hover {
   background: #616161 radial-gradient(circle, transparent 1%, #616161 1%)
-  center/15000%;
+    center/15000%;
   color: white;
 }
 .ripple:active {
@@ -406,7 +406,7 @@ button.ripple {
   border: none;
   border-radius: 2px;
   padding: 6px 9px;
-  margin: 3px 0;
+  margin: 3px;
   font-size: 12px;
   cursor: pointer;
   color: #333;
@@ -476,9 +476,20 @@ select.chip {
   width: 45px;
 }
 
+.user-list {
+  display: inline-flex;
+  flex-wrap: wrap;
+  width: 100%;
+}
+
 button.user-create-button.ripple {
-  border-radius: 15px;
+  border-radius: 15px 0 0 15px;
   padding-left: 10px;
+  margin: 0 0 0 10px;
+}
+
+button.user-delete-button.ripple {
+  border-radius: 0 15px 15px 0;
   padding-right: 10px;
-  margin-left: 10px;
+  margin-left: -5px;
 }

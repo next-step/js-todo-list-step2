@@ -1,7 +1,11 @@
-const onUserCreateHandler = () => {
-  const userName = prompt("추가하고 싶은 이름을 입력해주세요.");
-}
+import App from "./App.js";
+import $store from "./store/index.js";
 
-const userCreateButton = document.querySelector('.user-create-button')
-userCreateButton.addEventListener('click', onUserCreateHandler)
+const init = async () => {
+  await $store.user.init();
+  $store.filter.init();
+  await $store.todo.init();
+  new App("#app");
+};
 
+init();
