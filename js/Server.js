@@ -1,5 +1,4 @@
-import {initElement,$count} from './InitElement.js';
-let Count = $count
+import {addTodolistItem} from './AddTodolistItem.js';
 
 const $userList = document.getElementById('user-list');
 const $userCreateButton = document.querySelector('.user-create-button')
@@ -37,7 +36,7 @@ function deleteUser(){
 const onUserCreateHandler = () => {
     const userName = prompt("추가하고 싶은 이름을 입력해주세요.");
     // User의 이름은 최소 2글자 이상체크
-    if(userName.length>1) {
+    if(userName !== null && userName.length>1) {
         const button = document.createElement('button');
         button.innerText = userName;
         button.classList.add('ripple');
@@ -48,6 +47,7 @@ const onUserCreateHandler = () => {
         //추가된 만큼 핸들러 다시 추가
         clickUser();
     }
+
 }
 
 //삭제한 이름을 가진 데이터를 브라우저 및 서버에 적용
@@ -140,13 +140,14 @@ function getUserIdAndTodoitems(name){
 function getTodoitems(ID){
     removeLocalStorage();
     removeLiTag();
+
     fetch(`${$baseUrl}api/users/${ID}/items`)
         .then(response=>response.json())
         .then(data=>data.map(val=>{
             if(val.isCompleted === true)
-                initElement(val.contents,'T','F')
+                addTodolistItem(val.contents,'T')
             else
-                initElement(val.contents,'F','F')
+                addTodolistItem(val.contents,'F')
         }));
 }
 
@@ -164,7 +165,6 @@ function removeLocalStorage(){
 //모든 li태그 초기화
 function removeLiTag(){
     document.querySelector('.todo-count > strong').innerText = 0;
-    Count = 0 ;
     const todolist =  document.querySelectorAll('.todo-list > li')
     todolist.forEach(x=>x.remove());
 }
@@ -196,7 +196,7 @@ function AddTodolist(ID, value){
             body:JSON.stringify({
                 'contents':value})})
         .then(response=>response.json())
-        .then(()=>alert('정상 작동'))
+        .then((data)=>console.log(data))
         .catch(()=>alert('오류 작동'))
 }
 
