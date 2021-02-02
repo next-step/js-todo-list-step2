@@ -1,4 +1,3 @@
-import { uuid } from '../utils/uuid.js';
 import { FILTER_STATUS, PRORITY_TYPE } from './constants.js';
 
 /**
