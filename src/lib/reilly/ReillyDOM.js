@@ -13,11 +13,11 @@ class ReillyDOM {
    * @param {HTMLElement} container - container node for `reillyNode`
    */
   static render(reillyNode, container) {
-    const $root = document.getElementById("root");
+    const $root = document.getElementById('root');
     const htmlElement = this.renderElement(reillyNode);
-    if (!container) container = $root; /**@deprecated */
+    if (!container) container = $root;
 
-    container.innerHTML = "";
+    container.innerHTML = '';
     container.appendChild(htmlElement);
   }
 
@@ -26,33 +26,34 @@ class ReillyDOM {
    * @returns {HTMLElement} HTML element referred by the `reillyNode`
    */
   static renderElement(reillyNode) {
-    if (typeof reillyNode === "string" || typeof reillyNode === "number") {
+    if (typeof reillyNode === 'string' || typeof reillyNode === 'number') {
       return document.createTextNode(reillyNode);
     }
 
+    if (reillyNode === undefined) return;
+
     let $element;
 
-    if (reillyNode.nodeType === "fragment")
+    if (reillyNode.nodeType === 'fragment') {
       $element = document.createDocumentFragment();
-    else $element = document.createElement(reillyNode.nodeType);
+    } else $element = document.createElement(reillyNode.nodeType);
 
     for (let [key, value] of Object.entries(reillyNode.props ?? {})) {
-      if (key === "children") continue;
+      if (key === 'children') continue;
 
-      if (key === "className" || key.startsWith("on")) {
+      if (key === 'className' || key.startsWith('on')) {
         $element[key] = value;
       } else {
         $element.setAttribute(key, value);
       }
     }
 
-    reillyNode.children
-      .map((child) => {
-        return Object.assign(this.renderElement.call(this, child || ""), {
-          _container: $element
-        });
+    // console.log(reillyNode);
+    (reillyNode.children || reillyNode)
+      ?.map(child => {
+        return this.renderElement.call(this, child || '');
       })
-      .forEach((elem) => {
+      .forEach(elem => {
         $element.appendChild(elem);
       });
 

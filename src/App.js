@@ -1,11 +1,12 @@
+/*@jsx Reilly.createElement*/
 import Reilly, { createElement } from './lib/reilly/Reilly.js';
 import Main from './components/Main.js';
-import Title from './components/Title.js';
-import TodoForm from './components/TodoForm.js';
+import Title from './components/atom/Title.js';
+import TodoForm from './components/atom/TodoForm.js';
 import { Todo, AppState, User } from './types/index.js';
 import TodoService from './services/TodoService.js';
 import UserService from './services/UserService.js';
-import { UserList } from './components/UserList.js';
+import { UserList } from './components/module/UserList.js';
 import { FILTER_STATUS, PRIORITY_ENUM } from './types/constants.js';
 
 const initialState = {
@@ -26,7 +27,7 @@ class App extends Reilly.Component {
     this.fetchUserList();
     this.createUser = this.createUser.bind(this);
     this.deleteUser = this.deleteUser.bind(this);
-    this.addTodo = this.addTodo.bind(this);
+    this.addTodo = this.addTodo.call(this);
     this.toggleTodo = this.toggleTodo.bind(this);
     this.removeTodo = this.removeTodo.bind(this);
     this.deleteAllTodos = this.deleteAllTodos.bind(this);
@@ -82,8 +83,8 @@ class App extends Reilly.Component {
   async deleteUser(e) {
     e.preventDefault();
 
-    const targetId = e.target.id;
-    const response = confirm('destory this user?');
+    const targetId = this._state.user._id;
+    const response = confirm(`destory this user: "${this._state.user.name}"?`);
     if (!response) return;
 
     try {
@@ -119,6 +120,7 @@ class App extends Reilly.Component {
       } catch (error) {
         this.setState({ error });
       }
+      isSubmitting = false;
     };
   }
 
@@ -153,7 +155,13 @@ class App extends Reilly.Component {
   }
 
   async deleteAllTodos(e) {
-    console.log(e.target);
+    if (!this._state.todoList.length) {
+      alert('No todos to delete!');
+      return;
+    }
+    const answer = confirm('😈 Wanna delete every todos?');
+    if (!answer) return;
+
     await TodoService.deleteAll(this._state.user._id);
     this.setState({ todoList: [] });
   }
@@ -181,6 +189,7 @@ class App extends Reilly.Component {
   }
 
   changeMode(e) {
+    e.preventDefault();
     this.setState({
       mode: e.target.classList[0],
     });
@@ -256,40 +265,39 @@ class App extends Reilly.Component {
       editingId,
     } = this._state;
 
-    if (error) return createElement('h1', null, JSON.stringify(error));
-    return createElement(
-      'div',
-      { id: 'app' },
-      createElement(Title, {
-        id: 'user-title',
-        user,
-      }),
-      createElement(UserList, {
-        users,
-        isUsersLoading,
-        isUserLoaded: !!user,
-        onSelectUser: this.selectUser,
-        onCreateUser: this.createUser,
-        onDeleteUser: this.deleteUser,
-      }),
-      createElement(
-        'div',
-        { className: 'todoapp' },
-        user && createElement(TodoForm, { onsubmit: this.addTodo }),
-        user &&
-          createElement(Main, {
-            todoList,
-            mode,
-            editingId,
-            onToggle: this.toggleTodo,
-            onRemove: this.removeTodo,
-            onDeleteAll: this.deleteAllTodos,
-            onSetPriority: this.setPriority,
-            onModeChange: this.changeMode,
-            onStartEdit: this.startEditTodo,
-            onConfirmEdit: this.confirmEditTodo,
-          })
-      )
+    console.log('RENDERED!');
+
+    if (error) return <h1> {JSON.stringify(error)} Error occured!</h1>;
+
+    return (
+      <div id="app">
+        <Title id="user-title" user={user} />,
+        <UserList
+          users={users}
+          isUsersLoading={isUsersLoading}
+          isUserLoaded={!!user}
+          onSelectUser={this.selectUser}
+          onCreateUser={this.createUser}
+          onDeleteUser={this.deleteUser}
+        />
+        <div className="todoapp">
+          {user && <TodoForm onsubmit={this.addTodo} />}
+          {user && (
+            <Main
+              todoList={todoList}
+              mode={mode}
+              editingId={editingId}
+              onToggle={this.toggleTodo}
+              onRemove={this.removeTodo}
+              onDeleteAll={this.deleteAllTodos}
+              onSetPriority={this.setPriority}
+              onModeChange={this.changeMode}
+              onStartEdit={this.startEditTodo}
+              onConfirmEdit={this.confirmEditTodo}
+            />
+          )}
+        </div>
+      </div>
     );
   }
 }

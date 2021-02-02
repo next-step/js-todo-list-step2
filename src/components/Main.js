@@ -1,8 +1,8 @@
-import Reilly, { createElement } from '../lib/reilly/Reilly.js';
-import CountContainer from './CountContainer.js';
-import TodoList from './TodoList.js';
+/*@jsx Reilly.createElement*/
+import Reilly from '../lib/reilly/Reilly.js';
+import CountContainer from './module/CountContainer.js';
+import TodoList from './module/TodoList.js';
 import { FILTER_STATUS } from '../types/constants.js';
-import { Skeleton } from './Skeleton.js';
 
 class Main extends Reilly.Component {
   render() {
@@ -21,24 +21,28 @@ class Main extends Reilly.Component {
 
     const filteredTodos = todoList?.filter(by(mode)) || [];
 
-    return createElement(
-      'main',
-      null,
-      createElement(TodoList, {
-        todoList: filteredTodos,
-        editingId,
-        onToggle,
-        onRemove,
-        onSetPriority,
-        onStartEdit,
-        onConfirmEdit,
-      }),
-      createElement(CountContainer, {
-        mode,
-        todoList,
-        onModeChange,
-        onDeleteAll,
-      })
+    return (
+      <main>
+        <TodoList
+          {...{
+            todoList: filteredTodos,
+            editingId,
+            onToggle,
+            onRemove,
+            onSetPriority,
+            onStartEdit,
+            onConfirmEdit,
+          }}
+        />
+        <CountContainer
+          {...{
+            mode,
+            length: filteredTodos.length,
+            onModeChange,
+            onDeleteAll,
+          }}
+        />
+      </main>
     );
   }
 }

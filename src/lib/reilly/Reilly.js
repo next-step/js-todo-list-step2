@@ -32,9 +32,11 @@ class Reilly {
     if (typeof nodeType === 'function') {
       if (nodeType.prototype instanceof this.Component) {
         const component = new nodeType({ ...props, children });
+
         if (component.constructor.name === 'App')
           component._owner = document.querySelector('#root');
         else component._owner = document.querySelector('.view');
+
         return component.render();
       }
       return nodeType({ ...props, children });
