@@ -19,29 +19,24 @@ export const newUser = {
     
         const response = await api.addUser(user);
         userList.clear();
-        userList.list();
+        userList.load();
     }
 }
 
 export const userList = {
-    list: async () => {
+    load: async () => {
         const users = await api.loadUserList();
         console.log(users);
     
         users.map((user) => {
-            userList.addToList(user.name, user._id);
+            userList.add(user.name, user._id);
         })
 
         userState.set();
     },
 
-    addToList (name, userId) {
+    add (name, userId) {
         $userList.insertAdjacentHTML('afterbegin', template.userButtons(name, userId));
-    },
-
-    getId (target) {
-        const userId = target.dataset.userid;
-        return userId;
     },
 
     clear () {
@@ -52,6 +47,31 @@ export const userList = {
     
 }
 
+//아직 미완성
+export const userEdit = {
+
+    remove: async () => {
+        const target = userEdit.findActiveUser();
+        const userId = userEdit.getId(target);
+
+        console.log(target);
+        console.log(userId);
+    },
+
+    removeFromList (target) {
+        target.remove();
+    },
+
+    getId (target) {
+        const userId = target.dataset.userid;
+        return userId;
+    },
+
+    findActiveUser () {
+        return $userList.querySelector('active');
+    }
+}
+
 
 
 export const userState = {
@@ -59,7 +79,7 @@ export const userState = {
         const $firstUser = $userList.querySelector('button');
         const $secondUser = $firstUser.nextSibling;
         const firstUserName = $firstUser.innerText;
-        const firstUserId = userList.getId($firstUser);
+        const firstUserId = userEdit.getId($firstUser);
 
         userState.addActive($firstUser);
         userState.removeActive($secondUser);
@@ -69,12 +89,15 @@ export const userState = {
 
     change ({target}) {
         if(target.classList.item(1) !== 'user-create-button'){
-            const targetUserName= target.innerText;
-     
-            userState.init();
-            userState.addActive(target);
+            if(target.classList.item(1) !== 'user-delete-button'){
+            
+                const targetUserName= target.innerText;
         
-            editTitleName(targetUserName);
+                userState.init();
+                userState.addActive(target);
+            
+                editTitleName(targetUserName);
+            }
         }
     },
 

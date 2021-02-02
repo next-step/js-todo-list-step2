@@ -41,11 +41,11 @@ export const api = {
         return request(`${url}/api/users`, option.post(user));
     },
 
-    getUser(){
+    getUser(userId){
         return request(`${url}/api/${userId}`);
     },
 
-    deleteUser(){
+    deleteUser(userId){
         return request(`${url}/api/${userId}`);
     },
 
