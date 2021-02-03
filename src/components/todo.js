@@ -7,11 +7,7 @@ export const todo = {
         const array = await api.loadTodoList(userId);
         console.log(array);
 
-        let todos = [];
-        for(let i in array){
-            const newTodo = array[i].contents;
-            todos = [...todos, newTodo];
-        }
+        let todos = array.map((item) => item.contents);
 
         todo.clear();
         todos.forEach(item => {todo.input(item)});
