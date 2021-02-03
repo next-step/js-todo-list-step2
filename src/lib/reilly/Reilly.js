@@ -1,4 +1,4 @@
-import ReillyDOM from './ReillyDOM.js';
+import ReillyDOM from './ReillyDOM';
 
 /**
  * @typedef { Object } ReillyNode

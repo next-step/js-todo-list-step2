@@ -1,8 +1,8 @@
 /*@jsx Reilly.createElement*/
-import Reilly from '../../lib/reilly/Reilly.js';
-import FilterList from './FilterList.js';
-import { ToggleAll } from '../atom/ToggleAll.js';
-import { DeleteAll } from '../atom/DeleteAll.js';
+import Reilly from '../../lib/reilly/Reilly';
+import FilterList from './FilterList';
+import ToggleAll from '../atom/ToggleAll';
+import DeleteAll from '../atom/DeleteAll';
 
 class CountContainer extends Reilly.Component {
   render() {

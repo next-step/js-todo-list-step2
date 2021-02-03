@@ -1,8 +1,8 @@
 /*@jsx Reilly.createElement*/
-import Reilly from '../lib/reilly/Reilly.js';
-import CountContainer from './module/CountContainer.js';
-import TodoList from './module/TodoList.js';
-import { FILTER_STATUS } from '../types/constants.js';
+import Reilly from '../lib/reilly/Reilly';
+import CountContainer from './module/CountContainer';
+import TodoList from './module/TodoList';
+import { FILTER_STATUS } from '../types/constants';
 
 class Main extends Reilly.Component {
   render() {

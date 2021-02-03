@@ -1,7 +1,7 @@
 /*@jsx Reilly.createElement*/
-import Reilly from '../../lib/reilly/Reilly.js';
-import { FILTER_STATUS } from '../../types/constants.js';
-import FilterButton from '../atom/FilterButton.js';
+import Reilly from '../../lib/reilly/Reilly';
+import { FILTER_STATUS } from '../../types/constants';
+import FilterButton from '../atom/FilterButton';
 
 class FilterList extends Reilly.Component {
   render() {

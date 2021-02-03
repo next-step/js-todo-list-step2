@@ -1,13 +1,13 @@
 /*@jsx Reilly.createElement*/
-import Reilly, { createElement } from './lib/reilly/Reilly.js';
-import Main from './components/Main.js';
-import Title from './components/atom/Title.js';
-import TodoForm from './components/atom/TodoForm.js';
-import { Todo, AppState, User } from './types/index.js';
-import TodoService from './services/TodoService.js';
-import UserService from './services/UserService.js';
-import { UserList } from './components/module/UserList.js';
-import { FILTER_STATUS, PRIORITY_ENUM } from './types/constants.js';
+import Reilly, { createElement } from './lib/reilly/Reilly';
+import Main from './components/Main';
+import Title from './components/atom/Title';
+import TodoForm from './components/atom/TodoForm';
+import { Todo, AppState, User } from './types/index';
+import TodoService from './services/TodoService';
+import UserService from './services/UserService';
+import { UserList } from './components/module/UserList';
+import { FILTER_STATUS, PRIORITY_ENUM } from './types/constants';
 
 const initialState = {
   isUsersLoading: false,

@@ -1,6 +1,6 @@
 /*@jsx Reilly.createElement*/
-import Reilly from '../../lib/reilly/Reilly.js';
-import { Skeleton } from '../atom/Skeleton.js';
+import Reilly from '../../lib/reilly/Reilly';
+import { Skeleton } from '../atom/Skeleton';
 
 export class UserList extends Reilly.Component {
   render() {

@@ -1,6 +1,6 @@
 /*@jsx Reilly.createElement*/
-import Reilly from '../../lib/reilly/Reilly.js';
-import TodoItem from './TodoItem.js';
+import Reilly from '../../lib/reilly/Reilly';
+import TodoItem from './TodoItem';
 
 class TodoList extends Reilly.Component {
   render() {

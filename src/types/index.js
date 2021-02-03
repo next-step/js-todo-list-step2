@@ -1,4 +1,4 @@
-import { FILTER_STATUS, PRORITY_TYPE } from './constants.js';
+import { FILTER_STATUS, PRORITY_TYPE } from './constants';
 
 /**
  * @typedef {Object} IState

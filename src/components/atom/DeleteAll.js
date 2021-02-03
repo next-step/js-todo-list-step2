@@ -1,7 +1,7 @@
 /*@jsx Reilly.createElement*/
-import Reilly from '../../lib/reilly/Reilly.js';
+import Reilly from '../../lib/reilly/Reilly';
 
-export function DeleteAll(props) {
+function DeleteAll(props) {
   const { onDeleteAll } = props;
   return (
     <div title="kill em all" className="delete-all" onclick={onDeleteAll}>
@@ -9,3 +9,5 @@ export function DeleteAll(props) {
     </div>
   );
 }
+
+export default DeleteAll;

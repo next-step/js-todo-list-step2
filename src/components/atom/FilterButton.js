@@ -1,6 +1,6 @@
 /*@jsx Reilly.createElement*/
-import Reilly from '../../lib/reilly/Reilly.js';
-import { FILTER_NAMES } from '../../types/constants.js';
+import Reilly from '../../lib/reilly/Reilly';
+import { FILTER_NAMES } from '../../types/constants';
 
 function FilterButton({ name, mode, onModeChange }) {
   return (

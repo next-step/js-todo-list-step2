@@ -1,4 +1,4 @@
-import hermes from './index.js';
+import hermes from './index';
 
 /**
  * @namespace UserService at your service!

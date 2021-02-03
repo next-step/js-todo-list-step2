@@ -1,4 +1,4 @@
-import hermes from './index.js';
+import hermes from './index';
 
 /**
  * @namespace TodoService at your service!
