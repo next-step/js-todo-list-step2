@@ -6,7 +6,7 @@ const webpack = require('webpack');
 module.exports = {
   entry: './src/index.js',
   output: {
-    filename: '[name].[chunkhash].js', //hash, contenthash, chunkhash
+    filename: '[name].[chunkhash].js',
     path: path.resolve(__dirname, 'dist'),
   },
   module: {
