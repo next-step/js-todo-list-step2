@@ -8,19 +8,28 @@ let todoList = [];
 let todoFilter = 'all';
 
 const userCreateButton = document.querySelector('.user-create-button');
-const userList = document.querySelector('div#user-list');
-let currentUserButton = userList.querySelectorAll('button.ripple')[0];
+const $todoList = document.querySelector('ul.todo-list');
+const $userList = document.querySelector('div#user-list');
+let currentUserButton = $userList.querySelectorAll('button.ripple')[0];
 
 const $newTodo = document.querySelector('input.new-todo');
 
 userCreateButton.addEventListener('click', () => onUserCreateHandler());
-userList.addEventListener('click', event => {
-  userList.querySelectorAll('button.ripple').forEach(($user, index) => {
+$userList.addEventListener('click', event => {
+  $userList.querySelectorAll('button.ripple').forEach(($user, index) => {
     if($user.contains(event.target) && !$user.classList.contains('user-create-button')){
       onUserSelectHandler($user, index);
       // onUserDeleteHandler($user, index)
     }
   });
+})
+
+$todoList.addEventListener('click', event => {
+  $todoList.querySelectorAll('input.toggle').forEach(($item, index) => {
+    if($item.contains(event.target)){
+      toggleTodo($item, index);
+    }
+  })
 })
 
 $newTodo.addEventListener('keyup', event => {
@@ -46,7 +55,7 @@ const loadUserList = () => {
 
 const init = () => {
   renderUsers();
-  currentUserButton = userList.querySelectorAll('button.ripple')[0];
+  currentUserButton = $userList.querySelectorAll('button.ripple')[0];
   onUserSelectHandler(currentUserButton, 0);
   render();
 }
@@ -126,6 +135,18 @@ const onUserSelectHandler = ($user, index) => {
 
 }
 
+const toggleTodo = ($item, index) => {
+  const todoItem = todoList[index];
+  todoItem.isCompleted = !todoItem.isCompleted;
+  todoList[index] = todoItem;
+
+  API.toggleTodo(currentUserID, todoItem._id)
+    .then(response => {
+      console.log(response)
+      render()
+    });
+}
+
 const render = () => {
   const $todoList = document.querySelector('ul.todo-list');
 
@@ -166,14 +187,13 @@ const filterList = () => {
 const todoTemplate = todoItem => `
         <li class=${(todoItem.isCompleted) ? "completed" : ""}>
           <div class="view">
-            <input class="toggle" type="checkbox" />
+            <input class="toggle" type="checkbox" ${(todoItem.isCompleted) ? 'checked' : ''}/>
             <label class="label">
-            ${(todoItem.isCompleted) ? ``:
-              `<select class="chip select">
+              <select class="chip select">
                 <option value="0" selected>순위</option>
                 <option value="1">1순위</option>
                 <option value="2">2순위</option>
-              </select>`}
+              </select>
               ${todoItem.contents}
             </label>
             <button class="destroy"></button>

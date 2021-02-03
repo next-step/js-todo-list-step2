@@ -27,4 +27,31 @@ export const API = {
             body: JSON.stringify(todoItem),
         }   
     ),
+    updateTodo: (user, todoItem) => fetch(baseURL + `/api/users/${user}/items/${todoItem}`,
+        {
+            method: 'PUT',
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(todoItem),
+        }   
+    ),
+    toggleTodo: (user, todoItem) => fetch(baseURL + `/api/users/${user}/items/${todoItem}/toggle`,
+        {
+            method: 'PUT',
+            // headers: {
+            //     "Content-Type": "application/json",
+            // },
+            // body: JSON.stringify(todoItem),
+        }   
+    ),
+    updatePriority: (user, todoItem) => fetch(baseURL + `/api/users/${user}/items/priority`,
+        {
+            method: 'PUT',
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(todoItem),
+        }   
+    ),
 }
