@@ -30,6 +30,11 @@ $todoList.addEventListener('click', event => {
       toggleTodo($item, index);
     }
   })
+  $todoList.querySelectorAll('button.destroy').forEach(($item, index) => {
+    if($item.contains(event.target)){
+      deleteTodo($item, index);
+    }
+  });
 })
 
 $newTodo.addEventListener('keyup', event => {
@@ -142,8 +147,7 @@ const toggleTodo = ($item, index) => {
 
   API.toggleTodo(currentUserID, todoItem._id)
     .then(response => {
-      console.log(response)
-      render()
+      render();
     });
 }
 
@@ -170,6 +174,16 @@ const addTodo = todoItem => {
     .then(response => response.json())
     .then(data => console.log(data))
     .catch(err => console.error(err));
+}
+
+const deleteTodo = ($item, index) => {
+  const todoItem = todoList[index];
+  todoList.splice(index, 1);
+  
+  API.deleteTodo(currentUserID, todoItem._id)
+    .then(response => {
+      render();
+    });
 }
 
 const filterList = () => {

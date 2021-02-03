@@ -27,6 +27,11 @@ export const API = {
             body: JSON.stringify(todoItem),
         }   
     ),
+    deleteTodo: (user, todoItem) => fetch(baseURL + `/api/users/${user}/items/${todoItem}`,
+        {
+            method: 'DELETE',
+        }
+    ),
     updateTodo: (user, todoItem) => fetch(baseURL + `/api/users/${user}/items/${todoItem}`,
         {
             method: 'PUT',
