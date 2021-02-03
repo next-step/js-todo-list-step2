@@ -32,7 +32,7 @@ export const API = {
             method: 'DELETE',
         }
     ),
-    updateTodo: (user, todoItem) => fetch(baseURL + `/api/users/${user}/items/${todoItem}`,
+    updateTodo: (user, todoItem) => fetch(baseURL + `/api/users/${user}/items/${todoItem._id}`,
         {
             method: 'PUT',
             headers: {
@@ -44,10 +44,6 @@ export const API = {
     toggleTodo: (user, todoItem) => fetch(baseURL + `/api/users/${user}/items/${todoItem}/toggle`,
         {
             method: 'PUT',
-            // headers: {
-            //     "Content-Type": "application/json",
-            // },
-            // body: JSON.stringify(todoItem),
         }   
     ),
     updatePriority: (user, todoItem) => fetch(baseURL + `/api/users/${user}/items/priority`,

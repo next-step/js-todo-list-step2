@@ -37,12 +37,31 @@ $todoList.addEventListener('click', event => {
   });
 })
 
+$todoList.addEventListener('dblclick', event => {
+  $todoList.querySelectorAll('label.label').forEach(($item, index) => {
+    if($item.contains(event.target)){
+      const itemElement = $item.parentNode.parentNode;
+      itemElement.classList.add('editing');
+    }
+  });
+})
+
 $newTodo.addEventListener('keyup', event => {
   if(event.key === 'Enter'){
-    console.log($newTodo)
     addTodo($newTodo.value);
   }
 })
+
+$todoList.addEventListener('keyup', event => {
+  if(event.key === 'Enter'){
+    $todoList.querySelectorAll('input.edit').forEach(($item, index) => {
+      const itemElement = $item.parentNode;
+      if(itemElement.classList.contains('editing')){
+        modifyTodo($item, index);
+      }
+    })
+  }
+});
 
 window.onload = () => {
   loadUserList();
@@ -171,8 +190,6 @@ const addTodo = todoItem => {
   render();
 
   API.addTodo(currentUserID, newItem)
-    .then(response => response.json())
-    .then(data => console.log(data))
     .catch(err => console.error(err));
 }
 
@@ -184,6 +201,18 @@ const deleteTodo = ($item, index) => {
     .then(response => {
       render();
     });
+}
+
+const modifyTodo = ($item, index) => {
+  const itemElement = $item.parentNode;
+  itemElement.classList.remove('editing');
+  
+  const todoItem = todoList[index];
+  todoItem.contents = $item.value;
+  render();
+
+  API.updateTodo(currentUserID, todoItem)
+    .catch(err => console.error(err));
 }
 
 const filterList = () => {
@@ -212,6 +241,6 @@ const todoTemplate = todoItem => `
             </label>
             <button class="destroy"></button>
           </div>
-          <input class="edit" value=${todoItem} />
+          <input class="edit" value=${todoItem.contents} />
         </li>
 `;
