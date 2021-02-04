@@ -23,7 +23,7 @@ class UserList extends Reilly.Component {
           <Skeleton />
         ) : (
           <ul id="user-list" className={isUserLoaded ? 'folded' : ''}>
-            {users.map(user => (
+            {users?.map(user => (
               <UserButton user={user} onclick={onSelectUser} />
             ))}
           </ul>

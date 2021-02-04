@@ -7,7 +7,11 @@ class TodoItem extends Reilly.Component {
     const {
       todo: { _id, isCompleted, contents, priority },
       editingId,
+      onToggle,
+      onDelete,
       onSetPriority,
+      onStartEdit,
+      onConfirmEdit,
     } = this.props;
 
     return (
@@ -22,8 +26,9 @@ class TodoItem extends Reilly.Component {
             type="checkbox"
             className={`toggle ${isCompleted ? 'checked' : ''}`}
             checked={isCompleted}
+            onclick={onToggle}
           />
-          <label className="label">
+          <label className="label" ondblclick={onStartEdit}>
             <select
               className={`chip select ${PRIORITY_CLASS.get(priority)}`}
               onchange={onSetPriority}
@@ -36,9 +41,9 @@ class TodoItem extends Reilly.Component {
             </select>
             {contents}
           </label>
-          <button className="destroy" />
+          <button className="destroy" onclick={onDelete} />
         </div>
-        <input className="edit" value={contents} />
+        <input className="edit" value={contents} onkeyup={onConfirmEdit} />
       </li>
     );
   }

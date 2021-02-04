@@ -11,10 +11,11 @@ export {
 } from './atom';
 
 export {
-  CountContainer,
-  FilterList,
   TodoItem,
+  TodoItemContainer,
   TodoList,
+  TodoFooter,
+  FilterList,
   UserList,
 } from './module';
 

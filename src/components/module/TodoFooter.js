@@ -2,7 +2,7 @@
 import Reilly from 'reilly';
 import { FilterList, ToggleAll, DeleteAll, TodoCount } from 'components';
 
-class CountContainer extends Reilly.Component {
+class TodoFooter extends Reilly.Component {
   render() {
     const { mode, length, onModeChange, onDeleteAll } = this.props;
 
@@ -17,4 +17,4 @@ class CountContainer extends Reilly.Component {
   }
 }
 
-export default CountContainer;
+export default TodoFooter;

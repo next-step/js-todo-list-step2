@@ -1,5 +1,6 @@
 /*@jsx Reilly.createElement*/
 import Reilly from 'reilly';
+import { MESSAGES } from 'utility';
 
 function Title(props) {
   const { id, user } = props;
@@ -7,9 +8,13 @@ function Title(props) {
   return (
     <h1 id={id}>
       <span>
-        {user && <strong>{user.name}</strong>}
-        {user && "'s Todo List "}
-        {!user && 'Todo List'}
+        {user ? (
+          <span>
+            <strong>{user.name}</strong>'s Todo List
+          </span>
+        ) : (
+          MESSAGES.WELCOME
+        )}
       </span>
     </h1>
   );

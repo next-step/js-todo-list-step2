@@ -1,6 +1,6 @@
 /*@jsx Reilly.createElement*/
 import Reilly from 'reilly';
-import { CountContainer, TodoList } from 'components';
+import { TodoFooter, TodoList, TodoForm } from 'components';
 import { FILTER_STATUS } from 'utility';
 
 class Main extends Reilly.Component {
@@ -11,6 +11,7 @@ class Main extends Reilly.Component {
       editingId,
       onStartEdit,
       onConfirmEdit,
+      onAdd,
       onToggle,
       onDelete,
       onDeleteAll,
@@ -22,16 +23,18 @@ class Main extends Reilly.Component {
 
     return (
       <main>
+        <TodoForm onsubmit={onAdd} />
         <TodoList
           todoList={filteredTodos}
           editingId={editingId}
+          onAdd={onAdd}
           onToggle={onToggle}
           onDelete={onDelete}
           onSetPriority={onSetPriority}
           onStartEdit={onStartEdit}
           onConfirmEdit={onConfirmEdit}
         />
-        <CountContainer
+        <TodoFooter
           mode={mode}
           length={todoList.length}
           onModeChange={onModeChange}

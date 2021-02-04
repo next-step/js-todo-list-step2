@@ -1,6 +1,6 @@
 /*@jsx Reilly.createElement*/
 import Reilly from 'reilly';
-import { TodoItem } from 'components';
+import { TodoItemContainer } from 'components';
 
 class TodoList extends Reilly.Component {
   render() {
@@ -15,18 +15,15 @@ class TodoList extends Reilly.Component {
     } = this.props;
 
     return (
-      <ul
-        id="todo-list"
-        className="todo-list"
-        onchange={onToggle}
-        onclick={onDelete}
-        ondblclick={onStartEdit}
-        onkeyup={onConfirmEdit}
-      >
+      <ul id="todo-list" className="todo-list">
         {todoList?.map(todo => (
-          <TodoItem
+          <TodoItemContainer
             todo={todo}
             editingId={editingId}
+            onDelete={onDelete}
+            onStartEdit={onStartEdit}
+            onToggle={onToggle}
+            onConfirmEdit={onConfirmEdit}
             onSetPriority={onSetPriority}
           />
         ))}
