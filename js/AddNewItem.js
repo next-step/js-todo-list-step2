@@ -8,7 +8,7 @@ export const todoList = document.querySelector(".todo-list");
 
 export const initAddNewItem = () => {
   getWork.addEventListener("keypress", addNewList);
-}
+};
 
 const addNewList = (e) => {
   if (currentUserID === "") {
@@ -19,17 +19,13 @@ const addNewList = (e) => {
   if (e.target.value.length < MINIMUN_INPUT_LENGTH) {
     alert(`${MINIMUN_INPUT_LENGTH}글자 이상 입력해주세요!`);
     return;
-  } 
-  else if (e.target.value !== "" && !/^\s+|\s+$/g.exec(e.target.value)) {
-    const text = e.target.value;
-    e.target.value = null;
-
-    ajaxPostFunctions(text, "useritem");
-  } else {
-    alert("불필요한 공백을 제거해주세요!");
   }
+  const text = e.target.value;
+  e.target.value = null;
+
+  ajaxPostFunctions(text, "useritem");
   renewItemCount();
-}
+};
 
 export const listAssemble = (content) => {
   const li = document.createElement("li");
@@ -53,4 +49,4 @@ export const listAssemble = (content) => {
   todoList.append(li);
 
   return li;
-}
+};
