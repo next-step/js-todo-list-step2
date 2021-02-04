@@ -1,4 +1,4 @@
-import ReillyDOM from './ReillyDOM';
+import ReillyDOM from '../reillyDOM/ReillyDOM';
 
 /**
  * @typedef { Object } ReillyNode
@@ -29,6 +29,8 @@ class Reilly {
    */
 
   static createElement(nodeType, props, ...children) {
+    if (Array.isArray(children)) children = children.flat();
+
     if (typeof nodeType === 'function') {
       if (nodeType.prototype instanceof this.Component) {
         const component = new nodeType({ ...props, children });

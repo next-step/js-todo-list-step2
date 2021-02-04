@@ -54,6 +54,9 @@ class Hermes {
     return this._request('GET', url);
   }
   post(url, payload) {
+    if (!payload || typeof url !== 'string')
+      return this._request('POST', '', url);
+
     return this._request('POST', url, payload);
   }
   put(url, payload) {

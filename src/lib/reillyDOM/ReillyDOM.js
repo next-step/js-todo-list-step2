@@ -34,9 +34,7 @@ class ReillyDOM {
 
     let $element;
 
-    if (reillyNode.nodeType === 'fragment') {
-      $element = document.createDocumentFragment();
-    } else $element = document.createElement(reillyNode.nodeType);
+    $element = document.createElement(reillyNode.nodeType);
 
     for (let [key, value] of Object.entries(reillyNode.props ?? {})) {
       if (key === 'children') continue;
@@ -48,7 +46,6 @@ class ReillyDOM {
       }
     }
 
-    // console.log(reillyNode);
     (reillyNode.children || reillyNode)
       ?.map(child => {
         return this.renderElement.call(this, child || '');
