@@ -24,6 +24,7 @@ $todoList.addEventListener('click', event => deleteList(event));
 $todoList.addEventListener('dblclick', event => convertToEditing(event));
 $newTodo.addEventListener('keyup', event => getEnterForAddTodo(event));
 $todoList.addEventListener('keyup', event=> modifyList(event));
+$todoList.addEventListener('change', event => priorityChangeOfList(event));
 
 window.onload = () => {
   loadUserList();
@@ -127,6 +128,14 @@ const deleteList = event => {
   });
 }
 
+const priorityChangeOfList = event => {
+  $todoList.querySelectorAll('select').forEach(($item, index) => {
+    if($item.contains(event.target)){
+      setPriority($item, index);
+    }
+  });
+}
+
 const onUserSelectHandler = async ($user, index) => {
   $userTitle.innerHTML = `<span><strong>${users[index].name}</strong>'s Todo List</span>`;
   renderLoading();
@@ -222,6 +231,49 @@ const convertToEditing = event => {
   });
 }
 
+const setPriority = async ($item, index) => {
+  const $options = $item.querySelectorAll('option');
+  let $prevSelected, $newSelected;
+  $options.forEach($option => {
+    if($option.selected){
+      $prevSelected = $option;
+    }
+    if($option.value === $item.value){
+      $newSelected = $option;
+    }
+  });
+  
+  const todoItem = todoList[index];
+
+  if($item.value === "0"){
+    todoItem.priority = "NONE";
+    if($item.classList.contains('primary')){
+      $item.classList.remove('primary');
+    }
+    if($item.classList.contains('secondary')){
+      $item.classList.remove('secondary');
+    }
+  }
+  else if($item.value === "1"){
+    todoItem.priority = "FIRST";
+    if($item.classList.contains('secondary')){
+      $item.classList.remove('secondary');
+    }
+    $item.classList.add('primary');
+  }
+  else if($item.value === "2"){
+    todoItem.priority = "SECOND";
+    if($item.classList.contains('primary')){
+      $item.classList.remove('primary');
+    }
+    $item.classList.add('secondary');
+  }
+  await API.updatePriority(currentUserID, todoItem);
+
+  $prevSelected.selected = false;
+  $newSelected.selected = true;
+}
+
 const filterList = () => {
   if(todoFilter === 'all') {
     return todoList;
@@ -243,10 +295,10 @@ const todoTemplate = todoItem => `
           <div class="view">
             <input class="toggle" type="checkbox" ${(todoItem.isCompleted) ? 'checked' : ''}/>
             <label class="label">
-              <select class="chip select">
-                <option value="0" selected>순위</option>
-                <option value="1">1순위</option>
-                <option value="2">2순위</option>
+              <select class="chip select ${(todoItem.priority === "FIRST") ? 'primary' : (todoItem.priority === "SECOND") ? 'secondary' : ''}">
+                <option value="0" ${(todoItem.priority === "NONE") ? 'selected' : ''}>순위</option>
+                <option value="1" ${(todoItem.priority === "FIRST") ? 'selected' : ''}>1순위</option>
+                <option value="2" ${(todoItem.priority === "SECOND") ? 'selected' : ''}>2순위</option>
               </select>
               ${todoItem.contents}
             </label>

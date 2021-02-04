@@ -26,5 +26,5 @@ export const API = {
     deleteTodo: (user, todoItem) => fetch(baseURL + `/api/users/${user}/items/${todoItem}`, { method: 'DELETE', }),
     updateTodo: (user, todoItem) => fetch(baseURL + `/api/users/${user}/items/${todoItem._id}`, option.put(todoItem)),
     toggleTodo: (user, todoItem) => fetch(baseURL + `/api/users/${user}/items/${todoItem}/toggle`, { method: 'PUT', }),
-    updatePriority: (user, todoItem) => fetch(baseURL + `/api/users/${user}/items/priority`, option.put(todoItem)),
+    updatePriority: (user, todoItem) => fetch(baseURL + `/api/users/${user}/items/${todoItem._id}/priority`, option.put(todoItem)),
 }
