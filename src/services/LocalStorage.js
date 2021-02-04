@@ -1,16 +1,16 @@
 /**
  * @namespace
  */
-class LocalStorage {
-  static fetchTodos() {
+const LocalStorage = {
+  fetchTodos() {
     return JSON.parse(localStorage.getItem(`todos`));
-  }
-  static setTodos(todos) {
+  },
+  setTodos(todos) {
     return localStorage.setItem(`todos`, JSON.stringify(todos));
-  }
-  static clearTodos() {
-    return localStorage.removeItem(`todos`);
-  }
-}
+  },
+  clearTodos() {
+    return localStorage.deleteItem(`todos`);
+  },
+};
 
 export default LocalStorage;
