@@ -2,7 +2,6 @@ import { currentUserID, baseurl, userList } from "./ControlUserList.js";
 import { reflectUserItems, ajaxGetFunctions } from "./AjaxGet.js";
 import { chooseButton } from "./ControlTodoButton.js";
 
-
 export const ajaxPostFunctions = async (data, type) => {
   let url = baseurl;
   let dataset = {};
@@ -12,13 +11,13 @@ export const ajaxPostFunctions = async (data, type) => {
     dataset = { contents: data };
   }
   const option = {
-      method:  "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(dataset),
-    };
-  
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(dataset),
+  };
+
   await fetch(url, option)
     .then((data) => {
       if (!data.ok) throw new Error(data.status);
@@ -28,7 +27,7 @@ export const ajaxPostFunctions = async (data, type) => {
       if (type === "username") resetUserList();
       else if (type === "useritem") assembleSingleItem(post);
     })
-    .catch(error => console.log(error));
+    .catch((error) => console.log(error));
 };
 
 const assembleSingleItem = (useritem) => {
