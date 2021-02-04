@@ -4,7 +4,7 @@ import { ajaxPutFunctions } from "./AjaxPut.js";
 
 const todoList = document.querySelector(".todo-list");
 
-export function initTodolistItems() {
+export function initItemsEventListners() {
   todoList.addEventListener("click", itemClickControl);
   todoList.addEventListener("dblclick", workContentCopy);
   todoList.addEventListener("keyup", workUpdate);
