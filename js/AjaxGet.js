@@ -25,7 +25,7 @@ export const ajaxGetFunctions = async (type) => {
 
 const assembleUserList = (userlist) => {
   userlist.forEach((user) => {
-    let dataset = {
+    const dataset = {
       _id: user._id,
       name: user.name,
       todoList: user.todoList,
@@ -55,16 +55,18 @@ export const reflectUserItems = (item) => {
     checkbox.setAttribute("checked", "");
   }
 
-  if (item.priority !== "NONE") {
-    if (item.priority === "FIRST") {
-      span.classList.add("primary");
-      span.innerText = "1순위";
-    } else if (item.priority === "SECOND") {
-      span.classList.add("secondary");
-      span.innerText = "2순위";
-    }
-    selecter.style.display = "none";
-  } else span.style.display = "none";
+  if (item.priority === "NONE") {
+    span.style.display = "none";
+    return
+  }
+  if (item.priority === "FIRST") {
+    span.classList.add("primary");
+    span.innerText = "1순위";
+  } else if (item.priority === "SECOND") {
+    span.classList.add("secondary");
+    span.innerText = "2순위";
+  }
+  selecter.style.display = "none";
 };
 
 const ajaxCreateUserList = (dataset) => {

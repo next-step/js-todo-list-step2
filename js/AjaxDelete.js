@@ -2,6 +2,13 @@ import { currentUserID, baseurl } from "./ControlUserList.js";
 import { ajaxGetFunctions } from "./AjaxGet.js";
 import { resetUserList } from "./AjaxPost.js";
 
+const option = {
+  method: "DELETE",
+  headers: {
+    "Content-Type": "application/json",
+  },
+};
+
 export const ajaxDeleteFunctions = async (data, type) => {
   let url = `${baseurl}/${currentUserID}/items/`;
   if (type === "deleteitem") {
@@ -9,13 +16,6 @@ export const ajaxDeleteFunctions = async (data, type) => {
   } else {
     if (!confirm("정말로 모두 삭제하시겠습니까?")) return;
   }
-
-  const option = {
-    method: "DELETE",
-    headers: {
-      "Content-Type": "application/json",
-    },
-  };
 
   await fetch(url, option)
     .then((data) => {
@@ -31,12 +31,6 @@ export const ajaxDeleteFunctions = async (data, type) => {
 export const ajaxDeleteUser = async (e) => {
   if (!e.ctrlKey) return;
   if (!confirm("정말 유저를 삭제하시겠습니까?")) return;
-  const option = {
-    method: "DELETE",
-    headers: {
-      "Content-Type": "application/json",
-    },
-  };
 
   const url = `${baseurl}/${e.target.getAttribute("id")}`;
 
