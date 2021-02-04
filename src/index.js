@@ -1,6 +1,6 @@
-/*@jsx createElement */
-import ReillyDOM from './lib/reilly/ReillyDOM';
-import { createElement } from './lib/reilly/Reilly';
+/*@jsx Reilly.createElement */
+import ReillyDOM from 'reillyDOM';
+import Reilly from 'reilly';
 import App from './App';
 import './index.css';
 
