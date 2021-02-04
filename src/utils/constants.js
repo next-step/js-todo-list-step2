@@ -40,6 +40,7 @@ const PRIORITY_CLASS = new Map([
 ]);
 
 const MESSAGES = {
+  WELCOME: '🙌 WELCOME 🙌',
   ASK_NAME: 'please insert name',
   NAME_POLICY_NOTICE: 'username should be longer than 2 character',
   CONFIRM_DELETE: 'Wanna destory this?',
