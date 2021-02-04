@@ -9,6 +9,14 @@ module.exports = {
     filename: '[name].[chunkhash].js',
     path: path.resolve(__dirname, 'dist'),
   },
+  resolve: {
+    alias: {
+      reilly: path.resolve(__dirname, 'src/lib/reilly'),
+      reillyDOM: path.resolve(__dirname, 'src/lib/reillyDOM'),
+      utility: path.resolve(__dirname, 'src/utils'),
+      components: path.resolve(__dirname, 'src/components'),
+    },
+  },
   module: {
     rules: [
       {
