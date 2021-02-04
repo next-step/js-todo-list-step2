@@ -14,12 +14,11 @@ let currentUserButton = $userList.querySelectorAll('button.ripple')[0];
 
 const $newTodo = document.querySelector('input.new-todo');
 
-userCreateButton.addEventListener('click', () => onUserCreateHandler());
+userCreateButton.addEventListener('click', async () => onUserCreateHandler());
 $userList.addEventListener('click', event => {
   $userList.querySelectorAll('button.ripple').forEach(($user, index) => {
     if($user.contains(event.target) && !$user.classList.contains('user-create-button')){
       onUserSelectHandler($user, index);
-      // onUserDeleteHandler($user, index)
     }
   });
 })
@@ -97,7 +96,7 @@ const renderUsers = () => {
   }
 }
 
-const onUserCreateHandler = () => {
+const onUserCreateHandler = async () => {
   const userName = prompt("추가하고 싶은 이름을 입력해주세요.");
   if(userName.length < 2){
     alert("User의 이름은 최소 2글자 이상이어야 합니다.");
@@ -111,7 +110,8 @@ const onUserCreateHandler = () => {
   newUser._id = Math.random().toString(36).substr(2,10);
   users.push(newUser);
   addUser(newUser);
-  API.addUser(newUser);
+  
+  await API.addUser(newUser);
 
   if(currentUserButton){
     currentUser = currentUserButton.innerText;
@@ -129,45 +129,33 @@ const addUser = user => {
   userCreateButton.insertAdjacentElement('beforebegin', newUserButton);
 }
 
-const onUserDeleteHandler = ($user, index) => {
+const onUserDeleteHandler = async ($user, index) => {
   currentUserID = users[index]._id;
 
-  API.deleteUser(currentUserID)
-    .then(response => response.json())
-    .then(data => {
-      console.log(data)
-    })
+  await API.deleteUser(currentUserID);
 
   render();
 }
 
-const onUserSelectHandler = ($user, index) => {
+const onUserSelectHandler = async ($user, index) => {
   const currentUserButton = document.querySelector('button.ripple.active');
   if(currentUserButton) currentUserButton.classList.remove('active');
   $user.classList.add('active');
 
   currentUserID = users[index]._id;
 
-  API.fetchTodoList(currentUserID)
-    .then(response => response.json())
-    .then(data => {
-      todoList = data;
-      console.log(todoList)
-      render();
-    })
-    .catch(err => console.error(err))
-
+  const res = await API.fetchTodoList(currentUserID);
+  todoList = await res.json();
+  render();
 }
 
-const toggleTodo = ($item, index) => {
+const toggleTodo = async ($item, index) => {
   const todoItem = todoList[index];
   todoItem.isCompleted = !todoItem.isCompleted;
   todoList[index] = todoItem;
 
-  API.toggleTodo(currentUserID, todoItem._id)
-    .then(response => {
-      render();
-    });
+  await API.toggleTodo(currentUserID, todoItem._id);
+  render();
 }
 
 const render = () => {
@@ -180,7 +168,7 @@ const render = () => {
   $todoList.innerHTML = renderList.join(' ');
 }
 
-const addTodo = todoItem => {
+const addTodo = async todoItem => {
   const newItem = itemTemplate;
   newItem._id = Math.random().toString(36).substr(2,10);
   newItem.contents = todoItem;
@@ -189,21 +177,18 @@ const addTodo = todoItem => {
 
   render();
 
-  API.addTodo(currentUserID, newItem)
-    .catch(err => console.error(err));
+  await API.addTodo(currentUserID, newItem);
 }
 
-const deleteTodo = ($item, index) => {
+const deleteTodo = async ($item, index) => {
   const todoItem = todoList[index];
   todoList.splice(index, 1);
   
-  API.deleteTodo(currentUserID, todoItem._id)
-    .then(response => {
-      render();
-    });
+  await API.deleteTodo(currentUserID, todoItem._id);
+  render();
 }
 
-const modifyTodo = ($item, index) => {
+const modifyTodo = async ($item, index) => {
   const itemElement = $item.parentNode;
   itemElement.classList.remove('editing');
   
@@ -211,8 +196,7 @@ const modifyTodo = ($item, index) => {
   todoItem.contents = $item.value;
   render();
 
-  API.updateTodo(currentUserID, todoItem)
-    .catch(err => console.error(err));
+  await API.updateTodo(currentUserID, todoItem);
 }
 
 const filterList = () => {
