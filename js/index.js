@@ -15,52 +15,12 @@ let currentUserButton = $userList.querySelectorAll('button.ripple')[0];
 const $newTodo = document.querySelector('input.new-todo');
 
 userCreateButton.addEventListener('click', async () => onUserCreateHandler());
-$userList.addEventListener('click', event => {
-  $userList.querySelectorAll('button.ripple').forEach(($user, index) => {
-    if($user.contains(event.target) && !$user.classList.contains('user-create-button')){
-      onUserSelectHandler($user, index);
-    }
-  });
-})
-
-$todoList.addEventListener('click', event => {
-  $todoList.querySelectorAll('input.toggle').forEach(($item, index) => {
-    if($item.contains(event.target)){
-      toggleTodo($item, index);
-    }
-  })
-  $todoList.querySelectorAll('button.destroy').forEach(($item, index) => {
-    if($item.contains(event.target)){
-      deleteTodo($item, index);
-    }
-  });
-})
-
-$todoList.addEventListener('dblclick', event => {
-  $todoList.querySelectorAll('label.label').forEach(($item, index) => {
-    if($item.contains(event.target)){
-      const itemElement = $item.parentNode.parentNode;
-      itemElement.classList.add('editing');
-    }
-  });
-})
-
-$newTodo.addEventListener('keyup', event => {
-  if(event.key === 'Enter'){
-    addTodo($newTodo.value);
-  }
-})
-
-$todoList.addEventListener('keyup', event => {
-  if(event.key === 'Enter'){
-    $todoList.querySelectorAll('input.edit').forEach(($item, index) => {
-      const itemElement = $item.parentNode;
-      if(itemElement.classList.contains('editing')){
-        modifyTodo($item, index);
-      }
-    })
-  }
-});
+$userList.addEventListener('click', event => selectUser(event));
+$todoList.addEventListener('click', event => toggleList(event));
+$todoList.addEventListener('click', event => deleteList(event));
+$todoList.addEventListener('dblclick', event => convertToEditing(event));
+$newTodo.addEventListener('keyup', event => getEnterForAddTodo(event));
+$todoList.addEventListener('keyup', event=> modifyList(event));
 
 window.onload = () => {
   loadUserList();
@@ -98,9 +58,9 @@ const renderUsers = () => {
 
 const onUserCreateHandler = async () => {
   const userName = prompt("추가하고 싶은 이름을 입력해주세요.");
-  if(userName.length < 2){
-    alert("User의 이름은 최소 2글자 이상이어야 합니다.");
-    return;
+  const MINIMUM_USER_NAME_LENGTH = 2;
+  if(userName.length < MINIMUM_USER_NAME_LENGTH){
+      return alert(`User의 이름은 최소 ${MINIMUM_USER_NAME_LENGTH}글자 이상이어야 합니다.`);
   }
   currentUserButton = document.querySelector('button.ripple.active');
 
@@ -137,6 +97,30 @@ const onUserDeleteHandler = async ($user, index) => {
   render();
 }
 
+const selectUser = event => {
+  $userList.querySelectorAll('button.ripple').forEach(($user, index) => {
+    if($user.contains(event.target) && !$user.classList.contains('user-create-button')){
+      onUserSelectHandler($user, index);
+    }
+  });
+}
+
+const toggleList = event => {
+  $todoList.querySelectorAll('input.toggle').forEach(($item, index) => {
+    if($item.contains(event.target)){
+      toggleTodo($item, index);
+    }
+  })
+};
+
+const deleteList = event => {
+  $todoList.querySelectorAll('button.destroy').forEach(($item, index) => {
+    if($item.contains(event.target)){
+      deleteTodo($item, index);
+    }
+  });
+}
+
 const onUserSelectHandler = async ($user, index) => {
   const currentUserButton = document.querySelector('button.ripple.active');
   if(currentUserButton) currentUserButton.classList.remove('active');
@@ -168,6 +152,23 @@ const render = () => {
   $todoList.innerHTML = renderList.join(' ');
 }
 
+const getEnterForAddTodo = event => {
+  if(event.key === 'Enter'){
+    addTodo($newTodo.value);
+  }
+}
+
+const modifyList = event => {
+  if(event.key === 'Enter'){
+    $todoList.querySelectorAll('input.edit').forEach(($item, index) => {
+      const itemElement = $item.closest('li');
+      if(itemElement.classList.contains('editing')){
+        modifyTodo($item, index);
+      }
+    })
+  }
+}
+
 const addTodo = async todoItem => {
   const newItem = itemTemplate;
   newItem._id = Math.random().toString(36).substr(2,10);
@@ -189,7 +190,7 @@ const deleteTodo = async ($item, index) => {
 }
 
 const modifyTodo = async ($item, index) => {
-  const itemElement = $item.parentNode;
+  const itemElement = $item.closest('li');
   itemElement.classList.remove('editing');
   
   const todoItem = todoList[index];
@@ -197,6 +198,15 @@ const modifyTodo = async ($item, index) => {
   render();
 
   await API.updateTodo(currentUserID, todoItem);
+}
+
+const convertToEditing = event => {
+  $todoList.querySelectorAll('label.label').forEach(($item, index) => {
+    if($item.contains(event.target)){
+      const itemElement = $item.closest('li');
+      itemElement.classList.add('editing');
+    }
+  });
 }
 
 const filterList = () => {
