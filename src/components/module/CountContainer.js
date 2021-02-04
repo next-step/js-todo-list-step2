@@ -1,8 +1,6 @@
 /*@jsx Reilly.createElement*/
-import Reilly from '../../lib/reilly/Reilly';
-import FilterList from './FilterList';
-import ToggleAll from '../atom/ToggleAll';
-import DeleteAll from '../atom/DeleteAll';
+import Reilly from 'reilly';
+import { FilterList, ToggleAll, DeleteAll, TodoCount } from 'components';
 
 class CountContainer extends Reilly.Component {
   render() {
@@ -10,9 +8,7 @@ class CountContainer extends Reilly.Component {
 
     return (
       <div className="count-container">
-        <span className="todo-count">
-          총 <strong>{length || '0'}</strong> 개
-        </span>
+        <TodoCount length={length} />
         <FilterList mode={mode} onModeChange={onModeChange}></FilterList>
         <ToggleAll />
         <DeleteAll onDeleteAll={onDeleteAll} />

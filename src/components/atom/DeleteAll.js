@@ -1,12 +1,11 @@
 /*@jsx Reilly.createElement*/
-import Reilly from '../../lib/reilly/Reilly';
+import Reilly from 'reilly';
 
-function DeleteAll(props) {
-  const { onDeleteAll } = props;
+function DeleteAll({ onDeleteAll }) {
   return (
-    <div title="kill em all" className="delete-all" onclick={onDeleteAll}>
+    <button title="kill em all" className="delete-all" onclick={onDeleteAll}>
       😈
-    </div>
+    </button>
   );
 }
 

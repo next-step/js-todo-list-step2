@@ -1,7 +1,7 @@
 /*@jsx Reilly.createElement*/
-import Reilly from '../../lib/reilly/Reilly';
-import { FILTER_STATUS } from '../../types/constants';
-import FilterButton from '../atom/FilterButton';
+import Reilly from 'reilly';
+import { FILTER_STATUS, FILTER_NAMES } from 'utility';
+import { FilterButton } from 'components';
 
 class FilterList extends Reilly.Component {
   render() {
@@ -12,7 +12,12 @@ class FilterList extends Reilly.Component {
       <ul className="filters">
         {[ALL, ACTIVE, COMPLETED].map(name => (
           <li>
-            <FilterButton name={name} mode={mode} onModeChange={onModeChange} />
+            <FilterButton
+              name={name}
+              mode={mode}
+              onModeChange={onModeChange}
+              content={FILTER_NAMES.get(name)}
+            />
           </li>
         ))}
       </ul>

@@ -1,6 +1,6 @@
 /*@jsx Reilly.createElement*/
-import Reilly from '../../lib/reilly/Reilly';
-import TodoItem from './TodoItem';
+import Reilly from 'reilly';
+import { TodoItem } from 'components';
 
 class TodoList extends Reilly.Component {
   render() {
@@ -8,7 +8,7 @@ class TodoList extends Reilly.Component {
       todoList,
       editingId,
       onToggle,
-      onRemove,
+      onDelete,
       onSetPriority,
       onStartEdit,
       onConfirmEdit,
@@ -19,7 +19,7 @@ class TodoList extends Reilly.Component {
         id="todo-list"
         className="todo-list"
         onchange={onToggle}
-        onclick={onRemove}
+        onclick={onDelete}
         ondblclick={onStartEdit}
         onkeyup={onConfirmEdit}
       >

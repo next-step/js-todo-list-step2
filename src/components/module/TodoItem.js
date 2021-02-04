@@ -1,6 +1,6 @@
 /*@jsx Reilly.createElement*/
-import Reilly from '../../lib/reilly/Reilly';
-import { PRIORITY_CLASS, PRIORITY_ENUM } from '../../types/constants';
+import Reilly from 'reilly';
+import { PRIORITY_CLASS, PRIORITY_ENUM } from 'utility';
 
 class TodoItem extends Reilly.Component {
   render() {
@@ -28,9 +28,11 @@ class TodoItem extends Reilly.Component {
               className={`chip select ${PRIORITY_CLASS.get(priority)}`}
               onchange={onSetPriority}
             >
-              <option {...optionConfig(0, priority)}>순위</option>
-              <option {...optionConfig(1, priority)}>1순위</option>
-              <option {...optionConfig(2, priority)}>2순위</option>
+              {[0, 1, 2].map((_, count) => (
+                <option {...optionConfig(count, priority)}>
+                  {count && count}순위
+                </option>
+              ))}
             </select>
             {contents}
           </label>
