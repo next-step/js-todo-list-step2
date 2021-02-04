@@ -23,9 +23,7 @@ export function chooseButton(button) {
 }
 
 function viewAll() {
-  // "전체보기" 버튼 클릭 시의 기능
   const list = document.querySelectorAll(".todo-list>li");
-  //list.map((li)=> {console.log(li)});
   list.forEach((li) => li.classList.add("selected"));
 
   changeBox(viewAllListBtn);
@@ -33,7 +31,6 @@ function viewAll() {
 }
 
 function viewTodo() {
-  // "해야할 일" 버튼 클릭 시의 기능
   const list = document.querySelectorAll(".todo-list>li");
   list.forEach((li) => {
     if (li.querySelector(".toggle").hasAttribute("checked")) {
@@ -47,7 +44,6 @@ function viewTodo() {
 }
 
 function viewDone() {
-  // "완료한 일" 버튼 클릭 시의 기능
   const list = document.querySelectorAll(".todo-list>li");
   list.forEach((li) => {
     if (!li.querySelector(".toggle").hasAttribute("checked")) {
@@ -61,7 +57,6 @@ function viewDone() {
 }
 
 function changeBox(box) {
-  // 선택한 버튼을 표시하는 기능
   viewAllListBtn.classList.remove("selected");
   viewTodoListBtn.classList.remove("selected");
   viewCompleteListBtn.classList.remove("selected");
@@ -76,7 +71,6 @@ function changeBox(box) {
 }
 
 function reflectView() {
-  // 현재 누른 버튼에 대한 뷰를 반영하는 기능
   const list = document.querySelectorAll(".todo-list>li");
   list.forEach((li) => {
     if (li.classList.contains("selected")) {
@@ -90,7 +84,6 @@ function reflectView() {
 }
 
 export function renewItemCount() {
-  // 리스트 하단의 총 목록 갯수를 갱신하는 기능
   const list = document.querySelectorAll(".todo-list>li.selected");
   const item = document.querySelector(".todo-count>strong");
   item.innerText = list.length;
