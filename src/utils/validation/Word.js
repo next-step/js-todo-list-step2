@@ -1,14 +1,12 @@
-import axios from "axios";
-
 const options = {
-  method: "POST",
-  url: "https://neutrinoapi-bad-word-filter.p.rapidapi.com/bad-word-filter",
+  method: 'POST',
+  url: 'https://neutrinoapi-bad-word-filter.p.rapidapi.com/bad-word-filter',
   headers: {
-    "content-type": "application/x-www-form-urlencoded",
-    "x-rapidapi-key": "b1d0487589msh6adef2e414038fap17292djsneb5826782731",
-    "x-rapidapi-host": "neutrinoapi-bad-word-filter.p.rapidapi.com"
+    'content-type': 'application/x-www-form-urlencoded',
+    'x-rapidapi-key': 'b1d0487589msh6adef2e414038fap17292djsneb5826782731',
+    'x-rapidapi-host': 'neutrinoapi-bad-word-filter.p.rapidapi.com',
   },
-  data: { "censor-character": "*", content: "fuck" }
+  data: { 'censor-character': '*', content: 'fuck' },
 };
 
 class WordService {
@@ -41,3 +39,5 @@ class WordService {
     return text;
   }
 }
+
+export default WordService;
