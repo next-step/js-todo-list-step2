@@ -1,13 +1,17 @@
 /*@jsx Reilly.createElement*/
-import Reilly from '../../lib/reilly/Reilly.js';
-import { PRIORITY_CLASS, PRIORITY_ENUM } from '../../types/constants.js';
+import Reilly from 'reilly';
+import { PRIORITY_CLASS, PRIORITY_ENUM } from 'utility';
 
 class TodoItem extends Reilly.Component {
   render() {
     const {
       todo: { _id, isCompleted, contents, priority },
       editingId,
+      onToggle,
+      onDelete,
       onSetPriority,
+      onStartEdit,
+      onConfirmEdit,
     } = this.props;
 
     return (
@@ -22,21 +26,24 @@ class TodoItem extends Reilly.Component {
             type="checkbox"
             className={`toggle ${isCompleted ? 'checked' : ''}`}
             checked={isCompleted}
+            onclick={onToggle}
           />
-          <label className="label">
+          <label className="label" ondblclick={onStartEdit}>
             <select
               className={`chip select ${PRIORITY_CLASS.get(priority)}`}
               onchange={onSetPriority}
             >
-              <option {...optionConfig(0, priority)}>순위</option>
-              <option {...optionConfig(1, priority)}>1순위</option>
-              <option {...optionConfig(2, priority)}>2순위</option>
+              {[0, 1, 2].map((_, count) => (
+                <option {...optionConfig(count, priority)}>
+                  {count && count}순위
+                </option>
+              ))}
             </select>
             {contents}
           </label>
-          <button className="destroy" />
+          <button className="destroy" onclick={onDelete} />
         </div>
-        <input className="edit" value={contents} />
+        <input className="edit" value={contents} onkeyup={onConfirmEdit} />
       </li>
     );
   }

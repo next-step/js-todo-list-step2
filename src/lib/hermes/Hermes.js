@@ -1,3 +1,5 @@
+import HTTP_METHOD from './utils';
+
 /**
  * @typedef HermesRequestConfig
  * @property {string} baseURL
@@ -36,10 +38,17 @@ class Hermes {
       });
 
       xhr.setRequestHeader('content-type', 'application/json');
+
       xhr.send(JSON.stringify(payload));
 
+      if (xhr.status === 500) {
+        console.warn(1, xhr.statusText);
+      }
       xhr.ontimeout = () => console.warn('Timeout occured!');
       xhr.onreadystatechange = () => {
+        if (xhr.status === 500) {
+          console.warn(2, xhr.statusText);
+        }
         if (xhr.readyState !== xhr.DONE) return;
         if (xhr.status === 200 || xhr.status === 201) {
           resolve({ data: JSON.parse(xhr.response) });
@@ -51,16 +60,19 @@ class Hermes {
   }
 
   get(url) {
-    return this._request('GET', url);
+    return this._request(HTTP_METHOD.GET, url);
   }
   post(url, payload) {
-    return this._request('POST', url, payload);
+    if (!payload || typeof url !== 'string')
+      return this._request(HTTP_METHOD.POST, '', url);
+
+    return this._request(HTTP_METHOD.POST, url, payload);
   }
   put(url, payload) {
-    return this._request('PUT', url, payload);
+    return this._request(HTTP_METHOD.PUT, url, payload);
   }
   delete(url = this.url) {
-    return this._request('DELETE', url);
+    return this._request(HTTP_METHOD.DELETE, url);
   }
 
   /**

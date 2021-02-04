@@ -1,27 +1,52 @@
-import hermes from './index.js';
+import { typeChecks } from 'utility';
+import errorHandler from './errorHandler';
+import hermes from './index';
 
 /**
  * @namespace TodoService at your service!
  */
-class TodoService {
-  static fetchAll = async userId => await hermes.get(userId + '/items/');
+const TodoService = {
+  async fetchAll(userId) {
+    return await errorHandler(hermes.get, getTodoUrl(userId));
+  },
 
-  static add = async (userId, payload) =>
-    await hermes.post(userId + '/items/', payload);
+  async add(userId, payload) {
+    return await errorHandler(hermes.post, getTodoUrl(userId), payload);
+  },
 
-  static updateOne = async (userId, itemId, payload) =>
-    await hermes.put(userId + '/items/' + itemId, payload);
+  async updateOne(userId, itemId, payload) {
+    return await errorHandler(hermes.put, getTodoUrl(userId, itemId), payload);
+  },
 
-  static deleteAll = async userId => await hermes.delete(userId + '/items/');
+  async deleteAll(userId) {
+    return await errorHandler(hermes.delete, getTodoUrl(userId));
+  },
 
-  static deleteOne = async (userId, itemId) =>
-    await hermes.delete(userId + '/items/' + itemId);
+  async deleteOne(userId, itemId) {
+    return await errorHandler(hermes.delete, getTodoUrl(userId, itemId));
+  },
 
-  static setPriority = async (userId, itemId, payload) =>
-    await hermes.put(userId + '/items/' + itemId + '/priority', payload);
+  async setPriority(userId, itemId, payload) {
+    return await errorHandler(
+      hermes.put,
+      getTodoUrl(userId, itemId) + '/priority',
+      payload
+    );
+  },
 
-  static toggleOne = async (userId, itemId) =>
-    await hermes.put(userId + '/items/' + itemId + '/toggle');
+  async toggleOne(userId, itemId) {
+    return await errorHandler(
+      hermes.put,
+      getTodoUrl(userId, itemId) + '/toggle'
+    );
+  },
+};
+
+function getTodoUrl(userId, itemId) {
+  itemId = itemId ? itemId : '';
+  if (!typeChecks.isString(userId) && !typeChecks.isString(itemId))
+    throw new Error('invalid query string');
+  return userId + '/items/' + itemId;
 }
 
 export default TodoService;

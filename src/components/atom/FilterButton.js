@@ -1,15 +1,14 @@
 /*@jsx Reilly.createElement*/
-import Reilly from '../../lib/reilly/Reilly.js';
-import { FILTER_NAMES } from '../../types/constants.js';
+import Reilly from 'reilly';
 
-function FilterButton({ name, mode, onModeChange }) {
+function FilterButton({ name, mode, onModeChange, content }) {
   return (
     <a
       href={'#' + name}
       className={`${name} ${mode === name ? 'selected' : ''}`}
       onclick={onModeChange}
     >
-      {FILTER_NAMES.get(name)}
+      {content}
     </a>
   );
 }

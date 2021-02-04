@@ -1,8 +1,8 @@
 /*@jsx Reilly.createElement*/
-import Reilly from '../../lib/reilly/Reilly.js';
-import { Skeleton } from '../atom/Skeleton.js';
+import Reilly from 'reilly';
+import { Skeleton, UserMgmtButton, UserButton } from 'components';
 
-export class UserList extends Reilly.Component {
+class UserList extends Reilly.Component {
   render() {
     const {
       users,
@@ -13,26 +13,24 @@ export class UserList extends Reilly.Component {
       onDeleteUser,
     } = this.props;
 
+    if (!Array.isArray(users)) return <Skeleton />;
+
     return (
       <section>
-        <button className="ripple user-create-button" onclick={onCreateUser}>
-          유저 생성
-        </button>
-        <button className="ripple user-delete-button" onclick={onDeleteUser}>
-          유저 삭제
-        </button>
+        <UserMgmtButton type="create" onclick={onCreateUser} />
+        <UserMgmtButton type="delete" onclick={onDeleteUser} />
         {isUsersLoading ? (
           <Skeleton />
         ) : (
           <ul id="user-list" className={isUserLoaded ? 'folded' : ''}>
             {users?.map(user => (
-              <button className="ripple" onclick={onSelectUser} id={user._id}>
-                {user.name}
-              </button>
-            )) || []}
+              <UserButton user={user} onclick={onSelectUser} />
+            ))}
           </ul>
         )}
       </section>
     );
   }
 }
+
+export default UserList;

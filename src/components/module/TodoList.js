@@ -1,6 +1,6 @@
 /*@jsx Reilly.createElement*/
-import Reilly from '../../lib/reilly/Reilly.js';
-import TodoItem from './TodoItem.js';
+import Reilly from 'reilly';
+import { TodoItemContainer } from 'components';
 
 class TodoList extends Reilly.Component {
   render() {
@@ -8,25 +8,22 @@ class TodoList extends Reilly.Component {
       todoList,
       editingId,
       onToggle,
-      onRemove,
+      onDelete,
       onSetPriority,
       onStartEdit,
       onConfirmEdit,
     } = this.props;
 
     return (
-      <ul
-        id="todo-list"
-        className="todo-list"
-        onchange={onToggle}
-        onclick={onRemove}
-        ondblclick={onStartEdit}
-        onkeyup={onConfirmEdit}
-      >
+      <ul id="todo-list" className="todo-list">
         {todoList?.map(todo => (
-          <TodoItem
+          <TodoItemContainer
             todo={todo}
             editingId={editingId}
+            onDelete={onDelete}
+            onStartEdit={onStartEdit}
+            onToggle={onToggle}
+            onConfirmEdit={onConfirmEdit}
             onSetPriority={onSetPriority}
           />
         ))}

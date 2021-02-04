@@ -1,9 +1,7 @@
 /*@jsx Reilly.createElement*/
-import Reilly from '../../lib/reilly/Reilly.js';
+import Reilly from 'reilly';
 
-function TodoForm(props) {
-  const { onsubmit } = props;
-
+function TodoForm({ onsubmit }) {
   return (
     <form onsubmit={onsubmit}>
       <input

@@ -1,13 +1,10 @@
 /*@jsx Reilly.createElement*/
-import Reilly, { createElement } from './lib/reilly/Reilly.js';
-import Main from './components/Main.js';
-import Title from './components/atom/Title.js';
-import TodoForm from './components/atom/TodoForm.js';
-import { Todo, AppState, User } from './types/index.js';
-import TodoService from './services/TodoService.js';
-import UserService from './services/UserService.js';
-import { UserList } from './components/module/UserList.js';
-import { FILTER_STATUS, PRIORITY_ENUM } from './types/constants.js';
+import Reilly from 'reilly';
+import { Title, TodoForm, UserList, Main } from 'components';
+import { Todo, AppState, User } from './types';
+import { TodoService, UserService } from './services';
+import { FILTER_STATUS, PRIORITY_ENUM } from 'utility';
+import { Interactions, keyCode } from 'utility';
 
 const initialState = {
   isUsersLoading: false,
@@ -29,7 +26,7 @@ class App extends Reilly.Component {
     this.deleteUser = this.deleteUser.bind(this);
     this.addTodo = this.addTodo.call(this);
     this.toggleTodo = this.toggleTodo.bind(this);
-    this.removeTodo = this.removeTodo.bind(this);
+    this.deleteTodo = this.deleteTodo.bind(this);
     this.deleteAllTodos = this.deleteAllTodos.bind(this);
     this.changeMode = this.changeMode.bind(this);
     this.startEditTodo = this.startEditTodo.bind(this);
@@ -42,22 +39,19 @@ class App extends Reilly.Component {
     this.setState({ isUsersLoading: true });
 
     try {
-      if (this._state.users.length) return;
       const users = await UserService.fetchUsers();
-
       this.setState({ isUsersLoading: false, users });
     } catch (error) {
       this.setState({ isUsersLoading: false, error });
-      console.warn(error);
     }
   }
 
   async selectUser(e) {
     this.setState({ isUserLoading: true });
-    const targetId = e.target.id;
+    const { id } = e.target;
 
     try {
-      const user = await UserService.fetchUser(targetId);
+      const user = await UserService.fetchUser(id);
       this.setState({ user, todoList: user.todoList, isUserLoading: false });
     } catch (error) {
       this.setState({ error, isUserLoading: false });
@@ -65,12 +59,11 @@ class App extends Reilly.Component {
   }
 
   async createUser() {
-    let name;
-    while (!name || name.length < 2)
-      name = prompt('please insert name', 'domuk')?.trim();
+    const name = Interactions.askName();
+    if (!name) return;
 
     try {
-      const { data: user } = await UserService.add(new User({ name }));
+      const user = await UserService.add(new User({ name }));
       this.setState({
         user,
         todoList: user.todoList,
@@ -84,9 +77,12 @@ class App extends Reilly.Component {
   async deleteUser(e) {
     e.preventDefault();
 
-    const targetId = this._state.user._id;
-    const response = confirm(`destory this user: "${this._state.user.name}"?`);
-    if (!response) return;
+    const targetId = this._state.user?._id;
+    if (!targetId) {
+      Interactions.noUserToDelete();
+      return;
+    }
+    if (!Interactions.confirmDelete(this._state.user.name)) return;
 
     try {
       await UserService.delete(targetId);
@@ -109,18 +105,28 @@ class App extends Reilly.Component {
       isSubmitting = true;
 
       const content = e.target.elements['new-todo'].value.trim();
-      if (!content) return;
+
+      if (!content) {
+        isSubmitting = false;
+        return;
+      }
+
+      if (content.length < 2) {
+        Interactions.warnTodo(content);
+        isSubmitting = false;
+        return;
+      }
 
       try {
-        const { data } = await TodoService.add(
+        const addedTodo = await TodoService.add(
           this._state.user._id,
           new Todo(content)
         );
-
-        this.setState({ todoList: [data, ...this._state.todoList] });
+        this.setState({ todoList: [addedTodo, ...this._state.todoList] });
       } catch (error) {
         this.setState({ error });
       }
+
       isSubmitting = false;
     };
   }
@@ -129,7 +135,7 @@ class App extends Reilly.Component {
     e.stopPropagation();
     if (!e.target.matches('.toggle')) return;
 
-    const targetId = e.path.find(elm => elm.matches('li')).id;
+    const targetId = e.target.closest('li').id;
     const todoList = this._state.todoList.map(toggledBy(targetId));
 
     try {
@@ -140,9 +146,9 @@ class App extends Reilly.Component {
     }
   }
 
-  removeTodo(e) {
+  deleteTodo(e) {
     if (!e.target.matches('.destroy')) return;
-    if (!confirm('destroy this for real?')) return;
+    if (!Interactions.confirmDelete()) return;
 
     const targetId = e.target.closest('li').id;
     const todoList = this._state.todoList.filter(todo => todo._id !== targetId);
@@ -157,10 +163,10 @@ class App extends Reilly.Component {
 
   async deleteAllTodos(e) {
     if (!this._state.todoList.length) {
-      alert('No todos to delete!');
+      Interactions.noTodos();
       return;
     }
-    const answer = confirm('😈 Wanna delete every todos?');
+    const answer = Interactions.confirmDeleteAll();
     if (!answer) return;
 
     await TodoService.deleteAll(this._state.user._id);
@@ -174,7 +180,7 @@ class App extends Reilly.Component {
     const targetId = e.target.closest('li').id;
     const targetPriority = e.target.selectedIndex; // select node
 
-    const { data: newTodo } = await TodoService.setPriority(
+    const newTodo = await TodoService.setPriority(
       this._state.user._id,
       targetId,
       {
@@ -204,9 +210,9 @@ class App extends Reilly.Component {
 
   confirmEditTodo(e) {
     e.stopPropagation();
-    if (!(e.key === 'Enter' || e.key === 'Escape')) return;
+    if (!(keyCode.isEnter(e) || keyCode.isEscape(e))) return;
 
-    if (e.key === 'Escape') {
+    if (keyCode.isEscape(e)) {
       this.setState({
         editingId: null,
       });
@@ -263,11 +269,20 @@ class App extends Reilly.Component {
 
     console.log('RENDERED!');
 
-    if (error) return <h1> {JSON.stringify(error)} Error occured!</h1>;
+    if (error) {
+      return (
+        <div>
+          <h1> {error.message} Error occured!</h1>
+          <h2>
+            <a href="/">plz reload</a>
+          </h2>
+        </div>
+      );
+    }
 
     return (
       <div id="app">
-        <Title id="user-title" user={user} />,
+        <Title id="user-title" user={user} />
         <UserList
           users={users}
           isUsersLoading={isUsersLoading}
@@ -277,14 +292,14 @@ class App extends Reilly.Component {
           onDeleteUser={this.deleteUser}
         />
         <div className="todoapp">
-          {user && <TodoForm onsubmit={this.addTodo} />}
           {user && (
             <Main
               todoList={todoList}
               mode={mode}
               editingId={editingId}
+              onAdd={this.addTodo}
               onToggle={this.toggleTodo}
-              onRemove={this.removeTodo}
+              onDelete={this.deleteTodo}
               onDeleteAll={this.deleteAllTodos}
               onSetPriority={this.setPriority}
               onModeChange={this.changeMode}

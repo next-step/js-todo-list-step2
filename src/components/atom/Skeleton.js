@@ -1,7 +1,7 @@
 /*@jsx Reilly.createElement*/
-import Reilly from '../../lib/reilly/Reilly.js';
+import Reilly from 'reilly';
 
-export function Skeleton() {
+function Skeleton() {
   return (
     <li>
       <div className="view">
@@ -16,3 +16,5 @@ export function Skeleton() {
     </li>
   );
 }
+
+export default Skeleton;

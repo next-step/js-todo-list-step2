@@ -1,39 +1,24 @@
-import hermes from './index.js';
+import errorHandler from './errorHandler';
+import hermes from './index';
 
 /**
  * @namespace UserService at your service!
  */
-class UserService {
-  static async fetchUsers() {
-    try {
-      const { data } = await hermes.get();
-      return data;
-    } catch (error) {
-      console.warn(error);
-    }
-  }
+const UserService = {
+  async fetchUsers() {
+    return await errorHandler(hermes.get);
+  },
+  async fetchUser(id) {
+    return await errorHandler(hermes.get, id);
+  },
 
-  static async add(payload) {
-    return await hermes.post('', payload);
-  }
+  async add(payload) {
+    return await errorHandler(hermes.post, payload);
+  },
 
-  static async fetchUser(id) {
-    try {
-      const { data } = await hermes.get(id);
-      return data;
-    } catch (error) {
-      console.warn(error);
-    }
-  }
-
-  static async delete(id) {
-    try {
-      const { data } = await hermes.delete(id);
-      return data;
-    } catch (error) {
-      console.warn(error);
-    }
-  }
-}
+  async delete(id) {
+    return await errorHandler(hermes.delete, id);
+  },
+};
 
 export default UserService;
