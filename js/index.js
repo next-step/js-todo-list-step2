@@ -27,6 +27,7 @@ window.onload = () => {
 }
 
 const loadUserList = () => {
+  renderLoading();
   API.fetchUserList()
     .then(response => response.json())
     .then(data => {
@@ -90,6 +91,7 @@ const addUser = user => {
 }
 
 const onUserDeleteHandler = async ($user, index) => {
+  renderLoading();
   currentUserID = users[index]._id;
 
   await API.deleteUser(currentUserID);
@@ -122,6 +124,7 @@ const deleteList = event => {
 }
 
 const onUserSelectHandler = async ($user, index) => {
+  renderLoading();
   const currentUserButton = document.querySelector('button.ripple.active');
   if(currentUserButton) currentUserButton.classList.remove('active');
   $user.classList.add('active');
@@ -134,6 +137,7 @@ const onUserSelectHandler = async ($user, index) => {
 }
 
 const toggleTodo = async ($item, index) => {
+  renderLoading();
   const todoItem = todoList[index];
   todoItem.isCompleted = !todoItem.isCompleted;
   todoList[index] = todoItem;
@@ -170,6 +174,7 @@ const modifyList = event => {
 }
 
 const addTodo = async todoItem => {
+  renderLoading();
   const newItem = itemTemplate;
   newItem._id = Math.random().toString(36).substr(2,10);
   newItem.contents = todoItem;
@@ -182,6 +187,7 @@ const addTodo = async todoItem => {
 }
 
 const deleteTodo = async ($item, index) => {
+  renderLoading();
   const todoItem = todoList[index];
   todoList.splice(index, 1);
   
@@ -190,6 +196,7 @@ const deleteTodo = async ($item, index) => {
 }
 
 const modifyTodo = async ($item, index) => {
+  renderLoading();
   const itemElement = $item.closest('li');
   itemElement.classList.remove('editing');
   
@@ -221,6 +228,10 @@ const filterList = () => {
   }
 }
 
+const renderLoading = () => {
+  $todoList.innerHTML = loadingTemplate;
+}
+
 const todoTemplate = todoItem => `
         <li class=${(todoItem.isCompleted) ? "completed" : ""}>
           <div class="view">
@@ -238,3 +249,15 @@ const todoTemplate = todoItem => `
           <input class="edit" value=${todoItem.contents} />
         </li>
 `;
+
+const loadingTemplate = `<li>
+<div class="view">
+  <label class="label">
+    <div class="animated-background">
+      <div class="skel-mask-container">
+        <div class="skel-mask"></div>
+      </div>
+    </div>
+  </label>
+</div>
+</li>`;

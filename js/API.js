@@ -13,7 +13,7 @@ const option = {
         headers: {
             "Content-Type": "application/json",
         },
-        body: JSON.stringify(todoItem),
+        body: JSON.stringify(target),
     })
 }
 
