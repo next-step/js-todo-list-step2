@@ -7,7 +7,9 @@ let users = [];
 let todoList = [];
 let todoFilter = 'all';
 
+const $userTitle = document.querySelector('h1#user-title');
 const userCreateButton = document.querySelector('.user-create-button');
+const userDeleteButton = document.querySelector('.user-delete-button');
 const $todoList = document.querySelector('ul.todo-list');
 const $userList = document.querySelector('div#user-list');
 let currentUserButton = $userList.querySelectorAll('button.ripple')[0];
@@ -15,6 +17,7 @@ let currentUserButton = $userList.querySelectorAll('button.ripple')[0];
 const $newTodo = document.querySelector('input.new-todo');
 
 userCreateButton.addEventListener('click', async () => onUserCreateHandler());
+userDeleteButton.addEventListener('click', async () => onUserDeleteHandler());
 $userList.addEventListener('click', event => selectUser(event));
 $todoList.addEventListener('click', event => toggleList(event));
 $todoList.addEventListener('click', event => deleteList(event));
@@ -90,18 +93,19 @@ const addUser = user => {
   userCreateButton.insertAdjacentElement('beforebegin', newUserButton);
 }
 
-const onUserDeleteHandler = async ($user, index) => {
+const onUserDeleteHandler = async () => {
   renderLoading();
-  currentUserID = users[index]._id;
 
   await API.deleteUser(currentUserID);
-
+  
+  $userList.removeChild(currentUser);
   render();
 }
 
 const selectUser = event => {
   $userList.querySelectorAll('button.ripple').forEach(($user, index) => {
-    if($user.contains(event.target) && !$user.classList.contains('user-create-button')){
+    if($user.contains(event.target) 
+      && !$user.classList.contains('user-create-button') && !$user.classList.contains('user-delete-button')){
       onUserSelectHandler($user, index);
     }
   });
@@ -124,11 +128,13 @@ const deleteList = event => {
 }
 
 const onUserSelectHandler = async ($user, index) => {
+  $userTitle.innerHTML = `<span><strong>${users[index].name}</strong>'s Todo List</span>`;
   renderLoading();
   const currentUserButton = document.querySelector('button.ripple.active');
   if(currentUserButton) currentUserButton.classList.remove('active');
   $user.classList.add('active');
 
+  currentUser = $user;
   currentUserID = users[index]._id;
 
   const res = await API.fetchTodoList(currentUserID);
