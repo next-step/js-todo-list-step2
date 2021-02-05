@@ -3,62 +3,76 @@ import { API as UserAPI } from "./users.js";
 import { getSelectedFilter, applySelectedFilter } from "./filterview.js";
 
 export async function initTodos() {
-  // 새로운 할 일 입력폼에 이벤트 리스너 등록.
-  document.querySelector("input.new-todo").addEventListener("keyup", onAddTodo);
+  initTodoInputForm();
+  initRemoveAllTodoButton();
+  initUsers();
+}
 
-  // 모든(또는 완료된?) 할 일 제거 버튼에 이벤트 리스너 등록.
+function initTodoInputForm() {
+  document.querySelector("input.new-todo").addEventListener("keyup", onAddTodo);
+}
+
+function initRemoveAllTodoButton() {
   document
     .querySelector("button.clear-completed")
     .addEventListener("click", onRemoveAllTodoClick);
+}
 
-  // 사용자 추가 및 제거 이벤트 처리기 등록.
-  const allData = await UserAPI.loadUsers();
-  allData.map((data) => drawUser(data));
+async function initUsers() {
+  const users = await UserAPI.loadUsers();
+  users.map((user) => drawUser(user));
   const userList = document.getElementById("user-list");
   userList.addEventListener("click", onClickUserList);
   userList.addEventListener("contextmenu", onRightClickUser);
 }
 
-async function checkDuplicates(userid, text) {
+async function checkDuplicatedTodo(userid, text) {
   const todoList = await UserAPI.loadTodoList(userid);
   return (
     todoList.filter((todoElement) => todoElement.contents === text).length > 0
   );
 }
 
+function disableClickedEffectUser(userid) {
+  document.getElementById(userid).classList.remove("active");
+}
+
+function enableClickedEffectUser(userid) {
+  document.getElementById(userid).classList.add("active");
+}
+
+function updateHeaderText(text) {
+  document.querySelector("h1#user-title span strong").textContent = text;
+}
+
 async function onClickUserList({ target }) {
-  if (target && target.nodeName === "BUTTON") {
-    // 사용자 선택.
-    // TODO: what about hasAttribute()?
-    if (target.hasAttribute("id")) {
-      // 선택된 사용자만 강조 표시.
-      document
-        .getElementById(UserAPI.getActiveUserID() ?? target.id)
-        .classList.remove("active");
-      target.classList.add("active");
-      // 선택된 사용자의 할 일 표시.
-      showTodoListLoadingAnimation();
-      const todoList = await UserAPI.loadTodoList(target.id);
-      clearTodoList();
-      todoList.map((todoElement) => drawTodo(todoElement));
-      // 헤더 텍스트 변경.
-      document.querySelector("h1#user-title span strong").textContent =
-        target.textContent;
-      updateCountText();
-      // 사용자 추가.
-    } else {
-      const newUsername = prompt(
-        "What is your name?",
-        "DEFAULT_ACCOUNT"
-      ).padStart(2, "_");
-      const newUserInfo = await UserAPI.addUser(newUsername);
-      alert(`New user ${newUserInfo.name}#${newUserInfo._id} added!`);
-      drawUser(newUserInfo);
-    }
+  if (!target || target.nodeName !== "BUTTON") {
+    return;
+  }
+
+  if (target.hasAttribute("id")) {
+    disableClickedEffectUser(UserAPI.getActiveUserID() ?? target.id);
+    enableClickedEffectUser(target.id);
+    showTodoListLoadingAnimation();
+    clearTodoList();
+
+    const clickedUsersTodoList = await UserAPI.loadTodoList(target.id);
+    clickedUsersTodoList.map((todoElement) => drawTodo(todoElement));
+
+    updateHeaderText(target.textContent);
+    updateCountText();
+  } else {
+    const newUsername = prompt(
+      "What is your name?",
+      "DEFAULT_ACCOUNT"
+    ).padStart(2, "_");
+    const newUserInfo = await UserAPI.addUser(newUsername);
+    alert(`New user ${newUserInfo.name}#${newUserInfo._id} added!`);
+    drawUser(newUserInfo);
   }
 }
 
-// 사용자 제거 함수.
+// 마우스 우클릭으로 사용자를 제거함.
 async function onRightClickUser(event) {
   if (
     event.target &&
@@ -69,7 +83,6 @@ async function onRightClickUser(event) {
     if (!confirm(`Delete user ${event.target.textContent}?`)) return;
     const userID = event.target.id;
     UserAPI.deleteUser(userID);
-    // 만약 현재 선택된 사용자를 제거한다면 할 일 목록도 초기화.
     if (userID === UserAPI.getActiveUserID()) {
       clearTodoList();
     }
@@ -77,7 +90,6 @@ async function onRightClickUser(event) {
   }
 }
 
-// 사용자 버튼을 그리는 함수.
 function drawUser({ _id, name }) {
   if (_id === undefined || name === undefined) return;
   const userList = document.getElementById("user-list");
@@ -91,13 +103,11 @@ function drawUser({ _id, name }) {
   );
 }
 
-// 사용자 입력으로 새로운 할 일이 추가되는 함수
 async function onAddTodo({ target, key }) {
-  // 기본적인 예외 처리(공백 문자열, 중복 할 일 등)
-  const newTodoInput = target;
-  const newTodoText = newTodoInput.value.trim();
+  const newTodoText = target.value.trim();
+
   if (key != "Enter" || newTodoText.length === 0) {
-    newTodoInput.focus();
+    target.focus();
     return;
   }
 
@@ -107,12 +117,12 @@ async function onAddTodo({ target, key }) {
     return;
   }
 
-  if (await checkDuplicates(userID, newTodoText)) {
+  if (await checkDuplicatedTodo(userID, newTodoText)) {
     alert("That ToDo already exists!");
     return;
   }
 
-  newTodoInput.value = "";
+  target.value = "";
   const addedTodo = await UserAPI.addTodoElement(userID, newTodoText);
   drawTodo(addedTodo);
 
@@ -120,16 +130,20 @@ async function onAddTodo({ target, key }) {
   applySelectedFilter();
 }
 
-// 할 일 추가 시 실제로 HTML 요소를 그리는 함수
+function isValidTodoElement({ _id, contents, priority, isCompleted }) {
+  return (
+    _id !== undefined &&
+    contents !== undefined &&
+    priority !== undefined &&
+    isCompleted !== undefined
+  );
+}
+
 function drawTodo({ _id, contents, priority, isCompleted }) {
-  if (
-    !_id === undefined ||
-    !contents === undefined ||
-    !priority === undefined ||
-    isCompleted === undefined
-  ) {
+  if (!isValidTodoElement({ _id, contents, priority, isCompleted })) {
     return;
   }
+
   const todoList = document.querySelector("ul.todo-list");
   const li = document.createElement("li");
   const newTodoHTMLElement = `
@@ -164,84 +178,77 @@ function drawTodo({ _id, contents, priority, isCompleted }) {
         </div>
         <input class="edit" value="${contents}"></input>
     `;
-  // 추후 접근 편의를 위해 <li> 태그의 id를 해당 할 일의 고유값으로 설정.
   li.id = _id;
   li.innerHTML = newTodoHTMLElement;
-  // 해당 할 일의 순위값 설정, 이벤트 처리기 등록.
   li.querySelector(
     `option[value="${priority == "FIRST" ? 1 : priority == "SECOND" ? 2 : 0}"]`
   ).toggleAttribute("selected");
+
   li.querySelector("select").addEventListener(
     "change",
     changeTodoElementPriority
   );
-  // 해당 할 일에 대한 클릭(완료 상태 토글, 삭제), 더블클릭(편집모드 진입), 키 입력(편집모드 종료, 변경내역 반영) 이벤트 처리기 등록.
+
   li.addEventListener("click", onTodoElementClicked);
   li.addEventListener("dblclick", onTodoElementDblclicked);
   li.addEventListener("keyup", onTodoElementKeyupped);
+
   todoList.append(li);
-  // 만약 해당 할 일이 완료된 할 일이라면 토글.
-  // 이번에는 Event를 발생시키지 않음!! 이벤트 처리기 때문에 토글이 풀리는 문제가 발생.
   if (isCompleted) {
     li.querySelector("input.toggle").setAttribute("checked", "");
     li.classList.add("completed");
   }
+
   updateCountText();
 }
 
-// 모든 할 일들 제거.
 async function onRemoveAllTodoClick(event) {
-  if (await UserAPI.deteleAllTodoElement(UserAPI.getActiveUserID())) {
+  try {
+    await UserAPI.deteleAllTodoElement(UserAPI.getActiveUserID());
     clearTodoList();
-  } else {
-    // notify user that operation is failed.
+  } catch (error) {
     alert("할 일을 제거하는 데 실패했습니다!");
   }
 }
 
-// 할 일을 클릭했을때 이벤트 위임.
 function onTodoElementClicked({ target }) {
   if (!target) {
     return;
   }
 
   if (target.nodeName === "INPUT" && target.classList.contains("toggle")) {
-    toggleTodoElementStatus(target);
+    toggleTodoElementCompleted(target);
   } else if (target.nodeName === "BUTTON") {
     removeCurrentTodoElement(target);
   }
 }
 
-// 할 일을 더블클릭했을때 이벤트 위임.
 function onTodoElementDblclicked({ target }) {
   if (target && target.nodeName === "LABEL") {
-    toggleTodoElementMode(target);
+    toggleTodoElementEditing(target);
   }
 }
 
-// 할 일을 조작 중 키를 입력했을때 이벤트 위임.
 function onTodoElementKeyupped({ target, key }) {
   if (target && target.nodeName === "INPUT") {
     updateTodoEdit({ target, key });
   }
 }
 
-// 할 일의 우선순위 변경.
 async function changeTodoElementPriority({ target }) {
-  const selectedPriority = parseInt(target.value); // 선택된 option 값은 select 요소의 value로 존재!
-  const userID = UserAPI.getActiveUserID();
+  // 선택된 option 값은 select 엘리먼트의 value 값.
+  const selectedPriority = parseInt(target.value);
   const todoElement = target.closest("li");
-  const todoElementID = todoElement.id;
 
   const animationToggler = getTodoElementLoadingAnimationToggler(todoElement);
   animationToggler();
 
   const updatedTodoElement = await UserAPI.updateTodoElementPriority(
-    userID,
-    todoElementID,
+    UserAPI.getActiveUserID(),
+    todoElement.id,
     selectedPriority == 0 ? "NONE" : selectedPriority == 1 ? "FIRST" : "SECOND"
   );
-  // 서버측 결과에 따라 스타일, 선택 항목 적용.
+
   target.classList.remove("primary", "secondary");
   switch (updatedTodoElement.priority) {
     case "FIRST":
@@ -259,8 +266,7 @@ async function changeTodoElementPriority({ target }) {
   animationToggler();
 }
 
-// 할 일 완료 여부 설정/해제.
-async function toggleTodoElementStatus(target) {
+async function toggleTodoElementCompleted(target) {
   const todoElement = target.closest("li");
 
   const animationToggler = getTodoElementLoadingAnimationToggler(todoElement);
@@ -270,66 +276,66 @@ async function toggleTodoElementStatus(target) {
     UserAPI.getActiveUserID(),
     todoElement.id
   );
-  // checked 속성을 toggle input에 넣어줄 필요가 없는듯?
+
   if (updatedTodoElement.isCompleted) {
-    // target.setAttribute('checked', '')
     todoElement.classList.add("completed");
   } else {
-    // target.removeAttribute('checked')
     todoElement.classList.remove("completed");
   }
+  animationToggler();
+
   applySelectedFilter();
   updateCountText();
-
-  animationToggler();
 }
 
-// 할 일을 더블클릭 했을 때 편집 모드 토글.
-function toggleTodoElementMode(target) {
+function toggleTodoElementEditing(target) {
   target.closest("li").classList.toggle("editing");
 }
 
-// 할 일 변경 이벤트 처리기.
 async function updateTodoEdit({ target, key }) {
-  const todoElement = target.closest("li");
   if (key === "Escape") {
-    todoElement.classList.toggle("editing");
-  } else if (key === "Enter") {
+    toggleTodoElementEditing(target);
+    return;
+  }
+
+  if (key === "Enter") {
+    const editingTodoElement = target.closest("li");
     const newTodoText = target.value.trim();
     if (newTodoText.length === 0) {
       target.focus();
       return;
     }
 
-    if (await checkDuplicates(UserAPI.getActiveUserID(), newTodoText)) {
+    if (await checkDuplicatedTodo(UserAPI.getActiveUserID(), newTodoText)) {
       alert("That ToDo already exists!");
       target.focus();
       return;
     }
 
-    todoElement.classList.toggle("editing");
-    const animationToggler = getTodoElementLoadingAnimationToggler(todoElement);
+    toggleTodoElementEditing(target);
+    const animationToggler = getTodoElementLoadingAnimationToggler(
+      editingTodoElement
+    );
     animationToggler();
 
     const updatedTodoElement = await UserAPI.updateTodoElementText(
       UserAPI.getActiveUserID(),
-      todoElement.id,
+      editingTodoElement.id,
       newTodoText
     );
-    // HTML 요소에서도 변경사항 적용 후 편집모드 종료.
-    todoElement.querySelector("div label span").textContent =
+
+    editingTodoElement.querySelector("div label span").textContent =
       updatedTodoElement.contents;
 
     animationToggler();
   }
 }
 
-// 할 일 삭제 이벤트 처리기.
 function removeCurrentTodoElement(target) {
-  const todoElement = target.closest("li");
-  const itemID = todoElement.id;
+  const currentTodoElement = target.closest("li");
+  const itemID = currentTodoElement.id;
   UserAPI.deleteTodoElement(UserAPI.getActiveUserID(), itemID);
-  target.closest("li").remove();
+  currentTodoElement.remove();
   updateCountText();
 }
 
@@ -351,7 +357,6 @@ function getTodoElementLoadingAnimationToggler(todoElement) {
   };
 }
 
-// 로딩 애니메이션 표시. 할 일 리스트 전체를 불러올때만 적용.
 function showTodoListLoadingAnimation() {
   const animationElement = `
     <li>
@@ -368,7 +373,6 @@ function showTodoListLoadingAnimation() {
   clearTodoList(animationElement);
 }
 
-// 할 일 리스트 초기화.
 function clearTodoList(clearValue = "") {
   document.querySelector("ul.todo-list").innerHTML = clearValue;
   updateCountText();
