@@ -56,16 +56,17 @@ const onUserDeleteHandler = ()=>{
     document.querySelectorAll('#user-list > button').forEach((x)=>checkToDelete(x,userName))
 }
 function checkToDelete(x, userName){
-    if(x.innerText === userName) {
-        if (x.classList.contains('user-create-button') || x.classList.contains('user-delete-button')) {
-            alert('삭제 불가능');
-        } else if (x.classList.contains('active') == true) {
-            alert('활성화 삭제 불가능');
-        } else {
-            x.remove();
-            getUserIdAndDelete(userName);
-        }
-    }
+  if (x.innerText !== userName) {
+    return
+  }
+  if (x.classList.contains('user-create-button') || x.classList.contains('user-delete-button')) {
+    alert('삭제 불가능');
+  } else if (x.classList.contains('active') == true) {
+    alert('활성화 삭제 불가능');
+  } else {
+    x.remove();
+    getUserIdAndDelete(userName);
+  }
 }
 
 //해당 이름을 가진 내용을 서버에 추가하기

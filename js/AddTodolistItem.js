@@ -10,23 +10,18 @@ function addTodolistItem(value, item) {
     clickEraseButton();
     clickCheckboxButton();
     clickLabel();
-    //strong태그 안에 있는 count 값 적용시키기
     document.querySelector('.todo-count > strong').innerText = document.querySelector('.todo-list').childElementCount;
 
 }
-function clickSet() {
-//전체보기 버튼 클릭시 모든 내용 display
+function initFilterEventListeners() {
     document.querySelector('.all').addEventListener('click', onAllFilterHandler);
-
-//해야할 일 버튼 클릭시 class가 completed인 것들은 display가 none이 되도록
     document.querySelector('.active').addEventListener('click', onActiveFilterHandler);
-
-//완료한 일 클릭시 class가 active인 것들은 display가 none이 되도록
     document.querySelector('.completed').addEventListener('click', onCompletedFilterHandler);
 }
 
 function onAllFilterHandler(){
-    document.querySelectorAll('.todo-list > li').forEach(x => x.style.display = '');
+    document.querySelectorAll('.todo-list > li').forEach(x => {x.style.display = ''});
+    document.querySelector('.todo-count > strong').innerText = document.querySelector('.todo-list').childElementCount;
     /* 아래코드도 가능
    let child = document.querySelector('.todo-list')
    child.childNodes.forEach(x=> x.style.display = '');
@@ -34,7 +29,10 @@ function onAllFilterHandler(){
 }
 
 function onActiveFilterHandler(){
-    document.querySelectorAll('.todo-list > li').forEach(x => x.classList.contains('active') == true ? x.style.display = '' : x.style.display = 'none');
+    document
+      .querySelectorAll('.todo-list > li')
+      .forEach(x => x.style.display  = (x.classList.contains('active') ? '' :  'none'));
+    document.querySelector('.todo-count > strong').innerText =  document.querySelectorAll('.todo-list > .active').length;
     /* 아래코드도 가능
     let child = document.querySelector('.todo-list')
     child.childNodes.forEach(x=>x.classList.contains('active') == true ? x.style.display='' : x.style.display = 'none');
@@ -43,15 +41,16 @@ function onActiveFilterHandler(){
 
 function onCompletedFilterHandler() {
     document.querySelectorAll('.todo-list > li').forEach(x => x.classList.contains('completed') == true ? x.style.display = '' : x.style.display = 'none')
+    document.querySelector('.todo-count > strong').innerText =  document.querySelectorAll('.todo-list > .completed').length
     /* 아래코드도 가능
     let child = document.querySelector('.todo-list')
     child.childNodes.forEach(x=>x.classList.contains('completed') == true ?  x.style.display='' : x.style.display = 'none')
     */
 }
 
-function checkServerItemComplete(value,item){
+function checkServerItemComplete(value, itemComplete){
     const $todo_list = document.querySelector('.todo-list');
-    if(item==='F') {
+    if(itemComplete==='F') {
         const content = (value) => `
         <li class="active"> 
             <div class="view">
@@ -60,7 +59,7 @@ function checkServerItemComplete(value,item){
                 <button class="destroy"></button>    
             </div>
         </li>
-    `
+        `
         $todo_list.innerHTML += content(value);
     }
     else{
@@ -78,7 +77,6 @@ function checkServerItemComplete(value,item){
 }
 
 function clickEraseButton(){
-    //버튼 클릭시 가장가까운 li태그 삭제 및, 해야할 count 값 줄이기
     document.querySelectorAll('.destroy').forEach($el => $el.addEventListener('click', function (event) {
         event.target.closest('li').remove();
         document.querySelector('.todo-count > strong').innerText =  document.querySelector('.todo-list').childElementCount;;
@@ -114,9 +112,8 @@ function clickLabel(){
         inputTag.setAttribute('class','edit');
         event.target.closest('li').insertAdjacentElement("beforeend", inputTag);
 
-        //input에서 Enter 클릭시 적용/ Esc 클릭시 취 소적용
         inputTag.addEventListener('keydown', function (e) {
-            if (e.key === 'Enter' && /[\S]/gi.test(inputTag.value)==true && check_overlap(inputTag.value) == true) {
+            if (e.key === 'Enter' && /[\S]/gi.test(inputTag.value)==true) {
                 //기존 localItem 제거, 새로운 localItem 추가 및 값 변경과 기본값으로 속성 변경 및 click_set 다시 설정(변화 후 바로 적용되게)
                 getUserIdAndModifyTodolist(document.querySelector('#user-list > .active').innerHTML, event.target.closest('div').children[1].innerText,inputTag.value)
 
@@ -124,7 +121,7 @@ function clickLabel(){
                 inputTag.remove();
                 event.target.closest('li').setAttribute('class', 'active');
                 event.target.closest('div').children[0].removeAttribute('checked')
-                clickSet();
+                initFilterEventListeners();
 
             }
             else if (e.key === 'Escape') {
@@ -135,21 +132,8 @@ function clickLabel(){
             else if(e.key === 'Enter' && /[\S]/gi.test(inputTag.value)==false){
                 alert('공백 입력 금지')
             }
-            else if(e.key === 'Enter' && checkOverlap(inputTag.value) == false){
-                alert('이미 존재하는 할일 입력 금지')
-            }
         });
     }))
 }
 
-//기존 할일과 같은 이름의 중복 방지 함수
-function checkOverlap(value){
-    for(let i=0;i<localStorage.length;i++)
-    {
-        if(value === localStorage.key(i))
-            return false;
-    }
-    return true;
-}
-
-export {addTodolistItem,clickSet,checkOverlap};
+export {addTodolistItem,initFilterEventListeners};
