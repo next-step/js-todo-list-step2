@@ -3,7 +3,7 @@ import $store from "../store/index.js";
 
 import TodoListItem from "./TodoListItem.js";
 
-const TodoListLoadingBar = `
+const todoListLoadingBar = `
   <li>
     <div class="view">
       <label class="label">
@@ -26,7 +26,7 @@ export default function TodoList() {
   };
 
   const render = async () => {
-    dom.innerHTML = TodoListLoadingBar;
+    dom.innerHTML = todoListLoadingBar;
     const todos = await $store.todoState.getFilteredTodos();
 
     dom.innerHTML = "";
