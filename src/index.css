@@ -509,7 +509,7 @@ button.ripple {
 #user-list.folded {
   white-space: nowrap;
   height: 50px;
-  overflow-x: scroll;
+  overflow-x: auto;
   overflow-y: hidden;
   margin: 0;
   padding: 0;
