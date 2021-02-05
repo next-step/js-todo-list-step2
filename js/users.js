@@ -42,7 +42,7 @@ async function addUser(newUsername) {
   let addedUserInfo = {};
   await fetch(
     `${serverURL}/api/users`,
-    requestOptionWithJsonData("POST", { name: newUsername })
+    requestOption.post({ name: newUsername })
   )
     .then(jsonifyData)
     .then((jsonResponse) => (addedUserInfo = responseChecker(jsonResponse)))
@@ -52,7 +52,7 @@ async function addUser(newUsername) {
 }
 
 function deleteUser(userid) {
-  fetch(`${serverURL}/api/users/${userid}`, requestOption("DELETE"));
+  fetch(`${serverURL}/api/users/${userid}`, requestOption.delete());
 }
 
 async function loadTodoList(userid) {
@@ -68,7 +68,7 @@ async function addTodoElement(userid, text) {
   let todoElement = {};
   await fetch(
     `${serverURL}/api/users/${userid}/items/`,
-    requestOptionWithJsonData("POST", { contents: text })
+    requestOption.post({ contents: text })
   )
     .then(jsonifyData)
     .then((jsonResponse) => (todoElement = responseChecker(jsonResponse)))
@@ -78,10 +78,7 @@ async function addTodoElement(userid, text) {
 
 async function deteleAllTodoElement(userid) {
   let result = false;
-  await fetch(
-    `${serverURL}/api/users/${userid}/items/`,
-    requestOption("DELETE")
-  )
+  await fetch(`${serverURL}/api/users/${userid}/items/`, requestOption.delete())
     .then(jsonifyData)
     .then((jsonResponse) => (result = jsonResponse.success));
   return result;
@@ -90,7 +87,7 @@ async function deteleAllTodoElement(userid) {
 async function deleteTodoElement(userid, itemid) {
   await fetch(
     `${serverURL}/api/users/${userid}/items/${itemid}`,
-    requestOption("DELETE")
+    requestOption.delete()
   );
 }
 
@@ -98,7 +95,7 @@ async function updateTodoElementText(userid, itemid, text) {
   let updatedTodoElement = {};
   await fetch(
     `${serverURL}/api/users/${userid}/items/${itemid}`,
-    requestOptionWithJsonData("PUT", { contents: text })
+    requestOption.put({ contents: text })
   )
     .then(jsonifyData)
     .then(
@@ -112,7 +109,7 @@ async function updateTodoElementPriority(userid, itemid, priority) {
   let updatedTodoElement = {};
   await fetch(
     `${serverURL}/api/users/${userid}/items/${itemid}/priority`,
-    requestOptionWithJsonData("PUT", { priority: priority })
+    requestOption.put({ priority: priority })
   )
     .then(jsonifyData)
     .then(
@@ -126,7 +123,7 @@ async function updateTodoElementStatus(userid, itemid) {
   let updatedTodoElement = {};
   await fetch(
     `${serverURL}/api/users/${userid}/items/${itemid}/toggle`,
-    requestOption("PUT")
+    requestOption.put()
   )
     .then(jsonifyData)
     .then(
@@ -136,19 +133,31 @@ async function updateTodoElementStatus(userid, itemid) {
   return updatedTodoElement;
 }
 
-function requestOption(method) {
-  return { method: method };
-}
-
-function requestOptionWithJsonData(method, data) {
-  return {
-    method: method,
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(data),
-  };
-}
+const requestOption = {
+  post: (data) => {
+    return {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    };
+  },
+  put: (data) => {
+    return {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    };
+  },
+  delete: () => {
+    return {
+      method: "DELETE",
+    };
+  },
+};
 
 function jsonifyData(data) {
   return data.json();
