@@ -8,21 +8,32 @@ let $userCount =0;
 const $baseUrl = 'https://js-todo-list-9ca3a.df.r.appspot.com/'
 
 // 해당 서버에 데이터 가져와 처리
-function responseApi(){
-    fetch(`${$baseUrl}api/users`)
-        .then((response) => response.json())
-        .then((myJson)=> {
-            $userList.innerHTML = myJson.map(user => `
+
+async function responseApi(){
+  try {
+    const response = await delay();
+    const post = await response.json();
+    await setUserName(post);
+  }
+  catch(err){
+    alert(err);
+  }
+};
+
+function delay(){
+  return fetch(`${$baseUrl}api/users`)
+}
+
+function setUserName(myJson){
+  $userList.innerHTML = myJson.map(user => `
                 <button class="ripple" id=${++$userCount}>${user.name}</button>
             `).join('');
-            clickUser();
-            $userList.append($userCreateButton);
-            $userList.append($userDeleteButton);
-            $userCreateButton.addEventListener('click',makeUser);
-            $userDeleteButton.addEventListener('click',deleteUser);
-        })
-
-};
+  clickUser();
+  $userList.append($userCreateButton);
+  $userList.append($userDeleteButton);
+  $userCreateButton.addEventListener('click',makeUser);
+  $userDeleteButton.addEventListener('click',deleteUser);
+}
 
 // 클릭시 생성 혹은 삭제 핸들러 실행
 function makeUser(){
@@ -108,9 +119,9 @@ function deleteData(_id){
 function clickUser(){
     for(let i=1; i<=$userCount; i++)
     {
-        let id = document.getElementById(`${i}`);
-        if(id!==null)       //id가 숫자로 제대로 존재한다면 실행 (숫자가 아니라면 실행X)
-            id.addEventListener('click',(event)=>OnUserClickHandler(id.innerText,event));
+        let dom = document.getElementById(String(i));
+        if(Number.isInteger(Number(dom.id)))       //id가 숫자로 제대로 존재한다면 실행 (숫자가 아니라면 실행X)
+            dom.addEventListener('click',(event)=>OnUserClickHandler(dom.innerText,event));
     }
 }
 
