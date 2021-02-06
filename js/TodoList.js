@@ -1,4 +1,4 @@
-import { getTodoItems, deleteTodoItem } from "./Fetch.js";
+import { getTodoItems, postTodoItem, deleteTodoItem } from "./Fetch.js";
 const PRIORITY = {
   NONE: `<select class="chip select">
   <option value="0" selected>순위</option>
@@ -13,7 +13,10 @@ const $todoList = document.querySelector(".todo-list");
 let USERID = "";
 export const initTodoList = () => {
   addListeners();
+  const $newTodo = document.querySelector(".new-todo");
+  $newTodo.addEventListener("keyup", addItem);
 };
+
 export const renderTodoListOfUser = async ({ target }) => {
   const classes = target.className.split(" ");
   USERID = target.id;
@@ -43,6 +46,7 @@ const assignTodoList = (todoList) => {
 
 const createTodoItem = (todo) => {
   const { _id, contents, isCompleted, priority } = todo;
+  console.log(contents);
   const $li = document.createElement("li");
   $li.setAttribute("id", _id);
   $li.innerHTML = `
@@ -69,4 +73,12 @@ const deleteItem = ({ target }) => {
   const _id = $li.id;
   $todoList.removeChild($li);
   deleteTodoItem(USERID, _id);
+};
+
+const addItem = async ({ target, key }) => {
+  if (key !== "Enter") return;
+  const todoItem = await postTodoItem(USERID, target.value);
+  target.value = "";
+  const $todoItem = createTodoItem(todoItem);
+  $todoList.appendChild($todoItem);
 };
