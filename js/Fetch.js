@@ -55,14 +55,10 @@ export const postTodoItem = (userID, contents) => {
     },
     body: requestBody,
   };
-  return fetch(`${ROOT}/api/users/${userID}/items/`, options)
-    .then((res) => {
-      if (!res.ok) return new Error(res.status);
-      return res.json();
-    })
-    .then((post) => {
-      console.log(post);
-    });
+  return fetch(`${ROOT}/api/users/${userID}/items/`, options).then((res) => {
+    if (!res.ok) return new Error(res.status);
+    return res.json();
+  });
 };
 
 export const deleteTodoItems = (userID) => {

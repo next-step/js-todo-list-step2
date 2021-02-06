@@ -6,7 +6,6 @@ import {
 import {
   postUser,
   deleteUser,
-  getTodoItems,
   postTodoItem,
   deleteTodoItems,
   deleteTodoItem,
@@ -14,6 +13,8 @@ import {
   revisePriorityOfTodoItem,
   toggleCompleteOfTodoItem,
 } from "./Fetch.js";
+
+import { renderTodoListOfUser } from "./TodoList.js";
 
 export const initUserList = () => {
   const userList = getUserListByLocalStorage();
@@ -33,8 +34,14 @@ export const initUserList = () => {
 
 const onUserCreateHandler = async ({ target }) => {
   const userName = prompt("추가하고 싶은 이름을 입력해주세요.");
-  if (!userName) return;
+  if (!userName || userName.length === 1) {
+    alert("2글자 이상의 username을 입력하세요!");
+    return;
+  }
   const user = await postUser(userName);
+  postTodoItem(user._id, "contents 1");
+  postTodoItem(user._id, "contents 2");
+  postTodoItem(user._id, "contents 3");
   addUserBtnToUserList(user, target);
   setUserListToLocalStorage();
 };
@@ -54,29 +61,4 @@ const createUserButton = (user) => {
   $button.setAttribute("id", user._id);
   $button.innerText = user.name;
   return $button;
-};
-
-const renderTodoListOfUser = async ({ target }) => {
-  const classes = target.className.split(" ");
-  if (!classes.includes("userBtn")) return false;
-  const todoList = await getTodoItems(target.id);
-  assignTodoList(todoList);
-};
-
-const assignTodoList = (todolist) => {};
-
-const createTodoItem = (todolist) => {
-  const todoItem = `
-    <li>
-      <div class="view">
-        <input class="toggle" type="checkbox" />
-        <label class="label">
-          <span class="chip secondary">2순위</span>
-           해야할 아이템
-        </label>
-        <button class="destroy"></button>
-      </div>
-      <input class="edit" value="완료된 타이틀" />
-    </li>
-  `;
 };
