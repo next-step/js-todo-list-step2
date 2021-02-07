@@ -1,6 +1,6 @@
 /*@jsx Reilly.createElement*/
 import Reilly from 'reilly';
-import { MESSAGES } from 'utility';
+import { MESSAGES } from 'utils';
 
 function Title(props) {
   const { id, user } = props;

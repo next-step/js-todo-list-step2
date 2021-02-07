@@ -1,7 +1,7 @@
 /*@jsx Reilly.createElement*/
 import Reilly from 'reilly';
 import { TodoFooter, TodoList, TodoForm } from 'components';
-import { FILTER_STATUS } from 'utility';
+import { FILTER_STATUS } from 'utils';
 
 class Main extends Reilly.Component {
   render() {

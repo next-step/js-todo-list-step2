@@ -1,6 +1,6 @@
 /*@jsx Reilly.createElement*/
 import Reilly from 'reilly';
-import { FILTER_STATUS, FILTER_NAMES } from 'utility';
+import { FILTER_STATUS, FILTER_NAMES } from 'utils';
 import { FilterButton } from 'components';
 
 class FilterList extends Reilly.Component {

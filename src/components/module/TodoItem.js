@@ -1,6 +1,6 @@
 /*@jsx Reilly.createElement*/
 import Reilly from 'reilly';
-import { PRIORITY_CLASS, PRIORITY_ENUM } from 'utility';
+import { PRIORITY_CLASS, PRIORITY_ENUM } from 'utils';
 
 class TodoItem extends Reilly.Component {
   render() {
