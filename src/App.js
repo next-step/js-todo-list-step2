@@ -3,8 +3,8 @@ import Reilly from 'reilly';
 import { Title, TodoForm, UserList, Main } from 'components';
 import { Todo, AppState, User } from './types';
 import { TodoService, UserService } from './services';
-import { FILTER_STATUS, PRIORITY_ENUM } from 'utility';
-import { Interactions, keyCode } from 'utility';
+import { FILTER_STATUS, PRIORITY_ENUM } from 'utils';
+import { Interactions, keyCode } from 'utils';
 
 const initialState = {
   isUsersLoading: false,
@@ -78,6 +78,7 @@ class App extends Reilly.Component {
     e.preventDefault();
 
     const targetId = this._state.user?._id;
+
     if (!targetId) {
       Interactions.noUserToDelete();
       return;

@@ -1,4 +1,4 @@
-import { FILTER_STATUS, PRORITY_TYPE } from 'utility';
+import { FILTER_STATUS, PRORITY_TYPE } from 'utils';
 
 /**
  * @typedef {Object} AppStateInit

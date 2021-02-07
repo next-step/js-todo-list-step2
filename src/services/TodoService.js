@@ -1,4 +1,4 @@
-import { typeChecks } from 'utility';
+import { typeChecks } from 'utils';
 import errorHandler from './errorHandler';
 import hermes from './index';
 
