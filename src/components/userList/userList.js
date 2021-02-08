@@ -1,7 +1,7 @@
-import { initAddUser } from './addUser.js';
-import { initSelectUser } from './selectUser.js';
+import {selectUser} from './selectUser.js';
+import {changeUserList} from './changeUserList.js';
 
-export function inituserControl() {
-    initAddUser();
-    initSelectUser();
-}
+export const userList = () => {
+    selectUser();
+    changeUserList();
+};

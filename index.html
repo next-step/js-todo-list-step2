@@ -1,117 +1,57 @@
 <!DOCTYPE html>
 <html>
-
 <head>
   <title>Mission 2 Todo List</title>
   <meta charset="utf-8" />
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   <link href="./css/app.css" rel="stylesheet" />
-  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+  <link
+          href="https://fonts.googleapis.com/icon?family=Material+Icons"
+          rel="stylesheet"
+  />
+  <script src="https://ajax.googleapis.com/ajax/libs/d3js/6.5.0/d3.min.js"></script>
 </head>
-
 <body>
-  <div id="app">
-    <h1 id="user-title"></h1>
-    <section>
-      <div id="user-list">
-        <button class="ripple active">yeewon</button>
-        <button class="ripple user-create-button">+ 유저 생성</button>
-      </div>
-    </section>
+<div id="app">
+  <h1 id="user-title" data-username="eastjun">
+    <span><strong>yewon</strong>'s Todo List</span>
+  </h1>
+  <section>
+    <div id="user-list">
+      <button class="ripple active">yeewon</button>
+    </div>
+  </section>
 
-    <section class="todoapp">
-      <section class="input-container">
-        <input class="new-todo" placeholder="할 일을 입력해주세요." autofocus />
-      </section>
-      <section class="main">
-        <ul class="todo-list">
-          <li>
-            <div class="view">
-              <label class="label">
-                <div class="animated-background">
-                  <div class="skel-mask-container">
-                    <div class="skel-mask"></div>
-                  </div>
-                </div>
-              </label>
-            </div>
-          </li>
-          <li>
-            <div class="view">
-              <input class="toggle" type="checkbox" />
-              <label class="label">
-                <select class="chip select">
-                  <option value="0" selected>순위</option>
-                  <option value="1">1순위</option>
-                  <option value="2">2순위</option>
-                </select>
-                해야할 아이템
-              </label>
-              <button class="destroy"></button>
-            </div>
-            <input class="edit" value="완료된 타이틀" />
-          </li>
-          <li>
-            <div class="view">
-              <input class="toggle" type="checkbox" />
-              <label class="label">
-                <span class="chip primary">1순위</span>
-                해야할 아이템
-              </label>
-              <button class="destroy"></button>
-            </div>
-            <input class="edit" value="완료된 타이틀" />
-          </li>
-          <li>
-            <div class="view">
-              <input class="toggle" type="checkbox" />
-              <label class="label">
-                <span class="chip secondary">2순위</span>
-                해야할 아이템
-              </label>
-              <button class="destroy"></button>
-            </div>
-            <input class="edit" value="완료된 타이틀" />
-          </li>
-          <li class="completed">
-            <div class="view">
-              <input class="toggle" type="checkbox" checked />
-              <label class="label">완료된 아이템 </label>
-              <button class="destroy"></button>
-            </div>
-            <input class="edit" value="완료된 타이틀" />
-          </li>
-          <li class="editing">
-            <div class="view">
-              <input class="toggle" type="checkbox" checked />
-              <label class="label">
-                <span class="chip secondary">2순위</span>
-                수정중인 아이템
-              </label>
-              <button class="destroy"></button>
-            </div>
-            <input class="edit" value="완료된 타이틀" />
-          </li>
-        </ul>
-      </section>
-      <div class="count-container">
-        <span class="todo-count">총 <strong>0</strong> 개</span>
-        <ul class="filters">
-          <li>
-            <a href="/#" class="all selected">전체보기</a>
-          </li>
-          <li>
-            <a href="#active" class="active">해야할 일</a>
-          </li>
-          <li>
-            <a href="#completed" class="completed">완료한 일</a>
-          </li>
-        </ul>
-        <button class="clear-completed">모두 삭제</button>
-      </div>
+  <section class="todoapp">
+    <section class="input-container">
+      <input
+              class="new-todo"
+              placeholder="할 일을 입력해주세요."
+              autofocus
+      />
     </section>
-  </div>
+    <section class="main">
+      <ul class="todo-list">
+
+      </ul>
+    </section>
+    <div class="count-container">
+      <span class="todo-count">총 <strong>0</strong> 개</span>
+      <ul class="filters">
+        <li>
+          <a href="/#" class="all selected" >전체보기</a>
+        </li>
+        <li>
+          <a href="#active" class="active">해야할 일</a>
+        </li>
+        <li>
+          <a href="#completed" class="completed">완료한 일</a>
+        </li>
+      </ul>
+      <button class="clear-completed">모두 삭제</button>
+    </div>
+  </section>
+</div>
+<!-- 외부 모듈 스크립트를 다운로드 할 때는 병렬적으로 불러와야 한다. -> type="module"-->
+<script src="./src/index.js" type="module"></script>
 </body>
-<script src="src/index.js" type="module"></script>
-
 </html>
