@@ -1,8 +1,6 @@
 /*@jsx Reilly.createElement*/
 import Reilly from 'reilly';
 import { PRIORITY_CLASS, PRIORITY_ENUM } from 'utils';
-import cn from 'classNames';
-
 function TodoItem(props) {
   const {
     todo: { _id, isCompleted, contents, priority },
@@ -17,18 +15,20 @@ function TodoItem(props) {
   return (
     <li
       id={_id}
-      className={cn({ completed: isCompleted, editing: _id === editingId })}
+      className={`${isCompleted ? 'completed' : ''} ${
+        _id === editingId ? 'editing' : ''
+      }`}
     >
       <div className="view">
         <input
           type="checkbox"
-          className={cn('toggle', { checked: isCompleted })}
+          className={`toggle ${isCompleted ? 'checked' : ''}`}
           checked={isCompleted}
           onclick={onToggle}
         />
         <label className="label" ondblclick={onStartEdit}>
           <select
-            className={cn('chip', 'select', PRIORITY_CLASS.get(priority))}
+            className={`chip select ${PRIORITY_CLASS.get(priority)}`}
             onchange={onSetPriority}
           >
             {[0, 1, 2].map((_, count) => (
