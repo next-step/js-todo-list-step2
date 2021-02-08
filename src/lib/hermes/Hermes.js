@@ -41,14 +41,8 @@ class Hermes {
 
       xhr.send(JSON.stringify(payload));
 
-      if (xhr.status === 500) {
-        console.warn(1, xhr.statusText);
-      }
       xhr.ontimeout = () => console.warn('Timeout occured!');
       xhr.onreadystatechange = () => {
-        if (xhr.status === 500) {
-          console.warn(2, xhr.statusText);
-        }
         if (xhr.readyState !== xhr.DONE) return;
         if (xhr.status === 200 || xhr.status === 201) {
           resolve({ data: JSON.parse(xhr.response) });
