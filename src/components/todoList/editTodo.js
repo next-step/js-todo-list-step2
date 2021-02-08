@@ -1,7 +1,7 @@
 import {API} from '../../api/api.js';
 import {loadTodos} from './loadTodos.js';
 import {getCurrentUser} from '../../utils/localStorage.js';
-export const MIN_TODO_LENGTH = 1;
+import {MIN_TODO_LENGTH} from './addTodo.js';
 
 export const initEditTodo = () => {
     const $todoList = document.querySelector('.todo-list');
