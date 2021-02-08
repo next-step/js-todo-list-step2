@@ -47,6 +47,11 @@ const MESSAGES = {
   CONFIRM_DELETE_ALL: '😈 Wanna delete every todos?',
 };
 
+const USERLIST = {
+  FOLD: 'fold',
+  UNFOLD: '',
+};
+
 export {
   FILTER_NAMES,
   FILTER_STATUS,
@@ -54,4 +59,5 @@ export {
   PRIORITY_ENUM,
   PRORITY_TYPE,
   MESSAGES,
+  USERLIST,
 };
