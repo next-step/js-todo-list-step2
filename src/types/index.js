@@ -1,1 +1,1 @@
-export { AppState, Todo, User } from './state';
+export { Todo, User } from './state';
