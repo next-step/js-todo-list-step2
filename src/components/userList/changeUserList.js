@@ -3,7 +3,7 @@ import {API} from '../../api/api.js';
 import {getCurrentUser} from '../../utils/localStorage.js';
 const MIN_USER_NAME = 2;
 
-export const changeUserList = () => {
+export const initChangeUserList = () => {
     const $userList = document.getElementById('user-list');
     $userList.addEventListener("click", onChangeUserList);
 }

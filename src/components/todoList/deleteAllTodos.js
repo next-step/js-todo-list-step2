@@ -5,7 +5,7 @@ import {getCurrentUser} from '../../utils/localStorage.js';
 export const initDeleteAllTodos = () => {
     const $deleteAll = document.querySelector('.clear-completed');
 
-    $deleteAll.addEventListener('click', onDeleteAllTodos);//delete all todos
+    $deleteAll.addEventListener('click', onDeleteAllTodos);
 }
 
 const onDeleteAllTodos = async ({target}) => {

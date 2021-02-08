@@ -2,15 +2,15 @@ import {API} from '../../api/api.js';
 import {loadTodos} from './loadTodos.js';
 import {getCurrentUser} from '../../utils/localStorage.js';
 
-//add or delete or edir todo item 
+//delete todo & complete todo
 export const initControlTodo = () => {
     const $todoList = document.querySelector('.todo-list');
 
-    $todoList.addEventListener('click', onControlTodo);// delete, complete todo
+    $todoList.addEventListener('click', onControlTodo);
 }
 
 const onControlTodo = async ({target}) => {
-    //delete todo
+
     if (target.className === 'destroy'){
         const userId = getCurrentUser();
         const itemId = target.closest('li').id;
@@ -18,7 +18,7 @@ const onControlTodo = async ({target}) => {
         await API.deleteTodo(userId, itemId);
         loadTodos(userId);
     }
-    // complete todo
+
     else if(target.className === 'toggle'){
         const userId = getCurrentUser();
         const itemId = target.closest('li').id;

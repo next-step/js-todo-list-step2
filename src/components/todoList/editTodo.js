@@ -6,7 +6,7 @@ import {MIN_TODO_LENGTH} from './addTodo.js';
 export const initEditTodo = () => {
     const $todoList = document.querySelector('.todo-list');
 
-    $todoList.addEventListener('dblclick', onEditTodo);//edit todo
+    $todoList.addEventListener('dblclick', onEditTodo);
 }
 
 const editTodo = async (target) => {
