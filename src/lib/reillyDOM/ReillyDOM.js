@@ -14,9 +14,11 @@ class ReillyDOM {
    */
   static render(reillyNode, container) {
     const $root = document.getElementById('root');
+
+    //diff here
+
     const htmlElement = this.renderElement(reillyNode);
     if (!container) container = $root;
-
     container.innerHTML = '';
     container.appendChild(htmlElement);
   }

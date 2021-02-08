@@ -27,7 +27,6 @@ class Reilly {
    *    createElement('div', {id: 1})
    *    createElement(App, null, createElement(UList, null, ListItem1,ListItem2))
    */
-
   static createElement(nodeType, props, ...children) {
     if (Array.isArray(children)) children = children.flat();
 
@@ -35,9 +34,9 @@ class Reilly {
       if (nodeType.prototype instanceof this.Component) {
         const component = new nodeType({ ...props, children });
 
-        if (component.constructor.name === 'App')
+        if (component.constructor.name === 'App') {
           component._owner = document.querySelector('#root');
-        else component._owner = document.querySelector('.view');
+        }
 
         return component.render();
       }
