@@ -44,31 +44,8 @@ export function Todo(contents) {
 }
 
 export function User({ name }) {
-  if (!new.target) return new Todo(contents);
+  if (!new.target) return new User({ name });
 
   this.name = name || 'randomUser';
   this.todoList = [];
-}
-
-/**
- * @param {AppStateInit} initialState
- */
-export function AppState({
-  isUsersLoading,
-  todoList,
-  user,
-  users,
-  editingId,
-  mode = FILTER_STATUS.ALL,
-  error = null,
-}) {
-  if (!new.target) return new AppState({ isLoading, user, users, mode });
-
-  this.isUsersLoading = isUsersLoading;
-  this.user = user;
-  this.todoList = todoList;
-  this.users = users;
-  this.mode = mode;
-  this.error = error;
-  this.editingId = editingId;
 }
