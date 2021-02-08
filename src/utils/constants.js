@@ -48,7 +48,7 @@ const MESSAGES = {
 };
 
 const USERLIST = {
-  FOLD: 'fold',
+  FOLD: 'folded',
   UNFOLD: '',
 };
 
