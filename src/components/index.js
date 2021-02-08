@@ -3,6 +3,7 @@ export {
   FilterButton,
   Skeleton,
   Title,
+  TodoItem,
   TodoCount,
   TodoForm,
   ToggleAll,
@@ -10,13 +11,6 @@ export {
   UserMgmtButton,
 } from './atom';
 
-export {
-  TodoItem,
-  TodoItemContainer,
-  TodoList,
-  TodoFooter,
-  FilterList,
-  UserList,
-} from './module';
+export { TodoList, TodoFooter, FilterList, UserList } from './module';
 
 export { default as Main } from './Main';
