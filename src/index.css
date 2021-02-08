@@ -58,6 +58,11 @@ body {
   font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
   margin-bottom: 50px;
 }
+#user-title {
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+}
 
 .todoapp {
   background: #fff;
