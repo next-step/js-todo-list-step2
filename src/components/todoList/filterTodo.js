@@ -1,23 +1,21 @@
 import {getCurrentUser} from '../../utils/localStorage.js';
 import {loadTodos} from './loadTodos.js';
-const $filters = document.querySelector('.filters');
-
-const selectOption = (option) => {
-    const buttons = $filters.querySelectorAll('a');
-    buttons.forEach((button) => button.classList.remove('selected'));
-    $filters.querySelector(`.${option}`).classList.add('selected');
-};
 
 export const filterTodo = () => {
+    const $filters = document.querySelector('.filters');
     $filters.addEventListener('click', onFilterTodo);
 }
-
-const onFilterTodo = ({target}) => {
-    if(target.classList.contains('all')) show('all');
-    else if(target.classList.contains('active')) show('active');
-    else if(target.classList.contains('completed')) show('completed');
+const selectOption = (option) => {
+    const buttons = document.querySelectorAll('.filters a');
+    
+    buttons.forEach((button) => button.classList.remove('selected'));
+    document.getElementById(`${option}`).classList.add('selected');
 };
 
+const onFilterTodo = ({target}) => {
+    const filters = ['all','active','completed'];
+    if(filters.includes(target.id)) show(target.id);
+};
 
 const show = (option) => {
     const user = getCurrentUser();

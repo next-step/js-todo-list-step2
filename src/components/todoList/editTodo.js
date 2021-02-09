@@ -5,7 +5,6 @@ import {MIN_TODO_LENGTH} from './addTodo.js';
 
 export const initEditTodo = () => {
     const $todoList = document.querySelector('.todo-list');
-
     $todoList.addEventListener('dblclick', onEditTodo);
 }
 
@@ -40,7 +39,6 @@ const onUpdateTitle = ({target, key}, originalTodo) => {
 
 const onEditTodo =  async ({target}) => {
     if(target.className === 'label'){
-        const originalTodo = target.innerText;
         const $li = target.closest('li');
 
         $li.classList.add('editing');

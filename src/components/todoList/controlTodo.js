@@ -9,21 +9,19 @@ export const initControlTodo = () => {
     $todoList.addEventListener('click', onControlTodo);
 }
 
+
 const onControlTodo = async ({target}) => {
 
-    if (target.className === 'destroy'){
+    const classList = ['destroy', 'toggle'];
+
+    if(classList.includes(target.className)){
         const userId = getCurrentUser();
         const itemId = target.closest('li').id;
-    
-        await API.deleteTodo(userId, itemId);
+
+        target.className === 'destroy' ? await API.deleteTodo(userId, itemId) : await API.toggleTodo(userId, itemId); 
+
+        classList[target.className];
         loadTodos(userId);
     }
 
-    else if(target.className === 'toggle'){
-        const userId = getCurrentUser();
-        const itemId = target.closest('li').id;
-
-        await API.toggleTodo(userId, itemId);
-        loadTodos(userId);
-    } 
 }

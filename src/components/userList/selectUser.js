@@ -7,19 +7,14 @@ export const initSelectUser = () => {
 }
 
 export const onChangeTitleName = async ({target}) => {
-    if (!target.classList.contains('ripple') 
-        || target.classList.contains('user-create-button') 
-        || target.classList.contains('user-delete-button')) {
-        return;
-    }
+    const controlButtton = ['ripple user-create-button', 'ripple user-delete-button'];
+    if (controlButtton.includes(target.className)) return;
 
     const preUserId = getCurrentUser();
-    document.getElementById(`${preUserId}`).className = 'ripple';
-
     const userId = target.id;
-    const $selectedUserButton = document.getElementById(`${userId}`);
 
-    $selectedUserButton.classList.add('active');
+    document.getElementById(`${preUserId}`).classList.remove('active');
+    document.getElementById(`${userId}`).classList.add('active');
 
     setCurrentUser(userId);
     await loadTodos(userId);

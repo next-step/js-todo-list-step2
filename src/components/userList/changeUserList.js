@@ -9,16 +9,14 @@ export const initChangeUserList = () => {
 }
 
 const onChangeUserList = async ({target}) => {
-    if (target.className === 'ripple user-create-button'){
+    if (target.classList.contains('user-create-button')){
         const userName = prompt('이름을 입력해주세요');
-        if(userName === null) return;
-        if(userName.length < MIN_USER_NAME){
-            return alert(`닉네임은 ${MIN_USER_NAME}자 이상 입력해주세요`);
-        }
+        if(!userName) return;
+        if(userName.length < MIN_USER_NAME) return alert(`닉네임은 ${MIN_USER_NAME}자 이상 입력해주세요`);
         await API.addUser(userName);
         loadUsers();
     }
-    else if(target.className === 'ripple user-delete-button'){
+    else if(target.classList.contains('user-delete-button')){
         const userId = getCurrentUser();
 
         await API.deleteUser(userId);
