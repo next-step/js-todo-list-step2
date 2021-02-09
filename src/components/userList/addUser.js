@@ -14,7 +14,7 @@ const onAddUser = async ({target}) => {
     const userName = prompt('이름을 입력해주세요');
     if(!userName) return;
     if(userName.length < MIN_USER_NAME) return alert(`닉네임은 ${MIN_USER_NAME}자 이상 입력해주세요`);
-    await API.addUser(userName);
-    loadUsers();
+    const response = await API.addUser(userName);
+    loadUsers(response._id);
     
 }
