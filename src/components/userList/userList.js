@@ -1,7 +1,10 @@
 import {initSelectUser} from './selectUser.js';
-import {initChangeUserList} from './changeUserList.js';
+import {initAddUser} from './addUser.js';
+import {initDeleteUser} from './deleteUser.js';
+
 
 export const userList = () => {
     initSelectUser();
-    initChangeUserList();
+    initAddUser();
+    initDeleteUser();
 };
