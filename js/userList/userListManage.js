@@ -4,7 +4,7 @@ import { selectUser } from './selectUser.js';
 
 const onClickUserList = ({ target }) => {
     if(!target.classList.contains('ripple')) return;
-
+    // console.dir(target);
     if(target.classList.contains('user-create-button')){
         addUser();
     }

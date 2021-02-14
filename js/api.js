@@ -47,5 +47,20 @@ export const API = {
     getUserTodos: (userId) => {
         return request(`/api/users/${userId}`);
     },
+    addTodo: (userId, contents) => {
+        const content = {
+            contents
+        };
+        return request(`/api/users/${userId}/items`, option.post(content));
+    },
+    checkTodo: (userId, itemId) => {
+        return request(`/api/users/${userId}/items/${itemId}/toggle`, option.put());
+    },
+    editTodo: (userId, itemId, contents) => {
+        const content = {
+            contents
+        };
+        return request(`/api/users/${userId}/items/${itemId}`, option.put(content));
+    },
 
 }
