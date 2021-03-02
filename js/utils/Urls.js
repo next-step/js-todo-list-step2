@@ -1,5 +1,5 @@
 const BASE_URL = "https://js-todo-list-9ca3a.df.r.appspot.com";
-const buildURL = ({url, method}) => ({"path": `${BASE_URL}${url}`, method});
+const buildURL = ({url, method}) => ({"url": `${BASE_URL}${url}`, method});
 
 // users
 const USERS_API = "/api/users";
@@ -15,7 +15,7 @@ const ITEM_PRIORITY_API = "/api/users/:userId/items/:itemId/priority";
 // item complete
 const ITEM_COMPLETE_API = "/api/users/:userId/items/:itemId/toggle";
 
-const METHOD = {
+export const METHOD = {
   GET: "GET",
   POST: "POST",
   PUT: "PUT",
