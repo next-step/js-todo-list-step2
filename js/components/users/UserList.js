@@ -9,12 +9,13 @@ export default function UserList({users}) {
   this.$userList = $.single("#user-list");
 
   const init = () => {
-    createButtonInit();
+    createButtonEventInit();
+    userListEventInit();
 
-    this.$userList.addEventListener("click", userListDelegateEvent)
   }
 
-  const createButtonInit = () => {
+  // 유저 생성 이벤트
+  const createButtonEventInit = () => {
     const $userCreateButton = $.single(".user-create-button")
     $userCreateButton.addEventListener("click", onUserCreateHandler);
   }
@@ -29,12 +30,9 @@ export default function UserList({users}) {
     }
   }
 
-  const initActiveClass = () => {
-    const $userButtons = $.multi("#user-list button");
-    $userButtons.forEach(v => {
-      if (Validation.notIncludeClass(v.classList, "active")) return;
-      v.classList.remove("active");
-    })
+  // user list 이벤트 위임
+  const userListEventInit = () => {
+    this.$userList.addEventListener("click", userListDelegateEvent)
   }
 
   const userListDelegateEvent = e => {
@@ -46,12 +44,24 @@ export default function UserList({users}) {
     changeUserTitle(name);
   }
 
+
+  // user lit class init
+  const initActiveClass = () => {
+    const $userButtons = $.multi("#user-list button");
+    $userButtons.forEach(v => {
+      if (Validation.notIncludeClass(v.classList, "active")) return;
+      v.classList.remove("active");
+    })
+  }
+
+  // 해당하는 dataset-id를 갖는 button active
   const activeUser = _id => {
     initActiveClass();
     $.single(`#user-list [data-id=${_id}]`).classList.add("active")
   }
 
-  const changeUserTitle = userName=> {
+  // 상단 userName 변경
+  const changeUserTitle = userName => {
     const userTitle = $.single("#user-title")
     userTitle.dataset.username = userName;
 
@@ -59,21 +69,25 @@ export default function UserList({users}) {
     userTitleView.textContent = userName;
   }
 
+  // 유저 생성 API
   const persistUser = async userName => {
     const {_id, name, todoList} = await RequestAPI.of(USERS.PERSIST_USER, {name: userName}).request();
     activeUser(_id)
     changeUserTitle(name)
   }
 
+  // user list 동적 render
   const buildUserList = async () => {
     return await users.map(v => new User(v).render())
   }
 
+  // user list 결과 render
   const build = async () => {
     const result = await buildUserList()
     this.$userList.innerHTML = result.join("");
   }
 
+  // render
   this.render = async () => {
     await build();
     await init()
