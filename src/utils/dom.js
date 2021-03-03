@@ -6,3 +6,5 @@ const $ = (selector, element = document) => {
 const $$ = (selector, element = document) => {
   return element.querySelectorAll(selector);
 };
+
+export { $, $$ };
