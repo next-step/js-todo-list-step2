@@ -10,15 +10,19 @@
 //   return localStorage.getItem(CURRENT_USER) ?? '';
 // };
 
+const LOCALSTORAGE_KEY = 'todoItems';
+
 class LocalStorage {
-  saveItems() {
-    localStorage.setItem('todoItems', JSON.stringify(this.todoItems));
+  saveItems(items) {
+    localStorage.setItem(LOCALSTORAGE_KEY, JSON.stringify(items));
   }
 
   loadItems() {
-    const loadedTodoItems = localStorage.getItem('todoItems');
+    const loadedTodoItems = localStorage.getItem(LOCALSTORAGE_KEY);
     const parsedTodoItems = JSON.parse(loadedTodoItems);
     if (!parsedTodoItems) return [];
     return parsedTodoItems;
   }
 }
+
+export default LocalStorage;
