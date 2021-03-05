@@ -1,11 +1,11 @@
 import $ from "../../utils/Selector.js"
 import {priorityFiltering} from "../../utils/PriorityFIlter.js";
 
-export default function TodoItem() {
+export default function TodoItem({_id, todoList}) {
 
   const $todoList = $.single(".todo-list");
 
-  const renderItem = todoList => {
+  const renderItem = () => {
     const items = todoList.map(render)
 
     $todoList.innerHTML = items.join("");
@@ -27,9 +27,8 @@ export default function TodoItem() {
   }
 
   const render = ({contents, isCompleted, priority, _id}) => {
-    console.log({contents, isCompleted, priority, _id})
     return `
-      <li class="${isCompleted ? "completed" : ""}">
+      <li id="${_id}" class="${isCompleted ? "completed" : ""}">
        <div class="view">
          <input class="toggle" type="checkbox" ${isCompleted ? "checked" : ""}/>
          <label class="label">

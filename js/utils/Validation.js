@@ -11,4 +11,8 @@ export default class Validation {
   static moreThan (value , length) {
     return value.length >= length;
   }
+
+  static isEmpty (value) {
+    return value.length <= 0;
+  }
 }
