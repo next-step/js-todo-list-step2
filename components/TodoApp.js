@@ -1,20 +1,16 @@
-import UserList from "./UserList.js"
+import UserList from './UserList.js'
+import userApi from '../apis/userApi.js'
 
 export default function TodoApp($el) {
   this.$el = $el
   this.components = []
   this.state = {
-    todoItems: ["study", "blog"],
-    users: [
-      { name: "choi", active: true },
-      { name: "hong", active: false },
-    ],
+    todoItems: ['study', 'blog'],
+    users: [],
   }
 
   this.render = () => {
-    const { name: activeUserName } = this.state.users.find(
-      ({ active }) => active
-    )
+    const { name: activeUserName } = this.state.users.find(({ active }) => true)
 
     this.$el.innerHTML = `
       <h1 id="user-title" data-username="${activeUserName}">
@@ -121,10 +117,22 @@ export default function TodoApp($el) {
       </section>
         `
 
-    const userList = new UserList(this.$el.querySelector("#user-list"), {
+    const userList = new UserList(this.$el.querySelector('#user-list'), {
       users: this.state.users,
     })
   }
 
-  this.render()
+  this.fetchUsers = () => {
+    userApi.getUsers().then((users) => {
+      this.state.users = users.map((user, index) => {
+        return {
+          ...user,
+          active: index === 0,
+        }
+      })
+      this.render()
+    })
+  }
+
+  this.fetchUsers()
 }

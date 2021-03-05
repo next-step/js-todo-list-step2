@@ -7,10 +7,10 @@ export default function UserList($el, { users }) {
     this.$el.innerHTML = users
       .map(({ name, active }) => {
         return `<button class="ripple ${
-          active ? "active" : ""
+          active ? 'active' : ''
         }">${name}</button>`
       })
-      .join("")
+      .join('')
 
     this.$el.innerHTML +=
       '<button class="ripple user-create-button">+ 유저 생성</button>'
