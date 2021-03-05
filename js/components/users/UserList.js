@@ -3,6 +3,7 @@ import $ from "../../utils/Selector.js"
 import Validation from "../../utils/Validation.js";
 import RequestAPI from "../../utils/Request.js";
 import {USERS} from "../../utils/Urls.js";
+import {addUser} from "../../utils/APIs.js";
 
 export default function UserList({users}) {
 
@@ -28,6 +29,8 @@ export default function UserList({users}) {
       alert("User의 이름은 최소 2글자 이상이어야 합니다.")
       return;
     }
+
+    persistUser(userName);
   }
 
   // user list 이벤트 위임
@@ -37,11 +40,13 @@ export default function UserList({users}) {
 
   const userListDelegateEvent = e => {
     const {target: $target} = e;
-    const {id: _id} = $target.dataset;
+    const {_id} = $target.dataset;
     const name = $target.textContent;
 
     activeUser(_id)
     changeUserTitle(name);
+
+    // 불러와야함 .
   }
 
 
@@ -57,7 +62,7 @@ export default function UserList({users}) {
   // 해당하는 dataset-id를 갖는 button active
   const activeUser = _id => {
     initActiveClass();
-    $.single(`#user-list [data-id=${_id}]`).classList.add("active")
+    $.single(`#user-list [data-_id='${_id}']`).classList.add("active")
   }
 
   // 상단 userName 변경
@@ -71,7 +76,10 @@ export default function UserList({users}) {
 
   // 유저 생성 API
   const persistUser = async userName => {
-    const {_id, name, todoList} = await RequestAPI.of(USERS.PERSIST_USER, {name: userName}).request();
+
+    const {_id, name, todoList} = await addUser({name: userName});
+    // 돔에 그려줘야함.
+    this.$userList.innerHTML += new User({_id, name}).render();
     activeUser(_id)
     changeUserTitle(name)
   }
