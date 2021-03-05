@@ -7,7 +7,9 @@ class TodoInputView {
     this.$todoInput = $('.new-todo');
   }
 
-  clear() {}
+  clear() {
+    this.$todoInput.value = '';
+  }
 }
 
-export default TodoInputView;
+export const todoInputView = new TodoInputView();

@@ -12,17 +12,18 @@
 
 const LOCALSTORAGE_KEY = 'todoItems';
 
-class LocalStorage {
+class TodoLocalStorage {
   saveItems(items) {
     localStorage.setItem(LOCALSTORAGE_KEY, JSON.stringify(items));
   }
 
   loadItems() {
     const loadedTodoItems = localStorage.getItem(LOCALSTORAGE_KEY);
+    if (loadedTodoItems == 'undefined') return []; // 임시 에러 처리
     const parsedTodoItems = JSON.parse(loadedTodoItems);
     if (!parsedTodoItems) return [];
     return parsedTodoItems;
   }
 }
 
-export default LocalStorage;
+export const todoLocalStorage = new TodoLocalStorage();

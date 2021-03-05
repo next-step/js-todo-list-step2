@@ -1,13 +1,15 @@
 'use strict';
 
 import { $ } from '../utils/dom.js';
-
+import { todoTemplate } from '../layout/templates.js';
 class TodoListView {
   constructor() {
     this.$todoList = $('.todo-list');
   }
 
-  render() {}
+  render(items) {
+    this.$todoList.innerHTML = items.map(todoTemplate).join('');
+  }
 }
 
-export default TodoListView;
+export const todoListView = new TodoListView();

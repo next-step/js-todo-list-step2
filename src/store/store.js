@@ -1,16 +1,18 @@
 'use strict';
 
-import FILTER_TYPE from '../constant/constants.js';
-import LocalStorage from './localstorage.js';
-class TodoStore {
+import { FILTER_TYPE } from '../constant/constants.js';
+import { todoLocalStorage } from './localstorage.js';
+
+class TodoListStore {
   constructor() {
     this.todoItems = [];
     this.filterType = FILTER_TYPE.ALL;
+    // this.localStorage = new LocalStorage();
   }
 
   push(item) {
     this.todoItems.push(item);
-    LocalStorage.saveItems(this.items);
+    todoLocalStorage.saveItems(this.todoItems);
   }
 
   get() {
@@ -27,19 +29,24 @@ class TodoStore {
   update(id, contents) {
     const item = this.items.find(item => item.id === id);
     item.contents = contents;
-    LocalStorage.saveItems(this.items);
+    todoLocalStorage.saveItems(this.items);
   }
 
   delete(id) {
+    console.log(id);
     this.todoItems = this.todoItems.filter(item => item.id !== id);
-    LocalStorage.saveItems(this.items);
+    todoLocalStorage.saveItems(this.todoItems);
   }
 
   toggle(id) {
     const item = this.todoItems.find(item => item.id === id);
     item.isCompleted = !item.isCompleted;
-    LocalStorage.saveItems(this.items);
+    todoLocalStorage.saveItems(this.todoItems);
+  }
+
+  init() {
+    this.todoItems = todoLocalStorage.loadItems();
   }
 }
 
-export default TodoStore;
+export const todoListStore = new TodoListStore();

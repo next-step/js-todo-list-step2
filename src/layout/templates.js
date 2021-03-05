@@ -14,20 +14,20 @@ const priorityTemplate = priority => {
 			</select>`;
 };
 
-const todoTemplate = todo => {
+export const todoTemplate = items => {
   return `
-  <li data-id=${todo._id} class="todo-item ${
-    todo.isCompleted ? 'completed' : ''
+  <li data-id=${items.id} class="todo-item ${
+    items.isCompleted ? 'completed' : ''
   }">
 	<div class="view">
-		<input class="toggle" type="checkbox" ${todo.isCompleted ? 'checked' : ''}/>
+		<input class="toggle" type="checkbox" ${items.isCompleted ? 'checked' : ''}/>
 		<label class="label">
-		${priorityTemplate(todo.priority)}
-		${todo.contents}
+		${priorityTemplate(items.priority)}
+		${items.contents}
 		</label>
 		<button class="destroy"></button>
 	</div>
-	<input class="edit" value="${todo.contents}" />
+	<input class="edit" value="${items.contents}" />
 	</li>`;
 };
 
