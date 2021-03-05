@@ -8,3 +8,7 @@ export const requestUserList = async () => {
 export const addUser = async (message) => {
   return await RequestAPI.of({...USERS.PERSIST_USER, message }).request();
 }
+
+export const requestUserData = async id => {
+  return await RequestAPI.of({...USERS.FIND_USER}).setData(":userId" , id).request();
+}

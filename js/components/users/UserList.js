@@ -1,18 +1,15 @@
 import User from "./User.js";
 import $ from "../../utils/Selector.js"
 import Validation from "../../utils/Validation.js";
-import RequestAPI from "../../utils/Request.js";
-import {USERS} from "../../utils/Urls.js";
-import {addUser} from "../../utils/APIs.js";
+import {addUser, requestUserData} from "../../utils/APIs.js";
 
-export default function UserList({users}) {
+export default function UserList({users,loadUserData}) {
 
   this.$userList = $.single("#user-list");
 
-  const init = () => {
+  const init = async () => {
     createButtonEventInit();
     userListEventInit();
-
   }
 
   // 유저 생성 이벤트
@@ -38,15 +35,18 @@ export default function UserList({users}) {
     this.$userList.addEventListener("click", userListDelegateEvent)
   }
 
-  const userListDelegateEvent = e => {
+  const userListDelegateEvent = async e => {
     const {target: $target} = e;
     const {_id} = $target.dataset;
     const name = $target.textContent;
 
     activeUser(_id)
     changeUserTitle(name);
-
     // 불러와야함 .
+
+    const {_id: userId, name:userName, todoList} = await requestUserData(_id);
+    loadUserData({_id, name, todoList});
+
   }
 
 
@@ -98,6 +98,6 @@ export default function UserList({users}) {
   // render
   this.render = async () => {
     await build();
-    await init()
+    await init();
   }
 }
