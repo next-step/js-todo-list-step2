@@ -1,22 +1,27 @@
-export function TodoApp($el) {
+import UserList from "./UserList.js"
+
+export default function TodoApp($el) {
   this.$el = $el
-  this.todoItems = ["study", "blog"]
-  this.users = ["choi", "hong"]
+  this.components = []
+  this.state = {
+    todoItems: ["study", "blog"],
+    users: [
+      { name: "choi", active: true },
+      { name: "hong", active: false },
+    ],
+  }
 
   this.render = () => {
+    const { name: activeUserName } = this.state.users.find(
+      ({ active }) => active
+    )
+
     this.$el.innerHTML = `
-        <h1 id="user-title" data-username="eastjun">
-        <span><strong>eastjun</strong>'s Todo List</span>
+      <h1 id="user-title" data-username="${activeUserName}">
+        <span><strong>${activeUserName}</strong>'s Todo List</span>
       </h1>
       <section>
-        <div id="user-list">
-          <button class="ripple active">eastjun</button>
-          <button class="ripple">westjun</button>
-          <button class="ripple">southjun</button>
-          <button class="ripple">northjun</button>
-          <button class="ripple">hojun</button>
-          <button class="ripple user-create-button">+ 유저 생성</button>
-        </div>
+        <div id="user-list"></div>
       </section>
     
       <section class="todoapp">
@@ -115,6 +120,10 @@ export function TodoApp($el) {
         </div>
       </section>
         `
+
+    const userList = new UserList(this.$el.querySelector("#user-list"), {
+      users: this.state.users,
+    })
   }
 
   this.render()
