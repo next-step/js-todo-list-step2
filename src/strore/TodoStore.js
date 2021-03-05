@@ -5,7 +5,7 @@ import LocalStorage from './localstorage.js';
 class TodoStore {
   constructor() {
     this.todoItems = [];
-    this.filter = FILTER_TYPE.ALL;
+    this.filterType = FILTER_TYPE.ALL;
   }
 
   push(item) {
@@ -14,7 +14,7 @@ class TodoStore {
   }
 
   get() {
-    switch (this.filter) {
+    switch (this.filterType) {
       case FILTER_TYPE.ALL:
         return this.todoItems;
       case FILTER_TYPE.ACTIVE:
