@@ -27,7 +27,6 @@ export default function TodoApp() {
 
   const setState = ({_id, name, todoList}) => {
     this.state = {_id, name, todoList};
-    console.log(this.state)
   }
 
   this.start = async () => {

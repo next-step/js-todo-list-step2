@@ -12,7 +12,6 @@ export default class RequestAPI {
   }
 
   static of({url, method, message}) {
-    console.log({url, method, message})
     return new RequestAPI({url, method, message});
   }
 

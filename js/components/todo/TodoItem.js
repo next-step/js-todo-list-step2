@@ -7,7 +7,6 @@ export default function TodoItem({_id, todoList}) {
 
   const renderItem = () => {
     const items = todoList.map(render)
-
     $todoList.innerHTML = items.join("");
     initEventListener();
   }
@@ -15,11 +14,32 @@ export default function TodoItem({_id, todoList}) {
   const initEventListener = () => {
     $.multi(".todo-list li").forEach(v => {
       v.addEventListener("click" ,clickEventListener)
+      v.addEventListener("dblclick", dblclickEventListener)
     });
   }
 
+  const findClassList = target => {
+    return target.classList;
+  }
+
   const clickEventListener = ({target}) => {
-    console.log(target)
+    const classes = findClassList(target);
+
+    if(classes.contains("toggle")) {
+      alert("체크")
+    }
+
+    if(classes.contains("destroy")) {
+      alert("삭제")
+    }
+  }
+
+  const dblclickEventListener = ({target}) => {
+    const classes = findClassList(target);
+    console.log(target);
+    if(classes.contains("label")) {
+      alert("수정")
+    }
   }
 
   const priorityRenderType = (priority) =>{

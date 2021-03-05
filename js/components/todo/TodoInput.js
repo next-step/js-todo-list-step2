@@ -19,7 +19,6 @@ export default function TodoInput({refreshTodoList}) {
     const {_id} = this.$todoInput.dataset
 
     await persistTodoItem({_id , contents});
-    console.log(_id)
     const todoList = await requestTodoItemById(_id);
     refreshTodoList(todoList);
 
