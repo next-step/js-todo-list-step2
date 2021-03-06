@@ -8,6 +8,10 @@ export default class Validation {
     return classList.contains(className);
   }
 
+  static equalsTo(target, value) {
+    return target === value;
+  }
+
   static isNull (value) {
     return value === null;
   }
