@@ -31,6 +31,7 @@ class TodoListView {
 
   clear() {
     this.$todoList.innerHTML = '';
+    todoFitlerView.showCount();
   }
 }
 
