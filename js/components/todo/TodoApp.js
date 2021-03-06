@@ -13,28 +13,36 @@ export default function TodoApp() {
     todoList: []
   }
 
+  this.renderTodoItem = props => {
+    new TodoItem(props).renderItem();
+  }
+
+  this.renderTodoItemCount = count => {
+    new TodoCount().changeCount(count);
+  }
+
   const updateTodoItem = ({_id, contents, isCompleted, priority}) => {
     const {_id: userId, name, todoList} = this.state;
     const newTodoList = todoList.map(v => {
       if (!Validation.equalsTo(v._id, _id)) return v;
       return {_id, contents, isCompleted, priority};
     })
-    new TodoItem({_id: userId, todoList: newTodoList, updateTodoItem}).renderItem()
+    this.renderTodoItem({_id: userId, todoList: newTodoList, updateTodoItem});
     setState({_id: userId, name, todoList: newTodoList});
 
   }
 
   const loadUserData = ({_id, name, todoList}) => {
     _TodoInput.changeId(_id);
-    new TodoItem({_id, todoList, updateTodoItem}).renderItem();
-    new TodoCount().changeCount(todoList.length)
+    this.renderTodoItem({_id, todoList, updateTodoItem})
+    this.renderTodoItemCount(todoList.length)
     setState({_id, name, todoList});
   }
 
   const refreshTodoList = todoList => {
     const {_id} = this.state
-    new TodoItem({_id, todoList, updateTodoItem}).renderItem()
-    new TodoItem({_id, todoList, updateTodoItem}).renderItem();
+    this.renderTodoItem({_id, todoList, updateTodoItem})
+    this.renderTodoItemCount(todoList.length)
     setState({...this.state, todoList});
   }
 
