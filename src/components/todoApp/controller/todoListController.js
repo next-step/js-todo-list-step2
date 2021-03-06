@@ -1,10 +1,13 @@
 'use strict';
 
-import { $ } from '../utils/dom.js';
 import { todoListView } from '../view/todoListView.js';
 import { todoListStore } from '../store/store.js';
-import { ElementValidator, KeyValidator } from '../validator/validator.js';
-import { DELETE_ITEM_MESSAGE } from '../constant/message.js';
+import { $ } from '../../../utils/dom.js';
+import {
+  ElementValidator,
+  KeyValidator,
+} from '../../../validator/validator.js';
+import { DELETE_ITEM_MESSAGE } from '../../../constant/message.js';
 
 class TodoListController {
   constructor() {

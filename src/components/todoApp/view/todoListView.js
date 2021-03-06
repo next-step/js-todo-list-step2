@@ -1,7 +1,7 @@
 'use strict';
 
-import { $ } from '../utils/dom.js';
-import { todoTemplate } from '../layout/templates.js';
+import { $ } from '../../../utils/dom.js';
+import { todoTemplate } from '../../../layout/templates.js';
 import { todoFitlerView } from '../view/todoFilterView.js';
 class TodoListView {
   constructor() {

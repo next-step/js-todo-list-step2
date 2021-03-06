@@ -1,6 +1,6 @@
 'use strict';
 
-import { FILTER_TYPE } from '../constant/constants.js';
+import { FILTER_TYPE } from '../../../constant/constants.js';
 import { todoLocalStorage } from './localstorage.js';
 
 class TodoListStore {

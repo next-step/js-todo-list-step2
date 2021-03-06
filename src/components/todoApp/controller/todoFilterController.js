@@ -1,12 +1,12 @@
 'use strict';
 
-import { $ } from '../utils/dom.js';
 import { todoListStore } from '../store/store.js';
 import { todoFitlerView } from '../view/todoFilterView.js';
 import { todoListView } from '../view/todoListView.js';
-import { FILTER_TYPE } from '../constant/constants.js';
-import { ElementValidator } from '../validator/validator.js';
-import { DELETE_ALL_ITEM_MESSAGE } from '../constant/message.js';
+import { $ } from '../../../utils/dom.js';
+import { FILTER_TYPE } from '../../../constant/constants.js';
+import { ElementValidator } from '../../../validator/validator.js';
+import { DELETE_ALL_ITEM_MESSAGE } from '../../../constant/message.js';
 
 class TodoFilterController {
   constructor() {

@@ -1,11 +1,14 @@
 'use strict';
 
-import { $ } from '../utils/dom.js';
 import { todoListStore } from '../store/store.js';
 import { todoInputView } from '../view/todoInputView.js';
 import { todoListView } from '../view/todoListView.js';
-import { KeyValidator, ElementValidator } from '../validator/validator.js';
-import { uuid } from '../utils/utils.js';
+import { $ } from '../../../utils/dom.js';
+import {
+  KeyValidator,
+  ElementValidator,
+} from '../../../validator/validator.js';
+import { uuid } from '../../../utils/utils.js';
 
 class TodoInputController {
   constructor() {
