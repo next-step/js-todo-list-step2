@@ -7,11 +7,12 @@ const priorityTemplate = priority => {
     NONE: '',
   };
 
-  return `<select class="chip select ${priorityClassList[priority]}" >
-			  <option value="0" ${priority === 'NONE' && 'selected'}>순위</option>
-			  <option value="1" ${priority === 'FIRST' && 'selected'}>1순위</option>
-			  <option value="2" ${priority === 'SECOND' && 'selected'}>2순위</option>
-			</select>`;
+  return `
+    <select class="chip select ${priorityClassList[priority]}" >
+      <option value="0" ${priority === 'NONE' && 'selected'}>순위</option>
+      <option value="1" ${priority === 'FIRST' && 'selected'}>1순위</option>
+      <option value="2" ${priority === 'SECOND' && 'selected'}>2순위</option>
+    </select>`;
 };
 
 export const todoTemplate = items => {
@@ -22,8 +23,8 @@ export const todoTemplate = items => {
 	<div class="view">
 		<input class="toggle" type="checkbox" ${items.isCompleted ? 'checked' : ''}/>
 		<label class="label">
-		${priorityTemplate(items.priority)}
-		${items.contents}
+      ${priorityTemplate(items.priority)}
+      <span class="todo-item__contents">${items.contents}</span>
 		</label>
 		<button class="destroy"></button>
 	</div>
@@ -32,15 +33,16 @@ export const todoTemplate = items => {
 };
 
 export const progressTemplate = () => {
-  return `<li>
-                <div class="view">
-                <label class="label">
-                    <div class="animated-background">
-                    <div class="skel-mask-container">
-                        <div class="skel-mask"></div>
-                    </div>
-                    </div>
-                </label>
-                </div>
-            </li>`;
+  return `
+  <li>
+    <div class="view">
+    <label class="label">
+      <div class="animated-background">
+      <div class="skel-mask-container">
+        <div class="skel-mask"></div>
+      </div>
+      </div>
+    </label>
+    </div>
+  </li>`;
 };

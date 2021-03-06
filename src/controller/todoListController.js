@@ -3,7 +3,7 @@
 import { $ } from '../utils/dom.js';
 import { todoListView } from '../view/todoListView.js';
 import { todoListStore } from '../store/store.js';
-import { ElementValidator } from '../validator/validator.js';
+import { ElementValidator, KeyValidator } from '../validator/validator.js';
 import { DELETE_ITEM_MESSAGE } from '../constant/message.js';
 
 class TodoListController {
@@ -21,32 +21,50 @@ class TodoListController {
     ) {
       return;
     }
-
     if (ElementValidator.isDeleteBtn(target)) this.deleteItem(target);
     else if (ElementValidator.isToggleBtn(target)) this.toggleItem(target);
-    console.log('onClickTodoList');
   };
 
-  onDoubleClickTodoList = () => {
-    console.log('onDoubleClickTodoList');
+  onDoubleClickTodoList = ({ target }) => {
+    if (ElementValidator.isNotLabel(target)) return;
+    const $item = target.closest('.todo-item');
+    todoListView.activateEditMode($item);
   };
 
-  onKeyIpTodoList = () => {
-    console.log('onKeyIpTodoList');
+  onKeyIpTodoList = event => {
+    if (KeyValidator.isNotEnter(event.key) && KeyValidator.isNotEsc(event.key))
+      return;
+    const $item = event.target.closest('.todo-item');
+    if (KeyValidator.isEnter(event.key)) {
+      this.editItem($item);
+      todoListView.deactivateEditMode($item);
+    } else if (KeyValidator.isEsc(event.key)) {
+      todoListView.deactivateEditMode($item);
+    }
   };
 
   deleteItem(target) {
-    if (!confirm(DELETE_ITEM_MESSAGE)) return;
+    if (!todoListView.confirm(DELETE_ITEM_MESSAGE)) return;
     const id = target.closest('.todo-item').dataset.id;
     todoListStore.delete(id);
     todoListView.render(todoListStore.todoItems);
   }
 
+  deleteAllItems() {}
+
   toggleItem(target) {
-    const $targetItem = target.closest('.todo-item');
-    const id = $targetItem.dataset.id;
-    $targetItem.classList.toggle('completed');
+    const $item = target.closest('.todo-item');
+    const id = $item.dataset.id;
+    $item.classList.toggle('completed');
     todoListStore.toggle(id);
+  }
+
+  editItem(item) {
+    const text = $('.edit', item).value;
+    const id = item.dataset.id;
+    todoListStore.update(id, text);
+    // todoListView.editItem(item, text);
+    todoListView.render(todoListStore.todoItems); // 전체를 렌더할지 하나만 업데이트할지 고민중
   }
 
   init() {

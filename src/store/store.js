@@ -27,9 +27,9 @@ class TodoListStore {
   }
 
   update(id, contents) {
-    const item = this.items.find(item => item.id === id);
+    const item = this.todoItems.find(item => item.id === id);
     item.contents = contents;
-    todoLocalStorage.saveItems(this.items);
+    todoLocalStorage.saveItems(this.todoItems);
   }
 
   delete(id) {

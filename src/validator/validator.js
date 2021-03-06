@@ -13,4 +13,6 @@ export class ElementValidator {
   static isNotToggleBtn = target => !target.matches('.toggle');
   static isDeleteBtn = target => target.matches('.destroy');
   static isNotDeleteBtn = target => !target.matches('.destroy');
+  static isLabel = target => target.matches('.label');
+  static isNotLabel = target => !target.matches('.label');
 }
