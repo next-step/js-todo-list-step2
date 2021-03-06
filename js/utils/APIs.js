@@ -34,9 +34,16 @@ export const requestTodoItemById = async _id => {
     .request();
 }
 
+// contents 업데이트
 export const updateContent = async ({_id, _itemId, contents}) => {
   return await RequestAPI.of({...ITEMS.UPDATE_ITEM_CONTENTS, message : {contents}})
     .setData(":userId", _id)
     .setData(":itemId", _itemId)
+    .request();
+}
+
+export const removeAllTodoItem = async _id => {
+  return await RequestAPI.of({...ITEMS.REMOVE_ITEMS})
+    .setData(":userId", _id)
     .request();
 }

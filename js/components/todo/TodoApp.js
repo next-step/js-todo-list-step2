@@ -4,6 +4,7 @@ import TodoItem from "./TodoItem.js";
 import TodoInput from "./TodoInput.js";
 import Validation from "../../utils/Validation.js";
 import TodoCount from "./TodoCount.js";
+import TodoRemoveAll from "./TodoRemoveAll.js";
 
 export default function TodoApp() {
 
@@ -21,11 +22,22 @@ export default function TodoApp() {
     new TodoCount().changeCount(count);
   }
 
-  const updateTodoItem = ({_id, contents, isCompleted, priority}) => {
+  this.renderTodoRemoveAll = props => {
+    new TodoRemoveAll(props).render();
+  }
+
+  const removeTodoItemAll = ({_id : userId, name, todoList}) => {
+
+    this.renderTodoItem({_id: userId, todoList, updateTodoItem})
+    this.renderTodoItemCount(todoList.length)
+    setState({_id : userId, name, todoList});
+  }
+
+  const updateTodoItem = ({_id : itemId, contents, isCompleted, priority}) => {
     const {_id: userId, name, todoList} = this.state;
     const newTodoList = todoList.map(v => {
-      if (!Validation.equalsTo(v._id, _id)) return v;
-      return {_id, contents, isCompleted, priority};
+      if (!Validation.equalsTo(v._id, itemId)) return v;
+      return {_id : itemId, contents, isCompleted, priority};
     })
     this.renderTodoItem({_id: userId, todoList: newTodoList, updateTodoItem});
     setState({_id: userId, name, todoList: newTodoList});
@@ -36,6 +48,8 @@ export default function TodoApp() {
     _TodoInput.changeId(_id);
     this.renderTodoItem({_id, todoList, updateTodoItem})
     this.renderTodoItemCount(todoList.length)
+    this.renderTodoRemoveAll({_id, name, removeTodoItemAll})
+
     setState({_id, name, todoList});
   }
 
