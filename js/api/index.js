@@ -2,10 +2,22 @@ const BASE_URL = "https://js-todo-list-9ca3a.df.r.appspot.com";
 
 export const ApiService = {
   get(path) {
-    return fetch(BASE_URL + path).then((res) => res.json());
+    return request(path);
   },
   post(path, data) {
-    return fetch(BASE_URL + path, {
+    return request(path, METHOD.POST(data));
+  },
+  delete(path) {
+    return request(path, METHOD.DELETE());
+  },
+};
+
+const request = (path, config) =>
+  fetch(BASE_URL + path, config).then((res) => res.json());
+
+const METHOD = {
+  POST(data) {
+    return {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -13,6 +25,11 @@ export const ApiService = {
       body: JSON.stringify({
         ...data,
       }),
-    }).then((res) => res.json());
+    };
+  },
+  DELETE() {
+    return {
+      method: "DELETE",
+    };
   },
 };

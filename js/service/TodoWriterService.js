@@ -15,10 +15,6 @@ function TodoWriterService() {
     clear($newTodoTitle);
   };
 
-  function isEmpty(title) {
-    return !title || /^\s*$/.test(title);
-  }
-
   function clear($newTodoTitle) {
     $newTodoTitle.value = "";
   }

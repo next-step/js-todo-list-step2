@@ -1,21 +1,31 @@
 import { MemberApiService } from "/js/api/modules/member.js";
+import { equalToById } from "/js/utils/util.js";
 
 function MemberStore() {
   //{_id, name, todoList}
   this.members = [];
-  this.nowMemberName = "";
+  this.nowMemberId = "";
 
-  this.getAllMembers = function () {
+  this.addMember = (member) => {
+    this.members.push(member);
+    sort(this.members);
+  };
+
+  this.render = (members) => {
+    sort(members);
+    this.members = members;
+  };
+
+  this.resetNowMember = () => {
+    this.nowMemberId = this.members[0]._id;
+  };
+
+  this.getMembers = () => {
     return this.members;
   };
 
-  this.getNowMemberName = function () {
-    return this.nowMemberName;
-  };
-
-  this.addMember = function (member) {
-    this.members.push(member);
-    sort(this.members);
+  this.getNowMemberId = function () {
+    return this.nowMemberId;
   };
 
   const sort = (members) => {
@@ -24,11 +34,10 @@ function MemberStore() {
     });
   };
 
-  this.init = async function () {
-    const members = await MemberApiService.findAllMember();
-    sort(members);
-    this.members = members;
-    this.nowUserName = members[0].name;
+  this.init = async () => {
+    const members = await MemberApiService.findAllMembers();
+    this.render(members);
+    this.resetNowMember();
   };
 }
 

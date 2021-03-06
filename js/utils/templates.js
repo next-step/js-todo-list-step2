@@ -28,10 +28,11 @@ export const todoFilterTemplate = (data) =>
     </li>
   </ul>`;
 
-export const todoUserTemplate = (user, nowUserName) =>
-  `<button class="ripple ${user.name === nowUserName ? "active" : ""}">${
-    user.name
-  }</button>`;
+export const todoUserTemplate = (member, nowMemberId) =>
+  `<button data-id="${member._id}" class="ripple ${
+    member._id === nowMemberId ? "active" : ""
+  }">${member.name}</button>`;
 
 export const todoUserCreateTemplate =
-  '<button class="ripple user-create-button">+ 유저 생성</button>';
+  '<button class="ripple user-create-button">+ 유저 생성</button>' +
+  '<button class="ripple user-delete-button">- 현재 유저 삭제</button>';

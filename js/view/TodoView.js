@@ -6,6 +6,7 @@ import {
 } from "/js/utils/templates.js";
 import { $todoItemStore } from "/js/store/TodoStore.js";
 import { $memberStore } from "/js/store/MemberStore.js";
+import { MemberApiService } from "/js/api/modules/member.js";
 
 function TodoView() {
   const $userList = document.querySelector("#user-list");
@@ -26,12 +27,12 @@ function TodoView() {
     });
   };
 
-  this.userRender = () => {
-    const members = $memberStore.getAllMembers();
+  this.userRender = async () => {
+    const members = $memberStore.getMembers();
+    const nowMemberId = $memberStore.getNowMemberId();
     console.log(members);
-    const nowUserName = $memberStore.getNowMemberName();
     $userList.innerHTML = members
-      .map((user) => todoUserTemplate(user, nowUserName))
+      .map((user) => todoUserTemplate(user, nowMemberId))
       .join("");
     $userList.insertAdjacentHTML("beforeend", todoUserCreateTemplate);
   };

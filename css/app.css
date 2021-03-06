@@ -482,3 +482,11 @@ button.user-create-button.ripple {
   padding-right: 10px;
   margin-left: 10px;
 }
+
+button.user-delete-button.ripple {
+  border-radius: 15px;
+  padding-left: 10px;
+  padding-right: 10px;
+  margin-left: 10px;
+  background-color: #d63a49;
+}
