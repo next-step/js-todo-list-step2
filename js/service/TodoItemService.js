@@ -1,18 +1,18 @@
-import { $store } from "/js/Store/TodoStore.js";
+import { $todoItemStore } from "/js/store/TodoStore.js";
 import { todoView } from "/js/view/TodoView.js";
 
 function TodoItemService() {
   this.todoView = todoView;
 
   this.toggle = function (item) {
-    $store.toggle(item.dataset.id);
+    $todoItemStore.toggle(item.dataset.id);
     item.classList.toggle("completed");
   };
 
   this.destroy = function (item) {
     if (confirm("삭제하시겠습니까?")) {
-      $store.destroy(item.dataset.id);
-      this.todoView.render($store.items);
+      $todoItemStore.destroy(item.dataset.id);
+      this.todoView.itemRender($todoItemStore.items);
     }
   };
 
@@ -21,8 +21,8 @@ function TodoItemService() {
   };
 
   this.edit = function (id, title) {
-    $store.edit(id, title);
-    this.todoView.render($store.items);
+    $todoItemStore.edit(id, title);
+    this.todoView.itemRender($todoItemStore.items);
   };
 }
 

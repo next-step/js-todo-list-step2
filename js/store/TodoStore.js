@@ -1,7 +1,7 @@
 import { FILTER_STATE } from "/js/utils/constants.js";
-import { $localStorage } from "/js/Store/CustomLocalStorage.js";
+import { $localStorage } from "/js/store/CustomLocalStorage.js";
 
-function Store() {
+function TodoItemStore() {
   //item = {id, title, isDone}
   this.items = [];
   this.filterState = FILTER_STATE.ALL;
@@ -61,4 +61,4 @@ function Store() {
   };
 }
 
-export const $store = new Store();
+export const $todoItemStore = new TodoItemStore();
