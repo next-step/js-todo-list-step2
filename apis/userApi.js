@@ -1,7 +1,14 @@
-const BASE_URL = 'https://js-todo-list-9ca3a.df.r.appspot.com'
+const END_POINT = 'https://js-todo-list-9ca3a.df.r.appspot.com'
+
+const defaultApi = {
+  get: async function ({ path }) {
+    const res = await fetch(`${END_POINT}${path}`)
+    return await res.json()
+  },
+}
 
 export default {
   getUsers: function () {
-    return fetch(`${BASE_URL}/api/users`).then((response) => response.json())
+    return defaultApi.get({ path: '/api/users' })
   },
 }

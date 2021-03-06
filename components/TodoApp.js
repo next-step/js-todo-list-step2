@@ -9,6 +9,16 @@ export default function TodoApp($el) {
     users: [],
   }
 
+  this.fetchUsers = async function () {
+    const users = await userApi.getUsers()
+    this.state.users = users.map((user, index) => {
+      return {
+        ...user,
+        active: index === 0,
+      }
+    })
+  }
+
   this.render = () => {
     const { name: activeUserName } = this.state.users.find(({ active }) => true)
 
@@ -122,17 +132,10 @@ export default function TodoApp($el) {
     })
   }
 
-  this.fetchUsers = () => {
-    userApi.getUsers().then((users) => {
-      this.state.users = users.map((user, index) => {
-        return {
-          ...user,
-          active: index === 0,
-        }
-      })
-      this.render()
-    })
+  this.initailize = async function () {
+    await this.fetchUsers()
+    this.render()
   }
 
-  this.fetchUsers()
+  this.initailize()
 }
