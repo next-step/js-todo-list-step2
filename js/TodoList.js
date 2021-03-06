@@ -1,4 +1,9 @@
-import { getTodoItems, postTodoItem, deleteTodoItem } from "./Fetch.js";
+import {
+  getTodoItems,
+  postTodoItem,
+  deleteTodoItem,
+  reviseTodoItem,
+} from "./Fetch.js";
 const PRIORITY = {
   NONE: `<select class="chip select">
   <option value="0" selected>순위</option>
@@ -11,6 +16,7 @@ const PRIORITY = {
 };
 const $todoList = document.querySelector(".todo-list");
 let USERID = "";
+
 export const initTodoList = () => {
   addListeners();
   const $newTodo = document.querySelector(".new-todo");
@@ -64,8 +70,24 @@ const createTodoItem = (todo) => {
 
 const addListeners = () => {
   $todoList.addEventListener("click", deleteItem);
+  $todoList.addEventListener("dblclick", onEditMode);
+  $todoList.addEventListener("keyup", editContent);
 };
+const onEditMode = ({ target }) => {
+  if (!target.classList.contains("label")) return;
+  target.closest("li").classList.add("editing");
+};
+const editContent = ({ target, key }) => {
+  if (!target.classList.contains("edit") || key !== "Enter") return;
 
+  const newContent = target.value;
+  const parantLi = target.closest("li");
+  parantLi.classList.remove("editing");
+  console.log(parantLi.querySelector(".label"));
+  parantLi.querySelector(".label").innerHTML = newContent;
+
+  reviseTodoItem(USERID, parantLi.id, newContent);
+};
 const deleteItem = ({ target }) => {
   if (target.className !== "destroy") return;
   const $li = target.closest("li");
@@ -79,5 +101,6 @@ const addItem = async ({ target, key }) => {
   const todoItem = await postTodoItem(USERID, target.value);
   target.value = "";
   const $todoItem = createTodoItem(todoItem);
+  console.log($todoItem);
   $todoList.appendChild($todoItem);
 };

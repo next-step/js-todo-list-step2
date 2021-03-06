@@ -48,12 +48,14 @@ const onUserCreateHandler = async ({ target }) => {
   addUserBtnToUserList(user, target);
   setUserListToLocalStorage();
 };
+
 const onUserDeleteHandler = async () => {
   console.log("?");
   const targetUserbtn = document.querySelector(".userBtn.active");
   targetUserbtn.parentElement.removeChild(targetUserbtn);
   await deleteUser(targetUserbtn.id);
 };
+
 function addUserBtnToUserList(user, target) {
   const $userBtn = createUserButton(user);
 
