@@ -46,7 +46,6 @@ const assignTodoList = (todoList) => {
 
 const createTodoItem = (todo) => {
   const { _id, contents, isCompleted, priority } = todo;
-  console.log(contents);
   const $li = document.createElement("li");
   $li.setAttribute("id", _id);
   $li.innerHTML = `

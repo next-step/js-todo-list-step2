@@ -18,18 +18,21 @@ import { renderTodoListOfUser } from "./TodoList.js";
 
 export const initUserList = () => {
   const userList = getUserListByLocalStorage();
-  const $target = document.querySelector(".user-create-button");
 
+  const $userCreateBtn = document.querySelector(".user-create-button");
+  const $userDeleteBtn = document.querySelector(".user-delete-button");
+  console.log($userDeleteBtn);
   if (userList) {
     userList.map((user) => {
-      addUserBtnToUserList(user, $target);
+      addUserBtnToUserList(user, $userCreateBtn);
     });
   }
-  const $userCreateBtn = document.querySelector(".user-create-button");
+
   const $userList = document.getElementById("user-list");
   $userList.addEventListener("click", renderTodoListOfUser);
-
+  $userList.addEventListener("click", toggleActive);
   $userCreateBtn.addEventListener("click", onUserCreateHandler);
+  $userDeleteBtn.addEventListener("click", onUserDeleteHandler);
 };
 
 const onUserCreateHandler = async ({ target }) => {
@@ -44,6 +47,12 @@ const onUserCreateHandler = async ({ target }) => {
   postTodoItem(user._id, "contents 3");
   addUserBtnToUserList(user, target);
   setUserListToLocalStorage();
+};
+const onUserDeleteHandler = async () => {
+  console.log("?");
+  const targetUserbtn = document.querySelector(".userBtn.active");
+  targetUserbtn.parentElement.removeChild(targetUserbtn);
+  await deleteUser(targetUserbtn.id);
 };
 function addUserBtnToUserList(user, target) {
   const $userBtn = createUserButton(user);
@@ -61,4 +70,13 @@ const createUserButton = (user) => {
   $button.setAttribute("id", user._id);
   $button.innerText = user.name;
   return $button;
+};
+
+const toggleActive = ({ target }) => {
+  if (!target.classList.contains("userBtn")) return;
+  const userBtns = document.querySelectorAll(".userBtn");
+  userBtns.forEach((userBtn) => {
+    userBtn.classList.remove("active");
+  });
+  target.classList.add("active");
 };
