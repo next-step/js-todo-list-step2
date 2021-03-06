@@ -40,7 +40,6 @@ export default class RequestAPI {
     return {...this._option}
   }
 
-
   async request() {
     const response = await fetch(this._url, this.getOption());
     return await response.json();

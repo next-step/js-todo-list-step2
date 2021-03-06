@@ -4,6 +4,10 @@ export default class Validation {
     return !classList.contains(className);
   }
 
+  static includeClass(classList, className) {
+    return classList.contains(className);
+  }
+
   static isNull (value) {
     return value === null;
   }

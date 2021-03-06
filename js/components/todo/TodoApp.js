@@ -11,15 +11,30 @@ export default function TodoApp() {
     todoList: []
   }
 
+  const updateTodoItem  = ({_id, contents, isCompleted, priority}) => {
+    console.log({_id, contents, isCompleted, priority})
+    const {_id:userId,name, todoList} = this.state;
+    const newTodoList = todoList.map(v => {
+      if (v._id === _id) {
+        return {_id, contents, isCompleted, priority}
+      }
+      return v;
+    })
+    new TodoItem({_id:userId, todoList:newTodoList,updateTodoItem}).renderItem()
+    setState({_id: userId, name, todoList : newTodoList});
+
+  }
+
   const loadUserData = ({_id, name, todoList}) => {
     _TodoInput.changeId(_id);
-    new TodoItem({_id, todoList}).renderItem()
+    new TodoItem({_id, todoList,updateTodoItem}).renderItem()
     setState({_id, name, todoList});
   }
 
   const refreshTodoList = todoList => {
     const {_id} = this.state
-    new TodoItem({_id, todoList}).renderItem()
+    new TodoItem({_id, todoList,updateTodoItem}).renderItem()
+
     setState({...this.state, todoList});
   }
 

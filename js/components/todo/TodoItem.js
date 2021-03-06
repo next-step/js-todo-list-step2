@@ -1,7 +1,10 @@
 import $ from "../../utils/Selector.js"
 import {priorityFiltering} from "../../utils/PriorityFIlter.js";
+import Validation from "../../utils/Validation.js";
+import Key from "../../utils/Key.js";
+import {updateContent} from "../../utils/APIs.js";
 
-export default function TodoItem({_id, todoList}) {
+export default function TodoItem({_id, todoList,updateTodoItem}) {
 
   const $todoList = $.single(".todo-list");
 
@@ -15,6 +18,7 @@ export default function TodoItem({_id, todoList}) {
     $.multi(".todo-list li").forEach(v => {
       v.addEventListener("click" ,clickEventListener)
       v.addEventListener("dblclick", dblclickEventListener)
+      v.addEventListener("keyup", editEventListener)
     });
   }
 
@@ -25,22 +29,38 @@ export default function TodoItem({_id, todoList}) {
   const clickEventListener = ({target}) => {
     const classes = findClassList(target);
 
-    if(classes.contains("toggle")) {
+    if(Validation.includeClass(classes, "toggle")) {
       alert("체크")
     }
 
-    if(classes.contains("destroy")) {
+    if(Validation.includeClass(classes,"destroy")) {
       alert("삭제")
     }
   }
 
   const dblclickEventListener = ({target}) => {
     const classes = findClassList(target);
-    console.log(target);
-    if(classes.contains("label")) {
-      alert("수정")
+    if(Validation.includeClass(classes, "label")) {
+      target.closest("li").classList.add("editing")
     }
   }
+
+  const editEventListener = async ({keyCode, target}) => {
+
+    if(Key.isEsc(keyCode)) {
+      target.closest("li").classList.remove("editing")
+      return;
+    }
+
+
+    if(Key.isEnter(keyCode)) {
+      const {value: contents} = target;
+      const {id : _itemId} =  target.closest("li")
+      updateTodoItem(await updateContent({_id, _itemId, contents}));
+    }
+  }
+
+
 
   const priorityRenderType = (priority) =>{
     return priorityFiltering(priority)
