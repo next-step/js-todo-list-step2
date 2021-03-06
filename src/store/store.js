@@ -15,7 +15,7 @@ class TodoListStore {
     todoLocalStorage.saveItems(this.todoItems);
   }
 
-  get() {
+  getItemsByFilter() {
     switch (this.filterType) {
       case FILTER_TYPE.ALL:
         return this.todoItems;
@@ -42,6 +42,15 @@ class TodoListStore {
     const item = this.todoItems.find(item => item.id === id);
     item.isCompleted = !item.isCompleted;
     todoLocalStorage.saveItems(this.todoItems);
+  }
+
+  clear() {
+    this.todoItems = [];
+    todoLocalStorage.saveItems(this.todoItems);
+  }
+
+  setFilterType(filterType) {
+    this.filterType = filterType;
   }
 
   init() {

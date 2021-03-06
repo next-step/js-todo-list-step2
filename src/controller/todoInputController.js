@@ -33,7 +33,7 @@ class TodoInputController {
 
   addNewItem(todoItem) {
     todoListStore.push(todoItem);
-    todoListView.render(todoListStore.todoItems);
+    todoListView.render(todoListStore.getItemsByFilter());
     todoInputView.clear();
   }
 }

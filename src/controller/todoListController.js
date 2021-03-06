@@ -44,10 +44,10 @@ class TodoListController {
   };
 
   deleteItem(target) {
-    if (!todoListView.confirm(DELETE_ITEM_MESSAGE)) return;
+    if (!confirm(DELETE_ITEM_MESSAGE)) return;
     const id = target.closest('.todo-item').dataset.id;
     todoListStore.delete(id);
-    todoListView.render(todoListStore.todoItems);
+    todoListView.render(todoListStore.getItemsByFilter());
   }
 
   deleteAllItems() {}
@@ -57,6 +57,7 @@ class TodoListController {
     const id = $item.dataset.id;
     $item.classList.toggle('completed');
     todoListStore.toggle(id);
+    todoListView.render(todoListStore.getItemsByFilter());
   }
 
   editItem(item) {
@@ -64,7 +65,7 @@ class TodoListController {
     const id = item.dataset.id;
     todoListStore.update(id, text);
     // todoListView.editItem(item, text);
-    todoListView.render(todoListStore.todoItems); // 전체를 렌더할지 하나만 업데이트할지 고민중
+    todoListView.render(todoListStore.getItemsByFilter()); // 전체를 렌더할지 하나만 업데이트할지 고민중
   }
 
   init() {

@@ -15,4 +15,8 @@ export class ElementValidator {
   static isNotDeleteBtn = target => !target.matches('.destroy');
   static isLabel = target => target.matches('.label');
   static isNotLabel = target => !target.matches('.label');
+  static isFilterBtn = target => target.matches('.filters__btn');
+  static isNotFilterBtn = target => !target.matches('.filters__btn');
+  static isClearBtn = target => target.matches('.clear-completed');
+  static isNotClearBtn = target => !target.matches('.clear-completed');
 }

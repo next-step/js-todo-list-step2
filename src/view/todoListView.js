@@ -2,6 +2,7 @@
 
 import { $ } from '../utils/dom.js';
 import { todoTemplate } from '../layout/templates.js';
+import { todoFitlerView } from '../view/todoFilterView.js';
 class TodoListView {
   constructor() {
     this.$todoList = $('.todo-list');
@@ -9,6 +10,7 @@ class TodoListView {
 
   render(items) {
     this.$todoList.innerHTML = items.map(todoTemplate).join('');
+    todoFitlerView.showCount();
   }
 
   activateEditMode(target) {
@@ -27,8 +29,8 @@ class TodoListView {
     $label.innerText = text;
   }
 
-  confirm(message) {
-    return confirm(message);
+  clear() {
+    this.$todoList.innerHTML = '';
   }
 }
 
