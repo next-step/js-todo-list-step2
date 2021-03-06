@@ -20,15 +20,17 @@ export const todoTemplate = items => {
   <li data-id=${items.id} class="todo-item ${
     items.isCompleted ? 'completed' : ''
   }">
-	<div class="view">
-		<input class="toggle" type="checkbox" ${items.isCompleted ? 'checked' : ''}/>
-		<label class="label">
-      ${priorityTemplate(items.priority)}
-      <span class="todo-item__contents">${items.contents}</span>
-		</label>
-		<button class="destroy"></button>
-	</div>
-	<input class="edit" value="${items.contents}" />
+    <div class="view">
+      <input class="toggle" type="checkbox" ${
+        items.isCompleted ? 'checked' : ''
+      }/>
+      <label class="label">
+        ${priorityTemplate(items.priority)}
+        <span class="todo-item__contents">${items.contents}</span>
+      </label>
+      <button class="destroy"></button>
+    </div>
+    <input class="edit" value="${items.contents}" />
 	</li>`;
 };
 

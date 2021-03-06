@@ -1,14 +1,16 @@
 'use strict';
 
-import { todoStore } from './store/todoStore';
-import { TodoInputController } from './controller/todoInputController.js';
-import { TodoInputView } from './view/todoInputView.js';
+import TodoInputController from './controller/todoInputController.js';
+import TodoListController from './controller/todoListController.js';
+import TodoFilterController from './controller/todoFilterController.js';
 
 class TodoApp {
-  constructor() {
-    this.todoInputController = new TodoInputController();
-    this.todoInputView = new TodoInputView();
+  init() {
+    const todoInputController = new TodoInputController();
+    const todoListController = new TodoListController();
+    const todoFilterController = new TodoFilterController();
+    todoListController.init();
   }
-
-  init() {}
 }
+
+export default TodoApp;
