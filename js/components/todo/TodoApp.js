@@ -28,7 +28,13 @@ export default function TodoApp() {
 
   const removeTodoItemAll = ({_id : userId, name, todoList}) => {
 
-    this.renderTodoItem({_id: userId, todoList, updateTodoItem})
+    this.renderTodoItem({_id: userId, todoList, updateTodoItem, removeTodoItemByItemId})
+    this.renderTodoItemCount(todoList.length)
+    setState({_id : userId, name, todoList});
+  }
+
+  const removeTodoItemByItemId = ({_id: userId, name, todoList}) => {
+    this.renderTodoItem({_id: userId, todoList, updateTodoItem, removeTodoItemByItemId})
     this.renderTodoItemCount(todoList.length)
     setState({_id : userId, name, todoList});
   }
@@ -39,14 +45,13 @@ export default function TodoApp() {
       if (!Validation.equalsTo(v._id, itemId)) return v;
       return {_id : itemId, contents, isCompleted, priority};
     })
-    this.renderTodoItem({_id: userId, todoList: newTodoList, updateTodoItem});
+    this.renderTodoItem({_id: userId, todoList: newTodoList, updateTodoItem, removeTodoItemByItemId});
     setState({_id: userId, name, todoList: newTodoList});
-
   }
 
   const loadUserData = ({_id, name, todoList}) => {
     _TodoInput.changeId(_id);
-    this.renderTodoItem({_id, todoList, updateTodoItem})
+    this.renderTodoItem({_id, todoList, updateTodoItem, removeTodoItemByItemId})
     this.renderTodoItemCount(todoList.length)
     this.renderTodoRemoveAll({_id, name, removeTodoItemAll})
 
@@ -55,7 +60,7 @@ export default function TodoApp() {
 
   const refreshTodoList = todoList => {
     const {_id} = this.state
-    this.renderTodoItem({_id, todoList, updateTodoItem})
+    this.renderTodoItem({_id, todoList, updateTodoItem, removeTodoItemByItemId})
     this.renderTodoItemCount(todoList.length)
     setState({...this.state, todoList});
   }

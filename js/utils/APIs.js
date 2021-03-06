@@ -42,8 +42,17 @@ export const updateContent = async ({_id, _itemId, contents}) => {
     .request();
 }
 
+// 전체 TodoItem 삭제
 export const removeAllTodoItem = async _id => {
   return await RequestAPI.of({...ITEMS.REMOVE_ITEMS})
     .setData(":userId", _id)
+    .request();
+}
+
+// TodoItem 1건 삭제
+export const removeOneTodoItem = async ({_id, _itemId}) => {
+  return await RequestAPI.of({...ITEMS.REMOVE_ITEM})
+    .setData(":userId", _id)
+    .setData(":itemId", _itemId)
     .request();
 }
