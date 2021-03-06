@@ -8,7 +8,7 @@ export default function TodoItem({_id, todoList,updateTodoItem}) {
 
   const $todoList = $.single(".todo-list");
 
-  const renderItem = () => {
+  this.renderItem = () => {
     const items = todoList.map(render)
     $todoList.innerHTML = items.join("");
     initEventListener();
@@ -60,8 +60,6 @@ export default function TodoItem({_id, todoList,updateTodoItem}) {
     }
   }
 
-
-
   const priorityRenderType = (priority) =>{
     return priorityFiltering(priority)
   }
@@ -79,9 +77,5 @@ export default function TodoItem({_id, todoList,updateTodoItem}) {
        </div>
        <input class="edit" value="${contents}" />
      </li>`;
-  }
-
-  return {
-    renderItem
   }
 }

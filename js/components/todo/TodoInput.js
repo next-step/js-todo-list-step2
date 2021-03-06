@@ -25,16 +25,12 @@ export default function TodoInput({refreshTodoList}) {
     this.$todoInput.value = "";
   }
 
-  const render = () => {
+  this.render = () => {
     initEventListener();
   }
 
-  const changeId = _id => {
+  this.changeId = _id => {
     this._id = _id;
     this.$todoInput.dataset._id = _id;
-  }
-
-  return {
-    render,changeId
   }
 }
