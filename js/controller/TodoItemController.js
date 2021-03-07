@@ -57,8 +57,8 @@ function TodoItemController() {
 
   const edit = (event) => {
     const $todoItem = event.target.closest(".todo-item");
-    const title = event.target.value;
-    this.todoItemService.edit($todoItem.dataset.id, title);
+    const contents = event.target.value;
+    this.todoItemService.edit($todoItem.dataset.id, contents);
   };
 
   const offEdit = (event) => {

@@ -1,27 +1,36 @@
 import { todoView } from "/js/view/TodoView.js";
 import { $store } from "/js/store/index.js";
+import { todoItemApi } from "/js/api/modules/todoItem.js";
 
 function TodoItemService() {
   this.todoView = todoView;
 
-  this.toggle = function (item) {
-    $store.todoItem.toggle(item.dataset.id);
-    item.classList.toggle("completed");
+  this.toggle = async (target) => {
+    const itemId = target.dataset.id;
+    await todoItemApi.toggleItem($store.member.getNowMember(), itemId);
+    $store.todoItem.toggle(itemId);
+    target.classList.toggle("completed");
   };
 
-  this.destroy = function (item) {
+  this.destroy = async (target) => {
     if (confirm("삭제하시겠습니까?")) {
-      $store.todoItem.destroy(item.dataset.id);
-      this.todoView.itemRender($store.todoItem.items);
+      const itemId = target.dataset.id;
+      await todoItemApi.deleteItem(
+        $store.member.getNowMember(),
+        itemId
+      );
+      $store.todoItem.destroy(itemId);
+      this.todoView.itemRender();
     }
   };
 
-  this.onEdit = function (item) {
+  this.onEdit = (item) => {
     item.classList.add("editing");
   };
 
-  this.edit = function (id, title) {
-    $store.todoItem.edit(id, title);
+  this.edit = async (id, contents) => {
+    await todoItemApi.editItem($store.member.getNowMember(), id, contents);
+    $store.todoItem.edit(id, contents);
     this.todoView.itemRender($store.todoItem.items);
   };
 }

@@ -1,38 +1,33 @@
 import { FILTER_STATE } from "/js/utils/constants.js";
-import { $localStorage } from "/js/store/CustomLocalStorage.js";
 import { memberApi } from "/js/api/modules/member.js";
 import { $store } from "/js/store/index.js";
+import { equalToById, notEqualToById } from "/js/utils/util.js";
 
 export function TodoItem() {
-  //item = {id, title, isDone}
+  //item = {id, contents, isCompleted}
   this.items = [];
   this.filterState = FILTER_STATE.ALL;
 
   this.push = function (item) {
     this.items.push(item);
-    $localStorage.saveItems(this.items);
   };
 
   this.toggle = function (id) {
-    const item = this.items.find((item) => equalTo(item.id, id));
-    item.isDone = !item.isDone;
-    $localStorage.saveItems(this.items);
+    const item = this.items.find((item) => equalToById(item._id, id));
+    item.isCompleted = !item.isCompleted;
   };
 
   this.destroy = function (id) {
-    this.items = this.items.filter((item) => notEqualTo(item.id, id));
-    $localStorage.saveItems(this.items);
+    this.items = this.items.filter((item) => notEqualToById(item._id, id));
   };
 
-  this.edit = function (id, title) {
-    const item = this.items.find((item) => equalTo(item.id, id));
-    item.title = title;
-    $localStorage.saveItems(this.items);
+  this.edit = function (id, contents) {
+    const item = this.items.find((item) => equalToById(item._id, id));
+    item.contents = contents;
   };
 
   this.setFilterState = function (filterState) {
     this.filterState = filterState;
-    $localStorage.saveFilterState(this.filterState);
   };
 
   this.getItemsByFilter = function () {
@@ -41,11 +36,11 @@ export function TodoItem() {
     }
 
     if (this.filterState === FILTER_STATE.ACTIVE) {
-      return this.items.filter((item) => !item.isDone);
+      return this.items.filter((item) => !item.isCompleted);
     }
 
     if (this.filterState === FILTER_STATE.COMPLETED) {
-      return this.items.filter((item) => item.isDone);
+      return this.items.filter((item) => item.isCompleted);
     }
   };
 
@@ -56,14 +51,6 @@ export function TodoItem() {
   this.getItems = () => {
     return this.items;
   };
-
-  function equalTo(itemId, id) {
-    return parseInt(itemId) === parseInt(id);
-  }
-
-  function notEqualTo(itemId, id) {
-    return parseInt(itemId) !== parseInt(id);
-  }
 
   this.init = async () => {
     const nowMember = $store.member.getNowMember();

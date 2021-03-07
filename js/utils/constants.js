@@ -3,8 +3,3 @@ export const FILTER_STATE = {
   ACTIVE: "active",
   COMPLETED: "completed"
 }
-
-export const LOCAL_STORAGE = {
-  ITEM_KEY: "todoItem",
-  FILTER_STATE_KEY: "filterState"
-}

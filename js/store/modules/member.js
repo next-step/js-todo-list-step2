@@ -17,8 +17,10 @@ export function Member() {
     });
   };
 
-  this.deleteMember = (deleteMember) => {
-    this.members = this.members.filter((member) => member !== deleteMember);
+  this.deleteMemberById = (deleteMemberId) => {
+    this.members = this.members.filter(
+      (member) => member._id !== deleteMemberId
+    );
     this.setNowMember(this.members[0]);
   };
 

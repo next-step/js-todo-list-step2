@@ -6,13 +6,13 @@ import { todoItemApi } from "/js/api/modules/todoItem.js";
 function TodoWriterService() {
   this.todoView = todoView;
 
-  this.addNewItem = async function (item, $newTodoTitle) {
+  this.addNewItem = async function (contents, $newTodoTitle) {
     try {
-      validate(item.title);
+      validate(contents);
 
       const savedItem = await todoItemApi.saveItem(
         $store.member.getNowMember(),
-        item.title
+        contents
       );
       $store.todoItem.push(savedItem);
       this.todoView.itemRender($store.todoItem.getItemsByFilter());

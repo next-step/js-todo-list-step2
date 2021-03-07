@@ -25,7 +25,7 @@ function TodoMemberService() {
     try {
       console.log(member);
       await memberApi.deleteMemberById(member._id);
-      $store.member.deleteMember(member);
+      $store.member.deleteMemberById(member._id);
       this.todoView.render();
     } catch (e) {
       alert(e.message);

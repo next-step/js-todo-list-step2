@@ -3,30 +3,16 @@ import { todoWriterService } from "/js/service/TodoWriterService.js";
 function TodoWriterController() {
   this.todoWriterService = todoWriterService;
 
-  const $newTodoTitle = document.querySelector(".new-todo");
+  const $newTodoContents = document.querySelector(".new-todo");
 
   const onKeyupTodoTitle = (event) => {
     if (event.key === "Enter") {
-      const newItem = {
-        id: generateUniqueIdFromDate(),
-        title: $newTodoTitle.value,
-        isDone: false,
-      };
-      this.todoWriterService.addNewItem(newItem, $newTodoTitle);
+      this.todoWriterService.addNewItem($newTodoContents.value, $newTodoContents);
     }
   };
 
-  function generateUniqueIdFromDate() {
-    const date = new Date();
-    return date.toLocaleDateString("en-us").replaceAll("/", "") +
-      date.getHours() +
-      date.getMinutes() +
-      date.getSeconds() +
-      date.getMilliseconds();
-  }
-
   this.init = function () {
-    $newTodoTitle.addEventListener("keyup", onKeyupTodoTitle);
+    $newTodoContents.addEventListener("keyup", onKeyupTodoTitle);
   };
 }
 
