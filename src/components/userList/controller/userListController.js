@@ -2,8 +2,9 @@
 
 import { $ } from '../../../utils/dom.js';
 import { ElementValidator } from '../../../validator/validator.js';
-import { API } from '../../../api/api.js';
+import { userStore } from '../store/userStore.js';
 import { userListView } from '../view/userListView.js';
+import { MINIMUM_USER_NAME_LENGTH } from '../../../constant/constants.js';
 
 class UserListController {
   constructor() {
@@ -26,18 +27,19 @@ class UserListController {
   async addUser() {
     const userName = prompt('유저 이름을 입력해주세요.');
     if (!userName) return;
-    if (userName.length < 2) {
+    if (userName.length < MINIMUM_USER_NAME_LENGTH) {
       return alert('유저 이름은 두글자 이상이어야 합니다.');
     }
-    await API.addUser(userName);
+    await userStore.addUser(userName);
     this.loadUsers();
   }
 
-  async deleteUser(id) {
+  async deleteUser() {
     if (!confirm('현재 선택된 유저를 삭제하시겠습니까?')) return;
-    const selectedUser = document.querySelector('.active');
-    await API.deleteUser(selectedUser.id);
+    const id = $('.active', this.$userList).id;
+    await userStore.deleteUser(id);
     this.loadUsers();
+    alert('유저가 삭제되었습니다.');
   }
 
   selectUserBtn(target) {
@@ -49,7 +51,7 @@ class UserListController {
   }
 
   async loadUsers() {
-    const users = await API.getUsers();
+    const users = await userStore.getUsers();
     userListView.renderUserBtns(users);
   }
 
