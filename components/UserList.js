@@ -1,4 +1,4 @@
-export default function UserList($el, { users, createUser }) {
+export default function UserList($el, { users, createUser, deleteUser }) {
   this.$el = $el
   this.state = { users }
 
@@ -7,6 +7,17 @@ export default function UserList($el, { users, createUser }) {
     userCreateButton.addEventListener('click', () => {
       const userName = prompt('추가하고 싶은 이름을 입력해주세요.')
       createUser(userName)
+    })
+
+    const userDeleteButton = this.$el.querySelector('.user-delete-button')
+    userDeleteButton.addEventListener('click', () => {
+      const userName = prompt('삭제하고 싶은 이름을 입력해주세요.')
+      const targetUser = this.state.users.find((user) => user.name === userName)
+      if (!targetUser) {
+        alert('해당 이름을 가진 유저가 없습니다.')
+        return
+      }
+      deleteUser(targetUser._id)
     })
   }
 
@@ -20,8 +31,10 @@ export default function UserList($el, { users, createUser }) {
       })
       .join('')
 
-    this.$el.innerHTML +=
-      '<button class="ripple user-create-button">+ 유저 생성</button>'
+    this.$el.innerHTML += `
+      <button class="ripple user-create-button">+ 유저 생성</button>
+      <button class="ripple user-delete-button">- 유저 삭제</button>
+      `
 
     bindEvents()
   }

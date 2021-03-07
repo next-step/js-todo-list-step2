@@ -9,7 +9,7 @@ export default function TodoApp($el) {
     users: [],
   }
 
-  this.fetchUsers = async function () {
+  const fetchUsers = async () => {
     const users = await userApi.getUsers()
     this.setState({
       users: users.map((user, index) => {
@@ -21,9 +21,14 @@ export default function TodoApp($el) {
     })
   }
 
-  this.createUser = async (userName) => {
+  const createUser = async (userName) => {
     await userApi.createUser(userName)
-    await this.fetchUsers()
+    await fetchUsers()
+  }
+
+  const deleteUser = async (userId) => {
+    await userApi.deleteUser(userId)
+    await fetchUsers()
   }
 
   this.setState = function (changeState) {
@@ -145,12 +150,13 @@ export default function TodoApp($el) {
 
     const userList = new UserList(this.$el.querySelector('#user-list'), {
       users: this.state.users,
-      createUser: this.createUser,
+      createUser,
+      deleteUser,
     })
   }
 
   this.initailize = async function () {
-    await this.fetchUsers()
+    await fetchUsers()
     this.render()
   }
 

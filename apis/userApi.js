@@ -14,7 +14,14 @@ const defaultApi = {
       },
       body: JSON.stringify(data),
     })
-    return res.json()
+    return await res.json()
+  },
+
+  delete: async function ({ path }) {
+    const res = await fetch(`${END_POINT}${path}`, {
+      method: 'DELETE',
+    })
+    return await res.json()
   },
 }
 
@@ -25,5 +32,9 @@ export default {
 
   createUser: function (userName) {
     return defaultApi.post({ path: '/api/users', data: { name: userName } })
+  },
+
+  deleteUser: function (userId) {
+    return defaultApi.delete({ path: `/api/users/${userId}` })
   },
 }
