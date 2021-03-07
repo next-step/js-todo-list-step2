@@ -71,7 +71,7 @@ export const API = {
     return request(`api/users/${userId}/items/${itemId}`, option.delete());
   },
 
-  deleAllTodo: userId => {
+  deleteAllTodo: userId => {
     return request(`/api/users/${userId}/items/`, option.delete());
   },
 

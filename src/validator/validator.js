@@ -19,4 +19,6 @@ export class ElementValidator {
   static isNotFilterBtn = target => !target.matches('.filters__btn');
   static isClearBtn = target => target.matches('.clear-completed');
   static isNotClearBtn = target => !target.matches('.clear-completed');
+  static isRipple = target => target.matches('.ripple');
+  static isNotRipple = target => !target.matches('.ripple');
 }

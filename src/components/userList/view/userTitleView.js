@@ -4,7 +4,7 @@ import { $ } from '../../../utils/dom.js';
 
 class UserTitleView {
   constructor() {
-    this.$userTitle = $('.user-title');
+    this.$userTitle = $('#user-title');
   }
 
   render(userName) {
