@@ -52,6 +52,8 @@ class TodoFilterController {
     await API.deleteAllTodoItem(userStore.currentUserID);
     todoListController.loadUserItems(userStore.currentUserID);
   }
+
+  init() {}
 }
 
 export const todoFilterController = new TodoFilterController();

@@ -52,7 +52,7 @@ class UserListController {
     this.loadUsers();
   }
 
-  selectUserBtn(target) {
+  async selectUserBtn(target) {
     const $selectedBtn = $('.active', this.userList);
     const userName = target.innerText;
     const userID = target.id;
@@ -60,7 +60,7 @@ class UserListController {
     userListView.deactiveUserBtn($selectedBtn);
     userListView.updateUserTitle(userName);
     todoFilterController.changeFilterBtn(FILTER_TYPE.ALL);
-    todoListController.loadUserItems(userID);
+    await todoListController.loadUserItems(userID); // 지연 발생 체크하기
     userStore.setCurrentUserID(userID);
   }
 

@@ -1,9 +1,9 @@
 'use strict';
 
-import { todoListView } from '../view/todoListView.js';
-import { userStore } from '../model/userStore.js';
 import { $ } from '../utils/dom.js';
 import { API } from '../api/api.js';
+import { todoListView } from '../view/todoListView.js';
+import { userStore } from '../model/userStore.js';
 import { ElementValidator, KeyValidator } from '../validator/validator.js';
 import { DELETE_ITEM_MESSAGE } from '../constant/message.js';
 import { PRIORITY_TYPE } from '../constant/constants.js';
@@ -85,6 +85,8 @@ class TodoListController {
     await API.changePriority(userStore.currentUserID, itemID, priority);
     this.loadUserItems(userStore.currentUserID);
   }
+
+  init() {}
 }
 
 export const todoListController = new TodoListController();

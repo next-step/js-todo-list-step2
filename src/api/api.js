@@ -33,8 +33,8 @@ const request = async (url, option = {}) => {
 };
 
 export const API = {
-  getUser: userId => {
-    return request(`api/users/${userId}`);
+  getUser: userID => {
+    return request(`api/users/${userID}`);
   },
 
   getUsers: () => {
@@ -48,47 +48,47 @@ export const API = {
     return request('api/users', option.post(content));
   },
 
-  deleteUser: userId => {
-    return request(`api/users/${userId}`, option.delete());
+  deleteUser: userID => {
+    return request(`api/users/${userID}`, option.delete());
   },
 
-  getUserTodoItems: userId => {
-    return request(`api/users/${userId}/items`);
+  getUserTodoItems: userID => {
+    return request(`api/users/${userID}/items`);
   },
 
-  addTodoItem: (title, userId) => {
-    const content = {
-      contents: title,
-    };
-    return request(`api/users/${userId}/items`, option.post(content));
-  },
-
-  toggleTodoItem: (userId, itemId) => {
-    return request(`api/users/${userId}/items/${itemId}/toggle`, option.put());
-  },
-
-  deleteTodoItem: (userId, itemId) => {
-    return request(`api/users/${userId}/items/${itemId}`, option.delete());
-  },
-
-  deleteAllTodoItem: userId => {
-    return request(`/api/users/${userId}/items/`, option.delete());
-  },
-
-  updateTodoItem: (userId, itemId, text) => {
+  addTodoItem: (userID, text) => {
     const content = {
       contents: text,
     };
-    return request(`/api/users/${userId}/items/${itemId}`, option.put(content));
+    return request(`api/users/${userID}/items`, option.post(content));
   },
 
-  changePriority: (userId, itemId, priority) => {
+  toggleTodoItem: (userID, itemID) => {
+    return request(`api/users/${userID}/items/${itemID}/toggle`, option.put());
+  },
+
+  deleteTodoItem: (userID, itemID) => {
+    return request(`api/users/${userID}/items/${itemID}`, option.delete());
+  },
+
+  deleteAllTodoItem: userID => {
+    return request(`/api/users/${userID}/items/`, option.delete());
+  },
+
+  updateTodoItem: (userID, itemID, text) => {
+    const content = {
+      contents: text,
+    };
+    return request(`/api/users/${userID}/items/${itemID}`, option.put(content));
+  },
+
+  changePriority: (userID, itemID, priority) => {
     const content = {
       priority: priority,
     };
 
     return request(
-      `/api/users/${userId}/items/${itemId}/priority`,
+      `/api/users/${userID}/items/${itemID}/priority`,
       option.put(content)
     );
   },
