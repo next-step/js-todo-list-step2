@@ -17,7 +17,6 @@ class UserListController {
     if (target.classList.contains('user-create-button')) {
       this.addUser();
     } else if (target.classList.contains('user-delete-button')) {
-      console.log('delete user');
       this.deleteUser();
     } else {
       this.selectUserBtn(target);
@@ -39,7 +38,7 @@ class UserListController {
     const id = $('.active', this.$userList).id;
     await userStore.deleteUser(id);
     this.loadUsers();
-    alert('유저가 삭제되었습니다.');
+    alert('선택된 유저가 삭제되었습니다.');
   }
 
   selectUserBtn(target) {

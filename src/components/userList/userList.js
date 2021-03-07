@@ -1,11 +1,14 @@
 'use strict';
 
 import UserListController from './controller/userListController.js';
-class UserListView {
+class UserList {
+  constructor() {
+    this.userListController = new UserListController();
+  }
+
   init() {
-    const userListController = new UserListController();
-    userListController.init();
+    this.userListController.init();
   }
 }
 
-export default UserListView;
+export default UserList;
