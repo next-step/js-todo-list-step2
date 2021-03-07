@@ -1,8 +1,20 @@
-export default function UserList($el, { users, createUser, deleteUser }) {
+export default function UserList(
+  $el,
+  { users, activeUser },
+  { changeUser, createUser, deleteUser }
+) {
   this.$el = $el
-  this.state = { users }
+  this.state = { users, activeUser }
 
   const bindEvents = () => {
+    this.$el.addEventListener('click', (event) => {
+      const { action, userId } = event.target.dataset
+      if (action === 'changeUser') {
+        event.stopPropagation()
+        changeUser(userId)
+      }
+    })
+
     const userCreateButton = this.$el.querySelector('.user-create-button')
     userCreateButton.addEventListener('click', () => {
       const userName = prompt('추가하고 싶은 이름을 입력해주세요.')
@@ -24,10 +36,10 @@ export default function UserList($el, { users, createUser, deleteUser }) {
   this.render = () => {
     const { users } = this.state
     this.$el.innerHTML = users
-      .map(({ name, active }) => {
+      .map(({ name, _id }) => {
         return `<button class="ripple ${
-          active ? 'active' : ''
-        }">${name}</button>`
+          _id === this.state.activeUser._id ? 'active' : ''
+        }" data-action="changeUser" data-user-id="${_id}">${name}</button>`
       })
       .join('')
 

@@ -7,18 +7,20 @@ export default function TodoApp($el) {
   this.state = {
     todoItems: ['study', 'blog'],
     users: [],
+    activeUser: null,
   }
 
   const fetchUsers = async () => {
     const users = await userApi.getUsers()
     this.setState({
-      users: users.map((user, index) => {
-        return {
-          ...user,
-          active: index === 0,
-        }
-      }),
+      users,
+      activeUser: this.state.activeUser || users[0],
     })
+  }
+
+  const changeUser = async (userId) => {
+    const activeUser = this.state.users.find((user) => user._id === userId)
+    this.setState({ activeUser })
   }
 
   const createUser = async (userName) => {
@@ -148,11 +150,18 @@ export default function TodoApp($el) {
       </section>
         `
 
-    const userList = new UserList(this.$el.querySelector('#user-list'), {
-      users: this.state.users,
-      createUser,
-      deleteUser,
-    })
+    const userList = new UserList(
+      this.$el.querySelector('#user-list'),
+      {
+        users: this.state.users,
+        activeUser: this.state.activeUser,
+      },
+      {
+        changeUser,
+        createUser,
+        deleteUser,
+      }
+    )
   }
 
   this.initailize = async function () {
