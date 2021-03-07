@@ -1,20 +1,22 @@
 import { todoMemberService } from "/js/service/TodoMemberSerivce.js";
-import { $store } from "/js/store/MemberStore.js";
+import { $store } from "/js/store/index.js";
 
 function TodoMemberController() {
   const $userList = document.querySelector("#user-list");
 
-  const onClickUserComponent = ({ target }) => {
+  const onClickUserComponent = async ({ target }) => {
     if (isMemberCreateButton(target)) {
       const userName = prompt("추가하고 싶은 이름을 입력해주세요.");
-      todoMemberService.addMember(userName);
+      await todoMemberService.addMember(userName);
       return;
     }
     if (isMemberDeleteButton(target)) {
-      todoMemberService.deleteMember($store.getNowMemberId());
+      await todoMemberService.deleteMember($store.member.getNowMember());
       return;
     }
-    todoMemberService.selectMember(target.dataset.id);
+    if (isMemberNameButton(target)) {
+      await todoMemberService.selectMember(target.dataset.id);
+    }
   };
 
   const isMemberCreateButton = (target) => {
@@ -24,6 +26,10 @@ function TodoMemberController() {
   const isMemberDeleteButton = (target) => {
     return target.classList.contains("user-delete-button");
   };
+
+  const isMemberNameButton = target => {
+    return target.classList.contains("ripple");
+  }
 
   this.init = function () {
     $userList.addEventListener("click", onClickUserComponent);

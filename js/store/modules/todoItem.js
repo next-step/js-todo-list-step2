@@ -1,7 +1,9 @@
 import { FILTER_STATE } from "/js/utils/constants.js";
 import { $localStorage } from "/js/store/CustomLocalStorage.js";
+import { MemberApiService } from "/js/api/modules/member.js";
+import { $store } from "/js/store/index.js";
 
-function TodoItemStore() {
+export function TodoItem() {
   //item = {id, title, isDone}
   this.items = [];
   this.filterState = FILTER_STATE.ALL;
@@ -47,6 +49,14 @@ function TodoItemStore() {
     }
   };
 
+  this.setItems = (items) => {
+    this.items = items;
+  };
+
+  this.getItems = () => {
+    return this.items;
+  };
+
   function equalTo(itemId, id) {
     return parseInt(itemId) === parseInt(id);
   }
@@ -55,10 +65,9 @@ function TodoItemStore() {
     return parseInt(itemId) !== parseInt(id);
   }
 
-  this.init = function () {
-    this.items = $localStorage.loadItems();
-    this.filterState = $localStorage.loadFilterState();
+  this.init = async () => {
+    const nowMember = $store.member.getNowMember();
+    const todoItems = await MemberApiService.findTodoItemById(nowMember._id);
+    this.setItems(todoItems);
   };
 }
-
-export const $todoItemStore = new TodoItemStore();

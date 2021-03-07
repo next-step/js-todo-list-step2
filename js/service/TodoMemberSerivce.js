@@ -1,6 +1,6 @@
 import { MemberApiService } from "/js/api/modules/member.js";
 import { todoView } from "/js/view/TodoView.js";
-import { $store } from "/js/store/MemberStore.js";
+import { $store } from "/js/store/index.js";
 import { Member } from "/js/core/member.js";
 
 function TodoMemberService() {
@@ -9,21 +9,23 @@ function TodoMemberService() {
   this.addMember = async (userName) => {
     try {
       const memberToSave = new Member({ name: userName });
-      $store.addMember(await MemberApiService.saveMember(memberToSave));
+      let member = await MemberApiService.saveMember(memberToSave);
+      $store.member.addMember(member);
       this.todoView.render();
     } catch (e) {
       alert(e.message);
     }
   };
 
-  this.deleteMember = async (memberId) => {
+  this.deleteMember = async (member) => {
     if (!confirm("삭제하시겠습니까?")) {
       return;
     }
 
     try {
-      await MemberApiService.deleteMemberBy(memberId);
-      $store.deleteMember(memberId);
+      console.log(member);
+      await MemberApiService.deleteMemberById(member._id);
+      $store.member.deleteMember(member);
       this.todoView.render();
     } catch (e) {
       alert(e.message);
@@ -31,10 +33,9 @@ function TodoMemberService() {
   };
 
   this.selectMember = async (id) => {
-    let todoItems = await MemberApiService.findTodoItemBy(id);
-    $store.setItems(todoItems);
-    console.log(todoItems);
-    $store.setNowMember(id);
+    let todoItems = await MemberApiService.findTodoItemById(id);
+    $store.todoItem.setItems(todoItems);
+    $store.member.setNowMemberById(id);
     this.todoView.render();
   };
 }

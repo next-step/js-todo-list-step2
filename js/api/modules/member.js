@@ -11,18 +11,14 @@ export const MemberApiService = {
     const savedMember = await ApiService.post("/api/users/", {
       name: member.name,
     });
-    return new Member({
-      id: savedMember._id,
-      name: savedMember.name,
-      todoList: savedMember.todoList,
-    });
+    return new Member(savedMember);
   },
 
-  async deleteMemberBy(memberId) {
+  async deleteMemberById(memberId) {
     return await ApiService.delete(`/api/users/${memberId}`);
   },
 
-  async findTodoItemBy(memberId) {
+  async findTodoItemById(memberId) {
     return await ApiService.get(`/api/users/${memberId}/items/`);
   },
 };

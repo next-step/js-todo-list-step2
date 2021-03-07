@@ -1,12 +1,12 @@
-import { $todoItemStore } from "/js/store/TodoStore.js";
 import { todoView } from "/js/view/TodoView.js";
+import { $store } from "/js/store/index.js";
 
 function TodoFilterService() {
   this.todoView = todoView;
 
   this.onClickFilter = function (filterState) {
-    $todoItemStore.setFilterState(filterState);
-    this.todoView.itemRender($todoItemStore.getItemsByFilter());
+    $store.todoItem.setFilterState(filterState);
+    this.todoView.itemRender($store.todoItem.getItemsByFilter());
   };
 }
 
