@@ -1,6 +1,7 @@
 'use strict';
 
-import { todoListStore } from '../store/store.js';
+// import { todoListStore } from '../store/store.js';
+import { API } from '../../../api/api.js';
 import { todoFitlerView } from '../view/todoFilterView.js';
 import { todoListView } from '../view/todoListView.js';
 import { $ } from '../../../utils/dom.js';
@@ -48,4 +49,4 @@ class TodoFilterController {
   }
 }
 
-export default TodoFilterController;
+export const todoFilterController = new TodoFilterController();

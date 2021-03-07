@@ -5,6 +5,7 @@ import { ElementValidator } from '../../../validator/validator.js';
 import { userStore } from '../store/userStore.js';
 import { userListView } from '../view/userListView.js';
 import { MINIMUM_USER_NAME_LENGTH } from '../../../constant/constants.js';
+import { todoListController } from '../../todoApp/controller/todoListController.js';
 
 class UserListController {
   constructor() {
@@ -44,14 +45,20 @@ class UserListController {
   selectUserBtn(target) {
     const $selectedBtn = $('.active', this.userList);
     const userName = target.innerText;
+    const userID = target.id;
     userListView.activeUserBtn(target);
     userListView.deactiveUserBtn($selectedBtn);
     userListView.updateUserTitle(userName);
+    todoListController.loadUserItems(userID);
+    userStore.setCurrentUserID(userID);
   }
 
   async loadUsers() {
     const users = await userStore.getUsers();
+    const firstUserID = users[0]._id;
     userListView.renderUserBtns(users);
+    todoListController.loadUserItems(firstUserID);
+    userStore.setCurrentUserID(firstUserID);
   }
 
   init() {
@@ -59,4 +66,4 @@ class UserListController {
   }
 }
 
-export default UserListController;
+export const userListController = new UserListController();

@@ -5,7 +5,7 @@ import { API } from '../../../api/api.js';
 class UserStore {
   constructor() {
     this.userList = [];
-    this.currenUser = '';
+    this.currentUserID = '';
   }
 
   async getUsers() {
@@ -20,7 +20,9 @@ class UserStore {
     await API.deleteUser(id);
   }
 
-  setCurrentUser() {}
+  setCurrentUserID(id) {
+    this.currentUserID = id;
+  }
 }
 
 export const userStore = new UserStore();

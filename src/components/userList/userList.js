@@ -1,13 +1,13 @@
 'use strict';
 
-import UserListController from './controller/userListController.js';
+import { userListController } from './controller/userListController.js';
 class UserList {
   constructor() {
-    this.userListController = new UserListController();
+    // this.userListController = new UserListController();
   }
 
   init() {
-    this.userListController.init();
+    userListController.init();
   }
 }
 

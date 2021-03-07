@@ -52,30 +52,30 @@ export const API = {
     return request(`api/users/${userId}`, option.delete());
   },
 
-  getUserTodos: userId => {
+  getUserTodoItems: userId => {
     return request(`api/users/${userId}/items`);
   },
 
-  addTodo: (title, userId) => {
+  addTodoItem: (title, userId) => {
     const content = {
       contents: title,
     };
     return request(`api/users/${userId}/items`, option.post(content));
   },
 
-  toggleTodo: (userId, itemId) => {
+  toggleTodoItem: (userId, itemId) => {
     return request(`api/users/${userId}/items/${itemId}/toggle`, option.put());
   },
 
-  deleteTodo: (userId, itemId) => {
+  deleteTodoItem: (userId, itemId) => {
     return request(`api/users/${userId}/items/${itemId}`, option.delete());
   },
 
-  deleteAllTodo: userId => {
+  deleteAllTodoItem: userId => {
     return request(`/api/users/${userId}/items/`, option.delete());
   },
 
-  editTodo: (newTitle, userId, itemId) => {
+  editTodoItem: (newTitle, userId, itemId) => {
     const content = {
       contents: newTitle,
     };

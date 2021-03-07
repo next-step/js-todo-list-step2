@@ -1,8 +1,9 @@
 'use strict';
 
 import { todoListView } from '../view/todoListView.js';
-import { todoListStore } from '../store/store.js';
+// import { todoListStore } from '../store/store.js';
 import { $ } from '../../../utils/dom.js';
+import { API } from '../../../api/api.js';
 import {
   ElementValidator,
   KeyValidator,
@@ -14,7 +15,7 @@ class TodoListController {
     this.$todoList = $('.todo-list');
     this.$todoList.addEventListener('click', this.onClickTodoList);
     this.$todoList.addEventListener('dblclick', this.onDoubleClickTodoList);
-    this.$todoList.addEventListener('keyup', this.onKeyIpTodoList);
+    this.$todoList.addEventListener('keyup', this.onKeyUpTodoList);
   }
 
   onClickTodoList = ({ target }) => {
@@ -24,8 +25,8 @@ class TodoListController {
     ) {
       return;
     }
-    if (ElementValidator.isDeleteBtn(target)) this.deleteItem(target);
-    else if (ElementValidator.isToggleBtn(target)) this.toggleItem(target);
+    // if (ElementValidator.isDeleteBtn(target)) this.deleteItem(target);
+    // else if (ElementValidator.isToggleBtn(target)) this.toggleItem(target);
   };
 
   onDoubleClickTodoList = ({ target }) => {
@@ -34,7 +35,8 @@ class TodoListController {
     todoListView.activateEditMode($item);
   };
 
-  onKeyIpTodoList = event => {
+  onKeyUpTodoList = event => {
+    console.log('키업');
     if (KeyValidator.isNotEnter(event.key) && KeyValidator.isNotEsc(event.key))
       return;
     const $item = event.target.closest('.todo-item');
@@ -71,10 +73,15 @@ class TodoListController {
     todoListView.render(todoListStore.getItemsByFilter()); // 전체를 렌더할지 하나만 업데이트할지 고민중
   }
 
+  async loadUserItems(userID) {
+    const items = await API.getUserTodoItems(userID);
+    todoListView.render(items);
+  }
+
   init() {
-    todoListStore.init();
-    todoListView.render(todoListStore.todoItems);
+    // todoListStore.init();
+    // todoListView.render(todoListStore.todoItems);
   }
 }
 
-export default TodoListController;
+export const todoListController = new TodoListController();

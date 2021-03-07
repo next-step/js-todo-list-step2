@@ -1,18 +1,18 @@
 'use strict';
 
-import { todoListStore } from '../store/store.js';
+// import { todoStore } from '../store/store.js';
+import { API } from '../../../api/api.js';
 import { todoInputView } from '../view/todoInputView.js';
-import { todoListView } from '../view/todoListView.js';
+import { todoListController } from '../controller/todoListController.js';
+import { userStore } from '../../userList/store/userStore.js';
 import { $ } from '../../../utils/dom.js';
 import {
   KeyValidator,
   ElementValidator,
 } from '../../../validator/validator.js';
-import { uuid } from '../../../utils/utils.js';
 
 class TodoInputController {
   constructor() {
-    // this.todoInputView = new TodoInputView();
     this.$todoInput = $('.new-todo');
     this.$todoInput.addEventListener('keyup', this.onKeyUpTodoInput);
   }
@@ -24,21 +24,15 @@ class TodoInputController {
     ) {
       return;
     }
-
-    const newTodoItem = {
-      id: uuid(),
-      contents: this.$todoInput.value,
-      priority: 'NONE',
-      isCompleted: false,
-    };
-    this.addNewItem(newTodoItem);
+    this.addNewItem(event.target.value.trim());
   };
 
-  addNewItem(todoItem) {
-    todoListStore.push(todoItem);
-    todoListView.render(todoListStore.getItemsByFilter());
+  // 두번 실행되는 버그 있음
+  async addNewItem(text) {
+    await API.addTodoItem(text, userStore.currentUserID);
+    todoListController.loadUserItems(userStore.currentUserID);
     todoInputView.clear();
   }
 }
 
-export default TodoInputController;
+export const todoInputController = new TodoInputController();
