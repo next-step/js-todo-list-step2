@@ -1,7 +1,12 @@
 import { api } from "/js/api/index.js";
-import { $loadingBar } from "/js/utils/loadingbar.js";
+import { $loadingBar } from "/js/view/loadingbar.js";
 
 export const todoItemApi = {
+  async toggleItem(member, itemId) {
+    $loadingBar.loading();
+    return await api.put(`/api/users/${member._id}/items/${itemId}/toggle`);
+  },
+
   async saveItem(member, contents) {
     $loadingBar.loading();
     return await api.post(`/api/users/${member._id}/items/`, {
@@ -21,8 +26,10 @@ export const todoItemApi = {
     });
   },
 
-  async toggleItem(member, itemId) {
+  async setPriority(member, itemId, priority) {
     $loadingBar.loading();
-    return await api.put(`/api/users/${member._id}/items/${itemId}/toggle`);
+    return await api.put(`/api/users/${member._id}/items/${itemId}/priority`, {
+      priority: priority,
+    });
   },
 };

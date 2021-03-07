@@ -1,6 +1,6 @@
 import { api } from "/js/api/index.js";
 import { Member } from "/js/core/member.js";
-import { $loadingBar } from "/js/utils/loadingbar.js";
+import { $loadingBar } from "/js/view/loadingbar.js";
 
 export const memberApi = {
   async findAllMembers() {

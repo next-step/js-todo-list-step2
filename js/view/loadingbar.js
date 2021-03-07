@@ -1,4 +1,4 @@
-import {loadingBarTemplate} from "./templates.js";
+import {loadingBarTemplate} from "../utils/templates.js";
 
 function LoadingBar() {
   let $loadingBar = document.querySelector(".todo-list");

@@ -1,11 +1,11 @@
 import {
-  loadingBarTemplate,
   todoFilterTemplate,
   todoItemTemplate,
   todoUserCreateDeleteTemplate,
   todoUserTemplate,
 } from "/js/utils/templates.js";
 import { $store } from "/js/store/index.js";
+import { TodoPriorityController } from "/js/controller/TodoPrirorityController.js";
 
 function TodoView() {
   const $userList = document.querySelector("#user-list");
@@ -33,6 +33,12 @@ function TodoView() {
       count: items.length,
       filter: $store.todoItem.filterState,
     });
+    addPriorityEvent();
+  };
+
+  const addPriorityEvent = () => {
+    const todoPriorityController = new TodoPriorityController();
+    todoPriorityController.init();
   };
 }
 

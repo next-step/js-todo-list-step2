@@ -4,7 +4,7 @@ import { $store } from "/js/store/index.js";
 import { equalToById, notEqualToById } from "/js/utils/util.js";
 
 export function TodoItem() {
-  //item = {id, contents, isCompleted}
+  //item = {id, contents, isCompleted, priority}
   this.items = [];
   this.filterState = FILTER_STATE.ALL;
 
@@ -21,9 +21,11 @@ export function TodoItem() {
     this.items = this.items.filter((item) => notEqualToById(item._id, id));
   };
 
-  this.edit = function (id, contents) {
+  this.edit = function (id, updatedItem) {
     const item = this.items.find((item) => equalToById(item._id, id));
-    item.contents = contents;
+    item.contents = updatedItem.contents;
+    item.isCompleted = updatedItem.isCompleted;
+    item.priority = updatedItem.priority;
   };
 
   this.setFilterState = (filterState) => {

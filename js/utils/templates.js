@@ -1,29 +1,49 @@
-export const loadingBarTemplate = () =>
-        `<li>
-          <div class="view">
-            <label class="label">
-              <div class="animated-background">
-                <div class="skel-mask-container">
-                  <div class="skel-mask"></div>
-                </div>
-              </div>
-            </label>
-          </div>
-        </li>`;
+import { priorityClassConverter, priorityValueConverter } from "/js/utils/priorityConverter.js";
 
-export const todoItemTemplate = (item) =>
-  `<li data-id="${item._id}" class="todo-item ${
-    item.isCompleted ? "completed" : ""
-  }">
+export const loadingBarTemplate = () =>
+  `<li>
     <div class="view">
-      <input class="toggle" type="checkbox" ${
-        item.isCompleted ? "checked" : ""
-      }/>
-      <label class="label">${item.contents}</label>
+      <label class="label">
+        <div class="animated-background">
+          <div class="skel-mask-container">
+            <div class="skel-mask"></div>
+          </div>
+        </div>
+      </label>
+    </div>
+  </li>`;
+
+export const todoItemTemplate = (item) => {
+  const priorityTemplate = findPriorityTemplate(item.priority);
+  return `<li data-id="${item._id}" class="todo-item ${item.isCompleted ? "completed" : ""}">
+    <div class="view">
+      <input class="toggle" type="checkbox" ${item.isCompleted ? "checked" : ""}/>
+      <label class="label">
+        ${priorityTemplate}
+        ${item.contents}
+      </label>
       <button class="destroy"></button>
     </div>
     <input class="edit" value="${item.contents}" />
   </li>`;
+}
+
+const findPriorityTemplate = (priority) => {
+  if (priority === "NONE") {
+    return prioritySelectTemplate();
+  }
+  return selectedPriorityTemplate(priority);
+};
+
+export const prioritySelectTemplate = () =>
+  `<select class="chip select">
+    <option value="0" selected>순위</option>
+    <option value="1">1순위</option>
+    <option value="2">2순위</option>
+  </select>`
+
+export const selectedPriorityTemplate = (priority) =>
+  `<span class="chip ${priorityClassConverter(priority)}">${priorityValueConverter(priority)}순위</span>`
 
 export const todoFilterTemplate = (data) =>
   `<span class="todo-count">총 <strong>${data.count}</strong> 개</span>

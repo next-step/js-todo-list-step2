@@ -6,20 +6,20 @@ import { todoMemberController } from "/js/controller/TodoMemberController.js";
 import { $store } from "/js/store/index.js";
 
 function TodoApp() {
-  this.todoWriterController = todoWriterController;
-  this.todoItemController = todoItemController;
-  this.todoFilterController = todoFilterController;
-  this.todoMemberController = todoMemberController;
   this.view = todoView;
 
   this.init = async function () {
     await $store.member.init();
     await $store.todoItem.init();
     this.view.render();
-    this.todoWriterController.init();
-    this.todoItemController.init();
-    this.todoFilterController.init();
-    this.todoMemberController.init();
+    addEvent();
+  };
+
+  const addEvent = () => {
+    todoWriterController.init();
+    todoItemController.init();
+    todoFilterController.init();
+    todoMemberController.init();
   };
 }
 

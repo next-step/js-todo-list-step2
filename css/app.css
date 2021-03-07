@@ -490,12 +490,3 @@ button.user-delete-button.ripple {
   margin-left: 10px;
   background-color: #d63a49;
 }
-
-.loading-bar {
-  position: relative;
-  left: 50%;
-  top: 50vh;
-  transform: translate(-50%, 0);
-  width: 100px;
-  /*display: none;*/
-}

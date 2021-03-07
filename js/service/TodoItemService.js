@@ -15,10 +15,7 @@ function TodoItemService() {
   this.destroy = async (target) => {
     if (confirm("삭제하시겠습니까?")) {
       const itemId = target.dataset.id;
-      await todoItemApi.deleteItem(
-        $store.member.getNowMember(),
-        itemId
-      );
+      await todoItemApi.deleteItem($store.member.getNowMember(), itemId);
       $store.todoItem.destroy(itemId);
       this.todoView.itemRender();
     }
@@ -29,8 +26,12 @@ function TodoItemService() {
   };
 
   this.edit = async (id, contents) => {
-    await todoItemApi.editItem($store.member.getNowMember(), id, contents);
-    $store.todoItem.edit(id, contents);
+    const updatedItem = await todoItemApi.editItem(
+      $store.member.getNowMember(),
+      id,
+      contents
+    );
+    $store.todoItem.edit(id, updatedItem);
     this.todoView.itemRender($store.todoItem.items);
   };
 }
