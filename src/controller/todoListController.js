@@ -1,14 +1,11 @@
 'use strict';
 
 import { todoListView } from '../view/todoListView.js';
-import { userStore } from '../../userList/store/userStore.js';
-import { $ } from '../../../utils/dom.js';
-import { API } from '../../../api/api.js';
-import {
-  ElementValidator,
-  KeyValidator,
-} from '../../../validator/validator.js';
-import { DELETE_ITEM_MESSAGE } from '../../../constant/message.js';
+import { userStore } from '../model/userStore.js';
+import { $ } from '../utils/dom.js';
+import { API } from '../api/api.js';
+import { ElementValidator, KeyValidator } from '../validator/validator.js';
+import { DELETE_ITEM_MESSAGE } from '../constant/message.js';
 
 class TodoListController {
   constructor() {
@@ -55,7 +52,7 @@ class TodoListController {
   async deleteItem(target) {
     if (!confirm(DELETE_ITEM_MESSAGE)) return;
     const itemID = target.closest('.todo-item').dataset.id;
-    await API.deleteTodoItem(itemID);
+    await API.deleteTodoItem(userStore.currentUserID, itemID);
     this.loadUserItems(userStore.currentUserID);
   }
 

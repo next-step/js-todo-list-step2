@@ -1,10 +1,9 @@
 'use strict';
 
-import { API } from '../../../api/api.js';
+import { API } from '../api/api.js';
 
 class UserStore {
   constructor() {
-    this.userList = [];
     this.currentUserID = '';
   }
 

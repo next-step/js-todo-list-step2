@@ -21,4 +21,6 @@ export class ElementValidator {
   static isNotClearBtn = target => !target.matches('.clear-completed');
   static isRipple = target => target.matches('.ripple');
   static isNotRipple = target => !target.matches('.ripple');
+  static isAddUserBtn = target => target.matches('.user-create-button');
+  static isDeleteUserBtn = target => target.matches('.user-delete-button');
 }

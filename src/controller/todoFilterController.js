@@ -1,13 +1,14 @@
 'use strict';
 
-// import { todoListStore } from '../store/store.js';
-import { API } from '../../../api/api.js';
+import { $ } from '../utils/dom.js';
+import { API } from '../api/api.js';
+import { todoStore } from '../model/todoStore.js';
+import { userStore } from '../model/userStore.js';
 import { todoFitlerView } from '../view/todoFilterView.js';
-import { todoListView } from '../view/todoListView.js';
-import { $ } from '../../../utils/dom.js';
-import { FILTER_TYPE } from '../../../constant/constants.js';
-import { ElementValidator } from '../../../validator/validator.js';
-import { DELETE_ALL_ITEM_MESSAGE } from '../../../constant/message.js';
+import { FILTER_TYPE } from '../constant/constants.js';
+import { ElementValidator } from '../validator/validator.js';
+import { DELETE_ALL_ITEM_MESSAGE } from '../constant/message.js';
+import { todoListController } from './todoListController.js';
 
 class TodoFilterController {
   constructor() {
@@ -23,13 +24,17 @@ class TodoFilterController {
       return;
     if (ElementValidator.isFilterBtn(target)) {
       const filterType = this.getSelctedFilterType(target);
-      todoListStore.setFilterType(filterType);
-      todoListView.render(todoListStore.getItemsByFilter());
-      todoFitlerView.changeSelectedBtn(target);
+      this.changeFilterBtn(filterType);
     } else if (ElementValidator.isClearBtn(target)) {
       this.clearAllItems();
     }
   };
+
+  changeFilterBtn(filterType) {
+    todoStore.setFilterType(filterType);
+    todoFitlerView.changeSelectedBtn(filterType);
+    todoListController.loadUserItems(userStore.currentUserID);
+  }
 
   getSelctedFilterType(target) {
     const classList = target.classList;
@@ -42,10 +47,10 @@ class TodoFilterController {
     }
   }
 
-  clearAllItems() {
+  async clearAllItems() {
     if (!confirm(DELETE_ALL_ITEM_MESSAGE)) return;
-    todoListStore.clear();
-    todoListView.clear();
+    await API.deleteAllTodoItem(userStore.currentUserID);
+    todoListController.loadUserItems(userStore.currentUserID);
   }
 }
 

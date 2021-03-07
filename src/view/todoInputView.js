@@ -1,6 +1,6 @@
 'use strict';
 
-import { $ } from '../../../utils/dom.js';
+import { $ } from '../utils/dom.js';
 
 class TodoInputView {
   constructor() {

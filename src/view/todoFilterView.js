@@ -1,6 +1,6 @@
 'use strict';
 
-import { $, $$ } from '../../../utils/dom.js';
+import { $, $$ } from '../utils/dom.js';
 
 class TodoFitlerView {
   constructor() {
@@ -8,10 +8,11 @@ class TodoFitlerView {
     this.$count = $('.todo-count>strong');
   }
 
-  changeSelectedBtn(target) {
-    const selectedBtn = $('.selected', this.$todoFilter);
-    selectedBtn.classList.remove('selected');
-    target.classList.add('selected');
+  changeSelectedBtn(filterType) {
+    const $selectedBtn = $('.selected', this.$todoFilter);
+    const $targetBtn = $(`.${filterType}`, this.$todoFilter);
+    $selectedBtn.classList.remove('selected');
+    $targetBtn.classList.add('selected');
   }
 
   showCount() {

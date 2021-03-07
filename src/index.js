@@ -1,9 +1,5 @@
 'use strict';
 
-import TodoApp from './components/todoApp/todoApp.js';
-import UserList from './components/userList/userList.js';
+import { userListController } from './controller/userListController.js';
 
-const todoApp = new TodoApp();
-const userList = new UserList();
-todoApp.init();
-userList.init();
+userListController.init();

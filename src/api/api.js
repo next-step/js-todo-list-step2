@@ -28,7 +28,7 @@ const request = async (url, option = {}) => {
     }
     return await response.json();
   } catch (err) {
-    alert(`💣 Error : ${err} 💣`);
+    alert(`Error : ${err}`);
   }
 };
 
