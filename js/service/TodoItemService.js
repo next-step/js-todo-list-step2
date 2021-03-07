@@ -9,7 +9,7 @@ function TodoItemService() {
     const itemId = target.dataset.id;
     await todoItemApi.toggleItem($store.member.getNowMember(), itemId);
     $store.todoItem.toggle(itemId);
-    target.classList.toggle("completed");
+    this.todoView.itemRender();
   };
 
   this.destroy = async (target) => {

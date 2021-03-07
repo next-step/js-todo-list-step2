@@ -1,4 +1,5 @@
 import {
+  loadingBarTemplate,
   todoFilterTemplate,
   todoItemTemplate,
   todoUserCreateDeleteTemplate,
@@ -19,7 +20,6 @@ function TodoView() {
   this.userRender = () => {
     const members = $store.member.getMembers();
     const nowMember = $store.member.getNowMember();
-
     $userList.innerHTML = members
       .map((member) => todoUserTemplate(member, nowMember))
       .join("");
@@ -27,7 +27,7 @@ function TodoView() {
   };
 
   this.itemRender = () => {
-    const items = $store.todoItem.getItems();
+    const items = $store.todoItem.getItemsByFilter();
     $itemList.innerHTML = items.map(todoItemTemplate).join("");
     $countContainer.innerHTML = todoFilterTemplate({
       count: items.length,

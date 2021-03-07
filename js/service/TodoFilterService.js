@@ -6,7 +6,7 @@ function TodoFilterService() {
 
   this.onClickFilter = function (filterState) {
     $store.todoItem.setFilterState(filterState);
-    this.todoView.itemRender($store.todoItem.getItemsByFilter());
+    this.todoView.itemRender();
   };
 }
 

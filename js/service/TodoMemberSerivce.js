@@ -9,8 +9,11 @@ function TodoMemberService() {
   this.addMember = async (userName) => {
     try {
       const memberToSave = new Member({ name: userName });
-      let member = await memberApi.saveMember(memberToSave);
+      const member = await memberApi.saveMember(memberToSave);
+
       $store.member.addMember(member);
+      $store.todoItem.setItems(member.todoList);
+
       this.todoView.render();
     } catch (e) {
       alert(e.message);
@@ -21,9 +24,7 @@ function TodoMemberService() {
     if (!confirm("삭제하시겠습니까?")) {
       return;
     }
-
     try {
-      console.log(member);
       await memberApi.deleteMemberById(member._id);
       $store.member.deleteMemberById(member._id);
       this.todoView.render();

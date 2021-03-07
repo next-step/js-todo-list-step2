@@ -1,7 +1,24 @@
+export const loadingBarTemplate = () =>
+        `<li>
+          <div class="view">
+            <label class="label">
+              <div class="animated-background">
+                <div class="skel-mask-container">
+                  <div class="skel-mask"></div>
+                </div>
+              </div>
+            </label>
+          </div>
+        </li>`;
+
 export const todoItemTemplate = (item) =>
-  `<li data-id="${item._id}" class="todo-item ${item.isCompleted ? "completed" : ""}">
+  `<li data-id="${item._id}" class="todo-item ${
+    item.isCompleted ? "completed" : ""
+  }">
     <div class="view">
-      <input class="toggle" type="checkbox" ${item.isCompleted ? "checked" : ""}/>
+      <input class="toggle" type="checkbox" ${
+        item.isCompleted ? "checked" : ""
+      }/>
       <label class="label">${item.contents}</label>
       <button class="destroy"></button>
     </div>

@@ -26,7 +26,7 @@ export function TodoItem() {
     item.contents = contents;
   };
 
-  this.setFilterState = function (filterState) {
+  this.setFilterState = (filterState) => {
     this.filterState = filterState;
   };
 
@@ -46,10 +46,6 @@ export function TodoItem() {
 
   this.setItems = (items) => {
     this.items = items;
-  };
-
-  this.getItems = () => {
-    return this.items;
   };
 
   this.init = async () => {

@@ -48,7 +48,6 @@ export function Member() {
   this.init = async () => {
     const members = await memberApi.findAllMembers();
     this.setMembers(members);
-    console.log(members);
     let nowMember = this.members[0];
     this.setNowMember(nowMember);
   };
