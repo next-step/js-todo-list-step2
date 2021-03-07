@@ -34,16 +34,18 @@ class UserListController {
   }
 
   async deleteUser(id) {
-    if (!confirm('현재 선택된유저를 삭제하시겠습니까?')) return;
+    if (!confirm('현재 선택된 유저를 삭제하시겠습니까?')) return;
     const selectedUser = document.querySelector('.active');
     await API.deleteUser(selectedUser.id);
     this.loadUsers();
   }
 
   selectUserBtn(target) {
-    const selectedBtn = $('.active', this.userList);
+    const $selectedBtn = $('.active', this.userList);
+    const userName = target.innerText;
     userListView.activeUserBtn(target);
-    userListView.deactiveUserBtn(selectedBtn);
+    userListView.deactiveUserBtn($selectedBtn);
+    userListView.updateUserTitle(userName);
   }
 
   async loadUsers() {
