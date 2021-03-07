@@ -1,5 +1,5 @@
 import { todoMemberService } from "/js/service/TodoMemberSerivce.js";
-import { $memberStore } from "/js/store/MemberStore.js";
+import { $store } from "/js/store/MemberStore.js";
 
 function TodoMemberController() {
   const $userList = document.querySelector("#user-list");
@@ -11,9 +11,10 @@ function TodoMemberController() {
       return;
     }
     if (isMemberDeleteButton(target)) {
-      todoMemberService.deleteMember($memberStore.getNowMemberId());
+      todoMemberService.deleteMember($store.getNowMemberId());
+      return;
     }
-    changeMember(target);
+    todoMemberService.selectMember(target.dataset.id);
   };
 
   const isMemberCreateButton = (target) => {
@@ -22,10 +23,6 @@ function TodoMemberController() {
 
   const isMemberDeleteButton = (target) => {
     return target.classList.contains("user-delete-button");
-  };
-
-  const changeMember = (target) => {
-    console.log(target);
   };
 
   this.init = function () {

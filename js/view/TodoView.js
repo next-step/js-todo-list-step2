@@ -5,8 +5,7 @@ import {
   todoUserTemplate,
 } from "/js/utils/templates.js";
 import { $todoItemStore } from "/js/store/TodoStore.js";
-import { $memberStore } from "/js/store/MemberStore.js";
-import { MemberApiService } from "/js/api/modules/member.js";
+import { $store } from "/js/store/MemberStore.js";
 
 function TodoView() {
   const $userList = document.querySelector("#user-list");
@@ -14,27 +13,27 @@ function TodoView() {
   const $countContainer = document.querySelector(".count-container");
 
   this.render = () => {
-    this.itemRender();
     this.userRender();
+    this.itemRender();
+  };
+
+  this.userRender = () => {
+    const members = $store.getMembers();
+    const nowMemberId = $store.getNowMemberId();
+    console.log("nowMemberId: " + nowMemberId);
+    $userList.innerHTML = members
+      .map((member) => todoUserTemplate(member, nowMemberId))
+      .join("");
+    $userList.insertAdjacentHTML("beforeend", todoUserCreateTemplate);
   };
 
   this.itemRender = () => {
-    const items = $todoItemStore.getItemsByFilter();
+    const items = $store.getItems();
     $itemList.innerHTML = items.map(todoItemTemplate).join("");
     $countContainer.innerHTML = todoFilterTemplate({
       count: items.length,
       filter: $todoItemStore.filterState,
     });
-  };
-
-  this.userRender = async () => {
-    const members = $memberStore.getMembers();
-    const nowMemberId = $memberStore.getNowMemberId();
-    console.log(members);
-    $userList.innerHTML = members
-      .map((user) => todoUserTemplate(user, nowMemberId))
-      .join("");
-    $userList.insertAdjacentHTML("beforeend", todoUserCreateTemplate);
   };
 }
 

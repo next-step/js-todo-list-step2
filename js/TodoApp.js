@@ -1,10 +1,9 @@
-import { $todoItemStore } from "/js/store/TodoStore.js";
 import { todoView } from "/js/view/TodoView.js";
 import { todoItemController } from "/js/controller/TodoItemController.js";
 import { todoWriterController } from "/js/controller/TodoWriterController.js";
 import { todoFilterController } from "/js/controller/TodoFilterController.js";
 import { todoMemberController } from "/js/controller/TodoMemberController.js";
-import { $memberStore } from "./store/MemberStore.js";
+import { $store } from "./store/MemberStore.js";
 
 function TodoApp() {
   this.todoWriterController = todoWriterController;
@@ -14,8 +13,7 @@ function TodoApp() {
   this.view = todoView;
 
   this.init = async function () {
-    $todoItemStore.init();
-    await $memberStore.init();
+    await $store.init();
     this.view.render();
     this.todoWriterController.init();
     this.todoItemController.init();

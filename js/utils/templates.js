@@ -1,11 +1,11 @@
-export const todoItemTemplate = (data) =>
-  `<li data-id="${data.id}" class="todo-item ${data.isDone ? "completed" : ""}">
+export const todoItemTemplate = (item) =>
+  `<li data-id="${item._id}" class="todo-item ${item.isCompleted ? "completed" : ""}">
     <div class="view">
-      <input class="toggle" type="checkbox" ${data.isDone ? "checked" : ""}/>
-      <label class="label">${data.title}</label>
+      <input class="toggle" type="checkbox" ${item.isCompleted ? "checked" : ""}/>
+      <label class="label">${item.contents}</label>
       <button class="destroy"></button>
     </div>
-    <input class="edit" value="${data.title}" />
+    <input class="edit" value="${item.contents}" />
   </li>`;
 
 export const todoFilterTemplate = (data) =>
