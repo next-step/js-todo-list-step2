@@ -1,6 +1,6 @@
 import { FILTER_STATE } from "/js/utils/constants.js";
 import { $localStorage } from "/js/store/CustomLocalStorage.js";
-import { MemberApiService } from "/js/api/modules/member.js";
+import { memberApi } from "/js/api/modules/member.js";
 import { $store } from "/js/store/index.js";
 
 export function TodoItem() {
@@ -67,7 +67,7 @@ export function TodoItem() {
 
   this.init = async () => {
     const nowMember = $store.member.getNowMember();
-    const todoItems = await MemberApiService.findTodoItemById(nowMember._id);
+    const todoItems = await memberApi.findTodoItemById(nowMember._id);
     this.setItems(todoItems);
   };
 }

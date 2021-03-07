@@ -1,6 +1,6 @@
 const BASE_URL = "https://js-todo-list-9ca3a.df.r.appspot.com";
 
-export const ApiService = {
+export const api = {
   get(path) {
     return request(path);
   },

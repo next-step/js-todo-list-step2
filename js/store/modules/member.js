@@ -1,4 +1,4 @@
-import { MemberApiService } from "/js/api/modules/member.js";
+import { memberApi } from "/js/api/modules/member.js";
 
 export function Member() {
   //{member: {_id, name, todoList}}
@@ -18,7 +18,7 @@ export function Member() {
   };
 
   this.deleteMember = (deleteMember) => {
-    this.members = this.members.filter(member => member !== deleteMember);
+    this.members = this.members.filter((member) => member !== deleteMember);
     this.setNowMember(this.members[0]);
   };
 
@@ -44,9 +44,9 @@ export function Member() {
   };
 
   this.init = async () => {
-    const members = await MemberApiService.findAllMembers();
+    const members = await memberApi.findAllMembers();
     this.setMembers(members);
-
+    console.log(members);
     let nowMember = this.members[0];
     this.setNowMember(nowMember);
   };

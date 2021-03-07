@@ -28,7 +28,6 @@ function TodoView() {
 
   this.itemRender = () => {
     const items = $store.todoItem.getItems();
-
     $itemList.innerHTML = items.map(todoItemTemplate).join("");
     $countContainer.innerHTML = todoFilterTemplate({
       count: items.length,
