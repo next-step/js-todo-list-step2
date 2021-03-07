@@ -75,9 +75,9 @@ export const API = {
     return request(`/api/users/${userId}/items/`, option.delete());
   },
 
-  editTodoItem: (newTitle, userId, itemId) => {
+  updateTodoItem: (userId, itemId, text) => {
     const content = {
-      contents: newTitle,
+      contents: text,
     };
     return request(`/api/users/${userId}/items/${itemId}`, option.put(content));
   },

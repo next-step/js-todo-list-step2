@@ -17,7 +17,7 @@ const priorityTemplate = priority => {
 
 export const todoTemplate = item => {
   return `
-  <li data-id=${item.id} class="todo-item ${
+  <li data-id=${item._id} class="todo-item ${
     item.isCompleted ? 'completed' : ''
   }">
     <div class="view">

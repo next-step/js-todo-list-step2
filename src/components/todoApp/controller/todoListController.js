@@ -1,7 +1,7 @@
 'use strict';
 
 import { todoListView } from '../view/todoListView.js';
-// import { todoListStore } from '../store/store.js';
+import { userStore } from '../../userList/store/userStore.js';
 import { $ } from '../../../utils/dom.js';
 import { API } from '../../../api/api.js';
 import {
@@ -25,8 +25,8 @@ class TodoListController {
     ) {
       return;
     }
-    // if (ElementValidator.isDeleteBtn(target)) this.deleteItem(target);
-    // else if (ElementValidator.isToggleBtn(target)) this.toggleItem(target);
+    if (ElementValidator.isDeleteBtn(target)) this.deleteItem(target);
+    else if (ElementValidator.isToggleBtn(target)) this.toggleItem(target);
   };
 
   onDoubleClickTodoList = ({ target }) => {
@@ -36,7 +36,6 @@ class TodoListController {
   };
 
   onKeyUpTodoList = event => {
-    console.log('키업');
     if (KeyValidator.isNotEnter(event.key) && KeyValidator.isNotEsc(event.key))
       return;
     const $item = event.target.closest('.todo-item');
@@ -48,39 +47,32 @@ class TodoListController {
     }
   };
 
-  deleteItem(target) {
-    if (!confirm(DELETE_ITEM_MESSAGE)) return;
-    const id = target.closest('.todo-item').dataset.id;
-    todoListStore.delete(id);
-    todoListView.render(todoListStore.getItemsByFilter());
-  }
-
-  deleteAllItems() {}
-
-  toggleItem(target) {
-    const $item = target.closest('.todo-item');
-    const id = $item.dataset.id;
-    $item.classList.toggle('completed');
-    todoListStore.toggle(id);
-    todoListView.render(todoListStore.getItemsByFilter());
-  }
-
-  editItem(item) {
-    const text = $('.edit', item).value;
-    const id = item.dataset.id;
-    todoListStore.update(id, text);
-    // todoListView.editItem(item, text);
-    todoListView.render(todoListStore.getItemsByFilter()); // 전체를 렌더할지 하나만 업데이트할지 고민중
-  }
-
   async loadUserItems(userID) {
     const items = await API.getUserTodoItems(userID);
     todoListView.render(items);
   }
 
-  init() {
-    // todoListStore.init();
-    // todoListView.render(todoListStore.todoItems);
+  async deleteItem(target) {
+    if (!confirm(DELETE_ITEM_MESSAGE)) return;
+    const itemID = target.closest('.todo-item').dataset.id;
+    await API.deleteTodoItem(itemID);
+    this.loadUserItems(userStore.currentUserID);
+  }
+
+  async toggleItem(target) {
+    const $item = target.closest('.todo-item');
+    const itemiD = $item.dataset.id;
+    // $item.classList.toggle('completed'); // 빠르게 ui변경 하고싶으면 이걸로
+    await API.toggleTodoItem(userStore.currentUserID, itemiD);
+    this.loadUserItems(userStore.currentUserID);
+  }
+
+  async editItem(item) {
+    const text = $('.edit', item).value;
+    const itemID = item.dataset.id;
+    await API.updateTodoItem(userStore.currentUserID, itemID, text);
+    // todoListView.editItem(item, text);// 빠르게 ui변경 하고 싶으면 이걸로
+    this.loadUserItems(userStore.currentUserID);
   }
 }
 
