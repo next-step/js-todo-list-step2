@@ -38,7 +38,9 @@ export default function UserList(
     this.$el.innerHTML = users
       .map(({ name, _id }) => {
         return `<button class="ripple ${
-          _id === this.state.activeUser._id ? 'active' : ''
+          _id === this.state.activeUser && this.state.activeUser._id
+            ? 'active'
+            : ''
         }" data-action="changeUser" data-user-id="${_id}">${name}</button>`
       })
       .join('')

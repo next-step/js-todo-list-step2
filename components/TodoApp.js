@@ -1,26 +1,29 @@
 import UserList from './UserList.js'
 import userApi from '../apis/userApi.js'
+import TodoList from './TodoList.js'
+import todoApi from '../apis/todoApi.js'
 
 export default function TodoApp($el) {
   this.$el = $el
-  this.components = []
+  this.components = {}
   this.state = {
-    todoItems: ['study', 'blog'],
+    todoItems: [],
     users: [],
     activeUser: null,
+    isLoading: true,
   }
 
   const fetchUsers = async () => {
     const users = await userApi.getUsers()
-    this.setState({
-      users,
-      activeUser: this.state.activeUser || users[0],
-    })
+    this.setState({ users })
   }
 
   const changeUser = async (userId) => {
     const activeUser = this.state.users.find((user) => user._id === userId)
-    this.setState({ activeUser })
+    this.setState({ activeUser, isLoading: true })
+
+    const todoItems = await todoApi.getTodoItems(userId)
+    this.setState({ todoItems, isLoading: false })
   }
 
   const createUser = async (userName) => {
@@ -39,15 +42,18 @@ export default function TodoApp($el) {
       ...changeState,
     }
 
+    const { todoItems, isLoading } = this.state
+    this.components.todoList.setState({ todoItems, isLoading })
+
     this.render()
   }
 
   this.render = () => {
-    const { name: activeUserName } = this.state.users.find(({ active }) => true)
+    const { name } = this.state.activeUser || { name: '' }
 
     this.$el.innerHTML = `
-      <h1 id="user-title" data-username="${activeUserName}">
-        <span><strong>${activeUserName}</strong>'s Todo List</span>
+      <h1 id="user-title" data-username="${name}">
+        <span><strong>${name}</strong>'s Todo List</span>
       </h1>
       <section>
         <div id="user-list"></div>
@@ -61,77 +67,7 @@ export default function TodoApp($el) {
                   autofocus
           />
         </section>
-        <section class="main">
-          <ul class="todo-list">
-            <li>
-              <div class="view">
-                <label class="label">
-                  <div class="animated-background">
-                    <div class="skel-mask-container">
-                      <div class="skel-mask"></div>
-                    </div>
-                  </div>
-                </label>
-              </div>
-            </li>
-            <li>
-              <div class="view">
-                <input class="toggle" type="checkbox" />
-                <label class="label">
-                  <select class="chip select">
-                    <option value="0" selected>순위</option>
-                    <option value="1">1순위</option>
-                    <option value="2">2순위</option>
-                  </select>
-                  해야할 아이템
-                </label>
-                <button class="destroy"></button>
-              </div>
-              <input class="edit" value="완료된 타이틀" />
-            </li>
-            <li>
-              <div class="view">
-                <input class="toggle" type="checkbox" />
-                <label class="label">
-                  <span class="chip primary">1순위</span>
-                  해야할 아이템
-                </label>
-                <button class="destroy"></button>
-              </div>
-              <input class="edit" value="완료된 타이틀" />
-            </li>
-            <li>
-              <div class="view">
-                <input class="toggle" type="checkbox" />
-                <label class="label">
-                  <span class="chip secondary">2순위</span>
-                  해야할 아이템
-                </label>
-                <button class="destroy"></button>
-              </div>
-              <input class="edit" value="완료된 타이틀" />
-            </li>
-            <li class="completed">
-              <div class="view">
-                <input class="toggle" type="checkbox" checked />
-                <label class="label">완료된 아이템 </label>
-                <button class="destroy"></button>
-              </div>
-              <input class="edit" value="완료된 타이틀" />
-            </li>
-            <li class="editing">
-              <div class="view">
-                <input class="toggle" type="checkbox" checked />
-                <label class="label">
-                  <span class="chip secondary">2순위</span>
-                  수정중인 아이템
-                </label>
-                <button class="destroy"></button>
-              </div>
-              <input class="edit" value="완료된 타이틀" />
-            </li>
-          </ul>
-        </section>
+        <div id="todo-list"></div> 
         <div class="count-container">
           <span class="todo-count">총 <strong>0</strong> 개</span>
           <ul class="filters">
@@ -150,23 +86,32 @@ export default function TodoApp($el) {
       </section>
         `
 
-    const userList = new UserList(
-      this.$el.querySelector('#user-list'),
-      {
-        users: this.state.users,
-        activeUser: this.state.activeUser,
-      },
-      {
-        changeUser,
-        createUser,
-        deleteUser,
-      }
-    )
+    this.components = {
+      userList: new UserList(
+        this.$el.querySelector('#user-list'),
+        {
+          users: this.state.users,
+          activeUser: this.state.activeUser,
+        },
+        {
+          changeUser,
+          createUser,
+          deleteUser,
+        }
+      ),
+
+      todoList: new TodoList(this.$el.querySelector('#todo-list'), {
+        todoItems: this.state.todoItems,
+        isLoading: this.state.isLoading,
+      }),
+    }
   }
 
   this.initailize = async function () {
-    await fetchUsers()
     this.render()
+
+    await fetchUsers()
+    await changeUser(this.state.users[0]._id)
   }
 
   this.initailize()
