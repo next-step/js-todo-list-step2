@@ -1,9 +1,9 @@
 'use strict';
 
 import { $ } from '../utils/dom.js';
-import { todoTemplate, progressTemplate } from '../layout/templates.js';
 import { todoStore } from '../model/todoStore.js';
 import { todoFitlerView } from '../view/todoFilterView.js';
+import { todoItemTemplate, progressTemplate } from '../layout/templates.js';
 class TodoListView {
   constructor() {
     this.$todoList = $('.todo-list');
@@ -16,7 +16,7 @@ class TodoListView {
       completed: () => items.filter(item => item.isCompleted === true),
     };
     const filteredItems = filter[todoStore.filterType]();
-    this.$todoList.innerHTML = filteredItems.map(todoTemplate).join('');
+    this.$todoList.innerHTML = filteredItems.map(todoItemTemplate).join('');
     todoFitlerView.showCount();
   }
 

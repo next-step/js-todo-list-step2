@@ -1,21 +1,17 @@
 'use strict';
 
-const priorityTemplate = priority => {
-  const priorityClassList = {
-    FIRST: 'primary',
-    SECOND: 'secondary',
-    NONE: '',
-  };
+import { PRIORITY_CLASSLIST } from '../constant/constants.js';
 
+const priorityTemplate = priority => {
   return `
-    <select class="chip select ${priorityClassList[priority]}" >
+    <select class="chip select ${PRIORITY_CLASSLIST[priority]}" >
       <option value="0" ${priority === 'NONE' && 'selected'}>순위</option>
       <option value="1" ${priority === 'FIRST' && 'selected'}>1순위</option>
       <option value="2" ${priority === 'SECOND' && 'selected'}>2순위</option>
     </select>`;
 };
 
-export const todoTemplate = item => {
+export const todoItemTemplate = item => {
   return `
   <li data-id=${item._id} class="todo-item ${
     item.isCompleted ? 'completed' : ''
@@ -47,4 +43,23 @@ export const progressTemplate = () => {
     </label>
     </div>
   </li>`;
+};
+
+export const userButtonTemplate = ({ name, _id }) => {
+  return `<button class="ripple" id=${_id}>${name}</button>`;
+};
+
+export const addDeleteButtonTemplate = () => {
+  return `
+    <button class="ripple user-create-button">+ 유저 생성</button>
+    <button class="ripple user-delete-button">- 유저 삭제</button>
+  `;
+};
+
+export const userTitleTemplate = userName => {
+  return `
+  <span>
+    <strong>${userName}</strong>'s Todo List
+  </span>
+`;
 };

@@ -1,10 +1,10 @@
 'use strict';
 
+import { $ } from '../utils/dom.js';
 import { API } from '../api/api.js';
+import { userStore } from '../model/userStore.js';
 import { todoInputView } from '../view/todoInputView.js';
 import { todoListController } from './todoListController.js';
-import { userStore } from '../model/userStore.js';
-import { $ } from '../utils/dom.js';
 import {
   KeyValidator,
   ElementValidator,

@@ -1,14 +1,16 @@
 'use strict';
 
 import { $ } from '../utils/dom.js';
-import { ElementValidator } from '../validator/validator.js';
 import { userStore } from '../model/userStore.js';
 import { userListView } from '../view/userListView.js';
-import { MINIMUM_USER_NAME_LENGTH } from '../constant/constants.js';
-import { todoListController } from './todoListController.js';
-import { FILTER_TYPE } from '../constant/constants.js';
-import { todoFilterController } from './todoFilterController.js';
 import { todoListView } from '../view/todoListView.js';
+import { todoFilterController } from './todoFilterController.js';
+import { todoListController } from './todoListController.js';
+import { ElementValidator } from '../validator/validator.js';
+import {
+  FILTER_TYPE,
+  MINIMUM_USER_NAME_LENGTH,
+} from '../constant/constants.js';
 import {
   INPUT_USER_NAME,
   ALERT_USER_NAME,

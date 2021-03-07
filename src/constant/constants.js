@@ -12,5 +12,10 @@ export const PRIORITY_TYPE = Object.freeze({
   0: 'NONE',
 });
 
+export const PRIORITY_CLASSLIST = Object.freeze({
+  FIRST: 'primary',
+  SECOND: 'secondary',
+  NONE: '',
+});
+
 export const MINIMUM_USER_NAME_LENGTH = 2;
-export const CURRENT_USER = 'currentUser';
