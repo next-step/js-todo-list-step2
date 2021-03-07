@@ -22,12 +22,6 @@ class UserListView {
     this.$userTitle.innerHTML = this.userTitleTemplate(userName);
   }
 
-  addUser() {}
-
-  deleteUser() {}
-
-  selectUser() {}
-
   activeUserBtn(target) {
     // const $userBtn = $(`#${id}`);
     target.classList.add('active');
