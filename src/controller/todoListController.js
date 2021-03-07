@@ -6,6 +6,7 @@ import { $ } from '../utils/dom.js';
 import { API } from '../api/api.js';
 import { ElementValidator, KeyValidator } from '../validator/validator.js';
 import { DELETE_ITEM_MESSAGE } from '../constant/message.js';
+import { PRIORITY_TYPE } from '../constant/constants.js';
 
 class TodoListController {
   constructor() {
@@ -13,6 +14,7 @@ class TodoListController {
     this.$todoList.addEventListener('click', this.onClickTodoList);
     this.$todoList.addEventListener('dblclick', this.onDoubleClickTodoList);
     this.$todoList.addEventListener('keyup', this.onKeyUpTodoList);
+    this.$todoList.addEventListener('change', this.onChangePriority);
   }
 
   onClickTodoList = ({ target }) => {
@@ -44,6 +46,11 @@ class TodoListController {
     }
   };
 
+  onChangePriority = ({ target }) => {
+    if (!target.classList.contains('chip')) return;
+    this.changePriority(target);
+  };
+
   async loadUserItems(userID) {
     const items = await API.getUserTodoItems(userID);
     todoListView.render(items);
@@ -69,6 +76,13 @@ class TodoListController {
     const itemID = item.dataset.id;
     await API.updateTodoItem(userStore.currentUserID, itemID, text);
     // todoListView.editItem(item, text);// 빠르게 ui변경 하고 싶으면 이걸로
+    this.loadUserItems(userStore.currentUserID);
+  }
+
+  async changePriority(target) {
+    const itemID = target.closest('.todo-item').dataset.id;
+    const priority = PRIORITY_TYPE[target.value];
+    await API.changePriority(userStore.currentUserID, itemID, priority);
     this.loadUserItems(userStore.currentUserID);
   }
 }

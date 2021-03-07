@@ -82,7 +82,7 @@ export const API = {
     return request(`/api/users/${userId}/items/${itemId}`, option.put(content));
   },
 
-  changePriority: (priority, userId, itemId) => {
+  changePriority: (userId, itemId, priority) => {
     const content = {
       priority: priority,
     };
