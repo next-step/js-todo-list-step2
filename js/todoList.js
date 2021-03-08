@@ -4,14 +4,19 @@ const ATTRIBUTE_CHECKED = 'checked';
 
 const extractState = ($li) => {
   return {
-    index: $li.dataset.id,
-    content: $li.querySelector('.label .content').textContent,
+    _id: $li.dataset.id,
+    contents: $li.querySelector('.label .content').textContent,
     priority: $li.querySelector('.label').dataset.priority,
-    status: $li.classList[0],
+    isCompleted: $li.querySelector('.toggle').hasAttribute('checked'),
   };
 };
 
-const eventHandler = (updateTodoItem, removeTodoItem) => {
+const eventHandler = (
+  updateTodoContents,
+  updateTodoPriority,
+  updateToggle,
+  removeTodoItem
+) => {
   const _toggleCompleteStatus = ({ target }) => {
     if (!target.classList.contains('toggle')) {
       return;
@@ -25,7 +30,7 @@ const eventHandler = (updateTodoItem, removeTodoItem) => {
       $li.classList.remove(CLASS_COMPLETED);
     }
 
-    updateTodoItem(extractState($li));
+    updateToggle(extractState($li));
   };
 
   const _changeToEditMode = ({ target }) => {
@@ -60,7 +65,7 @@ const eventHandler = (updateTodoItem, removeTodoItem) => {
     const updatedContent = target.value.trim();
     $labelContent.textContent = updatedContent;
 
-    updateTodoItem(extractState($li));
+    updateTodoContents(extractState($li));
   };
 
   const _escapeToViewMode = ({ target, key }) => {
@@ -93,7 +98,7 @@ const eventHandler = (updateTodoItem, removeTodoItem) => {
 
     const $li = target.closest('li');
     $li.remove();
-    removeTodoItem(extractState($li));
+    removeTodoItem(extractState($li)); //TODO only id necessary
   };
 
   const addEventListener = ($liTemplate) => {
@@ -112,13 +117,24 @@ const eventHandler = (updateTodoItem, removeTodoItem) => {
   };
 };
 
-const todoList = ($ulist, updateTodoItem, removeTodoItem) => {
-  const _eventHandler = eventHandler(updateTodoItem, removeTodoItem);
+const todoList = (
+  $ulist,
+  updateTodoContents,
+  updateTodoPriority,
+  updateToggle,
+  removeTodoItem
+) => {
+  const _eventHandler = eventHandler(
+    updateTodoContents,
+    updateTodoPriority,
+    updateToggle,
+    removeTodoItem
+  ); //TODO do sth with params
 
   const _priorityOptions = {
-    select: { value: '0', text: '순위' },
-    primary: { value: '1', text: '1순위' },
-    secondary: { value: '2', text: '2순위' },
+    NONE: { class: 'select', value: '0', text: '순위' },
+    FIRST: { class: 'primary', value: '1', text: '1순위' },
+    SECOND: { class: 'secondary', value: '2', text: '2순위' },
   };
 
   const _createListItemTemplate = () => {
@@ -151,34 +167,35 @@ const todoList = ($ulist, updateTodoItem, removeTodoItem) => {
   };
 
   const _createListItem = (todoItem) => {
-    const index = todoItem.index;
-    const content = todoItem.content;
-    const status = todoItem.status;
+    const index = todoItem._id;
+    const content = todoItem.contents;
+    const isCompleted = todoItem.isCompleted;
     const priority = todoItem.priority;
 
     const $todoItem = _eventHandler.addEventListener(_createListItemTemplate());
     const $todoLabel = $todoItem.querySelector('label.label');
 
-    if (priority !== 'select') {
+    if (priority !== 'NONE') {
       const $prioritySpan = document.createElement('span');
-      $prioritySpan.classList.add('chip', priority);
+      $prioritySpan.classList.add('chip', _priorityOptions[priority].class);
       $prioritySpan.textContent = _priorityOptions[priority].text;
       $todoLabel.appendChild($prioritySpan);
     } else {
+      //TODO
       const $labelSelect = document.createElement('select');
       $labelSelect.classList.add('chip', 'select');
       const $selectOption = document.createElement('option');
-      $selectOption.value = _priorityOptions.select.value;
-      $selectOption.text = _priorityOptions.select.text;
+      $selectOption.value = _priorityOptions.NONE.value;
+      $selectOption.text = _priorityOptions.NONE.text;
       const $primaryOption = document.createElement('option');
-      $primaryOption.value = _priorityOptions.primary.value;
-      $primaryOption.text = _priorityOptions.primary.text;
+      $primaryOption.value = _priorityOptions.FIRST.value;
+      $primaryOption.text = _priorityOptions.FIRST.text;
       const $secondaryOption = document.createElement('option');
-      $secondaryOption.value = _priorityOptions.secondary.value;
-      $secondaryOption.text = _priorityOptions.secondary.text;
+      $secondaryOption.value = _priorityOptions.SECOND.value;
+      $secondaryOption.text = _priorityOptions.SECOND.text;
       $labelSelect.add($selectOption);
       $labelSelect.add($primaryOption);
-      $labelSelect.add($secondaryOption); //TODO
+      $labelSelect.add($secondaryOption);
 
       $todoLabel.appendChild($labelSelect);
     }
@@ -192,8 +209,8 @@ const todoList = ($ulist, updateTodoItem, removeTodoItem) => {
 
     $todoItem.querySelector('input.edit').value = content;
 
-    status && $todoItem.classList.add(status);
-    if (status === CLASS_COMPLETED) {
+    if (isCompleted) {
+      $todoItem.classList.add(CLASS_COMPLETED);
       $todoItem
         .querySelector('input.toggle')
         .setAttribute(ATTRIBUTE_CHECKED, null);

@@ -95,7 +95,14 @@
 |GET|/api/users/:userId/items/|
 ```javascript
 {
- response: [...]
+ response: [
+   {
+   "_id": "string",
+   "contents": "string",
+   "priority": "string",
+   "isCompleted": boolean
+  },
+  ...]
 }
 ```
 
@@ -112,8 +119,9 @@
  },
  response: {
    "_id": "string",
-   "name": "string",
-   "todoList": [...]
+   "contents": "string",
+   "priority": "string",
+   "isCompleted": boolean
   }
 }
 ```
@@ -258,6 +266,3 @@ live-server 폴더명
 ## 📝 License
 
 This project is [MIT](https://github.com/next-step/js-todo-list-step3/blob/master/LICENSE) licensed.
-
-
-

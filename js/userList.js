@@ -1,36 +1,16 @@
-const userList = () => {
-  const BASE_URL = 'https://js-todo-list-9ca3a.df.r.appspot.com';
+import store from './store.js';
+
+const userList = (setState) => {
   const $userTitle = document.getElementById('user-title');
   const $userList = document.getElementById('user-list');
-  const _userMap = new Map();
-  let _currentUser = {};
 
   const _onUserCreateHandler = () => {
-    const userName = prompt('추가하고 싶은 이름을 입력해주세요.');
-    const jsonBody = JSON.stringify({ name: userName });
-
-    const p = fetch(BASE_URL + '/api/users', {
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      method: 'POST',
-      body: jsonBody,
-    });
-
-    p.then((response) => {
-      if (!response.ok) {
-        return new Error(response);
-      }
-
-      return response.json();
-    }).then((user) => {
-      _setUser(user);
-      listUsers();
-    });
-  };
-
-  const _setUser = (user) => {
-    _userMap.set(user._id, user);
+    const name = prompt('추가하고 싶은 이름을 입력해주세요.');
+    store()
+      .createUser(name)
+      .then(() => {
+        _listUsers();
+      });
   };
 
   const _onUserDeleteHandler = () => {
@@ -38,58 +18,49 @@ const userList = () => {
       return;
     }
 
-    const userId = _currentUser._id;
-
-    fetch(BASE_URL + '/api/users/' + userId, {
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      method: 'DELETE',
-    }).then((response) => {
-      if (!response.ok) {
-        return new Error(response);
-      }
-
-      _userMap.delete(userId);
-      _currentUser = {};
-      listUsers();
-    });
-  };
-
-  const _onClickUserHandler = ({ target }) => {
-    const userId = target.dataset.id;
-
-    fetch(BASE_URL + '/api/users/' + userId)
-      .then((response) => {
-        if (!response.ok) {
-          return new Error(response);
-        }
-        return response.json();
-      })
-      .then((user) => {
-        _currentUser = user; //TODO todoList와는 동기가 보장되어야함
-        $userTitle.dataset.username = _currentUser.name;
-        $userTitle.querySelector('span>strong').innerHTML = _currentUser.name;
-        //refresh todoList();
+    store()
+      .deleteUser()
+      .then(() => {
+        _listUsers();
       });
   };
 
-  const init = () => {
-    fetch(BASE_URL + '/api/users')
-      .then((response) => {
-        if (!response.ok) {
-          return new Error(response);
-        }
-        return response.json();
-      })
-      .then((users) => {
-        users
-          .map((item) => ({ ...item }))
-          .forEach((user) => {
-            _userMap.set(user._id, user);
+  function _onClickUserHandler({ target }) {
+    const userId = target.dataset.id;
+
+    store()
+      .setUser(userId)
+      .then((user) => {
+        $userTitle.dataset.username = user.name;
+        $userTitle.innerHTML = `<span><strong>${user.name}</strong>'s Todo List</span>`;
+        setState(); //TODO
+      });
+  }
+
+  const _listUsers = () => {
+    $userList.querySelector('.user-span').innerHTML = '';
+    store()
+      .getUsers()
+      .then((userList) => {
+        userList
+          .map((user) => _createUserButton(user))
+          .forEach((element) => {
+            $userList.querySelector('.user-span').appendChild(element);
           });
-      })
-      .then(() => listUsers());
+      });
+  };
+
+  const _createUserButton = (user) => {
+    const $button = document.createElement('button');
+    $button.classList.add('ripple');
+    $button.textContent = user.name;
+    $button.dataset.id = user._id;
+    $button.addEventListener('click', _onClickUserHandler);
+    return $button;
+  };
+
+  const init = () => {
+    _listUsers();
 
     $userList
       .querySelector('.user-create-button')
@@ -100,34 +71,8 @@ const userList = () => {
       .addEventListener('click', _onUserDeleteHandler);
   };
 
-  const listUsers = () => {
-    $userList.querySelector('.user-span').innerHTML = '';
-    Array.from(_userMap.values())
-      .map((user) => {
-        const $button = document.createElement('button');
-        $button.classList.add('ripple');
-        $button.textContent = user.name;
-        $button.dataset.id = user._id;
-        $button.addEventListener('click', _onClickUserHandler);
-        return $button;
-      })
-      .forEach((element) => {
-        $userList.querySelector('.user-span').appendChild(element);
-      });
-  };
-
-  //   const _createAddButton = () => {
-  //     const $addButton = document.createElement('button');
-  //     $addButton.classList.add('ripple', 'user-create-button');
-  //     $addButton.innerText = '+ 유저 생성';
-  //     $addButton.addEventListener('click', _onUserCreateHandler);
-
-  //     $userList.appendChild($addButton);
-  //   };
-
   return {
     init,
-    listUsers,
   };
 };
 
