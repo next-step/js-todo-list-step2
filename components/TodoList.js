@@ -3,7 +3,7 @@ import { PRIORITY_TYPE } from '../consts/priorityType.js'
 export default function TodoList(
   $el,
   { todoItems, isLoading },
-  { toggleTodoItem }
+  { toggleTodoItem, deleteTodoItem }
 ) {
   this.$el = $el
   this.state = {
@@ -12,11 +12,23 @@ export default function TodoList(
   }
 
   const bindEvents = () => {
-    this.$el.addEventListener('change', (event) => {
-      if (event.target.dataset.action === 'toggle') {
+    this.$el.addEventListener('click', (event) => {
+      const { action } = event.target.dataset
+
+      if (action === 'toggle') {
+        event.stopPropagation()
         const $todoItem = event.target.closest('li')
         const todoItemId = $todoItem.dataset.todoItemId
         toggleTodoItem(todoItemId)
+        return
+      }
+
+      if (action === 'delete') {
+        event.stopPropagation()
+        const $todoItem = event.target.closest('li')
+        const todoItemId = $todoItem.dataset.todoItemId
+        deleteTodoItem(todoItemId)
+        return
       }
     })
   }
@@ -35,7 +47,7 @@ export default function TodoList(
                     ${makePriorityTemplate(priority)}
                     ${contents}
                 </label>
-                <button class="destroy"></button>
+                <button class="destroy" data-action="delete"></button>
             </div>
             <input class="edit" value="${contents}" />
         </li>

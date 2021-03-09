@@ -64,6 +64,12 @@ export default function TodoApp($el) {
     })
   }
 
+  const deleteTodoItem = async (todoItemId) => {
+    const userId = this.state.activeUser._id
+    await todoApi.deleteTodoItem(userId, todoItemId)
+    await fetchTodoItems(userId)
+  }
+
   this.setState = function (changeState) {
     this.state = {
       ...this.state,
@@ -130,6 +136,7 @@ export default function TodoApp($el) {
         },
         {
           toggleTodoItem,
+          deleteTodoItem,
         }
       ),
 

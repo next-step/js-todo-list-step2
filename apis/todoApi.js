@@ -17,4 +17,10 @@ export default {
       path: `/api/users/${userId}/items/${todoItemId}/toggle`,
     })
   },
+
+  deleteTodoItem: async function (userId, todoItemId) {
+    return defaultApi.delete({
+      path: `/api/users/${userId}/items/${todoItemId}`,
+    })
+  },
 }
