@@ -1,27 +1,22 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Mission 2 Todo List</title>
+  <title>Todo List</title>
   <meta charset="utf-8" />
   <link href="./css/app.css" rel="stylesheet" />
   <link
           href="https://fonts.googleapis.com/icon?family=Material+Icons"
           rel="stylesheet"
   />
+  <script src="./src/main.js" type="module" defer></script>
 </head>
 <body>
 <div id="app">
-  <h1 id="user-title" data-username="eastjun">
-    <span><strong>eastjun</strong>'s Todo List</span>
-  </h1>
+  <h1 id="user-title" data-username="eastjun"></h1>
   <section>
     <div id="user-list">
-      <button class="ripple active">eastjun</button>
-      <button class="ripple">westjun</button>
-      <button class="ripple">southjun</button>
-      <button class="ripple">northjun</button>
-      <button class="ripple">hojun</button>
       <button class="ripple user-create-button">+ 유저 생성</button>
+      <button class="ripple user-delete-button">- 유저 삭제</button>
     </div>
   </section>
 
@@ -35,73 +30,7 @@
     </section>
     <section class="main">
       <ul class="todo-list">
-        <li>
-          <div class="view">
-            <label class="label">
-              <div class="animated-background">
-                <div class="skel-mask-container">
-                  <div class="skel-mask"></div>
-                </div>
-              </div>
-            </label>
-          </div>
-        </li>
-        <li>
-          <div class="view">
-            <input class="toggle" type="checkbox" />
-            <label class="label">
-              <select class="chip select">
-                <option value="0" selected>순위</option>
-                <option value="1">1순위</option>
-                <option value="2">2순위</option>
-              </select>
-              해야할 아이템
-            </label>
-            <button class="destroy"></button>
-          </div>
-          <input class="edit" value="완료된 타이틀" />
-        </li>
-        <li>
-          <div class="view">
-            <input class="toggle" type="checkbox" />
-            <label class="label">
-              <span class="chip primary">1순위</span>
-              해야할 아이템
-            </label>
-            <button class="destroy"></button>
-          </div>
-          <input class="edit" value="완료된 타이틀" />
-        </li>
-        <li>
-          <div class="view">
-            <input class="toggle" type="checkbox" />
-            <label class="label">
-              <span class="chip secondary">2순위</span>
-              해야할 아이템
-            </label>
-            <button class="destroy"></button>
-          </div>
-          <input class="edit" value="완료된 타이틀" />
-        </li>
-        <li class="completed">
-          <div class="view">
-            <input class="toggle" type="checkbox" checked />
-            <label class="label">완료된 아이템 </label>
-            <button class="destroy"></button>
-          </div>
-          <input class="edit" value="완료된 타이틀" />
-        </li>
-        <li class="editing">
-          <div class="view">
-            <input class="toggle" type="checkbox" checked />
-            <label class="label">
-              <span class="chip secondary">2순위</span>
-              수정중인 아이템
-            </label>
-            <button class="destroy"></button>
-          </div>
-          <input class="edit" value="완료된 타이틀" />
-        </li>
+        
       </ul>
     </section>
     <div class="count-container">
@@ -121,6 +50,5 @@
     </div>
   </section>
 </div>
-<script src="js/index.js"></script>
 </body>
 </html>
