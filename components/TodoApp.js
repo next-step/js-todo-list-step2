@@ -44,8 +44,12 @@ export default function TodoApp($el) {
 
   const createTodoItem = async (contents) => {
     const userId = this.state.activeUser._id
-    await todoApi.createTodoItem(userId, contents)
-    await fetchTodoItems(userId)
+    const addedTodoItem = await todoApi.createTodoItem(userId, contents)
+
+    this.setState({
+      todoItems: [...this.state.todoItems, addedTodoItem],
+      isLoading: false,
+    })
   }
 
   this.setState = function (changeState) {
