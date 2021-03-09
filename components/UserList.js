@@ -16,8 +16,19 @@ export default function UserList(
     })
 
     const userCreateButton = this.$el.querySelector('.user-create-button')
+    const inputUserName = (defaultUserName = '') => {
+      const name = window.prompt(
+        '추가하고 싶은 이름을 입력해주세요.',
+        defaultUserName
+      )
+      if (name.length < 2) {
+        window.alert('User의 이름은 최소 2글자 이상이어야 합니다.')
+        return inputUserName(name)
+      }
+      return name
+    }
     userCreateButton.addEventListener('click', () => {
-      const userName = prompt('추가하고 싶은 이름을 입력해주세요.')
+      const userName = inputUserName()
       createUser(userName)
     })
 
