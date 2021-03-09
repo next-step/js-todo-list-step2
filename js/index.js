@@ -1,7 +1,16 @@
-const onUserCreateHandler = () => {
-  const userName = prompt("추가하고 싶은 이름을 입력해주세요.");
-}
+import { initAddNewItem } from "./AddNewItem.js";
+import { initTodolistButton } from "./ControlTodoButton.js";
+import { initItemsEventListners } from "./ControlTodoItems.js";
+import { initControlUserList } from "./ControlUserList.js";
+import { ajaxGetFunctions } from "./AjaxGet.js";
 
-const userCreateButton = document.querySelector('.user-create-button')
-userCreateButton.addEventListener('click', onUserCreateHandler)
+const init = () => {
+  ajaxGetFunctions("userlist");
 
+  initAddNewItem();
+  initTodolistButton();
+  initItemsEventListners();
+  initControlUserList();
+};
+
+init();
