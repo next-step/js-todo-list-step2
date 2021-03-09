@@ -406,7 +406,7 @@ button.ripple {
   border: none;
   border-radius: 2px;
   padding: 6px 9px;
-  margin: 3px;
+  margin: 3px 0;
   font-size: 12px;
   cursor: pointer;
   color: #333;
@@ -476,20 +476,14 @@ select.chip {
   width: 45px;
 }
 
-.user-list {
-  display: inline-flex;
-  flex-wrap: wrap;
-  width: 100%;
-}
-
 button.user-create-button.ripple {
-  border-radius: 15px 0 0 15px;
+  border-radius: 15px;
   padding-left: 10px;
-  margin: 0 0 0 10px;
+  margin-left: 10px;
 }
-
 button.user-delete-button.ripple {
-  border-radius: 0 15px 15px 0;
+  border-radius: 15px;
   padding-right: 10px;
-  margin-left: -5px;
+  margin-left: 5px;
+  box-shadow: 0 0 3px #999;
 }
