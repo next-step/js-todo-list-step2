@@ -4,7 +4,6 @@ import { loadTodos } from './loadTodos.js';
 
 export const checkTodo = async ({ target }) => {
     if(!target.classList.contains('toggle')) return;
-    // console.log('hello!');
     
     const userId = getCurrentUser();
     const itemId = target.closest('li').dataset.id;

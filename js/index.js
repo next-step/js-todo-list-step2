@@ -8,6 +8,10 @@ export const todoApp = async () => {
     todoTrigger();
 };
 
-window.onload = () => {
+// window.onload = () => {
+//     todoApp();
+// };
+
+window.addEventListener('DOMContentLoaded', function(){
     todoApp();
-};
+});

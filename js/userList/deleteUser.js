@@ -5,7 +5,6 @@ const DELETE_MSG = '유저를 정말 삭제하시겠습니까?\n(해당 유저�
 
 export const deleteUser = async () => {
     const $selectedUser = document.querySelector('#user-list > .active');
-    // console.dir($selectedUser);
     
     if(!confirm(`'${$selectedUser.textContent}' ` + DELETE_MSG)) return;
 

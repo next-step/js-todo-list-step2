@@ -15,4 +15,3 @@ export const addUser = async () => {
     await API.addUser(userName);
     loadUsers();
 };
-

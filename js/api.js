@@ -25,7 +25,7 @@ const request = async (url, option = {}) => {
         if(!response.ok){
             throw new Error(response.status);
         }
-        return await response.json();
+        return response.json();
     } catch(err){
         alert(`Error: ${err}`);
     }
@@ -61,6 +61,12 @@ export const API = {
             contents
         };
         return request(`/api/users/${userId}/items/${itemId}`, option.put(content));
+    },
+    deleteTodo: (userId, itemId) => {
+        return request(`/api/users/${userId}/items/${itemId}`, option.delete());
+    },
+    deleteTodoAll: (userId) => {
+        return request(`/api/users/${userId}/items/`, option.delete());
     },
 
 }
