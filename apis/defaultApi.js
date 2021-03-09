@@ -17,6 +17,17 @@ export default {
     return await res.json()
   },
 
+  put: async function ({ path, data }) {
+    const res = await fetch(`${END_POINT}${path}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    })
+    return await res.json()
+  },
+
   delete: async function ({ path }) {
     const res = await fetch(`${END_POINT}${path}`, {
       method: 'DELETE',

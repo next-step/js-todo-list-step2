@@ -1,10 +1,24 @@
 import { PRIORITY_TYPE } from '../consts/priorityType.js'
 
-export default function TodoList($el, { todoItems, isLoading }) {
+export default function TodoList(
+  $el,
+  { todoItems, isLoading },
+  { toggleTodoItem }
+) {
   this.$el = $el
   this.state = {
     todoItems,
     isLoading,
+  }
+
+  const bindEvents = () => {
+    this.$el.addEventListener('change', (event) => {
+      if (event.target.dataset.action === 'toggle') {
+        const $todoItem = event.target.closest('li')
+        const todoItemId = $todoItem.dataset.todoItemId
+        toggleTodoItem(todoItemId)
+      }
+    })
   }
 
   const makeTodoItemTemplate = function (todoItem) {
@@ -14,7 +28,9 @@ export default function TodoList($el, { todoItems, isLoading }) {
           isCompleted ? 'completed' : ''
         }" data-todo-item-id="${_id}">
             <div class="view">
-                <input class="toggle" type="checkbox" />
+                <input class="toggle" type="checkbox" data-action="toggle" ${
+                  isCompleted ? 'checked' : ''
+                } />
                 <label class="label">
                     ${makePriorityTemplate(priority)}
                     ${contents}
@@ -79,6 +95,8 @@ export default function TodoList($el, { todoItems, isLoading }) {
             </ul>
         </section>
         `
+
+    bindEvents()
   }
 
   this.initialize = function () {

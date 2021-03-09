@@ -48,7 +48,19 @@ export default function TodoApp($el) {
 
     this.setState({
       todoItems: [...this.state.todoItems, addedTodoItem],
-      isLoading: false,
+    })
+  }
+
+  const toggleTodoItem = async (todoItemId) => {
+    const userId = this.state.activeUser._id
+    const changedTodoItem = await todoApi.toggleTodoItem(userId, todoItemId)
+    const changedTodoItemIndex = this.state.todoItems.findIndex(
+      (todoItem) => todoItem._id === changedTodoItem._id
+    )
+
+    this.state.todoItems.splice(changedTodoItemIndex, 1, changedTodoItem)
+    this.setState({
+      todoItems: this.state.todoItems,
     })
   }
 
@@ -110,10 +122,16 @@ export default function TodoApp($el) {
         }
       ),
 
-      todoList: new TodoList(this.$el.querySelector('#todo-list'), {
-        todoItems: this.state.todoItems,
-        isLoading: this.state.isLoading,
-      }),
+      todoList: new TodoList(
+        this.$el.querySelector('#todo-list'),
+        {
+          todoItems: this.state.todoItems,
+          isLoading: this.state.isLoading,
+        },
+        {
+          toggleTodoItem,
+        }
+      ),
 
       todoInput: new TodoInput(
         this.$el.querySelector('#todo-input'),

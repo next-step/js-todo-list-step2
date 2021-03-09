@@ -11,4 +11,10 @@ export default {
       data: { contents },
     })
   },
+
+  toggleTodoItem: async function (userId, todoItemId) {
+    return defaultApi.put({
+      path: `/api/users/${userId}/items/${todoItemId}/toggle`,
+    })
+  },
 }
