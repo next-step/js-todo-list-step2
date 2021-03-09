@@ -1,7 +1,17 @@
-const onUserCreateHandler = () => {
-  const userName = prompt("추가하고 싶은 이름을 입력해주세요.");
-}
+import { userList } from './userList/userListManage.js';
+import { loadUsers } from './userList/loadUsers.js';
+import { todoTrigger } from './todoList/todoTrigger.js';
 
-const userCreateButton = document.querySelector('.user-create-button')
-userCreateButton.addEventListener('click', onUserCreateHandler)
+export const todoApp = async () => {
+    await loadUsers();
+    userList();
+    todoTrigger();
+};
 
+// window.onload = () => {
+//     todoApp();
+// };
+
+window.addEventListener('DOMContentLoaded', function(){
+    todoApp();
+});
