@@ -464,10 +464,12 @@ button.ripple {
 
 .chip.primary {
   background-color: #d63a49;
+  color: white;
 }
 
 .chip.secondary {
   background-color: #26c6da;
+  color: white;
 }
 
 select.chip {
@@ -481,4 +483,13 @@ button.user-create-button.ripple {
   padding-left: 10px;
   padding-right: 10px;
   margin-left: 10px;
+}
+
+button.user-delete-button.ripple {
+  border-radius: 15px;
+  padding-left: 10px;
+  padding-right: 10px;
+  margin-left: 10px;
+  background-color: #BB0000;
+  color: white;
 }

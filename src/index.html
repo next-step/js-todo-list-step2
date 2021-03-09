@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Mission 2 Todo List</title>
+    <meta charset="utf-8" />
+    <link href="./css/app.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+  </head>
+  <body>
+    <div id="app">
+      <h1 id="user-title" data-username="eastjun">
+        <span><strong>eastjun</strong>'s Todo List</span>
+      </h1>
+      <section>
+        <div id="user-list"></div>
+      </section>
+
+      <section class="todoapp">
+        <section class="input-container">
+          <input class="new-todo" placeholder="할 일을 입력해주세요." autofocus />
+        </section>
+        <section class="main">
+          <ul class="todo-list"></ul>
+        </section>
+        <div class="count-container">
+          <span class="todo-count">총 <strong>0</strong> 개</span>
+          <ul class="filters">
+            <li>
+              <a href="#" class="all selected">전체보기</a>
+            </li>
+            <li>
+              <a href="#active" class="active">해야할 일</a>
+            </li>
+            <li>
+              <a href="#completed" class="completed">완료한 일</a>
+            </li>
+          </ul>
+          <button class="clear-completed">모두 삭제</button>
+        </div>
+      </section>
+    </div>
+    <script type="module" src="./index.js"></script>
+  </body>
+</html>
