@@ -1,0 +1,23 @@
+{
+  "env": {
+    "browser": true,
+    "es2021": true
+  },
+  "extends": ["airbnb-base", "plugin:prettier/recommended"],
+  "plugins": ["prettier"],
+  "parserOptions": {
+    "sourceType": "module"
+  },
+  "rules": {
+    "parser": "babel-eslint",
+    "no-new": "off",
+    "no-alert": "off",
+    "no-console": "off",
+    "no-plusplus": "off",
+    "no-param-reassign": "off",
+    "no-return-assign": "off",
+    "import/extensions": "off",
+    "max-depth": ["error", 1],
+    "max-lines-per-function": ["error", 15]
+  }
+}
