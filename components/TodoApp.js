@@ -2,6 +2,7 @@ import UserList from './UserList.js'
 import userApi from '../apis/userApi.js'
 import TodoList from './TodoList.js'
 import todoApi from '../apis/todoApi.js'
+import TodoInput from './todoInput.js'
 
 export default function TodoApp($el) {
   this.$el = $el
@@ -20,10 +21,9 @@ export default function TodoApp($el) {
 
   const changeUser = async (userId) => {
     const activeUser = this.state.users.find((user) => user._id === userId)
-    this.setState({ activeUser, isLoading: true })
+    this.setState({ activeUser })
 
-    const todoItems = await todoApi.getTodoItems(userId)
-    this.setState({ todoItems, isLoading: false })
+    await fetchTodoItems(userId)
   }
 
   const createUser = async (userName) => {
@@ -34,6 +34,18 @@ export default function TodoApp($el) {
   const deleteUser = async (userId) => {
     await userApi.deleteUser(userId)
     await fetchUsers()
+  }
+
+  const fetchTodoItems = async (userId) => {
+    this.setState({ isLoading: true })
+    const todoItems = await todoApi.getTodoItems(userId)
+    this.setState({ todoItems, isLoading: false })
+  }
+
+  const createTodoItem = async (contents) => {
+    const userId = this.state.activeUser._id
+    await todoApi.createTodoItem(userId, contents)
+    await fetchTodoItems(userId)
   }
 
   this.setState = function (changeState) {
@@ -60,13 +72,7 @@ export default function TodoApp($el) {
       </section>
     
       <section class="todoapp">
-        <section class="input-container">
-          <input
-                  class="new-todo"
-                  placeholder="할 일을 입력해주세요."
-                  autofocus
-          />
-        </section>
+        <div id="todo-input"></div>
         <div id="todo-list"></div> 
         <div class="count-container">
           <span class="todo-count">총 <strong>0</strong> 개</span>
@@ -104,6 +110,14 @@ export default function TodoApp($el) {
         todoItems: this.state.todoItems,
         isLoading: this.state.isLoading,
       }),
+
+      todoInput: new TodoInput(
+        this.$el.querySelector('#todo-input'),
+        {},
+        {
+          createTodoItem,
+        }
+      ),
     }
   }
 
