@@ -112,8 +112,9 @@
  },
  response: {
    "_id": "string",
-   "name": "string",
-   "todoList": [...]
+   "contents": "string",
+   "priority": "NONE",
+   "isCompleted": false
   }
 }
 ```
