@@ -24,11 +24,20 @@ export default {
     })
   },
 
-  editTodoItem: async function (userId, todoItemId, contents) {
+  editTodoItemContents: async function (userId, todoItemId, contents) {
     return defaultApi.put({
       path: `/api/users/${userId}/items/${todoItemId}`,
       data: {
         contents,
+      },
+    })
+  },
+
+  editTodoItemPriority: async function (userId, todoItemId, priority) {
+    return defaultApi.put({
+      path: `/api/users/${userId}/items/${todoItemId}/priority`,
+      data: {
+        priority,
       },
     })
   },

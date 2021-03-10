@@ -3,7 +3,7 @@ import { PRIORITY_TYPE } from '../consts/priorityType.js'
 export default function TodoList(
   $el,
   { todoItems, isLoading },
-  { toggleTodoItem, deleteTodoItem, editTodoItem }
+  { toggleTodoItem, deleteTodoItem, editTodoItemContents, editTodoItemPriority }
 ) {
   this.$el = $el
   this.state = {
@@ -52,7 +52,7 @@ export default function TodoList(
 
       if (action === 'edit') {
         if (event.key === 'Enter') {
-          editTodoItem(todoItemId, event.target.value)
+          editTodoItemContents(todoItemId, event.target.value)
           return
         }
         if (event.key === 'Escape') {
@@ -62,6 +62,18 @@ export default function TodoList(
           $todoItem.classList.remove('editing')
           return
         }
+      }
+    })
+
+    this.$el.addEventListener('change', (event) => {
+      const { action } = event.target.dataset
+
+      if (action === 'priority') {
+        const priority = event.target.value
+        const $todoItem = event.target.closest('li')
+        const todoItemId = $todoItem.dataset.todoItemId
+
+        editTodoItemPriority(todoItemId, priority)
       }
     })
   }
@@ -90,10 +102,10 @@ export default function TodoList(
   const makePriorityTemplate = function (priority) {
     if (priority === 'NONE') {
       return `
-            <select class="chip select">
-                <option value="0" selected>순위</option>
-                <option value="1">1순위</option>
-                <option value="2">2순위</option>
+            <select class="chip select" data-action="priority">
+                <option value="NONE" selected>순위</option>
+                <option value="FIRST">1순위</option>
+                <option value="SECOND">2순위</option>
             </select> 
           `
     }

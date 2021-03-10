@@ -70,12 +70,29 @@ export default function TodoApp($el) {
     await fetchTodoItems(userId)
   }
 
-  const editTodoItem = async (todoItemId, contents) => {
+  const editTodoItemContents = async (todoItemId, contents) => {
     const userId = this.state.activeUser._id
-    const editedTodoItem = await todoApi.editTodoItem(
+    const editedTodoItem = await todoApi.editTodoItemContents(
       userId,
       todoItemId,
       contents
+    )
+    const editedTodoItemIndex = this.state.todoItems.findIndex(
+      (todoItem) => todoItem._id === todoItemId
+    )
+
+    this.state.todoItems.splice(editedTodoItemIndex, 1, editedTodoItem)
+    this.setState({
+      todoItem: this.state.todoItems,
+    })
+  }
+
+  const editTodoItemPriority = async (todoItemId, priority) => {
+    const userId = this.state.activeUser._id
+    const editedTodoItem = await todoApi.editTodoItemPriority(
+      userId,
+      todoItemId,
+      priority
     )
     const editedTodoItemIndex = this.state.todoItems.findIndex(
       (todoItem) => todoItem._id === todoItemId
@@ -154,7 +171,8 @@ export default function TodoApp($el) {
         {
           toggleTodoItem,
           deleteTodoItem,
-          editTodoItem,
+          editTodoItemContents,
+          editTodoItemPriority,
         }
       ),
 
