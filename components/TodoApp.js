@@ -70,6 +70,23 @@ export default function TodoApp($el) {
     await fetchTodoItems(userId)
   }
 
+  const editTodoItem = async (todoItemId, contents) => {
+    const userId = this.state.activeUser._id
+    const editedTodoItem = await todoApi.editTodoItem(
+      userId,
+      todoItemId,
+      contents
+    )
+    const editedTodoItemIndex = this.state.todoItems.findIndex(
+      (todoItem) => todoItem._id === todoItemId
+    )
+
+    this.state.todoItems.splice(editedTodoItemIndex, 1, editedTodoItem)
+    this.setState({
+      todoItem: this.state.todoItems,
+    })
+  }
+
   this.setState = function (changeState) {
     this.state = {
       ...this.state,
@@ -137,6 +154,7 @@ export default function TodoApp($el) {
         {
           toggleTodoItem,
           deleteTodoItem,
+          editTodoItem,
         }
       ),
 

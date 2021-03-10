@@ -3,7 +3,7 @@ import { PRIORITY_TYPE } from '../consts/priorityType.js'
 export default function TodoList(
   $el,
   { todoItems, isLoading },
-  { toggleTodoItem, deleteTodoItem }
+  { toggleTodoItem, deleteTodoItem, editTodoItem }
 ) {
   this.$el = $el
   this.state = {
@@ -31,6 +31,39 @@ export default function TodoList(
         return
       }
     })
+
+    this.$el.addEventListener('dblclick', (event) => {
+      const { action } = event.target.dataset
+
+      if (action === 'onEditing') {
+        event.stopPropagation()
+        event.target.closest('li').classList.add('editing')
+      }
+    })
+
+    this.$el.addEventListener('keypress', (event) => {
+      if (event.key !== 'Enter' && event.key !== 'Escape') {
+        return
+      }
+
+      const { action } = event.target.dataset
+      const $todoItem = event.target.closest('li')
+      const todoItemId = $todoItem.dataset.todoItemId
+
+      if (action === 'edit') {
+        if (event.key === 'Enter') {
+          editTodoItem(todoItemId, event.target.value)
+          return
+        }
+        if (event.key === 'Escape') {
+          event.target.value = this.state.todoItems.find(
+            (todoItem) => todoItem._id === todoItemId
+          ).contents
+          $todoItem.classList.remove('editing')
+          return
+        }
+      }
+    })
   }
 
   const makeTodoItemTemplate = function (todoItem) {
@@ -43,13 +76,13 @@ export default function TodoList(
                 <input class="toggle" type="checkbox" data-action="toggle" ${
                   isCompleted ? 'checked' : ''
                 } />
-                <label class="label">
+                <label class="label" data-action="onEditing">
                     ${makePriorityTemplate(priority)}
                     ${contents}
                 </label>
                 <button class="destroy" data-action="delete"></button>
             </div>
-            <input class="edit" value="${contents}" />
+            <input class="edit" data-action="edit" value="${contents}" />
         </li>
     `
   }

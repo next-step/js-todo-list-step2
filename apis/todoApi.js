@@ -23,4 +23,13 @@ export default {
       path: `/api/users/${userId}/items/${todoItemId}`,
     })
   },
+
+  editTodoItem: async function (userId, todoItemId, contents) {
+    return defaultApi.put({
+      path: `/api/users/${userId}/items/${todoItemId}`,
+      data: {
+        contents,
+      },
+    })
+  },
 }
