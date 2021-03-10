@@ -35,9 +35,21 @@ export default function TodoList(
     this.$el.addEventListener('dblclick', (event) => {
       const { action } = event.target.dataset
 
-      if (action === 'onEditing') {
+      if (action === 'onEditingContents') {
         event.stopPropagation()
         event.target.closest('li').classList.add('editing')
+        return
+      }
+
+      if (action === 'onEditingPriority') {
+        event.stopPropagation()
+        const $todoItem = event.target.closest('li')
+        const todoItemId = $todoItem.dataset.todoItemId
+        this.state.todoItems.find(
+          (todoItem) => todoItem._id === todoItemId
+        ).onEditingPriority = true
+
+        this.setState({ todoItems: this.state.todoItems })
       }
     })
 
@@ -68,7 +80,7 @@ export default function TodoList(
     this.$el.addEventListener('change', (event) => {
       const { action } = event.target.dataset
 
-      if (action === 'priority') {
+      if (action === 'changePriority') {
         const priority = event.target.value
         const $todoItem = event.target.closest('li')
         const todoItemId = $todoItem.dataset.todoItemId
@@ -79,7 +91,7 @@ export default function TodoList(
   }
 
   const makeTodoItemTemplate = function (todoItem) {
-    const { _id, contents, priority, isCompleted } = todoItem
+    const { _id, contents, priority, isCompleted, onEditingPriority } = todoItem
     return `
         <li class="${
           isCompleted ? 'completed' : ''
@@ -88,8 +100,8 @@ export default function TodoList(
                 <input class="toggle" type="checkbox" data-action="toggle" ${
                   isCompleted ? 'checked' : ''
                 } />
-                <label class="label" data-action="onEditing">
-                    ${makePriorityTemplate(priority)}
+                <label class="label" data-action="onEditingContents">
+                    ${makePriorityTemplate(priority, onEditingPriority)}
                     ${contents}
                 </label>
                 <button class="destroy" data-action="delete"></button>
@@ -99,18 +111,24 @@ export default function TodoList(
     `
   }
 
-  const makePriorityTemplate = function (priority) {
-    if (priority === 'NONE') {
+  const makePriorityTemplate = function (priority, onEditingPriority) {
+    if (onEditingPriority || priority === 'NONE') {
       return `
-            <select class="chip select" data-action="priority">
-                <option value="NONE" selected>순위</option>
-                <option value="FIRST">1순위</option>
-                <option value="SECOND">2순위</option>
+            <select class="chip select" data-action="changePriority">
+                <option value="NONE" ${
+                  priority === 'NONE' ? 'selected' : ''
+                }>순위</option>
+                <option value="FIRST" ${
+                  priority === 'FIRST' ? 'selected' : ''
+                }>1순위</option>
+                <option value="SECOND" ${
+                  priority === 'SECOND' ? 'selected' : ''
+                }>2순위</option>
             </select> 
           `
     }
     return `
-        <span class="chip ${PRIORITY_TYPE[priority].className}">
+        <span class="chip ${PRIORITY_TYPE[priority].className}" data-action="onEditingPriority">
             ${PRIORITY_TYPE[priority].text}
         </span>
       `
