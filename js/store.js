@@ -1,6 +1,17 @@
 const BASE_URL = 'https://js-todo-list-9ca3a.df.r.appspot.com';
 let _currentUserId = '';
 
+const _catchHTTPStatusError = (fn) => {
+  return (...args) => {
+    return fn(...args).then((response) => {
+      if (!response.ok) {
+        return new Error(response);
+      }
+      return response.json();
+    });
+  };
+};
+
 const REQUEST_OPTIONS = (body) => {
   return {
     post: {
@@ -26,20 +37,9 @@ const REQUEST_OPTIONS = (body) => {
   };
 };
 
-const store = () => {
+const userStore = () => {
   const setCurrentUser = (userId) => {
     _currentUserId = userId; //TODO
-  };
-
-  const _catchHTTPStatusError = (fn) => {
-    return (...args) => {
-      return fn(...args).then((response) => {
-        if (!response.ok) {
-          return new Error(response);
-        }
-        return response.json();
-      });
-    };
   };
 
   const getUser = async (userId) => {
@@ -75,6 +75,18 @@ const store = () => {
     _currentUserId = '';
   };
 
+  return {
+    setUser(userId) {
+      setCurrentUser(userId);
+      return getUser(userId);
+    },
+    getUsers,
+    createUser,
+    deleteUser,
+  };
+};
+
+const todoItemStore = () => {
   const getTodoList = async () => {
     const wrappedFunction = _catchHTTPStatusError(() =>
       fetch(BASE_URL + `/api/users/${_currentUserId}/items`)
@@ -116,17 +128,6 @@ const store = () => {
     return wrappedFunction();
   }
 
-  function updateTodoPriority(todoId, priority) {
-    const requestBody = { priority };
-    const wrappedFunction = _catchHTTPStatusError(() =>
-      fetch(
-        BASE_URL + `/api/users/${_currentUserId}/items/${todoId}/priority`,
-        REQUEST_OPTIONS(requestBody).put
-      )
-    );
-    return wrappedFunction();
-  }
-
   function updateTodoToggle(todoId) {
     return fetch(
       BASE_URL + `/api/users/${_currentUserId}/items/${todoId}/toggle`,
@@ -146,20 +147,12 @@ const store = () => {
   }
 
   return {
-    setUser(userId) {
-      setCurrentUser(userId);
-      return getUser(userId);
-    },
-    getUsers,
-    createUser,
-    deleteUser,
     getTodoList,
     createTodo,
     deleteTodo,
     updateTodoContents,
-    updateTodoPriority,
     updateTodoToggle,
   };
 };
 
-export default store;
+export { userStore, todoItemStore };

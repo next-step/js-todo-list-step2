@@ -1,4 +1,4 @@
-import store from './store.js';
+import { todoItemStore } from './store.js';
 
 const $todoApp = document.querySelector('section.todoapp');
 const $listContainer = $todoApp.querySelector('section.main');
@@ -8,7 +8,7 @@ const todoApp = (userList, todoInput, todoList, todoStatus) => {
   let _todoItems = new Map();
   let _currentFilter = 'all';
 
-  const _store = store();
+  const _store = todoItemStore();
 
   const _filterStatusPredicate = {
     //TODO sync with todoStatus.js/filters
@@ -29,11 +29,6 @@ const todoApp = (userList, todoInput, todoList, todoStatus) => {
 
   const updateTodoContents = async ({ _id, contents }) => {
     await _store.updateTodoContents(_id, contents);
-    _setState();
-  };
-
-  const updateTodoPriority = async ({ _id, priority }) => {
-    await _store.updateTodoPriority(_id, priority);
     _setState();
   };
 
@@ -65,7 +60,6 @@ const todoApp = (userList, todoInput, todoList, todoStatus) => {
   const todoListHandler = todoList(
     $listUl,
     updateTodoContents,
-    updateTodoPriority,
     updateToggle,
     removeTodoItem
   ); //TODO too many arguments

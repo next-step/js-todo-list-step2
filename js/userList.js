@@ -1,10 +1,10 @@
-import store from './store.js';
+import { userStore } from './store.js';
 
 const userList = (setState) => {
   const $userTitle = document.getElementById('user-title');
   const $userList = document.getElementById('user-list');
 
-  const _store = store();
+  const _store = userStore();
 
   const _onUserCreateHandler = async () => {
     const name = prompt('추가하고 싶은 이름을 입력해주세요.');
