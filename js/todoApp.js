@@ -8,6 +8,8 @@ const todoApp = (userList, todoInput, todoList, todoStatus) => {
   let _todoItems = new Map();
   let _currentFilter = 'all';
 
+  const _store = store();
+
   const _filterStatusPredicate = {
     //TODO sync with todoStatus.js/filters
     all: () => true,
@@ -15,37 +17,29 @@ const todoApp = (userList, todoInput, todoList, todoStatus) => {
     active: ({ isCompleted }) => !isCompleted,
   };
 
-  const addTodoItem = (contents) => {
-    store()
-      .createTodo(contents)
-      .then(() => _setState());
+  const addTodoItem = async (contents) => {
+    await _store.createTodo(contents);
+    _setState();
   };
 
-  const removeTodoItem = ({ _id }) => {
-    store()
-      .deleteTodo(_id)
-      .then(() => _setState());
+  const removeTodoItem = async ({ _id }) => {
+    await _store.deleteTodo(_id);
+    _setState();
   };
 
-  const updateTodoContents = ({ _id, contents }) => {
-    store()
-      .updateTodoContents(_id, contents)
-      .then(() => _setState());
+  const updateTodoContents = async ({ _id, contents }) => {
+    await _store.updateTodoContents(_id, contents);
+    _setState();
   };
 
-  const updateTodoPriority = ({ _id, priority }) => {
-    store()
-      .updateTodoPriority(_id, priority)
-      .then(() => _setState());
+  const updateTodoPriority = async ({ _id, priority }) => {
+    await _store.updateTodoPriority(_id, priority);
+    _setState();
   };
 
-  const updateToggle = ({ _id }) => {
-    store()
-      .updateTodoToggle(_id)
-      .then((todo) => {
-        console.log(todo);
-        _setState();
-      });
+  const updateToggle = async ({ _id }) => {
+    await _store.updateTodoToggle(_id);
+    _setState();
   };
 
   const setFilter = (filterType) => {
@@ -53,17 +47,18 @@ const todoApp = (userList, todoInput, todoList, todoStatus) => {
     _setState();
   };
 
-  async function _setState() {
-    await store()
-      .getTodoList()
-      .then((todoList) => {
-        const filteredItems = todoList.filter(
-          _filterStatusPredicate[_currentFilter]
-        );
-        todoListHandler.refresh(filteredItems);
-        todoStatusHandler.updateCount(filteredItems.length); //TODO inline
-      });
-  }
+  const _setState = async () => {
+    const todoList = await _store.getTodoList();
+    _applyFilter(todoList);
+  };
+
+  const _applyFilter = (todoList) => {
+    const filteredItems = todoList.filter(
+      _filterStatusPredicate[_currentFilter]
+    );
+    todoListHandler.refresh(filteredItems);
+    todoStatusHandler.updateCount(filteredItems.length);
+  };
 
   const userListHandler = userList(_setState);
   const todoInputHandler = todoInput(addTodoItem);

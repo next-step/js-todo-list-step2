@@ -98,7 +98,7 @@ const eventHandler = (
 
     const $li = target.closest('li');
     $li.remove();
-    removeTodoItem(extractState($li)); //TODO only id necessary
+    removeTodoItem(extractState($li));
   };
 
   const addEventListener = ($liTemplate) => {

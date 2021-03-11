@@ -1,148 +1,130 @@
 const BASE_URL = 'https://js-todo-list-9ca3a.df.r.appspot.com';
-//let _currentUser = {}; 로 뒀을시,
-//setCurrentUser -> getTodoList 순서로 호출시 여전히 {}로 남아있는 문제
 let _currentUserId = '';
 
-const store = () => {
-  const setCurrentUser = (userId) => {
-    _currentUserId = userId;
-  };
-
-  const getUser = (userId) => {
-    return fetch(BASE_URL + '/api/users/' + userId)
-      .then((response) => {
-        if (!response.ok) {
-          return new Error(response);
-        }
-        return response.json();
-      })
-      .then((user) => {
-        return user;
-      });
-  };
-
-  const getUsers = () => {
-    return fetch(BASE_URL + '/api/users').then((response) => {
-      if (!response.ok) {
-        return new Error(response);
-      }
-      return response.json();
-    });
-  };
-
-  const createUser = (name) => {
-    return fetch(BASE_URL + '/api/users', {
+const REQUEST_OPTIONS = (body) => {
+  return {
+    post: {
       headers: {
         'Content-Type': 'application/json',
       },
       method: 'POST',
-      body: JSON.stringify({ name }),
-    }).then((response) => {
-      if (!response.ok) {
-        return new Error(response);
-      }
-
-      return response.json();
-    });
-  };
-
-  const deleteUser = () => {
-    return fetch(BASE_URL + '/api/users/' + _currentUserId, {
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      method: 'DELETE',
-    }).then((response) => {
-      if (!response.ok) {
-        return new Error(response);
-      }
-
-      _currentUserId = '';
-    });
-  };
-
-  function getTodoList() {
-    // return fetch(BASE_URL + `/api/users/${userId}/items`).then((response) => {
-    return fetch(BASE_URL + `/api/users/${_currentUserId}/items`).then(
-      (response) => {
-        if (!response.ok) {
-          return new Error(response);
-        }
-        return response.json();
-      }
-    );
-  }
-
-  function createTodo(contents) {
-    return fetch(BASE_URL + `/api/users/${_currentUserId}/items`, {
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      method: 'POST',
-      body: JSON.stringify({ contents }),
-    }).then((response) => {
-      if (!response.ok) {
-        return new Error(response);
-      }
-
-      //   {
-      //     "_id": "GvDA7CBpd",
-      //     "contents": "test",
-      //     "priority": "NONE",
-      //     "isCompleted": false
-      // }
-      return response.json();
-    });
-  }
-
-  function deleteTodo(todoId) {
-    return fetch(BASE_URL + `/api/users/${_currentUserId}/items/${todoId}`, {
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      method: 'DELETE',
-    }).then((response) => {
-      if (!response.ok) {
-        return new Error(response);
-      }
-
-      return response.json();
-    });
-  }
-
-  function updateTodoContents(todoId, contents) {
-    return fetch(BASE_URL + `/api/users/${_currentUserId}/items/${todoId}`, {
+      body: JSON.stringify(body),
+    },
+    put: {
       headers: {
         'Content-Type': 'application/json',
       },
       method: 'PUT',
-      body: JSON.stringify({ contents }),
-    }).then((response) => {
-      if (!response.ok) {
-        return new Error(response);
-      }
+      body: JSON.stringify(body),
+    },
+    delete: {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      method: 'DELETE',
+    },
+  };
+};
 
-      return response.json();
-    });
+const store = () => {
+  const setCurrentUser = (userId) => {
+    _currentUserId = userId; //TODO
+  };
+
+  const _catchHTTPStatusError = (fn) => {
+    return (...args) => {
+      return fn(...args).then((response) => {
+        if (!response.ok) {
+          return new Error(response);
+        }
+        return response.json();
+      });
+    };
+  };
+
+  const getUser = async (userId) => {
+    const wrappedFunction = _catchHTTPStatusError(() =>
+      fetch(BASE_URL + '/api/users/' + userId)
+    );
+    return wrappedFunction();
+  };
+
+  const getUsers = async () => {
+    const wrappedFunction = _catchHTTPStatusError(() =>
+      fetch(BASE_URL + '/api/users')
+    );
+
+    return wrappedFunction();
+  };
+
+  const createUser = async (name) => {
+    const requestBody = { name };
+    const wrappedFunction = _catchHTTPStatusError(() =>
+      fetch(BASE_URL + '/api/users', REQUEST_OPTIONS(requestBody).post)
+    );
+
+    return wrappedFunction();
+  };
+
+  const deleteUser = async () => {
+    const wrappedFunction = _catchHTTPStatusError(() =>
+      fetch(BASE_URL + '/api/users/' + _currentUserId, REQUEST_OPTIONS().delete)
+    );
+
+    await wrappedFunction();
+    _currentUserId = '';
+  };
+
+  const getTodoList = async () => {
+    const wrappedFunction = _catchHTTPStatusError(() =>
+      fetch(BASE_URL + `/api/users/${_currentUserId}/items`)
+    );
+    return wrappedFunction();
+  };
+
+  const createTodo = async (contents) => {
+    const requestBody = { contents };
+    const wrappedFunction = _catchHTTPStatusError(() =>
+      fetch(
+        BASE_URL + `/api/users/${_currentUserId}/items`,
+        REQUEST_OPTIONS(requestBody).post
+      )
+    );
+
+    return wrappedFunction();
+  };
+
+  const deleteTodo = async (todoId) => {
+    const wrappedFunction = _catchHTTPStatusError(() =>
+      fetch(
+        BASE_URL + `/api/users/${_currentUserId}/items/${todoId}`,
+        REQUEST_OPTIONS().delete
+      )
+    );
+    await wrappedFunction();
+  };
+
+  function updateTodoContents(todoId, contents) {
+    const requestBody = { contents };
+    const wrappedFunction = _catchHTTPStatusError(() =>
+      fetch(
+        BASE_URL + `/api/users/${_currentUserId}/items/${todoId}`,
+        REQUEST_OPTIONS(requestBody).put
+      )
+    );
+
+    return wrappedFunction();
   }
 
   function updateTodoPriority(todoId, priority) {
-    return fetch(
-      BASE_URL + `/api/users/${_currentUserId}/items/${todoId}/priority`,
-      {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        method: 'PUT',
-        body: JSON.stringify({ priority }),
-      }
-    ).then((response) => {
-      if (!response.ok) {
-        return new Error(response);
-      }
-
-      return response.json();
-    });
+    const requestBody = { priority };
+    const wrappedFunction = _catchHTTPStatusError(() =>
+      fetch(
+        BASE_URL + `/api/users/${_currentUserId}/items/${todoId}/priority`,
+        REQUEST_OPTIONS(requestBody).put
+      )
+    );
+    return wrappedFunction();
   }
 
   function updateTodoToggle(todoId) {
@@ -166,7 +148,7 @@ const store = () => {
   return {
     setUser(userId) {
       setCurrentUser(userId);
-      return getUser(userId); //TODO
+      return getUser(userId);
     },
     getUsers,
     createUser,
