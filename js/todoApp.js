@@ -43,6 +43,7 @@ const todoApp = (userList, todoInput, todoList, todoStatus) => {
   };
 
   const _setState = async () => {
+    todoListHandler.loading();
     const todoList = await _store.getTodoList();
     _applyFilter(todoList);
   };

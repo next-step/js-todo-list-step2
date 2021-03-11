@@ -180,6 +180,20 @@ const todoList = (
     return $todoItem;
   };
 
+  const loading = () => {
+    $ulist.innerHTML = `<li>
+    <div class="view">
+      <label class="label">
+        <div class="animated-background">
+          <div class="skel-mask-container">
+            <div class="skel-mask"></div>
+          </div>
+        </div>
+      </label>
+    </div>
+  </li>`;
+  };
+
   const _empty = () => {
     $ulist.innerHTML = '';
   };
@@ -196,6 +210,7 @@ const todoList = (
       _empty();
       todoItems.map(_createListItem).forEach(_render);
     },
+    loading,
   };
 };
 
