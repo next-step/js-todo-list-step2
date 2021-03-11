@@ -111,19 +111,12 @@ const eventHandler = (updateTodoContents, updateToggle, removeTodoItem) => {
   };
 };
 
-const todoList = (
-  $ulist,
-  updateTodoContents,
-  updateTodoPriority,
-  updateToggle,
-  removeTodoItem
-) => {
+const todoList = ($ulist, updateTodoContents, updateToggle, removeTodoItem) => {
   const _eventHandler = eventHandler(
     updateTodoContents,
-    updateTodoPriority,
     updateToggle,
     removeTodoItem
-  ); //TODO do sth with params
+  );
 
   const _createListItemTemplate = () => {
     const $liTemplate = document.createElement('li');
