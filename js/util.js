@@ -12,7 +12,7 @@ const _catchHTTPStatusError = (fn) => {
   return (...args) => {
     return fn(...args).then((response) => {
       if (!response.ok) {
-        return new Error(response);
+        throw new Error(response);
       }
       return response.json();
     });
