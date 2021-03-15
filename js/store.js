@@ -107,7 +107,6 @@ const todoItemStore = () => {
       { contents }
     );
     itemMap.set(item._id, item);
-    console.log(itemMap);
     return item;
   }
 
