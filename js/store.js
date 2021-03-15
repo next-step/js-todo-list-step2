@@ -1,41 +1,7 @@
+import { REQUEST_METHODS, fetchRequest } from './util.js';
+
 const BASE_URL = 'https://js-todo-list-9ca3a.df.r.appspot.com';
 let _currentUserId = '';
-
-const _catchHTTPStatusError = (fn) => {
-  return (...args) => {
-    return fn(...args).then((response) => {
-      if (!response.ok) {
-        return new Error(response);
-      }
-      return response.json();
-    });
-  };
-};
-
-const REQUEST_OPTIONS = (body) => {
-  return {
-    post: {
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      method: 'POST',
-      body: JSON.stringify(body),
-    },
-    put: {
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      method: 'PUT',
-      body: JSON.stringify(body),
-    },
-    delete: {
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      method: 'DELETE',
-    },
-  };
-};
 
 const userStore = () => {
   const setCurrentUser = (userId) => {
@@ -43,35 +9,24 @@ const userStore = () => {
   };
 
   const getUser = async (userId) => {
-    const wrappedFunction = _catchHTTPStatusError(() =>
-      fetch(BASE_URL + '/api/users/' + userId)
-    );
-    return wrappedFunction();
+    return fetchRequest(`${BASE_URL}/api/users/${userId}`);
   };
 
   const getUsers = async () => {
-    const wrappedFunction = _catchHTTPStatusError(() =>
-      fetch(BASE_URL + '/api/users')
-    );
-
-    return wrappedFunction();
+    return fetchRequest(`${BASE_URL}/api/users`);
   };
 
   const createUser = async (name) => {
-    const requestBody = { name };
-    const wrappedFunction = _catchHTTPStatusError(() =>
-      fetch(BASE_URL + '/api/users', REQUEST_OPTIONS(requestBody).post)
-    );
-
-    return wrappedFunction();
+    return fetchRequest(`${BASE_URL}/api/users`, REQUEST_METHODS.post, {
+      name,
+    });
   };
 
   const deleteUser = async () => {
-    const wrappedFunction = _catchHTTPStatusError(() =>
-      fetch(BASE_URL + '/api/users/' + _currentUserId, REQUEST_OPTIONS().delete)
+    await fetchRequest(
+      `${BASE_URL}/api/users/${_currentUserId}`,
+      REQUEST_METHODS.delete
     );
-
-    await wrappedFunction();
     _currentUserId = '';
   };
 
@@ -88,62 +43,37 @@ const userStore = () => {
 
 const todoItemStore = () => {
   const getTodoList = async () => {
-    const wrappedFunction = _catchHTTPStatusError(() =>
-      fetch(BASE_URL + `/api/users/${_currentUserId}/items`)
-    );
-    return wrappedFunction();
+    return fetchRequest(`${BASE_URL}/api/users/${_currentUserId}/items`);
   };
 
   const createTodo = async (contents) => {
-    const requestBody = { contents };
-    const wrappedFunction = _catchHTTPStatusError(() =>
-      fetch(
-        BASE_URL + `/api/users/${_currentUserId}/items`,
-        REQUEST_OPTIONS(requestBody).post
-      )
+    return fetchRequest(
+      `${BASE_URL}/api/users/${_currentUserId}/items`,
+      REQUEST_METHODS.post,
+      { contents }
     );
-
-    return wrappedFunction();
   };
 
   const deleteTodo = async (todoId) => {
-    const wrappedFunction = _catchHTTPStatusError(() =>
-      fetch(
-        BASE_URL + `/api/users/${_currentUserId}/items/${todoId}`,
-        REQUEST_OPTIONS().delete
-      )
+    await fetchRequest(
+      `${BASE_URL}/api/users/${_currentUserId}/items/${todoId}`,
+      REQUEST_METHODS.delete
     );
-    await wrappedFunction();
   };
 
   function updateTodoContents(todoId, contents) {
-    const requestBody = { contents };
-    const wrappedFunction = _catchHTTPStatusError(() =>
-      fetch(
-        BASE_URL + `/api/users/${_currentUserId}/items/${todoId}`,
-        REQUEST_OPTIONS(requestBody).put
-      )
+    return fetchRequest(
+      BASE_URL + `/api/users/${_currentUserId}/items/${todoId}`,
+      REQUEST_METHODS.put,
+      { contents }
     );
-
-    return wrappedFunction();
   }
 
   function updateTodoToggle(todoId) {
-    return fetch(
+    return fetchRequest(
       BASE_URL + `/api/users/${_currentUserId}/items/${todoId}/toggle`,
-      {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        method: 'PUT',
-      }
-    ).then((response) => {
-      if (!response.ok) {
-        return new Error(response);
-      }
-
-      return response.json();
-    });
+      REQUEST_METHODS.put
+    );
   }
 
   return {
