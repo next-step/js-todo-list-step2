@@ -1,6 +1,7 @@
 const userList = (createUser, deleteUser, selectUser) => {
   const $userTitle = document.getElementById('user-title');
   const $userList = document.getElementById('user-list');
+  const $userSpan = $userList.querySelector('.user-span');
 
   const _onUserCreateHandler = () => {
     const name = prompt('추가하고 싶은 이름을 입력해주세요.');
@@ -29,11 +30,11 @@ const userList = (createUser, deleteUser, selectUser) => {
   };
 
   const listUsers = (userList) => {
-    $userList.querySelector('.user-span').innerHTML = '';
+    $userSpan.innerHTML = '';
     userList
       .map((user) => _createUserButton(user))
       .forEach((element) => {
-        $userList.querySelector('.user-span').appendChild(element);
+        $userSpan.appendChild(element);
       });
   };
 
