@@ -40,7 +40,7 @@ const fetchData = (url, method = 'GET', body) => {
 
 const fetchWithWrapper = (url, method, body) => {
   const wrappedFunction = _catchHTTPStatusError(() =>
-    fetchData(url, REQUEST_METHODS[method], body)
+    fetchData(url, method, body)
   );
   //TODO add error redirect wrapper ?
   return wrappedFunction();

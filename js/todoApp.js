@@ -10,8 +10,8 @@ const todoApp = (userList, todoInput, todoList, todoStatus) => {
   const _todoItemStore = todoItemStore();
   const _userStore = userStore();
 
-  const getUsers = async () => {
-    return await _userStore.getUsers();
+  const getUsers = () => {
+    return _userStore.getUsers();
   };
 
   const addUser = async (name) => {
@@ -32,8 +32,8 @@ const todoApp = (userList, todoInput, todoList, todoStatus) => {
     userListHandler.setTitleName(user.name);
   };
 
-  const _setUserListState = async () => {
-    const userList = await getUsers();
+  const _setUserListState = () => {
+    const userList = getUsers();
     userListHandler.listUsers(userList);
   };
 
@@ -45,22 +45,22 @@ const todoApp = (userList, todoInput, todoList, todoStatus) => {
   };
 
   const addTodoItem = async (contents) => {
-    await _todoItemStore.createTodo(contents);
+    await _todoItemStore.createItem(contents);
     _setTodoListState();
   };
 
   const removeTodoItem = async ({ _id }) => {
-    await _todoItemStore.deleteTodo(_id);
+    await _todoItemStore.deleteItem(_id);
     _setTodoListState();
   };
 
-  const updateTodoContents = async ({ _id, contents }) => {
-    await _todoItemStore.updateTodoContents(_id, contents);
+  const updateItemContents = async ({ _id, contents }) => {
+    await _todoItemStore.updateItemContents(_id, contents);
     _setTodoListState();
   };
 
   const updateToggle = async ({ _id }) => {
-    await _todoItemStore.updateTodoToggle(_id);
+    await _todoItemStore.updateItemToggle(_id);
     _setTodoListState();
   };
 
@@ -71,7 +71,7 @@ const todoApp = (userList, todoInput, todoList, todoStatus) => {
 
   const _setTodoListState = async () => {
     todoListHandler.loading();
-    const todoList = await _todoItemStore.getTodoList();
+    const todoList = await _todoItemStore.getItemList();
     _applyFilter(todoList);
   };
 
@@ -87,13 +87,14 @@ const todoApp = (userList, todoInput, todoList, todoStatus) => {
   const todoInputHandler = todoInput(addTodoItem);
   const todoListHandler = todoList(
     $listUl,
-    updateTodoContents,
+    updateItemContents,
     updateToggle,
     removeTodoItem
   ); //TODO too many arguments
   const todoStatusHandler = todoStatus($listUl, setFilter);
 
-  const init = () => {
+  const init = async () => {
+    await _userStore.refresh();
     _setUserListState();
   };
 
