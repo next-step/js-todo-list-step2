@@ -22,6 +22,7 @@ const todoApp = (userList, todoInput, todoList, todoStatus) => {
   const removeUser = async () => {
     await _userStore.deleteUser();
     _setUserListState();
+    todoStatusHandler.refresh();
     todoListHandler.refresh([]);
     userListHandler.setTitleName();
   };

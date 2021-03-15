@@ -1,3 +1,4 @@
+const MIN_NAME_LENGTH = 2;
 const userList = (createUser, deleteUser, selectUser) => {
   const $userTitle = document.getElementById('user-title');
   const $userList = document.getElementById('user-list');
@@ -5,7 +6,10 @@ const userList = (createUser, deleteUser, selectUser) => {
 
   const _onUserCreateHandler = () => {
     const name = prompt('추가하고 싶은 이름을 입력해주세요.');
-    if (name.length < 2) {
+    if (name === null) {
+      return;
+    }
+    if (name.length < MIN_NAME_LENGTH) {
       alert('2글자 이상 입력해주세요');
       return;
     }
