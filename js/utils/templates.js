@@ -1,4 +1,7 @@
-import { priorityClassConverter, priorityValueConverter } from "/js/utils/priorityConverter.js";
+import {
+  priorityClassConverter,
+  priorityValueConverter,
+} from "/js/utils/priorityConverter.js";
 
 export const loadingBarTemplate = () =>
   `<li>
@@ -15,9 +18,13 @@ export const loadingBarTemplate = () =>
 
 export const todoItemTemplate = (item) => {
   const priorityTemplate = findPriorityTemplate(item.priority);
-  return `<li data-id="${item._id}" class="todo-item ${item.isCompleted ? "completed" : ""}">
+  return `<li data-id="${item._id}" class="todo-item ${
+    item.isCompleted ? "completed" : ""
+  }">
     <div class="view">
-      <input class="toggle" type="checkbox" ${item.isCompleted ? "checked" : ""}/>
+      <input class="toggle" type="checkbox" ${
+        item.isCompleted ? "checked" : ""
+      }/>
       <label class="label">
         ${priorityTemplate}
         ${item.contents}
@@ -26,24 +33,24 @@ export const todoItemTemplate = (item) => {
     </div>
     <input class="edit" value="${item.contents}" />
   </li>`;
-}
+};
 
 const findPriorityTemplate = (priority) => {
   if (priority === "NONE") {
-    return prioritySelectTemplate();
+    return prioritySelectTemplate;
   }
   return selectedPriorityTemplate(priority);
 };
 
-export const prioritySelectTemplate = () =>
+export const prioritySelectTemplate =
   `<select class="chip select">
     <option value="0" selected>순위</option>
     <option value="1">1순위</option>
     <option value="2">2순위</option>
-  </select>`
+  </select>`;
 
 export const selectedPriorityTemplate = (priority) =>
-  `<span class="chip ${priorityClassConverter(priority)}">${priorityValueConverter(priority)}순위</span>`
+  `<span class="chip ${priorityClassConverter[priority]}">${priorityValueConverter(priority)}순위</span>`;
 
 export const todoFilterTemplate = (data) =>
   `<span class="todo-count">총 <strong>${data.count}</strong> 개</span>

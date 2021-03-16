@@ -1,10 +1,6 @@
-export const priorityClassConverter = (priority) => {
-  switch (priority) {
-    case "FIRST":
-      return "primary";
-    case "SECOND":
-      return "secondary";
-  }
+export const priorityClassConverter = {
+  FIRST: "primary",
+  SECOND: "secondary",
 };
 
 export const priorityValueConverter = (priority) => {
@@ -14,8 +10,8 @@ export const priorityValueConverter = (priority) => {
     case "SECOND":
       return "2";
     case "1":
-      return "FIRST"
+      return "FIRST";
     case "2":
-      return "SECOND"
+      return "SECOND";
   }
 };

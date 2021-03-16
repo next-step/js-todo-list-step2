@@ -1,7 +1,7 @@
 import { todoMemberService } from "/js/service/TodoMemberSerivce.js";
 import { $store } from "/js/store/index.js";
 
-function TodoMemberController() {
+export function TodoMemberController() {
   const $userList = document.querySelector("#user-list");
 
   const onClickUserComponent = async ({ target }) => {

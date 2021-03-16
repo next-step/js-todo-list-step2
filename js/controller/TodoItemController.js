@@ -1,6 +1,6 @@
 import { todoItemService } from "/js/service/TodoItemService.js";
 
-function TodoItemController() {
+export function TodoItemController() {
   this.todoItemService = todoItemService;
 
   const $todoList = document.querySelector(".todo-list");
@@ -72,5 +72,3 @@ function TodoItemController() {
     $todoList.addEventListener("keyup", onKeyupTodoList);
   };
 }
-
-export const todoItemController = new TodoItemController();

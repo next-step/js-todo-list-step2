@@ -1,10 +1,10 @@
-import {loadingBarTemplate} from "../utils/templates.js";
+import { loadingBarTemplate } from "../utils/templates.js";
 
 function LoadingBar() {
-  let $loadingBar = document.querySelector(".todo-list");
+  const $loadingBar = document.querySelector(".todo-list");
 
   this.loading = () => {
-    $loadingBar.innerHTML=loadingBarTemplate();
+    $loadingBar.innerHTML = loadingBarTemplate();
   };
 }
 

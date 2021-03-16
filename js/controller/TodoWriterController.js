@@ -1,6 +1,6 @@
 import { todoWriterService } from "/js/service/TodoWriterService.js";
 
-function TodoWriterController() {
+export function TodoWriterController() {
   this.todoWriterService = todoWriterService;
 
   const $newTodoContents = document.querySelector(".new-todo");
@@ -16,4 +16,3 @@ function TodoWriterController() {
   };
 }
 
-export const todoWriterController = new TodoWriterController();

@@ -9,11 +9,9 @@ export const memberApi = {
     return members.map((member) => new Member(member));
   },
 
-  async saveMember(member) {
+  async saveMember({ name }) {
     $loadingBar.loading();
-    const savedMember = await api.post("/api/users/", {
-      name: member.name,
-    });
+    const savedMember = await api.post("/api/users/", { name });
     return new Member(savedMember);
   },
 

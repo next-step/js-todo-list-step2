@@ -29,7 +29,7 @@ export const todoItemApi = {
   async setPriority(member, itemId, priority) {
     $loadingBar.loading();
     return await api.put(`/api/users/${member._id}/items/${itemId}/priority`, {
-      priority: priority,
+      priority,
     });
   },
 };
