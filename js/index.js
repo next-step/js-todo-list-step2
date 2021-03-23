@@ -1,7 +1,7 @@
-const onUserCreateHandler = () => {
-  const userName = prompt("추가하고 싶은 이름을 입력해주세요.");
-}
+import userList from './userList.js';
+import { todoApp } from './todoApp.js';
+import { todoList } from './todoList.js';
+import { todoStatus } from './todoStatus.js';
+import { todoInput } from './todoInput.js';
 
-const userCreateButton = document.querySelector('.user-create-button')
-userCreateButton.addEventListener('click', onUserCreateHandler)
-
+todoApp(userList, todoInput, todoList, todoStatus).init();
