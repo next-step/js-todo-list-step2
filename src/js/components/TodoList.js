@@ -5,6 +5,7 @@ import {
   KEY_NAME,
 } from '../utils/constant.js';
 import { todoListTemplate } from '../utils/templates.js';
+import api, { defaultErrorMessage } from '../api/index.js';
 import Observer from '../libs/Observer.js';
 
 // 관찰자
@@ -13,7 +14,7 @@ class TodoList extends Observer {
     super();
     this.store = store;
     this.container = document.querySelector(SELECTOR.TODO_LIST);
-    // this.bindEvent();
+    this.bindEvent();
     this.render();
   }
 
@@ -45,7 +46,7 @@ class TodoList extends Observer {
         const $activeInput = Array.from($editList).find(
           (element) => element === document.activeElement,
         );
-        $activeInput && this.offEditMode($activeInput, key); // 현재 focused 상태의 input이 있을 경우
+        $activeInput && this.offEditMode($activeInput, key);
       }
     });
   }
@@ -56,7 +57,6 @@ class TodoList extends Observer {
    */
   onEditMode(target) {
     const $li = target.closest(NODE_NAME.LIST);
-    // 이미 complete 된 투두는 변경 불가
     if ($li.classList.contains(CLASS_NAME.COMPLETED)) return;
     const value = target.closest(NODE_NAME.LABEL).innerText;
     const $input = $li.querySelector(SELECTOR.EDIT_INPUT);
@@ -73,32 +73,43 @@ class TodoList extends Observer {
     const $li = target.closest(NODE_NAME.LIST);
     const $label = $li.querySelector(NODE_NAME.LABEL);
     const value = target.value;
-
-    // 내용이 변경 되었을 경우
     if (
       key === KEY_NAME.ENTER &&
       value !== $label.innerText &&
       value.length > 0
     ) {
       $label.innerText = value;
-      this.onUpdateTodo(+$li.dataset.id, value);
+      this.onUpdateTodo($li.dataset.id, value);
     }
     $li.classList.remove(CLASS_NAME.EDITING);
   }
 
   /**
    * 내용이 바뀐 투두를 데이터베이스에 전달해주는 메서드
-   * @param {number} id
-   * @param {string} newTitle
+   * @param {number} itemId
+   * @param {string} contents
    */
-  onUpdateTodo(id, newTitle) {
-    const updatedData = this.store.originData.map((data) => {
-      if (data.id === id) {
-        return { id, title: newTitle };
+  async onUpdateTodo(itemId, contents) {
+    try {
+      const updateResult = await api.updateTodo(
+        this.store.currentUserId,
+        itemId,
+        contents,
+      );
+      if (updateResult.isError) {
+        return window.alert(updateResult.errorMessage);
       }
-      return data;
-    });
-    this.store.setOriginData(updatedData);
+      console.log(updateResult.data);
+      // const updatedData = this.store.originData.map((data) => {
+      //   if (data.id === id) {
+      //     return { id, title: newTitle };
+      //   }
+      //   return data;
+      // });
+      // this.store.setOriginData(updatedData);
+    } catch (error) {
+      return window.alert(defaultErrorMessage);
+    }
   }
 
   /**

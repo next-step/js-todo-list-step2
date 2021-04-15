@@ -1,23 +1,8 @@
+import requestData from './requestData.js';
+
 export const defaultErrorMessage = '잠시 후 다시 시도해주세요';
 
-const METHODS = {
-  GET: 'GET',
-  POST: 'POST',
-  DELETE: 'DELETE',
-  PUT: 'PUT',
-};
-
-const baseUrl = 'https://js-todo-list-9ca3a.df.r.appspot.com';
-
-const urls = {
-  USER: '/api/users/',
-  USER_TODO: (userId) => `/api/users/${userId}/items/`,
-  UPDATE_TODO: (userId, itemId) => `/api/users/${userId}/items/${itemId}`,
-  TOGGLE_TODO: (userId, itemId) =>
-    `/api/users/${userId}/items/${itemId}/toggle`,
-  SET_PRIORITY: (userId, itemId) =>
-    `/api/users/${userId}/items/${itemId}/priority`,
-};
+const baseUrl = 'https://js-todo-list-9ca3a.df.r.appspot.com/';
 
 const errorResponse = (message) => {
   return {
@@ -33,11 +18,11 @@ const successResponse = (data) => {
   };
 };
 
-const request = async (url, body) => {
+const request = async (endPoint, option) => {
   try {
-    const response = await fetch(baseUrl + url, body);
+    const response = await fetch(baseUrl + endPoint, option);
     const data = await response.json();
-    if (response.status === 500) {
+    if (response.status !== 200) {
       throw { message: data.message };
     }
     return data;
@@ -49,7 +34,8 @@ const request = async (url, body) => {
 const api = {
   getUserList: async () => {
     try {
-      const data = await request(urls.USER, { method: METHODS.GET });
+      const { endPoint, option } = requestData.getUserList();
+      const data = await request(endPoint, option);
       return successResponse(data);
     } catch ({ message }) {
       return errorResponse(message);
@@ -58,7 +44,8 @@ const api = {
 
   getUser: async (userId) => {
     try {
-      const data = await request(urls.USER + userId, { method: METHODS.GET });
+      const { endPoint, option } = requestData.getUser(userId);
+      const data = await request(endPoint, option);
       return successResponse(data);
     } catch ({ message }) {
       return errorResponse(message);
@@ -67,7 +54,8 @@ const api = {
 
   addUser: async (name) => {
     try {
-      const data = await request(urls.USER, { method: METHODS.POST, name });
+      const { endPoint, option } = requestData.addUser(name);
+      const data = await request(endPoint, option);
       return successResponse(data);
     } catch ({ message }) {
       return errorResponse(message);
@@ -76,30 +64,32 @@ const api = {
 
   removeUser: async (userId) => {
     try {
-      await request(urls.USER + userId, { method: METHODS.DELETE });
+      const { endPoint, option } = requestData.removeUser(userId);
+      await request(endPoint, option);
       return successResponse();
     } catch ({ message }) {
       return errorResponse(message);
     }
   },
 
-  addTodoItem: async (userId, item) => {
+  addTodoItem: async (userId, contents) => {
     try {
-      const data = await request(urls.USER_TODO(userId), {
-        method: METHODS.POST,
-        contents: item,
-      });
+      const { endPoint, option } = requestData.addTodoItem(userId, contents);
+      const data = await request(endPoint, option);
       return successResponse(data);
     } catch ({ message }) {
       return errorResponse(message);
     }
   },
 
-  updateTodo: async (userId, itemId) => {
+  updateTodo: async (userId, itemId, contents) => {
     try {
-      const data = await request(urls.UPDATE_TODO(userId, itemId), {
-        method: METHODS.PUT,
-      });
+      const { endPoint, option } = requestData.updateTodo(
+        userId,
+        itemId,
+        contents,
+      );
+      const data = await request(endPoint, option);
       return successResponse(data);
     } catch ({ message }) {
       return errorResponse(message);
@@ -107,9 +97,8 @@ const api = {
   },
   removeTodo: async (userId, itemId) => {
     try {
-      const data = await request(urls.UPDATE_TODO(userId, itemId), {
-        method: METHODS.DELETE,
-      });
+      const { endPoint, option } = requestData.removeTodo(userId, itemId);
+      const data = await request(endPoint, option);
       return successResponse(data);
     } catch ({ message }) {
       return errorResponse(message);
@@ -117,9 +106,8 @@ const api = {
   },
   removeAllTodos: async (userId) => {
     try {
-      const data = await request(urls.USER_TODO(userId), {
-        method: METHODS.DELETE,
-      });
+      const { endPoint, option } = requestData.removeAllTodos(userId);
+      const data = await request(endPoint, option);
       return successResponse(data);
     } catch ({ message }) {
       return errorResponse(message);
@@ -127,10 +115,12 @@ const api = {
   },
   setTodoPriority: async (userId, itemId, priority) => {
     try {
-      const data = await request(urls.SET_PRIORITY(userId, itemId), {
-        method: METHODS.PUT,
+      const { endPoint, option } = requestData.setTodoPriority(
+        userId,
+        itemId,
         priority,
-      });
+      );
+      const data = await request(endPoint, option);
       return successResponse(data);
     } catch ({ message }) {
       return errorResponse(message);
@@ -138,7 +128,11 @@ const api = {
   },
   toggleTodoComplete: async (userId, itemId) => {
     try {
-      const data = await request(urls.TOGGLE_TODO(userId, itemId));
+      const { endPoint, option } = requestData.toggleTodoComplete(
+        userId,
+        itemId,
+      );
+      const data = await request(endPoint, option);
       return successResponse(data);
     } catch ({ message }) {
       return errorResponse(message);
