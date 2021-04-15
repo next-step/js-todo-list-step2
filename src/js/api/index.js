@@ -83,7 +83,7 @@ const api = {
 
   addTodoItem: async (userId, item) => {
     try {
-      const data = await request(USER_TODO(userId), {
+      const data = await request(urls.USER_TODO(userId), {
         method: METHODS.POST,
         contents: item,
       });
@@ -95,7 +95,7 @@ const api = {
 
   updateTodo: async (userId, itemId) => {
     try {
-      const data = await request(url.UPDATE_TODO(userId, itemId), {
+      const data = await request(urls.UPDATE_TODO(userId, itemId), {
         method: METHODS.PUT,
       });
       return successResponse(data);
@@ -136,7 +136,7 @@ const api = {
   },
   toggleTodoComplete: async (userId, itemId) => {
     try {
-      const data = await request(user.TOGGLE_TODO(userId, itemId));
+      const data = await request(urls.TOGGLE_TODO(userId, itemId));
       return successResponse(data);
     } catch ({ message }) {
       return errorResponse(message);
