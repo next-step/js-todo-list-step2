@@ -1,3 +1,5 @@
+export const defaultErrorMessage = '잠시 후 다시 시도해주세요';
+
 const METHODS = {
   GET: 'GET',
   POST: 'POST',
@@ -20,7 +22,7 @@ const urls = {
 const errorResponse = (message) => {
   return {
     isError: true,
-    errorMessage: message || '잠시 후 다시 시도해주세요',
+    errorMessage: message || defaultErrorMessage,
   };
 };
 
