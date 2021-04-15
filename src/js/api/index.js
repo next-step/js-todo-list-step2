@@ -24,12 +24,18 @@ const errorResponse = (message) => {
   };
 };
 
+const successResponse = (data) => {
+  return {
+    isError: false,
+    data,
+  };
+};
+
 const request = async (url, body) => {
   try {
     const response = await fetch(baseUrl + url, body);
     const data = await response.json();
     if (response.status === 500) {
-      console.log(response);
       throw { message: data.message };
     }
     return data;
@@ -42,10 +48,7 @@ const api = {
   getUserList: async () => {
     try {
       const data = await request(urls.USER, { method: METHODS.GET });
-      return {
-        isError: false,
-        data,
-      };
+      return successResponse(data);
     } catch ({ message }) {
       return errorResponse(message);
     }
@@ -54,7 +57,7 @@ const api = {
   getUser: async (userId) => {
     try {
       const data = await request(urls.USER + userId, { method: METHODS.GET });
-      return { isError: false, data };
+      return successResponse(data);
     } catch ({ message }) {
       return errorResponse(message);
     }
@@ -63,7 +66,7 @@ const api = {
   addUser: async (name) => {
     try {
       const data = await request(urls.USER, { method: METHODS.POST, name });
-      return { isError: false, data };
+      return successResponse(data);
     } catch ({ message }) {
       return errorResponse(message);
     }
@@ -72,7 +75,7 @@ const api = {
   removeUser: async (userId) => {
     try {
       await request(urls.USER + userId, { method: METHODS.DELETE });
-      return { isError: false };
+      return successResponse();
     } catch ({ message }) {
       return errorResponse(message);
     }
@@ -84,7 +87,7 @@ const api = {
         method: METHODS.POST,
         contents: item,
       });
-      return { isError: false, data };
+      return successResponse(data);
     } catch ({ message }) {
       return errorResponse(message);
     }
@@ -95,7 +98,7 @@ const api = {
       const data = await request(url.UPDATE_TODO(userId, itemId), {
         method: METHODS.PUT,
       });
-      return { isError: false, data };
+      return successResponse(data);
     } catch ({ message }) {
       return errorResponse(message);
     }
@@ -105,7 +108,7 @@ const api = {
       const data = await request(urls.UPDATE_TODO(userId, itemId), {
         method: METHODS.DELETE,
       });
-      return { isError: false, data };
+      return successResponse(data);
     } catch ({ message }) {
       return errorResponse(message);
     }
@@ -115,7 +118,7 @@ const api = {
       const data = await request(urls.USER_TODO(userId), {
         method: METHODS.DELETE,
       });
-      return { isError: false, data };
+      return successResponse(data);
     } catch ({ message }) {
       return errorResponse(message);
     }
@@ -126,6 +129,7 @@ const api = {
         method: METHODS.PUT,
         priority,
       });
+      return successResponse(data);
     } catch ({ message }) {
       return errorResponse(message);
     }
@@ -133,7 +137,7 @@ const api = {
   toggleTodoComplete: async (userId, itemId) => {
     try {
       const data = await request(user.TOGGLE_TODO(userId, itemId));
-      return { isError: false, data };
+      return successResponse(data);
     } catch ({ message }) {
       return errorResponse(message);
     }
