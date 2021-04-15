@@ -140,7 +140,7 @@ class TodoList extends Observer {
   }
 
   render() {
-    this.container.innerHTML = todoListTemplate(this.store.renderData);
+    this.container.innerHTML = todoListTemplate(this.store.renderTodoList);
   }
 }
 

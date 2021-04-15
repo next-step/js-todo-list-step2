@@ -1,6 +1,6 @@
 export const SELECTOR = {
   TODO_APP: '#todoapp',
-  TODO_LIST: '#todo-list',
+  TODO_LIST: '.todo-list',
   TODO_INPUT: '#new-todo-title',
   TODO_FORM: '#todo-form',
   EDIT_INPUT: '.edit',

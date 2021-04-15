@@ -5,11 +5,11 @@
  * @returns {string}
  */
 
-export const todoTemplate = (id, title, complete) => `
- <li data-id=${id} class=${complete ? 'completed' : ''}>
+export const todoTemplate = (id, contents, isCompleted) => `
+ <li data-id=${id} class=${isCompleted ? 'completed' : ''}>
      <div class="view">
-         <input class="toggle" type="checkbox" ${complete ? 'checked' : ''}/>
-         <label class="label">${title}</label>
+         <input class="toggle" type="checkbox" ${isCompleted ? 'checked' : ''}/>
+         <label class="label">${contents}</label>
          <button class="destroy"></button>
      </div>
      <input class="edit"/>
@@ -22,9 +22,10 @@ export const todoTemplate = (id, title, complete) => `
 
 export const todoListTemplate = (datas) => {
   let result = '';
-  datas.map((v) => {
-    result += todoTemplate(v.id, v.title, v.complete);
-  });
+  datas &&
+    datas.map((todo) => {
+      result += todoTemplate(todo._id, todo.contents, todo.isCompleted);
+    });
   return result;
 };
 
@@ -37,3 +38,15 @@ export const todoCounterTemplate = (counter) =>
 
 export const userTemplate = (userName) =>
   `<button class="ripple">${userName}</button>`;
+
+export const userTitleTemplate = (userName) =>
+  `<span><strong>${userName}</strong>'s Todo List</span>`;
+
+export const loaderTemplate = `
+  <label class="label">
+    <div class="animated-background">
+      <div class="skel-mask-container">
+        <div class="skel-mask"></div>
+      </div>
+    </div>
+  </label>`;

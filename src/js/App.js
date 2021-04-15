@@ -14,7 +14,7 @@ const App = () => {
       }
       const store = new TodoStore(userListResult.data || []);
       // const todoInput = new TodoInput(store);
-      // const todoList = new TodoList(store);
+      const todoList = new TodoList(store);
       // const todoFilters = new TodoFilters(store);
       // const todoCounter = new TodoCounter(store);
 

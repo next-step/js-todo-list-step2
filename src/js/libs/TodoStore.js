@@ -6,22 +6,29 @@ class TodoStore extends Subject {
   constructor(userList) {
     super();
     this.userList = userList;
-    this.originData = userList[0];
-    this.renderData = userList[0];
+    this.currentUserName = userList[0].name;
+    this.currentUserId = userList[0]._id;
+    this.originTodoList = userList[1].todoList;
+    this.renderTodoList = userList[1].todoList;
     this.status = STATUS.ALL;
   }
 
-  /**
-   * @param {object[]} todoData
-   */
-  setOriginData(todoData) {
-    this.originData = todoData;
+  setCurrentUser(userId) {
+    const { name: userName, todoList: newTodoList } = this.userList.find(
+      (user) => user._id === userId,
+    );
+    this.originTodoList = newTodoList;
+    this.renderTodoList = newTodoList;
+    this.currentUserId = userId;
+    this.currentUserName = userName;
+    this.notifyAll();
   }
+
   /**
-   * @param {object[]} renderData
+   * @param {object[]} todoList
    */
-  setRenderData(renderData) {
-    this.renderData = renderData;
+  setRenderData(todoList) {
+    this.renderTodoList = todoList;
     this.notifyAll();
   }
 
@@ -33,14 +40,14 @@ class TodoStore extends Subject {
     switch (status) {
       case STATUS.ACTIVE:
         return this.setRenderData(
-          this.originData.filter((data) => !data.complete),
+          this.originTodoList.filter((data) => !data.complete),
         );
       case STATUS.COMPLETED:
         return this.setRenderData(
-          this.originData.filter((data) => data.complete),
+          this.originTodoList.filter((data) => data.complete),
         );
       default:
-        return this.setRenderData(this.originData);
+        return this.setRenderData(this.originTodoList);
     }
   }
 }
