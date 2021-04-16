@@ -1,10 +1,10 @@
-export const todoTemplate = ({ contents, _id, isCompleted, isEditing }) => {
+export const todoTemplate = ({ contents, _id, isCompleted }) => {
   return `
-    <li id=${_id} class='${isCompleted && "completed"} ${isEditing ? "editing" : ""}'>
+    <li data-_id="${_id}" class="${isCompleted && "completed"}">
         <div class="view">
-            <input class="toggle" type="checkbox" id=${_id} ${isCompleted && "checked"} />
+            <input class="toggle" type="checkbox" data-_id="${_id}" ${isCompleted && "checked"} />
             <label class="label">${contents}</label>
-            <button class="destroy" id=${_id}></button>
+            <button class="destroy" data-_id="${_id}"></button>
         </div>
         <input class="edit" value="${contents}" />
     </li>

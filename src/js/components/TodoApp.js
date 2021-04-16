@@ -23,7 +23,7 @@ class TodoApp {
     const [selectedUser] = _users;
 
     this.store.on(["selectedUser", "selectedUser.todoList", "filter"], this.updateTodoListViewPipe.bind(this));
-    this.store.on(["selectedUser", "users"], this.updateUserListView.bind(this));
+    this.store.on(["selectedUser", "users"], this.updateUserListViewPipe.bind(this));
     this.store.set({
       selectedUser: { ...selectedUser },
       users: [..._users],
@@ -32,8 +32,22 @@ class TodoApp {
 
     new TodoUserList(this.store);
     new TodoInput(this.store);
-    // new TodoList(this.store);
+    new TodoList(this.store);
     new TodoFilters(this.store);
+  }
+
+  updateTodoListViewPipe() {
+    pipe(
+      this._getTodoListData.bind(this),
+      this._renderTodoList.bind(this)
+    )();
+  }
+
+  updateUserListViewPipe() {
+    pipe(
+      this._getUserListData.bind(this),
+      this._renderUserList.bind(this)
+    )();
   }
 
   _getTodoListData() {
@@ -43,32 +57,22 @@ class TodoApp {
     if (filter === FILTER_TYPE.ACTIVE) onFilteringTodoList = selectedUser.todoList.filter((item) => !item.isCompleted);
     if (filter === FILTER_TYPE.COMPLETED) onFilteringTodoList = selectedUser.todoList.filter((item) => item.isCompleted);
 
-    return { selectedUser, onFilteringTodoList };
+    return { onFilteringTodoList };
   }
 
-  _renderTodoList({ selectedUser, onFilteringTodoList }) {
+  _getUserListData() {
+    const { selectedUser, users } = this.store.get();
+    return { selectedUser, users }
+  }
+
+  _renderTodoList({ onFilteringTodoList }) {
     const todoListTemplate = onFilteringTodoList.map(({ contents, _id, isCompleted }) => todoTemplate({ contents, _id, isCompleted })).join("");
 
     this.todoListEl.innerHTML = todoListTemplate;
     this.todoCountEl.innerText = onFilteringTodoList.length;
-
-    return selectedUser;
   }
 
-  _saveTodoListData({ _id }) {
-
-  }
-
-  updateTodoListViewPipe() {
-    pipe(
-      this._getTodoListData.bind(this),
-      this._renderTodoList.bind(this),
-      this._saveTodoListData.bind(this)
-    )();
-  }
-
-  updateUserListView() {
-    const { selectedUser, users } = this.store.get();
+  _renderUserList({ selectedUser, users }) {
     const userListTemplate = users.map((user) => userTemplate({ _id: user._id, name: user.name, isSelected: selectedUser._id === user._id })).join("");
 
     this.userNameEl.innerText = selectedUser.name;

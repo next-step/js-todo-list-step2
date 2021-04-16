@@ -32,7 +32,7 @@ class TodoUser {
     const name = prompt(MESSAGES.CREATE_USER);
 
     if (name === null) return;
-    if (name.length < VALIDATION.MIN_USER_NAME) return alert(MESSAGES.INVALID_CREATE_USER);
+    if (name.length < VALIDATION.MIN_USER_NAME_LENGTH) return alert(MESSAGES.INVALID_CREATE_USER);
 
     const { data: _selectedUser } = await createUser(name);
     const { data: _users } = await getUsers();

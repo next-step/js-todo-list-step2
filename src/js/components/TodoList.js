@@ -1,4 +1,5 @@
 import { getEl } from "@js/util";
+import { getUser, toggleTodoItem } from "@lib/api";
 import { UI_CLASS, KEY, MESSAGES } from "@constants/constant";
 
 class TodoList {
@@ -14,28 +15,23 @@ class TodoList {
     this.todoListEl.addEventListener("keyup", this.confirmHandler.bind(this));
   }
 
-  _toggleTodoItem({ id }) {
-    const todoList = this.store.get().todoList;
-    todoList[id].isCompleted = !todoList[id].isCompleted;
-
-    this.store.set({
-      todoList: { ...todoList },
-    });
-  }
-
-  _destroyTodoItem({ id }) {
-    if (!confirm(MESSAGES.DELETE)) return;
-    const todoList = this.store.get().todoList;
-    delete todoList[id];
-
-    this.store.set({
-      todoList: { ...todoList },
-    });
-  }
-
   todoClickDelegationHandler({ target }) {
     if (target.classList.contains(UI_CLASS.TOGGLE)) return this._toggleTodoItem(target);
     if (target.classList.contains(UI_CLASS.DESTROY)) return this._destroyTodoItem(target);
+  }
+
+  async _toggleTodoItem({ dataset: { _id: todoId } }) {
+    const { selectedUser } = this.store.get();
+    await toggleTodoItem({ userId: selectedUser._id, todoId });
+    const { data } = await getUser(selectedUser._id);
+
+    this.store.set({
+      selectedUser: { ...data },
+    });
+  }
+
+  _destroyTodoItem({ dataset: { _id: todoId } }) {
+    if (!confirm(MESSAGES.DELETE_TODO)) return;
   }
 
   modifyHandler({ target }) {
