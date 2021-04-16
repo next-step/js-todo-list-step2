@@ -22,7 +22,7 @@ const App = () => {
         initialData[0].todoList || [],
       );
       const userStore = new UserStore(initialData, todoStore);
-      // const todoInput = new TodoInput(store);
+      const todoInput = new TodoInput(todoStore);
       const todoList = new TodoList(todoStore);
       // const todoFilters = new TodoFilters(store);
       // const todoCounter = new TodoCounter(store);
@@ -35,6 +35,7 @@ const App = () => {
       userStore.addObserver(userTitle);
       userStore.addObserver(userList);
     } catch (error) {
+      console.error(error);
       return window.alert(defaultErrorMessage);
     }
   };

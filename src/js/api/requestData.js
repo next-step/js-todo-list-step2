@@ -48,9 +48,10 @@ const requestData = {
 
   addTodoItem: (userId, contents) => {
     return {
-      endPoint: `/api/users/${userId}/items/`,
+      endPoint: `api/users/${userId}/items/`,
       option: {
         method: HttpMethod.POST,
+        headers,
         body: JSON.stringify({ contents }),
       },
     };
@@ -58,7 +59,7 @@ const requestData = {
 
   updateTodo: (userId, itemId, contents) => {
     return {
-      endPoint: `/api/users/${userId}/items/${itemId}`,
+      endPoint: `api/users/${userId}/items/${itemId}`,
       option: {
         method: HttpMethod.PUT,
         headers,
@@ -68,7 +69,7 @@ const requestData = {
   },
   removeTodo: (userId, itemId) => {
     return {
-      endPoint: `/api/users/${userId}/items/${itemId}`,
+      endPoint: `api/users/${userId}/items/${itemId}`,
       option: {
         method: HttpMethod.DELETE,
       },
@@ -76,7 +77,7 @@ const requestData = {
   },
   removeAllTodo: (userId) => {
     return {
-      endPoint: `/api/users/${userId}/items/`,
+      endPoint: `api/users/${userId}/items/`,
       option: {
         method: HttpMethod.DELETE,
       },
@@ -84,7 +85,7 @@ const requestData = {
   },
   toggleTodoComplete: (userId, itemId) => {
     return {
-      endPoint: `/api/users/${userId}/items/${itemId}/toggle`,
+      endPoint: `api/users/${userId}/items/${itemId}/toggle`,
       option: {
         method: HttpMethod.PUT,
       },
@@ -92,7 +93,7 @@ const requestData = {
   },
   setTodoPriority: (userId, itemId, priority) => {
     return {
-      endPoint: `/api/users/${userId}/items/${itemId}/priority`,
+      endPoint: `api/users/${userId}/items/${itemId}/priority`,
       option: {
         method: HttpMethod.PUT,
         headers,

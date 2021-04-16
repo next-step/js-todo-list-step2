@@ -10,7 +10,8 @@ class TodoStore extends Subject {
     this.status = STATUS.ALL;
   }
 
-  setTodoList(todoList) {
+  setTodoList(userId, todoList) {
+    this.currentUserId = userId;
     this.originTodoList = todoList;
     this.setRenderList(todoList);
   }

@@ -1,8 +1,7 @@
 export const SELECTOR = {
   TODO_APP: '#todoapp',
   TODO_LIST: '.todo-list',
-  TODO_INPUT: '#new-todo-title',
-  TODO_FORM: '#todo-form',
+  TODO_INPUT: '.new-todo',
   EDIT_INPUT: '.edit',
   TODO_COUNTER: '.todo-count',
   FILTER: '.filters',
