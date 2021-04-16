@@ -403,7 +403,7 @@ button.ripple {
   border: none;
   border-radius: 2px;
   padding: 6px 9px;
-  margin: 3px 0;
+  margin: 3px 1.5px;
   font-size: 12px;
   cursor: pointer;
   color: #333;
