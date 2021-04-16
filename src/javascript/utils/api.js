@@ -49,4 +49,8 @@ function deleteUser(userId) {
   return fetch_retry(`${BASE_URL}/api/users/${userId}`, options);
 }
 
-export { getUsers, addUser, deleteUser };
+function getUser(userId) {
+  return fetch_retry(`${BASE_URL}/api/users/${userId}`);
+}
+
+export { getUsers, addUser, deleteUser, getUser };

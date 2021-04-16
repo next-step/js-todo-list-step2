@@ -10,6 +10,11 @@ export default class TodoListView {
     this._todoList.appendChild(newTodo);
   }
 
+  addAll(todos) {
+    this._todoList.innerHTML = '';
+    todos.map((todo) => this.add(todo));
+  }
+
   remove(todo) {
     const li = this._getTodoById(todo.id);
     if (!li) {

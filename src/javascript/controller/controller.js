@@ -110,10 +110,11 @@ export default class Controller {
     });
   }
 
-  selectUser(data) {
+  async selectUser(userId) {
+    const user = await this.model.getUser(userId);
     this.view.render({
       cmd: RENDER_COMMAND.SWITCH_USER,
-      params: data,
+      params: user,
     });
   }
 

@@ -14,6 +14,10 @@ export default class Model {
     return await API.deleteUser(userId);
   }
 
+  async getUser(userId) {
+    return await API.getUser(userId);
+  }
+
   async create(value, userName) {
     // if (!value.length) {
     //   throw new Error(ERROR_MESSAGE.CONTENT_EMPTY);
@@ -54,12 +58,12 @@ export default class Model {
     // });
   }
 
-  getTodosOf(userName) {
-    const a = this.data.find((user) => user.name === userName);
-    console.log(a.todoList);
-    return a.todoList;
-    // return this._todos[userName].filter((todo) => !todo.removed);
-  }
+  // getTodosOf(userName) {
+  //   const a = this.data.find((user) => user.name === userName);
+  //   console.log(a.todoList);
+  //   return a.todoList;
+  //   // return this._todos[userName].filter((todo) => !todo.removed);
+  // }
 
   _findTodoById(id, userName) {
     return this._todos[userName].find((todo) => todo.id === id);

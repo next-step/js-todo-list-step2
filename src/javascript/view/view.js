@@ -156,10 +156,10 @@ export default class View {
     this.InputView.clear();
   }
 
-  _switchUser(data) {
-    this.userListView.setActive(data);
-    // TODO: todoListView, countView 를 비어있게 만들자.
-    // this.userListView.
+  _switchUser(user) {
+    this.userListView.setActive(user._id);
+    this.todoListView.addAll(user.todoList);
+    this.todoCountView.init(user.todoList.length);
   }
 
   _addUser(data) {

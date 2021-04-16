@@ -9,6 +9,12 @@ export default class TodoCountView {
     this._currentFilter = 'all';
   }
 
+  init(count) {
+    this._todoCount = count;
+    this.setTodoCount(count);
+    this.setSelectFilter($('.all', this._filterContainer));
+  }
+
   increaseTodoCount() {
     this._todoCount++;
   }
