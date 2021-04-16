@@ -8,7 +8,6 @@ import { todoListTemplate } from '../utils/templates.js';
 import api, { defaultErrorMessage } from '../api/index.js';
 import Observer from '../libs/Observer.js';
 
-// 관찰자
 class TodoList extends Observer {
   constructor(store) {
     super();
@@ -99,14 +98,13 @@ class TodoList extends Observer {
       if (updateResult.isError) {
         return window.alert(updateResult.errorMessage);
       }
-      console.log(updateResult.data);
-      // const updatedData = this.store.originData.map((data) => {
-      //   if (data.id === id) {
-      //     return { id, title: newTitle };
-      //   }
-      //   return data;
-      // });
-      // this.store.setOriginData(updatedData);
+      const updatedList = this.store.originTodoList.map((data) => {
+        if (data._id === itemId) {
+          return { ...data, contents };
+        }
+        return data;
+      });
+      this.store.setOriginList(updatedList);
     } catch (error) {
       return window.alert(defaultErrorMessage);
     }

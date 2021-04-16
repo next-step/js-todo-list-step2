@@ -17,7 +17,10 @@ const App = () => {
       }
       const { data: initialData } = userListResult;
 
-      const todoStore = new TodoStore(initialData[0].todoList || []);
+      const todoStore = new TodoStore(
+        initialData[0]._id,
+        initialData[0].todoList || [],
+      );
       const userStore = new UserStore(initialData, todoStore);
       // const todoInput = new TodoInput(store);
       const todoList = new TodoList(todoStore);

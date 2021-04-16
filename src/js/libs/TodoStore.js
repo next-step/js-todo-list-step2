@@ -2,16 +2,21 @@ import Subject from './Subject.js';
 import { STATUS } from '../utils/constant.js';
 
 class TodoStore extends Subject {
-  constructor(initialData) {
+  constructor(initialUserId, initialTodo) {
     super();
-    this.originTodoList = initialData;
-    this.renderTodoList = initialData;
+    this.currentUserId = initialUserId;
+    this.originTodoList = initialTodo;
+    this.renderTodoList = initialTodo;
     this.status = STATUS.ALL;
+  }
+
+  setTodoList(todoList) {
+    this.originTodoList = todoList;
+    this.renderTodoList(todoList);
   }
 
   setOriginList(todoList) {
     this.originTodoList = todoList;
-    this.setRenderList(todoList);
   }
   /**
    * @param {object[]} todoList
