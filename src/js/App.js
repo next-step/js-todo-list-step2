@@ -28,6 +28,9 @@ const App = () => {
       // store.addObserver(todoCounter);
       const userTitle = new UserTitle(userStore);
       const userList = new UserList(userStore);
+      todoStore.addObserver(todoList);
+      userStore.addObserver(userTitle);
+      userStore.addObserver(userList);
     } catch (error) {
       return window.alert(defaultErrorMessage);
     }

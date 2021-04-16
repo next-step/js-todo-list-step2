@@ -35,8 +35,8 @@ class UserStore extends Subject {
     );
     this.currentUserId = userId;
     this.currentUserName = userName;
-    this.todoStore.setOriginList(todoList);
     this.notifyAll();
+    this.todoStore.setOriginList(todoList);
   }
 }
 

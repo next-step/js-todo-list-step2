@@ -6,13 +6,14 @@ import {
 } from '../utils/constant.js';
 import { isAvailableUserName } from '../utils/validations.js';
 import { userListTemplate } from '../utils/templates.js';
+import Observer from '../libs/Observer.js';
 import api from '../api/index.js';
 
-class UserList {
+class UserList extends Observer {
   constructor(store) {
+    super();
     this.store = store;
     this.container = document.querySelector(SELECTOR.USER_LIST);
-    this.activeUserId = this.store.currentUserId;
     this.render();
     this.bindEvent();
   }
@@ -41,16 +42,19 @@ class UserList {
         return window.alert(result.errorMessage);
       }
       this.store.addUser(result.data);
-      this.render();
     } catch (error) {}
   }
 
   onRemoveUser() {}
 
+  update() {
+    this.render();
+  }
+
   render() {
     this.container.innerHTML = userListTemplate(
       this.store.userList,
-      this.activeUserId,
+      this.store.currentUserId,
     );
   }
 }
