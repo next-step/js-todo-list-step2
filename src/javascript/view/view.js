@@ -76,12 +76,8 @@ export default class View {
     options[eventName]();
   }
 
-  setCurrentUser(name) {
-    this._currentUser = name;
-  }
-
-  getCurrentUser() {
-    return this._currentUser;
+  getCurrentUserId() {
+    return this.userListView.getCurrentUserId();
   }
 
   _add(todo) {

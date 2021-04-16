@@ -8,6 +8,10 @@ export default class UserListView {
     users.map((user) => this.addUser(user));
   }
 
+  getCurrentUserId() {
+    return this.selectedUser ? this.selectedUser.dataset.id : '';
+  }
+
   addUser(user) {
     const elem = document.createElement('button');
     elem.classList.add('ripple');
