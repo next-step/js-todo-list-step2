@@ -34,7 +34,7 @@ export default class TodoListView {
   }
 
   editEnd(todo) {
-    todo = todo instanceof Element ? todo : this._getTodoById(todo.id);
+    todo = todo instanceof Element ? todo : this._getTodoById(todo);
     todo.classList.remove('editing');
     const input = $('.edit', todo);
     input.value = '';
@@ -113,7 +113,7 @@ export default class TodoListView {
       }
       const input = event.target.closest('.edit');
       const todo = input.closest('li');
-      callback(+todo.dataset.id, input.value);
+      callback(todo.dataset.id, input.value);
     });
   }
 

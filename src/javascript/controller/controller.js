@@ -59,25 +59,24 @@ export default class Controller {
     });
   }
 
-  editApply(todoId, content) {
-    this.model
-      .updateContent(todoId, content, this.view.getCurrentUser())
-      .then((todo) => {
-        this.view.render({
-          cmd: RENDER_COMMAND.EDIT_APPLY,
-          params: todo,
-        });
-      })
-      .catch((error) => {
-        if (error instanceof Error) {
-          alert(error);
-        } else {
-          this.view.render({
-            cmd: RENDER_COMMAND.EDIT_END,
-            params: error,
-          });
-        }
+  async editApply(todoId, contents) {
+    try {
+      const updatedTodo = await this.model.updateContents(
+        this.view.getCurrentUserId(),
+        todoId,
+        contents
+      );
+      this.view.render({
+        cmd: RENDER_COMMAND.EDIT_APPLY,
+        params: updatedTodo,
       });
+    } catch (error) {
+      alert(error.message);
+      this.view.render({
+        cmd: RENDER_COMMAND.EDIT_END,
+        params: todoId,
+      });
+    }
   }
 
   editEnd(todo) {

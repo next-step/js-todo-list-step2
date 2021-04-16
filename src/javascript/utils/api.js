@@ -77,6 +77,21 @@ function updateComplete(userId, itemId) {
   );
 }
 
+function updateContents(userId, itemId, contents) {
+  const requestBody = {
+    contents,
+  };
+  const options = {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(requestBody),
+  };
+  return fetch_retry(
+    `${BASE_URL}/api/users/${userId}/items/${itemId}`,
+    options
+  );
+}
+
 export {
   getUsers,
   addUser,
@@ -85,4 +100,5 @@ export {
   updateComplete,
   deleteItem,
   createItem,
+  updateContents,
 };
