@@ -15,6 +15,7 @@ class TodoInput {
 
   async addTodoHandler({ key, target }) {
     if (key !== KEY.ENTER || !target.value) return;
+
     const { selectedUser } = this.store.get();
     const { data } = await addTodoItem({ _id: selectedUser._id, contents: target.value });
     const _todoList = [...selectedUser.todoList, data]

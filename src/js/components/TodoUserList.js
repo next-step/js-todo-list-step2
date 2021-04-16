@@ -1,5 +1,5 @@
 import { getEl } from "@js/util";
-import { getUser, createUser, deleteUser } from "@lib/api";
+import { getUsers, getUser, createUser, deleteUser } from "@lib/api";
 import { ACTION, MESSAGES, VALIDATION } from "@constants/constant";
 
 class TodoUser {
@@ -34,13 +34,11 @@ class TodoUser {
     if (name === null) return;
     if (name.length < VALIDATION.MIN_USER_NAME) return alert(MESSAGES.INVALID_CREATE_USER);
 
-    const { data } = await createUser(name);
-    const _users = this.store.get().users.slice();
-    const index = Math.floor(Math.random() * _users.length);
-    _users.splice(index, 0, data);
+    const { data: _selectedUser } = await createUser(name);
+    const { data: _users } = await getUsers();
 
     this.store.set({
-      selectedUser: { ...data },
+      selectedUser: { ..._selectedUser },
       users: [..._users],
     })
   }
@@ -54,7 +52,7 @@ class TodoUser {
     const [currSelectedUser, ...restUsers] = users.filter((user) => user._id !== selectedUser._id);
 
     this.store.set({
-      selectedUser: currSelectedUser,
+      selectedUser: { ...currSelectedUser },
       users: [currSelectedUser, ...restUsers],
     });
   }

@@ -3,7 +3,7 @@ import { getEl, pipe } from "@js/util";
 import { getUsers } from "@lib/api";
 import { FILTER_TYPE } from "@constants/constant";
 
-import TodoUser from "./TodoUser";
+import TodoUserList from "./TodoUserList";
 import TodoInput from "./TodoInput";
 import TodoList from "./TodoList";
 import TodoFilters from "./TodoFilters";
@@ -30,7 +30,7 @@ class TodoApp {
       filter: FILTER_TYPE.ALL,
     });
 
-    new TodoUser(this.store);
+    new TodoUserList(this.store);
     new TodoInput(this.store);
     // new TodoList(this.store);
     // new TodoFilters(this.store);
