@@ -24,14 +24,13 @@ const App = () => {
       const userStore = new UserStore(initialData, todoStore);
       const todoInput = new TodoInput(todoStore);
       const todoList = new TodoList(todoStore);
-      // const todoFilters = new TodoFilters(store);
-      // const todoCounter = new TodoCounter(store);
+      const todoFilters = new TodoFilters(todoStore);
+      const todoCounter = new TodoCounter(todoStore);
 
-      // store.addObserver(todoList);
-      // store.addObserver(todoCounter);
       const userTitle = new UserTitle(userStore);
       const userList = new UserList(userStore);
       todoStore.addObserver(todoList);
+      todoStore.addObserver(todoCounter);
       userStore.addObserver(userTitle);
       userStore.addObserver(userList);
     } catch (error) {

@@ -34,15 +34,15 @@ class TodoStore extends Subject {
     this.status = status;
     switch (status) {
       case STATUS.ACTIVE:
-        return this.setRenderData(
-          this.originTodoList.filter((data) => !data.complete),
+        return this.setRenderList(
+          this.originTodoList.filter((data) => !data.isCompleted),
         );
       case STATUS.COMPLETED:
-        return this.setRenderData(
-          this.originTodoList.filter((data) => data.complete),
+        return this.setRenderList(
+          this.originTodoList.filter((data) => data.isCompleted),
         );
       default:
-        return this.setRenderData(this.originTodoList);
+        return this.setRenderList(this.originTodoList);
     }
   }
 }

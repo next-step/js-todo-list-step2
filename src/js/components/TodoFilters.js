@@ -3,7 +3,7 @@ import { SELECTOR, CLASS_NAME } from '../utils/constant.js';
 class TodoFilters {
   constructor(store) {
     this.store = store;
-    // this.bindEvent();
+    this.bindEvent();
   }
 
   bindEvent() {
