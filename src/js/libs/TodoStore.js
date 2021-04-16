@@ -13,7 +13,7 @@ class TodoStore extends Subject {
   setTodoList(userId, todoList) {
     this.currentUserId = userId;
     this.originTodoList = todoList;
-    this.setRenderList(todoList);
+    this.setStatus(this.status);
   }
 
   setOriginList(todoList) {
