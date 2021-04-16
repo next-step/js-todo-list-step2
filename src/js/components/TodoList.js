@@ -21,7 +21,7 @@ class TodoList extends Observer {
     // 투두 토글 or 삭제
     this.container.addEventListener('click', ({ target }) => {
       const $li = target.closest(NODE_NAME.LIST);
-      const id = +$li.dataset.id;
+      const id = $li.dataset.id;
       const targetClassList = target.classList;
 
       if (targetClassList.contains(CLASS_NAME.TOGGLE)) {
@@ -116,17 +116,22 @@ class TodoList extends Observer {
    * @param {Element} $li
    * @param {EventTarget} target
    */
-  onToggleComplete(id, $li, target) {
-    target.toggleAttribute('checked');
-    $li.classList.toggle(CLASS_NAME.COMPLETED);
-
-    const updatedData = this.store.originData.map((data) => {
-      if (data.id === id) {
-        return { ...data, complete: !data.complete };
+  async onToggleComplete(id, $li, target) {
+    try {
+      target.toggleAttribute('checked');
+      $li.classList.toggle(CLASS_NAME.COMPLETED);
+      const result = await api.toggleTodoComplete(this.store.currentUserId, id);
+      if (result.isError) {
+        return window.alert(result.errorMessage);
       }
-      return data;
-    });
-    this.store.setOriginData(updatedData);
+      const updatedData = this.store.originTodoList.map((data) => {
+        if (data._id === id) {
+          return { ...data, isCompleted: !data.isCompleted };
+        }
+        return data;
+      });
+      this.store.setOriginList(updatedData);
+    } catch (error) {}
   }
 
   /**

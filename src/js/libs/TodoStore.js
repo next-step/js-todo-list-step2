@@ -12,7 +12,7 @@ class TodoStore extends Subject {
 
   setTodoList(todoList) {
     this.originTodoList = todoList;
-    this.renderTodoList(todoList);
+    this.setRenderList(todoList);
   }
 
   setOriginList(todoList) {
