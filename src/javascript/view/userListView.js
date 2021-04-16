@@ -16,7 +16,17 @@ export default class UserListView {
     this.userList.insertBefore(elem, this.userCreateButton);
   }
 
+  deleteUser(userId) {
+    const userNode = $(`[data-id=${userId}]`);
+    if (!userNode) {
+      return;
+    }
+    userNode.remove();
+    this.selectedUser = '';
+  }
+
   setActive(data) {
+    console.log(data);
     const userNode = $(`[data-id=${data}]`);
     if (this.selectedUser) {
       this.selectedUser.classList.remove('active');
@@ -48,6 +58,21 @@ export default class UserListView {
       }
       const userName = prompt('추가하고 싶은 이름을 입력해주세요.');
       callback(userName);
+    });
+  }
+
+  setDeleteUser(callback) {
+    this.userList.addEventListener('click', (event) => {
+      const target = event.target.closest('.user-delete-button');
+      if (!target) {
+        return;
+      }
+      const conf = confirm('정말로 삭제?');
+      if (conf) {
+        callback(this.selectedUser.dataset.id);
+      } else {
+        callback();
+      }
     });
   }
 }

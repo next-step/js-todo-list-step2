@@ -20,6 +20,7 @@ export default class View {
     if (!cmd) {
       return;
     }
+    // TODO: obj.todo 를 전부 params 로 수정히자
     const options = {
       add: () => this._add(obj.todo),
       editStart: () => this._editMode(obj.todo),
@@ -33,6 +34,7 @@ export default class View {
       showCompleted: () => this._filterCompleted(),
       switchUser: () => this._switchUser(obj.params),
       addUser: () => this._addUser(obj.params),
+      deleteUser: () => this._deleteUser(obj.params),
     };
     options[cmd]();
   }
@@ -68,6 +70,8 @@ export default class View {
       selectUser: () => this.userListView.setSelectUser(callback),
       // NOTE: callback == Controller.addUser
       addUser: () => this.userListView.setAddUser(callback),
+      // NOTE: callback == COntroller.deleteUser
+      deleteUser: () => this.userListView.setDeleteUser(callback),
     };
     options[eventName]();
   }
@@ -160,8 +164,14 @@ export default class View {
 
   _addUser(data) {
     this.userListView.addUser(data);
-    this.userListView.setActive(data._id);
-    // TODO: 새롭게 만들어진 유저로 select를 옮기고
-    // TODO: todoListView, countView 를 비어있게 만들자.
+    // NOTE: user를 만들고 바로 만들어진 유저한테로 이동하게 되면
+    // NOTE: 가끔 DOM 이 만들어지는데 소요되는 시간이 많이걸려서
+    // NOTE: 에러가 발생한다. 이런 경우를 대비해서 그냥 setActive는 하지말자.
+    // this.userListView.setActive(data._id);
+  }
+
+  _deleteUser(userId) {
+    this.userListView.deleteUser(userId);
+    // TODO: todoListView, conutView 를 비우자
   }
 }

@@ -10,6 +10,10 @@ export default class Model {
     return await API.addUser(userName);
   }
 
+  async deleteUser(userId) {
+    return await API.deleteUser(userId);
+  }
+
   async create(value, userName) {
     // if (!value.length) {
     //   throw new Error(ERROR_MESSAGE.CONTENT_EMPTY);

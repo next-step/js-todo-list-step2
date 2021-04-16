@@ -116,6 +116,7 @@ export default class Controller {
       params: data,
     });
   }
+
   addUser(userName) {
     this.model
       .createUser(userName)
@@ -129,9 +130,17 @@ export default class Controller {
         console.log(err);
       });
   }
-
-  deleteUser(userId) {
-    console.log(userId);
+  async deleteUser(userId) {
+    // NOTE: 통신 확인ㅇ해보니 delete를 날리면 무조건 성공으로 나온다.
+    // NOTE: 그러니깐 굳이 여기서 model 작업에 await를 하지는 말자.
+    if (!userId) {
+      return;
+    }
+    this.model.deleteUser(userId);
+    this.view.render({
+      cmd: RENDER_COMMAND.DELETE_USER,
+      params: userId,
+    });
   }
 
   setEventListeners() {
@@ -171,7 +180,6 @@ export default class Controller {
     this.view.setEventListener(EVENT_NAME.ADD_USER, (data) => {
       this.addUser(data);
     });
-    // TODO: DELETE USER
     this.view.setEventListener(EVENT_NAME.DELETE_USER, (userId) => {
       this.deleteUser(userId);
     });
