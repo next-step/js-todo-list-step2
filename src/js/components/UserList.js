@@ -49,7 +49,16 @@ class UserList extends Observer {
     } catch (error) {}
   }
 
-  onRemoveUser() {}
+  async onRemoveUser() {
+    try {
+      const userId = this.store.currentUserId;
+      const result = await api.removeUser(userId);
+      if (result.isError) {
+        return window.alert(USER_NAME_ERROR);
+      }
+      this.store.removeUser(userId);
+    } catch (error) {}
+  }
 
   update() {
     this.render();

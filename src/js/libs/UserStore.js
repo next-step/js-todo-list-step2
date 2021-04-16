@@ -22,9 +22,9 @@ class UserStore extends Subject {
       return user._id !== userId;
     });
     if (removedIndex === this.userList.length) {
-      nextId = this.userList[removedIndex - 1];
+      nextId = this.userList[removedIndex - 1]._id;
     } else {
-      nextId = this.userList[removedIndex];
+      nextId = this.userList[removedIndex]._id;
     }
     this.setCurrentUser(nextId);
   }
