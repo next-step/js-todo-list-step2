@@ -1,4 +1,4 @@
-import { todoTemplate } from "@js/template";
+import { todoTemplate, userTemplate, userListActionButtonTemplate } from "@js/template";
 import { getEl, pipe } from "@js/util";
 import { getUsers } from "@lib/api";
 import { FILTER_TYPE } from "@constants/constant";
@@ -13,56 +13,66 @@ class TodoApp {
     this.store = store;
     this.todoListEl = getEl("ul.todo-list");
     this.todoCountEl = getEl("span.todo-count strong");
+    this.userNameEl = getEl("#user-title strong");
+    this.userListEl = getEl("#user-list");
     this.init();
   }
 
   async init() {
     const { data } = await getUsers();
-    const [user] = data;
+    const [selectedUser] = data;
 
-    this.store.on(["user.name", "user.todoList", "filter"], this.updateViewPipe.bind(this));
+    this.store.on(["selectedUser", "selectedUser.todoList", "filter"], this.updateTodoListViewPipe.bind(this));
+    this.store.on(["selectedUser", "users"], this.updateUserListView.bind(this));
     this.store.set({
-      todoData: data,
-      user: {
-        id: user._id,
-        name: user.name,
-        todoList: user.todoList,
-      },
+      selectedUser: { ...selectedUser },
+      users: data,
       filter: FILTER_TYPE.ALL,
     });
 
     new TodoUser(this.store);
-    new TodoInput(this.store);
-    new TodoList(this.store);
-    new TodoFilters(this.store);
+    // new TodoInput(this.store);
+    // new TodoList(this.store);
+    // new TodoFilters(this.store);
   }
 
-  _getTodoData() {
-    const todoList = this.store.get().user.todoList;
-    const filter = this.store.get().filter;
+  _getTodoListData() {
+    const { selectedUser, filter } = this.store.get();
 
-    let onFilteringTodoList = todoList;
-    if (filter === FILTER_TYPE.ACTIVE) onFilteringTodoList = todoList.filter((item) => !item.isCompleted);
-    if (filter === FILTER_TYPE.COMPLETED) onFilteringTodoList = todoList.filter((item) => item.isCompleted);
+    let onFilteringTodoList = selectedUser.todoList;
+    if (filter === FILTER_TYPE.ACTIVE) onFilteringTodoList = selectedUser.todoList.filter((item) => !item.isCompleted);
+    if (filter === FILTER_TYPE.COMPLETED) onFilteringTodoList = selectedUser.todoList.filter((item) => item.isCompleted);
 
-    return { todoList, onFilteringTodoList };
+    return { selectedUser, onFilteringTodoList };
   }
 
-  _render({ todoList, onFilteringTodoList }) {
-    const todoListTemplate = onFilteringTodoList.map(({ contents, _id, isCompleted, isEditing }) => todoTemplate({ contents, _id, isCompleted, isEditing })).join("");
+  _renderTodoList({ selectedUser, onFilteringTodoList }) {
+    const todoListTemplate = onFilteringTodoList.map(({ contents, _id, isCompleted }) => todoTemplate({ contents, _id, isCompleted })).join("");
 
     this.todoListEl.innerHTML = todoListTemplate;
     this.todoCountEl.innerText = onFilteringTodoList.length;
 
-    return todoList;
+    return selectedUser;
   }
 
-  _saveTodoData(todoList) {
-    saveData(todoList);
+  _saveTodoListData({ _id }) {
+
   }
 
-  updateViewPipe() {
-    pipe(this._getTodoData.bind(this), this._render.bind(this))();
+  updateTodoListViewPipe() {
+    pipe(
+      this._getTodoListData.bind(this),
+      this._renderTodoList.bind(this),
+      this._saveTodoListData.bind(this)
+    )();
+  }
+
+  updateUserListView() {
+    const { selectedUser, users } = this.store.get();
+    const userListTemplate = users.map((user) => userTemplate({ _id: user._id, name: user.name, isSelected: selectedUser._id === user._id })).join("");
+
+    this.userNameEl.innerText = selectedUser.name;
+    this.userListEl.innerHTML = userListTemplate + userListActionButtonTemplate();
   }
 }
 

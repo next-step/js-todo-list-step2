@@ -1,9 +1,9 @@
 export const TODO_STORE = {
-  todoData: [],
-  user: {
-    id: "",
-    name: "",
+  selectedUser: {
+    _id: '',
+    name: '',
     todoList: [],
   },
+  users: [],
   filter: "",
 };
