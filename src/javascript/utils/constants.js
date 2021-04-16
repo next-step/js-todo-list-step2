@@ -14,6 +14,7 @@ export const RENDER_COMMAND = {
   SHOW_ALL: 'showAll',
   SHOW_ACTIVE: 'showActive',
   SHOW_COMPLETED: 'showCompleted',
+  SWITCH_USER: 'switchUser',
 };
 
 export const EVENT_NAME = {
@@ -27,4 +28,7 @@ export const EVENT_NAME = {
   EDIT: 'edit',
   EDIT_END: 'editEnd',
   EDIT_APPLY: 'editApply',
+  SELECT_USER: 'selectUser',
 };
+
+export const BASE_URL = 'https://js-todo-list-9ca3a.df.r.appspot.com';

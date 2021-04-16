@@ -5,14 +5,14 @@
 import TodoListView from './todoListView.js';
 import InputView from './inputView.js';
 import TodoCountView from './todoCountView.js';
+import UserListView from './userListView.js';
 
 export default class View {
-  constructor() {
+  constructor(user) {
     this.todoListView = new TodoListView();
     this.inputView = new InputView();
     this.todoCountView = new TodoCountView();
-
-    this.setCurrentUser('default');
+    this.userListView = new UserListView(user);
   }
 
   render(obj) {
@@ -31,6 +31,7 @@ export default class View {
       showAll: () => this._filterAll(),
       showActive: () => this._filterActive(),
       showCompleted: () => this._filterCompleted(),
+      switchUser: () => this._switchUser(obj.params),
     };
     options[cmd]();
   }
@@ -62,6 +63,7 @@ export default class View {
           callback();
         });
       },
+      selectUser: () => this.userListView.setSelectUser(callback),
     };
     options[eventName]();
   }
@@ -75,9 +77,10 @@ export default class View {
   }
 
   _add(todo) {
+    // console.log(todo);
     this.todoListView.add(todo);
     this.inputView.clear();
-    if (this.todoCountView.getCurrentFilter() === 'completed') {
+    if (this.todoCountView.getCurrentFilter() === 'isCompleted') {
       this.todoListView.hide(todo);
     } else {
       this.todoCountView.setTodoCount(
@@ -105,12 +108,12 @@ export default class View {
 
     if (currentFilter === 'all') {
       return;
-    } else if (currentFilter === 'active' && todo.completed) {
+    } else if (currentFilter === 'active' && todo.isCompleted) {
       this.todoListView.hide(todo);
       this.todoCountView.setTodoCount(
         this.todoCountView.getInnerTextCount() - 1
       );
-    } else if (currentFilter === 'completed' && !todo.completd) {
+    } else if (currentFilter === 'completed' && !todo.isCompletd) {
       this.todoListView.hide(todo);
       this.todoCountView.setTodoCount(
         this.todoCountView.getInnerTextCount() - 1
@@ -143,5 +146,11 @@ export default class View {
 
   _clearInput() {
     this.InputView.clear();
+  }
+
+  _switchUser(data) {
+    console.log(data);
+    this.userListView.setActive(data);
+    // this.userListView.
   }
 }
