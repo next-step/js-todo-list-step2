@@ -6,11 +6,16 @@ class TodoStore extends Subject {
   constructor(userList) {
     super();
     this.userList = userList;
-    this.currentUserName = userList[1].name;
-    this.currentUserId = userList[1]._id;
-    this.originTodoList = userList[1].todoList;
-    this.renderTodoList = userList[1].todoList;
+    this.currentUserName = userList[0].name;
+    this.currentUserId = userList[0]._id;
+    this.originTodoList = userList[0].todoList;
+    this.renderTodoList = userList[0].todoList;
     this.status = STATUS.ALL;
+  }
+
+  addUser(userData) {
+    this.userList = [userData, ...this.userList];
+    this.setCurrentUser(userData._id);
   }
 
   setCurrentUser(userId) {

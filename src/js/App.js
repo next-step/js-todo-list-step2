@@ -2,8 +2,10 @@ import TodoInput from './components/TodoInput.js';
 import TodoList from './components/TodoList.js';
 import TodoCounter from './components/TodoCounter.js';
 import TodoFilters from './components/TodoFilters.js';
+import UserTitle from './components/UserTitle.js';
 import TodoStore from './libs/TodoStore.js';
 import api, { defaultErrorMessage } from './api/index.js';
+import UserList from './components/UserList.js';
 
 const App = () => {
   const init = async () => {
@@ -20,6 +22,8 @@ const App = () => {
 
       // store.addObserver(todoList);
       // store.addObserver(todoCounter);
+      const userTitle = new UserTitle(store);
+      const userList = new UserList(store);
     } catch (error) {
       return window.alert(defaultErrorMessage);
     }

@@ -22,7 +22,7 @@ const request = async (endPoint, option) => {
   try {
     const response = await fetch(baseUrl + endPoint, option);
     const data = await response.json();
-    if (response.status !== 200) {
+    if (response.status !== 200 || !response.ok) {
       throw { message: data.message };
     }
     return data;
