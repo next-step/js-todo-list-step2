@@ -1,0 +1,39 @@
+{
+  "name": "js-todo-list-step2",
+  "version": "1.0.0",
+  "description": "<p align=\"middle\" >   <img width=\"200px;\" src=\"./src/images/check_list.png\"/> </p> <h2 align=\"middle\">JS 투두리스트 스텝2</h2> <p align=\"middle\">자바스크립트와 AJAX를 이용하여 구현 하는 투두리스트</p> <p align=\"middle\">   <img src=\"https://img.shields.io/badge/version-1.0.0-blue?style=flat-square\" alt=\"template version\"/>   <img src=\"https://img.shields.io/badge/language-html-red.svg?style=flat-square\"/>   <img src=\"https://img.shields.io/badge/language-css-blue.svg?style=flat-square\"/>   <img src=\"https://img.shields.io/badge/language-js-yellow.svg?style=flat-square\"/>   <a href=\"https://github.com/next-step/js-todo-list-step2/blob/main/LICENSE\" target=\"_blank\">     <img src=\"https://img.shields.io/github/license/next-step/js-todo-list-step2.svg?style=flat-square&label=license&color=08CE5D\"/>   </a> </p>",
+  "main": "index.js",
+  "dependencies": {
+    "axios": "^0.21.1",
+    "follow-redirects": "^1.13.3"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.13.15",
+    "@babel/polyfill": "^7.12.1",
+    "babel-loader": "^8.2.2",
+    "css-loader": "^5.2.1",
+    "dotenv-webpack": "^7.0.2",
+    "html-webpack-plugin": "^5.3.1",
+    "mini-css-extract-plugin": "^1.4.1",
+    "webpack": "^5.33.2",
+    "webpack-cli": "^4.6.0",
+    "webpack-dev-server": "^3.11.2",
+    "webpack-merge": "^5.7.3"
+  },
+  "scripts": {
+    "start": "webpack serve",
+    "build": "rm -rf ./dist && webpack",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/seungdeng17/js-todo-list-step2.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/seungdeng17/js-todo-list-step2/issues"
+  },
+  "homepage": "https://github.com/seungdeng17/js-todo-list-step2#readme"
+}
