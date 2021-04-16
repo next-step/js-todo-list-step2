@@ -1,38 +1,22 @@
 import Subject from './Subject.js';
 import { STATUS } from '../utils/constant.js';
 
-// Todo 앱 전반 State 관리
 class TodoStore extends Subject {
-  constructor(userList) {
+  constructor(initialData) {
     super();
-    this.userList = userList;
-    this.currentUserName = userList[0].name;
-    this.currentUserId = userList[0]._id;
-    this.originTodoList = userList[0].todoList;
-    this.renderTodoList = userList[0].todoList;
+    this.originTodoList = initialData;
+    this.renderTodoList = initialData;
     this.status = STATUS.ALL;
   }
 
-  addUser(userData) {
-    this.userList = [userData, ...this.userList];
-    this.setCurrentUser(userData._id);
+  setOriginList(todoList) {
+    this.originTodoList(todoList);
+    this.setRenderList(todoList);
   }
-
-  setCurrentUser(userId) {
-    const { name: userName, todoList: newTodoList } = this.userList.find(
-      (user) => user._id === userId,
-    );
-    this.originTodoList = newTodoList;
-    this.renderTodoList = newTodoList;
-    this.currentUserId = userId;
-    this.currentUserName = userName;
-    this.notifyAll();
-  }
-
   /**
    * @param {object[]} todoList
    */
-  setRenderData(todoList) {
+  setRenderList(todoList) {
     this.renderTodoList = todoList;
     this.notifyAll();
   }

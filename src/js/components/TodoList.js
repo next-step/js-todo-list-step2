@@ -142,8 +142,8 @@ class TodoList extends Observer {
     const updatedOriginData = this.store.originData.filter(
       (data) => data.id !== id,
     );
-    this.store.setOriginData(updatedOriginData);
-    this.store.setRenderData(updatedRenderData);
+    this.store.setOriginList(updatedOriginData);
+    this.store.setRenderList(updatedRenderData);
   }
 
   update() {
