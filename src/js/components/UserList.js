@@ -26,10 +26,14 @@ class UserList extends Observer {
           ? this.onCreateUser()
           : this.onRemoveUser();
       }
+      const userId = target.dataset.id;
+      userId && this.onSelectUser(userId);
     });
   }
 
-  onSelectUser() {}
+  onSelectUser(userId) {
+    this.store.setCurrentUser(userId);
+  }
 
   async onCreateUser() {
     try {
