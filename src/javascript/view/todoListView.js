@@ -41,7 +41,7 @@ export default class TodoListView {
   }
 
   update(todo) {
-    const oldTodo = this._getTodoById(todo.id);
+    const oldTodo = this._getTodoById(todo._id);
     const newTodo = this._createTodo(todo);
     this._todoList.replaceChild(newTodo, oldTodo);
   }
@@ -59,7 +59,7 @@ export default class TodoListView {
   }
 
   hide(todo) {
-    const li = this._getTodoById(todo.id);
+    const li = this._getTodoById(todo._id);
     if (!li) {
       return;
     }
@@ -72,7 +72,7 @@ export default class TodoListView {
         return;
       }
       const li = event.target.closest('li');
-      callback(+li.dataset.id);
+      callback(li.dataset.id);
     });
   }
 
@@ -82,7 +82,7 @@ export default class TodoListView {
         return;
       }
       const li = event.target.closest('li');
-      callback(+li.dataset.id);
+      callback(li.dataset.id);
     });
   }
 

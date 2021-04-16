@@ -43,18 +43,19 @@ export default class Controller {
       });
   }
 
-  toggleComplete(todoId) {
-    this.model
-      .updateStatus(todoId, this.view.getCurrentUser())
-      .then((todo) => {
-        this.view.render({
-          cmd: RENDER_COMMAND.TOGGLE,
-          params: todo,
-        });
-      })
-      .catch((error) => {
-        alert(error.message);
+  async toggleComplete(todoId) {
+    try {
+      const updatedTodo = await this.model.updateComplete(
+        this.view.getCurrentUserId(),
+        todoId
+      );
+      this.view.render({
+        cmd: RENDER_COMMAND.TOGGLE,
+        params: updatedTodo,
       });
+    } catch (error) {
+      alert('toggle update error');
+    }
   }
 
   edit(todo) {

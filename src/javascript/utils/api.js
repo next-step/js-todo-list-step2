@@ -53,4 +53,15 @@ function getUser(userId) {
   return fetch_retry(`${BASE_URL}/api/users/${userId}`);
 }
 
-export { getUsers, addUser, deleteUser, getUser };
+function updateComplete(userId, itemId) {
+  const options = {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+  };
+  return fetch_retry(
+    `${BASE_URL}/api/users/${userId}/items/${itemId}/toggle`,
+    options
+  );
+}
+
+export { getUsers, addUser, deleteUser, getUser, updateComplete };

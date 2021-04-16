@@ -18,6 +18,10 @@ export default class Model {
     return await API.getUser(userId);
   }
 
+  async updateComplete(userId, itemId) {
+    return await API.updateComplete(userId, itemId);
+  }
+
   async create(value, userName) {
     // if (!value.length) {
     //   throw new Error(ERROR_MESSAGE.CONTENT_EMPTY);
