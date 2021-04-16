@@ -1,6 +1,6 @@
-import { BASE_URL } from './constants.js';
+import { BASE_URL, RETRY_COUNT } from './constants.js';
 
-const fetch_retry = async (url, options, n = 3) => {
+const fetch_retry = async (url, options, n = RETRY_COUNT) => {
   try {
     let response = await fetch(url, options);
     if (!response.ok) {
@@ -8,7 +8,8 @@ const fetch_retry = async (url, options, n = 3) => {
     }
     return await response.json();
   } catch (err) {
-    if (n < 1) {
+    console.log(n);
+    if (n <= 1) {
       throw err;
     }
     return await fetch_retry(url, options, n - 1);

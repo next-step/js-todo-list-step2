@@ -36,3 +36,5 @@ export const EVENT_NAME = {
 };
 
 export const BASE_URL = 'https://js-todo-list-9ca3a.df.r.appspot.com';
+
+export const RETRY_COUNT = 3;

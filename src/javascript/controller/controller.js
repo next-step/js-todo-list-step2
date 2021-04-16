@@ -125,12 +125,12 @@ export default class Controller {
         params: newUser,
       });
     } catch (error) {
-      console.error(error);
+      alert('생성 실패');
     }
   }
 
   async deleteUser(userId) {
-    // NOTE: 통신 확인ㅇ해보니 delete를 날리면 무조건 성공으로 나온다.
+    // NOTE: 통신 확인해보니 delete를 날리면 무조건 성공으로 나온다.
     // NOTE: 그러니깐 굳이 여기서 model 작업에 await를 하지는 말자.
     if (!userId) {
       return;
