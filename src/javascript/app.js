@@ -1,20 +1,44 @@
 import Model from './model/model.js';
 import View from './view/view.js';
 import Controller from './controller/controller.js';
-import DB from './db.js';
+import { getUsers } from './utils/api.js';
 
-// NOTE: userNames 는 이후의 과제를 고려해서 작성해둠.
-// TODO: 이후 userNames 는 localStorages에서 `userNames` 키로 가져오기
 class App {
   constructor() {
+    this.init();
+  }
+
+  async init() {
     location.href = '#';
-    this.storages = {};
-    this.userNames = ['default', 'test', 'test2'];
-    this.userNames.map((name) => {
-      this.storages[name] = new DB(name);
-    });
-    this.model = new Model(this.storages);
-    this.view = new View();
+    await this.initUsers();
+    this.initModel();
+    this.initView();
+    this.initController();
+  }
+
+  async initUsers() {
+    this.users = await getUsers();
+  }
+
+  initModel() {
+    this.model = new Model(this.users);
+  }
+
+  initView() {
+    // view를 초기화할 때 첫 번째 유저의 정보를 먼저 렌더링하게 만들자
+    // this.view = new View(this.model.getTodosOf(this.users[0].name));
+    // userNames 배열을 인자로 주자
+    this.view = new View(
+      this.users.map((user) => {
+        return {
+          name: user.name,
+          id: user._id,
+        };
+      })
+    );
+  }
+
+  initController() {
     this.controller = new Controller(this.model, this.view);
   }
 }
