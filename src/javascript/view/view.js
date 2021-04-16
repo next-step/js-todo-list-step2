@@ -164,10 +164,6 @@ export default class View {
 
   _addUser(data) {
     this.userListView.addUser(data);
-    // NOTE: user를 만들고 바로 만들어진 유저한테로 이동하게 되면
-    // NOTE: 가끔 DOM 이 만들어지는데 소요되는 시간이 많이걸려서
-    // NOTE: 에러가 발생한다. 이런 경우를 대비해서 그냥 setActive는 하지말자.
-    // this.userListView.setActive(data._id);
   }
 
   _deleteUser(userId) {

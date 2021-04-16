@@ -117,19 +117,18 @@ export default class Controller {
     });
   }
 
-  addUser(userName) {
-    this.model
-      .createUser(userName)
-      .then((newUser) => {
-        this.view.render({
-          cmd: RENDER_COMMAND.ADD_USER,
-          params: newUser,
-        });
-      })
-      .catch((err) => {
-        console.log(err);
+  async addUser(userName) {
+    try {
+      const newUser = await this.model.createUser(userName);
+      this.view.render({
+        cmd: RENDER_COMMAND.ADD_USER,
+        params: newUser,
       });
+    } catch (error) {
+      console.error(error);
+    }
   }
+
   async deleteUser(userId) {
     // NOTE: 통신 확인ㅇ해보니 delete를 날리면 무조건 성공으로 나온다.
     // NOTE: 그러니깐 굳이 여기서 model 작업에 await를 하지는 말자.

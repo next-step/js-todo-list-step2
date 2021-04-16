@@ -17,7 +17,7 @@ export default class UserListView {
   }
 
   deleteUser(userId) {
-    const userNode = $(`[data-id=${userId}]`);
+    const userNode = this._getUserNode(userId);
     if (!userNode) {
       return;
     }
@@ -25,14 +25,17 @@ export default class UserListView {
     this.selectedUser = '';
   }
 
-  setActive(data) {
-    console.log(data);
-    const userNode = $(`[data-id="${data}"]`);
+  setActive(userId) {
+    const userNode = this._getUserNode(userId);
     if (this.selectedUser) {
       this.selectedUser.classList.remove('active');
     }
     userNode.classList.add('active');
     this.selectedUser = userNode;
+  }
+
+  _getUserNode(id) {
+    return $(`[data-id="${id}"]`);
   }
 
   setSelectUser(callback) {
