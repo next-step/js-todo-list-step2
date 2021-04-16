@@ -13,10 +13,10 @@ class TodoFilters {
   }
 
   filtersHandler({ target }) {
-    if (target.tagName !== "A") return;
-    const type = target.classList[0];
+    if (!target.classList.contains(UI_CLASS.FILTER)) return;
+    const [type] = target.classList;
 
-    this.filtersEl.querySelectorAll("a").forEach((el) => {
+    this.filtersEl.querySelectorAll(`.${UI_CLASS.FILTER}`).forEach((el) => {
       el.classList.remove(UI_CLASS.SELECTED);
       if (el.classList.contains(type)) el.classList.add(UI_CLASS.SELECTED);
     });

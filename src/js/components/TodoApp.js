@@ -19,21 +19,21 @@ class TodoApp {
   }
 
   async init() {
-    const { data } = await getUsers();
-    const [selectedUser] = data;
+    const { data: _users } = await getUsers();
+    const [selectedUser] = _users;
 
     this.store.on(["selectedUser", "selectedUser.todoList", "filter"], this.updateTodoListViewPipe.bind(this));
     this.store.on(["selectedUser", "users"], this.updateUserListView.bind(this));
     this.store.set({
       selectedUser: { ...selectedUser },
-      users: data,
+      users: [..._users],
       filter: FILTER_TYPE.ALL,
     });
 
     new TodoUserList(this.store);
     new TodoInput(this.store);
     // new TodoList(this.store);
-    // new TodoFilters(this.store);
+    new TodoFilters(this.store);
   }
 
   _getTodoListData() {

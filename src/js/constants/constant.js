@@ -9,6 +9,7 @@ export const UI_CLASS = {
   DESTROY: "destroy",
   LABEL: "label",
   SELECTED: "selected",
+  FILTER: "todo-filter"
 };
 
 export const KEY = {
