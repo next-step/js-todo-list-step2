@@ -75,7 +75,6 @@ export default class View {
   }
 
   _add(todo) {
-    // console.log(todo);
     this.todoListView.add(todo);
     this.inputView.clear();
     if (this.todoCountView.getCurrentFilter() === 'isCompleted') {

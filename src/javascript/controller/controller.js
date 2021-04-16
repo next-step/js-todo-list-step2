@@ -7,18 +7,19 @@ export default class Controller {
     this.setEventListeners();
   }
 
-  add(value) {
-    this.model
-      .create(value, this.view.getCurrentUser())
-      .then((todo) => {
-        this.view.render({
-          cmd: RENDER_COMMAND.ADD,
-          params: todo,
-        });
-      })
-      .catch((error) => {
-        alert(error.message);
+  async add(contents) {
+    try {
+      const newTodo = await this.model.createItem(
+        this.view.getCurrentUserId(),
+        contents
+      );
+      this.view.render({
+        cmd: RENDER_COMMAND.ADD,
+        params: newTodo,
       });
+    } catch (error) {
+      alert(error.message);
+    }
   }
 
   async remove(todoId) {

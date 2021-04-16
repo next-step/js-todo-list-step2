@@ -26,27 +26,11 @@ export default class Model {
     return API.deleteItem(userId, itemId);
   }
 
-  async create(value, userName) {
-    // if (!value.length) {
-    //   throw new Error(ERROR_MESSAGE.CONTENT_EMPTY);
-    // }
-    // this._setCurrentStorage(userName);
-    // this._todos[userName].push(
-    //   this._currentStorage.new({
-    //     contents: value,
-    //     completed: false,
-    //   })
-    // );
-    // this._currentStorage.save(this._todos[userName]);
-    // return this._todos[userName][this._todos[userName].length - 1];
-  }
-
-  async updateStatus(todoId, userName) {
-    // return this._update({
-    //   todoId,
-    //   userName,
-    //   cmd: 'updateStatus',
-    // });
+  createItem(userId, contents) {
+    if (contents.length < 2) {
+      throw new Error('길이는 2글자 이산!');
+    }
+    return API.createItem(userId, contents);
   }
 
   async updateContent(todoId, content, userName) {
@@ -57,13 +41,6 @@ export default class Model {
     //   cmd: 'updateContent',
     // });
   }
-
-  // getTodosOf(userName) {
-  //   const a = this.data.find((user) => user.name === userName);
-  //   console.log(a.todoList);
-  //   return a.todoList;
-  //   // return this._todos[userName].filter((todo) => !todo.removed);
-  // }
 
   _findTodoById(id, userName) {
     return this._todos[userName].find((todo) => todo.id === id);

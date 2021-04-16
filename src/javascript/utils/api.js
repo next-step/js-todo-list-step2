@@ -19,13 +19,16 @@ function getUsers() {
   return fetch_retry(`${BASE_URL}/api/users`);
 }
 
-function addTodo() {
+function createItem(userId, contents) {
+  const requestBody = {
+    contents,
+  };
   const options = {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(contents),
+    body: JSON.stringify(requestBody),
   };
-  // return fetch_retry()
+  return fetch_retry(`${BASE_URL}/api/users/${userId}/items`, options);
 }
 
 function addUser(userName) {
@@ -74,4 +77,12 @@ function updateComplete(userId, itemId) {
   );
 }
 
-export { getUsers, addUser, deleteUser, getUser, updateComplete, deleteItem };
+export {
+  getUsers,
+  addUser,
+  deleteUser,
+  getUser,
+  updateComplete,
+  deleteItem,
+  createItem,
+};
