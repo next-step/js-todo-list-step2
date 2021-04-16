@@ -2,7 +2,7 @@ import { getEl } from "@js/util";
 import { getUsers, getUser, createUser, deleteUser } from "@lib/api";
 import { ACTION, MESSAGES, VALIDATION } from "@constants/constant";
 
-class TodoUser {
+class TodoUserList {
   constructor(store) {
     this.store = store;
     this.userListEl = getEl("#user-list");
@@ -58,4 +58,4 @@ class TodoUser {
   }
 }
 
-export default TodoUser;
+export default TodoUserList;
