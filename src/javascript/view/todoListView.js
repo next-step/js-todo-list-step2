@@ -114,13 +114,13 @@ export default class TodoListView {
 
   _createTodo(todo) {
     const li = document.createElement('li');
-    li.className = todo.completed ? 'completed' : 'active';
-    li.dataset.id = todo.id;
+    li.className = todo.isCompleted ? 'completed' : 'active';
+    li.dataset.id = todo._id;
     li.innerHTML = `
                     <div class="view">
                       <input class="toggle" type="checkbox"
-                        ${todo.completed ? 'checked' : ''}/>
-                      <label class="label">${todo.content}</label>
+                        ${todo.isCompleted ? 'checked' : ''}/>
+                      <label class="label">${todo.contents}</label>
                       <button class="destroy"></button>
                     </div>
                     <input class="edit" value="" />`;
