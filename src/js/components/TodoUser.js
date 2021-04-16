@@ -18,7 +18,7 @@ class TodoUser {
 
     if (action === 'createUser') return this._createUserHandler();
     if (action === 'deleteUser') return this._deleteUserHandler();
-    if (_id === targetId) return;
+    if (!targetId || _id === targetId) return;
 
     const { data } = await getUser(targetId);
 
