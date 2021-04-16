@@ -1,5 +1,5 @@
 import { todoTemplate } from "@js/template";
-import { getEl, saveData, loadData, pipe } from "@js/util";
+import { getEl, pipe } from "@js/util";
 import { FILTER_TYPE } from "@js/constants/constant";
 
 import TodoInput from "./TodoInput";

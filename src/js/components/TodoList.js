@@ -1,5 +1,5 @@
 import { getEl } from "@js/util";
-import { UI_CLASS, KEY_CODE, MESSAGES } from "@js/constants/constant";
+import { UI_CLASS, KEY, MESSAGES } from "@js/constants/constant";
 
 class TodoList {
   constructor(store) {
@@ -50,10 +50,10 @@ class TodoList {
   }
 
   confirmHandler({ keyCode, target }) {
-    if (keyCode === KEY_CODE.ENTER || keyCode === KEY_CODE.ESCAPE) {
+    if (keyCode === KEY.ENTER || keyCode === KEY.ESCAPE) {
       const { id } = target.closest("li");
       const todoList = this.store.get().todoList;
-      if (keyCode === KEY_CODE.ENTER) todoList[id].title = target.value;
+      if (keyCode === KEY.ENTER) todoList[id].title = target.value;
       todoList[id].isEditing = false;
 
       this.store.set({
