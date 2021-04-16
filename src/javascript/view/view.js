@@ -26,13 +26,13 @@ export default class View {
       editStart: () => this._editMode(obj.params),
       editApply: () => this._update(obj.params),
       editEnd: () => this._editEnd(obj.params),
-      remove: () => this._remove(obj.params),
+      remove: () => this._refresh(obj.params),
       toggle: () => this._update(obj.params),
       refresh: () => this._addAll(obj.params),
       showAll: () => this._filterAll(),
       showActive: () => this._filterActive(),
       showCompleted: () => this._filterCompleted(),
-      switchUser: () => this._switchUser(obj.params),
+      switchUser: () => this._refresh(obj.params),
       addUser: () => this._addUser(obj.params),
       deleteUser: () => this._deleteUser(obj.params),
     };
@@ -60,12 +60,6 @@ export default class View {
       // NOTE: callback == Controller.showCompleted
       selectCompleted: () =>
         this.todoCountView.setSelectCompletedEvent(callback),
-      // NOTE: callback == Controller.refreshPage
-      refresh: () => {
-        window.addEventListener('load', () => {
-          callback();
-        });
-      },
       // NOTE: callback == Controller.switchUser
       selectUser: () => this.userListView.setSelectUser(callback),
       // NOTE: callback == Controller.addUser
@@ -152,7 +146,7 @@ export default class View {
     this.InputView.clear();
   }
 
-  _switchUser(user) {
+  _refresh(user) {
     this.userListView.setActive(user._id);
     this.todoListView.addAll(user.todoList);
     this.todoCountView.init(user.todoList.length);

@@ -18,8 +18,12 @@ export default class Model {
     return await API.getUser(userId);
   }
 
-  async updateComplete(userId, itemId) {
-    return await API.updateComplete(userId, itemId);
+  updateComplete(userId, itemId) {
+    return API.updateComplete(userId, itemId);
+  }
+
+  deleteItem(userId, itemId) {
+    return API.deleteItem(userId, itemId);
   }
 
   async create(value, userName) {
@@ -35,14 +39,6 @@ export default class Model {
     // );
     // this._currentStorage.save(this._todos[userName]);
     // return this._todos[userName][this._todos[userName].length - 1];
-  }
-
-  async remove(todoId, userName) {
-    // return this._update({
-    //   todoId,
-    //   userName,
-    //   cmd: 'remove',
-    // });
   }
 
   async updateStatus(todoId, userName) {

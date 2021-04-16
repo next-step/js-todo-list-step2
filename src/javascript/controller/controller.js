@@ -21,26 +21,19 @@ export default class Controller {
       });
   }
 
-  refreshPage() {
-    const todos = this.model.getTodosOf(this.view.getCurrentUser());
-    this.view.render({
-      cmd: RENDER_COMMAND.REFRESH,
-      todos: todos,
-    });
-  }
-
-  remove(todoId) {
-    this.model
-      .remove(todoId, this.view.getCurrentUser())
-      .then((todo) => {
-        this.view.render({
-          cmd: RENDER_COMMAND.REMOVE,
-          params: todo,
-        });
-      })
-      .catch((error) => {
-        alert(error.message);
+  async remove(todoId) {
+    try {
+      const user = await this.model.deleteItem(
+        this.view.getCurrentUserId(),
+        todoId
+      );
+      this.view.render({
+        cmd: RENDER_COMMAND.REMOVE,
+        params: user,
       });
+    } catch (error) {
+      alert('remove error!!');
+    }
   }
 
   async toggleComplete(todoId) {
@@ -147,9 +140,6 @@ export default class Controller {
   setEventListeners() {
     this.view.setEventListener(EVENT_NAME.ADD, (value) => {
       this.add(value);
-    });
-    this.view.setEventListener(EVENT_NAME.REFRESH, () => {
-      this.refreshPage();
     });
     this.view.setEventListener(EVENT_NAME.DESTROY, (todoId) => {
       this.remove(todoId);

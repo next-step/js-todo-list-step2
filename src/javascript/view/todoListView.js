@@ -16,7 +16,7 @@ export default class TodoListView {
   }
 
   remove(todo) {
-    const li = this._getTodoById(todo.id);
+    const li = this._getTodoById(todo._id);
     if (!li) {
       return;
     }

@@ -8,7 +8,6 @@ const fetch_retry = async (url, options, n = RETRY_COUNT) => {
     }
     return await response.json();
   } catch (err) {
-    console.log(n);
     if (n <= 1) {
       throw err;
     }
@@ -53,6 +52,17 @@ function getUser(userId) {
   return fetch_retry(`${BASE_URL}/api/users/${userId}`);
 }
 
+function deleteItem(userId, itemId) {
+  const options = {
+    method: 'DELETE',
+    headers: { 'Content-Type': 'application/json' },
+  };
+  return fetch_retry(
+    `${BASE_URL}/api/users/${userId}/items/${itemId}`,
+    options
+  );
+}
+
 function updateComplete(userId, itemId) {
   const options = {
     method: 'PUT',
@@ -64,4 +74,4 @@ function updateComplete(userId, itemId) {
   );
 }
 
-export { getUsers, addUser, deleteUser, getUser, updateComplete };
+export { getUsers, addUser, deleteUser, getUser, updateComplete, deleteItem };
