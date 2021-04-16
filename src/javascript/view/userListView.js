@@ -27,7 +27,7 @@ export default class UserListView {
 
   setActive(data) {
     console.log(data);
-    const userNode = $(`[data-id=${data}]`);
+    const userNode = $(`[data-id="${data}"]`);
     if (this.selectedUser) {
       this.selectedUser.classList.remove('active');
     }
