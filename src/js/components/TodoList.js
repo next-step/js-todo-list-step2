@@ -138,15 +138,21 @@ class TodoList extends Observer {
    * 투두 삭제 메서드
    * @param {number} id
    */
-  onRemoveTodo(id) {
-    const updatedRenderData = this.store.renderData.filter(
-      (data) => data.id !== id,
-    );
-    const updatedOriginData = this.store.originData.filter(
-      (data) => data.id !== id,
-    );
-    this.store.setOriginList(updatedOriginData);
-    this.store.setRenderList(updatedRenderData);
+  async onRemoveTodo(id) {
+    try {
+      const result = await api.removeTodo(this.store.currentUserId, id);
+      if (result.isError) {
+        return window.alert(result.errorMessage);
+      }
+      const updatedRenderData = this.store.renderTodoList.filter(
+        (todo) => todo._id !== id,
+      );
+      const updatedOriginData = this.store.originTodoList.filter(
+        (todo) => todo._id !== id,
+      );
+      this.store.setOriginList(updatedOriginData);
+      this.store.setRenderList(updatedRenderData);
+    } catch (error) {}
   }
 
   update() {
