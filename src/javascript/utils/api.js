@@ -1,6 +1,6 @@
 import { BASE_URL } from './constants.js';
 
-const fetch_retry = async (url, options, n) => {
+const fetch_retry = async (url, options, n = 3) => {
   try {
     let response = await fetch(url, options);
     if (!response.ok) {
@@ -27,6 +27,7 @@ function addTodo() {
   };
   // return fetch_retry()
 }
+
 function addUser(userName) {
   const requestBody = {
     name: userName,
@@ -38,4 +39,13 @@ function addUser(userName) {
   };
   return fetch_retry(`${BASE_URL}/api/users`, options);
 }
-export { getUsers, addUser };
+
+function deleteUser(userId) {
+  const options = {
+    method: 'DELETE',
+    headers: { 'Content-Type': 'application/json' },
+  };
+  return fetch_retry(`${BASE_URL}/api/users/${userId}`, options);
+}
+
+export { getUsers, addUser, deleteUser };
