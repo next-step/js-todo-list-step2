@@ -7,6 +7,7 @@ export const SELECTOR = {
   FILTER: '.filters',
   USER_TITLE: '#user-title',
   USER_LIST: '#user-list',
+  CLEAR_ALL: '.clear-completed',
 };
 
 export const CLASS_NAME = {

@@ -75,7 +75,7 @@ const requestData = {
       },
     };
   },
-  removeAllTodo: (userId) => {
+  removeAllTodos: (userId) => {
     return {
       endPoint: `api/users/${userId}/items/`,
       option: {

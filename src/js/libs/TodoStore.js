@@ -1,4 +1,5 @@
 import Subject from './Subject.js';
+import api from '../api/index.js';
 import { STATUS } from '../utils/constant.js';
 
 class TodoStore extends Subject {
@@ -10,7 +11,7 @@ class TodoStore extends Subject {
     this.status = STATUS.ALL;
   }
 
-  setTodoList(userId, todoList) {
+  initTodoList(userId, todoList) {
     this.currentUserId = userId;
     this.originTodoList = todoList;
     this.setStatus(this.status);

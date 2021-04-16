@@ -18,6 +18,8 @@ class TodoList extends Observer {
   }
 
   bindEvent() {
+    const clearAllBtn = document.querySelector(SELECTOR.CLEAR_ALL);
+    clearAllBtn.addEventListener('click', (e) => this.onClearAll(e));
     // 투두 토글 or 삭제
     this.container.addEventListener('click', ({ target }) => {
       const $li = target.closest(NODE_NAME.LIST);
@@ -48,6 +50,17 @@ class TodoList extends Observer {
         $activeInput && this.offEditMode($activeInput, key);
       }
     });
+  }
+
+  async onClearAll() {
+    try {
+      const result = await api.removeAllTodos(this.store.currentUserId);
+      if (result.isError) {
+        return window.alert(result.errorMessage);
+      }
+      this.store.setOriginList([]);
+      this.store.setRenderList([]);
+    } catch (error) {}
   }
 
   /**

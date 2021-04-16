@@ -1,4 +1,5 @@
 import Subject from './Subject.js';
+import api from '../api/index.js';
 
 class UserStore extends Subject {
   constructor(userList, todoStore) {
@@ -29,14 +30,18 @@ class UserStore extends Subject {
     this.setCurrentUser(nextId);
   }
 
-  setCurrentUser(userId) {
-    const { name: userName, todoList } = this.userList.find(
-      (user) => user._id === userId,
-    );
-    this.currentUserId = userId;
-    this.currentUserName = userName;
-    this.notifyAll();
-    this.todoStore.setTodoList(userId, todoList);
+  async setCurrentUser(userId) {
+    try {
+      const result = await api.getUser(userId);
+      if (result.isError) {
+        return window.alert(result.errorMessage);
+      }
+      const { todoList, name } = result.data;
+      this.currentUserId = userId;
+      this.currentUserName = name;
+      this.notifyAll();
+      this.todoStore.initTodoList(userId, todoList);
+    } catch (error) {}
   }
 }
 
