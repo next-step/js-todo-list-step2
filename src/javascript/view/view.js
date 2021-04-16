@@ -168,6 +168,7 @@ export default class View {
 
   _deleteUser(userId) {
     this.userListView.deleteUser(userId);
-    // TODO: todoListView, conutView 를 비우자
+    this.todoListView.clear();
+    this.todoCountView.init(0);
   }
 }

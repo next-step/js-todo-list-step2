@@ -23,6 +23,10 @@ export default class TodoListView {
     li.remove();
   }
 
+  clear() {
+    this._todoList.innerHTML = '';
+  }
+
   editStart(todo) {
     todo.classList.add('editing');
     const input = $('.edit', todo);
