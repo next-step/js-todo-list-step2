@@ -25,8 +25,17 @@ function addTodo() {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(contents),
   };
-
   // return fetch_retry()
 }
-
-export { getUsers };
+function addUser(userName) {
+  const requestBody = {
+    name: userName,
+  };
+  const options = {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(requestBody),
+  };
+  return fetch_retry(`${BASE_URL}/api/users`, options);
+}
+export { getUsers, addUser };

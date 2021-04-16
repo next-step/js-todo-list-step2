@@ -110,6 +110,30 @@ export default class Controller {
     });
   }
 
+  selectUser(data) {
+    this.view.render({
+      cmd: RENDER_COMMAND.SWITCH_USER,
+      params: data,
+    });
+  }
+  addUser(userName) {
+    this.model
+      .createUser(userName)
+      .then((newUser) => {
+        this.view.render({
+          cmd: RENDER_COMMAND.ADD_USER,
+          params: newUser,
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+
+  deleteUser(userId) {
+    console.log(userId);
+  }
+
   setEventListeners() {
     this.view.setEventListener(EVENT_NAME.ADD, (value) => {
       this.add(value);
@@ -140,6 +164,16 @@ export default class Controller {
     });
     this.view.setEventListener(EVENT_NAME.EDIT_APPLY, (todoId, content) => {
       this.editApply(todoId, content);
+    });
+    this.view.setEventListener(EVENT_NAME.SELECT_USER, (data) => {
+      this.selectUser(data);
+    });
+    this.view.setEventListener(EVENT_NAME.ADD_USER, (data) => {
+      this.addUser(data);
+    });
+    // TODO: DELETE USER
+    this.view.setEventListener(EVENT_NAME.DELETE_USER, (userId) => {
+      this.deleteUser(userId);
     });
   }
 }

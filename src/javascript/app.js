@@ -32,7 +32,7 @@ class App {
       this.users.map((user) => {
         return {
           name: user.name,
-          id: user._id,
+          _id: user._id,
         };
       })
     );

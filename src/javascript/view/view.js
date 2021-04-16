@@ -32,6 +32,7 @@ export default class View {
       showActive: () => this._filterActive(),
       showCompleted: () => this._filterCompleted(),
       switchUser: () => this._switchUser(obj.params),
+      addUser: () => this._addUser(obj.params),
     };
     options[cmd]();
   }
@@ -57,13 +58,16 @@ export default class View {
       // NOTE: callback == Controller.showCompleted
       selectCompleted: () =>
         this.todoCountView.setSelectCompletedEvent(callback),
+      // NOTE: callback == Controller.refreshPage
       refresh: () => {
-        // NOTE: callback == Controller.refreshPage
         window.addEventListener('load', () => {
           callback();
         });
       },
+      // NOTE: callback == Controller.switchUser
       selectUser: () => this.userListView.setSelectUser(callback),
+      // NOTE: callback == Controller.addUser
+      addUser: () => this.userListView.setAddUser(callback),
     };
     options[eventName]();
   }
@@ -149,8 +153,15 @@ export default class View {
   }
 
   _switchUser(data) {
-    console.log(data);
     this.userListView.setActive(data);
+    // TODO: todoListView, countView 를 비어있게 만들자.
     // this.userListView.
+  }
+
+  _addUser(data) {
+    this.userListView.addUser(data);
+    this.userListView.setActive(data._id);
+    // TODO: 새롭게 만들어진 유저로 select를 옮기고
+    // TODO: todoListView, countView 를 비어있게 만들자.
   }
 }

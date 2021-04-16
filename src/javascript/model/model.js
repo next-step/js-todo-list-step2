@@ -1,60 +1,60 @@
 import { ERROR_MESSAGE } from '../utils/constants.js';
 import { hasKey } from '../utils/utils.js';
+import * as API from '../utils/api.js';
 export default class Model {
-  constructor(storages) {
-    this._storages = storages;
-    this._todos = {};
-    for (let userName in storages) {
-      this._todos[userName] = storages[userName].todos;
-    }
+  constructor(data) {
+    this.data = data;
+  }
+
+  async createUser(userName) {
+    return await API.addUser(userName);
   }
 
   async create(value, userName) {
-    if (!value.length) {
-      throw new Error(ERROR_MESSAGE.CONTENT_EMPTY);
-    }
-    this._setCurrentStorage(userName);
-    this._todos[userName].push(
-      this._currentStorage.new({
-        content: value,
-        completed: false,
-      })
-    );
-    this._currentStorage.save(this._todos[userName]);
-    return this._todos[userName][this._todos[userName].length - 1];
+    // if (!value.length) {
+    //   throw new Error(ERROR_MESSAGE.CONTENT_EMPTY);
+    // }
+    // this._setCurrentStorage(userName);
+    // this._todos[userName].push(
+    //   this._currentStorage.new({
+    //     contents: value,
+    //     completed: false,
+    //   })
+    // );
+    // this._currentStorage.save(this._todos[userName]);
+    // return this._todos[userName][this._todos[userName].length - 1];
   }
 
   async remove(todoId, userName) {
-    return this._update({
-      todoId,
-      userName,
-      cmd: 'remove',
-    });
+    // return this._update({
+    //   todoId,
+    //   userName,
+    //   cmd: 'remove',
+    // });
   }
 
   async updateStatus(todoId, userName) {
-    return this._update({
-      todoId,
-      userName,
-      cmd: 'updateStatus',
-    });
+    // return this._update({
+    //   todoId,
+    //   userName,
+    //   cmd: 'updateStatus',
+    // });
   }
 
   async updateContent(todoId, content, userName) {
-    return this._update({
-      todoId,
-      userName,
-      content,
-      cmd: 'updateContent',
-    });
+    // return this._update({
+    //   todoId,
+    //   userName,
+    //   content,
+    //   cmd: 'updateContent',
+    // });
   }
 
   getTodosOf(userName) {
-    return this._todos[userName].filter((todo) => !todo.removed);
-  }
-
-  _setCurrentStorage(userName) {
-    this._currentStorage = this._storages[userName];
+    const a = this.data.find((user) => user.name === userName);
+    console.log(a.todoList);
+    return a.todoList;
+    // return this._todos[userName].filter((todo) => !todo.removed);
   }
 
   _findTodoById(id, userName) {
