@@ -16,11 +16,11 @@ const UserList = function() {
         const users = await response.json();
         return users;
     }
+
     const render = async function() {
         const userInfos = await returnUserInfo();
-        userInfos.forEach(userInfo => $('#userlist').insertAdjacentHTML('afterbegin', appendUserBtn(userInfo)));
+        userInfos.forEach(userInfo => $('#user-list').insertAdjacentHTML('afterbegin', appendUserBtn(userInfo)));
     }
-
     render();
 }
 
