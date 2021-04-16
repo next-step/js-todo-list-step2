@@ -55,9 +55,7 @@ class Store {
       Promise.resolve().then(() => {
         this._guard = false;
         const nextState = this._state;
-        this._currTicklisteners.forEach((listener) =>
-          listener(nextState, prevState)
-        );
+        this._currTicklisteners.forEach((listener) => listener(nextState, prevState));
         this._currTicklisteners.clear();
       });
     }
