@@ -13,7 +13,7 @@ export default class Controller {
       .then((todo) => {
         this.view.render({
           cmd: RENDER_COMMAND.ADD,
-          todo: todo,
+          params: todo,
         });
       })
       .catch((error) => {
@@ -35,7 +35,7 @@ export default class Controller {
       .then((todo) => {
         this.view.render({
           cmd: RENDER_COMMAND.REMOVE,
-          todo: todo,
+          params: todo,
         });
       })
       .catch((error) => {
@@ -49,7 +49,7 @@ export default class Controller {
       .then((todo) => {
         this.view.render({
           cmd: RENDER_COMMAND.TOGGLE,
-          todo: todo,
+          params: todo,
         });
       })
       .catch((error) => {
@@ -60,7 +60,7 @@ export default class Controller {
   edit(todo) {
     this.view.render({
       cmd: RENDER_COMMAND.EDIT_START,
-      todo: todo,
+      params: todo,
     });
   }
 
@@ -70,7 +70,7 @@ export default class Controller {
       .then((todo) => {
         this.view.render({
           cmd: RENDER_COMMAND.EDIT_APPLY,
-          todo: todo,
+          params: todo,
         });
       })
       .catch((error) => {
@@ -79,7 +79,7 @@ export default class Controller {
         } else {
           this.view.render({
             cmd: RENDER_COMMAND.EDIT_END,
-            todo: error,
+            params: error,
           });
         }
       });
@@ -88,7 +88,7 @@ export default class Controller {
   editEnd(todo) {
     this.view.render({
       cmd: RENDER_COMMAND.EDIT_END,
-      todo: todo,
+      params: todo,
     });
   }
 

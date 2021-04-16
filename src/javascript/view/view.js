@@ -20,15 +20,15 @@ export default class View {
     if (!cmd) {
       return;
     }
-    // TODO: obj.todo 를 전부 params 로 수정히자
+    // TODO: obj.params 를 전부 params 로 수정히자
     const options = {
-      add: () => this._add(obj.todo),
-      editStart: () => this._editMode(obj.todo),
-      editApply: () => this._update(obj.todo),
-      editEnd: () => this._editEnd(obj.todo),
-      remove: () => this._remove(obj.todo),
-      toggle: () => this._update(obj.todo),
-      refresh: () => this._addAll(obj.todos),
+      add: () => this._add(obj.params),
+      editStart: () => this._editMode(obj.params),
+      editApply: () => this._update(obj.params),
+      editEnd: () => this._editEnd(obj.params),
+      remove: () => this._remove(obj.params),
+      toggle: () => this._update(obj.params),
+      refresh: () => this._addAll(obj.params),
       showAll: () => this._filterAll(),
       showActive: () => this._filterActive(),
       showCompleted: () => this._filterCompleted(),
