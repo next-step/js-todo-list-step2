@@ -1,5 +1,5 @@
 import { getEl } from "@js/util";
-import { UI_CLASS, KEY, MESSAGES } from "@js/constants/constant";
+import { UI_CLASS, KEY, MESSAGES } from "@constants/constant";
 
 class TodoList {
   constructor(store) {

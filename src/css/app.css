@@ -280,9 +280,7 @@ body {
   left: 0;
   height: 50px;
   overflow: hidden;
-  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.2), 0 8px 0 -3px #f6f6f6,
-    0 9px 1px -3px rgba(0, 0, 0, 0.2), 0 16px 0 -6px #f6f6f6,
-    0 17px 2px -6px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.2), 0 8px 0 -3px #f6f6f6, 0 9px 1px -3px rgba(0, 0, 0, 0.2), 0 16px 0 -6px #f6f6f6, 0 17px 2px -6px rgba(0, 0, 0, 0.2);
 }
 
 .todo-count {
@@ -386,8 +384,7 @@ html .clear-completed:active {
   font-weight: bold;
 }
 .ripple:hover {
-  background: #616161 radial-gradient(circle, transparent 1%, #616161 1%)
-    center/15000%;
+  background: #616161 radial-gradient(circle, transparent 1%, #616161 1%) center/15000%;
   color: white;
 }
 .ripple:active {
@@ -486,4 +483,9 @@ button.user-delete-button.ripple {
   border-radius: 0 15px 15px 0;
   padding-right: 10px;
   margin-left: -5px;
+}
+
+#user-list,
+#user-button-wrap {
+  display: inline;
 }

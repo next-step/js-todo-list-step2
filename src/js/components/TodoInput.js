@@ -1,5 +1,5 @@
 import { getEl } from "@js/util";
-import { KEY } from "@js/constants/constant";
+import { KEY } from "@constants/constant";
 
 class TodoInput {
   constructor(store) {
@@ -12,13 +12,13 @@ class TodoInput {
     this.inputEl.addEventListener("keyup", this.addTodoHandler.bind(this));
   }
 
-  addTodoHandler({ keyCode, target }) {
-    if (keyCode !== KEY.ENTER || !target.value) return;
+  addTodoHandler({ key, target }) {
+    if (key !== KEY.ENTER || !target.value) return;
     const todoList = this.store.get().todoList;
     const id = new Date().getTime();
     const newTodo = {
       title: target.value,
-      id: id,
+      _id: id,
       isCompleted: false,
       isEditing: false,
     };

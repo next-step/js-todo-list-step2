@@ -1,5 +1,5 @@
 import { getEl } from "@js/util.js";
-import { FILTER_TYPE, UI_CLASS } from "@js/constants/constant.js";
+import { FILTER_TYPE, UI_CLASS } from "@constants/constant.js";
 
 class TodoFilters {
   constructor(store) {
