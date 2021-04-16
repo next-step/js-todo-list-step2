@@ -5,4 +5,5 @@ export const API = {
   GET_USER: (_id) => BASE_URL + `/api/users/${_id}`,
   CREATE_USER: BASE_URL + "/api/users",
   DELETE_USER: (_id) => BASE_URL + `/api/users/${_id}`,
+  ADD_TODO_ITEM: (_id) => BASE_URL + `/api/users/${_id}/items`,
 };

@@ -31,7 +31,7 @@ class TodoApp {
     });
 
     new TodoUser(this.store);
-    // new TodoInput(this.store);
+    new TodoInput(this.store);
     // new TodoList(this.store);
     // new TodoFilters(this.store);
   }

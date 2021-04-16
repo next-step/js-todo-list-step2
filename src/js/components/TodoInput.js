@@ -1,5 +1,6 @@
 import { getEl } from "@js/util";
 import { KEY } from "@constants/constant";
+import { addTodoItem } from "@lib/api";
 
 class TodoInput {
   constructor(store) {
@@ -12,21 +13,18 @@ class TodoInput {
     this.inputEl.addEventListener("keyup", this.addTodoHandler.bind(this));
   }
 
-  addTodoHandler({ key, target }) {
+  async addTodoHandler({ key, target }) {
     if (key !== KEY.ENTER || !target.value) return;
-    const todoList = this.store.get().todoList;
-    const id = new Date().getTime();
-    const newTodo = {
-      title: target.value,
-      _id: id,
-      isCompleted: false,
-      isEditing: false,
-    };
-    todoList[id] = newTodo;
+    const { selectedUser } = this.store.get();
+    const { data } = await addTodoItem({ _id: selectedUser._id, contents: target.value });
+    const _todoList = [...selectedUser.todoList, data]
     target.value = "";
 
     this.store.set({
-      todoList: { ...todoList },
+      selectedUser: {
+        ...selectedUser,
+        todoList: [..._todoList],
+      },
     });
   }
 }
