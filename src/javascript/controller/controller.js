@@ -10,7 +10,6 @@ export default class Controller {
   constructor(model, view) {
     this.model = model;
     this.view = view;
-
     this.setEventListeners();
   }
 
@@ -28,7 +27,6 @@ export default class Controller {
         cmd: RENDER_COMMAND.ADD,
         params: newTodo,
       });
-      console.log('after view');
     } catch (error) {
       alert(error.message);
       this.selectUser(UTILS.getLastSelectedUser());
@@ -63,7 +61,6 @@ export default class Controller {
       });
     } catch (error) {
       alert(error.message);
-      console.log(UTILS.getLastSelectedUser());
       this.selectUser(UTILS.getLastSelectedUser());
     }
   }
