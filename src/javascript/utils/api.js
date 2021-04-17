@@ -102,7 +102,6 @@ function updatePriority(userId, itemId, priority) {
 }
 
 function updateComplete(userId, itemId) {
-  console.log(this);
   return fetch_retry(
     makeURL({ cmd: 'updateComplete', userId, itemId }),
     makeOption(METHODS.PUT),
