@@ -20,7 +20,6 @@ const successResponse = (data) => {
 
 const request = async (endPoint, option) => {
   try {
-    console.log(option);
     const response = await fetch(baseUrl + endPoint, option);
     const data = await response.json();
     if (response.status !== 200 || !response.ok) {

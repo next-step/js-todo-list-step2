@@ -6,17 +6,34 @@
  */
 const userActionButtons = `
 <button class="ripple user-create-button" data-action="createUser">
-+ 유저 생성
+  + 유저 생성
 </button>
 <button class="ripple user-delete-button" data-action="deleteUser">
-삭제 -
+  삭제 -
 </button>`;
 
-export const todoTemplate = (id, contents, isCompleted) => `
- <li data-id=${id} class=${isCompleted ? 'completed' : ''}>
+export const priorityTemplate = {
+  NONE: `
+  <select class="chip select" data-action="selectPriority">
+    <option value="NONE">순위</option>
+    <option value="FIRST">1순위</option>
+    <option value="SECOND">2순위</option>
+  </select>
+`,
+  FIRST: `<span class="chip primary">1순위</span>`,
+  SECOND: `<span class="chip secondary">2순위</span>`,
+};
+
+export const todoTemplate = (id, contents, isCompleted, priority) => `
+ <li data-id=${id} data-contents=${contents} class=${
+  isCompleted ? 'completed' : ''
+}>
      <div class="view">
          <input class="toggle" type="checkbox" ${isCompleted ? 'checked' : ''}/>
-         <label class="label">${contents}</label>
+         <label class="label">
+         ${priorityTemplate[priority]}
+         ${contents}
+         </label>
          <button class="destroy"></button>
      </div>
      <input class="edit"/>
@@ -31,7 +48,12 @@ export const todoListTemplate = (datas) => {
   let result = '';
   datas &&
     datas.map((todo) => {
-      result += todoTemplate(todo._id, todo.contents, todo.isCompleted);
+      result += todoTemplate(
+        todo._id,
+        todo.contents,
+        todo.isCompleted,
+        todo.priority,
+      );
     });
   return result;
 };

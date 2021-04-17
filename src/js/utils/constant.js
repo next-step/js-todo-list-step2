@@ -8,6 +8,7 @@ export const SELECTOR = {
   USER_TITLE: '#user-title',
   USER_LIST: '#user-list',
   CLEAR_ALL: '.clear-completed',
+  TODO_CONTENTS: '.todo-contents',
 };
 
 export const CLASS_NAME = {
@@ -16,6 +17,7 @@ export const CLASS_NAME = {
   EDITING: 'editing',
   TOGGLE: 'toggle',
   DESTROY: 'destroy',
+  PRIORITY_SELECT: 'select',
 };
 
 export const ACTION_NAME = {
@@ -32,6 +34,12 @@ export const STATUS = {
   ALL: 'all',
   COMPLETED: 'completed',
   ACTIVE: 'active',
+};
+
+export const PRIORITY = {
+  NONE: 'NONE',
+  FIRST: 'FIRST',
+  SECOND: 'SECOND',
 };
 
 export const KEY_NAME = {

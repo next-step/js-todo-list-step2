@@ -3,8 +3,9 @@ import {
   NODE_NAME,
   CLASS_NAME,
   KEY_NAME,
+  PRIORITY,
 } from '../utils/constant.js';
-import { todoListTemplate } from '../utils/templates.js';
+import { priorityTemplate, todoListTemplate } from '../utils/templates.js';
 import api, { defaultErrorMessage } from '../api/index.js';
 import Observer from '../libs/Observer.js';
 
@@ -30,6 +31,11 @@ class TodoList extends Observer {
         this.onToggleComplete(id, $li, target);
       } else if (targetClassList.contains(CLASS_NAME.DESTROY)) {
         this.onRemoveTodo(id);
+      } else if (targetClassList.contains(CLASS_NAME.PRIORITY_SELECT)) {
+        const priority = target.value;
+        if (priority !== PRIORITY.NONE) {
+          this.onChangePriority($li, id, priority);
+        }
       }
     });
 
@@ -52,6 +58,21 @@ class TodoList extends Observer {
     });
   }
 
+  async onChangePriority($li, itemId, priority) {
+    try {
+      const result = await api.setTodoPriority(
+        this.store.currentUserId,
+        itemId,
+        priority,
+      );
+      if (result.isError) {
+        return window.alert(result.errorMessage);
+      }
+      const label = $li.querySelector(NODE_NAME.LABEL);
+      label.innerHTML = priorityTemplate[priority] + $li.dataset.contents;
+    } catch (error) {}
+  }
+
   async onClearAll() {
     try {
       const result = await api.removeAllTodos(this.store.currentUserId);
@@ -70,7 +91,7 @@ class TodoList extends Observer {
   onEditMode(target) {
     const $li = target.closest(NODE_NAME.LIST);
     if ($li.classList.contains(CLASS_NAME.COMPLETED)) return;
-    const value = target.closest(NODE_NAME.LABEL).innerText;
+    const value = $li.dataset.contents;
     const $input = $li.querySelector(SELECTOR.EDIT_INPUT);
     $li.classList.add(CLASS_NAME.EDITING);
     $input.value = value;
