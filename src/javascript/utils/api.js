@@ -1,4 +1,10 @@
-import { BASE_URL, ERROR_MESSAGE, RETRY_COUNT, METHODS } from './constants.js';
+import {
+  BASE_URL,
+  ERROR_MESSAGE,
+  RETRY_COUNT,
+  METHODS,
+  URL_OPTS,
+} from './constants.js';
 
 const fetch_retry = async (url, options, errorMessage, n = RETRY_COUNT) => {
   try {
@@ -39,7 +45,7 @@ function makeOption(method, body = '') {
 
 function getUsers() {
   return fetch_retry(
-    makeURL({ cmd: 'getUsers' }),
+    makeURL({ cmd: URL_OPTS.GET_USERS }),
     makeOption(METHODS.GET),
     ERROR_MESSAGE.GET_USERS
   );
@@ -47,7 +53,7 @@ function getUsers() {
 
 function createItem(userId, contents) {
   return fetch_retry(
-    makeURL({ cmd: 'createItem', userId }),
+    makeURL({ cmd: URL_OPTS.CREATE_ITEM, userId }),
     makeOption(METHODS.POST, { contents }),
     ERROR_MESSAGE.CREATE_ITEM
   );
@@ -55,7 +61,7 @@ function createItem(userId, contents) {
 
 function addUser(name) {
   return fetch_retry(
-    makeURL({ cmd: 'addUser' }),
+    makeURL({ cmd: URL_OPTS.ADD_USER }),
     makeOption(METHODS.POST, { name }),
     ERROR_MESSAGE.ADD_USER
   );
@@ -63,7 +69,7 @@ function addUser(name) {
 
 function deleteUser(userId) {
   return fetch_retry(
-    makeURL({ cmd: 'deleteUser', userId }),
+    makeURL({ cmd: URL_OPTS.DELETE_USER, userId }),
     makeOption(METHODS.DELETE),
     ERROR_MESSAGE.DELETE_USER
   );
@@ -71,7 +77,7 @@ function deleteUser(userId) {
 
 function getUser(userId) {
   return fetch_retry(
-    makeURL({ cmd: 'getUser', userId }),
+    makeURL({ cmd: URL_OPTS.GET_USER, userId }),
     makeOption(METHODS.GET),
     ERROR_MESSAGE.GET_USER
   );
@@ -79,7 +85,7 @@ function getUser(userId) {
 
 function deleteItem(userId, itemId) {
   return fetch_retry(
-    makeURL({ cmd: 'deleteItem', userId, itemId }),
+    makeURL({ cmd: URL_OPTS.DELETE_ITEM, userId, itemId }),
     makeOption(METHODS.DELETE),
     ERROR_MESSAGE.DELETE_ITEM
   );
@@ -87,7 +93,7 @@ function deleteItem(userId, itemId) {
 
 function deleteAllTodoOfUser(userId) {
   return fetch_retry(
-    makeURL({ cmd: 'deleteAllTodoOfUser', userId }),
+    makeURL({ cmd: URL_OPTS.DELETE_ALL, userId }),
     makeOption(METHODS.DELETE),
     ERROR_MESSAGE.DELETE_ALL_ITEM
   );
@@ -95,7 +101,7 @@ function deleteAllTodoOfUser(userId) {
 
 function updatePriority(userId, itemId, priority) {
   return fetch_retry(
-    makeURL({ cmd: 'updatePriority', userId, itemId }),
+    makeURL({ cmd: URL_OPTS.UPDATE_PRIORITY, userId, itemId }),
     makeOption(METHODS.PUT, { priority }),
     ERROR_MESSAGE.SET_PRIORITY
   );
@@ -103,7 +109,7 @@ function updatePriority(userId, itemId, priority) {
 
 function updateComplete(userId, itemId) {
   return fetch_retry(
-    makeURL({ cmd: 'updateComplete', userId, itemId }),
+    makeURL({ cmd: URL_OPTS.UPDATE_COMPLETE, userId, itemId }),
     makeOption(METHODS.PUT),
     ERROR_MESSAGE.UPDATE_COMPLETE
   );
@@ -111,7 +117,7 @@ function updateComplete(userId, itemId) {
 
 function updateContents(userId, itemId, contents) {
   return fetch_retry(
-    makeURL({ cmd: 'updateContents', userId, itemId }),
+    makeURL({ cmd: URL_OPTS.UPDATE_CONTENTS, userId, itemId }),
     makeOption(METHODS.PUT, { contents }),
     ERROR_MESSAGE.UPDATE_CONTENT
   );

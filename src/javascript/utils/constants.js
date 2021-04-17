@@ -32,6 +32,19 @@ const RENDER_COMMAND = {
   DELETE_ALL: 'deleteAll',
 };
 
+const URL_OPTS = {
+  GET_USERS: 'getUsers',
+  ADD_USER: 'addUser',
+  DELETE_USER: 'deleteUser',
+  GET_USER: 'getUser',
+  UPDATE_COMPLETE: 'updateComplete',
+  UPDATE_CONTENTS: 'updateContents',
+  UPDATE_PRIORITY: 'updatePriority',
+  CREATE_ITEM: 'createItem',
+  DELETE_ITEM: 'deleteItem',
+  DELETE_ALL: 'deleteAllTodoOfUser',
+};
+
 const METHODS = {
   GET: 'GET',
   POST: 'POST',
@@ -43,4 +56,11 @@ const BASE_URL = 'https://js-todo-list-9ca3a.df.r.appspot.com';
 
 const RETRY_COUNT = 3;
 
-export { ERROR_MESSAGE, RENDER_COMMAND, METHODS, BASE_URL, RETRY_COUNT };
+export {
+  ERROR_MESSAGE,
+  RENDER_COMMAND,
+  METHODS,
+  BASE_URL,
+  RETRY_COUNT,
+  URL_OPTS,
+};
