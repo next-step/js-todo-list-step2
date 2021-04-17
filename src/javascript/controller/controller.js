@@ -65,7 +65,7 @@ export default class Controller {
       });
     } catch (error) {
       alert(error.message);
-      this.selectUser(UTILS.getLastSelectedUser());
+      this._reloadUser();
     }
   }
 
@@ -81,7 +81,7 @@ export default class Controller {
       });
     } catch (error) {
       alert(error.message);
-      this.selectUser(UTILS.getLastSelectedUser());
+      this._reloadUser();
     }
   }
 
@@ -97,7 +97,7 @@ export default class Controller {
       });
     } catch (error) {
       alert(error.message);
-      this.selectUser(UTILS.getLastSelectedUser());
+      this._reloadUser();
     }
   }
 
@@ -114,7 +114,7 @@ export default class Controller {
       });
     } catch (error) {
       alert(error.message);
-      this.selectUser(UTILS.getLastSelectedUser());
+      this._reloadUser();
     }
   }
 
@@ -138,7 +138,7 @@ export default class Controller {
       });
     } catch (error) {
       alert(error.message);
-      this.selectUser(UTILS.getLastSelectedUser());
+      this._reloadUser();
     }
   }
 
@@ -179,7 +179,7 @@ export default class Controller {
       });
     } catch (error) {
       alert(error.message);
-      this.selectUser(UTILS.getLastSelectedUser());
+      this._reloadUser();
     }
   }
 
@@ -210,5 +210,9 @@ export default class Controller {
       selectCompleted: () => this.showCompleted(),
       deleteAll: () => this.deleteAllTodoOfUser(),
     });
+  }
+
+  _reloadUser() {
+    this.selectUser(UTILS.getLastSelectedUser());
   }
 }
