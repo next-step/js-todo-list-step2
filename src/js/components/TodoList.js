@@ -4,9 +4,11 @@ import {
   CLASS_NAME,
   KEY_NAME,
   PRIORITY,
+  POPUP_MESSAGE,
 } from '../utils/constant.js';
 import { $, $all } from '../utils/dom.js';
 import { priorityTemplate, todoListTemplate } from '../utils/templates.js';
+import confirmAlert from '../utils/confirm.js';
 import api from '../api/index.js';
 import Observer from '../libs/Observer.js';
 
@@ -35,7 +37,7 @@ class TodoList extends Observer {
     if (targetClassList.contains(CLASS_NAME.TOGGLE)) {
       return this.toggleComplete($li, itemId, target);
     } else if (targetClassList.contains(CLASS_NAME.DESTROY)) {
-      return this.removeTodo(itemId);
+      return confirmAlert(POPUP_MESSAGE.REMOVE_TODO) && this.removeTodo(itemId);
     } else if (targetClassList.contains(CLASS_NAME.PRIORITY_SELECT)) {
       const priority = target.value;
       if (priority === PRIORITY.NONE) return;
@@ -61,6 +63,7 @@ class TodoList extends Observer {
 
   async onClearAll() {
     try {
+      if (!confirmAlert(POPUP_MESSAGE.REMOVE_TODO)) return;
       await api.removeAllTodos(this.userId);
       this.store.setOriginList([]);
       this.store.setRenderList([]);
