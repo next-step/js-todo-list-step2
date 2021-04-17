@@ -121,6 +121,19 @@ export default class TodoListView {
     return $(`li[data-id='${id}']`, this._todoList);
   }
 
+  _makePriority(priority) {
+    const options = {
+      NONE: `<select class="chip select">
+              <option value="0" selected>순위</option>
+              <option value="1">1순위</option>
+              <option value="2">2순위</option>
+            </select>`,
+      FIRST: `<span class="chip primary">1순위</span>`,
+      SECOND: `<span class="chip secondary">2순위</span>`,
+    };
+    return options[priority];
+  }
+
   _createTodo(todo) {
     const li = document.createElement('li');
     li.className = todo.isCompleted ? 'completed' : 'active';
@@ -130,11 +143,7 @@ export default class TodoListView {
                       <input class="toggle" type="checkbox"
                         ${todo.isCompleted ? 'checked' : ''}/>
                       <label class="label">
-                      <select class="chip select">
-                        <option value="0" selected>순위</option>
-                        <option value="1">1순위</option>
-                        <option value="2">2순위</option>
-                      </select>
+                      ${this._makePriority(todo.priority)}
                       ${todo.contents}
                       </label>
                       <button class="destroy"></button>
