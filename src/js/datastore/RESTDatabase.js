@@ -1,30 +1,16 @@
 import { TodoItem } from "../component/todo/Todo.js";
+import * as Ajax from "../util/ajaxUtil.js";
 
 export class RESTDataBase {
   static BASE_URL = "https://js-todo-list-9ca3a.df.r.appspot.com";
   static async getUsers() {
     const url = RESTDataBase.BASE_URL + '/api/users'
-    const response = await fetch(url);
-    let body = [];
-    if (response.ok) { 
-      body = await response.json();
-    } else {
-      alert("UserList 로드 실패 : " + response.status);
-    }
-    return body;
+    return await Ajax.get(url,"UserList 로드 실패");
   }
 
   static async getUser(id) {
     const url = RESTDataBase.BASE_URL + '/api/users/' + id;
-    const response = await fetch(url);
-    let body = [];
-    if (response.ok) { 
-      body = await response.json();
-    } else {
-      console.log(response)
-      alert("User 로드 실패 : " + response.status + " " + response.message);
-    }
-    return body;
+    return await Ajax.get(url,"User 로드 실패");
   }
 
   static loadData(user) {
