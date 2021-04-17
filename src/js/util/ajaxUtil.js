@@ -1,8 +1,13 @@
+const DEBUG = true;
 export async function get(url,errMsg){
     const response = await fetch(url);
     let body = [];
     if (response.ok) { 
       body = await response.json();
+      if(DEBUG) {
+        console.log(`GET(${url}):`);
+        console.log(body);
+      }
     } else {
       alert(errMsg + " : " + response.status);
     }
@@ -18,6 +23,10 @@ export async function post(url,data,errMsg){
     let body = [];
     if (response.ok) { 
       body = await response.json();
+      if(DEBUG) {
+        console.log(`POST(${url}):`);
+        console.log(body);
+      }
     } else {
       alert(errMsg + " : " + response.status);
     }
@@ -25,10 +34,14 @@ export async function post(url,data,errMsg){
 }
 
 export async function deleteRequest(url,errMsg){
-    const response = await fetch(url);
+    const response = await fetch(url,{ method:'DELETE'});
     let body = [];
     if (response.ok) { 
       body = await response.json();
+      if(DEBUG) {
+        console.log(`DELETE(${url}):`);
+        console.log(body);
+      }
     } else {
       alert(errMsg + " : " + response.status);
     }
