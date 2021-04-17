@@ -66,7 +66,7 @@ class TodoApp {
   }
 
   _renderTodoList({ onFilteringTodoList }) {
-    const todoListTemplate = onFilteringTodoList.map(({ contents, _id, isCompleted }) => todoTemplate({ contents, _id, isCompleted })).join("");
+    const todoListTemplate = onFilteringTodoList.map(({ contents, _id, isCompleted, priority }) => todoTemplate({ contents, _id, isCompleted, priority })).join("");
 
     this.todoListEl.innerHTML = todoListTemplate;
     this.todoCountEl.innerText = onFilteringTodoList.length;

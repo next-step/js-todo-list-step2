@@ -10,8 +10,9 @@ export const UI_CLASS = {
   LABEL: "label",
   SELECTED: "selected",
   FILTER: "todo-filter",
-  TODO_ITEM: 'todo-item-li',
-  EDITING: 'editing',
+  TODO_ITEM: "todo-item-li",
+  EDITING: "editing",
+  SELECT: "select"
 };
 
 export const KEY = {

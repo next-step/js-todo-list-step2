@@ -7,6 +7,7 @@ class TodoList {
     this.store = store;
     this.todoListEl = getEl("ul.todo-list");
     this.todoAllDeleteButton = getEl("button.clear-completed");
+    this.todoPrioritySelect = getEl("select.chip.select");
     this.init();
   }
 
@@ -14,7 +15,8 @@ class TodoList {
     this.todoListEl.addEventListener("click", this.clickDelegationHandler.bind(this));
     this.todoListEl.addEventListener("dblclick", this.modifyHandler.bind(this));
     this.todoListEl.addEventListener("keyup", this.confirmHandler.bind(this));
-    this.todoAllDeleteButton.addEventListener('click', this.allDeleteTodoItem.bind(this));
+    this.todoListEl.addEventListener("change", this.changePriorityHandler.bind(this));
+    this.todoAllDeleteButton.addEventListener("click", this.allDeleteTodoItem.bind(this));
   }
 
   async _setSelectedUser(userId) {
@@ -68,6 +70,15 @@ class TodoList {
       await api.modifyTodoItem({ userId, todoId, contents: target.value });
       this._setSelectedUser(userId);
     }
+  }
+
+  async changePriorityHandler({ target }) {
+    if (!target.classList.contains(UI_CLASS.SELECT)) return;
+
+    const { selectedUser: { _id: userId } } = this.store.get();
+    const { _id: todoId } = target.closest(`.${UI_CLASS.TODO_ITEM}`).dataset;
+    await api.priorityTodoItem({ userId, todoId, priority: target.value });
+    this._setSelectedUser(userId);
   }
 }
 

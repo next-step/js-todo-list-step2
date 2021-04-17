@@ -10,4 +10,5 @@ export const API = {
   DELETE_TODO_ITEM: ({ userId, todoId }) => BASE_URL + `/api/users/${userId}/items/${todoId}`,
   ALL_DELETE_TODO_ITEM: ({ userId }) => BASE_URL + `/api/users/${userId}/items/`,
   MODIFY_TODO_ITEM: ({ userId, todoId }) => BASE_URL + `/api/users/${userId}/items/${todoId}`,
+  PRIORITY_TODO_ITEM: ({ userId, todoId }) => BASE_URL + `/api/users/${userId}/items/${todoId}/priority`,
 };
