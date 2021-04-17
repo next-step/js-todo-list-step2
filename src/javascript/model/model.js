@@ -3,20 +3,20 @@ import { ERROR_MESSAGE } from '../utils/constants.js';
 export default class Model {
   constructor() {}
 
-  async createUser(userName) {
-    return await API.addUser(userName);
+  createUser(userName) {
+    return API.addUser(userName);
   }
 
-  async deleteUser(userId) {
-    return await API.deleteUser(userId);
+  deleteUser(userId) {
+    return API.deleteUser(userId);
   }
 
-  async getUser(userId) {
-    return await API.getUser(userId);
+  getUser(userId) {
+    return API.getUser(userId);
   }
 
-  async deleteAllTodoOfUser(userId) {
-    return await API.deleteAllTodoOfUser(userId);
+  deleteAllTodoOfUser(userId) {
+    return API.deleteAllTodoOfUser(userId);
   }
 
   updatePriority(userId, itemId, priority) {
