@@ -7,4 +7,6 @@ export const API = {
   DELETE_USER: (userId) => BASE_URL + `/api/users/${userId}`,
   ADD_TODO_ITEM: (userId) => BASE_URL + `/api/users/${userId}/items`,
   TOGGLE_TODO_ITEM: ({ userId, todoId }) => BASE_URL + `/api/users/${userId}/items/${todoId}/toggle`,
+  DELETE_TODO_ITEM: ({ userId, todoId }) => BASE_URL + `/api/users/${userId}/items/${todoId}`,
+  ALL_DELETE_TODO_ITEM: ({ userId }) => BASE_URL + `/api/users/${userId}/items/`,
 };
