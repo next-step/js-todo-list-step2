@@ -9,7 +9,9 @@ export const UI_CLASS = {
   DESTROY: "destroy",
   LABEL: "label",
   SELECTED: "selected",
-  FILTER: "todo-filter"
+  FILTER: "todo-filter",
+  TODO_ITEM: 'todo-item-li',
+  EDITING: 'editing',
 };
 
 export const KEY = {

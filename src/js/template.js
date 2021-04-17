@@ -1,6 +1,6 @@
 export const todoTemplate = ({ contents, _id, isCompleted }) => {
   return `
-    <li data-_id="${_id}" class="${isCompleted && "completed"}">
+    <li data-_id="${_id}" class="${isCompleted && "completed"} todo-item-li">
         <div class="view">
             <input class="toggle" type="checkbox" data-_id="${_id}" ${isCompleted && "checked"} />
             <label class="label">${contents}</label>

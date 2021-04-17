@@ -9,3 +9,4 @@ export const addTodoItem = ({ userId, contents }) => axios.post(API.ADD_TODO_ITE
 export const toggleTodoItem = ({ userId, todoId }) => axios.put(API.TOGGLE_TODO_ITEM({ userId, todoId }));
 export const deleteTodoItem = ({ userId, todoId }) => axios.delete(API.DELETE_TODO_ITEM({ userId, todoId }));
 export const allDeleteTodoItem = ({ userId }) => axios.delete(API.ALL_DELETE_TODO_ITEM({ userId }));
+export const modifyTodoItem = ({ userId, todoId, contents }) => axios.put(API.MODIFY_TODO_ITEM({ userId, todoId }), { contents });
