@@ -7,10 +7,14 @@ import TodoMode from "./TodoMode.js";
 import UserList from "./UserList.js";
 
 import KEY_CODE from "../constants/KeyCode.js";
-import Mode from "../constants/Mode.js";
 import env from "../constants/env.js";
 
 import request from "../util/request.js";
+
+import onChangeMode from "./events/TodoMode.js";
+import onAdd from "./events/TodoInput.js";
+import { onDelete, onCompleted, onEditing } from "./events/TodoList.js";
+import { onSelectingUser, onAddUser, onDeleteUser } from "./events/UserList.js";
 
 function TodoApp(users) {
 	this.users = users.map((user) => {
@@ -40,64 +44,9 @@ function TodoApp(users) {
 	const userListTarget = document.querySelector("#user-list");
 	const userList = new UserList({
 		target: userListTarget,
-		onSelectingUser: async (e) => {
-			if (!e.target.dataset || !e.target.dataset.id) {
-				return;
-			}
-
-			const { id } = e.target.dataset;
-			const selectedIdx = this.searchSelectedUserIdx(id);
-
-			const { response, error } = await request(env.BASE_URL + env.ITEM(id));
-
-			if (error) {
-				alert("사용자 할 일 목록 조회에 실패했습니다.");
-				return;
-			}
-
-			this.users[selectedIdx].todoList = response.map(
-				(todo) =>
-					new TodoItemModel({
-						...todo,
-						id: todo._id
-					})
-			);
-
-			this.setSelectedUser(selectedIdx);
-			this.setUsers([...this.users]);
-		},
-		onAddUser: async () => {
-			const name = prompt("추가하고 싶은 이름을 입력해주세요.");
-			const { response, error } = await request(env.BASE_URL + env.USERS, "POST", { name });
-
-			if (error) {
-				alert("사용자 등록에 실패했습니다.");
-				return;
-			}
-
-			this.setUsers([...this.users, new User({ id: response._id, name: response.name, todoList: [] })]);
-		},
-		onDeleteUser: async () => {
-			const answer = confirm(`${this.users[this.selectedUserIdx].name}을 삭제하시겠습니까?`);
-			if (!answer) {
-				return;
-			}
-
-			const { response, error } = await request(
-				env.BASE_URL + env.USER(this.users[this.selectedUserIdx].id),
-				"DELETE"
-			);
-
-			if (error) {
-				alert("사용자 삭제에 실패했습니다.");
-				return;
-			}
-
-			this.users.splice(this.selectedUserIdx, 1);
-
-			this.setUsers([...this.users]);
-			this.setSelectedUser(0);
-		}
+		onSelectingUser: onSelectingUser.bind(this),
+		onAddUser: onAddUser.bind(this),
+		onDeleteUser: onDeleteUser.bind(this)
 	});
 
 	const countTarget = document.querySelector(".todo-count strong");
@@ -107,51 +56,9 @@ function TodoApp(users) {
 	const todoList = new TodoList({
 		target: listTarget,
 		status: null,
-		onDeleteButton: async (id) => {
-			const { response, error } = await request(
-				env.BASE_URL + env.USER_ITEM(this.users[this.selectedUserIdx].id, id),
-				"DELETE"
-			);
-			if (error) {
-				alert("할 일 삭제에 실패했습니다.");
-				return;
-			}
-
-			this.users[this.selectedUserIdx].todoList = this.users[this.selectedUserIdx].todoList.filter(
-				(item) => item.id !== id
-			);
-			todoList.setState(this.users[this.selectedUserIdx].todoList);
-			todoCount.setState(this.users[this.selectedUserIdx].todoList);
-		},
-		onCompleted: async (id) => {
-			const { response, error } = await request(
-				env.BASE_URL + env.ITEM_TOGGLE(this.users[this.selectedUserIdx].id, id),
-				"PUT"
-			);
-			if (error) {
-				alert("할 일 완료에 실패했습니다.");
-				return;
-			}
-
-			this.users[this.selectedUserIdx].todoList = this.users[this.selectedUserIdx].todoList.map((item) => {
-				if (item.id === id) {
-					return new TodoItemModel({ ...response, id: response._id });
-				}
-				return item;
-			});
-			todoList.setState(this.users[this.selectedUserIdx].todoList);
-			todoCount.setState(this.users[this.selectedUserIdx].todoList);
-		},
-		onEditing: (id) => {
-			this.users[this.selectedUserIdx].todoList = this.users[this.selectedUserIdx].todoList.map((item) => {
-				if (item.id === id) {
-					item.editing = true;
-				}
-				return item;
-			});
-			todoList.setState(this.users[this.selectedUserIdx].todoList);
-			todoCount.setState(this.users[this.selectedUserIdx].todoList);
-		},
+		onDeleteButton: onDelete.bind(this),
+		onCompleted: onCompleted.bind(this),
+		onEditing: onEditing.bind(this),
 		onEdit: (id) => async (event) => {
 			if (event.keyCode === KEY_CODE.ESC) {
 				this.users[this.selectedUserIdx].todoList.map((item) => {
@@ -160,8 +67,7 @@ function TodoApp(users) {
 					}
 					return item;
 				});
-				todoList.setState(this.users[this.selectedUserIdx].todoList);
-				todoCount.setState(this.users[this.selectedUserIdx].todoList);
+				this.setTodoItems(this.users[this.selectedUserIdx].todoList);
 			} else if (event.keyCode === KEY_CODE.ENTER) {
 				const { response, error } = await request(
 					env.BASE_URL + env.USER_ITEM(this.users[this.selectedUserIdx].id, id),
@@ -180,56 +86,27 @@ function TodoApp(users) {
 					}
 					return item;
 				});
-				todoList.setState(this.users[this.selectedUserIdx].todoList);
-				todoCount.setState(this.users[this.selectedUserIdx].todoList);
+				this.setTodoItems(this.users[this.selectedUserIdx].todoList);
 			}
 		}
 	});
 
 	new TodoInput({
-		onAdd: async (contents) => {
-			const { response, error } = await request(
-				env.BASE_URL + env.ITEM(this.users[this.selectedUserIdx].id),
-				"POST",
-				{ contents }
-			);
-			if (error) {
-				alert("할 일 등록에 실패했습니다.");
-				return;
-			}
-
-			this.users[this.selectedUserIdx].todoList.push(
-				new TodoItemModel({
-					...response,
-					id: response._id
-				})
-			);
-			this.setSelectedUser(this.selectedUserIdx);
-		}
+		onAdd: onAdd.bind(this)
 	});
 
 	new TodoMode({
 		target: document.querySelector(".filters"),
-		onChangeMode: (mode) => {
-			let prevTodoItems;
-			switch (mode) {
-				case Mode.ALL:
-					prevTodoItems = this.users[this.selectedUserIdx].todoList;
-					break;
-				case Mode.ACTIVE:
-					prevTodoItems = this.users[this.selectedUserIdx].todoList.filter((item) => !item.completed);
-					break;
-				case Mode.COMPLETED:
-					prevTodoItems = this.users[this.selectedUserIdx].todoList.filter((item) => item.completed);
-					break;
-			}
-			todoList.setState(prevTodoItems);
-			todoCount.setState(prevTodoItems);
-		}
+		onChangeMode: onChangeMode.bind(this)
 	});
 
 	this.render = () => {
 		userList.render(this.users, 0);
+	};
+
+	this.setTodoItems = (updatedTodo) => {
+		todoList.setState(updatedTodo);
+		todoCount.setState(updatedTodo);
 	};
 
 	this.setUsers = (updatedUsers) => {
