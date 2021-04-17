@@ -20,7 +20,6 @@ export default class View {
     if (!cmd) {
       return;
     }
-    // TODO: obj.params 를 전부 params 로 수정히자
     const options = {
       add: () => this._add(obj.params),
       editStart: () => this._editMode(obj.params),
@@ -36,6 +35,7 @@ export default class View {
       addUser: () => this._addUser(obj.params),
       deleteUser: () => this._deleteUser(obj.params),
       setPriority: () => this._update(obj.params),
+      deleteAll: () => this._deleteAll(),
     };
     options[cmd]();
   }
@@ -69,6 +69,8 @@ export default class View {
       deleteUser: () => this.userListView.setDeleteUser(callback),
       // NOTE: callback == COntroller.setPriority
       setPriority: () => this.todoListView.setPriority(callback),
+      //NOTE: callback == controller.deleteAll
+      deleteAll: () => this.todoCountView.setDeleteAll(callback),
     };
     options[eventName]();
   }
@@ -160,6 +162,11 @@ export default class View {
 
   _deleteUser(userId) {
     this.userListView.deleteUser(userId);
+    this.todoListView.clear();
+    this.todoCountView.init(0);
+  }
+
+  _deleteAll() {
     this.todoListView.clear();
     this.todoCountView.init(0);
   }

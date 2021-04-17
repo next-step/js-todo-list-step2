@@ -7,6 +7,7 @@ export default class TodoCountView {
     this._countView = $('.todo-count').children[0];
     this._currentFilterView = $('.all', this._filterContainer);
     this._currentFilter = 'all';
+    this._clearButton = $('.clear-completed');
   }
 
   init(count) {
@@ -75,6 +76,12 @@ export default class TodoCountView {
         return;
       }
       this.setSelectFilter(filter);
+      callback();
+    });
+  }
+
+  setDeleteAll(callback) {
+    this._clearButton.addEventListener('click', () => {
       callback();
     });
   }

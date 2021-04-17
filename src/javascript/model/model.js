@@ -18,6 +18,10 @@ export default class Model {
     return await API.getUser(userId);
   }
 
+  async deleteAllTodoOfUser(userId) {
+    return await API.deleteAllTodoOfUser(userId);
+  }
+
   updatePriority(userId, itemId, priority) {
     return API.updatePriority(userId, itemId, priority);
   }

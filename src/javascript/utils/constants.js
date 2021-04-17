@@ -18,6 +18,7 @@ export const RENDER_COMMAND = {
   ADD_USER: 'addUser',
   DELETE_USER: 'deleteUser',
   SET_PRIORITY: 'setPriority',
+  DELETE_ALL: 'deleteAll',
 };
 
 export const EVENT_NAME = {
@@ -35,6 +36,7 @@ export const EVENT_NAME = {
   ADD_USER: 'addUser',
   DELETE_USER: 'deleteUser',
   SET_PRIORITY: 'setPriority',
+  DELETE_ALL: 'deleteAll',
 };
 
 export const BASE_URL = 'https://js-todo-list-9ca3a.df.r.appspot.com';

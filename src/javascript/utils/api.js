@@ -66,6 +66,14 @@ function deleteItem(userId, itemId) {
   );
 }
 
+function deleteAllTodoOfUser(userId) {
+  const options = {
+    method: 'DELETE',
+    headers: { 'Content-Type': 'application/json' },
+  };
+  return fetch_retry(`${BASE_URL}/api/users/${userId}/items`, options);
+}
+
 function updatePriority(userId, itemId, priority) {
   const requestBody = {
     priority,
@@ -117,4 +125,5 @@ export {
   createItem,
   updateContents,
   updatePriority,
+  deleteAllTodoOfUser,
 };

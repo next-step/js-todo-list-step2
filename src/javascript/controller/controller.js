@@ -153,6 +153,17 @@ export default class Controller {
     });
   }
 
+  async deleteAllTodoOfUser() {
+    try {
+      await this.model.deleteAllTodoOfUser(this.view.getCurrentUserId());
+      this.view.render({
+        cmd: RENDER_COMMAND.DELETE_ALL,
+      });
+    } catch (error) {
+      alert('delete all error!');
+    }
+  }
+
   setEventListeners() {
     this.view.setEventListener(EVENT_NAME.ADD, (value) => {
       this.add(value);
@@ -192,6 +203,9 @@ export default class Controller {
     });
     this.view.setEventListener(EVENT_NAME.SET_PRIORITY, (todoId, priority) => {
       this.setPriority(todoId, priority);
+    });
+    this.view.setEventListener(EVENT_NAME.DELETE_ALL, (userId) => {
+      this.deleteAllTodoOfUser(userId);
     });
   }
 }
