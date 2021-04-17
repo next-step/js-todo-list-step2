@@ -1,7 +1,7 @@
 import { todoItem } from './todoItem.js';
 export default class TodoList {
   constructor({ todoListUl, todoData, onCheckItem, onEditItem, onDeleteItem }) {
-    this.todoListUl = todoListUl;
+    this.todoListUl = document.getElementById('todo-list');
     this.todoData = todoData;
     this.handleCheckItem = onCheckItem;
     this.handleEditItem = onEditItem;

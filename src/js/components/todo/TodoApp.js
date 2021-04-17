@@ -1,10 +1,9 @@
-import TodoList from './TodoList.js';
 import TodoInput from './TodoInput.js';
+import TodoList from './TodoList.js';
 import { TodoFilter } from './TodoFilter.js';
 
 export default class TodoApp {
   constructor() {
-    this.todoListUl = document.getElementById('todo-list');
     this.todoCount = document.querySelector('.todo-count strong');
     this.todoFilterButton = document.querySelectorAll('.filters li a');
     this.todoLocalData = localStorage.getItem('item');
@@ -21,7 +20,6 @@ export default class TodoApp {
     });
 
     this.todoList = new TodoList({
-      todoListUl: this.todoListUl,
       todoData: this.todoData,
       onCheckItem: this.handleCheckItem.bind(this),
       onEditItem: this.handleEditItem.bind(this),
