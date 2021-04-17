@@ -45,6 +45,7 @@
     "window": true,
     "alert": true,
     "Element": true,
-    "location": true
+    "location": true,
+    "fetch": true
   }
 }

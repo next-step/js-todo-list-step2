@@ -8,6 +8,10 @@ export default class Controller {
   }
 
   async add(contents) {
+    if (!this.view.getCurrentUserId()) {
+      alert('유저를 먼저 선택해주세요 :)');
+      return;
+    }
     try {
       const newTodo = await this.model.createItem(
         this.view.getCurrentUserId(),
@@ -154,6 +158,10 @@ export default class Controller {
   }
 
   async deleteAllTodoOfUser() {
+    if (!this.view.getCurrentUserId()) {
+      alert('유저를 먼저 선택해주세요 :)');
+      return;
+    }
     try {
       await this.model.deleteAllTodoOfUser(this.view.getCurrentUserId());
       this.view.render({
