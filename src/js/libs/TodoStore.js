@@ -14,19 +14,18 @@ class TodoStore extends Subject {
 
   async initTodoList(userId) {
     try {
+      this.setLoading();
       this.currentUserId = userId;
-      this.setLoadingStatus(true);
       const { todoList } = await api.getUser(userId);
       this.originTodoList = todoList;
-      this.isLoading = false;
       this.setStatus(this.status);
     } catch (error) {
       return alert(error);
     }
   }
 
-  setLoadingStatus(status) {
-    this.isLoading = status;
+  setLoading() {
+    this.isLoading = true;
     this.notifyAll();
   }
 

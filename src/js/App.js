@@ -17,10 +17,10 @@ const App = () => {
         initialData[0].todoList || [],
       );
       const userStore = new UserStore(initialData, todoStore);
-      const todoInput = new TodoInput(todoStore);
       const todoList = new TodoList(todoStore);
-      const todoFilters = new TodoFilters(todoStore);
       const todoCounter = new TodoCounter(todoStore);
+      new TodoInput(todoStore);
+      new TodoFilters(todoStore);
 
       const userTitle = new UserTitle(userStore);
       const userList = new UserList(userStore);

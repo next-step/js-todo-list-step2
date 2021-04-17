@@ -9,10 +9,10 @@ class TodoFilters {
 
   bindEvent() {
     const container = $(SELECTOR.FILTER);
-    container.addEventListener('click', ({ target }) => this.onClick(target));
+    container.addEventListener('click', (e) => this.onClick(e));
   }
 
-  onClick(target) {
+  onClick({ target }) {
     const $filters = target.closest(SELECTOR.FILTER).children;
     this.resetStatus($filters);
     const status = target.className;
