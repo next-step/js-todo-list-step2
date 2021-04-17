@@ -1,4 +1,4 @@
-import { BASE_URL, ERROR_MESSAGE, RETRY_COUNT } from './constants.js';
+import { BASE_URL, ERROR_MESSAGE, RETRY_COUNT, METHODS } from './constants.js';
 
 const fetch_retry = async (url, options, errorMessage, n = RETRY_COUNT) => {
   try {
@@ -15,124 +15,124 @@ const fetch_retry = async (url, options, errorMessage, n = RETRY_COUNT) => {
   }
 };
 
+function makeOption(method, body = '') {
+  body = body ? JSON.stringify(body) : '';
+  const headers = { 'Content-Type': 'application/json' };
+  const options = {
+    GET: {},
+    POST: {
+      method,
+      headers,
+      body,
+    },
+    PUT: {
+      method,
+      headers,
+      body,
+    },
+    DELETE: {
+      method,
+    },
+  };
+  return options[method];
+}
+
 function getUsers() {
-  return fetch_retry(`${BASE_URL}/api/users`, {}, ERROR_MESSAGE.GET_USER);
+  return fetch_retry(
+    makeURL({ cmd: 'getUsers' }),
+    makeOption(METHODS.GET),
+    ERROR_MESSAGE.GET_USERS
+  );
 }
 
 function createItem(userId, contents) {
-  const requestBody = {
-    contents,
-  };
-  const options = {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(requestBody),
-  };
   return fetch_retry(
-    `${BASE_URL}/api/users/${userId}/items`,
-    options,
+    makeURL({ cmd: 'createItem', userId }),
+    makeOption(METHODS.POST, { contents }),
     ERROR_MESSAGE.CREATE_ITEM
   );
 }
 
-function addUser(userName) {
-  const requestBody = {
-    name: userName,
-  };
-  const options = {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(requestBody),
-  };
-  return fetch_retry(`${BASE_URL}/api/users`, options, ERROR_MESSAGE.ADD_USER);
+function addUser(name) {
+  return fetch_retry(
+    makeURL({ cmd: 'addUser' }),
+    makeOption(METHODS.POST, { name }),
+    ERROR_MESSAGE.ADD_USER
+  );
 }
 
 function deleteUser(userId) {
-  const options = {
-    method: 'DELETE',
-    headers: { 'Content-Type': 'application/json' },
-  };
   return fetch_retry(
-    `${BASE_URL}/api/users/${userId}`,
-    options,
+    makeURL({ cmd: 'deleteUser', userId }),
+    makeOption(METHODS.DELETE),
     ERROR_MESSAGE.DELETE_USER
   );
 }
 
 function getUser(userId) {
   return fetch_retry(
-    `${BASE_URL}/api/users/${userId}`,
-    {},
+    makeURL({ cmd: 'getUser', userId }),
+    makeOption(METHODS.GET),
     ERROR_MESSAGE.GET_USER
   );
 }
 
 function deleteItem(userId, itemId) {
-  const options = {
-    method: 'DELETE',
-    headers: { 'Content-Type': 'application/json' },
-  };
   return fetch_retry(
-    `${BASE_URL}/api/users/${userId}/items/${itemId}`,
-    options,
+    makeURL({ cmd: 'deleteItem', userId, itemId }),
+    makeOption(METHODS.DELETE),
     ERROR_MESSAGE.DELETE_ITEM
   );
 }
 
 function deleteAllTodoOfUser(userId) {
-  const options = {
-    method: 'DELETE',
-    headers: { 'Content-Type': 'application/json' },
-  };
   return fetch_retry(
-    `${BASE_URL}/api/users/${userId}/items`,
-    options,
+    makeURL({ cmd: 'deleteAllTodoOfUser', userId }),
+    makeOption(METHODS.DELETE),
     ERROR_MESSAGE.DELETE_ALL_ITEM
   );
 }
 
 function updatePriority(userId, itemId, priority) {
-  const requestBody = {
-    priority,
-  };
-  const options = {
-    method: 'PUT',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(requestBody),
-  };
   return fetch_retry(
-    `${BASE_URL}/api/users/${userId}/items/${itemId}/priority`,
-    options,
+    makeURL({ cmd: 'updatePriority', userId, itemId }),
+    makeOption(METHODS.PUT, { priority }),
     ERROR_MESSAGE.SET_PRIORITY
   );
 }
 
 function updateComplete(userId, itemId) {
-  const options = {
-    method: 'PUT',
-    headers: { 'Content-Type': 'application/json' },
-  };
+  console.log(this);
   return fetch_retry(
-    `${BASE_URL}/api/users/${userId}/items/${itemId}/toggle`,
-    options,
+    makeURL({ cmd: 'updateComplete', userId, itemId }),
+    makeOption(METHODS.PUT),
     ERROR_MESSAGE.UPDATE_COMPLETE
   );
 }
 
 function updateContents(userId, itemId, contents) {
-  const requestBody = {
-    contents,
-  };
-  const options = {
-    method: 'PUT',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(requestBody),
-  };
   return fetch_retry(
-    `${BASE_URL}/api/users/${userId}/items/${itemId}`,
-    options,
+    makeURL({ cmd: 'updateContents', userId, itemId }),
+    makeOption(METHODS.PUT, { contents }),
     ERROR_MESSAGE.UPDATE_CONTENT
   );
+}
+
+function makeURL(params) {
+  const users = `${BASE_URL}/api/users/`;
+  const url = {
+    getUsers: `${users}`,
+    addUser: `${users}`,
+    deleteUser: `${users}${params.userId}`,
+    getUser: `${users}${params.userId}`,
+    updateComplete: `${users}${params.userId}/items/${params.itemId}/toggle`,
+    updateContents: `${users}${params.userId}/items/${params.itemId}`,
+    updatePriority: `${users}${params.userId}/items/${params.itemId}/priority`,
+    createItem: `${users}${params.userId}/items`,
+    deleteItem: `${users}${params.userId}/items/${params.itemId}`,
+    deleteAllTodoOfUser: `${users}${params.userId}/items`,
+  };
+  return url[params.cmd];
 }
 
 export {
@@ -141,9 +141,9 @@ export {
   deleteUser,
   getUser,
   updateComplete,
-  deleteItem,
-  createItem,
   updateContents,
   updatePriority,
+  createItem,
+  deleteItem,
   deleteAllTodoOfUser,
 };
