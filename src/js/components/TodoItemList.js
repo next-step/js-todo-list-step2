@@ -2,7 +2,7 @@ import { getEl } from "@js/util";
 import * as api from "@lib/api";
 import { UI_CLASS, KEY, MESSAGES } from "@constants/constant";
 
-class TodoList {
+class TodoItemList {
   constructor(store) {
     this.store = store;
     this.todoListEl = getEl("ul.todo-list");
@@ -82,4 +82,4 @@ class TodoList {
   }
 }
 
-export default TodoList;
+export default TodoItemList;

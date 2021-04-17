@@ -5,7 +5,7 @@ import { FILTER_TYPE } from "@constants/constant";
 
 import TodoUserList from "./TodoUserList";
 import TodoInput from "./TodoInput";
-import TodoList from "./TodoList";
+import TodoItemList from "./TodoItemList";
 import TodoFilters from "./TodoFilters";
 
 class TodoApp {
@@ -32,7 +32,7 @@ class TodoApp {
 
     new TodoUserList(this.store);
     new TodoInput(this.store);
-    new TodoList(this.store);
+    new TodoItemList(this.store);
     new TodoFilters(this.store);
   }
 
