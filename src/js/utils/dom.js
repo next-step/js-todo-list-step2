@@ -1,2 +1,9 @@
-export const $get = (selector) => document.querySelector(selector);
-export const $closest = (element, target) => element.closest(target);
+export const $ = (selector, target) => {
+  if (!target) return document.querySelector(selector);
+  return target.querySelector(selector);
+};
+
+export const $all = (selector, target) => {
+  if (!target) return document.querySelectorAll(selector);
+  return target.querySelectorAll(selector);
+};

@@ -34,7 +34,7 @@ class UserStore extends Subject {
     try {
       const result = await api.getUser(userId);
       if (result.isError) {
-        return window.alert(result.errorMessage);
+        return alert(result.errorMessage);
       }
       const { todoList, name } = result.data;
       this.currentUserId = userId;

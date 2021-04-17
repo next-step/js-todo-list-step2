@@ -25,7 +25,7 @@ export const priorityTemplate = {
 };
 
 export const todoTemplate = (id, contents, isCompleted, priority) => `
- <li data-id=${id} data-contents=${contents} class=${
+ <li data-id=${id} data-contents=${contents} data-priority=${priority} class=${
   isCompleted ? 'completed' : ''
 }>
      <div class="view">

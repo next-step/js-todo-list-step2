@@ -1,4 +1,5 @@
 import Observer from '../libs/Observer.js';
+import { $ } from '../utils/dom.js';
 import { SELECTOR } from '../utils/constant.js';
 import { todoCounterTemplate } from '../utils/templates.js';
 
@@ -7,7 +8,7 @@ class TodoCounter extends Observer {
   constructor(store) {
     super();
     this.store = store;
-    this.container = document.querySelector(SELECTOR.TODO_COUNTER);
+    this.container = $(SELECTOR.TODO_COUNTER);
     this.render();
   }
 

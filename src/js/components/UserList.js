@@ -4,6 +4,7 @@ import {
   USER_NAME_ERROR,
   CREATE_USER_PROMPT,
 } from '../utils/constant.js';
+import { $ } from '../utils/dom.js';
 import { isAvailableUserName } from '../utils/validations.js';
 import { userListTemplate } from '../utils/templates.js';
 import Observer from '../libs/Observer.js';
@@ -13,48 +14,52 @@ class UserList extends Observer {
   constructor(store) {
     super();
     this.store = store;
-    this.container = document.querySelector(SELECTOR.USER_LIST);
+    this.container = $(SELECTOR.USER_LIST);
     this.render();
     this.bindEvent();
   }
 
   bindEvent() {
-    this.container.addEventListener('click', ({ target }) => {
+    this.container.addEventListener('click', (e) => this.onClick(e));
+  }
+
+  async onClick({ target }) {
+    try {
       const action = target.dataset.action;
       if (action) {
         return action === ACTION_NAME.CREATE_USER
-          ? this.onCreateUser()
-          : this.onRemoveUser();
+          ? await this.createUser()
+          : await this.removeUser();
       }
       const userId = target.dataset.id;
-      userId && this.onSelectUser(userId);
-    });
+      userId && this.selectUser(userId);
+    } catch (error) {}
   }
 
-  onSelectUser(userId) {
+  selectUser(userId) {
     this.store.setCurrentUser(userId);
   }
 
-  async onCreateUser() {
+  async createUser() {
     try {
       const userName = prompt(CREATE_USER_PROMPT).trim();
       if (!isAvailableUserName(userName)) {
-        return window.alert(USER_NAME_ERROR);
+        return alert(USER_NAME_ERROR);
       }
       const result = await api.addUser(userName);
       if (result.isError) {
-        return window.alert(result.errorMessage);
+        return alert(result.errorMessage);
       }
       this.store.addUser(result.data);
     } catch (error) {}
   }
 
-  async onRemoveUser() {
+  async removeUser() {
     try {
       const userId = this.store.currentUserId;
       const result = await api.removeUser(userId);
       if (result.isError) {
-        return window.alert(USER_NAME_ERROR);
+        return alert(USER_NAME_ERROR);
       }
       this.store.removeUser(userId);
     } catch (error) {}

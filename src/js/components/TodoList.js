@@ -5,6 +5,7 @@ import {
   KEY_NAME,
   PRIORITY,
 } from '../utils/constant.js';
+import { $, $all } from '../utils/dom.js';
 import { priorityTemplate, todoListTemplate } from '../utils/templates.js';
 import api, { defaultErrorMessage } from '../api/index.js';
 import Observer from '../libs/Observer.js';
@@ -13,124 +14,107 @@ class TodoList extends Observer {
   constructor(store) {
     super();
     this.store = store;
-    this.container = document.querySelector(SELECTOR.TODO_LIST);
+    this.container = $(SELECTOR.TODO_LIST);
+    this.userId = this.store.currentUserId;
     this.bindEvent();
     this.render();
   }
 
   bindEvent() {
-    const clearAllBtn = document.querySelector(SELECTOR.CLEAR_ALL);
-    clearAllBtn.addEventListener('click', (e) => this.onClearAll(e));
-    // 투두 토글 or 삭제
-    this.container.addEventListener('click', ({ target }) => {
-      const $li = target.closest(NODE_NAME.LIST);
-      const id = $li.dataset.id;
-      const targetClassList = target.classList;
+    $(SELECTOR.CLEAR_ALL).addEventListener('click', (e) => this.onClearAll(e));
+    this.container.addEventListener('click', (e) => this.onClick(e));
+    this.container.addEventListener('dblclick', (e) => this.onDoubleClick(e));
+    this.container.addEventListener('keydown', (e) => this.onKeyDown(e));
+  }
 
+  async onClick({ target }) {
+    try {
+      const $li = target.closest(NODE_NAME.LIST);
+      if (!$li) return;
+      const { id: dataId, contents: dataContents } = $li.dataset;
+      const targetClassList = target.classList;
       if (targetClassList.contains(CLASS_NAME.TOGGLE)) {
-        this.onToggleComplete(id, $li, target);
+        return await this.toggleComplete($li, dataId, target);
       } else if (targetClassList.contains(CLASS_NAME.DESTROY)) {
-        this.onRemoveTodo(id);
+        return await this.removeTodo(dataId);
       } else if (targetClassList.contains(CLASS_NAME.PRIORITY_SELECT)) {
         const priority = target.value;
-        if (priority !== PRIORITY.NONE) {
-          this.onChangePriority($li, id, priority);
-        }
+        if (priority === PRIORITY.NONE) return;
+        return await this.changePriority($li, dataId, dataContents, priority);
       }
-    });
+    } catch (error) {
+      console.error(error);
+    }
+  }
 
-    // 투두 수정
-    this.container.addEventListener('dblclick', ({ target }) => {
+  async onDoubleClick({ target }) {
+    try {
       if (target.classList.contains(NODE_NAME.LABEL)) {
-        this.onEditMode(target);
+        return await this.changeToEditMode(target);
       }
-    });
+    } catch (error) {
+      console.error(error);
+    }
+  }
 
-    // 투두 수정 완료
-    this.container.addEventListener('keydown', ({ key }) => {
+  async onKeyDown({ key }) {
+    try {
       if (key === KEY_NAME.ENTER || key === KEY_NAME.ESC) {
-        const $editList = this.container.querySelectorAll(SELECTOR.EDIT_INPUT);
+        const $editList = $all(SELECTOR.EDIT_INPUT, this.container);
         const $activeInput = Array.from($editList).find(
           (element) => element === document.activeElement,
         );
-        $activeInput && this.offEditMode($activeInput, key);
+        $activeInput && (await this.closeEditMode($activeInput, key));
       }
-    });
-  }
-
-  async onChangePriority($li, itemId, priority) {
-    try {
-      const result = await api.setTodoPriority(
-        this.store.currentUserId,
-        itemId,
-        priority,
-      );
-      if (result.isError) {
-        return window.alert(result.errorMessage);
-      }
-      const label = $li.querySelector(NODE_NAME.LABEL);
-      label.innerHTML = priorityTemplate[priority] + $li.dataset.contents;
-    } catch (error) {}
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   async onClearAll() {
     try {
-      const result = await api.removeAllTodos(this.store.currentUserId);
+      const result = await api.removeAllTodos(this.userId);
       if (result.isError) {
-        return window.alert(result.errorMessage);
+        return alert(result.errorMessage);
       }
       this.store.setOriginList([]);
       this.store.setRenderList([]);
-    } catch (error) {}
+    } catch (error) {
+      console.error(error);
+    }
   }
 
-  /**
-   * Edit mode 로 변경해주는 메서드
-   * @param {EventTarget} target
-   */
-  onEditMode(target) {
+  changeToEditMode(target) {
     const $li = target.closest(NODE_NAME.LIST);
     if ($li.classList.contains(CLASS_NAME.COMPLETED)) return;
     const value = $li.dataset.contents;
-    const $input = $li.querySelector(SELECTOR.EDIT_INPUT);
+    const $input = $(SELECTOR.EDIT_INPUT, $li);
     $li.classList.add(CLASS_NAME.EDITING);
     $input.value = value;
   }
 
-  /**
-   * Edit Mode 끝내주는 메서드
-   * @param {EventTarget} target
-   * @param {'Enter' | 'Escape'} key
-   */
-  offEditMode(target, key) {
-    const $li = target.closest(NODE_NAME.LIST);
-    const $label = $li.querySelector(NODE_NAME.LABEL);
-    const value = target.value;
-    if (
-      key === KEY_NAME.ENTER &&
-      value !== $label.innerText &&
-      value.length > 0
-    ) {
-      $label.innerText = value;
-      this.onUpdateTodo($li.dataset.id, value);
+  async closeEditMode(target, key) {
+    try {
+      const $li = target.closest(NODE_NAME.LIST);
+      const { contents, id, priority } = $li.dataset;
+      const $label = $(NODE_NAME.LABEL, $li);
+      const value = target.value;
+      if (key === KEY_NAME.ENTER && value !== contents && value.length > 0) {
+        $li.dataset.contents = value;
+        $label.innerHTML = priorityTemplate[priority] + value;
+        await this.updateTodo(id, value);
+      }
+      $li.classList.remove(CLASS_NAME.EDITING);
+    } catch (error) {
+      console.error(error);
     }
-    $li.classList.remove(CLASS_NAME.EDITING);
   }
 
-  /**
-   * 내용이 바뀐 투두를 데이터베이스에 전달해주는 메서드
-   * @param {number} itemId
-   * @param {string} contents
-   */
-  async onUpdateTodo(itemId, contents) {
+  async updateTodo(itemId, contents) {
     try {
-      const updateResult = await api.updateTodo(
-        this.store.currentUserId,
-        itemId,
-        contents,
-      );
+      const updateResult = await api.updateTodo(this.userId, itemId, contents);
       if (updateResult.isError) {
-        return window.alert(updateResult.errorMessage);
+        return alert(updateResult.errorMessage);
       }
       const updatedList = this.store.originTodoList.map((data) => {
         if (data._id === itemId) {
@@ -140,26 +124,20 @@ class TodoList extends Observer {
       });
       this.store.setOriginList(updatedList);
     } catch (error) {
-      return window.alert(defaultErrorMessage);
+      return alert(defaultErrorMessage);
     }
   }
 
-  /**
-   * 투두 Complete 토글 메서드
-   * @param {number} id
-   * @param {Element} $li
-   * @param {EventTarget} target
-   */
-  async onToggleComplete(id, $li, target) {
+  async toggleComplete($li, dataId, target) {
     try {
       target.toggleAttribute('checked');
       $li.classList.toggle(CLASS_NAME.COMPLETED);
-      const result = await api.toggleTodoComplete(this.store.currentUserId, id);
+      const result = await api.toggleTodoComplete(this.userId, dataId);
       if (result.isError) {
-        return window.alert(result.errorMessage);
+        return alert(result.errorMessage);
       }
       const updatedData = this.store.originTodoList.map((data) => {
-        if (data._id === id) {
+        if (data._id === dataId) {
           return { ...data, isCompleted: !data.isCompleted };
         }
         return data;
@@ -168,28 +146,38 @@ class TodoList extends Observer {
     } catch (error) {}
   }
 
-  /**
-   * 투두 삭제 메서드
-   * @param {number} id
-   */
-  async onRemoveTodo(id) {
+  async removeTodo(dataId) {
     try {
-      const result = await api.removeTodo(this.store.currentUserId, id);
+      const result = await api.removeTodo(this.userId, dataId);
       if (result.isError) {
-        return window.alert(result.errorMessage);
+        return alert(result.errorMessage);
       }
       const updatedRenderData = this.store.renderTodoList.filter(
-        (todo) => todo._id !== id,
+        (todo) => todo._id !== dataId,
       );
       const updatedOriginData = this.store.originTodoList.filter(
-        (todo) => todo._id !== id,
+        (todo) => todo._id !== dataId,
       );
       this.store.setOriginList(updatedOriginData);
       this.store.setRenderList(updatedRenderData);
     } catch (error) {}
   }
 
+  async changePriority($li, dataId, dataContents, priority) {
+    try {
+      const result = await api.setTodoPriority(this.userId, dataId, priority);
+      if (result.isError) {
+        return alert(result.errorMessage);
+      }
+      const label = $(NODE_NAME.LABEL, $li);
+      label.innerHTML = priorityTemplate[priority] + dataContents;
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
   update() {
+    this.userId = this.store.currentUserId;
     this.render();
   }
 

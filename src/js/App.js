@@ -13,7 +13,7 @@ const App = () => {
     try {
       const userListResult = await api.getUserList();
       if (userListResult.isError) {
-        return window.alert(userListResult.errorMessage);
+        return alert(userListResult.errorMessage);
       }
       const { data: initialData } = userListResult;
 
@@ -35,7 +35,7 @@ const App = () => {
       userStore.addObserver(userList);
     } catch (error) {
       console.error(error);
-      return window.alert(defaultErrorMessage);
+      return alert(defaultErrorMessage);
     }
   };
 

@@ -1,4 +1,5 @@
 import { SELECTOR, CLASS_NAME } from '../utils/constant.js';
+import { $ } from '../utils/dom.js';
 
 class TodoFilters {
   constructor(store) {
@@ -7,13 +8,10 @@ class TodoFilters {
   }
 
   bindEvent() {
-    const container = document.querySelector(SELECTOR.FILTER);
+    const container = $(SELECTOR.FILTER);
     container.addEventListener('click', ({ target }) => this.onClick(target));
   }
 
-  /**
-   * @param {EventTarget} target
-   */
   onClick(target) {
     const $filters = target.closest(SELECTOR.FILTER).children;
     this.resetStatus($filters); // Filter 내부 ClassName 초기화
@@ -22,15 +20,11 @@ class TodoFilters {
     this.store.setStatus(status);
   }
 
-  /**
-   * filters 내부 Element들 className 초기화 메서드
-   * @param {HTMLCollection} filters
-   */
   resetStatus(filters) {
-    for (let i = 0; i < 3; i++) {
-      const $anchor = filters[i].children[0];
+    Array.from(filters).map((filter) => {
+      const $anchor = filter.children[0];
       $anchor.classList.remove(CLASS_NAME.SELECTED);
-    }
+    });
   }
 }
 
