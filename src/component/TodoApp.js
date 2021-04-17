@@ -158,17 +158,26 @@ function TodoApp(users) {
 		}
 	});
 
-	this.setState = (updatedItems) => {
-		this.users[this.selectedUserIdx].todoList = updatedItems;
-		todoList.setState(this.users[this.selectedUserIdx].todoList);
-		todoCount.setState(this.users[this.selectedUserIdx].todoList);
-	};
-
 	new TodoInput({
-		onAdd: (contents) => {
-			const newTodoItem = new TodoItemModel({ contents });
-			this.users[this.selectedUserIdx].todoList.push(newTodoItem);
-			this.setState(this.users[this.selectedUserIdx].todoList);
+		onAdd: async (contents) => {
+			console.log(this.users[this.selectedUserIdx].id);
+			const { response, error } = await request(
+				env.BASE_URL + env.ITEM(this.users[this.selectedUserIdx].id),
+				"POST",
+				{ contents }
+			);
+			if (error) {
+				alert("할 일 등록에 실패했습니다.");
+				return;
+			}
+
+			this.users[this.selectedUserIdx].todoList.push(
+				new TodoItemModel({
+					...response,
+					id: response._id
+				})
+			);
+			this.setSelectedUser(this.selectedUserIdx);
 		}
 	});
 
@@ -199,12 +208,16 @@ function TodoApp(users) {
 	this.setUsers = (updatedUsers) => {
 		this.users = updatedUsers;
 		userList.render(this.users, this.selectedUserIdx);
+
+		todoCount.setState(this.users[this.selectedUserIdx].todoList);
 	};
 
 	this.setSelectedUser = (selectedUserIdx) => {
 		this.selectedUserIdx = selectedUserIdx;
 		userList.setState(this.users, this.selectedUserIdx);
+
 		todoList.setState(this.users[this.selectedUserIdx].todoList);
+		todoCount.setState(this.users[this.selectedUserIdx].todoList);
 	};
 
 	this.render();
