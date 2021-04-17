@@ -146,8 +146,7 @@ export default class View {
 
   _deleteUser(userId) {
     this.userListView.deleteUser(userId);
-    this.todoListView.clear();
-    this.todoCountView.init(0);
+    this._deleteAll();
   }
 
   _deleteAll() {
