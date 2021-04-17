@@ -14,13 +14,16 @@ export class TodoApp {
     });
   }
   async init() {
-    this.userListArray = await DAO.getUsers();
-    
+    this.userListArray = await this.getUsers();
     const [haveTodoListUser] = this.userListArray.filter((user)=>user.todoList[0]);
     this.currentUser = haveTodoListUser;
     this.todoItemArray = DAO.loadData(this.currentUser);
     this.setState();
   }
+  async getUsers(){
+    return await DAO.getUsers();
+  }
+
   async changeUser(userId){
     const selectedUser = await DAO.getUser(userId);
     this.currentUser = selectedUser;
@@ -29,12 +32,21 @@ export class TodoApp {
   }
 
   async addUser(name){
+    const addedUser = await DAO.addUser(name);
+    this.userListArray = await this.getUsers();//userList 업데이트를 위함.
+    await this.changeUser(addedUser._id);
   }
-  async deleteUser(name){
+
+  async deleteUser(id){
+    const deletedUser = await DAO.deleteUser(id);
+    this.init();
   }
 
   addItem(data) {
-    if (!data || data.trim() == "") return;
+    if (!data || data.trim().length < 2 ){
+      alert('할일을 최소 2자 이상으로 입력해 주세요.')
+      return;
+    } 
     DAO.addItem(this.todoItemArray,data);
     this.setState();
   }

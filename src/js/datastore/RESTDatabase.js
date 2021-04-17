@@ -13,6 +13,15 @@ export class RESTDataBase {
     return await Ajax.get(url,"User 로드 실패");
   }
 
+  static async addUser(name) {
+    const url = RESTDataBase.BASE_URL + '/api/users';
+
+    return await Ajax.post(url,{'name':name},"User Add 실패");
+  }
+  static async deleteUser(id) {
+    const url = RESTDataBase.BASE_URL + '/api/users/' + id;
+    return await Ajax.deleteRequest(url,"User delete 실패");
+  }
   static loadData(user) {
     const loadedArray = user.todoList;
     const resultArray =[];
