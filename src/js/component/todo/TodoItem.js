@@ -2,13 +2,11 @@ export class TodoItem {
   static ACTIVE = "active";
   static COMPLETED = "completed";
 
-  constructor(data, state) {
-    if (state != TodoItem.ACTIVE && state != TodoItem.COMPLETED) {
-      alert("item state error");
-      return;
-    }
+  constructor(data, isCompleted, id, priority) {
     this.data = data;
-    this.state = state;
+    this.isCompleted = isCompleted;
+    this.id = id;
+    this.priority = priority;
   }
   toString() {
     return JSON.stringify(this);

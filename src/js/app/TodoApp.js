@@ -1,8 +1,7 @@
-import { $, $$ } from "./util/domSelection.js";
-import { DAO } from "./datastore/datastore.js";
-import { TodoList, TodoStatusContainer } from "./component/todo/Todo.js";
+import { $ } from "../util/domSelection.js";
+import { DAO } from "../datastore/datastore.js";
 
-class TodoApp {
+export class TodoApp {
   constructor(todoItemArray) {
     this.todoItemArray = todoItemArray;
 
@@ -14,10 +13,26 @@ class TodoApp {
       }
     });
   }
-  loadData() {
-    this.todoItemArray = DAO.loadData();
+  async init() {
+    this.userListArray = await DAO.getUsers();
+    
+    const [haveTodoListUser] = this.userListArray.filter((user)=>user.todoList[0]);
+    this.currentUser = haveTodoListUser;
+    this.todoItemArray = DAO.loadData(this.currentUser);
     this.setState();
   }
+  async changeUser(userId){
+    const selectedUser = await DAO.getUser(userId);
+    this.currentUser = selectedUser;
+    this.todoItemArray = DAO.loadData(selectedUser);
+    this.setState();
+  }
+
+  async addUser(name){
+  }
+  async deleteUser(name){
+  }
+
   addItem(data) {
     if (!data || data.trim() == "") return;
     DAO.addItem(this.todoItemArray,data);
@@ -42,13 +57,9 @@ class TodoApp {
     if (this.todoStatusContainer) {
       this.todoStatusContainer.setState();
     }
-    DAO.saveData(this.todoItemArray);
+    if (this.userList) {
+      this.userList.setState(this.userListArray,this.currentUser);
+    }
   }
 }
-const todoApp = new TodoApp([]);
-const todoList = new TodoList(todoApp);
-const todoStatusContainer = new TodoStatusContainer();
 
-todoApp.todoList = todoList;
-todoApp.todoStatusContainer = todoStatusContainer;
-todoApp.loadData();

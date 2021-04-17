@@ -53,11 +53,11 @@ export class TodoList {
       index = index + 1;
       li.setAttributeNode(indexAttribute);
 
-      if (item.state == TodoItem.COMPLETED) {
+      if (item.isCompleted) {
         const liClass = document.createAttribute("class");
         liClass.value = TodoItem.COMPLETED;
         li.setAttributeNode(liClass);
-      } else if (item.state == TodoItem.ACTIVE) {
+      } else  {
         const liClass = document.createAttribute("class");
         liClass.value = TodoItem.ACTIVE;
         li.setAttributeNode(liClass);
@@ -65,7 +65,7 @@ export class TodoList {
       li.innerHTML = `
               <div class="view">
                   <input class="toggle" type="checkbox" ${
-                    item.state == TodoItem.COMPLETED ? "checked" : ""
+                    item.isCompleted ? "checked" : ""
                   }/>
                   <label class="label">${item.data}</label>
                   <button class="destroy"></button>
