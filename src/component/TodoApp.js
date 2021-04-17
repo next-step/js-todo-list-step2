@@ -107,7 +107,16 @@ function TodoApp(users) {
 	const todoList = new TodoList({
 		target: listTarget,
 		status: null,
-		onDeleteButton: (id) => {
+		onDeleteButton: async (id) => {
+			const { response, error } = await request(
+				env.BASE_URL + env.USER_ITEM(this.users[this.selectedUserIdx].id, id),
+				"DELETE"
+			);
+			if (error) {
+				alert("할 일 삭제에 실패했습니다.");
+				return;
+			}
+
 			this.users[this.selectedUserIdx].todoList = this.users[this.selectedUserIdx].todoList.filter(
 				(item) => item.id !== id
 			);
