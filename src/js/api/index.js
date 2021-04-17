@@ -1,142 +1,75 @@
-import requestData from './requestData.js';
+import requestParams from './requestData.js';
 
 export const defaultErrorMessage = '잠시 후 다시 시도해주세요';
 
 const baseUrl = 'https://js-todo-list-9ca3a.df.r.appspot.com/';
 
-const errorResponse = (message) => {
-  return {
-    isError: true,
-    errorMessage: message || defaultErrorMessage,
-  };
-};
-
-const successResponse = (data) => {
-  return {
-    isError: false,
-    data,
-  };
-};
-
-const request = async (endPoint, option) => {
-  try {
-    const response = await fetch(baseUrl + endPoint, option);
-    const data = await response.json();
-    if (response.status !== 200 || !response.ok) {
-      throw { message: data.message };
-    }
-    return data;
-  } catch (error) {
-    throw error;
+const request = async (endPoint, option = {}) => {
+  const response = await fetch(baseUrl + endPoint, option);
+  const data = await response.json();
+  if (response.status !== 200 || !response.ok) {
+    throw data.message || defaultErrorMessage;
   }
+  return data;
 };
 
 const api = {
   getUserList: async () => {
-    try {
-      const { endPoint, option } = requestData.getUserList();
-      const data = await request(endPoint, option);
-      return successResponse(data);
-    } catch ({ message }) {
-      return errorResponse(message);
-    }
+    const { endPoint, option } = requestParams.getUserList();
+    return await request(endPoint, option);
   },
 
   getUser: async (userId) => {
-    try {
-      const { endPoint, option } = requestData.getUser(userId);
-      const data = await request(endPoint, option);
-      return successResponse(data);
-    } catch ({ message }) {
-      return errorResponse(message);
-    }
+    const { endPoint, option } = requestParams.getUser(userId);
+    return await request(endPoint, option);
   },
 
   addUser: async (name) => {
-    try {
-      const { endPoint, option } = requestData.addUser(name);
-      const data = await request(endPoint, option);
-      return successResponse(data);
-    } catch ({ message }) {
-      return errorResponse(message);
-    }
+    const { endPoint, option } = requestParams.addUser(name);
+    return await request(endPoint, option);
   },
 
   removeUser: async (userId) => {
-    try {
-      const { endPoint, option } = requestData.removeUser(userId);
-      await request(endPoint, option);
-      return successResponse();
-    } catch ({ message }) {
-      return errorResponse(message);
-    }
+    const { endPoint, option } = requestParams.removeUser(userId);
+    return await request(endPoint, option);
   },
 
   addTodoItem: async (userId, contents) => {
-    try {
-      const { endPoint, option } = requestData.addTodoItem(userId, contents);
-      const data = await request(endPoint, option);
-      return successResponse(data);
-    } catch ({ message }) {
-      return errorResponse(message);
-    }
+    const { endPoint, option } = requestParams.addTodoItem(userId, contents);
+    return await request(endPoint, option);
   },
 
   updateTodo: async (userId, itemId, contents) => {
-    try {
-      const { endPoint, option } = requestData.updateTodo(
-        userId,
-        itemId,
-        contents,
-      );
-      const data = await request(endPoint, option);
-      return successResponse(data);
-    } catch ({ message }) {
-      return errorResponse(message);
-    }
+    const { endPoint, option } = requestParams.updateTodo(
+      userId,
+      itemId,
+      contents,
+    );
+    return await request(endPoint, option);
   },
+
   removeTodo: async (userId, itemId) => {
-    try {
-      const { endPoint, option } = requestData.removeTodo(userId, itemId);
-      const data = await request(endPoint, option);
-      return successResponse(data);
-    } catch ({ message }) {
-      return errorResponse(message);
-    }
+    const { endPoint, option } = requestParams.removeTodo(userId, itemId);
+    return await request(endPoint, option);
   },
   removeAllTodos: async (userId) => {
-    try {
-      const { endPoint, option } = requestData.removeAllTodos(userId);
-      const data = await request(endPoint, option);
-      return successResponse(data);
-    } catch ({ message }) {
-      return errorResponse(message);
-    }
+    const { endPoint, option } = requestParams.removeAllTodos(userId);
+    return await request(endPoint, option);
   },
   setTodoPriority: async (userId, itemId, priority) => {
-    try {
-      const { endPoint, option } = requestData.setTodoPriority(
-        userId,
-        itemId,
-        priority,
-      );
-      const data = await request(endPoint, option);
-      return successResponse(data);
-    } catch ({ message }) {
-      return errorResponse(message);
-    }
+    const { endPoint, option } = requestParams.setTodoPriority(
+      userId,
+      itemId,
+      priority,
+    );
+    return await request(endPoint, option);
   },
   toggleTodoComplete: async (userId, itemId) => {
-    try {
-      const { endPoint, option } = requestData.toggleTodoComplete(
-        userId,
-        itemId,
-      );
-      const data = await request(endPoint, option);
-      return successResponse(data);
-    } catch ({ message }) {
-      return errorResponse(message);
-    }
+    const { endPoint, option } = requestParams.toggleTodoComplete(
+      userId,
+      itemId,
+    );
+    return await request(endPoint, option);
   },
 };
 

@@ -23,17 +23,15 @@ class UserList extends Observer {
     this.container.addEventListener('click', (e) => this.onClick(e));
   }
 
-  async onClick({ target }) {
-    try {
-      const action = target.dataset.action;
-      if (action) {
-        return action === ACTION_NAME.CREATE_USER
-          ? await this.createUser()
-          : await this.removeUser();
-      }
-      const userId = target.dataset.id;
-      userId && this.selectUser(userId);
-    } catch (error) {}
+  onClick({ target }) {
+    const action = target.dataset.action;
+    if (action) {
+      return action === ACTION_NAME.CREATE_USER
+        ? this.createUser()
+        : this.removeUser();
+    }
+    const userId = target.dataset.id;
+    userId && this.selectUser(userId);
   }
 
   selectUser(userId) {
@@ -46,23 +44,21 @@ class UserList extends Observer {
       if (!isAvailableUserName(userName)) {
         return alert(USER_NAME_ERROR);
       }
-      const result = await api.addUser(userName);
-      if (result.isError) {
-        return alert(result.errorMessage);
-      }
-      this.store.addUser(result.data);
-    } catch (error) {}
+      const user = await api.addUser(userName);
+      this.store.addUser(user);
+    } catch (error) {
+      return alert(error);
+    }
   }
 
   async removeUser() {
     try {
       const userId = this.store.currentUserId;
-      const result = await api.removeUser(userId);
-      if (result.isError) {
-        return alert(USER_NAME_ERROR);
-      }
+      await api.removeUser(userId);
       this.store.removeUser(userId);
-    } catch (error) {}
+    } catch (error) {
+      return alert(error);
+    }
   }
 
   update() {

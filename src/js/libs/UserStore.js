@@ -32,16 +32,15 @@ class UserStore extends Subject {
 
   async setCurrentUser(userId) {
     try {
-      const result = await api.getUser(userId);
-      if (result.isError) {
-        return alert(result.errorMessage);
-      }
-      const { todoList, name } = result.data;
+      const userData = await api.getUser(userId);
+      const { todoList, name } = userData;
       this.currentUserId = userId;
       this.currentUserName = name;
       this.notifyAll();
       this.todoStore.initTodoList(userId, todoList);
-    } catch (error) {}
+    } catch (error) {
+      return alert(error);
+    }
   }
 }
 

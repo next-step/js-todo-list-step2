@@ -7,7 +7,7 @@ const HttpMethod = {
 
 const headers = { 'Content-Type': 'application/json' };
 
-const requestData = {
+const requestParams = {
   getUserList: () => {
     return {
       endPoint: 'api/users/',
@@ -103,4 +103,4 @@ const requestData = {
   },
 };
 
-export default requestData;
+export default requestParams;

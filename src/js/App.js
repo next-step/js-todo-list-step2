@@ -5,18 +5,13 @@ import TodoFilters from './components/TodoFilters.js';
 import UserTitle from './components/UserTitle.js';
 import TodoStore from './libs/TodoStore.js';
 import UserStore from './libs/UserStore.js';
-import api, { defaultErrorMessage } from './api/index.js';
+import api from './api/index.js';
 import UserList from './components/UserList.js';
 
 const App = () => {
   const init = async () => {
     try {
-      const userListResult = await api.getUserList();
-      if (userListResult.isError) {
-        return alert(userListResult.errorMessage);
-      }
-      const { data: initialData } = userListResult;
-
+      const initialData = await api.getUserList();
       const todoStore = new TodoStore(
         initialData[0]._id,
         initialData[0].todoList || [],
@@ -34,11 +29,9 @@ const App = () => {
       userStore.addObserver(userTitle);
       userStore.addObserver(userList);
     } catch (error) {
-      console.error(error);
-      return alert(defaultErrorMessage);
+      return alert(error);
     }
   };
-
   init();
 };
 

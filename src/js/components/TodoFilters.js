@@ -14,12 +14,13 @@ class TodoFilters {
 
   onClick(target) {
     const $filters = target.closest(SELECTOR.FILTER).children;
-    this.resetStatus($filters); // Filter 내부 ClassName 초기화
-    const status = target.className; // 현재 target 의 className = 새로 바뀔 status
+    this.resetStatus($filters);
+    const status = target.className;
     target.classList.add(CLASS_NAME.SELECTED);
     this.store.setStatus(status);
   }
 
+  // Filter 내부 초기화
   resetStatus(filters) {
     Array.from(filters).map((filter) => {
       const $anchor = filter.children[0];

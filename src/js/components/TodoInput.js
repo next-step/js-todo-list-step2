@@ -17,7 +17,7 @@ class TodoInput {
 
   async onKeyDown({ key }) {
     if (key === KEY_NAME.ENTER) {
-      return await submitTodo();
+      return await this.submitTodo();
     }
   }
 
@@ -27,12 +27,9 @@ class TodoInput {
       if (!isAvaliableTodo(value)) {
         return alert('2글자 이상 입력해주세요');
       }
-      const result = await api.addTodoItem(this.store.currentUserId, value);
-      if (result.isError) {
-        return alert(result.errorMessage);
-      }
-      const newTodo = result.data;
-      this.container.value = ''; // value 값 초기화
+      const newTodo = await api.addTodoItem(this.store.currentUserId, value);
+
+      this.container.value = '';
       const todoData = [...this.store.originTodoList, newTodo];
 
       this.store.setOriginList(todoData);
@@ -42,7 +39,9 @@ class TodoInput {
         const renderData = [...this.store.renderTodoList, newTodo];
         this.store.setRenderList(renderData);
       }
-    } catch (error) {}
+    } catch (error) {
+      return alert(error);
+    }
   }
 }
 export default TodoInput;
