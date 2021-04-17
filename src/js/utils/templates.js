@@ -1,9 +1,3 @@
-/**
- * @param {string} title
- * @param {number} id
- * @param {boolean} complete
- * @returns {string}
- */
 const userActionButtons = `
   <button class="ripple user-create-button" data-action="createUser">
     + 유저 생성
@@ -39,11 +33,6 @@ export const todoTemplate = (id, contents, isCompleted, priority) => `
      <input class="edit"/>
  </li>`;
 
-/**
- * @param {object[]} datas
- * @returns {string}
- */
-
 export const todoListTemplate = (datas) => {
   let result = '';
   datas &&
@@ -58,10 +47,6 @@ export const todoListTemplate = (datas) => {
   return result;
 };
 
-/**
- * @param {number} counter
- * @returns {string}
- */
 export const todoCounterTemplate = (counter) =>
   `총 <strong>${counter}</strong> 개</span>`;
 

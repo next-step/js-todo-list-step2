@@ -157,7 +157,6 @@ class TodoList extends Observer {
 
   update() {
     this.userId = this.store.currentUserId;
-    console.log(this.store.isLoading);
     this.render();
   }
 

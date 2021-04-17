@@ -1,4 +1,4 @@
-export const defaultErrorMessage = '잠시 후 다시 시도해주세요';
+const defaultErrorMessage = '잠시 후 다시 시도해주세요';
 
 const baseUrl = 'https://js-todo-list-9ca3a.df.r.appspot.com/';
 
