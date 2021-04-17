@@ -4,7 +4,7 @@ function UserList({ onSelectingUser, target, onAddUser, onDeleteUser }) {
 	target.addEventListener("click", onSelectingUser);
 
 	this.setState = (updatedUsers, selectedUserIdx) => {
-		render(updatedUsers, selectedUserIdx);
+		this.render(updatedUsers, selectedUserIdx);
 	};
 
 	const html = (userList, selectedUserIdx) => {
@@ -13,7 +13,7 @@ function UserList({ onSelectingUser, target, onAddUser, onDeleteUser }) {
 			if (idx === selectedUserIdx) {
 				button = template("button", { class: "ripple active", dataId: user.id });
 			} else {
-				button = template("button", { class: "ripple" });
+				button = template("button", { class: "ripple", dataId: user.id });
 			}
 
 			button.append(document.createTextNode(user.name));
