@@ -50,10 +50,10 @@ export default class UserListView {
         const userName = prompt('추가하고 싶은 이름을 입력해주세요.');
         controller.addUser(userName);
       } else if (target.classList.contains('user-delete-button')) {
-        if (confirm('정말로 삭제?')) {
+        if (this.selectedUser && confirm('정말로 삭제?')) {
           controller.deleteUser(this.selectedUser.dataset.id);
         } else {
-          controller.deleteUser();
+          return;
         }
       } else {
         controller.selectUser(target.dataset.id);

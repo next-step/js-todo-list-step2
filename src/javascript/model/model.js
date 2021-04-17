@@ -4,6 +4,9 @@ export default class Model {
   constructor() {}
 
   createUser(userName) {
+    if (!userName || userName.length < 2) {
+      throw new Error('유저 이름의 길이는 2글자를 넘어야합니다!');
+    }
     return API.addUser(userName);
   }
 
