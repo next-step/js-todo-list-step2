@@ -40,14 +40,31 @@ function TodoApp(users) {
 	const userListTarget = document.querySelector("#user-list");
 	const userList = new UserList({
 		target: userListTarget,
-		onSelectingUser: (e) => {
+		onSelectingUser: async (e) => {
 			if (!e.target.dataset || !e.target.dataset.id) {
 				return;
 			}
 
 			const { id } = e.target.dataset;
 			const selectedIdx = this.searchSelectedUserIdx(id);
+
+			const { response, error } = await request(env.BASE_URL + env.ITEM(id));
+
+			if (error) {
+				alert("사용자 할 일 목록 조회에 실패했습니다.");
+				return;
+			}
+
+			this.users[selectedIdx].todoList = response.map(
+				(todo) =>
+					new TodoItemModel({
+						...todo,
+						id: todo._id
+					})
+			);
+
 			this.setSelectedUser(selectedIdx);
+			this.setUsers([...this.users]);
 		},
 		onAddUser: async () => {
 			const name = prompt("추가하고 싶은 이름을 입력해주세요.");
