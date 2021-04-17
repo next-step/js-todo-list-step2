@@ -1,8 +1,9 @@
 export const TODO_STORE = {
   selectedUser: {
-    _id: '',
-    name: '',
+    _id: "",
+    name: "",
     todoList: [],
+    priority: "",
   },
   users: [],
   filter: "",
