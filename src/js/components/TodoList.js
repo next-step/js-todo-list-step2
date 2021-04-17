@@ -161,11 +161,9 @@ class TodoList extends Observer {
   }
 
   render() {
-    this.store.isLoading
-      ? (this.container.innerHTML = loaderTemplate)
-      : (this.container.innerHTML = todoListTemplate(
-          this.store.renderTodoList,
-        ));
+    this.container.innerHTML = this.store.isLoading
+      ? loaderTemplate
+      : todoListTemplate(this.store.renderTodoList);
   }
 }
 
