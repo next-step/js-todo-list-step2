@@ -1,4 +1,3 @@
-import { TodoItem } from "../component/todo/Todo.js";
 import * as Ajax from "../util/ajaxUtil.js";
 
 export class RESTDataBase {
@@ -8,34 +7,32 @@ export class RESTDataBase {
     return await Ajax.get(url,"UserList 로드 실패");
   }
 
-  static async getUser(id) {
-    const url = RESTDataBase.BASE_URL + '/api/users/' + id;
+  static async getUser(userId) {
+    const url = RESTDataBase.BASE_URL + '/api/users/' + userId;
     return await Ajax.get(url,"User 로드 실패");
   }
 
-  static async addUser(name) {
+  static async addUser(userName) {
     const url = RESTDataBase.BASE_URL + '/api/users';
 
-    return await Ajax.post(url,{'name':name},"User Add 실패");
+    return await Ajax.post(url,{'name':userName},"User Add 실패");
   }
-  static async deleteUser(id) {
-    const url = RESTDataBase.BASE_URL + '/api/users/' + id;
+  static async deleteUser(userId) {
+    const url = RESTDataBase.BASE_URL + '/api/users/' + userId;
     return await Ajax.deleteRequest(url,"User delete 실패");
   }
-  static loadData(user) {
-    const loadedArray = user.todoList;
-    const resultArray =[];
-    loadedArray.forEach((item) => {
-      resultArray.push(new TodoItem(item.contents, item.isCompleted, item._id, item.priority));
-    });
-    return resultArray;
+   static async getUserItems(userId) {
+    const url = RESTDataBase.BASE_URL + '/api/users/' + userId + '/items';
+    return await Ajax.get(url,"UserItem 로드 실패");
   }
-  static addItem(todoListArray,data) {
-    const isCompleted = false;
-    todoListArray.push(new TodoItem(data, isCompleted));
+
+  static async addItem(userId,data) {
+    const url = RESTDataBase.BASE_URL + '/api/users/' + userId + '/items';
+    return await Ajax.post(url,{'contents':data},"Add Item 실패");
   }
-  static deleteItem(index, todoListArray) {
-    todoListArray.splice(index, 1);
+  static async deleteItem(userId, itemId) {
+    const url = RESTDataBase.BASE_URL + '/api/users/' + userId + '/items/' +itemId;
+    return await Ajax.deleteRequest(url,"Delete Item 실패");
   }
   static updateItem(index, todoListArray, data) {
     todoListArray[index].data = data;

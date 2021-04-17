@@ -16,21 +16,21 @@ export class UserList{
                 todoApp.changeUser(selectedButton.dataset.userid);
             }
         });
-        list.addEventListener("click", function (e) {
+        list.addEventListener("click", async function (e) {
             if (e.target && e.target.classList.contains("user-create-button")) {
                 const userName = prompt("추가하고 싶은 이름을 입력해주세요.");
                 if(userName.trim().length < 2){
                     alert('유저명은 최소 2자 이상 입력해 주세요.');
                     return;
                 }
-                todoApp.addUser(userName);
+                await todoApp.addUser(userName);
             }
         });
-        list.addEventListener("click", function (e) {
+        list.addEventListener("click", async function (e) {
             if (e.target && e.target.classList.contains("user-delete-button")) {
                 const deleteUserName =  todoApp.currentUser.name;
                 if(confirm(deleteUserName +"을 삭제하시겠습니까?")){
-                    todoApp.deleteUser(todoApp.currentUser._id);
+                    await todoApp.deleteUser(todoApp.currentUser._id);
                 };
             }
         });

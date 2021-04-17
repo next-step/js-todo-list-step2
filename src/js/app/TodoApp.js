@@ -1,58 +1,54 @@
-import { $ } from "../util/domSelection.js";
 import { DAO } from "../datastore/datastore.js";
+import { TodoItem } from "../component/todo/Todo.js";
 
 export class TodoApp {
-  constructor(todoItemArray) {
-    this.todoItemArray = todoItemArray;
-
-    const newTodoInput = $("input.new-todo");
-    newTodoInput.addEventListener("keydown", (e) => {
-      if (e.key == "Enter") {
-        this.addItem(newTodoInput.value);
-        newTodoInput.value = "";
-      }
-    });
-  }
-  async init() {
+  async init(userId = '') {
     this.userListArray = await this.getUsers();
-    const [haveTodoListUser] = this.userListArray.filter((user)=>user.todoList[0]);
-    this.currentUser = haveTodoListUser;
-    this.todoItemArray = DAO.loadData(this.currentUser);
+    if(!userId){
+      const [haveTodoListUser] = this.userListArray.filter((user)=>user.todoList[0]);
+      this.currentUser = haveTodoListUser;
+    }else{
+      this.currentUser = await DAO.getUser(userId);
+    }
+    
+    this.todoItemArray = this.currentUser.todoList.map(item => new TodoItem(item));
     this.setState();
   }
   async getUsers(){
     return await DAO.getUsers();
   }
-
-  async changeUser(userId){
-    const selectedUser = await DAO.getUser(userId);
-    this.currentUser = selectedUser;
-    this.todoItemArray = DAO.loadData(selectedUser);
+  async refreshUserItems(userId){
+    const userItems = await DAO.getUserItems(userId);
+    this.todoItemArray = userItems.map(item => new TodoItem(item));
     this.setState();
   }
 
-  async addUser(name){
-    const addedUser = await DAO.addUser(name);
-    this.userListArray = await this.getUsers();//userList 업데이트를 위함.
-    await this.changeUser(addedUser._id);
+  async changeUser(userId){
+    await this.init(userId);
   }
 
-  async deleteUser(id){
-    const deletedUser = await DAO.deleteUser(id);
+  async addUser(userName){
+    const addedUser = await DAO.addUser(userName);
+    this.userListArray = await this.getUsers();//userList 업데이트를 위함.
+    await this.init(addedUser._id);
+  }
+
+  async deleteUser(userId){
+    const deletedUser = await DAO.deleteUser(userId);
     this.init();
   }
 
-  addItem(data) {
+  async addItem(data) {
     if (!data || data.trim().length < 2 ){
       alert('할일을 최소 2자 이상으로 입력해 주세요.')
       return;
     } 
-    DAO.addItem(this.todoItemArray,data);
-    this.setState();
+    await DAO.addItem(this.currentUser._id,data);
+    await this.refreshUserItems(this.currentUser._id);
   }
-  deleteItem(index) {
-    DAO.deleteItem(index, this.todoItemArray);
-    this.setState();
+  async deleteItem(itemId) {
+    await DAO.deleteItem(this.currentUser._id, itemId);
+    await this.refreshUserItems(this.currentUser._id);
   }
   updateItem(index, data) {
     DAO.updateItem(index, this.todoItemArray, data);

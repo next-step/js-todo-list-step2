@@ -5,6 +5,15 @@ export class TodoList {
     this.todoApp = todoApp;
 
     const list = $(".todo-list");
+    
+    list.addEventListener("click", async function (e) {
+      if (e.target && e.target.className == "destroy") {
+        const targetLi = e.target.closest("li");
+        const itemId =targetLi.dataset.itemid;
+        await todoApp.deleteItem(itemId);
+        targetLi.outerHTML = "";
+      }
+    });
     list.addEventListener("click", function (e) {
       if (e.target && e.target.className == "toggle") {
         const targetLi = e.target.closest("li");
@@ -15,13 +24,7 @@ export class TodoList {
         targetLi.classList.toggle(TodoItem.ACTIVE);
       }
     });
-    list.addEventListener("click", function (e) {
-      if (e.target && e.target.className == "destroy") {
-        const targetLi = e.target.closest("li");
-        targetLi.outerHTML = "";
-        todoApp.deleteItem(targetLi.dataset.index);
-      }
-    });
+
     list.addEventListener("dblclick", function (e) {
       if (e.target && e.target.nodeName == "LABEL") {
         const targetLi = e.target.closest("li");
@@ -44,14 +47,11 @@ export class TodoList {
     const list = $(".todo-list");
     list.innerHTML = "";
     let li;
-    let index = 0;
     todoItemArray.forEach((item) => {
       li = document.createElement("li");
-
-      const indexAttribute = document.createAttribute("data-index");
-      indexAttribute.value = index;
-      index = index + 1;
-      li.setAttributeNode(indexAttribute);
+      const itemIdAttribute = document.createAttribute("data-itemid");
+      itemIdAttribute.value = item._id;
+      li.setAttributeNode(itemIdAttribute);
 
       if (item.isCompleted) {
         const liClass = document.createAttribute("class");
