@@ -60,7 +60,27 @@ function TodoApp(users) {
 
 			this.setUsers([...this.users, new User({ id: response._id, name: response.name, todoList: [] })]);
 		},
-		onDeleteUser: () => {}
+		onDeleteUser: async () => {
+			const answer = confirm(`${this.users[this.selectedUserIdx].name}을 삭제하시겠습니까?`);
+			if (!answer) {
+				return;
+			}
+
+			const { response, error } = await request(
+				env.BASE_URL + env.USER(this.users[this.selectedUserIdx].id),
+				"DELETE"
+			);
+
+			if (error) {
+				alert("사용자 삭제에 실패했습니다.");
+				return;
+			}
+
+			this.users.splice(this.selectedUserIdx, 1);
+
+			this.setUsers([...this.users]);
+			this.setSelectedUser(0);
+		}
 	});
 
 	const countTarget = document.querySelector(".todo-count strong");
@@ -79,7 +99,6 @@ function TodoApp(users) {
 		},
 		onCompleted: (id) => {
 			this.users[this.selectedUserIdx].todoList = this.users[this.selectedUserIdx].todoList.map((item) => {
-				console.log(item.id, id);
 				if (item.id === id) {
 					item.completed = !item.completed;
 				}

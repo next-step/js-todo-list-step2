@@ -6,7 +6,6 @@ function TodoList({ target, onDeleteButton, onCompleted, onEditing, onEdit }) {
 	};
 
 	const html = (itemModel) => {
-		console.log(itemModel);
 		const li = template("li", {
 			class: `${itemModel.completed ? "completed" : ""} ${itemModel.editing ? "editing" : ""}`.trim(),
 			onDblClick: onEditing.bind(null, itemModel.id)
