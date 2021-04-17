@@ -9,6 +9,7 @@ export default class Controller {
   }
 
   async selectUser(userId) {
+    location.href = '#';
     try {
       UTILS.setLoadingBar();
       const user = await this.model.getUser(userId);
