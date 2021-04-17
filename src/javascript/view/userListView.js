@@ -4,13 +4,22 @@ export default class UserListView {
     this.userList = $('#user-list');
     this.userTitle = $('#user-title strong');
     this.userCreateButton = $('.user-create-button', this.userList);
-    this.cuserDeleteButton = $('.user-delete-button', this.userList);
     this.selectedUser;
     users.map((user) => this.addUser(user));
   }
 
   getCurrentUserId() {
     return this.selectedUser ? this.selectedUser.dataset.id : '';
+  }
+
+  selectUser(userId) {
+    const userNode = this._getUserNode(userId);
+    if (this.selectedUser) {
+      this.selectedUser.classList.remove('active');
+    }
+    userNode.classList.add('active');
+    this.userTitle.innerText = userNode.innerText;
+    this.selectedUser = userNode;
   }
 
   addUser(user) {
@@ -29,20 +38,6 @@ export default class UserListView {
     userNode.remove();
     this.selectedUser = '';
     this.userTitle.innerText = 'Choose!';
-  }
-
-  setActive(userId) {
-    const userNode = this._getUserNode(userId);
-    if (this.selectedUser) {
-      this.selectedUser.classList.remove('active');
-    }
-    userNode.classList.add('active');
-    this.userTitle.innerText = userNode.innerText;
-    this.selectedUser = userNode;
-  }
-
-  _getUserNode(id) {
-    return $(`[data-id="${id}"]`);
   }
 
   setEvents(controller) {
@@ -64,5 +59,9 @@ export default class UserListView {
         controller.selectUser(target.dataset.id);
       }
     });
+  }
+
+  _getUserNode(id) {
+    return $(`[data-id="${id}"]`);
   }
 }
