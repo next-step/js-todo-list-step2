@@ -1,8 +1,4 @@
-import {
-  ERROR_MESSAGE,
-  EVENT_NAME,
-  RENDER_COMMAND,
-} from '../utils/constants.js';
+import { ERROR_MESSAGE, RENDER_COMMAND } from '../utils/constants.js';
 
 import * as UTILS from '../utils/utils.js';
 

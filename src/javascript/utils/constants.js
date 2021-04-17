@@ -1,4 +1,4 @@
-export const ERROR_MESSAGE = {
+const ERROR_MESSAGE = {
   GET_USERS: '유저를 불러오는데 실패했습니다.',
   CREATE_ITEM: '아이템을 생성하는데 실패했습니다.',
   DELETE_ITEM: '선택한 아이템을 삭제하는데 실패했습니다.',
@@ -14,7 +14,7 @@ export const ERROR_MESSAGE = {
   SELECT_USER_FIRST: '유저를 먼저 선택해주세요!',
 };
 
-export const RENDER_COMMAND = {
+const RENDER_COMMAND = {
   ADD: 'add',
   EDIT_START: 'editStart',
   EDIT_APPLY: 'editApply',
@@ -32,31 +32,15 @@ export const RENDER_COMMAND = {
   DELETE_ALL: 'deleteAll',
 };
 
-export const EVENT_NAME = {
-  ADD: 'add',
-  REFRESH: 'refresh',
-  DESTROY: 'destroy',
-  TOGGLE: 'toggle',
-  SELECT_ALL: 'selectAll',
-  SELECT_ACTIVE: 'selectActive',
-  SELECT_COMPLETED: 'selectCompleted',
-  EDIT: 'edit',
-  EDIT_END: 'editEnd',
-  EDIT_APPLY: 'editApply',
-  SELECT_USER: 'selectUser',
-  ADD_USER: 'addUser',
-  DELETE_USER: 'deleteUser',
-  SET_PRIORITY: 'setPriority',
-  DELETE_ALL: 'deleteAll',
-};
-
-export const METHODS = {
+const METHODS = {
   GET: 'GET',
   POST: 'POST',
   PUT: 'PUT',
   DELETE: 'DELETE',
 };
 
-export const BASE_URL = 'https://js-todo-list-9ca3a.df.r.appspot.com';
+const BASE_URL = 'https://js-todo-list-9ca3a.df.r.appspot.com';
 
-export const RETRY_COUNT = 3;
+const RETRY_COUNT = 3;
+
+export { ERROR_MESSAGE, RENDER_COMMAND, METHODS, BASE_URL, RETRY_COUNT };
