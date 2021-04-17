@@ -8,7 +8,6 @@ export default class TodoCountView {
     this._countView = $('.todo-count').children[0];
     this._currentFilterView = $('.all', this._filterContainer);
     this._currentFilter = 'all';
-    this._clearButton = $('.clear-completed');
   }
 
   init(count) {
