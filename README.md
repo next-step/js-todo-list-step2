@@ -12,14 +12,6 @@
 
 ## 🔥 Projects!
 
-<p align="middle">
-  <img width="400" src="./src/images/sample.png">
-</p>
-
-<p align="middle">
-  <a href="https://next-step.github.io/js-todo-list-step2/">🖥️ 데모 링크</a>
-</p>
-
 <br/>
 
 ## 🎯 요구사항
