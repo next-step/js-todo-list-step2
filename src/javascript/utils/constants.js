@@ -11,6 +11,7 @@ const ERROR_MESSAGE = {
   UPDATE_CONTENT: '선택한 아이템의 내용 변경을 실패했습니다.',
   NO_USER_SELECTED: '유저를 먼저 선택해주세요.',
   TODO_LENGTH: 'todo는 두 글자 이상이어야 합니다.',
+  USERNAME_LENGTH: '유저의 이름은 두 글자 이상이어야 합니다.',
   SELECT_USER_FIRST: '유저를 먼저 선택해주세요!',
 };
 
