@@ -6,7 +6,7 @@ class TodoList {
   constructor(store) {
     this.store = store;
     this.todoListEl = getEl("ul.todo-list");
-    this.todoItemAllDeleteButton = getEl(".clear-completed");
+    this.todoItemAllDeleteButton = getEl("button.clear-completed");
     this.init();
   }
 
@@ -22,14 +22,18 @@ class TodoList {
     if (target.classList.contains(UI_CLASS.DESTROY)) return this._destroyTodoItem(target);
   }
 
-  async _toggleTodoItem({ dataset: { _id: todoId } }) {
-    const { selectedUser } = this.store.get();
-    await toggleTodoItem({ userId: selectedUser._id, todoId });
+  async _setSelectedUser() {
     const { data } = await getUser(selectedUser._id);
 
     this.store.set({
       selectedUser: { ...data },
     });
+  }
+
+  async _toggleTodoItem({ dataset: { _id: todoId } }) {
+    const { selectedUser } = this.store.get();
+    await toggleTodoItem({ userId: selectedUser._id, todoId });
+    this._setSelectedUser();
   }
 
   async _destroyTodoItem({ dataset: { _id: todoId } }) {
@@ -37,11 +41,7 @@ class TodoList {
 
     const { selectedUser } = this.store.get();
     await deleteTodoItem({ userId: selectedUser._id, todoId });
-    const { data } = await getUser(selectedUser._id);
-
-    this.store.set({
-      selectedUser: { ...data },
-    });
+    this._setSelectedUser();
   }
 
   async _allDestroyTodoItem() {
@@ -49,11 +49,7 @@ class TodoList {
 
     const { selectedUser } = this.store.get();
     await allDeleteTodoItem({ userId: selectedUser._id });
-    const { data } = await getUser(selectedUser._id);
-
-    this.store.set({
-      selectedUser: { ...data },
-    });
+    this._setSelectedUser();
   }
 
   modifyHandler({ target }) {

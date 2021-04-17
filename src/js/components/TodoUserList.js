@@ -21,10 +21,10 @@ class TodoUserList {
     if (action === ACTION.DELETE_USER) return this._deleteUserHandler();
     if (!targetId || _id === targetId) return;
 
-    const { data } = await getUser(targetId);
+    const { data: _selectedUser } = await getUser(targetId);
 
     this.store.set({
-      selectedUser: { ...data },
+      selectedUser: { ..._selectedUser },
     });
   }
 
