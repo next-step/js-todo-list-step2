@@ -5,6 +5,7 @@ import TodoList from "./TodoList.js";
 import TodoCount from "./TodoCount.js";
 import TodoMode from "./TodoMode.js";
 import UserList from "./UserList.js";
+import TodoAllClear from "./TodoAllClear.js";
 
 import KEY_CODE from "../constants/KeyCode.js";
 import env from "../constants/env.js";
@@ -98,6 +99,23 @@ function TodoApp(users) {
 	new TodoMode({
 		target: document.querySelector(".filters"),
 		onChangeMode: onChangeMode.bind(this)
+	});
+
+	new TodoAllClear({
+		target: document.querySelector(".clear-completed"),
+		onAllClear: async () => {
+			const { response, error } = await request(
+				env.BASE_URL + env.ITEM(this.users[this.selectedUserIdx].id),
+				"DELETE"
+			);
+			if (error) {
+				alert("할 일 삭제에 실패했습니다.");
+				return;
+			}
+
+			this.users[this.selectedUserIdx].todoList = [];
+			this.setTodoItems(this.users[this.selectedUserIdx].todoList);
+		}
 	});
 
 	this.render = () => {

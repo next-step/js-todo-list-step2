@@ -51,3 +51,14 @@ export function onEditing(id) {
 
 	this.setTodoItems(this.users[this.selectedUserIdx].todoList);
 }
+function TodoCount({ target }) {
+	this.setState = (updatedTodoItems) => {
+		this.render(updatedTodoItems);
+	};
+
+	this.render = () => {
+		target.innerHTML = "";
+	};
+}
+
+export default TodoCount;
