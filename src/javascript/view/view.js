@@ -62,7 +62,6 @@ export default class View {
   _add(todo) {
     this.todoListView.add(todo);
     this.inputView.clear();
-    console.log(this.todoCountView.getCurrentFilter());
     if (this.todoCountView.getCurrentFilter() === 'completed') {
       this.todoListView.hide(todo);
     } else {
@@ -87,6 +86,10 @@ export default class View {
 
   _update(todo) {
     this.todoListView.update(todo);
+    this._filtering(todo);
+  }
+
+  _filtering(todo) {
     const currentFilter = this.todoCountView.getCurrentFilter();
 
     if (currentFilter === 'all') {
