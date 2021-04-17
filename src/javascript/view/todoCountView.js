@@ -59,7 +59,6 @@ export default class TodoCountView {
 
   setFilterEvent(target, controller) {
     if (target.classList.contains('all')) {
-      console.log(controller.selectAll);
       controller.selectAll();
     } else if (target.classList.contains('active')) {
       controller.selectActive();

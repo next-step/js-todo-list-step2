@@ -62,7 +62,8 @@ export default class View {
   _add(todo) {
     this.todoListView.add(todo);
     this.inputView.clear();
-    if (this.todoCountView.getCurrentFilter() === 'isCompleted') {
+    console.log(this.todoCountView.getCurrentFilter());
+    if (this.todoCountView.getCurrentFilter() === 'completed') {
       this.todoListView.hide(todo);
     } else {
       this.todoCountView.setTodoCount(
@@ -95,7 +96,7 @@ export default class View {
       this.todoCountView.setTodoCount(
         this.todoCountView.getInnerTextCount() - 1
       );
-    } else if (currentFilter === 'completed' && !todo.isCompletd) {
+    } else if (currentFilter === 'completed' && !todo.isCompleted) {
       this.todoListView.hide(todo);
       this.todoCountView.setTodoCount(
         this.todoCountView.getInnerTextCount() - 1
