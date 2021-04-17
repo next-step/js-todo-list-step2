@@ -2,6 +2,7 @@ import Model from './model/model.js';
 import View from './view/view.js';
 import Controller from './controller/controller.js';
 import { getUsers } from './utils/api.js';
+import * as UTILS from './utils/utils.js';
 
 class App {
   constructor() {
@@ -10,7 +11,9 @@ class App {
 
   async init() {
     location.href = '#';
+    UTILS.setLoadingBar();
     await this.initUsers();
+    UTILS.deleteLoadingBar();
     this.initModel();
     this.initView();
     this.initController();

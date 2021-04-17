@@ -1,5 +1,4 @@
 import { ERROR_MESSAGE, RENDER_COMMAND } from '../utils/constants.js';
-
 import * as UTILS from '../utils/utils.js';
 
 export default class Controller {
@@ -11,7 +10,9 @@ export default class Controller {
 
   async selectUser(userId) {
     try {
+      UTILS.setLoadingBar();
       const user = await this.model.getUser(userId);
+      UTILS.deleteLoadingBar();
       this.view.render({
         cmd: RENDER_COMMAND.SWITCH_USER,
         params: user,
@@ -25,7 +26,9 @@ export default class Controller {
 
   async addUser(userName) {
     try {
+      UTILS.setLoadingBar();
       const newUser = await this.model.createUser(userName);
+      UTILS.deleteLoadingBar();
       this.view.render({
         cmd: RENDER_COMMAND.ADD_USER,
         params: newUser,
@@ -38,7 +41,9 @@ export default class Controller {
 
   async deleteUser(userId) {
     try {
-      this.model.deleteUser(userId);
+      UTILS.setLoadingBar();
+      await this.model.deleteUser(userId);
+      UTILS.deleteLoadingBar();
       this.view.render({
         cmd: RENDER_COMMAND.DELETE_USER,
         params: userId,
@@ -55,10 +60,12 @@ export default class Controller {
       return;
     }
     try {
+      UTILS.setLoadingBar();
       const newTodo = await this.model.createItem(
         this.view.getCurrentUserId(),
         contents
       );
+      UTILS.deleteLoadingBar();
       this.view.render({
         cmd: RENDER_COMMAND.ADD,
         params: newTodo,
@@ -71,10 +78,12 @@ export default class Controller {
 
   async remove(todoId) {
     try {
+      UTILS.setLoadingBar();
       const user = await this.model.deleteItem(
         this.view.getCurrentUserId(),
         todoId
       );
+      UTILS.deleteLoadingBar();
       this.view.render({
         cmd: RENDER_COMMAND.REMOVE,
         params: user,
@@ -87,10 +96,12 @@ export default class Controller {
 
   async toggleComplete(todoId) {
     try {
+      UTILS.setLoadingBar();
       const updatedTodo = await this.model.updateComplete(
         this.view.getCurrentUserId(),
         todoId
       );
+      UTILS.deleteLoadingBar();
       this.view.render({
         cmd: RENDER_COMMAND.TOGGLE,
         params: updatedTodo,
@@ -103,11 +114,13 @@ export default class Controller {
 
   async setPriority(todoId, priority) {
     try {
+      UTILS.setLoadingBar();
       const updatedTodo = await this.model.updatePriority(
         this.view.getCurrentUserId(),
         todoId,
         priority
       );
+      UTILS.deleteLoadingBar();
       this.view.render({
         cmd: RENDER_COMMAND.SET_PRIORITY,
         params: updatedTodo,
@@ -127,11 +140,13 @@ export default class Controller {
 
   async editApply(todoId, contents) {
     try {
+      UTILS.setLoadingBar();
       const updatedTodo = await this.model.updateContents(
         this.view.getCurrentUserId(),
         todoId,
         contents
       );
+      UTILS.deleteLoadingBar();
       this.view.render({
         cmd: RENDER_COMMAND.EDIT_APPLY,
         params: updatedTodo,
@@ -173,10 +188,12 @@ export default class Controller {
       return;
     }
     try {
+      UTILS.setLoadingBar();
       await this.model.deleteAllTodoOfUser(this.view.getCurrentUserId());
       this.view.render({
         cmd: RENDER_COMMAND.DELETE_ALL,
       });
+      UTILS.deleteLoadingBar();
     } catch (error) {
       alert(error.message);
       this._reloadUser();
@@ -213,6 +230,7 @@ export default class Controller {
   }
 
   _reloadUser() {
+    UTILS.deleteLoadingBar();
     this.selectUser(UTILS.getLastSelectedUser());
   }
 }
