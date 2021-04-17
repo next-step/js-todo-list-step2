@@ -2,6 +2,7 @@ import { $ } from '../utils/querySelector.js';
 
 export default class TodoCountView {
   constructor() {
+    this._countContainer = $('.count-container');
     this._filterContainer = $('.filters');
     this._todoCount = 0;
     this._countView = $('.todo-count').children[0];
@@ -47,42 +48,25 @@ export default class TodoCountView {
     this._currentFilterView.classList.add('selected');
   }
 
-  setSelectAllEvent(callback) {
-    this._filterContainer.addEventListener('click', (event) => {
-      const filter = event.target.closest('.all');
-      if (!filter) {
-        return;
+  setEvents(controller) {
+    this._countContainer.addEventListener('click', (event) => {
+      if (event.target.closest('li')) {
+        this.setFilterEvent(event.target, controller);
+      } else if (event.target.closest('.clear-completed')) {
+        controller.deleteAll();
       }
-      this.setSelectFilter(filter);
-      callback();
     });
   }
 
-  setSelectActiveEvent(callback) {
-    this._filterContainer.addEventListener('click', (event) => {
-      const filter = event.target.closest('.active');
-      if (!filter) {
-        return;
-      }
-      this.setSelectFilter(filter);
-      callback();
-    });
-  }
-
-  setSelectCompletedEvent(callback) {
-    this._filterContainer.addEventListener('click', (event) => {
-      const filter = event.target.closest('.completed');
-      if (!filter) {
-        return;
-      }
-      this.setSelectFilter(filter);
-      callback();
-    });
-  }
-
-  setDeleteAll(callback) {
-    this._clearButton.addEventListener('click', () => {
-      callback();
-    });
+  setFilterEvent(target, controller) {
+    if (target.classList.contains('all')) {
+      console.log(controller.selectAll);
+      controller.selectAll();
+    } else if (target.classList.contains('active')) {
+      controller.selectActive();
+    } else {
+      controller.selectCompleted();
+    }
+    this.setSelectFilter(target);
   }
 }

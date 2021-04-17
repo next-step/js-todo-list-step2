@@ -66,7 +66,16 @@ export default class TodoListView {
     li.style.display = 'none';
   }
 
-  setRemoveEvent(callback) {
+  setEvents(controller) {
+    this._setRemoveEvent(controller.destroy);
+    this._setToggleEvent(controller.toggle);
+    this._setEditStartEvent(controller.edit);
+    this._setEditEndEvent(controller.editEnd);
+    this._setEditApplyEvent(controller.editApply);
+    this._setPriority(controller.setPriority);
+  }
+
+  _setRemoveEvent(callback) {
     this._todoList.addEventListener('click', (event) => {
       if (!event.target.closest('.destroy')) {
         return;
@@ -76,7 +85,7 @@ export default class TodoListView {
     });
   }
 
-  setToggleEvent(callback) {
+  _setToggleEvent(callback) {
     this._todoList.addEventListener('click', (event) => {
       if (!event.target.closest('.toggle')) {
         return;
@@ -86,7 +95,7 @@ export default class TodoListView {
     });
   }
 
-  setEditStartEvent(callback) {
+  _setEditStartEvent(callback) {
     this._todoList.addEventListener('dblclick', (event) => {
       const todo = event.target.closest('li');
       if (!todo) {
@@ -96,7 +105,7 @@ export default class TodoListView {
     });
   }
 
-  setEditEndEvent(callback) {
+  _setEditEndEvent(callback) {
     this._todoList.addEventListener('focusout', (event) => {
       const todo = event.target.closest('li');
       if (!todo) {
@@ -106,7 +115,7 @@ export default class TodoListView {
     });
   }
 
-  setEditApplyEvent(callback) {
+  _setEditApplyEvent(callback) {
     this._todoList.addEventListener('keydown', (event) => {
       if (event.key !== 'Enter') {
         return;
@@ -117,7 +126,7 @@ export default class TodoListView {
     });
   }
 
-  setPriority(callback) {
+  _setPriority(callback) {
     this._todoList.addEventListener('change', (event) => {
       const select = event.target.closest('select');
       if (!select) {

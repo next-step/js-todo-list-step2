@@ -5,10 +5,10 @@ export default class InputView {
     this._input = $('.new-todo');
   }
 
-  setAddEvent(callback) {
+  setEvents(controller) {
     this._input.addEventListener('keypress', (event) => {
       if (event.key === 'Enter') {
-        callback(this._input.value);
+        controller.add(this._input.value);
       }
     });
   }

@@ -40,39 +40,20 @@ export default class View {
     options[cmd]();
   }
 
-  setEventListener(eventName, callback) {
-    const options = {
-      // NOTE: callback == Controller.add
-      add: () => this.inputView.setAddEvent(callback),
-      // NOTE: callback == Controller.destroy
-      destroy: () => this.todoListView.setRemoveEvent(callback),
-      // NOTE: callback == Controller.toggleCheckBox
-      toggle: () => this.todoListView.setToggleEvent(callback),
-      // NOTE: callback == Controller.edit
-      edit: () => this.todoListView.setEditStartEvent(callback),
-      // NOTE: callback == Controller._editEnd
-      editEnd: () => this.todoListView.setEditEndEvent(callback),
-      // NOTE: callback == Controller.editApply
-      editApply: () => this.todoListView.setEditApplyEvent(callback),
-      // NOTE: callback == Controller.showAll
-      selectAll: () => this.todoCountView.setSelectAllEvent(callback),
-      // NOTE: callback == Controller.showActive
-      selectActive: () => this.todoCountView.setSelectActiveEvent(callback),
-      // NOTE: callback == Controller.showCompleted
-      selectCompleted: () =>
-        this.todoCountView.setSelectCompletedEvent(callback),
-      // NOTE: callback == Controller.switchUser
-      selectUser: () => this.userListView.setSelectUser(callback),
-      // NOTE: callback == Controller.addUser
-      addUser: () => this.userListView.setAddUser(callback),
-      // NOTE: callback == COntroller.deleteUser
-      deleteUser: () => this.userListView.setDeleteUser(callback),
-      // NOTE: callback == COntroller.setPriority
-      setPriority: () => this.todoListView.setPriority(callback),
-      //NOTE: callback == controller.deleteAll
-      deleteAll: () => this.todoCountView.setDeleteAll(callback),
-    };
-    options[eventName]();
+  setUserListViewEventListener(callbacks) {
+    this.userListView.setEvents(callbacks);
+  }
+
+  setInputViewEventListener(callbacks) {
+    this.inputView.setEvents(callbacks);
+  }
+
+  setTodoListViewEventListener(callbacks) {
+    this.todoListView.setEvents(callbacks);
+  }
+
+  setTodoCountViewEventListener(callbacks) {
+    this.todoCountView.setEvents(callbacks);
   }
 
   getCurrentUserId() {

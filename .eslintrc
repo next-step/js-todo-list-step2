@@ -46,6 +46,8 @@
     "alert": true,
     "Element": true,
     "location": true,
-    "fetch": true
+    "fetch": true,
+    "prompt": true,
+    "confirm": true
   }
 }

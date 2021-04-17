@@ -188,47 +188,31 @@ export default class Controller {
   }
 
   setEventListeners() {
-    this.view.setEventListener(EVENT_NAME.ADD, (value) => {
-      this.add(value);
+    // NOTE: userListView
+    this.view.setUserListViewEventListener({
+      addUser: (userName) => this.addUser(userName),
+      deleteUser: (userId) => this.deleteUser(userId),
+      selectUser: (userId) => this.selectUser(userId),
     });
-    this.view.setEventListener(EVENT_NAME.DESTROY, (todoId) => {
-      this.remove(todoId);
+    // NOTE: inputView
+    this.view.setInputViewEventListener({
+      add: (contents) => this.add(contents),
     });
-    this.view.setEventListener(EVENT_NAME.TOGGLE, (todoId) => {
-      this.toggleComplete(todoId);
+    // NOTE: todoListView
+    this.view.setTodoListViewEventListener({
+      edit: (todo) => this.edit(todo),
+      editEnd: (todo) => this.editEnd(todo),
+      editApply: (todoId, contents) => this.editApply(todoId, contents),
+      setPriority: (todoId, priority) => this.setPriority(todoId, priority),
+      destroy: (todoId) => this.remove(todoId),
+      toggle: (todoId) => this.toggleComplete(todoId),
     });
-    this.view.setEventListener(EVENT_NAME.SELECT_ALL, () => {
-      this.showAll();
-    });
-    this.view.setEventListener(EVENT_NAME.SELECT_ACTIVE, () => {
-      this.showActive();
-    });
-    this.view.setEventListener(EVENT_NAME.SELECT_COMPLETED, () => {
-      this.showCompleted();
-    });
-    this.view.setEventListener(EVENT_NAME.EDIT, (todo) => {
-      this.edit(todo);
-    });
-    this.view.setEventListener(EVENT_NAME.EDIT_END, (todo) => {
-      this.editEnd(todo);
-    });
-    this.view.setEventListener(EVENT_NAME.EDIT_APPLY, (todoId, content) => {
-      this.editApply(todoId, content);
-    });
-    this.view.setEventListener(EVENT_NAME.SELECT_USER, (data) => {
-      this.selectUser(data);
-    });
-    this.view.setEventListener(EVENT_NAME.ADD_USER, (data) => {
-      this.addUser(data);
-    });
-    this.view.setEventListener(EVENT_NAME.DELETE_USER, (userId) => {
-      this.deleteUser(userId);
-    });
-    this.view.setEventListener(EVENT_NAME.SET_PRIORITY, (todoId, priority) => {
-      this.setPriority(todoId, priority);
-    });
-    this.view.setEventListener(EVENT_NAME.DELETE_ALL, (userId) => {
-      this.deleteAllTodoOfUser(userId);
+    // NOTE: todoCountView
+    this.view.setTodoCountViewEventListener({
+      selectAll: () => this.showAll(),
+      selectActive: () => this.showActive(),
+      selectCompleted: () => this.showCompleted(),
+      deleteAll: () => this.deleteAllTodoOfUser(),
     });
   }
 }
