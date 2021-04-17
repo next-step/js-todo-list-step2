@@ -6,6 +6,7 @@ import TodoCount from "./TodoCount.js";
 import TodoMode from "./TodoMode.js";
 import UserList from "./UserList.js";
 import TodoAllClear from "./TodoAllClear.js";
+import TodoTitle from "./TodoTitle.js";
 
 import KEY_CODE from "../constants/KeyCode.js";
 import env from "../constants/env.js";
@@ -118,8 +119,14 @@ function TodoApp(users) {
 		}
 	});
 
+	const todoTitle = new TodoTitle(document.querySelector("#user-title strong"));
+
 	this.render = () => {
 		userList.render(this.users, 0);
+
+		this.setTodoItems(this.users[0].todoList);
+		todoTitle.setState(this.users[0].name);
+		todoCount.setState(this.users[0].todoList);
 	};
 
 	this.setTodoItems = (updatedTodo) => {
@@ -131,6 +138,7 @@ function TodoApp(users) {
 		this.users = updatedUsers;
 		userList.render(this.users, this.selectedUserIdx);
 
+		todoTitle.setState(this.users[this.selectedUserIdx].name);
 		todoCount.setState(this.users[this.selectedUserIdx].todoList);
 	};
 
