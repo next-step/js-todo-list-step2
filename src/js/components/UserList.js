@@ -1,12 +1,8 @@
-import {
-  SELECTOR,
-  ACTION_NAME,
-  USER_NAME_ERROR,
-  CREATE_USER_PROMPT,
-} from '../utils/constant.js';
+import { SELECTOR, ACTION_NAME, POPUP_MESSAGE } from '../utils/constant.js';
 import { $ } from '../utils/dom.js';
-import { isAvailableUserName } from '../utils/validations.js';
+import { isAvailableUserName, isAvailableUser } from '../utils/validations.js';
 import { userListTemplate } from '../utils/templates.js';
+import confirmAlert from '../utils/confirm.js';
 import Observer from '../libs/Observer.js';
 import api from '../api/index.js';
 
@@ -28,7 +24,8 @@ class UserList extends Observer {
     if (action) {
       return action === ACTION_NAME.CREATE_USER
         ? this.createUser()
-        : this.removeUser();
+        : confirmAlert(POPUP_MESSAGE.REMOVE_USER(this.store.currentUserName)) &&
+            this.removeUser();
     }
     const userId = target.dataset.id;
     userId && this.selectUser(userId);
@@ -40,10 +37,9 @@ class UserList extends Observer {
 
   async createUser() {
     try {
-      const userName = prompt(CREATE_USER_PROMPT).trim();
-      if (!isAvailableUserName(userName)) {
-        return alert(USER_NAME_ERROR);
-      }
+      const userName = prompt(POPUP_MESSAGE.CREATE_USER)?.trim();
+      if (!userName) return;
+      isAvailableUserName(userName);
       const user = await api.addUser(userName);
       this.store.addUser(user);
     } catch (error) {
@@ -54,6 +50,7 @@ class UserList extends Observer {
   async removeUser() {
     try {
       const userId = this.store.currentUserId;
+      isAvailableUser(userId);
       await api.removeUser(userId);
       this.store.removeUser(userId);
     } catch (error) {

@@ -47,5 +47,10 @@ export const KEY_NAME = {
   ESC: 'Escape',
 };
 
+export const POPUP_MESSAGE = {
+  CREATE_USER: '추가하고 싶은 이름을 입력해주세요',
+  REMOVE_USER: (userName) => `정말 ${userName}을 삭제하시겠습니까?`,
+  REMOVE_TODO: '정말 삭제하시겠습니까?',
+};
+
 export const CREATE_USER_PROMPT = '추가하고 싶은 이름을 입력해주세요';
-export const USER_NAME_ERROR = '이름은 2글자 이상이어야 합니다';

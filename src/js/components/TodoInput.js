@@ -24,11 +24,8 @@ class TodoInput {
   async submitTodo() {
     try {
       const value = this.container.value.trim();
-      if (!isAvaliableTodo(value)) {
-        return alert('2글자 이상 입력해주세요');
-      }
+      isAvaliableTodo(value);
       const newTodo = await api.addTodoItem(this.store.currentUserId, value);
-
       this.container.value = '';
       const todoData = [...this.store.originTodoList, newTodo];
 

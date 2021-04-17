@@ -3,7 +3,6 @@ import { $ } from '../utils/dom.js';
 import { SELECTOR } from '../utils/constant.js';
 import { todoCounterTemplate } from '../utils/templates.js';
 
-// 관찰자
 class TodoCounter extends Observer {
   constructor(store) {
     super();

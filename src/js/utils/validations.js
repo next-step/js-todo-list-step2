@@ -1,2 +1,11 @@
-export const isAvailableUserName = (userName) => userName.length >= 2;
-export const isAvaliableTodo = (todo) => todo.length >= 2;
+export const isAvailableUser = (userId) => {
+  if (!userId) throw '선택된 유저가 없습니다';
+};
+
+export const isAvailableUserName = (userName) => {
+  if (userName.length < 2) throw '이름은 2글자 이상이어야 합니다';
+};
+
+export const isAvaliableTodo = (todo) => {
+  if (todo.length < 2) throw '2글자 이상 입력해주세요';
+};
