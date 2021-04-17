@@ -5,12 +5,12 @@
  * @returns {string}
  */
 const userActionButtons = `
-<button class="ripple user-create-button" data-action="createUser">
-  + 유저 생성
-</button>
-<button class="ripple user-delete-button" data-action="deleteUser">
-  삭제 -
-</button>`;
+  <button class="ripple user-create-button" data-action="createUser">
+    + 유저 생성
+  </button>
+  <button class="ripple user-delete-button" data-action="deleteUser">
+    삭제 -  
+  </button>`;
 
 export const priorityTemplate = {
   NONE: `
@@ -70,9 +70,9 @@ export const userListTemplate = (userList, activeUserId) => {
   userList &&
     userList.map((user) => {
       if (user._id === activeUserId) {
-        result += `<button class="ripple active" data-id=${user._id}>${user.name}</button>`;
+        result += `<button class="ripple active" data-id=${user._id} data-name=${user.name}>${user.name}</button>`;
       } else {
-        result += `<button class="ripple" data-id=${user._id}>${user.name}</button>`;
+        result += `<button class="ripple" data-id=${user._id} data-name=${user.name}>${user.name}</button>`;
       }
     });
   return result + userActionButtons;

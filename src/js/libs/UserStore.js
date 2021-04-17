@@ -1,5 +1,4 @@
 import Subject from './Subject.js';
-import api from '../api/index.js';
 
 class UserStore extends Subject {
   constructor(userList, todoStore) {
@@ -12,35 +11,34 @@ class UserStore extends Subject {
 
   addUser(userData) {
     this.userList = [userData, ...this.userList];
-    this.setCurrentUser(userData._id);
+    this.setCurrentUser(userData._id, userData.name);
   }
 
   removeUser(userId) {
     let removedIndex = 0;
     let nextId = '';
+    let nextName = '';
     this.userList = this.userList.filter((user, index) => {
       if (user._id === userId) removedIndex = index;
       return user._id !== userId;
     });
     if (removedIndex === this.userList.length) {
-      nextId = this.userList[removedIndex - 1]._id;
+      const nextUser = this.userList[removedIndex - 1];
+      nextId = nextUser._id;
+      nextName = nextUser.name;
     } else {
-      nextId = this.userList[removedIndex]._id;
+      const nextUser = this.userList[removedIndex];
+      nextId = nextUser._id;
+      nextName = nextUser.name;
     }
-    this.setCurrentUser(nextId);
+    this.setCurrentUser(nextId, nextName);
   }
 
-  async setCurrentUser(userId) {
-    try {
-      const userData = await api.getUser(userId);
-      const { todoList, name } = userData;
-      this.currentUserId = userId;
-      this.currentUserName = name;
-      this.notifyAll();
-      this.todoStore.initTodoList(userId, todoList);
-    } catch (error) {
-      return alert(error);
-    }
+  setCurrentUser(userId, userName) {
+    this.currentUserId = userId;
+    this.currentUserName = userName;
+    this.notifyAll();
+    this.todoStore.initTodoList(userId);
   }
 }
 

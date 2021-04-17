@@ -6,8 +6,12 @@ import {
   PRIORITY,
   POPUP_MESSAGE,
 } from '../utils/constant.js';
+import {
+  priorityTemplate,
+  todoListTemplate,
+  loaderTemplate,
+} from '../utils/templates.js';
 import { $, $all } from '../utils/dom.js';
-import { priorityTemplate, todoListTemplate } from '../utils/templates.js';
 import api from '../api/index.js';
 import Observer from '../libs/Observer.js';
 
@@ -153,11 +157,16 @@ class TodoList extends Observer {
 
   update() {
     this.userId = this.store.currentUserId;
+    console.log(this.store.isLoading);
     this.render();
   }
 
   render() {
-    this.container.innerHTML = todoListTemplate(this.store.renderTodoList);
+    this.store.isLoading
+      ? (this.container.innerHTML = loaderTemplate)
+      : (this.container.innerHTML = todoListTemplate(
+          this.store.renderTodoList,
+        ));
   }
 }
 

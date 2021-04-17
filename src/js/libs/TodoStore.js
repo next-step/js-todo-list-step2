@@ -8,29 +8,38 @@ class TodoStore extends Subject {
     this.currentUserId = initialUserId;
     this.originTodoList = initialTodo;
     this.renderTodoList = initialTodo;
+    this.isLoading = false;
     this.status = STATUS.ALL;
   }
 
-  initTodoList(userId, todoList) {
-    this.currentUserId = userId;
-    this.originTodoList = todoList;
-    this.setStatus(this.status);
+  async initTodoList(userId) {
+    try {
+      this.currentUserId = userId;
+      this.setLoadingStatus(true);
+      const { todoList } = await api.getUser(userId);
+      this.originTodoList = todoList;
+      this.isLoading = false;
+      this.setStatus(this.status);
+    } catch (error) {
+      return alert(error);
+    }
+  }
+
+  setLoadingStatus(status) {
+    this.isLoading = status;
+    this.notifyAll();
   }
 
   setOriginList(todoList) {
     this.originTodoList = todoList;
   }
-  /**
-   * @param {object[]} todoList
-   */
+
   setRenderList(todoList) {
     this.renderTodoList = todoList;
+    this.isLoading = false;
     this.notifyAll();
   }
 
-  /**
-   * @param {string} status
-   */
   setStatus(status) {
     this.status = status;
     switch (status) {
