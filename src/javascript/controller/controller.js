@@ -3,6 +3,9 @@ import {
   EVENT_NAME,
   RENDER_COMMAND,
 } from '../utils/constants.js';
+
+import * as UTILS from '../utils/utils.js';
+
 export default class Controller {
   constructor(model, view) {
     this.model = model;
@@ -28,7 +31,7 @@ export default class Controller {
       console.log('after view');
     } catch (error) {
       alert(error.message);
-      // window.location.reload();
+      this.selectUser(UTILS.getLastSelectedUser());
     }
   }
 
@@ -44,6 +47,7 @@ export default class Controller {
       });
     } catch (error) {
       alert(error.message);
+      this.selectUser(UTILS.getLastSelectedUser());
     }
   }
 
@@ -59,6 +63,8 @@ export default class Controller {
       });
     } catch (error) {
       alert(error.message);
+      console.log(UTILS.getLastSelectedUser());
+      this.selectUser(UTILS.getLastSelectedUser());
     }
   }
 
@@ -75,6 +81,7 @@ export default class Controller {
       });
     } catch (error) {
       alert(error.message);
+      this.selectUser(UTILS.getLastSelectedUser());
     }
   }
 
@@ -98,10 +105,7 @@ export default class Controller {
       });
     } catch (error) {
       alert(error.message);
-      this.view.render({
-        cmd: RENDER_COMMAND.EDIT_END,
-        params: todoId,
-      });
+      this.selectUser(UTILS.getLastSelectedUser());
     }
   }
 
@@ -137,8 +141,10 @@ export default class Controller {
         cmd: RENDER_COMMAND.SWITCH_USER,
         params: user,
       });
+      UTILS.setLastSelectedUser(userId);
     } catch (error) {
       alert(error.message);
+      // TODO: 아무것도 선택하지 않은 상태로 돌아가기
     }
   }
 
@@ -150,6 +156,7 @@ export default class Controller {
         params: newUser,
       });
     } catch (error) {
+      // TODO: 아무것도 선택하지 않은 상태로 돌아가기
       alert(error.message);
     }
   }
@@ -163,6 +170,7 @@ export default class Controller {
       });
     } catch (error) {
       alert(error.message);
+      // TODO: 아무것도 선택하지 않은 상태로 돌아가기
     }
   }
 
@@ -178,6 +186,7 @@ export default class Controller {
       });
     } catch (error) {
       alert(error.message);
+      this.selectUser(UTILS.getLastSelectedUser());
     }
   }
 
