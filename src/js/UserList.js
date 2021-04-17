@@ -10,7 +10,7 @@ class UserList {
 
   async init() {
     const userCreateButton = document.querySelector('.user-create-button');
-    this.currentUserInfos = await this.returnUserInfo();
+    this.currentUsers = await this.returnUsers();
     userCreateButton.addEventListener('click', this.onUserCreateHandler);
     this.render();
   }
@@ -30,19 +30,19 @@ class UserList {
     this.render();
   }
 
-  appendUserInfoBtn(user) {
+  appendUserInfoButton(user) {
     return `
 		<button class="ripple" data-id="${user._id}">${user.name}</button>
 		`;
   }
 
-  async returnUserInfo() {
+  async returnUsers() {
     const response = await fetch(`${BASE_URL}${USER_PATH}`);
     const users = await response.json();
     return users;
   }
 
-  deleteExistingUserBtn() {
+  deleteExistingUserButtons() {
     const buttonCount = $('#user-list').querySelectorAll('button').length - 1;
     for (let i = 0; i < buttonCount; i++) {
       const button = $('#user-list').querySelector('button');
@@ -50,15 +50,23 @@ class UserList {
     }
   }
 
-  async render() {
-    this.userInfos = await this.returnUserInfo();
-    this.deleteExistingUserBtn(this.userInfos);
+  drawUserButtons() {
     this.userInfos.forEach(userInfo => {
       $('#user-list').insertAdjacentHTML(
         'afterbegin',
-        this.appendUserInfoBtn(userInfo)
+        this.appendUserInfoButton(userInfo)
       );
     });
+  }
+
+  renderUserButtons() {
+    this.deleteExistingUserButtons();
+    this.drawUserButtons();
+  }
+
+  async render() {
+    this.userInfos = await this.returnUsers();
+    this.renderUserButtons();
   }
 }
 
