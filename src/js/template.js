@@ -18,12 +18,12 @@ export const todoPriorityTemplate = (priority) => {
   if (priority === 'FIRST') return '<span class="chip primary">1순위</span>';
   if (priority === 'SECOND') return '<span class="chip secondary">2순위</span>';
   return `
-  <select class="chip select">
-    <option value="NONE" selected>순위</option>
-    <option value="FIRST">1순위</option>
-    <option value="SECOND">2순위</option>
-  </select>
-  `;
+    <select class="chip select">
+      <option value="NONE" selected>순위</option>
+      <option value="FIRST">1순위</option>
+      <option value="SECOND">2순위</option>
+    </select>
+    `;
 };
 
 export const userTemplate = ({ _id, name, isSelected }) => {
@@ -38,13 +38,13 @@ export const userTemplate = ({ _id, name, isSelected }) => {
 
 export const userListActionButtonTemplate = () => {
   return `
-  <div class="action-button-wrap">
-    <button class="ripple user-create-button" data-action="createUser">
-      + 유저 생성
-    </button>
-    <button class="ripple user-delete-button" data-action="deleteUser">
-      삭제 -
-    </button>
-  </div>
-  `;
+    <div class="action-button-wrap">
+      <button class="ripple user-create-button" data-action="createUser">
+        + 유저 생성
+      </button>
+      <button class="ripple user-delete-button" data-action="deleteUser">
+        삭제 -
+      </button>
+    </div>
+    `;
 };
