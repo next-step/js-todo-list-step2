@@ -1,22 +1,22 @@
-import { BASE_URL, RETRY_COUNT } from './constants.js';
+import { BASE_URL, ERROR_MESSAGE, RETRY_COUNT } from './constants.js';
 
-const fetch_retry = async (url, options, n = RETRY_COUNT) => {
+const fetch_retry = async (url, options, errorMessage, n = RETRY_COUNT) => {
   try {
     let response = await fetch(url, options);
     if (!response.ok) {
-      throw new Error('error');
+      throw new Error('fetch retry!');
     }
     return await response.json();
   } catch (err) {
     if (n <= 1) {
-      throw err;
+      throw new Error(errorMessage);
     }
-    return await fetch_retry(url, options, n - 1);
+    return await fetch_retry(url, options, errorMessage, n - 1);
   }
 };
 
 function getUsers() {
-  return fetch_retry(`${BASE_URL}/api/users`);
+  return fetch_retry(`${BASE_URL}/api/users`, {}, ERROR_MESSAGE.GET_USER);
 }
 
 function createItem(userId, contents) {
@@ -28,7 +28,11 @@ function createItem(userId, contents) {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(requestBody),
   };
-  return fetch_retry(`${BASE_URL}/api/users/${userId}/items`, options);
+  return fetch_retry(
+    `${BASE_URL}/api/users/${userId}/items`,
+    options,
+    ERROR_MESSAGE.CREATE_ITEM
+  );
 }
 
 function addUser(userName) {
@@ -40,7 +44,7 @@ function addUser(userName) {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(requestBody),
   };
-  return fetch_retry(`${BASE_URL}/api/users`, options);
+  return fetch_retry(`${BASE_URL}/api/users`, options, ERROR_MESSAGE.ADD_USER);
 }
 
 function deleteUser(userId) {
@@ -48,11 +52,19 @@ function deleteUser(userId) {
     method: 'DELETE',
     headers: { 'Content-Type': 'application/json' },
   };
-  return fetch_retry(`${BASE_URL}/api/users/${userId}`, options);
+  return fetch_retry(
+    `${BASE_URL}/api/users/${userId}`,
+    options,
+    ERROR_MESSAGE.DELETE_USER
+  );
 }
 
 function getUser(userId) {
-  return fetch_retry(`${BASE_URL}/api/users/${userId}`);
+  return fetch_retry(
+    `${BASE_URL}/api/users/${userId}`,
+    {},
+    ERROR_MESSAGE.GET_USER
+  );
 }
 
 function deleteItem(userId, itemId) {
@@ -62,7 +74,8 @@ function deleteItem(userId, itemId) {
   };
   return fetch_retry(
     `${BASE_URL}/api/users/${userId}/items/${itemId}`,
-    options
+    options,
+    ERROR_MESSAGE.DELETE_ITEM
   );
 }
 
@@ -71,7 +84,11 @@ function deleteAllTodoOfUser(userId) {
     method: 'DELETE',
     headers: { 'Content-Type': 'application/json' },
   };
-  return fetch_retry(`${BASE_URL}/api/users/${userId}/items`, options);
+  return fetch_retry(
+    `${BASE_URL}/api/users/${userId}/items`,
+    options,
+    ERROR_MESSAGE.DELETE_ALL_ITEM
+  );
 }
 
 function updatePriority(userId, itemId, priority) {
@@ -85,7 +102,8 @@ function updatePriority(userId, itemId, priority) {
   };
   return fetch_retry(
     `${BASE_URL}/api/users/${userId}/items/${itemId}/priority`,
-    options
+    options,
+    ERROR_MESSAGE.SET_PRIORITY
   );
 }
 
@@ -96,7 +114,8 @@ function updateComplete(userId, itemId) {
   };
   return fetch_retry(
     `${BASE_URL}/api/users/${userId}/items/${itemId}/toggle`,
-    options
+    options,
+    ERROR_MESSAGE.UPDATE_COMPLETE
   );
 }
 
@@ -111,7 +130,8 @@ function updateContents(userId, itemId, contents) {
   };
   return fetch_retry(
     `${BASE_URL}/api/users/${userId}/items/${itemId}`,
-    options
+    options,
+    ERROR_MESSAGE.UPDATE_CONTENT
   );
 }
 

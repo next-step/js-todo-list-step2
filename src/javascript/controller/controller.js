@@ -1,4 +1,8 @@
-import { EVENT_NAME, RENDER_COMMAND } from '../utils/constants.js';
+import {
+  ERROR_MESSAGE,
+  EVENT_NAME,
+  RENDER_COMMAND,
+} from '../utils/constants.js';
 export default class Controller {
   constructor(model, view) {
     this.model = model;
@@ -21,8 +25,10 @@ export default class Controller {
         cmd: RENDER_COMMAND.ADD,
         params: newTodo,
       });
+      console.log('after view');
     } catch (error) {
       alert(error.message);
+      // window.location.reload();
     }
   }
 
@@ -37,7 +43,7 @@ export default class Controller {
         params: user,
       });
     } catch (error) {
-      alert('remove error!!');
+      alert(error.message);
     }
   }
 
@@ -52,7 +58,7 @@ export default class Controller {
         params: updatedTodo,
       });
     } catch (error) {
-      alert('toggle update error');
+      alert(error.message);
     }
   }
 
@@ -68,7 +74,7 @@ export default class Controller {
         params: updatedTodo,
       });
     } catch (error) {
-      alert('priority error!');
+      alert(error.message);
     }
   }
 
@@ -125,11 +131,15 @@ export default class Controller {
   }
 
   async selectUser(userId) {
-    const user = await this.model.getUser(userId);
-    this.view.render({
-      cmd: RENDER_COMMAND.SWITCH_USER,
-      params: user,
-    });
+    try {
+      const user = await this.model.getUser(userId);
+      this.view.render({
+        cmd: RENDER_COMMAND.SWITCH_USER,
+        params: user,
+      });
+    } catch (error) {
+      alert(error.message);
+    }
   }
 
   async addUser(userName) {
@@ -140,26 +150,25 @@ export default class Controller {
         params: newUser,
       });
     } catch (error) {
-      alert('생성 실패');
+      alert(error.message);
     }
   }
 
   async deleteUser(userId) {
-    // NOTE: 통신 확인해보니 delete를 날리면 무조건 성공으로 나온다.
-    // NOTE: 그러니깐 굳이 여기서 model 작업에 await를 하지는 말자.
-    if (!userId) {
-      return;
+    try {
+      this.model.deleteUser(userId);
+      this.view.render({
+        cmd: RENDER_COMMAND.DELETE_USER,
+        params: userId,
+      });
+    } catch (error) {
+      alert(error.message);
     }
-    this.model.deleteUser(userId);
-    this.view.render({
-      cmd: RENDER_COMMAND.DELETE_USER,
-      params: userId,
-    });
   }
 
   async deleteAllTodoOfUser() {
     if (!this.view.getCurrentUserId()) {
-      alert('유저를 먼저 선택해주세요 :)');
+      alert(ERROR_MESSAGE.NO_USER_SELECTED);
       return;
     }
     try {
@@ -168,7 +177,7 @@ export default class Controller {
         cmd: RENDER_COMMAND.DELETE_ALL,
       });
     } catch (error) {
-      alert('delete all error!');
+      alert(error.message);
     }
   }
 

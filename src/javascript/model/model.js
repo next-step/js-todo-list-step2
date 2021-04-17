@@ -1,5 +1,3 @@
-import { ERROR_MESSAGE } from '../utils/constants.js';
-import { hasKey } from '../utils/utils.js';
 import * as API from '../utils/api.js';
 export default class Model {
   constructor(data) {
