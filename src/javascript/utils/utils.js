@@ -10,4 +10,9 @@ function getLastSelectedUser() {
   return localStorage.getItem('lastSelectedUser');
 }
 
-export { hasKey, setLastSelectedUser, getLastSelectedUser };
+function refresh() {
+  setLastSelectedUser('');
+  window.location.reload();
+}
+
+export { hasKey, setLastSelectedUser, getLastSelectedUser, refresh };

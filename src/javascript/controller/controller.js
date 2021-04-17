@@ -144,7 +144,7 @@ export default class Controller {
       UTILS.setLastSelectedUser(userId);
     } catch (error) {
       alert(error.message);
-      // TODO: 아무것도 선택하지 않은 상태로 돌아가기
+      UTILS.refresh();
     }
   }
 
@@ -156,8 +156,8 @@ export default class Controller {
         params: newUser,
       });
     } catch (error) {
-      // TODO: 아무것도 선택하지 않은 상태로 돌아가기
       alert(error.message);
+      UTILS.refresh();
     }
   }
 
@@ -170,7 +170,7 @@ export default class Controller {
       });
     } catch (error) {
       alert(error.message);
-      // TODO: 아무것도 선택하지 않은 상태로 돌아가기
+      UTILS.refresh();
     }
   }
 
