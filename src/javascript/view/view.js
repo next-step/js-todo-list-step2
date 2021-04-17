@@ -21,20 +21,19 @@ export default class View {
       return;
     }
     const options = {
-      add: () => this._add(obj.params),
-      editStart: () => this._editMode(obj.params),
-      editApply: () => this._update(obj.params),
-      editEnd: () => this._editEnd(obj.params),
-      remove: () => this._refresh(obj.params),
-      toggle: () => this._update(obj.params),
-      refresh: () => this._addAll(obj.params),
-      showAll: () => this._filterAll(),
-      showActive: () => this._filterActive(),
-      showCompleted: () => this._filterCompleted(),
       switchUser: () => this._refresh(obj.params),
       addUser: () => this._addUser(obj.params),
       deleteUser: () => this._deleteUser(obj.params),
+      add: () => this._add(obj.params),
+      remove: () => this._refresh(obj.params),
+      editStart: () => this._editMode(obj.params),
+      editApply: () => this._update(obj.params),
+      editEnd: () => this._editEnd(obj.params),
+      toggle: () => this._update(obj.params),
       setPriority: () => this._update(obj.params),
+      showAll: () => this._filterAll(),
+      showActive: () => this._filterActive(),
+      showCompleted: () => this._filterCompleted(),
       deleteAll: () => this._deleteAll(),
     };
     options[cmd]();
@@ -132,7 +131,7 @@ export default class View {
   }
 
   _refresh(user) {
-    this.userListView.setActive(user._id);
+    this.userListView.selectUser(user._id);
     this.todoListView.addAll(user.todoList);
     this.todoCountView.init(user.todoList.length);
   }

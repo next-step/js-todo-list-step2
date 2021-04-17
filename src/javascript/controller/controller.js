@@ -13,6 +13,46 @@ export default class Controller {
     this.setEventListeners();
   }
 
+  async selectUser(userId) {
+    try {
+      const user = await this.model.getUser(userId);
+      this.view.render({
+        cmd: RENDER_COMMAND.SWITCH_USER,
+        params: user,
+      });
+      UTILS.setLastSelectedUser(userId);
+    } catch (error) {
+      alert(error.message);
+      UTILS.refresh();
+    }
+  }
+
+  async addUser(userName) {
+    try {
+      const newUser = await this.model.createUser(userName);
+      this.view.render({
+        cmd: RENDER_COMMAND.ADD_USER,
+        params: newUser,
+      });
+    } catch (error) {
+      alert(error.message);
+      UTILS.refresh();
+    }
+  }
+
+  async deleteUser(userId) {
+    try {
+      this.model.deleteUser(userId);
+      this.view.render({
+        cmd: RENDER_COMMAND.DELETE_USER,
+        params: userId,
+      });
+    } catch (error) {
+      alert(error.message);
+      UTILS.refresh();
+    }
+  }
+
   async add(contents) {
     if (!this.view.getCurrentUserId()) {
       alert(ERROR_MESSAGE.SELECT_USER_FIRST);
@@ -129,46 +169,6 @@ export default class Controller {
     this.view.render({
       cmd: RENDER_COMMAND.SHOW_COMPLETED,
     });
-  }
-
-  async selectUser(userId) {
-    try {
-      const user = await this.model.getUser(userId);
-      this.view.render({
-        cmd: RENDER_COMMAND.SWITCH_USER,
-        params: user,
-      });
-      UTILS.setLastSelectedUser(userId);
-    } catch (error) {
-      alert(error.message);
-      UTILS.refresh();
-    }
-  }
-
-  async addUser(userName) {
-    try {
-      const newUser = await this.model.createUser(userName);
-      this.view.render({
-        cmd: RENDER_COMMAND.ADD_USER,
-        params: newUser,
-      });
-    } catch (error) {
-      alert(error.message);
-      UTILS.refresh();
-    }
-  }
-
-  async deleteUser(userId) {
-    try {
-      this.model.deleteUser(userId);
-      this.view.render({
-        cmd: RENDER_COMMAND.DELETE_USER,
-        params: userId,
-      });
-    } catch (error) {
-      alert(error.message);
-      UTILS.refresh();
-    }
   }
 
   async deleteAllTodoOfUser() {
