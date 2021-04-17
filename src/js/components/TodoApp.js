@@ -66,14 +66,14 @@ class TodoApp {
   }
 
   _renderTodoList({ onFilteringTodoList }) {
-    const todoListTemplate = onFilteringTodoList.map(({ contents, _id, isCompleted, priority }) => todoTemplate({ contents, _id, isCompleted, priority })).join("");
+    const todoListTemplate = onFilteringTodoList.map((todoItem) => todoTemplate(todoItem)).join("");
 
     this.todoListEl.innerHTML = todoListTemplate;
     this.todoCountEl.innerText = onFilteringTodoList.length;
   }
 
   _renderUserList({ selectedUser, users }) {
-    const userListTemplate = users.map((user) => userTemplate({ _id: user._id, name: user.name, isSelected: selectedUser._id === user._id })).join("");
+    const userListTemplate = users.map(({ _id, name }) => userTemplate({ _id, name, isSelected: selectedUser._id === _id })).join("");
 
     this.userNameEl.innerText = selectedUser.name;
     this.userListEl.innerHTML = userListTemplate + userListActionButtonTemplate();
