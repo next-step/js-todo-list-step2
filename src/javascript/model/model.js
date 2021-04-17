@@ -1,8 +1,7 @@
 import * as API from '../utils/api.js';
+import { ERROR_MESSAGE } from '../utils/constants.js';
 export default class Model {
-  constructor(data) {
-    this.data = data;
-  }
+  constructor() {}
 
   async createUser(userName) {
     return await API.addUser(userName);
@@ -29,8 +28,8 @@ export default class Model {
   }
 
   updateContents(userId, itemId, contents) {
-    if (contents.length < 2) {
-      throw new Error('길이는 2글자 이산!');
+    if (!this._checkValidOfLength(contents)) {
+      throw new Error(ERROR_MESSAGE.TODO_LENGTH);
     }
     return API.updateContents(userId, itemId, contents);
   }
@@ -40,9 +39,13 @@ export default class Model {
   }
 
   createItem(userId, contents) {
-    if (contents.length < 2) {
-      throw new Error('길이는 2글자 이산!');
+    if (!this._checkValidOfLength(contents)) {
+      throw new Error(ERROR_MESSAGE.TODO_LENGTH);
     }
     return API.createItem(userId, contents);
+  }
+
+  _checkValidOfLength(contents) {
+    return contents.length >= 2;
   }
 }

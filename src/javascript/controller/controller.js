@@ -16,7 +16,7 @@ export default class Controller {
 
   async add(contents) {
     if (!this.view.getCurrentUserId()) {
-      alert('유저를 먼저 선택해주세요 :)');
+      alert(ERROR_MESSAGE.SELECT_USER_FIRST);
       return;
     }
     try {

@@ -1,7 +1,3 @@
-function hasKey(obj, key) {
-  return Object.prototype.hasOwnProperty.call(obj, key);
-}
-
 function setLastSelectedUser(userId) {
   localStorage.setItem('lastSelectedUser', userId);
 }
@@ -15,4 +11,4 @@ function refresh() {
   window.location.reload();
 }
 
-export { hasKey, setLastSelectedUser, getLastSelectedUser, refresh };
+export { setLastSelectedUser, getLastSelectedUser, refresh };

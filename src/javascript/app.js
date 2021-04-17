@@ -21,13 +21,10 @@ class App {
   }
 
   initModel() {
-    this.model = new Model(this.users);
+    this.model = new Model();
   }
 
   initView() {
-    // view를 초기화할 때 첫 번째 유저의 정보를 먼저 렌더링하게 만들자
-    // this.view = new View(this.model.getTodosOf(this.users[0].name));
-    // userNames 배열을 인자로 주자
     this.view = new View(
       this.users.map((user) => {
         return {

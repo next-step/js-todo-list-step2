@@ -1,6 +1,4 @@
 export const ERROR_MESSAGE = {
-  UNEXPECTED: '예상치 못한 문제가 발생했습니다. 새로고침을 해주세요.',
-  CONTENT_EMPTY: '입력칸이 비어있습니다.',
   GET_USERS: '유저를 불러오는데 실패했습니다.',
   CREATE_ITEM: '아이템을 생성하는데 실패했습니다.',
   DELETE_ITEM: '선택한 아이템을 삭제하는데 실패했습니다.',
@@ -12,6 +10,8 @@ export const ERROR_MESSAGE = {
   UPDATE_COMPLETE: '선택한 아이템의 complete 변경을 실패했습니다.',
   UPDATE_CONTENT: '선택한 아이템의 내용 변경을 실패했습니다.',
   NO_USER_SELECTED: '유저를 먼저 선택해주세요.',
+  TODO_LENGTH: 'todo는 두 글자 이상이어야 합니다.',
+  SELECT_USER_FIRST: '유저를 먼저 선택해주세요!',
 };
 
 export const RENDER_COMMAND = {
