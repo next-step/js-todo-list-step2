@@ -52,6 +52,22 @@ export default class Controller {
     }
   }
 
+  async setPriority(todoId, priority) {
+    try {
+      const updatedTodo = await this.model.updatePriority(
+        this.view.getCurrentUserId(),
+        todoId,
+        priority
+      );
+      this.view.render({
+        cmd: RENDER_COMMAND.SET_PRIORITY,
+        params: updatedTodo,
+      });
+    } catch (error) {
+      alert('priority error!');
+    }
+  }
+
   edit(todo) {
     this.view.render({
       cmd: RENDER_COMMAND.EDIT_START,
@@ -173,6 +189,9 @@ export default class Controller {
     });
     this.view.setEventListener(EVENT_NAME.DELETE_USER, (userId) => {
       this.deleteUser(userId);
+    });
+    this.view.setEventListener(EVENT_NAME.SET_PRIORITY, (todoId, priority) => {
+      this.setPriority(todoId, priority);
     });
   }
 }

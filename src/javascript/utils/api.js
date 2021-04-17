@@ -66,6 +66,21 @@ function deleteItem(userId, itemId) {
   );
 }
 
+function updatePriority(userId, itemId, priority) {
+  const requestBody = {
+    priority,
+  };
+  const options = {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(requestBody),
+  };
+  return fetch_retry(
+    `${BASE_URL}/api/users/${userId}/items/${itemId}/priority`,
+    options
+  );
+}
+
 function updateComplete(userId, itemId) {
   const options = {
     method: 'PUT',
@@ -101,4 +116,5 @@ export {
   deleteItem,
   createItem,
   updateContents,
+  updatePriority,
 };

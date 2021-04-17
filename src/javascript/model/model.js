@@ -18,6 +18,10 @@ export default class Model {
     return await API.getUser(userId);
   }
 
+  updatePriority(userId, itemId, priority) {
+    return API.updatePriority(userId, itemId, priority);
+  }
+
   updateComplete(userId, itemId) {
     return API.updateComplete(userId, itemId);
   }

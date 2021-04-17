@@ -35,6 +35,7 @@ export default class View {
       switchUser: () => this._refresh(obj.params),
       addUser: () => this._addUser(obj.params),
       deleteUser: () => this._deleteUser(obj.params),
+      setPriority: () => this._update(obj.params),
     };
     options[cmd]();
   }
@@ -66,6 +67,8 @@ export default class View {
       addUser: () => this.userListView.setAddUser(callback),
       // NOTE: callback == COntroller.deleteUser
       deleteUser: () => this.userListView.setDeleteUser(callback),
+      // NOTE: callback == COntroller.setPriority
+      setPriority: () => this.todoListView.setPriority(callback),
     };
     options[eventName]();
   }

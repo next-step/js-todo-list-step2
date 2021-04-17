@@ -117,6 +117,19 @@ export default class TodoListView {
     });
   }
 
+  setPriority(callback) {
+    this._todoList.addEventListener('change', (event) => {
+      const select = event.target.closest('select');
+      if (!select) {
+        return;
+      }
+      const todo = event.target.closest('li');
+      select.value === '1'
+        ? callback(todo.dataset.id, 'FIRST')
+        : callback(todo.dataset.id, 'SECOND');
+    });
+  }
+
   _getTodoById(id) {
     return $(`li[data-id='${id}']`, this._todoList);
   }
