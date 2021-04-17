@@ -1,9 +1,7 @@
-import {
-    UserList
-} from './UserList.js';
-  
-const App = function() {
-  UserList();
-}
+import UserList from './UserList';
 
-export {App};
+const App = function () {
+  UserList();
+};
+
+export default { App };
