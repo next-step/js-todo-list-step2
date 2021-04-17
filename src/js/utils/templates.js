@@ -64,7 +64,7 @@ export const userListTemplate = (userList, activeUserId) => {
 };
 
 export const userTitleTemplate = (userName) =>
-  `<span><strong>${userName}</strong>'s Todo List</span>`;
+  `<p class="title"><strong>${userName}</strong>'s Todo List</p>`;
 
 export const loaderTemplate = `
   <label class="label">
