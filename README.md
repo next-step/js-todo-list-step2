@@ -32,7 +32,7 @@
 -   [x] 3. User 삭제하기
 -   [x] 4. todoItem 추가하기
 -   [x] 5. todoItem 불러오기
--   [ ] 6. todoItem complete하기
+-   [x] 6. todoItem complete하기
 -   [ ] 7. todoItem 삭제하기
 -   [ ] 8. todoItem contents 내용 수정하기
 

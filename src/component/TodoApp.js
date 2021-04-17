@@ -114,10 +114,19 @@ function TodoApp(users) {
 			todoList.setState(this.users[this.selectedUserIdx].todoList);
 			todoCount.setState(this.users[this.selectedUserIdx].todoList);
 		},
-		onCompleted: (id) => {
+		onCompleted: async (id) => {
+			const { response, error } = await request(
+				env.BASE_URL + env.ITEM_TOGGLE(this.users[this.selectedUserIdx].id, id),
+				"PUT"
+			);
+			if (error) {
+				alert("할 일 완료에 실패했습니다.");
+				return;
+			}
+
 			this.users[this.selectedUserIdx].todoList = this.users[this.selectedUserIdx].todoList.map((item) => {
 				if (item.id === id) {
-					item.completed = !item.completed;
+					return new TodoItemModel({ ...response, id: response._id });
 				}
 				return item;
 			});
