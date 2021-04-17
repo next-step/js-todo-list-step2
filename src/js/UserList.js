@@ -1,6 +1,7 @@
 /* eslint-disable class-methods-use-this */
 import { BASE_URL, USER_PATH, $ } from './constants.js';
 
+// const UserList = function () {
 class UserList {
   constructor() {
     this.userInfos = {};
@@ -41,9 +42,17 @@ class UserList {
     return users;
   }
 
+  deleteExistingUserBtn() {
+    const buttonCount = $('#user-list').querySelectorAll('button').length - 1;
+    for (let i = 0; i < buttonCount; i++) {
+      const button = $('#user-list').querySelector('button');
+      $('#user-list').removeChild(button);
+    }
+  }
+
   async render() {
     this.userInfos = await this.returnUserInfo();
-    // this.deleteExistingUserBtn(this.userInfos);
+    this.deleteExistingUserBtn(this.userInfos);
     this.userInfos.forEach(userInfo => {
       $('#user-list').insertAdjacentHTML(
         'afterbegin',
