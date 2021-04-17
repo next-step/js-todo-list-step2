@@ -6,7 +6,7 @@ class TodoList {
   constructor(store) {
     this.store = store;
     this.todoListEl = getEl("ul.todo-list");
-    this.todoItemAllDeleteButton = getEl("button.clear-completed");
+    this.todoAllDeleteButton = getEl("button.clear-completed");
     this.init();
   }
 
@@ -14,12 +14,12 @@ class TodoList {
     this.todoListEl.addEventListener("click", this.todoClickDelegationHandler.bind(this));
     this.todoListEl.addEventListener("dblclick", this.modifyHandler.bind(this));
     this.todoListEl.addEventListener("keyup", this.confirmHandler.bind(this));
-    this.todoItemAllDeleteButton.addEventListener('click', this._allDestroyTodoItem.bind(this));
+    this.todoAllDeleteButton.addEventListener('click', this._allDeleteTodoItem.bind(this));
   }
 
   todoClickDelegationHandler({ target }) {
     if (target.classList.contains(UI_CLASS.TOGGLE)) return this._toggleTodoItem(target);
-    if (target.classList.contains(UI_CLASS.DESTROY)) return this._destroyTodoItem(target);
+    if (target.classList.contains(UI_CLASS.DESTROY)) return this._delteTodoItem(target);
   }
 
   async _setSelectedUser(userId) {
@@ -36,7 +36,7 @@ class TodoList {
     this._setSelectedUser(userId);
   }
 
-  async _destroyTodoItem({ dataset: { _id: todoId } }) {
+  async _delteTodoItem({ dataset: { _id: todoId } }) {
     if (!confirm(MESSAGES.DELETE_TODO)) return;
 
     const { selectedUser: { _id: userId } } = this.store.get();
@@ -44,7 +44,7 @@ class TodoList {
     this._setSelectedUser(userId);
   }
 
-  async _allDestroyTodoItem() {
+  async _allDeleteTodoItem() {
     if (!confirm(MESSAGES.DELETE_TODO)) return;
 
     const { selectedUser: { _id: userId } } = this.store.get();
