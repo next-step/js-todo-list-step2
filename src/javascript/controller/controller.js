@@ -19,8 +19,7 @@ export default class Controller {
       });
       UTILS.setLastSelectedUser(userId);
     } catch (error) {
-      alert(error.message);
-      UTILS.refresh();
+      this._refreshWith(error.message);
     }
   }
 
@@ -34,8 +33,7 @@ export default class Controller {
         params: newUser,
       });
     } catch (error) {
-      alert(error.message);
-      UTILS.refresh();
+      this._refreshWith(error.message);
     }
   }
 
@@ -49,8 +47,7 @@ export default class Controller {
         params: userId,
       });
     } catch (error) {
-      alert(error.message);
-      UTILS.refresh();
+      this._refreshWith(error.message);
     }
   }
 
@@ -71,8 +68,7 @@ export default class Controller {
         params: newTodo,
       });
     } catch (error) {
-      alert(error.message);
-      this._reloadUser();
+      this._reloadUserWith(error.message);
     }
   }
 
@@ -89,8 +85,7 @@ export default class Controller {
         params: user,
       });
     } catch (error) {
-      alert(error.message);
-      this._reloadUser();
+      this._reloadUserWith(error.message);
     }
   }
 
@@ -107,8 +102,7 @@ export default class Controller {
         params: updatedTodo,
       });
     } catch (error) {
-      alert(error.message);
-      this._reloadUser();
+      this._reloadUserWith(error.message);
     }
   }
 
@@ -126,8 +120,7 @@ export default class Controller {
         params: updatedTodo,
       });
     } catch (error) {
-      alert(error.message);
-      this._reloadUser();
+      this._reloadUserWith(error.message);
     }
   }
 
@@ -152,8 +145,7 @@ export default class Controller {
         params: updatedTodo,
       });
     } catch (error) {
-      alert(error.message);
-      this._reloadUser();
+      this._reloadUserWith(error.message);
     }
   }
 
@@ -195,8 +187,7 @@ export default class Controller {
       });
       UTILS.deleteLoadingBar();
     } catch (error) {
-      alert(error.message);
-      this._reloadUser();
+      this._reloadUserWith(error.message);
     }
   }
 
@@ -229,8 +220,15 @@ export default class Controller {
     });
   }
 
-  _reloadUser() {
+  _reloadUserWith(message) {
+    alert(message);
     UTILS.deleteLoadingBar();
     this.selectUser(UTILS.getLastSelectedUser());
+  }
+
+  _refreshWith(message) {
+    alert(message);
+    UTILS.setLastSelectedUser('');
+    window.location.reload();
   }
 }

@@ -8,11 +8,6 @@ function getLastSelectedUser() {
   return localStorage.getItem('lastSelectedUser');
 }
 
-function refresh() {
-  setLastSelectedUser('');
-  window.location.reload();
-}
-
 function setLoadingBar() {
   const li = `<li class="loading">
   <div class="view">
@@ -35,7 +30,6 @@ function deleteLoadingBar() {
 export {
   setLastSelectedUser,
   getLastSelectedUser,
-  refresh,
   setLoadingBar,
   deleteLoadingBar,
 };
