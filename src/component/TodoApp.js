@@ -152,7 +152,7 @@ function TodoApp(users) {
 			todoList.setState(this.users[this.selectedUserIdx].todoList);
 			todoCount.setState(this.users[this.selectedUserIdx].todoList);
 		},
-		onEdit: (id) => (event) => {
+		onEdit: (id) => async (event) => {
 			if (event.keyCode === KEY_CODE.ESC) {
 				this.users[this.selectedUserIdx].todoList.map((item) => {
 					if (item.id === id) {
@@ -163,6 +163,16 @@ function TodoApp(users) {
 				todoList.setState(this.users[this.selectedUserIdx].todoList);
 				todoCount.setState(this.users[this.selectedUserIdx].todoList);
 			} else if (event.keyCode === KEY_CODE.ENTER) {
+				const { response, error } = await request(
+					env.BASE_URL + env.USER_ITEM(this.users[this.selectedUserIdx].id, id),
+					"PUT",
+					{ contents: event.target.value }
+				);
+				if (error) {
+					alert("할 일 완료에 실패했습니다.");
+					return;
+				}
+
 				this.users[this.selectedUserIdx].todoList.map((item) => {
 					if (item.id === id) {
 						item.contents = event.target.value;
@@ -178,7 +188,6 @@ function TodoApp(users) {
 
 	new TodoInput({
 		onAdd: async (contents) => {
-			console.log(this.users[this.selectedUserIdx].id);
 			const { response, error } = await request(
 				env.BASE_URL + env.ITEM(this.users[this.selectedUserIdx].id),
 				"POST",

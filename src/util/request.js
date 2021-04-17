@@ -1,5 +1,7 @@
 const getFetchConfigure = (method, data) => {
 	switch (method) {
+		case "PUT":
+		case "DELETE":
 		case "POST":
 			return {
 				method,
@@ -21,6 +23,10 @@ const request = async (url, method = "GET", body = {}) => {
 
 	try {
 		const response = await fetch(url, configuration);
+		if (response.status >= 400 || response.state < 600) {
+			throw Error;
+		}
+
 		const result = await response.json();
 		return {
 			response: result,

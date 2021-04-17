@@ -34,7 +34,7 @@
 -   [x] 5. todoItem 불러오기
 -   [x] 6. todoItem complete하기
 -   [x] 7. todoItem 삭제하기
--   [ ] 8. todoItem contents 내용 수정하기
+-   [x] 8. todoItem contents 내용 수정하기
 
 <br/>
 
