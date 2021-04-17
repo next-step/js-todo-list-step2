@@ -14,12 +14,12 @@ class TodoUserList {
   }
 
   async usersPanelClickHandler({ target }) {
-    const { _id } = this.store.get().selectedUser;
+    const { _id: userId } = this.store.get().selectedUser;
     const { action, _id: targetId } = target.dataset;
 
     if (action === ACTION.CREATE_USER) return this._createUserHandler();
     if (action === ACTION.DELETE_USER) return this._deleteUserHandler();
-    if (!targetId || _id === targetId) return;
+    if (!targetId || userId === targetId) return;
 
     const { data: _selectedUser } = await getUser(targetId);
 

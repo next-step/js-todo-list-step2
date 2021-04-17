@@ -33,10 +33,6 @@ export const MESSAGES = {
   INVALID_ADD_TODO: "2글자 이상이어야 합니다.",
 };
 
-export const STORAGE_KEY = {
-  TODOLIST: "todo-list",
-};
-
 export const VALIDATION = {
   MIN_USER_NAME_LENGTH: 2,
   MIN_TODO_CONTENTS_LENGTH: 2,
