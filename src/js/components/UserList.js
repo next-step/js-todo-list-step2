@@ -2,7 +2,6 @@ import { SELECTOR, ACTION_NAME, POPUP_MESSAGE } from '../utils/constant.js';
 import { $ } from '../utils/dom.js';
 import { isAvailableUserName, isAvailableUser } from '../utils/validations.js';
 import { userListTemplate } from '../utils/templates.js';
-import confirmAlert from '../utils/confirm.js';
 import Observer from '../libs/Observer.js';
 import api from '../api/index.js';
 
@@ -24,7 +23,7 @@ class UserList extends Observer {
     if (action) {
       return action === ACTION_NAME.CREATE_USER
         ? this.createUser()
-        : confirmAlert(POPUP_MESSAGE.REMOVE_USER(this.store.currentUserName)) &&
+        : confirm(POPUP_MESSAGE.REMOVE_USER(this.store.currentUserName)) &&
             this.removeUser();
     }
     const userId = target.dataset.id;
