@@ -7,7 +7,47 @@ class TodoList {
     this.init();
   }
 
-  handleClickUser(event) {
+  createNonPriorityElement(userTodoListElement) {
+    return `
+			<select class="chip select">
+			<option value="NONE selected">순위</option>
+			<option value="FIRST">1순위</option>
+			<option value="SECOND">2순위</option>
+			</select>
+			${userTodoListElement.contents}
+		`;
+  }
+
+  createPriorityElement(userTodoListElement) {
+    return `
+			<span class="
+				chip ${userTodoListElement.priority === 'FIRST' ? 'primary' : 'secondary'}">
+				${userTodoListElement.priority === 'FIRST' ? '1순위' : '2순위'}
+			</span>
+			${userTodoListElement.contents}
+		`;
+  }
+
+  createTodoListElement(userTodoListElement) {
+    return `
+			<li class data-id=${userTodoListElement._id}>
+			<div class="view">
+				<input class="toggle" type="checkbox" ${userTodoListElement.isCompleted} />
+				<label class="label">
+				${
+          userTodoListElement.priority === 'NONE'
+            ? this.createNonPriorityElement(userTodoListElement)
+            : this.createPriorityElement(userTodoListElement)
+        }
+				</label>
+				<button class="destroy"></button>
+			</div>
+			<input class="edit" value="완료된 타이틀" />
+			</li>
+		`;
+  }
+
+  async handleClickUser(event) {
     const { target } = event;
     const userButtons = USERLIST.querySelectorAll('button[data-active]');
     userButtons.forEach(userButton => {
@@ -17,7 +57,16 @@ class TodoList {
     });
     target.classList.add('active');
     const id = target.getAttribute('data-id');
-    // active 유저 불러오기
+
+    $('.todo-list').innerHTML = '';
+    const response = await fetch(`${BASE_URL}${USER_PATH}${id}/items/`, {});
+    const userTodoList = await response.json();
+    userTodoList.forEach(userTodoListElement => {
+      $('.todo-list').insertAdjacentHTML(
+        'afterbegin',
+        this.createTodoListElement(userTodoListElement)
+      );
+    });
   }
 
   async init() {
@@ -28,7 +77,10 @@ class TodoList {
     const firstUserButton = userButtons[0];
 
     firstUserButton.classList.add('active');
-    userCreateButton.addEventListener('click', this.handleCreateUser);
+    userCreateButton.addEventListener(
+      'click',
+      this.handleCreateUser.bind(this)
+    );
     userButtons.forEach(userButton => {
       if (!userButton.hasAttribute('data-action'))
         userButton.addEventListener('click', this.handleClickUser.bind(this));
@@ -52,7 +104,7 @@ class TodoList {
 
   appendUserInfoButton(user) {
     return `
-		<button class="ripple" data-id="${user._id}" data-active>${user.name}</button>
+			<button class="ripple" data-id="${user._id}" data-active>${user.name}</button>
 		`;
   }
 
