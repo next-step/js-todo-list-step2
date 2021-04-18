@@ -100,7 +100,7 @@ class TodoList extends Observer {
         this.updateTodo(id, value);
         $li.dataset.contents = value;
         $label.innerHTML =
-          (priorityTemplate[priority] || priorityTemplate.NONE) + value;
+          (priorityTemplate[priority] ?? priorityTemplate.NONE) + value;
       }
       $li.classList.remove(CLASS_NAME.EDITING);
     } catch (error) {

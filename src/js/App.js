@@ -13,7 +13,7 @@ const App = () => {
     const initialData = await api.getUserList();
     const todoStore = new TodoStore(
       initialData[0]._id,
-      initialData[0].todoList || [],
+      initialData[0].todoList ?? [],
     );
     const userStore = new UserStore(initialData, todoStore);
     const todoList = new TodoList(todoStore);

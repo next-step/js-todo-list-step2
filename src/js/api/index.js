@@ -50,8 +50,9 @@ const endPoints = {
 const request = async (endPoint, option = {}) => {
   const response = await fetch(baseUrl + endPoint, option);
   const data = await response.json();
+  console.log(data.message);
   if (!response.ok) {
-    throw ERROR_TYPE_BY_MESSAGE[data.message] || ERROR_TYPE.SERVER_ERROR;
+    throw ERROR_TYPE_BY_MESSAGE[data.message] ?? ERROR_TYPE.SERVER_ERROR;
   }
   return data;
 };

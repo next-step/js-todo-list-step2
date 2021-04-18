@@ -25,7 +25,7 @@ export const todoTemplate = (id, contents, isCompleted, priority) => `
      <div class="view">
          <input class="toggle" type="checkbox" ${isCompleted ? 'checked' : ''}/>
          <label class="label">
-         ${priorityTemplate[priority] || priorityTemplate.NONE}
+         ${priorityTemplate[priority] ?? priorityTemplate.NONE}
          ${contents}
          </label>
          <button class="destroy"></button>
