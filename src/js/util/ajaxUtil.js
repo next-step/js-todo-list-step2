@@ -47,3 +47,21 @@ export async function deleteRequest(url,errMsg){
     }
     return body;
 }
+export async function put(url,data,errMsg){
+  const response = await fetch(url,{ 
+    method:'PUT',
+    headers: { 'Content-Type': 'application/json'},
+    body : JSON.stringify(data)
+  });
+  let body = [];
+  if (response.ok) { 
+    body = await response.json();
+    if(DEBUG) {
+      console.log(`PUT(${url}):`);
+      console.log(body);
+    }
+  } else {
+    alert(errMsg + " : " + response.status);
+  }
+  return body;
+}
