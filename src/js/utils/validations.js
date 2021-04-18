@@ -9,3 +9,7 @@ export const isAvailableUserName = (userName) => {
 export const isAvaliableTodo = (todo) => {
   if (todo.length < 2) throw '2글자 이상 입력해주세요';
 };
+
+export const isRemovableList = (todoList) => {
+  if (!todoList || todoList.length === 0) throw '삭제할 항목이 없습니다';
+};

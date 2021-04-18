@@ -11,7 +11,7 @@ import {
   todoListTemplate,
   loaderTemplate,
 } from '../utils/templates.js';
-import { isAvaliableTodo } from '../utils/validations.js';
+import { isAvaliableTodo, isRemovableList } from '../utils/validations.js';
 import { $, $all } from '../utils/dom.js';
 import api from '../api/index.js';
 import Observer from '../libs/Observer.js';
@@ -68,6 +68,7 @@ class TodoList extends Observer {
   async onClearAll() {
     try {
       if (!confirm(POPUP_MESSAGE.REMOVE_TODO)) return;
+      isRemovableList(this.store.originTodoList);
       await api.removeAllTodos(this.userId);
       this.store.setOriginList([]);
       this.store.setRenderList([]);
