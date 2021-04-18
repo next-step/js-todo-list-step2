@@ -14,7 +14,9 @@ class UserTitle extends Observer {
     this.render();
   }
   render() {
-    this.container.innerHTML = userTitleTemplate(this.store.currentUserName);
+    const userName = this.store.currentUserName;
+    this.container.dataset.username = userName;
+    this.container.innerHTML = userTitleTemplate(userName);
   }
 }
 
