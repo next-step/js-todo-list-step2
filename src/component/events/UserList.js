@@ -34,6 +34,11 @@ export async function onSelectingUser(e) {
 
 export async function onAddUser() {
 	const name = prompt("추가하고 싶은 이름을 입력해주세요.");
+	if (name.length < 2) {
+		alert("2글자 이상이어야 합니다.");
+		return;
+	}
+
 	const { response, error } = await request(env.BASE_URL + env.USERS, "POST", { name });
 
 	if (error) {

@@ -13,6 +13,11 @@ function TodoInput({ onAdd }) {
 	this.addTodoItem = (event) => {
 		const $newTodoTarget = event.target;
 		if (this.isValid(event, $newTodoTarget.value)) {
+			if (event.target.value.length < 2) {
+				alert("2글자 이상이어야 합니다.");
+				return;
+			}
+
 			onAdd($newTodoTarget.value);
 			$newTodoTarget.value = "";
 		}
