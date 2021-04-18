@@ -2,7 +2,7 @@ import { user } from './user.js'
 
 const todoApp = () => {
   const init = () => {
-    user().addUser();
+    // user().addUser();
   }
   return {init}
 }
