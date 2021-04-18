@@ -1,5 +1,5 @@
 import { SELECTOR, CLASS_NAME, NODE_NAME } from '../utils/constant.js';
-import { $ } from '../utils/dom.js';
+import { $, $all } from '../utils/dom.js';
 
 class TodoFilters {
   constructor(store) {
@@ -13,7 +13,7 @@ class TodoFilters {
   }
 
   onClick({ target }) {
-    const $filters = this.container.children;
+    const $filters = $all(NODE_NAME.LIST, this.container);
     this.resetStatus($filters);
     const status = target.className;
     target.classList.add(CLASS_NAME.SELECTED);
