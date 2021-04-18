@@ -27,7 +27,9 @@ class UserList extends Observer {
             this.removeUser();
     }
     const { id, name } = target.dataset;
-    id && this.store.setCurrentUser(id, name);
+    id &&
+      id !== this.store.currentUserId &&
+      this.store.setCurrentUser(id, name);
   }
 
   async createUser() {
