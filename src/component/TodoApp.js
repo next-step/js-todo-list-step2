@@ -17,6 +17,7 @@ import onChangeMode from "./events/TodoMode.js";
 import onAdd from "./events/TodoInput.js";
 import { onDelete, onCompleted, onEditing } from "./events/TodoList.js";
 import { onSelectingUser, onAddUser, onDeleteUser } from "./events/UserList.js";
+import onAllClear from "./events/TodoAllClear.js";
 
 function TodoApp(users) {
 	this.users = users.map((user) => {
@@ -61,6 +62,29 @@ function TodoApp(users) {
 		onDeleteButton: onDelete.bind(this),
 		onCompleted: onCompleted.bind(this),
 		onEditing: onEditing.bind(this),
+		onSettingPriority: (id) => async (event) => {
+			if (event.target.value !== 0) {
+				const priority = event.target.value === "1" ? "FIRST" : "SECOND";
+
+				const { response, error } = await request(
+					env.BASE_URL + env.ITEM_PRIORITY(this.users[this.selectedUserIdx].id, id),
+					"PUT",
+					{ priority }
+				);
+				if (error) {
+					alert("할 일 완료에 실패했습니다.");
+					return;
+				}
+
+				this.users[this.selectedUserIdx].todoList.map((item) => {
+					if (item.id === id) {
+						item.priority = priority;
+					}
+					return item;
+				});
+				this.setTodoItems(this.users[this.selectedUserIdx].todoList);
+			}
+		},
 		onEdit: (id) => async (event) => {
 			if (event.keyCode === KEY_CODE.ESC) {
 				this.users[this.selectedUserIdx].todoList.map((item) => {
@@ -104,19 +128,7 @@ function TodoApp(users) {
 
 	new TodoAllClear({
 		target: document.querySelector(".clear-completed"),
-		onAllClear: async () => {
-			const { response, error } = await request(
-				env.BASE_URL + env.ITEM(this.users[this.selectedUserIdx].id),
-				"DELETE"
-			);
-			if (error) {
-				alert("할 일 삭제에 실패했습니다.");
-				return;
-			}
-
-			this.users[this.selectedUserIdx].todoList = [];
-			this.setTodoItems(this.users[this.selectedUserIdx].todoList);
-		}
+		onAllClear: onAllClear.bind(this)
 	});
 
 	const todoTitle = new TodoTitle(document.querySelector("#user-title strong"));

@@ -1,6 +1,6 @@
 import template from "../util/template.js";
 
-function TodoList({ target, onDeleteButton, onCompleted, onEditing, onEdit }) {
+function TodoList({ target, onDeleteButton, onCompleted, onEditing, onEdit, onSettingPriority }) {
 	this.setState = (updatedTodoItems) => {
 		this.render(updatedTodoItems);
 	};
@@ -33,22 +33,23 @@ function TodoList({ target, onDeleteButton, onCompleted, onEditing, onEdit }) {
 		let priority;
 
 		if (itemModel.priority === "NONE") {
-			priority = template("select", { class: "chip select" });
-
-			const options = [1, 2, 3].reduce((acc, cur, idx) => {
+			priority = template("select", {
+				class: "chip select",
+				onChange: onSettingPriority.call(null, itemModel.id)
+			});
+			const options = [0, 1, 2].reduce((acc, cur, idx) => {
 				let option;
 				if (idx === 0) {
 					option = template("option", { value: `${cur}`, selected: true });
 					option.appendChild(document.createTextNode("순위"));
 				} else {
-					option = template("option", { value: `${cur}`, selected: true });
-					option.appendChild(document.createTextNode(`${cur - 1}순위`));
+					option = template("option", { value: `${cur}` });
+					option.appendChild(document.createTextNode(`${cur}순위`));
 				}
 
 				acc.push(option);
 				return acc;
 			}, []);
-
 			priority.append(...options);
 		} else if (itemModel.priority === "FIRST") {
 			priority = template("span", { class: "chip primary" });
