@@ -1,4 +1,8 @@
-import { ERROR_TYPE_BY_MESSAGE, ERROR_TYPE } from '../utils/errors.js';
+import {
+  ERROR_TYPE_BY_MESSAGE,
+  ERROR_TYPE,
+  NO_USERLIST_MESSAGE,
+} from '../utils/errors.js';
 
 const baseUrl = 'https://js-todo-list-9ca3a.df.r.appspot.com/';
 
@@ -50,8 +54,8 @@ const endPoints = {
 const request = async (endPoint, option = {}) => {
   const response = await fetch(baseUrl + endPoint, option);
   const data = await response.json();
-  console.log(data.message);
   if (!response.ok) {
+    if (response.message === NO_USERLIST_MESSAGE) return [];
     throw ERROR_TYPE_BY_MESSAGE[data.message] ?? ERROR_TYPE.SERVER_ERROR;
   }
   return data;

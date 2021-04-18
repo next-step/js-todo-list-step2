@@ -7,6 +7,8 @@ export const ERROR_TYPE = {
   NOT_VALIDATE_TODOLIST: 'NOT_VALIDATE_TODOLIST',
 };
 
+export const NO_USERLIST_MESSAGE = 'user가 없습니다';
+
 export const ERROR_TYPE_BY_MESSAGE = {
   '해당 이름의 user가 없습니다.': ERROR_TYPE.NO_USER,
   '해당 이름의 유저가 없습니다.': ERROR_TYPE.NO_USER,

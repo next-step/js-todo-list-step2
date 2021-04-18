@@ -4,9 +4,9 @@ class UserStore extends Subject {
   constructor(userList, todoStore) {
     super();
     this.todoStore = todoStore;
-    this.userList = userList;
-    this.currentUserName = userList[0].name ?? '';
-    this.currentUserId = userList[0]._id;
+    this.userList = userList ?? [];
+    this.currentUserName = userList[0] ? userList[0].name : '';
+    this.currentUserId = userList[0] ? userList[0]._id : '';
   }
 
   addUser(userData) {
