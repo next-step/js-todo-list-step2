@@ -14,14 +14,10 @@ export class TodoList {
         targetLi.outerHTML = "";
       }
     });
-    list.addEventListener("click", function (e) {
+    list.addEventListener("click",async function (e) {
       if (e.target && e.target.className == "toggle") {
         const targetLi = e.target.closest("li");
-        todoApp.updateItemState(
-          targetLi.dataset.index,
-          targetLi.classList.toggle(TodoItem.COMPLETED)
-        );
-        targetLi.classList.toggle(TodoItem.ACTIVE);
+        await todoApp.updateItemState(targetLi.dataset.itemid);
       }
     });
 
@@ -31,13 +27,13 @@ export class TodoList {
         targetLi.classList.add("editing");
       }
     });
-    list.addEventListener("keydown", function (e) {
+    list.addEventListener("keydown", async function (e) {
       if (e.target && e.target.nodeName == "INPUT") {
         const targetLi = e.target.closest("li");
         if (e.key == "Escape") {
           targetLi.classList.remove("editing");
         } else if (e.key == "Enter") {
-          todoApp.updateItem(targetLi.dataset.index, e.target.value);
+          await todoApp.updateItem(targetLi.dataset.itemid, e.target.value);
           targetLi.classList.remove("editing");
         }
       }

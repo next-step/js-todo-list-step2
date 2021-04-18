@@ -50,14 +50,21 @@ export class TodoApp {
     await DAO.deleteItem(this.currentUser._id, itemId);
     await this.refreshUserItems(this.currentUser._id);
   }
-  updateItem(index, data) {
-    DAO.updateItem(index, this.todoItemArray, data);
-    this.setState();
+
+  async deleteItemAll() {
+    await DAO.deleteItemAll(this.currentUser._id);
+    await this.refreshUserItems(this.currentUser._id);
   }
-  updateItemState(index, isCompleted) {
-    DAO.updateItemState(index, this.todoItemArray, isCompleted);
-    this.setState();
+  
+  async updateItem(itemId, data) {
+    await DAO.updateItem(this.currentUser._id, itemId, data);
+    await this.refreshUserItems(this.currentUser._id);
   }
+  async updateItemState(itemId) {
+    await DAO.updateItemState(this.currentUser._id, itemId);
+    await this.refreshUserItems(this.currentUser._id);
+  }
+
   setState() {
     if (this.todoList) {
       this.todoList.setState(this.todoItemArray);

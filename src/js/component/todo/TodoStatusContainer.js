@@ -1,7 +1,8 @@
-import { TodoItem } from "./TodoItem.js";
+import { TodoItem } from "./Todo.js";
 import { $, $$ } from "../../util/domSelection.js";
 export class TodoStatusContainer {
-  constructor() {
+  constructor(todoApp) {
+    this.todoApp = todoApp;
     const filters = {
       activeFilter: {
         button: $(".count-container ." + TodoItem.ACTIVE),
@@ -39,6 +40,10 @@ export class TodoStatusContainer {
         showSelectedFilter(filter);
         this.setState();
       });
+    });
+    const deleteAllButton =$(".count-container .clear-completed" );
+    deleteAllButton.addEventListener("click", async function(e){
+      await todoApp.deleteItemAll();
     });
   }
   setState() {
