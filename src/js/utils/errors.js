@@ -10,7 +10,9 @@ export const ERROR_TYPE = {
 export const ERROR_TYPE_BY_MESSAGE = {
   '해당 이름의 user가 없습니다.': ERROR_TYPE.NO_USER,
   '해당 이름의 유저가 없습니다.': ERROR_TYPE.NO_USER,
+  '해당 유저가 존재하지 않습니다.': ERROR_TYPE.NO_USER,
   'Todo Item을 수정하는데 에러가 발생했습니다.': ERROR_TYPE.NO_TODO,
+  'Todo Item의 priority를 수정하는데 에러가 발생했습니다.': ERROR_TYPE.NO_TODO,
 };
 
 export const ERROR_HANDLER = {
