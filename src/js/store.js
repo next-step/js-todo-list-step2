@@ -7,8 +7,9 @@ const option = {
   body: ''
 }
 
-const callApi = (url, method) => {
+const callApi = (url, method, body) => {
   option.method = method;
+  option.body = JSON.stringify(body);
   return fetch(`https://js-todo-list-9ca3a.df.r.appspot.com/${url}`, option)
     .then(data => {
       if (!data.ok) {
@@ -23,15 +24,18 @@ const callApi = (url, method) => {
 
 
 const userStore = () => {
-  const getUser = () => {
-    console.log('get user')
+  const getUsers = () => {
+    return callApi('api/users', 'GET')
   }
 
   const addUser = (user) => {
-    option.body = JSON.stringify({name:user})
-    return callApi('/api/users', 'POST')
+    return callApi('api/users', 'POST',{name:user})
   }
-  return {getUser, addUser}
+
+  const getUser = (userId) => {
+    return callApi('api/users/:'+userId, 'GET')
+  }
+  return {getUsers, addUser}
 }
 
 export {userStore}

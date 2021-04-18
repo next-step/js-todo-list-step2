@@ -1,4 +1,4 @@
-import { user } from './user.js'
+import { users } from './user.js'
 
 const todoApp = () => {
   const init = () => {
