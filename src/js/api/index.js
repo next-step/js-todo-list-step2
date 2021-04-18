@@ -1,4 +1,4 @@
-const defaultErrorMessage = '잠시 후 다시 시도해주세요';
+import { ERROR_TYPE_BY_MESSAGE, ERROR_TYPE } from '../utils/errors.js';
 
 const baseUrl = 'https://js-todo-list-9ca3a.df.r.appspot.com/';
 
@@ -51,7 +51,7 @@ const request = async (endPoint, option = {}) => {
   const response = await fetch(baseUrl + endPoint, option);
   const data = await response.json();
   if (!response.ok) {
-    throw data.message || defaultErrorMessage;
+    throw ERROR_TYPE_BY_MESSAGE[data.message] || ERROR_TYPE.SERVER_ERROR;
   }
   return data;
 };

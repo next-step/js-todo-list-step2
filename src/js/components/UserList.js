@@ -1,7 +1,8 @@
 import { SELECTOR, ACTION_NAME, POPUP_MESSAGE } from '../utils/constant.js';
 import { $ } from '../utils/dom.js';
-import { isAvailableUserName, isAvailableUser } from '../utils/validations.js';
+import { isAvailableUserName } from '../utils/validations.js';
 import { userListTemplate } from '../utils/templates.js';
+import { ERROR_HANDLER } from '../utils/errors.js';
 import Observer from '../libs/Observer.js';
 import api from '../api/index.js';
 
@@ -40,18 +41,19 @@ class UserList extends Observer {
       const user = await api.addUser(userName);
       this.store.addUser(user);
     } catch (error) {
-      return alert(error);
+      const hanlder = ERROR_HANDLER[error];
+      hanlder ? hanlder() : alert(error);
     }
   }
 
   async removeUser() {
     try {
       const userId = this.store.currentUserId;
-      isAvailableUser(userId);
       await api.removeUser(userId);
       this.store.removeUser(userId);
     } catch (error) {
-      return alert(error);
+      const hanlder = ERROR_HANDLER[error];
+      hanlder ? hanlder() : alert(error);
     }
   }
 

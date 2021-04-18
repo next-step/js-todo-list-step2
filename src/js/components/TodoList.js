@@ -11,6 +11,7 @@ import {
   todoListTemplate,
   loaderTemplate,
 } from '../utils/templates.js';
+import { ERROR_HANDLER, ERROR_TYPE } from '../utils/errors.js';
 import { isAvaliableTodo, isRemovableList } from '../utils/validations.js';
 import { $, $all } from '../utils/dom.js';
 import api from '../api/index.js';
@@ -73,7 +74,9 @@ class TodoList extends Observer {
       this.store.setOriginList([]);
       this.store.setRenderList([]);
     } catch (error) {
-      return alert(error);
+      const hanlder = ERROR_HANDLER[error];
+      hanlder ? hanlder() : alert(error);
+      error === ERROR_TYPE.NO_TODO && this.reloadTodoList();
     }
   }
 
@@ -116,7 +119,9 @@ class TodoList extends Observer {
       });
       this.store.setOriginList(updatedList);
     } catch (error) {
-      return alert(error);
+      const hanlder = ERROR_HANDLER[error];
+      hanlder ? hanlder() : alert(error);
+      error === ERROR_TYPE.NO_TODO && this.reloadTodoList();
     }
   }
 
@@ -133,7 +138,9 @@ class TodoList extends Observer {
       });
       this.store.setOriginList(updatedData);
     } catch (error) {
-      return alert(error);
+      const hanlder = ERROR_HANDLER[error];
+      hanlder ? hanlder() : alert(error);
+      error === ERROR_TYPE.NO_TODO && this.reloadTodoList();
     }
   }
 
@@ -149,7 +156,9 @@ class TodoList extends Observer {
       this.store.setOriginList(updatedOriginData);
       this.store.setRenderList(updatedRenderData);
     } catch (error) {
-      return alert(error);
+      const hanlder = ERROR_HANDLER[error];
+      hanlder ? hanlder() : alert(error);
+      error === ERROR_TYPE.NO_TODO && this.reloadTodoList();
     }
   }
 
@@ -159,8 +168,14 @@ class TodoList extends Observer {
       const label = $(NODE_NAME.LABEL, $li);
       label.innerHTML = priorityTemplate[priority] + contents;
     } catch (error) {
-      return alert(error);
+      const hanlder = ERROR_HANDLER[error];
+      hanlder ? hanlder() : alert(error);
+      error === ERROR_TYPE.NO_TODO && this.reloadTodoList();
     }
+  }
+
+  reloadTodoList() {
+    this.store.initTodoList(this.userId);
   }
 
   update() {

@@ -1,6 +1,7 @@
 import { SELECTOR, KEY_NAME } from '../utils/constant.js';
 import { STATUS } from '../utils/constant.js';
 import { isAvaliableTodo } from '../utils/validations.js';
+import { ERROR_HANDLER } from '../utils/errors.js';
 import { $ } from '../utils/dom.js';
 import api from '../api/index.js';
 
@@ -37,7 +38,8 @@ class TodoInput {
         this.store.setRenderList(renderData);
       }
     } catch (error) {
-      return alert(error);
+      const hanlder = ERROR_HANDLER[error];
+      hanlder ? hanlder() : alert(error);
     }
   }
 }

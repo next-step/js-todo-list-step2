@@ -1,6 +1,7 @@
 import Subject from './Subject.js';
 import api from '../api/index.js';
 import { STATUS } from '../utils/constant.js';
+import { ERROR_HANDLER } from '../utils/errors.js';
 
 class TodoStore extends Subject {
   constructor(initialUserId, initialTodo) {
@@ -20,7 +21,8 @@ class TodoStore extends Subject {
       this.originTodoList = todoList;
       this.setStatus(this.status);
     } catch (error) {
-      return alert(error);
+      const hanlder = ERROR_HANDLER[error];
+      hanlder ? hanlder() : alert(error);
     }
   }
 
