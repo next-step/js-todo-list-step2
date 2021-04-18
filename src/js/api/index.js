@@ -11,100 +11,40 @@ const HttpMethod = {
 
 const headers = { 'Content-Type': 'application/json' };
 
-const requestParams = {
-  getUserList: () => {
+const options = {
+  GET: { method: HttpMethod.GET },
+  POST: (body = '') => {
     return {
-      endPoint: 'api/users/',
-      option: {
-        method: HttpMethod.GET,
-      },
+      method: HttpMethod.POST,
+      headers,
+      body: body ? JSON.stringify(body) : '',
     };
   },
+  PUT: (body = '') => {
+    return {
+      method: HttpMethod.PUT,
+      headers,
+      body: body ? JSON.stringify(body) : '',
+    };
+  },
+  DELETE: {
+    method: HttpMethod.DELETE,
+  },
+};
 
-  getUser: (userId) => {
-    return {
-      endPoint: `api/users/${userId}`,
-      option: {
-        method: HttpMethod.GET,
-      },
-    };
-  },
-
-  addUser: (name) => {
-    return {
-      endPoint: 'api/users/',
-      option: {
-        method: HttpMethod.POST,
-        headers,
-        body: JSON.stringify({ name }),
-      },
-    };
-  },
-
-  removeUser: (userId) => {
-    return {
-      endPoint: `api/users/${userId}`,
-      option: {
-        method: HttpMethod.DELETE,
-      },
-    };
-  },
-
-  addTodoItem: (userId, contents) => {
-    return {
-      endPoint: `api/users/${userId}/items/`,
-      option: {
-        method: HttpMethod.POST,
-        headers,
-        body: JSON.stringify({ contents }),
-      },
-    };
-  },
-
-  updateTodo: (userId, itemId, contents) => {
-    return {
-      endPoint: `api/users/${userId}/items/${itemId}`,
-      option: {
-        method: HttpMethod.PUT,
-        headers,
-        body: JSON.stringify({ contents }),
-      },
-    };
-  },
-  removeTodo: (userId, itemId) => {
-    return {
-      endPoint: `api/users/${userId}/items/${itemId}`,
-      option: {
-        method: HttpMethod.DELETE,
-      },
-    };
-  },
-  removeAllTodos: (userId) => {
-    return {
-      endPoint: `api/users/${userId}/items/`,
-      option: {
-        method: HttpMethod.DELETE,
-      },
-    };
-  },
-  toggleTodoComplete: (userId, itemId) => {
-    return {
-      endPoint: `api/users/${userId}/items/${itemId}/toggle`,
-      option: {
-        method: HttpMethod.PUT,
-      },
-    };
-  },
-  setTodoPriority: (userId, itemId, priority) => {
-    return {
-      endPoint: `api/users/${userId}/items/${itemId}/priority`,
-      option: {
-        method: HttpMethod.PUT,
-        headers,
-        body: JSON.stringify({ priority }),
-      },
-    };
-  },
+const endPoints = {
+  getUserList: 'api/users',
+  addUser: 'api/users',
+  getUser: (userId) => `api/users/${userId}`,
+  removeUser: (userId) => `api/users/${userId}`,
+  getUserTodo: (userId) => `api/users/${userId}/items/`,
+  addTodoItem: (userId) => `api/users/${userId}/items/`,
+  removeAllTodo: (userId) => `api/users/${userId}/items/`,
+  removeTodo: (userId, itemId) => `api/users/${userId}/items/${itemId}`,
+  updateTodo: (userId, itemId) => `api/users/${userId}/items/${itemId}`,
+  todoToggle: (userId, itemId) => `api/users/${userId}/items/${itemId}/toggle`,
+  setPriority: (userId, itemId) =>
+    `api/users/${userId}/items/${itemId}/priority`,
 };
 
 const request = async (endPoint, option = {}) => {
@@ -118,61 +58,53 @@ const request = async (endPoint, option = {}) => {
 
 const api = {
   getUserList: async () => {
-    const { endPoint, option } = requestParams.getUserList();
-    return await request(endPoint, option);
+    return await request(endPoints.getUserList, options.GET);
   },
 
   getUser: async (userId) => {
-    const { endPoint, option } = requestParams.getUser(userId);
-    return await request(endPoint, option);
+    return await request(endPoints.getUser(userId), options.GET);
   },
 
   addUser: async (name) => {
-    const { endPoint, option } = requestParams.addUser(name);
-    return await request(endPoint, option);
+    return await request(endPoints.addUser, options.POST({ name }));
   },
 
   removeUser: async (userId) => {
-    const { endPoint, option } = requestParams.removeUser(userId);
-    return await request(endPoint, option);
+    return await request(endPoints.removeUser(userId), options.DELETE);
+  },
+
+  getUserTodo: async (userId) => {
+    return await request(endPoints.getUserTodo(userId), options.GET);
   },
 
   addTodoItem: async (userId, contents) => {
-    const { endPoint, option } = requestParams.addTodoItem(userId, contents);
-    return await request(endPoint, option);
+    return await request(
+      endPoints.addTodoItem(userId),
+      options.POST({ contents }),
+    );
   },
 
   updateTodo: async (userId, itemId, contents) => {
-    const { endPoint, option } = requestParams.updateTodo(
-      userId,
-      itemId,
-      contents,
+    return await request(
+      endPoints.updateTodo(userId, itemId),
+      options.PUT({ contents }),
     );
-    return await request(endPoint, option);
   },
 
   removeTodo: async (userId, itemId) => {
-    const { endPoint, option } = requestParams.removeTodo(userId, itemId);
-    return await request(endPoint, option);
+    return await request(endPoints.removeTodo(userId, itemId), options.DELETE);
   },
   removeAllTodos: async (userId) => {
-    const { endPoint, option } = requestParams.removeAllTodos(userId);
-    return await request(endPoint, option);
+    return await request(endPoints.removeAllTodo(userId), options.DELETE);
   },
   setTodoPriority: async (userId, itemId, priority) => {
-    const { endPoint, option } = requestParams.setTodoPriority(
-      userId,
-      itemId,
-      priority,
+    return await request(
+      endPoints.setPriority(userId, itemId),
+      options.PUT({ priority }),
     );
-    return await request(endPoint, option);
   },
   toggleTodoComplete: async (userId, itemId) => {
-    const { endPoint, option } = requestParams.toggleTodoComplete(
-      userId,
-      itemId,
-    );
-    return await request(endPoint, option);
+    return await request(endPoints.todoToggle(userId, itemId), options.PUT());
   },
 };
 
