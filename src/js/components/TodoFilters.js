@@ -20,7 +20,6 @@ class TodoFilters {
     this.store.setStatus(status);
   }
 
-  // Filter 내부 초기화
   resetStatus(filters) {
     Array.from(filters).map((filter) => {
       const $anchor = filter.children[0];
