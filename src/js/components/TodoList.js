@@ -11,6 +11,7 @@ import {
   todoListTemplate,
   loaderTemplate,
 } from '../utils/templates.js';
+import { isAvaliableTodo } from '../utils/validations.js';
 import { $, $all } from '../utils/dom.js';
 import api from '../api/index.js';
 import Observer from '../libs/Observer.js';
@@ -85,16 +86,22 @@ class TodoList extends Observer {
   }
 
   closeEditMode(target, key) {
-    const $li = target.closest(NODE_NAME.LIST);
-    const { contents, id, priority } = $li.dataset;
-    const $label = $(NODE_NAME.LABEL, $li);
-    const value = target.value;
-    if (key === KEY_NAME.ENTER && value !== contents && value.length > 0) {
-      $li.dataset.contents = value;
-      $label.innerHTML = priorityTemplate[priority] + value;
-      this.updateTodo(id, value);
+    try {
+      const $li = target.closest(NODE_NAME.LIST);
+      const { contents, id, priority } = $li.dataset;
+      const $label = $(NODE_NAME.LABEL, $li);
+      const value = target.value;
+      if (key === KEY_NAME.ENTER && value !== contents) {
+        isAvaliableTodo(value);
+        this.updateTodo(id, value);
+        $li.dataset.contents = value;
+        $label.innerHTML =
+          (priorityTemplate[priority] || priorityTemplate.NONE) + value;
+      }
+      $li.classList.remove(CLASS_NAME.EDITING);
+    } catch (error) {
+      return alert(error);
     }
-    $li.classList.remove(CLASS_NAME.EDITING);
   }
 
   async updateTodo(itemId, contents) {

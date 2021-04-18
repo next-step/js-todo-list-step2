@@ -52,5 +52,3 @@ export const POPUP_MESSAGE = {
   REMOVE_USER: (userName) => `정말 ${userName}을 삭제하시겠습니까?`,
   REMOVE_TODO: '정말 삭제하시겠습니까?',
 };
-
-export const CREATE_USER_PROMPT = '추가하고 싶은 이름을 입력해주세요';
