@@ -16,6 +16,7 @@ class TodoList {
       }
     });
     target.classList.add('active');
+    const id = target.getAttribute('data-id');
     // active 유저 불러오기
   }
 

@@ -1,7 +1,7 @@
-import UserList from './UserList.js';
+import TodoList from './TodoList.js';
 
 const App = function () {
-  new UserList();
+  new TodoList();
 };
 
 export default App;
