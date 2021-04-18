@@ -28,6 +28,7 @@ export const ACTION_NAME = {
 export const NODE_NAME = {
   LIST: 'li',
   LABEL: 'label',
+  ANCHOR: 'a',
 };
 
 export const STATUS = {
