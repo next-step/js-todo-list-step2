@@ -22,7 +22,7 @@ class TodoStore extends Subject {
       this.setStatus(this.status);
     } catch (error) {
       const hanlder = ERROR_HANDLER[error];
-      hanlder ? hanlder() : alert(error);
+      return hanlder && hanlder();
     }
   }
 

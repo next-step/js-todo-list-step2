@@ -42,7 +42,7 @@ class UserList extends Observer {
       this.store.addUser(user);
     } catch (error) {
       const hanlder = ERROR_HANDLER[error];
-      hanlder ? hanlder() : alert(error);
+      return hanlder && hanlder();
     }
   }
 
@@ -53,7 +53,7 @@ class UserList extends Observer {
       this.store.removeUser(userId);
     } catch (error) {
       const hanlder = ERROR_HANDLER[error];
-      hanlder ? hanlder() : alert(error);
+      return hanlder && hanlder();
     }
   }
 

@@ -75,8 +75,8 @@ class TodoList extends Observer {
       this.store.setRenderList([]);
     } catch (error) {
       const hanlder = ERROR_HANDLER[error];
-      hanlder ? hanlder() : alert(error);
-      error === ERROR_TYPE.NO_TODO && this.reloadTodoList();
+      hanlder && hanlder();
+      return error === ERROR_TYPE.NO_TODO && this.reloadTodoList();
     }
   }
 
@@ -104,7 +104,8 @@ class TodoList extends Observer {
       }
       $li.classList.remove(CLASS_NAME.EDITING);
     } catch (error) {
-      return alert(error);
+      const hanlder = ERROR_HANDLER[error];
+      hanlder && hanlder();
     }
   }
 
@@ -120,8 +121,8 @@ class TodoList extends Observer {
       this.store.setOriginList(updatedList);
     } catch (error) {
       const hanlder = ERROR_HANDLER[error];
-      hanlder ? hanlder() : alert(error);
-      error === ERROR_TYPE.NO_TODO && this.reloadTodoList();
+      hanlder && hanlder();
+      return error === ERROR_TYPE.NO_TODO && this.reloadTodoList();
     }
   }
 
@@ -139,8 +140,8 @@ class TodoList extends Observer {
       this.store.setOriginList(updatedData);
     } catch (error) {
       const hanlder = ERROR_HANDLER[error];
-      hanlder ? hanlder() : alert(error);
-      error === ERROR_TYPE.NO_TODO && this.reloadTodoList();
+      hanlder && hanlder();
+      return error === ERROR_TYPE.NO_TODO && this.reloadTodoList();
     }
   }
 
@@ -157,8 +158,8 @@ class TodoList extends Observer {
       this.store.setRenderList(updatedRenderData);
     } catch (error) {
       const hanlder = ERROR_HANDLER[error];
-      hanlder ? hanlder() : alert(error);
-      error === ERROR_TYPE.NO_TODO && this.reloadTodoList();
+      hanlder && hanlder();
+      return error === ERROR_TYPE.NO_TODO && this.reloadTodoList();
     }
   }
 
@@ -169,8 +170,8 @@ class TodoList extends Observer {
       label.innerHTML = priorityTemplate[priority] + contents;
     } catch (error) {
       const hanlder = ERROR_HANDLER[error];
-      hanlder ? hanlder() : alert(error);
-      error === ERROR_TYPE.NO_TODO && this.reloadTodoList();
+      hanlder && hanlder();
+      return error === ERROR_TYPE.NO_TODO && this.reloadTodoList();
     }
   }
 
