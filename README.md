@@ -237,6 +237,15 @@
 
 <br/>
 
+## 📕 Component 구성
+
+![image](https://user-images.githubusercontent.com/59992230/114887244-3b4f9200-9e43-11eb-812b-1a3a3916b095.png)
+
+
+![image](https://user-images.githubusercontent.com/59992230/114886992-004d5e80-9e43-11eb-85ed-15dff1ee066f.png)
+
+
+
 ## ⚙️ Before Started
 
 #### <img alt="Tip" src="https://img.shields.io/static/v1.svg?label=&message=Tip&style=flat-square&color=673ab8"> 로컬에서 서버 띄워서 손쉽게 static resources 변경 및 확인하는 방법
