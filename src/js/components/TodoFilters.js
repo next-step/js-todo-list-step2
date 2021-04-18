@@ -4,12 +4,12 @@ import { $, $all } from '../utils/dom.js';
 class TodoFilters {
   constructor(store) {
     this.store = store;
+    this.container = $(SELECTOR.FILTER);
     this.bindEvent();
   }
 
   bindEvent() {
-    const container = $(SELECTOR.FILTER);
-    container.addEventListener('click', (e) => this.onClick(e));
+    this.container.addEventListener('click', (e) => this.onClick(e));
   }
 
   onClick({ target }) {
