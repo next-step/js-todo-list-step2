@@ -1,21 +1,40 @@
 /* eslint-disable class-methods-use-this */
-import { BASE_URL, USER_PATH, $ } from './constants.js';
+import { BASE_URL, USER_PATH, USERLIST, $ } from './constants.js';
 
-// const UserList = function () {
-class UserList {
+class TodoList {
   constructor() {
     this.userInfos = {};
     this.init();
   }
 
-  async init() {
-    const userCreateButton = document.querySelector('.user-create-button');
-    this.currentUsers = await this.returnUsers();
-    userCreateButton.addEventListener('click', this.onUserCreateHandler);
-    this.render();
+  handleClickUser(event) {
+    const { target } = event;
+    const userButtons = USERLIST.querySelectorAll('button[data-active]');
+    userButtons.forEach(userButton => {
+      if (userButton.classList.contains('active')) {
+        userButton.classList.remove('active');
+      }
+    });
+    target.classList.add('active');
+    // active 유저 불러오기
   }
 
-  static async createUser(userName) {
+  async init() {
+    await this.render();
+    // todo: first user todo render
+    const userCreateButton = document.querySelector('.user-create-button');
+    const userButtons = USERLIST.querySelectorAll('button');
+    const firstUserButton = userButtons[0];
+
+    firstUserButton.classList.add('active');
+    userCreateButton.addEventListener('click', this.handleCreateUser);
+    userButtons.forEach(userButton => {
+      if (!userButton.hasAttribute('data-action'))
+        userButton.addEventListener('click', this.handleClickUser.bind(this));
+    });
+  }
+
+  async createUser(userName) {
     const user = { name: userName };
     const response = await fetch(`${BASE_URL}${USER_PATH}`, {
       method: 'POST',
@@ -24,7 +43,7 @@ class UserList {
     });
   }
 
-  async onUserCreateHandler() {
+  async handleCreateUser() {
     const userName = prompt('추가하고 싶은 이름을 입력해주세요.');
     await this.createUser(userName);
     this.render();
@@ -32,7 +51,7 @@ class UserList {
 
   appendUserInfoButton(user) {
     return `
-		<button class="ripple" data-id="${user._id}">${user.name}</button>
+		<button class="ripple" data-id="${user._id}" data-active>${user.name}</button>
 		`;
   }
 
@@ -43,8 +62,9 @@ class UserList {
   }
 
   deleteExistingUserButtons() {
-    const buttonCount = $('#user-list').querySelectorAll('button').length - 1;
-    for (let i = 0; i < buttonCount; i++) {
+    const userButtonCount =
+      $('#user-list').querySelectorAll('button').length - 2;
+    for (let i = 0; i < userButtonCount; i++) {
       const button = $('#user-list').querySelector('button');
       $('#user-list').removeChild(button);
     }
@@ -70,4 +90,4 @@ class UserList {
   }
 }
 
-export default UserList;
+export default TodoList;
