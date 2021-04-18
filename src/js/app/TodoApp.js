@@ -17,12 +17,7 @@ export class TodoApp {
   async getUsers(){
     return await DAO.getUsers();
   }
-  async refreshUserItems(userId){
-    const userItems = await DAO.getUserItems(userId);
-    this.todoItemArray = userItems.map(item => new TodoItem(item));
-    this.setState();
-  }
-
+  
   async changeUser(userId){
     await this.init(userId);
   }
@@ -38,6 +33,11 @@ export class TodoApp {
     this.init();
   }
 
+  async refreshUserItems(userId){
+    const userItems = await DAO.getUserItems(userId);
+    this.todoItemArray = userItems.map(item => new TodoItem(item));
+    this.setState();
+  }
   async addItem(data) {
     if (!data || data.trim().length < 2 ){
       alert('할일을 최소 2자 이상으로 입력해 주세요.')
@@ -62,6 +62,11 @@ export class TodoApp {
   }
   async updateItemState(itemId) {
     await DAO.updateItemState(this.currentUser._id, itemId);
+    await this.refreshUserItems(this.currentUser._id);
+  }
+  async updateItemPriority(itemId,priority) {
+    const priorityArray = [TodoItem.PRIORITY_NONE,TodoItem.PRIORITY_FIRST,TodoItem.PRIORITY_SECOND];
+    await DAO.updateItemPriority(this.currentUser._id, itemId,priorityArray[priority]);
     await this.refreshUserItems(this.currentUser._id);
   }
 

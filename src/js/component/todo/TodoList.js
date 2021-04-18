@@ -35,7 +35,16 @@ export class TodoList {
         } else if (e.key == "Enter") {
           await todoApp.updateItem(targetLi.dataset.itemid, e.target.value);
           targetLi.classList.remove("editing");
+          
         }
+      }
+    });
+    list.addEventListener("change", async function (e) {
+      if (e.target && e.target.nodeName == "SELECT" && e.target.classList.contains('chip')) {
+        const targetLi = e.target.closest("li");
+        const selectedIndex = e.target.options.selectedIndex;
+        const priority = e.target.options[selectedIndex].value;
+        await todoApp.updateItemPriority(targetLi.dataset.itemid,priority);
       }
     });
   }
@@ -43,6 +52,15 @@ export class TodoList {
     const list = $(".todo-list");
     list.innerHTML = "";
     let li;
+    const priorityDom = {
+      'NONE':`<select class="chip select">
+            <option value="0" selected>순위</option>
+            <option value="1">1순위</option>
+            <option value="2">2순위</option>
+          </select>`,
+      'FIRST' :`<span class="chip ${TodoItem.PRIORITY_FIRST_CLASSNAME}">1순위</span>`,
+      'SECOND':`<span class="chip ${TodoItem.PRIORITY_SECOND_CLASSNAME}">2순위</span>`
+    };
     todoItemArray.forEach((item) => {
       li = document.createElement("li");
       const itemIdAttribute = document.createAttribute("data-itemid");
@@ -63,7 +81,13 @@ export class TodoList {
                   <input class="toggle" type="checkbox" ${
                     item.isCompleted ? "checked" : ""
                   }/>
-                  <label class="label">${item.data}</label>
+                  <label class="label">
+                  ${item.isCompleted ? "" :  
+                    item.priority == TodoItem.PRIORITY_NONE ? priorityDom.NONE :
+                    item.priority == TodoItem.PRIORITY_FIRST ? priorityDom.FIRST: priorityDom.SECOND
+                  }
+                  ${item.data}
+                  </label>
                   <button class="destroy"></button>
               </div>
               <input class="edit" value="${item.data}" />

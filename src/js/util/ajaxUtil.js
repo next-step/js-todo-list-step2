@@ -1,4 +1,4 @@
-const DEBUG = true;
+const DEBUG = false;
 export async function get(url,errMsg){
     const response = await fetch(url);
     let body = [];
@@ -47,8 +47,7 @@ export async function deleteRequest(url,errMsg){
     }
     return body;
 }
-export async function put(url,data='',errMsg){
- 
+export async function put(url,{data={},errMsg}){
   const options = {method:'PUT'};
   if(data){
     options.headers ={ 'Content-Type': 'application/json'};

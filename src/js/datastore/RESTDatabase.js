@@ -41,7 +41,11 @@ export class RESTDataBase {
   }
   static async updateItem(userId,itemId,data) {
     const url = RESTDataBase.BASE_URL + '/api/users/' + userId + '/items/' + itemId;
-    return await Ajax.put(url,{'contents':data},"Update Item 실패");
+    const options = {
+      'data' :{'contents':data},
+      'errMsg' :"Update Item 실패"
+    }
+    return await Ajax.put(url,options);
   }
   static async updateItemState(userId,itemId) {
     const url = RESTDataBase.BASE_URL + '/api/users/' + userId + '/items/' + itemId +'/toggle';
@@ -51,7 +55,12 @@ export class RESTDataBase {
     return await Ajax.put(url,options);
   }
 
-  static saveData(todoListArray) {
-    localStorage.setItem(LocalDataBase.DB_NAME, JSON.stringify(todoListArray));
+  static async updateItemPriority(userId,itemId,priority) {
+    const url = RESTDataBase.BASE_URL + '/api/users/' + userId + '/items/' + itemId +'/priority';
+    const options = {
+      'data' : {'priority':priority},
+      'errMsg' :"Update Item Priority 실패"
+    }
+    return await Ajax.put(url,options);
   }
 }
