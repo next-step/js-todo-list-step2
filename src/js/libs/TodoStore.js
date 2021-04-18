@@ -16,7 +16,7 @@ class TodoStore extends Subject {
     try {
       this.setLoading();
       this.currentUserId = userId;
-      const { todoList } = await api.getUser(userId);
+      const todoList = await api.getUserTodo(userId);
       this.originTodoList = todoList;
       this.setStatus(this.status);
     } catch (error) {
