@@ -47,33 +47,66 @@ class TodoList {
 		`;
   }
 
+  async handleInputKeyup(event) {
+    // todo => 제출
+    if (event.key !== 'Enter') return;
+    const { target } = event;
+    const inputValue = target.value;
+    const userId = USERLIST.querySelector('.active').getAttribute('data-id');
+    const data = {
+      _id: '1',
+      contents: inputValue,
+      isCompleted: false,
+      priority: 'NONE'
+    };
+    const response = await fetch(`${BASE_URL}${USER_PATH}${userId}/items`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        ...data
+      })
+    });
+    target.value = '';
+  }
+
   async handleClickUser(event) {
     const { target } = event;
     const userButtons = USERLIST.querySelectorAll('button[data-active]');
+    const userTitle = $('#user-title');
     userButtons.forEach(userButton => {
       if (userButton.classList.contains('active')) {
         userButton.classList.remove('active');
       }
     });
     target.classList.add('active');
+    userTitle.innerHTML = `<strong>${target.innerText}</strong>'s Todo List`;
+    userTitle.setAttribute('data-username', target.innerText);
     const id = target.getAttribute('data-id');
-
     $('.todo-list').innerHTML = '';
     const response = await fetch(`${BASE_URL}${USER_PATH}${id}/items/`, {});
     const userTodoList = await response.json();
+    await console.log(userTodoList);
     userTodoList.forEach(userTodoListElement => {
       $('.todo-list').insertAdjacentHTML(
         'afterbegin',
         this.createTodoListElement(userTodoListElement)
       );
     });
+    const newTodoInput = $('.new-todo');
+    newTodoInput.addEventListener(
+      'keyup',
+      await this.handleInputKeyup.bind(this)
+    );
+    // newTodoInput.addEventListener('dblclick', this.test2.bind(this));
   }
 
   async createUser(userName) {
     const user = { name: userName };
     const response = await fetch(`${BASE_URL}${USER_PATH}`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Contents-Type': 'application/json' },
       body: JSON.stringify(user)
     });
   }
