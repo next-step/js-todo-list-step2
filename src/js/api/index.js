@@ -50,7 +50,7 @@ const endPoints = {
 const request = async (endPoint, option = {}) => {
   const response = await fetch(baseUrl + endPoint, option);
   const data = await response.json();
-  if (response.status !== 200 || !response.ok) {
+  if (!response.ok) {
     throw data.message || defaultErrorMessage;
   }
   return data;
