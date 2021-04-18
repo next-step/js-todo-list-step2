@@ -17,7 +17,9 @@ class TodoCounter extends Observer {
 
   render() {
     const counter = this.store.renderTodoList.length;
-    this.container.innerHTML = todoCounterTemplate(counter);
+    this.container.innerHTML = this.store.isLoading
+      ? '로딩중..'
+      : todoCounterTemplate(counter);
   }
 }
 
