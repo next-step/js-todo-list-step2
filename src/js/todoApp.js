@@ -1,8 +1,8 @@
-import { users } from './user.js'
+import { userComponent } from './user.js'
 
 const todoApp = () => {
   const init = () => {
-    // user().addUser();
+    userComponent().userInit()
   }
   return {init}
 }

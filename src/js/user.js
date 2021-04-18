@@ -1,12 +1,12 @@
 import {$,$$, utils} from './util.js'
-import {userStore} from './store.js'
+import {userApi} from './api.js'
 import {Message as msg} from './constant.js'
+import {todoListComponent} from './todoList.js'
 
-const $user = $('#user-list');
 let user, userList;
 
-const addEventListner = () => {
-  console.log('addEventListner')
+const addEventListener = () => {
+  console.log('addEventListener')
   $$('.ripple').forEach(button=>{
     if(button.classList.contains('user-create-button') || button.classList.contains('user-delete-button')) return
     button.addEventListener('click', onUserClickHandler)
@@ -17,11 +17,16 @@ const addEventListner = () => {
 const onUserClickHandler = (e) => {
   console.log('onUserClickHandler')
   let clickedUser = e.target;
+  setUserButtonStatus(clickedUser)
+  getUser(clickedUser.id)
+  
+}
+
+const setUserButtonStatus = (userElement) => {
   $$('.ripple').forEach(button => {
-    // console.log(button)
     if(button.classList.contains('active')) button.classList.toggle('active')
   })
-  clickedUser.classList.add('active')
+  userElement.classList.add('active')
 }
 
 const onUserCreateHandler = () => {
@@ -31,21 +36,32 @@ const onUserCreateHandler = () => {
     alert(msg.MUST_2_MORE_WORD)
     return
   }
-  user().addUser(userName);
+  addUser(userName);
+}
+
+const setUserInfoAndTodoList = (user) => {
+  $('#user-title').setAttribute('data-username', user.name);
+  $('#user-title').firstElementChild.firstElementChild.textContent = user.name;
+  todoListComponent(user.todoList);
 }
 
 const drawUserList = (userList) => {
   let tag = '';
-  Array.from(userList).forEach(user=>{
-    tag += `<button class="ripple">${user.name}</button>`
+  console.log(user)
+  user = !user?userList[0]:user;
+  console.log(user)
+  Array.from(userList).forEach(eachUser=>{
+    // console.log(user)
+    tag += `<button class="ripple ${eachUser._id===user._id?'active':''}" id="${eachUser._id}">${eachUser.name}</button>`
   })
-  $('#user-list').innerHTML = tag + drawUserAddDeleteButton()
-  $('#user-list').children[0].classList.add('active')
-  addEventListner();
-
+  $('#user-list').innerHTML = tag + drawUserAddAndDeleteButton()
+  // $('#user-list').children[0].classList.add('active')
+  addEventListener();
+  
+  setUserInfoAndTodoList(user);
 }
 
-const drawUserAddDeleteButton = () => {
+const drawUserAddAndDeleteButton = () => {
   return `<button class="ripple user-create-button" data-action="createUser">
             + 유저 생성
           </button>
@@ -54,37 +70,45 @@ const drawUserAddDeleteButton = () => {
           </button>`
 }
 
-export const users = () => {
-  const addUser = (userName) => {
-    console.log('add user')
-    userStore()
-      .addUser(userName)
-      .then(response=>{
-        console.log('rst=',response.name)
-      });
+const addUser = (userName) => {
+  console.log('add user')
+  userApi()
+    .addUser(userName)
+    .then(response=>{
+      user = response
+      console.log(user)
+    })
+    .then(getUserList)
+    .then(drawUserList(userList))
+}
+
+const getUserList = () => {
+  console.log('get users')
+  userApi()
+    .getUsers()
+    .then(response=>{
+      userList = response;
+      drawUserList(userList)
+    })
+}
+
+const getUser = (userId) => {
+  console.log('get user')
+  userApi()
+    .getUser(userId)
+    .then(response=>{
+      user = response;
+      console.log(user);
+      setUserInfoAndTodoList(user);
+    })
+}
+
+export const userComponent = () => {
+  const userInit = () => {
+    console.log('userInit')
     getUserList();
   }
 
-  const getUserList = () => {
-    console.log('get users')
-    userStore()
-      .getUsers()
-      .then(response=>{
-        userList = response;
-        drawUserList(userList)
-      })
-  }
-
-  const getUser = (userId) => {
-    console.log('get user')
-    userStore()
-      .getUser(userId)
-      .then(response=>{
-        user = response;
-        console.log(user);
-      })
-  }
-  return { addUser, getUserList }
+  return { userInit }
 }
 
-users().getUserList()

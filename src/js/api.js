@@ -23,7 +23,7 @@ const callApi = (url, method, body) => {
 }
 
 
-const userStore = () => {
+const userApi = () => {
   const getUsers = () => {
     return callApi('api/users', 'GET')
   }
@@ -33,9 +33,9 @@ const userStore = () => {
   }
 
   const getUser = (userId) => {
-    return callApi('api/users/:'+userId, 'GET')
+    return callApi('api/users/'+userId, 'GET')
   }
-  return {getUsers, addUser}
+  return {getUsers, addUser, getUser}
 }
 
-export {userStore}
+export {userApi}
