@@ -5,32 +5,32 @@ import TodoList from "./todoList.js";
 export default function TodoApp() {
   const todoList = new TodoList(this);
   new TodoInput(this);
-  const todoItems = [];
-  let idGenerator = 0;
+  this.todoItems = [];
+  this.idGenerator = 0;
 
   this.render = () => {
-    todoList.render(todoItems);
+    todoList.render(this.todoItems);
   }
 
   this.add = content => {
-    const item = new TodoItem(idGenerator++, content);
-    todoItems.push(item);
+    const item = new TodoItem(this.idGenerator++, content);
+    this.todoItems.push(item);
     this.render();
   }
 
   this.complete = id => {
-    todoItems.find(item => item.matchId(id)).complete();
+    this.todoItems.find(item => item.matchId(id)).complete();
     this.render();
   }
 
   this.delete = id => {
-    const index = todoItems.findIndex(item => item.matchId(id));
-    todoItems.splice(index, 1);
+    const index = this.todoItems.findIndex(item => item.matchId(id));
+    this.todoItems.splice(index, 1);
     this.render();
   }
 
   this.deleteAll = () => {
-    todoItems.splice(0, todoItems.length);
+    this.todoItems.splice(0, this.todoItems.length);
     this.render();
   }
 
@@ -40,16 +40,18 @@ export default function TodoApp() {
   }
 
   this.edit = (id, content) => {
-    todoItems.find(item => item.matchId(id)).changeContent(content);
+    this.todoItems.find(item => item.matchId(id)).changeContent(content);
     this.render();
   }
 
   this.changePriority = (id, priority) => {
-    todoItems.find(item => item.matchId(id)).changePriority(priority);
+    this.todoItems.find(item => item.matchId(id)).changePriority(priority);
     this.render();
   }
 
-  this.init = () => {
+  this.init = todoItems => {
+    this.todoItems = todoItems;
+    this.idGenerator = todoItems.length === 0 ? 0 : todoItems[todoItems.length - 1].getId() + 1;
     this.render();
   }
 }

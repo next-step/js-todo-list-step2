@@ -23,7 +23,7 @@ export const UserTemplate = user => {
 </user-list-item>`;
 }
 
-export const isUserTarget = event => event.target.closest("user-list-item") !== null;
+export const isUserTarget = event => event.target.closest("user-list-item") !== null && event.target.getAttribute("data-action") === "selectUser";
 
 export const extractId = event =>
   parseInt(event.target.closest("button").getAttribute("data-id"));

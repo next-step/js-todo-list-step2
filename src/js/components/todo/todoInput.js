@@ -12,6 +12,7 @@ export default function TodoInput(app) {
       }
       app.add(getValue(event));
       event.target.value = "";
+      event.stopPropagation();
     }
   } 
 

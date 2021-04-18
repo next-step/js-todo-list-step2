@@ -1,9 +1,8 @@
 import { extractId, isUserTarget, UserTemplate } from "./user.js";
 import UserEditor from "./UserEditor.js";
 
-export default function UserList(app) {
+export default function UserList(app, userEditor) {
   const userList = document.querySelector("#user-list");
-  const userEditor = new UserEditor(app);
 
   this.render = users => {
     const template = users.map(user => UserTemplate(user));
