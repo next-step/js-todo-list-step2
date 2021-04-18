@@ -69,24 +69,6 @@ class TodoList {
     });
   }
 
-  async init() {
-    await this.render();
-    // todo: first user todo render
-    const userCreateButton = document.querySelector('.user-create-button');
-    const userButtons = USERLIST.querySelectorAll('button');
-    const firstUserButton = userButtons[0];
-
-    firstUserButton.classList.add('active');
-    userCreateButton.addEventListener(
-      'click',
-      this.handleCreateUser.bind(this)
-    );
-    userButtons.forEach(userButton => {
-      if (!userButton.hasAttribute('data-action'))
-        userButton.addEventListener('click', this.handleClickUser.bind(this));
-    });
-  }
-
   async createUser(userName) {
     const user = { name: userName };
     const response = await fetch(`${BASE_URL}${USER_PATH}`, {
@@ -96,10 +78,48 @@ class TodoList {
     });
   }
 
+  async deleteUser(userId) {
+    const response = await fetch(`${BASE_URL}${USER_PATH}${userId}`, {
+      method: 'DELETE'
+    });
+  }
+
   async handleCreateUser() {
     const userName = prompt('추가하고 싶은 이름을 입력해주세요.');
     await this.createUser(userName);
     this.render();
+  }
+
+  async handleDeleteUser() {
+    const userButton = USERLIST.querySelector('button.active');
+    const userId = userButton.getAttribute('data-id');
+    await this.deleteUser(userId);
+    this.render();
+  }
+
+  async addEvents() {
+    const userCreateButton = $('.user-create-button');
+    const userDeleteButton = $('.user-delete-button');
+    const userButtons = USERLIST.querySelectorAll('button');
+    const firstUserButton = userButtons[0];
+
+    firstUserButton.classList.add('active');
+    for (let index = 0; index < userButtons.length - 2; index++) {
+      if (userButtons[index].hasAttribute('data-active')) {
+        userButtons[index].addEventListener(
+          'click',
+          await this.handleClickUser.bind(this)
+        );
+      }
+    }
+    userCreateButton.addEventListener(
+      'click',
+      await this.handleCreateUser.bind(this)
+    );
+    userDeleteButton.addEventListener(
+      'click',
+      await this.handleDeleteUser.bind(this)
+    );
   }
 
   appendUserInfoButton(user) {
@@ -140,6 +160,11 @@ class TodoList {
   async render() {
     this.userInfos = await this.returnUsers();
     this.renderUserButtons();
+    await this.addEvents();
+  }
+
+  async init() {
+    await this.render();
   }
 }
 
