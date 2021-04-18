@@ -18,7 +18,10 @@ userCreateButton.addEventListener('click', onUserCreateHandler)
 export const user = () => {
   const addUser = (userName) => {
     console.log('add user')
-    userStore().addUser(userName);
+    let rst = userStore().addUser(userName);
+    rst.then(result=>{
+      console.log('rst=',result.name)
+    })
   }
   return { addUser }
 }
