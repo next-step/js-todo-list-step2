@@ -1,30 +1,14 @@
-import { checkEmpty, checkNull } from "./stringUtils.js";
+import { checkEmpty } from "./stringUtils.js";
 
-export function checkClassName(event, name) {
-  return event.target.className === name;
-}
+export const checkClassName = (event, name) => event.target.className === name;
+export const checkLocalName = (event, name) => event.target.localName === name;
+export const checkKey = (event, key) => event.key === key;
+export const isEmptyValue = event => checkEmpty(getValue(event));
 
-export function checkLocalName(event, name) {
-  return event.target.localName === name;
-}
+export const getClassName = event => event.target.className;
+export const getValue = event => event.target.value;
+export const getClassLiId = event => event.target.closest("li").getAttribute("data-id");
+export const getButtonId = event => event.target.closest("button").getAttribute("data-id");
 
-export function checkKey(event, key) {
-  return event.key === key;
-}
+export const isUserTarget = event => event.target.closest("user-list-item") !== null && event.target.getAttribute("data-action") === "selectUser";
 
-export function isEmptyValue(event) {
-  const value = getValue(event);
-  return checkEmpty(value);
-}
-
-export function getClassName(event) {
-  return event.target.className;
-}
-
-export function getValue(event) {
-  return event.target.value;
-}
-
-export function getClassLiId(event) {
-  return event.target.closest("li").getAttribute("data-id");
-}

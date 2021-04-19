@@ -3,5 +3,6 @@ export const ILLEGAL_MESSAGE = {
 }
 
 export const ASK_MESSAGE = {
-  ADD_NAME: "추가하고 싶은 이름을 입력해주세요."
+  ADD_NAME: "추가하고 싶은 이름을 입력해주세요.",
+  DELETE_NAME: name => `${name}을 삭제하시겠습니까?`
 }

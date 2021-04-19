@@ -1,5 +1,5 @@
-import { extractId, isUserTarget, UserTemplate } from "./user.js";
-import UserEditor from "./UserEditor.js";
+import { getButtonId, isUserTarget } from "../../utils/eventUtils.js";
+import { UserTemplate } from "./user.js";
 
 export default function UserList(app, userEditor) {
   const userList = document.querySelector("#user-list");
@@ -12,10 +12,9 @@ export default function UserList(app, userEditor) {
 
   const onClickHandler = event => {
     if (isUserTarget(event)) {
-      app.active(extractId(event));
+      app.active(getButtonId(event));
     }
   }
-
 
   userList.addEventListener("click", onClickHandler);
 }

@@ -1,5 +1,5 @@
 import { ASK_MESSAGE, ILLEGAL_MESSAGE } from "../../utils/Message.js";
-import { checkEmpty } from "../../utils/stringUtils.js";
+import { checkEmpty, checkNull } from "../../utils/stringUtils.js";
 
 export default function UserEditor(app) {
   let selectUserName;
@@ -22,10 +22,8 @@ export default function UserEditor(app) {
   }
 
   const onUserDeleteHandler = event => {
-    if(!checkNull(selectUserName) && confirm(`${selectUserName}을 삭제하시겠습니까?`)) {
+    if(!checkNull(selectUserName) && confirm(ASK_MESSAGE['DELETE_NAME'](selectUserName))) {
       app.delete();
     }
   }
-
-
 }

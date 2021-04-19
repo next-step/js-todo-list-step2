@@ -70,7 +70,6 @@ function POST({apiUri, parameter = '', data = {}, method = 'POST'}) {
   });
 }
 
-
 const postOption = {
   method: 'POST',
   headers: {

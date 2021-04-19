@@ -11,6 +11,7 @@ export default function TodoList(app) {
     const hash = document.location.hash;
     const checkFilter = checkHash[hash];
     items = items.filter(checkFilter);
+
     const template = items.map(item => todoTemplate(item));
     todoList.innerHTML = template.join("\n");
     todoCount.render(items);
@@ -65,3 +66,4 @@ export default function TodoList(app) {
   todoList.addEventListener("keydown", onKeyHandler);
   todoList.addEventListener("change", onChangeHandler);
 }
+

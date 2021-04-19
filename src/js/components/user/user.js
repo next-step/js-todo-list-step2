@@ -23,10 +23,4 @@ export const UserTemplate = user => {
 </user-list-item>`;
 }
 
-export const isUserTarget = event => event.target.closest("user-list-item") !== null && event.target.getAttribute("data-action") === "selectUser";
-
-export const extractId = event =>
-  event.target.closest("button").getAttribute("data-id");
-
-
 export const parseUser = user => new User(user._id, user.name, user.todoList);
