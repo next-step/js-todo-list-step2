@@ -1,16 +1,24 @@
 import axios from "axios";
 import { API } from "@constants/url";
 
-const getUsers = () => axios(API.GET_USERS);
-const getUser = (userId) => axios(API.GET_USER(userId));
-const createUser = (name) => axios.post(API.CREATE_USER, { name });
-const deleteUser = (userId) => axios.delete(API.DELETE_USER(userId));
-const addTodoItem = ({ userId, contents }) => axios.post(API.ADD_TODO_ITEM(userId), { contents });
-const toggleTodoItem = ({ userId, todoId }) => axios.put(API.TOGGLE_TODO_ITEM({ userId, todoId }));
-const deleteTodoItem = ({ userId, todoId }) => axios.delete(API.DELETE_TODO_ITEM({ userId, todoId }));
-const allDeleteTodoItem = ({ userId }) => axios.delete(API.ALL_DELETE_TODO_ITEM({ userId }));
-const modifyTodoItem = ({ userId, todoId, contents }) => axios.put(API.MODIFY_TODO_ITEM({ userId, todoId }), { contents });
-const priorityTodoItem = ({ userId, todoId, priority }) => axios.put(API.PRIORITY_TODO_ITEM({ userId, todoId }), { priority });
+const request = async (url, method = 'get', params = {}) => {
+    try {
+        return await axios[method](url, params);
+    } catch (e) {
+        alert(e);
+    }
+};
+
+const getUsers = () => request(API.GET_USERS);
+const getUser = (userId) => request(API.GET_USER(userId));
+const createUser = (name) => request(API.CREATE_USER, 'post', { name });
+const deleteUser = (userId) => request(API.DELETE_USER(userId), 'delete');
+const addTodoItem = ({ userId, contents }) => request(API.ADD_TODO_ITEM(userId), 'post', { contents });
+const toggleTodoItem = ({ userId, todoId }) => request(API.TOGGLE_TODO_ITEM({ userId, todoId }), 'put');
+const deleteTodoItem = ({ userId, todoId }) => request(API.DELETE_TODO_ITEM({ userId, todoId }), 'delete');
+const allDeleteTodoItem = ({ userId }) => request(API.ALL_DELETE_TODO_ITEM({ userId }), 'delete');
+const modifyTodoItem = ({ userId, todoId, contents }) => request(API.MODIFY_TODO_ITEM({ userId, todoId }), 'put', { contents });
+const priorityTodoItem = ({ userId, todoId, priority }) => request(API.PRIORITY_TODO_ITEM({ userId, todoId }), 'put', { priority });
 
 export {
     getUsers,
