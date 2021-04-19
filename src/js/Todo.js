@@ -1,3 +1,5 @@
+import { getUserList, pushData } from "./List.js";
+
 const TODOITEMS = "todoItems";
 const PENDING = "pending";
 const COMPLETED = "completed";
@@ -10,7 +12,7 @@ const showAllBtn = document.querySelector(".all");
 const completedBtn = document.querySelector(".completed");
 const pendingBtn = document.querySelector(".active");
 
-export let todoItemList = [];
+let todoItemList = [];
 
 const todoItemTemplate = (id, inputText, completed) =>
 	`<li id=${id} class=${completed === COMPLETED ? "completed" : "pending"}>
@@ -54,6 +56,7 @@ export function renderTodoItem(todoItems) {
 	todoList.innerHTML = mergedTemplate.join("");
 
 	itemEventTrigger();
+	todoItemList = getUserList();
 }
 
 function updatedTodoItems(_id, contents, isCompleted) {
@@ -147,10 +150,10 @@ function enterItem(event) {
 // 상태별 보기 버튼 설정
 function showProgress(event) {
 	const completedList = todoItemList.filter(
-		(item) => item.completed === COMPLETED
+		(item) => item.isCompleted === COMPLETED
 	);
 	const pendingList = todoItemList.filter(
-		(item) => item.completed === PENDING
+		(item) => item.isCompleted === PENDING
 	);
 	if (event.target === showAllBtn) {
 		renderTodoItem(todoItemList);
@@ -165,7 +168,7 @@ function showProgress(event) {
 }
 
 // localStorage
-function saveData() {
+export function saveData() {
 	localStorage.setItem(TODOITEMS, JSON.stringify(todoItemList));
 }
 
@@ -173,9 +176,8 @@ function loadData() {
 	const loadedItems = localStorage.getItem(TODOITEMS);
 	if (loadedItems !== null) {
 		const parsedItems = JSON.parse(loadedItems);
-		parsedItems.map((item) => {
-			addItem(item._id, item.contents, item.isCompleted);
-		});
+		parsedItems.map((item) => pushData(item));
+		renderTodoItem(parsedItems);
 	}
 }
 

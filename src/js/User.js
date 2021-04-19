@@ -1,4 +1,5 @@
-import { renderTodoItem } from "./Todo.js";
+import { getUserList, newTodoList, pushData } from "./List.js";
+import { renderTodoItem, saveData } from "./Todo.js";
 
 const BASEURL = "https://js-todo-list-9ca3a.df.r.appspot.com";
 
@@ -23,7 +24,26 @@ const renderUserBtn = (newUser) => {
 	userBtnEvent();
 };
 
-const userBtnClicked = async (event) => {
+const renderUserTodo = async (userId) => {
+	const selectedUserTodos = await fetchUserTodos(userId);
+	newTodoList();
+	if (selectedUserTodos.length === 0) {
+		renderTodoItem(getUserList());
+	} else {
+		selectedUserTodos.map((todo) => {
+			const todoItem = {
+				_id: todo._id,
+				contents: todo.contents,
+				isCompleted: todo.isCompleted,
+			};
+			pushData(todoItem);
+			renderTodoItem(getUserList());
+		});
+	}
+	saveData();
+};
+
+const userBtnClicked = (event) => {
 	const clickedBtn = event.target;
 	const userBtns = userList.children;
 	const userBtnsAry = Array.prototype.slice.call(userBtns, 0, -2);
@@ -36,20 +56,7 @@ const userBtnClicked = async (event) => {
 		else if (userBtn.dataset.id === clickedBtn.dataset.id)
 			userBtn.classList.add("active");
 	});
-	const selectedUserTodos = await fetchUserTodos(clickedBtn.dataset.id);
-	let userTodoList = [];
-	if (selectedUserTodos.length === 0) {
-		renderTodoItem(userTodoList);
-	} else {
-		selectedUserTodos.map((todo) => {
-			userTodoList.push({
-				_id: todo._id,
-				contents: todo.contents,
-				isCompleted: todo.isCompleted,
-			});
-			renderTodoItem(userTodoList);
-		});
-	}
+	renderUserTodo(clickedBtn.dataset.id);
 };
 
 const fetchUserTodos = (id) => {
@@ -88,13 +95,29 @@ const showUserList = async () => {
 	const fetchedUserList = await fetchUserList();
 	users.push(...fetchedUserList);
 	renderUserList();
+	const userBtn = userList.children[0];
+	userBtn.classList.add("active");
 };
 
 const renderUserList = () => {
 	users.map((user) => renderUserBtn(user));
 };
 
+const onUserDeleteHandler = async (event) => {
+	const clickedUser = document.querySelector(".active");
+	await fetchUserDelete(clickedUser.dataset.id);
+	userList.removeChild(clickedUser);
+};
+
+const fetchUserDelete = (userId) => {
+	return fetch(`${BASEURL}/api/users/${userId}`, {
+		method: "DELETE",
+	}).then((res) => res.json());
+};
 const userCreateButton = document.querySelector(".user-create-button");
 userCreateButton.addEventListener("click", onUserCreateHandler);
 
-export { showUserList, onUserCreateHandler };
+const userDeleteButton = document.querySelector(".user-delete-button");
+userDeleteButton.addEventListener("click", onUserDeleteHandler);
+
+export { showUserList };
