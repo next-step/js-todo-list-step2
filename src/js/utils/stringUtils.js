@@ -4,3 +4,7 @@ export function checkNull(str) {
   }
   return false;
 }
+
+export function checkEmpty(str) {
+  return checkNull(str) || str.length < 2;
+}

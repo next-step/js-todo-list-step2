@@ -1,4 +1,5 @@
-import { checkNull } from "../../utils/stringUtils.js";
+import { ASK_MESSAGE, ILLEGAL_MESSAGE } from "../../utils/Message.js";
+import { checkEmpty } from "../../utils/stringUtils.js";
 
 export default function UserEditor(app) {
   let selectUserName;
@@ -13,7 +14,10 @@ export default function UserEditor(app) {
   this.changeUser = name => selectUserName = name;
 
   const onUserCreateHandler = event => {
-    const userName = prompt("추가하고 싶은 이름을 입력해주세요.");
+    const userName = prompt(ASK_MESSAGE['ADD_NAME']);
+    if (checkEmpty(userName)) {
+      alert(ILLEGAL_MESSAGE['EMPTY_VALUE']);
+    }
     app.add(userName);
   }
 

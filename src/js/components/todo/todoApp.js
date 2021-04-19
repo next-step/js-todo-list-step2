@@ -1,4 +1,4 @@
-import { ADD_USER_TODOITEM, DELETE_USER_TODOITEM, DELETE_USER_TODOITEMS, GET_USER_TODOITEMS, UPDATE_USER_TODOITEM_COMPLETE } from "../../setting/api.js";
+import { ADD_USER_TODOITEM, DELETE_USER_TODOITEM, DELETE_USER_TODOITEMS, GET_USER_TODOITEMS, UPDATE_USER_TODOITEM, UPDATE_USER_TODOITEM_COMPLETE } from "../../setting/api.js";
 import { checkNull } from "../../utils/stringUtils.js";
 import TodoInput from "./todoInput.js";
 import { parseItem, TodoItem } from "./todoItem.js";
@@ -37,13 +37,13 @@ export default function TodoApp() {
     this.render();
   }
 
-  this.editing = id => {
-    this.render();
+  this.editing = async id => {
+    await this.render();
     todoList.editing(id);
   }
 
-  this.edit = (id, content) => {
-    todoItems.find(item => item.matchId(id)).changeContent(content);
+  this.edit = async (id, content) => {
+    await UPDATE_USER_TODOITEM(activeUser.getId(), id, content);
     this.render();
   }
 

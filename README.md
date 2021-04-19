@@ -34,7 +34,7 @@
 - [X] 4. todoItem 불러오기
 - [X] 5. todoItem complete하기
 - [X] 6. todoItem 삭제하기
-- [ ] 7. todoItem contents 내용 수정하기
+- [X] 7. todoItem contents 내용 수정하기
 
 <br/>
 
@@ -48,8 +48,8 @@
 
 ## 🕵️‍♂️ 제약사항
 
-- [ ] 1. User의 이름은 최소 2글자 이상이어야 한다.
-- [ ] 2. TodoItem Contents는 최소 2글자 이상이어야 한다.
+- [X] 1. User의 이름은 최소 2글자 이상이어야 한다.
+- [X] 2. TodoItem Contents는 최소 2글자 이상이어야 한다.
 
 <br/>
 

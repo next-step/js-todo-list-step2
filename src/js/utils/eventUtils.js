@@ -1,4 +1,4 @@
-import { checkNull } from "./stringUtils.js";
+import { checkEmpty, checkNull } from "./stringUtils.js";
 
 export function checkClassName(event, name) {
   return event.target.className === name;
@@ -14,7 +14,7 @@ export function checkKey(event, key) {
 
 export function isEmptyValue(event) {
   const value = getValue(event);
-  return checkNull(value);
+  return checkEmpty(value);
 }
 
 export function getClassName(event) {
