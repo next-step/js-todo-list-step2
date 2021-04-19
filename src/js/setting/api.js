@@ -24,6 +24,14 @@ export function UPDATE_USER_TODOITEM_COMPLETE(userId, itemId) {
   return POST({apiUri: 'UPDATE_USER_TODOITEM_COMPLETE', parameter:{userId, itemId}, method:'PUT'});
 }
 
+export function DELETE_USER_TODOITEMS(userId) {
+  return POST({apiUri:'DELETE_USER_TODOITEMS', parameter: userId, method: "DELETE"});
+}
+
+export function DELETE_USER_TODOITEM(userId, itemId) {
+  return POST({apiUri:'DELETE_USER_TODOITEM', parameter: {userId, itemId}, method:"DELETE"});
+} 
+
 function GET({apiUri, parameter = ''}) {
   return fetch(baseUrl + uri[apiUri](parameter))
   .then(res => {

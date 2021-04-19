@@ -1,4 +1,4 @@
-import { ADD_USER_TODOITEM, GET_USER_TODOITEMS, UPDATE_USER_TODOITEM_COMPLETE } from "../../setting/api.js";
+import { ADD_USER_TODOITEM, DELETE_USER_TODOITEM, DELETE_USER_TODOITEMS, GET_USER_TODOITEMS, UPDATE_USER_TODOITEM_COMPLETE } from "../../setting/api.js";
 import { checkNull } from "../../utils/stringUtils.js";
 import TodoInput from "./todoInput.js";
 import { parseItem, TodoItem } from "./todoItem.js";
@@ -27,14 +27,13 @@ export default function TodoApp() {
     this.render();
   }
 
-  this.delete = id => {
-    const index = todoItems.findIndex(item => item.matchId(id));
-    todoItems.splice(index, 1);
+  this.delete = async id => {
+    await DELETE_USER_TODOITEM(activeUser.getId(), id);
     this.render();
   }
 
-  this.deleteAll = () => {
-    todoItems.splice(0, todoItems.length);
+  this.deleteAll = async () => {
+    await DELETE_USER_TODOITEMS(activeUser.getId());
     this.render();
   }
 
