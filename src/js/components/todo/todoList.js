@@ -9,7 +9,7 @@ export default function TodoList(app) {
 
   this.render = items => {
     const hash = document.location.hash;
-    const checkFilter = checkHash(hash);
+    const checkFilter = checkHash[hash];
     items = items.filter(checkFilter);
     const template = items.map(item => todoTemplate(item));
     todoList.innerHTML = template.join("\n");
@@ -31,14 +31,11 @@ export default function TodoList(app) {
     }
   }
 
-  const checkHash = hash => {
-    if (hash === "#active") {
-      return item => item.isCompleted() !== true;
-    }
-    if (hash === "#completed") {
-      return item => item.isCompleted() === true;
-    }
-    return () => true;
+  const checkHash = {
+    "#active": item => item.isCompleted() !== true,
+    "#completed": item => item.isCompleted() === true,
+    "": () => true,
+    "#": () => true
   }
 
   const onDbClickHandler = event => {

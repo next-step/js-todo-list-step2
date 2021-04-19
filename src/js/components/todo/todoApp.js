@@ -1,4 +1,4 @@
-import { ADD_USER_TODOITEM, DELETE_USER_TODOITEM, DELETE_USER_TODOITEMS, GET_USER_TODOITEMS, UPDATE_USER_TODOITEM, UPDATE_USER_TODOITEM_COMPLETE } from "../../setting/api.js";
+import { ADD_USER_TODOITEM, DELETE_USER_TODOITEM, DELETE_USER_TODOITEMS, GET_USER_TODOITEMS, UPDATE_USER_TODOITEM, UPDATE_USER_TODOITEM_COMPLETE, UPDATE_USER_TODOITEM_PRIORTY } from "../../setting/api.js";
 import { checkNull } from "../../utils/stringUtils.js";
 import TodoInput from "./todoInput.js";
 import { parseItem, TodoItem } from "./todoItem.js";
@@ -47,8 +47,8 @@ export default function TodoApp() {
     this.render();
   }
 
-  this.changePriority = (id, priority) => {
-    todoItems.find(item => item.matchId(id)).changePriority(priority);
+  this.changePriority = async (id, priority) => {
+    await UPDATE_USER_TODOITEM_PRIORTY(activeUser.getId(), id, priority);
     this.render();
   }
 

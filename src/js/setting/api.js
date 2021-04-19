@@ -20,10 +20,6 @@ export function ADD_USER_TODOITEM(id, contents) {
   return POST({apiUri: 'ADD_USER_TODOITEM', parameter:id, data: {contents}});
 }
 
-export function UPDATE_USER_TODOITEM_COMPLETE(userId, itemId) {
-  return POST({apiUri: 'UPDATE_USER_TODOITEM_COMPLETE', parameter:{userId, itemId}, method:'PUT'});
-}
-
 export function DELETE_USER_TODOITEMS(userId) {
   return POST({apiUri:'DELETE_USER_TODOITEMS', parameter: userId, method: "DELETE"});
 }
@@ -34,6 +30,14 @@ export function DELETE_USER_TODOITEM(userId, itemId) {
 
 export function UPDATE_USER_TODOITEM(userId, itemId, contents) {
   return POST({apiUri: 'UPDATE_USER_TODOITEM', parameter: {userId, itemId}, data: {contents}, method:"PUT"});
+}
+
+export function UPDATE_USER_TODOITEM_PRIORTY(userId, itemId, priority) {
+  return POST({apiUri: 'UPDATE_USER_TODOITEM_PRIORTY', parameter: {userId, itemId}, data: {priority}, method: "PUT"});
+}
+
+export function UPDATE_USER_TODOITEM_COMPLETE(userId, itemId) {
+  return POST({apiUri: 'UPDATE_USER_TODOITEM_COMPLETE', parameter:{userId, itemId}, method:'PUT'});
 }
 
 function GET({apiUri, parameter = ''}) {
