@@ -1,4 +1,4 @@
-export function User(inputId, inputName, inputTodoList) {
+export function User(inputId, inputName, inputTodoList=[]) {
   const _id = inputId;
   const name = inputName;
   const todoList = inputTodoList ?? [];
@@ -27,3 +27,6 @@ export const isUserTarget = event => event.target.closest("user-list-item") !== 
 
 export const extractId = event =>
   parseInt(event.target.closest("button").getAttribute("data-id"));
+
+
+export const parseUser = user => new User(user._id, user.name, user.todoList);
