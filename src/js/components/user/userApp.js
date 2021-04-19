@@ -6,7 +6,7 @@ import UserTitle from "./userTitle.js";
 
 export default function UserApp(todoApp) {
   const userEditor = new UserEditor(this);
-  const userList = new UserList(this, userEditor);
+  const userList = new UserList(this);
   const userTitle = new UserTitle();
   let users = [];
   let activeUser;
@@ -25,20 +25,25 @@ export default function UserApp(todoApp) {
   this.add = async name => {
     const user = await ADD_USER(name);
     activeUser = parseUser(user);
+    changeActive();
     this.render();
   }
 
   this.delete = async () => {
     await DELETE_USER(activeUser.getId());
     activeUser = users[0];
+    changeActive();
     this.init();
   }
 
   this.active = id => {
     activeUser = users.find(user => user.matchId(id));
-    const name = activeUser.getName();
-
+    changeActive();
     this.init();
+  }
+
+  const changeActive = () => {
+    const name = activeUser.getName();
     userTitle.render(name);
     userEditor.changeUser(name);
   }
@@ -47,4 +52,5 @@ export default function UserApp(todoApp) {
     await this.render();
     todoApp.init(activeUser);
   }
+
 }

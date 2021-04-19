@@ -2,28 +2,27 @@ import { ASK_MESSAGE, ILLEGAL_MESSAGE } from "../../utils/Message.js";
 import { checkEmpty, checkNull } from "../../utils/stringUtils.js";
 
 export default function UserEditor(app) {
+  const createButton = document.querySelector('[data-action="createUser"]');
+  const deleteButton = document.querySelector('[data-action="deleteUser"]');
   let selectUserName;
-
-  this.render = div => {
-    this.createButton = div.querySelector('[data-action="createUser"]');
-    this.deleteButton = div.querySelector('[data-action="deleteUser"]');
-    this.createButton.addEventListener("click", onUserCreateHandler);
-    this.deleteButton.addEventListener("click", onUserDeleteHandler);
-  }
 
   this.changeUser = name => selectUserName = name;
 
-  const onUserCreateHandler = event => {
+  const onUserCreateHandler = () => {
     const userName = prompt(ASK_MESSAGE['ADD_NAME']);
     if (checkEmpty(userName)) {
       alert(ILLEGAL_MESSAGE['EMPTY_VALUE']);
+      return;
     }
     app.add(userName);
   }
 
-  const onUserDeleteHandler = event => {
+  const onUserDeleteHandler = () => {
     if(!checkNull(selectUserName) && confirm(ASK_MESSAGE['DELETE_NAME'](selectUserName))) {
       app.delete();
     }
   }
+
+  createButton.addEventListener("click", onUserCreateHandler);
+  deleteButton.addEventListener("click", onUserDeleteHandler);
 }
