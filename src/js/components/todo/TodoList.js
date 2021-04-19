@@ -1,4 +1,4 @@
-import { todoItem } from './todoItem.js';
+import { todoItem, loading } from './todoItem.js';
 export default class TodoList {
   constructor({ todoListUl, todoData, onCheckItem, onEditItem, onDeleteItem }) {
     this.todoListUl = document.getElementById('todo-list');
@@ -43,11 +43,19 @@ export default class TodoList {
       if (e.keyCode === 13) {
         const title = e.target.value.trim();
         const parentId = e.target.closest('li').id;
+        if (title.length < 2) {
+          alert('TodoItem의 콘텐츠는 최소 2글자 이상이어야 합니다.');
+          return;
+        }
         this.handleEditItem(parentId, title);
       } else if (e.keyCode === 27) {
         parentLi.classList.remove('editing');
       }
     };
+  }
+
+  isLoading() {
+    this.todoListUl.innerHTML = loading();
   }
 
   render() {

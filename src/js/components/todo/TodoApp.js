@@ -1,19 +1,20 @@
+import { todoApi } from '../../api/api.js';
 import TodoInput from './TodoInput.js';
 import TodoList from './TodoList.js';
 import { TodoFilter } from './TodoFilter.js';
 
 export default class TodoApp {
-  constructor({ todoData }) {
+  constructor({ userId }) {
     this.todoCount = document.querySelector('.todo-count strong');
     this.todoFilterButton = document.querySelectorAll('.filters li a');
-    this.todoData = todoData;
+    this.userId = userId;
+    this.todoData = [];
 
     this.init();
   }
 
   init() {
     this.todoInput = new TodoInput({
-      todoData: this.todoData,
       onCreateItem: this.handleCreateItem.bind(this),
     });
 
@@ -27,7 +28,21 @@ export default class TodoApp {
     this.todoFilter = new TodoFilter({
       onFilterItem: this.handleFilterItem.bind(this),
     });
+
+    this.getTodoData();
   }
+
+  setUserId(userId) {
+    this.userId = userId;
+    this.getTodoData();
+  }
+
+  getTodoData = async () => {
+    this.todoList.isLoading();
+    await todoApi.getItem(this.userId).then((data) => {
+      this.setState(data);
+    });
+  };
 
   setState(todoData) {
     this.todoData = todoData;
@@ -44,31 +59,25 @@ export default class TodoApp {
     this.render(this.todoData);
   }
 
-  handleCreateItem(contents) {
-    this.todoData.push({
-      _id: new Date().getTime(),
-      isCompleted: false,
-      contents,
-    });
-    this.setItem();
-  }
+  handleCreateItem = async (contents) => {
+    await todoApi.setItem(this.userId, contents);
+    this.getTodoData();
+  };
 
-  handleCheckItem(id) {
-    const item = this.todoData.find((data) => data._id === id);
-    item.isCompleted = !item.isCompleted;
-    this.setItem();
-  }
+  handleCheckItem = async (itemId) => {
+    await todoApi.toggleItem(this.userId, itemId);
+    this.getTodoData();
+  };
 
-  handleEditItem(id, title) {
-    const item = this.todoData.find((data) => data._id === id);
-    item.title = title;
-    this.setItem();
-  }
+  handleEditItem = async (itemId, contents) => {
+    await todoApi.putItem(this.userId, itemId, contents);
+    this.getTodoData();
+  };
 
-  handleDeleteItem(id) {
-    this.todoData = this.todoData.filter((data) => data._id != id);
-    this.setItem();
-  }
+  handleDeleteItem = async (itemId) => {
+    await todoApi.deleteItem(this.userId, itemId);
+    this.getTodoData();
+  };
 
   handleFilterItem(filter) {
     this.filter = filter;

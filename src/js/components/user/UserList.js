@@ -1,20 +1,20 @@
 export default class UserList {
-  constructor({ appData, onSelectUser, onCreateUser }) {
+  constructor({ appData, onSelectUser, onCreateUser, onDeleteUser }) {
     this.userListEl = document.querySelector('#user-list .users');
     this.userCreateButton = document.querySelector('.user-create-button');
+    this.userDeleteButton = document.querySelector('.user-delete-button');
     this.appData = appData;
     this.handleSeleteUser = onSelectUser;
     this.handleCreateUser = onCreateUser;
+    this.handleDeleteUser = onDeleteUser;
 
     this.render();
     this.init();
   }
 
   init() {
-    this.userListEl.addEventListener('click', (e) => {
-      const targetId = e.target.id;
-      this.handleSeleteUser(targetId);
-      this.render();
+    this.userListEl.addEventListener('click', ({ target }) => {
+      this.handleSeleteUser(target.id);
     });
 
     this.userCreateButton.addEventListener('click', () => {
@@ -25,12 +25,18 @@ export default class UserList {
       }
       this.handleCreateUser(userName);
     });
+
+    this.userDeleteButton.addEventListener('click', () => {
+      this.handleDeleteUser();
+    });
   }
 
   setState(appData) {
     this.appData = appData;
     this.render();
   }
+
+  handleActiveUser() {}
 
   render() {
     this.userListEl.innerHTML = this.appData
