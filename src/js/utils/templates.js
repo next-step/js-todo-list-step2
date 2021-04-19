@@ -54,10 +54,11 @@ export const userListTemplate = (userList, activeUserId) => {
   let result = '';
   userList &&
     userList.map((user) => {
+      const encodedName = encodeURIComponent(user.name);
       if (user._id === activeUserId) {
-        result += `<button class="ripple active" data-id=${user._id} data-name=${user.name}>${user.name}</button>`;
+        result += `<button class="ripple active" data-id=${user._id} data-name=${encodedName}>${user.name}</button>`;
       } else {
-        result += `<button class="ripple" data-id=${user._id} data-name=${user.name}>${user.name}</button>`;
+        result += `<button class="ripple" data-id=${user._id} data-name=${encodedName}>${user.name}</button>`;
       }
     });
   return result + userActionButtons;

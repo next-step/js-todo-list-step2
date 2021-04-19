@@ -30,7 +30,7 @@ class UserList extends Observer {
     const { id, name } = target.dataset;
     id &&
       id !== this.store.currentUserId &&
-      this.store.setCurrentUser(id, name);
+      this.store.setCurrentUser(id, decodeURIComponent(name));
   }
 
   async createUser() {
