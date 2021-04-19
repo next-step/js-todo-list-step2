@@ -45,6 +45,6 @@ export default function UserApp(todoApp) {
 
   this.init = () => {
     this.render();
-    todoApp.init(activeUser == null ? [] : activeUser.getTodoList());
+    todoApp.init(activeUser);
   }
 }

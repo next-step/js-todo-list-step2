@@ -1,3 +1,5 @@
+import { GET_USER_TODOITEMS } from "../../setting/api.js";
+import { checkNull } from "../../utils/stringUtils.js";
 import TodoInput from "./todoInput.js";
 import { parseItem, TodoItem } from "./todoItem.js";
 import TodoList from "./todoList.js";
@@ -49,7 +51,8 @@ export default function TodoApp() {
     this.render();
   }
 
-  this.init = todoItems => {
+  this.init = async user => {
+    const todoItems = checkNull(user) ? [] : await GET_USER_TODOITEMS(user.getId());
     this.todoItems = todoItems.map(item => parseItem(item));
     this.idGenerator = this.todoItems.length === 0 ? 0 : this.todoItems[todoItems.length - 1].getId() + 1;
     this.render();
