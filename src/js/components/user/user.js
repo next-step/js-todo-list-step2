@@ -7,7 +7,7 @@ export function User(inputId, inputName, inputTodoList=[]) {
   this.addItem = item => todoList.push(item);
   this.activate = () => active = true;
   this.inActivate = () => active = false;
-  this.matchId = id => _id === id;
+  this.matchId = id => _id == id;
 
   this.getName = () => name;
   this.getId = () => _id;
@@ -26,7 +26,7 @@ export const UserTemplate = user => {
 export const isUserTarget = event => event.target.closest("user-list-item") !== null && event.target.getAttribute("data-action") === "selectUser";
 
 export const extractId = event =>
-  parseInt(event.target.closest("button").getAttribute("data-id"));
+  event.target.closest("button").getAttribute("data-id");
 
 
 export const parseUser = user => new User(user._id, user.name, user.todoList);

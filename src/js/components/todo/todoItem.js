@@ -39,3 +39,5 @@ export const todoTemplate = item => {
         <input class="edit" value="${item.getContent()}">
       </li>`;
 }
+
+export const parseItem = item => new TodoItem(item._id, item.contents, item.priority, item.isCompleted);

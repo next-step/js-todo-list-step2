@@ -1,5 +1,5 @@
 import TodoInput from "./todoInput.js";
-import { TodoItem } from "./todoItem.js";
+import { parseItem, TodoItem } from "./todoItem.js";
 import TodoList from "./todoList.js";
 
 export default function TodoApp() {
@@ -50,8 +50,8 @@ export default function TodoApp() {
   }
 
   this.init = todoItems => {
-    this.todoItems = todoItems;
-    this.idGenerator = todoItems.length === 0 ? 0 : todoItems[todoItems.length - 1].getId() + 1;
+    this.todoItems = todoItems.map(item => parseItem(item));
+    this.idGenerator = this.todoItems.length === 0 ? 0 : this.todoItems[todoItems.length - 1].getId() + 1;
     this.render();
   }
 }
