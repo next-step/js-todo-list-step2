@@ -1,18 +1,18 @@
 import { BASEURL } from "./API.js";
-import {
-	getUserTodoList,
-	newTodoList,
-	pushData,
-	saveUserTodoList,
-} from "./List.js";
+import { getUserTodoList, newTodoList, pushData } from "./List.js";
 import { renderTodoItem } from "./Todo.js";
 
 const users = [];
 
+const userTitle = document.querySelector("#user-title");
 const userList = document.querySelector("#user-list");
 
+const userTitleTemplate = (userName) =>
+	`<span><strong>${userName}</strong>'s Todo List</span>`;
 const userBtnTemplate = (id, userName) =>
-	`<button class="ripple" data-id=${id}>${userName}</button>`;
+	`<button class="ripple" data-id=${id} data-contents=${userName}>${userName}</button>`;
+
+const loadingUser = () => {};
 
 const userBtnEvent = () => {
 	const userBtns = document.querySelectorAll(".ripple");
@@ -26,6 +26,12 @@ const renderUserBtn = (newUser) => {
 	const newUserTemplate = userBtnTemplate(newUser._id, newUser.name);
 	userList.insertAdjacentHTML("afterbegin", newUserTemplate);
 	userBtnEvent();
+};
+
+const getUserTitle = (user) => {
+	const title = userTitleTemplate(user.dataset.contents);
+	userTitle.dataset.username = user.dataset.contents;
+	userTitle.innerHTML = title;
 };
 
 const renderUserTodo = async (userId) => {
@@ -48,6 +54,7 @@ const renderUserTodo = async (userId) => {
 
 const userBtnClicked = (event) => {
 	const clickedBtn = event.target;
+	getUserTitle(clickedBtn);
 	const userBtns = userList.children;
 	const userBtnsAry = Array.prototype.slice.call(userBtns, 0, -2);
 	userBtnsAry.map((userBtn) => {
@@ -101,6 +108,7 @@ const showUserList = async () => {
 	const userBtn = userList.children[0];
 	userBtn.classList.add("active");
 	renderUserTodo(userBtn.dataset.id);
+	getUserTitle(userBtn);
 };
 
 const renderUserList = () => {

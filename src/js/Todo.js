@@ -86,7 +86,6 @@ async function setItemState(event) {
 		const todoItem = toggle.closest("li");
 		todoItem.className = isComplete(toggle) ? COMPLETED : PENDING;
 		const idx = todoItemList.findIndex((item) => item._id === todoItem.id);
-		console.log(getUserTodoList()[1].isCompleted);
 		todoItemList[idx].isCompleted = isComplete(toggle) ? true : false;
 		await fetchCompleteItem(user.dataset.id, todoItem.id);
 		// saveUserTodoList(todoItemList);
@@ -119,8 +118,9 @@ function editItem(event) {
 }
 
 // 수정 종료
-function finishEdit(event) {
+async function finishEdit(event) {
 	const todoItem = event.target.closest("li");
+	const user = document.querySelector(".active");
 	if (todoItem.classList.contains("editing")) {
 		const edit = event.target;
 		const label = todoItem.querySelector("label");
@@ -135,6 +135,11 @@ function finishEdit(event) {
 			todoItem.classList.remove("editing");
 			edit.setAttribute("value", editText);
 			label.textContent = editText;
+			await fetchEditItem(user.dataset.id, todoItem.id, editText);
+			const idx = todoItemList.findIndex(
+				(item) => item._id === todoItem.id
+			);
+			todoItemList[idx].contents = editText;
 		}
 	}
 }
@@ -214,4 +219,14 @@ const fetchCompleteItem = (userId, itemId) => {
 	return fetch(`${BASEURL}/api/users/${userId}/items/${itemId}/toggle`, {
 		method: "PUT",
 	}).then((res) => res.json());
+};
+
+const fetchEditItem = (userId, itemId, inputText) => {
+	return fetch(`${BASEURL}/api/users/${userId}/items/${itemId}`, {
+		method: "PUT",
+		headers: {
+			"Content-Type": "application/json",
+		},
+		body: JSON.stringify({ contents: `${inputText}` }),
+	});
 };
