@@ -1,6 +1,6 @@
 import { todoItem, loading } from './todoItem.js';
 export default class TodoList {
-  constructor({ todoListUl, todoData, onCheckItem, onEditItem, onDeleteItem }) {
+  constructor({ todoData, onCheckItem, onEditItem, onDeleteItem }) {
     this.todoListUl = document.getElementById('todo-list');
     this.todoData = todoData;
     this.handleCheckItem = onCheckItem;
@@ -17,41 +17,46 @@ export default class TodoList {
   }
 
   init() {
-    this.todoListUl.addEventListener('click', (e) => {
-      const target = e.target;
-      const parentId = e.target.closest('li').id;
-      if (target.classList.contains('toggle')) this.handleCheckItem(parentId);
-      if (target.classList.contains('destroy')) this.handleDeleteItem(parentId);
-    });
+    this.todoListUl.addEventListener('click', ({ target }) =>
+      this.todoClickHandler(target)
+    );
 
-    this.todoListUl.addEventListener('dblclick', (e) => {
-      const target = e.target;
-      if (!target.classList.contains('label')) return;
-      const parentLi = e.target.closest('li');
-      const editingEls = document.querySelectorAll('li.editing');
-
-      editingEls.forEach((li) => li.classList.remove('editing'));
-      parentLi.classList.add('editing');
-      this.handleEditInput(parentLi);
-    });
+    this.todoListUl.addEventListener('dblclick', ({ target }) =>
+      this.todoDblclickHandler(target)
+    );
   }
 
-  handleEditInput(parentLi) {
+  todoClickHandler(target) {
+    const parentId = target.closest('li').id;
+    if (target.classList.contains('toggle')) this.handleCheckItem(parentId);
+    if (target.classList.contains('destroy')) this.handleDeleteItem(parentId);
+  }
+
+  todoDblclickHandler(target) {
+    if (!target.classList.contains('label')) return;
+    const parentLi = target.closest('li');
+    const editingEls = document.querySelectorAll('li.editing');
+    editingEls.forEach((li) => li.classList.remove('editing'));
+    parentLi.classList.add('editing');
+
     const editInput = parentLi.querySelector('input.edit');
     editInput.focus();
-    editInput.onkeydown = (e) => {
-      if (e.keyCode === 13) {
-        const title = e.target.value.trim();
-        const parentId = e.target.closest('li').id;
-        if (title.length < 2) {
-          alert('TodoItem의 콘텐츠는 최소 2글자 이상이어야 합니다.');
-          return;
-        }
-        this.handleEditItem(parentId, title);
-      } else if (e.keyCode === 27) {
-        parentLi.classList.remove('editing');
+    editInput.onkeydown = ({ keyCode, target }) =>
+      this.editInputHandler({ keyCode, target }, parentLi);
+  }
+
+  editInputHandler({ keyCode, target }, parentLi) {
+    if (keyCode === 13) {
+      const title = target.value.trim();
+      const parentId = target.closest('li').id;
+      if (title.length < 2) {
+        alert('TodoItem의 콘텐츠는 최소 2글자 이상이어야 합니다.');
+        return;
       }
-    };
+      this.handleEditItem(parentId, title);
+    } else if (keyCode === 27) {
+      parentLi.classList.remove('editing');
+    }
   }
 
   isLoading() {

@@ -1,9 +1,16 @@
 export default class UserList {
-  constructor({ appData, onSelectUser, onCreateUser, onDeleteUser }) {
+  constructor({
+    appData,
+    selectedUserId,
+    onSelectUser,
+    onCreateUser,
+    onDeleteUser,
+  }) {
     this.userListEl = document.querySelector('#user-list .users');
     this.userCreateButton = document.querySelector('.user-create-button');
     this.userDeleteButton = document.querySelector('.user-delete-button');
     this.appData = appData;
+    this.selectedUserId = selectedUserId;
     this.handleSeleteUser = onSelectUser;
     this.handleCreateUser = onCreateUser;
     this.handleDeleteUser = onDeleteUser;
@@ -17,32 +24,36 @@ export default class UserList {
       this.handleSeleteUser(target.id);
     });
 
-    this.userCreateButton.addEventListener('click', () => {
-      const userName = prompt('추가하고 싶은 이름을 입력해주세요.');
-      if (userName.trim().length < 2) {
-        alert('User의 이름은 최소 2글자 이상이어야 합니다.');
-        return;
-      }
-      this.handleCreateUser(userName);
-    });
+    this.userCreateButton.addEventListener(
+      'click',
+      this.userCreateHandler.bind(this)
+    );
 
     this.userDeleteButton.addEventListener('click', () => {
-      this.handleDeleteUser();
+      this.handleDeleteUser(this.selectedUserId);
     });
   }
 
-  setState(appData) {
-    this.appData = appData;
-    this.render();
+  userCreateHandler() {
+    const userName = prompt('추가하고 싶은 이름을 입력해주세요.');
+    if (userName.trim().length < 2) {
+      alert('User의 이름은 최소 2글자 이상이어야 합니다.');
+      return;
+    }
+    this.handleCreateUser(userName);
   }
 
-  handleActiveUser() {}
+  setState(appData, userId) {
+    this.appData = appData;
+    this.selectedUserId = userId;
+    this.render();
+  }
 
   render() {
     this.userListEl.innerHTML = this.appData
       .map((data) => {
         return `<button id="${data._id}" class="ripple ${
-          data.isSelected ? 'active' : ''
+          data._id === this.selectedUserId ? 'active' : ''
         }">${data.name}</button>`;
       })
       .join('');

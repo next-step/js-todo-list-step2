@@ -12,10 +12,10 @@ export default class App {
   init() {
     userApi.getUser().then((data) => {
       this.appData = data;
-      this.appData[0].isSelected = true;
       this.selectedUserId = this.appData[0]._id;
       this.userList = new UserList({
         appData: this.appData,
+        selectedUserId: this.selectedUserId,
         onSelectUser: this.handleSelectUser.bind(this),
         onCreateUser: this.handleCreateUser.bind(this),
         onDeleteUser: this.handleDeleteUser.bind(this),
@@ -30,6 +30,7 @@ export default class App {
     await userApi.getUser().then((data) => {
       this.appData = data;
     });
+    this.selectedUserId = this.appData[0]._id;
     this.render();
   };
 
@@ -39,22 +40,17 @@ export default class App {
   };
 
   handleSelectUser = async (userId) => {
-    // const user = await api.getUser(id).then((data) => data);
-    this.appData.forEach((data) => (data.isSelected = false));
-    const user = this.appData.find((data) => data._id === userId);
-    user.isSelected = true;
     this.selectedUserId = userId;
-    this.todoApp.setUserId(userId);
     this.render();
   };
 
-  handleDeleteUser = async () => {
-    const targetId = this.appData.find((data) => data.isSelected)._id;
-    await userApi.deleteUser(targetId);
+  handleDeleteUser = async (userId) => {
+    await userApi.deleteUser(userId);
     this.handleGetAllUser();
   };
 
   render() {
-    this.userList.setState(this.appData);
+    this.userList.setState(this.appData, this.selectedUserId);
+    this.todoApp.setUserId(this.selectedUserId);
   }
 }
