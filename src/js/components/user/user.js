@@ -16,7 +16,7 @@ export function User(inputId, inputName, inputTodoList=[]) {
 }
 
 export const UserTemplate = user => {
-  return `<user-list-item key="${user.getId()}" data-_id="${user.getId()}" data-name="${user.getName()}" data-todolist="${user.getTodoList()}" data-active="${user.isActive()}">
+  return `<user-list-item key="${user.getId()}" data-_id="${user.getId()}" data-name="${user.getName()}" data-todolist data-active="${user.isActive()}">
   <button class="ripple  ${user.isActive() ? "active" : ""}" data-id="${user.getId()}" data-action="selectUser" selectuser="click">
     ${user.getName()}
   </button>

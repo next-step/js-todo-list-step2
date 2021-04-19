@@ -1,4 +1,4 @@
-import { ADD_USER, GET_USERS } from "../../setting/api.js";
+import { ADD_USER, DELETE_USER, GET_USERS } from "../../setting/api.js";
 import { User, parseUser } from "./user.js";
 import UserEditor from "./UserEditor.js";
 import UserList from "./UserList.js";
@@ -9,23 +9,27 @@ export default function UserApp(todoApp) {
   const userList = new UserList(this, userEditor);
   const userTitle = new UserTitle();
   let users = [];
-  let idGenerator = 0;
   let activeUser;
 
   this.render = async () => {
     const getUsers = await GET_USERS();
     users = getUsers.map(user => parseUser(user));
+
+    users.forEach(user => user.inActivate());
+    activeUser = activeUser ?? users[0];
+    users.find(user => user.matchId(activeUser.getId())).activate();
+
     userList.render(users);
   }
 
   this.add = async name => {
-    await ADD_USER(name);
+    const user = await ADD_USER(name);
+    activeUser = parseUser(user);
     this.render();
   }
 
-  this.delete = () => {
-    const index = users.indexOf(activeUser);
-    users.splice(index, 1);
+  this.delete = async () => {
+    await DELETE_USER(activeUser.getId());
     activeUser = users[0];
     this.init();
   }
@@ -33,9 +37,6 @@ export default function UserApp(todoApp) {
   this.active = id => {
     activeUser = users.find(user => user.matchId(id));
     const name = activeUser.getName();
-
-    users.forEach(user => user.inActivate());
-    users.find(user => user.matchId(id)).activate();
 
     this.init();
     userTitle.render(name);

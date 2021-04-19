@@ -9,7 +9,7 @@ export function ADD_USER(name) {
 }
 
 export function DELETE_USER(id) {
-  return POST('DELETE_USER', parameter=id, method='DELETE');
+  return POST({apiUri:'DELETE_USER', parameter:id, method:'DELETE'});
 }
 
 export function GET_USER_TODOITEMS(id) {
