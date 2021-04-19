@@ -1,3 +1,3 @@
-import Users from './Components/Users.js';
+import App from './App.js';
 
-new Users();
+new App();

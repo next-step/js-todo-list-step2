@@ -1,9 +1,7 @@
-import { postData } from '../helper/FetchApi.js';
-import { POST_USER_URL } from '../Config/API.js';
 import { isValidUserName } from '../helper/Validation.js';
 
-function Users() {
-  const onUserCreateHandler = () => {
+function UserList({ onCreate }) {
+  const createUser = () => {
     const userName = prompt(
       '추가하고 싶은 이름을 입력해주세요.\n(이름은 최소 2글자 이상이어야 합니다.)'
     );
@@ -14,13 +12,13 @@ function Users() {
       );
     }
 
-    return postData(POST_USER_URL, { name: userName }).then((data) =>
-      console.log(data)
-    );
+    return onCreate(userName);
   };
 
   const userCreateButton = document.querySelector('.user-create-button');
-  userCreateButton.addEventListener('click', onUserCreateHandler);
+  userCreateButton.addEventListener('click', createUser);
+
+  this.render = (items = []) => {};
 }
 
-export default Users;
+export default UserList;
