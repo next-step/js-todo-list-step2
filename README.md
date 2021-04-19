@@ -42,7 +42,7 @@
 
 - [X] 1. fetch api 사용하는 부분을 async await을 사용하여 리팩토링하기.
 - [X] 2. github issue에서 라벨을 붙이는 것처럼, 우선순위에 따라서 label를 추가하기.
-- [ ] 3. ES6 import & export를 이용해 자바스크립트 파일을 리팩토링하기.
+- [X] 3. ES6 import & export를 이용해 자바스크립트 파일을 리팩토링하기.
 
 <br/>
 
