@@ -1,4 +1,3 @@
-
 const option = {
   method: '',
   headers: {
@@ -38,4 +37,11 @@ const userApi = () => {
   return {getUsers, addUser, getUser}
 }
 
-export {userApi}
+const todoApi = () => {
+  const addTodo = (userId, contents) => {
+    return callApi('api/users/'+userId+'/items/', 'POST', {contents: contents})
+  }
+  return {addTodo}
+}
+
+export {userApi, todoApi}

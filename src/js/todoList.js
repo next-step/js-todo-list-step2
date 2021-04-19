@@ -4,12 +4,13 @@ let todoList;
 let totalCount = 0;
 
 const addEventListener = () => {
-  console.log($('.toggle'))
-  $('.todo-list').addEventListener('change', onChangeToggleHandler)
+  $('.todo-list').addEventListener('change', onChangeToggleHandler);
 }
 
 const onChangeToggleHandler = (e) => {
   console.log('onChangeToggleHandler')
+  if(e.target.className !== 'toggle') return
+  console.log(e)
   let li = e.target.closest('li')
   let id = li.getAttribute('id');
   todoList = todoList.map(todo => {
@@ -23,6 +24,7 @@ const drawTodoList = (todos) => {
   let tag = '';
   let count = 0;
   todoList = todos;
+  console.log(todoList)
   todoList.forEach(todo => {
     count++;
     tag += `<li id="${todo._id}" class="${todo.isCompleted? 'completed':''}">
@@ -54,9 +56,7 @@ const drawTodoList = (todos) => {
   addEventListener();
 }
 
-const setPriority = () => {
-  
-}
+
 export const todoListComponent = (todoList) => {
   drawTodoList(todoList)
   

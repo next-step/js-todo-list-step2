@@ -2,6 +2,7 @@ import {$,$$, utils} from './util.js'
 import {userApi} from './api.js'
 import {Message as msg} from './constant.js'
 import {todoListComponent} from './todoList.js'
+import {todoInputComponent} from './todoInput.js'
 
 let user, userList;
 
@@ -90,6 +91,9 @@ const getUserList = () => {
       userList = response;
       drawUserList(userList)
     })
+    .then(()=>{
+      todoInputComponent(user)
+    })
 }
 
 const getUser = (userId) => {
@@ -100,6 +104,9 @@ const getUser = (userId) => {
       user = response;
       console.log(user);
       setUserInfoAndTodoList(user);
+    })
+    .then(() => {
+      todoInputComponent(user)
     })
 }
 
