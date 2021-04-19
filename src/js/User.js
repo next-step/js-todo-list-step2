@@ -1,7 +1,11 @@
-import { getUserList, newTodoList, pushData } from "./List.js";
-import { renderTodoItem, saveData } from "./Todo.js";
-
-const BASEURL = "https://js-todo-list-9ca3a.df.r.appspot.com";
+import { BASEURL } from "./API.js";
+import {
+	getUserTodoList,
+	newTodoList,
+	pushData,
+	saveUserTodoList,
+} from "./List.js";
+import { renderTodoItem } from "./Todo.js";
 
 const users = [];
 
@@ -28,7 +32,7 @@ const renderUserTodo = async (userId) => {
 	const selectedUserTodos = await fetchUserTodos(userId);
 	newTodoList();
 	if (selectedUserTodos.length === 0) {
-		renderTodoItem(getUserList());
+		renderTodoItem(getUserTodoList());
 	} else {
 		selectedUserTodos.map((todo) => {
 			const todoItem = {
@@ -37,10 +41,9 @@ const renderUserTodo = async (userId) => {
 				isCompleted: todo.isCompleted,
 			};
 			pushData(todoItem);
-			renderTodoItem(getUserList());
+			renderTodoItem(getUserTodoList());
 		});
 	}
-	saveData();
 };
 
 const userBtnClicked = (event) => {
@@ -97,6 +100,7 @@ const showUserList = async () => {
 	renderUserList();
 	const userBtn = userList.children[0];
 	userBtn.classList.add("active");
+	renderUserTodo(userBtn.dataset.id);
 };
 
 const renderUserList = () => {

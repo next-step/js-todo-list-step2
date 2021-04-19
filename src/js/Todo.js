@@ -1,7 +1,8 @@
-import { getUserList, pushData } from "./List.js";
+import { BASEURL } from "./API.js";
+import { getUserTodoList, pushData, saveUserTodoList } from "./List.js";
 
 const TODOITEMS = "todoItems";
-const PENDING = "pending";
+const PENDING = "false";
 const COMPLETED = "completed";
 
 const todoInput = document.getElementById("new-todo-title");
@@ -15,11 +16,9 @@ const pendingBtn = document.querySelector(".active");
 let todoItemList = [];
 
 const todoItemTemplate = (id, inputText, completed) =>
-	`<li id=${id} class=${completed === COMPLETED ? "completed" : "pending"}>
+	`<li id=${id} class=${completed ? "completed" : "false"}>
 	<div class="view">
-		<input class="toggle" type="checkbox" id=${id} ${
-		completed === COMPLETED ? "checked" : ""
-	}>
+		<input class="toggle" type="checkbox" id=${id} ${completed ? "checked" : ""}>
 		<label class="label">${inputText}</label>
 		<button class="destroy" id=${id}></button>
 	</div>
@@ -56,7 +55,8 @@ export function renderTodoItem(todoItems) {
 	todoList.innerHTML = mergedTemplate.join("");
 
 	itemEventTrigger();
-	todoItemList = getUserList();
+	todoItemList = getUserTodoList();
+	setTodoNum();
 }
 
 function updatedTodoItems(_id, contents, isCompleted) {
@@ -73,35 +73,39 @@ function updatedTodoItems(_id, contents, isCompleted) {
 export function addItem(id, inputText, completed) {
 	todoItemList = updatedTodoItems(id, inputText, completed);
 	renderTodoItem(todoItemList);
-	setTodoNum();
-	saveData();
+	// saveData();
 }
 
 // 할 일 상태 설정
-function setItemState(event) {
+async function setItemState(event) {
 	if (event.target.className === "toggle") {
 		//event.target.classList.contains("toggle")
+		const user = document.querySelector(".active");
 		const toggle = event.target;
 		toggle.toggleAttribute("checked");
 		const todoItem = toggle.closest("li");
 		todoItem.className = isComplete(toggle) ? COMPLETED : PENDING;
 		const idx = todoItemList.findIndex((item) => item._id === todoItem.id);
-		todoItemList[idx].isCompleted = isComplete(toggle)
-			? COMPLETED
-			: PENDING;
-		saveData();
+		console.log(getUserTodoList()[1].isCompleted);
+		todoItemList[idx].isCompleted = isComplete(toggle) ? true : false;
+		await fetchCompleteItem(user.dataset.id, todoItem.id);
+		// saveUserTodoList(todoItemList);
+		// saveData();
 	}
 }
 
 // 할 일 삭제
-function removeItem(event) {
+async function removeItem(event) {
 	if (event.target.className === "destroy") {
+		const user = document.querySelector(".active");
 		const destroy = event.target;
 		const todoItem = destroy.closest("li");
 		todoList.removeChild(todoItem);
-		todoItemList = todoItemList.filter((item) => item._id !== todoItem._id);
+		todoItemList = todoItemList.filter((item) => item._id !== todoItem.id);
+		await fetchDeleteItem(user.dataset.id, todoItem.id);
+		saveUserTodoList(todoItemList);
 		setTodoNum();
-		saveData();
+		// saveData();
 	}
 }
 
@@ -136,24 +140,25 @@ function finishEdit(event) {
 }
 
 // 할 일 입력
-function enterItem(event) {
+async function enterItem(event) {
 	if (event.key === "Enter") {
 		const inputText = todoInput.value;
-		if (inputText !== "") {
-			const id = Date.now().toString();
-			addItem(id, inputText, PENDING);
+		if (inputText.length >= 2) {
+			const user = document.querySelector(".active");
+			const addedItem = await fetchAddItem(user.dataset.id, inputText);
+			addItem(addedItem._id, inputText, false);
 			todoInput.value = "";
-		}
+		} else alert("두 글자 이상으로 적어주세요!");
 	}
 }
 
 // 상태별 보기 버튼 설정
 function showProgress(event) {
 	const completedList = todoItemList.filter(
-		(item) => item.isCompleted === COMPLETED
+		(item) => item.isCompleted === true
 	);
 	const pendingList = todoItemList.filter(
-		(item) => item.isCompleted === PENDING
+		(item) => item.isCompleted === false
 	);
 	if (event.target === showAllBtn) {
 		renderTodoItem(todoItemList);
@@ -168,24 +173,45 @@ function showProgress(event) {
 }
 
 // localStorage
-export function saveData() {
-	localStorage.setItem(TODOITEMS, JSON.stringify(todoItemList));
-}
+// export function saveData() {
+// 	localStorage.setItem(TODOITEMS, JSON.stringify(todoItemList));
+// }
 
-function loadData() {
-	const loadedItems = localStorage.getItem(TODOITEMS);
-	if (loadedItems !== null) {
-		const parsedItems = JSON.parse(loadedItems);
-		parsedItems.map((item) => pushData(item));
-		renderTodoItem(parsedItems);
-	}
-}
+// function loadData() {
+// 	const loadedItems = localStorage.getItem(TODOITEMS);
+// 	if (loadedItems !== null) {
+// 		const parsedItems = JSON.parse(loadedItems);
+// 		parsedItems.map((item) => pushData(item));
+// 	}
+// }
 
 export function todoRole() {
-	loadData();
-
+	// loadData();
+	// todoItemList = getUserTodoList();
 	todoInput.addEventListener("keyup", enterItem);
 	showAllBtn.addEventListener("click", showProgress);
 	completedBtn.addEventListener("click", showProgress);
 	pendingBtn.addEventListener("click", showProgress);
 }
+
+const fetchAddItem = (userId, inputText) => {
+	return fetch(`${BASEURL}/api/users/${userId}/items`, {
+		method: "POST",
+		headers: {
+			"Content-Type": "application/json",
+		},
+		body: JSON.stringify({ contents: `${inputText}` }),
+	}).then((res) => res.json());
+};
+
+const fetchDeleteItem = (userId, itemId) => {
+	return fetch(`${BASEURL}/api/users/${userId}/items/${itemId}`, {
+		method: "DELETE",
+	});
+};
+
+const fetchCompleteItem = (userId, itemId) => {
+	return fetch(`${BASEURL}/api/users/${userId}/items/${itemId}/toggle`, {
+		method: "PUT",
+	}).then((res) => res.json());
+};
