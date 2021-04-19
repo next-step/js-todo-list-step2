@@ -25,5 +25,8 @@
     "eslint-plugin-prettier": "^3.3.1",
     "prettier": "2.2.1"
   },
-  "keywords": []
+  "keywords": [],
+  "dependencies": {
+    "live-server": "^1.2.1"
+  }
 }

@@ -48,10 +48,14 @@ class TodoList {
   }
 
   async handleInputKeyup(event) {
-    // todo => 제출
     if (event.key !== 'Enter') return;
     const { target } = event;
     const inputValue = target.value;
+    if (inputValue.length < 2) {
+      alert("todoitem은 최소 2글자 이상이어야 합니다.");
+      return;
+    }
+
     const userId = USERLIST.querySelector('.active').getAttribute('data-id');
     const data = {
       _id: '1',
@@ -59,6 +63,7 @@ class TodoList {
       isCompleted: false,
       priority: 'NONE'
     };
+
     const response = await fetch(`${BASE_URL}${USER_PATH}${userId}/items`, {
       method: 'POST',
       headers: {
@@ -68,10 +73,12 @@ class TodoList {
         ...data
       })
     });
+    await console.log(response);
     target.value = '';
+    await this.render();
   }
 
-  async handleClickUser(event) {
+  colorActiveUserButton(event) {
     const { target } = event;
     const userButtons = USERLIST.querySelectorAll('button[data-active]');
     const userTitle = $('#user-title');
@@ -80,25 +87,36 @@ class TodoList {
         userButton.classList.remove('active');
       }
     });
-    target.classList.add('active');
+    target.classList.add('active'); 
+  }
+
+  async handleClickUser(event) {
+    console.log("clickuser");
+    const { target } = event;
+    const userTitle = $('#user-title');
+
+    this.colorActiveUserButton(event);
     userTitle.innerHTML = `<strong>${target.innerText}</strong>'s Todo List`;
     userTitle.setAttribute('data-username', target.innerText);
-    const id = target.getAttribute('data-id');
+    
     $('.todo-list').innerHTML = '';
+    const id = target.getAttribute('data-id');
     const response = await fetch(`${BASE_URL}${USER_PATH}${id}/items/`, {});
     const userTodoList = await response.json();
-    await console.log(userTodoList);
     userTodoList.forEach(userTodoListElement => {
       $('.todo-list').insertAdjacentHTML(
         'afterbegin',
         this.createTodoListElement(userTodoListElement)
       );
     });
+    
     const newTodoInput = $('.new-todo');
     newTodoInput.addEventListener(
-      'keyup',
-      await this.handleInputKeyup.bind(this)
-    );
+        'keyup',
+        // await this.handleInputKeyup.bind(this)
+        await this.handleInputKeyup.bind(this)
+      );
+    // await this.render(); // TODO: 유저 리스트 실시간 렌더링
     // newTodoInput.addEventListener('dblclick', this.test2.bind(this));
   }
 
@@ -106,9 +124,11 @@ class TodoList {
     const user = { name: userName };
     const response = await fetch(`${BASE_URL}${USER_PATH}`, {
       method: 'POST',
-      headers: { 'Contents-Type': 'application/json' },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(user)
     });
+    // await console.log(response);
+    this.render();
   }
 
   async deleteUser(userId) {
@@ -119,24 +139,35 @@ class TodoList {
 
   async handleCreateUser() {
     const userName = prompt('추가하고 싶은 이름을 입력해주세요.');
+    if (userName.length < 2) {
+      alert('유저의 이름은 최소 2글자 이상이어야 합니다.')
+      return;
+    }
     await this.createUser(userName);
-    this.render();
+    // this.render();
+    await this.render();
   }
 
-  async handleDeleteUser() {
+  async handleDeleteUser(event) {
+    // console.log(event.target);
     const userButton = USERLIST.querySelector('button.active');
-    const userId = userButton.getAttribute('data-id');
-    await this.deleteUser(userId);
-    this.render();
+    const userName = userButton.innerText;
+    if (confirm(`${userName}을 삭제하시겠습니까?`))
+    {
+      const userId = userButton.getAttribute('data-id');
+      await this.deleteUser(userId);
+      await this.init();
+      return;
+    }
+    // this.render();
+    // await this.render();
   }
 
   async addEvents() {
+    console.log("addevents");
     const userCreateButton = $('.user-create-button');
     const userDeleteButton = $('.user-delete-button');
     const userButtons = USERLIST.querySelectorAll('button');
-    const firstUserButton = userButtons[0];
-
-    firstUserButton.classList.add('active');
     for (let index = 0; index < userButtons.length - 2; index++) {
       if (userButtons[index].hasAttribute('data-active')) {
         userButtons[index].addEventListener(
@@ -145,14 +176,8 @@ class TodoList {
         );
       }
     }
-    userCreateButton.addEventListener(
-      'click',
-      await this.handleCreateUser.bind(this)
-    );
-    userDeleteButton.addEventListener(
-      'click',
-      await this.handleDeleteUser.bind(this)
-    );
+    userCreateButton.addEventListener('click', await this.handleCreateUser.bind(this));
+    userDeleteButton.addEventListener('click', await this.handleDeleteUser.bind(this));
   }
 
   appendUserInfoButton(user) {
@@ -185,20 +210,37 @@ class TodoList {
     });
   }
 
-  renderUserButtons() {
+
+  async renderUserButtons() {
     this.deleteExistingUserButtons();
     this.drawUserButtons();
   }
 
   async render() {
+    // TODO: currentuser 설정
     this.userInfos = await this.returnUsers();
-    this.renderUserButtons();
+    await this.renderUserButtons();
     await this.addEvents();
+    
   }
 
   async init() {
-    await this.render();
+    // init() {
+      await this.render();
+      
+      const userButtons = USERLIST.querySelectorAll('button');
+      const firstUserButton = userButtons[0];
+      const userTitle = $('#user-title');
+
+      // TODO: Render first user's TODOLIST
+      userTitle.innerHTML = `<strong>${firstUserButton.innerText}</strong>'s Todo List`;
+      userTitle.setAttribute('data-username', firstUserButton.innerText);
+      firstUserButton.classList.add('active');
   }
 }
 
 export default TodoList;
+
+// Fix todo
+// 1. event 중복
+// 2. currentUser 설정
