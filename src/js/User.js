@@ -12,7 +12,9 @@ const userTitleTemplate = (userName) =>
 const userBtnTemplate = (id, userName) =>
 	`<button class="ripple" data-id=${id} data-contents=${userName}>${userName}</button>`;
 
-const loadingUser = () => {};
+const loadingUser = () => {
+	userTitle.innerHTML = `🙏 NOW LOADING... 🙏`;
+};
 
 const userBtnEvent = () => {
 	const userBtns = document.querySelectorAll(".ripple");
@@ -102,6 +104,7 @@ const fetchUserList = () => {
 };
 
 const showUserList = async () => {
+	loadingUser();
 	const fetchedUserList = await fetchUserList();
 	users.push(...fetchedUserList);
 	renderUserList();
