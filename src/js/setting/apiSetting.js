@@ -5,7 +5,7 @@ export const uri = {
   GET_USER: userId => `/api/users/${userId}`,
   DELETE_USER: userId => `/api/users/${userId}`,
   GET_USER_TODOITEMS: userId => `/api/users/${userId}/items/`,
-  ADD_USER_TODOITEM: "/api/users/:userId/items/",
+  ADD_USER_TODOITEM: userId => `/api/users/${userId}/items/`,
   DELETE_USER_TODOITEMS: "/api/users/:userId/items/",
   DELETE_USER_TODOITEM: "/api/users/:userId/items/:itemId",
   UPDATE_USER_TODOITEM: "/api/users/:userId/items/:itemId",

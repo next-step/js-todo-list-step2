@@ -16,6 +16,10 @@ export function GET_USER_TODOITEMS(id) {
   return GET({apiUri:'GET_USER_TODOITEMS', parameter:id});
 }
 
+export function ADD_USER_TODOITEM(id, contents) {
+  return POST({apiUri: 'ADD_USER_TODOITEM', parameter:id, data: {contents}});
+}
+
 function GET({apiUri, parameter = ''}) {
   return fetch(baseUrl + uri[apiUri](parameter))
   .then(res => {

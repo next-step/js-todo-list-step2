@@ -1,4 +1,4 @@
-import { GET_USER_TODOITEMS } from "../../setting/api.js";
+import { ADD_USER_TODOITEM, GET_USER_TODOITEMS } from "../../setting/api.js";
 import { checkNull } from "../../utils/stringUtils.js";
 import TodoInput from "./todoInput.js";
 import { parseItem, TodoItem } from "./todoItem.js";
@@ -7,32 +7,34 @@ import TodoList from "./todoList.js";
 export default function TodoApp() {
   const todoList = new TodoList(this);
   new TodoInput(this);
-  this.todoItems = [];
-  this.idGenerator = 0;
+  let todoItems = [];
+  let activeUser;
 
-  this.render = () => {
-    todoList.render(this.todoItems);
+  this.render = async () => {
+    const userTodoItem = checkNull(activeUser) ? [] : await GET_USER_TODOITEMS(activeUser.getId());
+    todoItems = userTodoItem.map(item => parseItem(item));
+
+    todoList.render(todoItems);
   }
 
-  this.add = content => {
-    const item = new TodoItem(this.idGenerator++, content);
-    this.todoItems.push(item);
+  this.add = async content => {
+    await ADD_USER_TODOITEM(activeUser.getId(), content);
     this.render();
   }
 
   this.complete = id => {
-    this.todoItems.find(item => item.matchId(id)).complete();
+    todoItems.find(item => item.matchId(id)).complete();
     this.render();
   }
 
   this.delete = id => {
-    const index = this.todoItems.findIndex(item => item.matchId(id));
-    this.todoItems.splice(index, 1);
+    const index = todoItems.findIndex(item => item.matchId(id));
+    todoItems.splice(index, 1);
     this.render();
   }
 
   this.deleteAll = () => {
-    this.todoItems.splice(0, this.todoItems.length);
+    todoItems.splice(0, todoItems.length);
     this.render();
   }
 
@@ -42,19 +44,17 @@ export default function TodoApp() {
   }
 
   this.edit = (id, content) => {
-    this.todoItems.find(item => item.matchId(id)).changeContent(content);
+    todoItems.find(item => item.matchId(id)).changeContent(content);
     this.render();
   }
 
   this.changePriority = (id, priority) => {
-    this.todoItems.find(item => item.matchId(id)).changePriority(priority);
+    todoItems.find(item => item.matchId(id)).changePriority(priority);
     this.render();
   }
 
-  this.init = async user => {
-    const todoItems = checkNull(user) ? [] : await GET_USER_TODOITEMS(user.getId());
-    this.todoItems = todoItems.map(item => parseItem(item));
-    this.idGenerator = this.todoItems.length === 0 ? 0 : this.todoItems[todoItems.length - 1].getId() + 1;
+  this.init = user => {
+    activeUser = user;
     this.render();
   }
 }

@@ -43,8 +43,8 @@ export default function UserApp(todoApp) {
     userEditor.changeUser(name);
   }
 
-  this.init = () => {
-    this.render();
+  this.init = async () => {
+    await this.render();
     todoApp.init(activeUser);
   }
 }
