@@ -1,4 +1,4 @@
-import { ADD_USER_TODOITEM, GET_USER_TODOITEMS } from "../../setting/api.js";
+import { ADD_USER_TODOITEM, GET_USER_TODOITEMS, UPDATE_USER_TODOITEM_COMPLETE } from "../../setting/api.js";
 import { checkNull } from "../../utils/stringUtils.js";
 import TodoInput from "./todoInput.js";
 import { parseItem, TodoItem } from "./todoItem.js";
@@ -22,8 +22,8 @@ export default function TodoApp() {
     this.render();
   }
 
-  this.complete = id => {
-    todoItems.find(item => item.matchId(id)).complete();
+  this.complete = async id => {
+    await UPDATE_USER_TODOITEM_COMPLETE(activeUser.getId(), id);
     this.render();
   }
 

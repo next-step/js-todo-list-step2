@@ -26,5 +26,5 @@ export function getValue(event) {
 }
 
 export function getClassLiId(event) {
-  return parseInt(event.target.closest("li").getAttribute("data-id"));
+  return event.target.closest("li").getAttribute("data-id");
 }

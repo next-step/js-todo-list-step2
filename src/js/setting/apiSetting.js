@@ -6,9 +6,9 @@ export const uri = {
   DELETE_USER: userId => `/api/users/${userId}`,
   GET_USER_TODOITEMS: userId => `/api/users/${userId}/items/`,
   ADD_USER_TODOITEM: userId => `/api/users/${userId}/items/`,
-  DELETE_USER_TODOITEMS: "/api/users/:userId/items/",
-  DELETE_USER_TODOITEM: "/api/users/:userId/items/:itemId",
-  UPDATE_USER_TODOITEM: "/api/users/:userId/items/:itemId",
-  UPDATE_USER_TODOITEM_PRIORTY: "/api/users/:userId/items/:itemId/priority",
-  UPDATE_USER_TODOITEM_COMPLETE: "/api/users/:userId/items/:itemId/toggle"
+  DELETE_USER_TODOITEMS: userId => `/api/users/${userId}/items/`,
+  DELETE_USER_TODOITEM: (userId, itemId) => `/api/users/${userId}/items/${itemId}`,
+  UPDATE_USER_TODOITEM: (userId, itemId) => `/api/users/${userId}/items/${itemId}`,
+  UPDATE_USER_TODOITEM_PRIORTY: (userId, itemId) => `/api/users/${userId}/items/${itemId}/priority`,
+  UPDATE_USER_TODOITEM_COMPLETE: ({userId, itemId}) => `/api/users/${userId}/items/${itemId}/toggle`
 }

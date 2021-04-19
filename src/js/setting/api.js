@@ -20,6 +20,10 @@ export function ADD_USER_TODOITEM(id, contents) {
   return POST({apiUri: 'ADD_USER_TODOITEM', parameter:id, data: {contents}});
 }
 
+export function UPDATE_USER_TODOITEM_COMPLETE(userId, itemId) {
+  return POST({apiUri: 'UPDATE_USER_TODOITEM_COMPLETE', parameter:{userId, itemId}, method:'PUT'});
+}
+
 function GET({apiUri, parameter = ''}) {
   return fetch(baseUrl + uri[apiUri](parameter))
   .then(res => {

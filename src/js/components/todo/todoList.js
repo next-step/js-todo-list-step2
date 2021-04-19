@@ -1,4 +1,4 @@
-import { checkClassName, checkKey, getClassLiId, getValue, isEmptyValue } from "../../utils/eventUtils.js";
+import { checkClassName, checkKey, checkLocalName, getClassLiId, getValue, isEmptyValue } from "../../utils/eventUtils.js";
 import { ILLEGAL_MESSAGE } from "../../utils/Message.js";
 import TodoCount from "./todoCount.js";
 import { todoTemplate } from "./todoItem.js";
@@ -58,7 +58,9 @@ export default function TodoList(app) {
   }
 
   const onChangeHandler = event => {
-    app.changePriority(getClassLiId(event), getValue(event));
+    if(checkLocalName(event, "select")) {
+      app.changePriority(getClassLiId(event), getValue(event));
+    }
   }
 
   todoList.addEventListener("click", onClickHandler);

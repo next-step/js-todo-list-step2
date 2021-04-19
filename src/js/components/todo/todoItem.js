@@ -29,7 +29,7 @@ const priority = {
 export const todoTemplate = item => {
   return `<li class="${item.isCompleted() ? "completed" : ""}" data-id="${item.getId()}">
         <div class="view">
-          <input class="toggle" type="checkbox" data-action="toggleTodo" toggletodo="click">
+          <input class="toggle" type="checkbox" "${item.isCompleted() ? "checked" : ""}" data-action="toggleTodo" toggletodo="click">
           <label class="label" data-action="toggleEditingTodo" toggleeditingtodo="dblclick">
           ${priority[item.getPriority()]}
             ${item.getContent()}
