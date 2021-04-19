@@ -1,11 +1,11 @@
 import { baseUrl, uri } from "./apiSetting.js";
 
 export function GET_USERS() {
-  return GET('GET_USERS');
+  return GET({apiUri:'GET_USERS'});
 }
 
 export function ADD_USER(name) {
-  return POST('ADD_USER', {name});
+  return POST({apiUri:'ADD_USER', data:{name}});
 }
 
 export function DELETE_USER(id) {
@@ -13,10 +13,10 @@ export function DELETE_USER(id) {
 }
 
 export function GET_USER_TODOITEMS(id) {
-  return GET('GET_USER_TODOITEMS', id);
+  return GET({apiUri:'GET_USER_TODOITEMS', parameter:id});
 }
 
-function GET(apiUri, parameter = '') {
+function GET({apiUri, parameter = ''}) {
   return fetch(baseUrl + uri[apiUri](parameter))
   .then(res => {
     if (!res.ok) {
@@ -30,7 +30,7 @@ function GET(apiUri, parameter = '') {
   });
 }
 
-function POST(apiUri, parameter = '', data = {}, method = 'POST') {
+function POST({apiUri, parameter = '', data = {}, method = 'POST'}) {
   postOption['method'] = method;
   postOption['body'] = JSON.stringify(data);
   return fetch(baseUrl + uri[apiUri](parameter), postOption)

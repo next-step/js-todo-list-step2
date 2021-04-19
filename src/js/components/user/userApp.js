@@ -19,8 +19,7 @@ export default function UserApp(todoApp) {
   }
 
   this.add = async name => {
-    const user = await ADD_USER(name);
-    users.push(parseUser(user));
+    await ADD_USER(name);
     this.render();
   }
 
