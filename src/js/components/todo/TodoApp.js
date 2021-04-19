@@ -3,14 +3,12 @@ import TodoList from './TodoList.js';
 import { TodoFilter } from './TodoFilter.js';
 
 export default class TodoApp {
-  constructor() {
+  constructor({ todoData }) {
     this.todoCount = document.querySelector('.todo-count strong');
     this.todoFilterButton = document.querySelectorAll('.filters li a');
-    this.todoLocalData = localStorage.getItem('item');
-    this.todoData = this.todoLocalData ? JSON.parse(this.todoLocalData) : [];
+    this.todoData = todoData;
 
     this.init();
-    this.render(this.todoData);
   }
 
   init() {
@@ -31,39 +29,44 @@ export default class TodoApp {
     });
   }
 
+  setState(todoData) {
+    this.todoData = todoData;
+    this.setItem();
+  }
+
   setItem() {
     if (this.filter === 'active')
-      return this.render(this.todoData.filter((data) => !data.completed));
+      return this.render(this.todoData.filter((data) => !data.isCompleted));
     if (this.filter === 'completed')
-      return this.render(this.todoData.filter((data) => data.completed));
+      return this.render(this.todoData.filter((data) => data.isCompleted));
 
     localStorage.setItem('item', JSON.stringify(this.todoData));
     this.render(this.todoData);
   }
 
-  handleCreateItem(title) {
+  handleCreateItem(contents) {
     this.todoData.push({
-      id: new Date().getTime(),
-      completed: false,
-      title,
+      _id: new Date().getTime(),
+      isCompleted: false,
+      contents,
     });
     this.setItem();
   }
 
   handleCheckItem(id) {
-    const item = this.todoData.find((data) => data.id.toString() === id);
-    item.completed = !item.completed;
+    const item = this.todoData.find((data) => data._id === id);
+    item.isCompleted = !item.isCompleted;
     this.setItem();
   }
 
   handleEditItem(id, title) {
-    const item = this.todoData.find((data) => data.id.toString() === id);
+    const item = this.todoData.find((data) => data._id === id);
     item.title = title;
     this.setItem();
   }
 
   handleDeleteItem(id) {
-    this.todoData = this.todoData.filter((data) => data.id != id);
+    this.todoData = this.todoData.filter((data) => data._id != id);
     this.setItem();
   }
 
