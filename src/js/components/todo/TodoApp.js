@@ -1,12 +1,12 @@
-import { todoApi } from '../../api/api.js';
-import TodoInput from './TodoInput.js';
-import TodoList from './TodoList.js';
-import { TodoFilter } from './TodoFilter.js';
+import { todoApi } from "../../api/api.js";
+import TodoInput from "./TodoInput.js";
+import TodoList from "./TodoList.js";
+import { TodoFilter } from "./TodoFilter.js";
 
 export default class TodoApp {
   constructor({ userId }) {
-    this.todoCount = document.querySelector('.todo-count strong');
-    this.todoFilterButton = document.querySelectorAll('.filters li a');
+    this.todoCount = document.querySelector(".todo-count strong");
+    this.todoFilterButton = document.querySelectorAll(".filters li a");
     this.userId = userId;
     this.todoData = [];
 
@@ -22,6 +22,7 @@ export default class TodoApp {
       todoData: this.todoData,
       onCheckItem: this.handleCheckItem.bind(this),
       onEditItem: this.handleEditItem.bind(this),
+      onSetPriorityItem: this.handleSetPriorityItem.bind(this),
       onDeleteItem: this.handleDeleteItem.bind(this),
     });
 
@@ -50,12 +51,12 @@ export default class TodoApp {
   }
 
   setItem() {
-    if (this.filter === 'active')
+    if (this.filter === "active")
       return this.render(this.todoData.filter((data) => !data.isCompleted));
-    if (this.filter === 'completed')
+    if (this.filter === "completed")
       return this.render(this.todoData.filter((data) => data.isCompleted));
 
-    localStorage.setItem('item', JSON.stringify(this.todoData));
+    localStorage.setItem("item", JSON.stringify(this.todoData));
     this.render(this.todoData);
   }
 
@@ -71,6 +72,11 @@ export default class TodoApp {
 
   handleEditItem = async (itemId, contents) => {
     await todoApi.putItem(this.userId, itemId, contents);
+    this.getTodoData();
+  };
+
+  handleSetPriorityItem = async (itemId, priority) => {
+    await todoApi.setPriorityItem(this.userId, itemId, priority);
     this.getTodoData();
   };
 

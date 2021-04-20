@@ -1,61 +1,82 @@
-import { todoItem, loading } from './todoItem.js';
+import { todoItem, loading } from "./todoItem.js";
 export default class TodoList {
-  constructor({ todoData, onCheckItem, onEditItem, onDeleteItem }) {
-    this.todoListUl = document.getElementById('todo-list');
+  constructor({
+    todoData,
+    onCheckItem,
+    onEditItem,
+    onSetPriorityItem,
+    onDeleteItem,
+  }) {
+    this.todoListUl = document.getElementById("todo-list");
+    this.todoPrioritySelect = document.querySelector("select.chip");
     this.todoData = todoData;
     this.handleCheckItem = onCheckItem;
     this.handleEditItem = onEditItem;
+    this.handleSetPriorityItem = onSetPriorityItem;
     this.handleDeleteItem = onDeleteItem;
-
+    console.log(this.todoPrioritySelect);
     this.init();
   }
 
   setState(data) {
     this.todoData = data;
-    this.todoListUl.innerHTML = '';
+    this.todoListUl.innerHTML = "";
     this.render();
   }
 
   init() {
-    this.todoListUl.addEventListener('click', ({ target }) =>
+    this.todoListUl.addEventListener("click", ({ target }) =>
       this.todoClickHandler(target)
     );
 
-    this.todoListUl.addEventListener('dblclick', ({ target }) =>
+    this.todoListUl.addEventListener("dblclick", ({ target }) =>
       this.todoDblclickHandler(target)
+    );
+
+    this.todoListUl.addEventListener("change", ({ target }) =>
+      this.todoChangeHandler(target)
     );
   }
 
   todoClickHandler(target) {
-    const parentId = target.closest('li').id;
-    if (target.classList.contains('toggle')) this.handleCheckItem(parentId);
-    if (target.classList.contains('destroy')) this.handleDeleteItem(parentId);
+    const parentId = target.closest("li").id;
+    if (target.classList.contains("toggle")) this.handleCheckItem(parentId);
+    if (target.classList.contains("destroy")) this.handleDeleteItem(parentId);
   }
 
   todoDblclickHandler(target) {
-    if (!target.classList.contains('label')) return;
-    const parentLi = target.closest('li');
-    const editingEls = document.querySelectorAll('li.editing');
-    editingEls.forEach((li) => li.classList.remove('editing'));
-    parentLi.classList.add('editing');
+    if (!target.classList.contains("label")) return;
+    const parentLi = target.closest("li");
+    const editingEls = document.querySelectorAll("li.editing");
+    editingEls.forEach((li) => li.classList.remove("editing"));
+    parentLi.classList.add("editing");
 
-    const editInput = parentLi.querySelector('input.edit');
+    const editInput = parentLi.querySelector("input.edit");
     editInput.focus();
     editInput.onkeydown = ({ keyCode, target }) =>
       this.editInputHandler({ keyCode, target }, parentLi);
   }
 
+  todoChangeHandler(target) {
+    if (target.value === 0) return;
+    const parentId = target.closest("li").id;
+    this.handleSetPriorityItem(
+      parentId,
+      target.value === "1" ? "FIRST" : "SECOND"
+    );
+  }
+
   editInputHandler({ keyCode, target }, parentLi) {
     if (keyCode === 13) {
       const title = target.value.trim();
-      const parentId = target.closest('li').id;
+      const parentId = target.closest("li").id;
       if (title.length < 2) {
-        alert('TodoItem의 콘텐츠는 최소 2글자 이상이어야 합니다.');
+        alert("TodoItem의 콘텐츠는 최소 2글자 이상이어야 합니다.");
         return;
       }
       this.handleEditItem(parentId, title);
     } else if (keyCode === 27) {
-      parentLi.classList.remove('editing');
+      parentLi.classList.remove("editing");
     }
   }
 
@@ -67,6 +88,6 @@ export default class TodoList {
     if (!this.todoData) return;
     this.todoListUl.innerHTML = this.todoData
       .map((data) => todoItem(data))
-      .join('');
+      .join("");
   }
 }
