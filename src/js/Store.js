@@ -14,7 +14,7 @@ export const subscribeSelectedUser = (callbackFunction) =>
 
 const publishUserList = () => {
   if (isEmptyObject(selectedUser)) {
-    resetSelectedUser();
+    setSelectedUser(userList[0]);
   }
   userListListeners.map((listener) => listener(userList, selectedUser));
 };
@@ -31,7 +31,3 @@ export const setSelectedUser = (update) => {
   selectedUser = update;
   publishSelectedUser();
 };
-
-export const getSelectedUser = () => selectedUser;
-
-export const resetSelectedUser = () => setSelectedUser(userList[0]);

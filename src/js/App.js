@@ -4,6 +4,7 @@ import { GET_USER_LIST_URL, POST_USER_URL } from './Config/API_URL.js';
 import { setSelectedUser, setUserList } from './Store.js';
 
 import UserList from './Components/UserList.js';
+import UserTitle from './Components/UserTitle.js';
 
 function App() {
   const onUserListLoadHandler = () =>
@@ -15,6 +16,7 @@ function App() {
       return onUserListLoadHandler();
     });
 
+  new UserTitle();
   new UserList({ onCreate: onUserCreateHandler });
 
   const init = () => {
