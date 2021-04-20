@@ -14,3 +14,8 @@ export const deleteData = (url = '') =>
   fetch(url, {
     method: 'DELETE',
   }).then((response) => response.json());
+
+export const putData = (url = '') =>
+  fetch(url, {
+    method: 'PUT',
+  }).then((response) => response.json());

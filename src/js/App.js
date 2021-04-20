@@ -1,10 +1,11 @@
-import { getData, postData, deleteData } from './Helper/FetchApi.js';
+import { getData, postData, deleteData, putData } from './Helper/FetchApi.js';
 import {
   GET_USER_LIST_URL,
   POST_USER_URL,
   DELETE_USER_URL,
   POST_TODO_URL,
   GET_USER_URL,
+  COMPLETE_TODO_URL,
 } from './Config/API_URL.js';
 
 import { getSelectedUserId, setSelectedUser, setUserList } from './Store.js';
@@ -61,6 +62,15 @@ const App = () => {
     });
   };
 
+  const onTodoCompleteHandler = (todoId) => {
+    const selectedUserId = getSelectedUserId();
+    const fetchURL = COMPLETE_TODO_URL(selectedUserId, todoId);
+
+    return putData(fetchURL).then((data) => {
+      return onUserLoadHandler();
+    });
+  };
+
   const init = () => {
     UserTitle();
     UserList({
@@ -68,7 +78,9 @@ const App = () => {
       onChange: onUserChangeHandler,
       onDelete: onUserDeleteHandler,
     });
-    TodoList();
+    TodoList({
+      onComplete: onTodoCompleteHandler,
+    });
     TodoInput({
       onAdd: onTodoCreateHandler,
     });
