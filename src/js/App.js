@@ -7,6 +7,7 @@ import {
   GET_USER_URL,
   COMPLETE_TODO_URL,
   DELETE_TODO_URL,
+  EDIT_TODO_URL,
 } from './Config/API_URL.js';
 
 import { getSelectedUserId, setSelectedUser, setUserList } from './Store.js';
@@ -81,6 +82,15 @@ const App = () => {
     });
   };
 
+  const onTodoEditHandler = (todoId, todo) => {
+    const selectedUserId = getSelectedUserId();
+    const fetchURL = EDIT_TODO_URL(selectedUserId, todoId);
+
+    return putData(fetchURL, { contents: todo }).then((data) => {
+      return onUserLoadHandler();
+    });
+  };
+
   const init = () => {
     UserTitle();
     UserList({
@@ -91,6 +101,7 @@ const App = () => {
     TodoList({
       onComplete: onTodoCompleteHandler,
       onDelete: onTodoDeleteHandler,
+      onEdit: onTodoEditHandler,
     });
     TodoInput({
       onAdd: onTodoCreateHandler,

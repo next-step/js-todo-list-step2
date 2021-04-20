@@ -16,3 +16,6 @@ export const COMPLETE_TODO_URL = (userId, itemId) =>
 
 export const DELETE_TODO_URL = (userId, itemId) =>
   `${BASE_URL}/api/users/${userId}/items/${itemId}`;
+
+export const EDIT_TODO_URL = (userId, itemId) =>
+  `${BASE_URL}/api/users/${userId}/items/${itemId}`;

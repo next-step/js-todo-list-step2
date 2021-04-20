@@ -4,7 +4,7 @@ import { getTodoItemId, getTodoList } from '../Helper/TodoHelper.js';
 
 import { subscribeSelectedUser } from '../Store.js';
 
-const TodoList = ({ onComplete, onDelete }) => {
+const TodoList = ({ onComplete, onDelete, onEdit }) => {
   const listElement = document.getElementById('todo-list');
 
   const completeTodo = (e) => {
@@ -25,6 +25,31 @@ const TodoList = ({ onComplete, onDelete }) => {
     onDelete(itemId);
   };
 
+  const startEditMode = (e) => {
+    const item = e.target.closest('li');
+    if (e.target.classList.contains('label')) {
+      item.classList.add('editing');
+    }
+  };
+
+  const editModeKeydownEvent = (e) => {
+    const item = e.target.closest('li');
+    if (!item.classList.contains('editing')) {
+      return;
+    }
+
+    if (e.key === 'Esc' || e.key === 'Escape') {
+      item.classList.remove('editing');
+      return;
+    }
+
+    if (e.key === 'Enter') {
+      const itemId = getTodoItemId(item.dataset);
+      onEdit(itemId, e.target.value);
+      item.classList.remove('editing');
+    }
+  };
+
   const render = (selectedUser) => {
     const list = getTodoList(selectedUser);
 
@@ -37,6 +62,8 @@ const TodoList = ({ onComplete, onDelete }) => {
 
   listElement.addEventListener('click', completeTodo);
   listElement.addEventListener('click', deleteTodo);
+  listElement.addEventListener('dblclick', startEditMode);
+  listElement.addEventListener('keydown', editModeKeydownEvent);
 
   subscribeSelectedUser(render);
 };
