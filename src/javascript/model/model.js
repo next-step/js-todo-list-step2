@@ -1,4 +1,4 @@
-import * as API from '../utils/api.js';
+import API from '../utils/api.js';
 import { ERROR_MESSAGE } from '../utils/constants.js';
 export default class Model {
   constructor() {}

@@ -1,25 +1,5 @@
-import {
-  BASE_URL,
-  ERROR_MESSAGE,
-  RETRY_COUNT,
-  METHODS,
-  URL_OPTS,
-} from './constants.js';
-
-const fetch_retry = async (url, options, errorMessage, n = RETRY_COUNT) => {
-  try {
-    let response = await fetch(url, options);
-    if (!response.ok) {
-      throw new Error('fetch retry!');
-    }
-    return await response.json();
-  } catch (err) {
-    if (n <= 1) {
-      throw new Error(errorMessage);
-    }
-    return await fetch_retry(url, options, errorMessage, n - 1);
-  }
-};
+import { BASE_URL, ERROR_MESSAGE, METHODS, URL_OPTS } from './constants.js';
+import fetchRetry from './fetchRetry.js';
 
 function makeOption(method, body = '') {
   body = body ? JSON.stringify(body) : '';
@@ -43,86 +23,6 @@ function makeOption(method, body = '') {
   return options[method];
 }
 
-function getUsers() {
-  return fetch_retry(
-    makeURL({ cmd: URL_OPTS.GET_USERS }),
-    makeOption(METHODS.GET),
-    ERROR_MESSAGE.GET_USERS
-  );
-}
-
-function createItem(userId, contents) {
-  return fetch_retry(
-    makeURL({ cmd: URL_OPTS.CREATE_ITEM, userId }),
-    makeOption(METHODS.POST, { contents }),
-    ERROR_MESSAGE.CREATE_ITEM
-  );
-}
-
-function addUser(name) {
-  return fetch_retry(
-    makeURL({ cmd: URL_OPTS.ADD_USER }),
-    makeOption(METHODS.POST, { name }),
-    ERROR_MESSAGE.ADD_USER
-  );
-}
-
-function deleteUser(userId) {
-  return fetch_retry(
-    makeURL({ cmd: URL_OPTS.DELETE_USER, userId }),
-    makeOption(METHODS.DELETE),
-    ERROR_MESSAGE.DELETE_USER
-  );
-}
-
-function getUser(userId) {
-  return fetch_retry(
-    makeURL({ cmd: URL_OPTS.GET_USER, userId }),
-    makeOption(METHODS.GET),
-    ERROR_MESSAGE.GET_USER
-  );
-}
-
-function deleteItem(userId, itemId) {
-  return fetch_retry(
-    makeURL({ cmd: URL_OPTS.DELETE_ITEM, userId, itemId }),
-    makeOption(METHODS.DELETE),
-    ERROR_MESSAGE.DELETE_ITEM
-  );
-}
-
-function deleteAllTodoOfUser(userId) {
-  return fetch_retry(
-    makeURL({ cmd: URL_OPTS.DELETE_ALL, userId }),
-    makeOption(METHODS.DELETE),
-    ERROR_MESSAGE.DELETE_ALL_ITEM
-  );
-}
-
-function updatePriority(userId, itemId, priority) {
-  return fetch_retry(
-    makeURL({ cmd: URL_OPTS.UPDATE_PRIORITY, userId, itemId }),
-    makeOption(METHODS.PUT, { priority }),
-    ERROR_MESSAGE.SET_PRIORITY
-  );
-}
-
-function updateComplete(userId, itemId) {
-  return fetch_retry(
-    makeURL({ cmd: URL_OPTS.UPDATE_COMPLETE, userId, itemId }),
-    makeOption(METHODS.PUT),
-    ERROR_MESSAGE.UPDATE_COMPLETE
-  );
-}
-
-function updateContents(userId, itemId, contents) {
-  return fetch_retry(
-    makeURL({ cmd: URL_OPTS.UPDATE_CONTENTS, userId, itemId }),
-    makeOption(METHODS.PUT, { contents }),
-    ERROR_MESSAGE.UPDATE_CONTENT
-  );
-}
-
 function makeURL(params) {
   const users = `${BASE_URL}/api/users/`;
   const url = {
@@ -140,15 +40,86 @@ function makeURL(params) {
   return url[params.cmd];
 }
 
-export {
-  getUsers,
-  addUser,
-  deleteUser,
-  getUser,
-  updateComplete,
-  updateContents,
-  updatePriority,
-  createItem,
-  deleteItem,
-  deleteAllTodoOfUser,
+export const API = {
+  getUsers: () => {
+    return fetchRetry(
+      makeURL({ cmd: URL_OPTS.GET_USERS }),
+      makeOption(METHODS.GET),
+      ERROR_MESSAGE.GET_USERS
+    );
+  },
+
+  createItem: (userId, contents) => {
+    return fetchRetry(
+      makeURL({ cmd: URL_OPTS.CREATE_ITEM, userId }),
+      makeOption(METHODS.POST, { contents }),
+      ERROR_MESSAGE.CREATE_ITEM
+    );
+  },
+
+  addUser: (name) => {
+    return fetchRetry(
+      makeURL({ cmd: URL_OPTS.ADD_USER }),
+      makeOption(METHODS.POST, { name }),
+      ERROR_MESSAGE.ADD_USER
+    );
+  },
+
+  deleteUser: (userId) => {
+    return fetchRetry(
+      makeURL({ cmd: URL_OPTS.DELETE_USER, userId }),
+      makeOption(METHODS.DELETE),
+      ERROR_MESSAGE.DELETE_USER
+    );
+  },
+
+  getUser: (userId) => {
+    return fetchRetry(
+      makeURL({ cmd: URL_OPTS.GET_USER, userId }),
+      makeOption(METHODS.GET),
+      ERROR_MESSAGE.GET_USER
+    );
+  },
+
+  deleteItem: (userId, itemId) => {
+    return fetchRetry(
+      makeURL({ cmd: URL_OPTS.DELETE_ITEM, userId, itemId }),
+      makeOption(METHODS.DELETE),
+      ERROR_MESSAGE.DELETE_ITEM
+    );
+  },
+
+  deleteAllTodoOfUser: (userId) => {
+    return fetchRetry(
+      makeURL({ cmd: URL_OPTS.DELETE_ALL, userId }),
+      makeOption(METHODS.DELETE),
+      ERROR_MESSAGE.DELETE_ALL_ITEM
+    );
+  },
+
+  updatePriority: (userId, itemId, priority) => {
+    return fetchRetry(
+      makeURL({ cmd: URL_OPTS.UPDATE_PRIORITY, userId, itemId }),
+      makeOption(METHODS.PUT, { priority }),
+      ERROR_MESSAGE.SET_PRIORITY
+    );
+  },
+
+  updateComplete: (userId, itemId) => {
+    return fetchRetry(
+      makeURL({ cmd: URL_OPTS.UPDATE_COMPLETE, userId, itemId }),
+      makeOption(METHODS.PUT),
+      ERROR_MESSAGE.UPDATE_COMPLETE
+    );
+  },
+
+  updateContents: (userId, itemId, contents) => {
+    return fetchRetry(
+      makeURL({ cmd: URL_OPTS.UPDATE_CONTENTS, userId, itemId }),
+      makeOption(METHODS.PUT, { contents }),
+      ERROR_MESSAGE.UPDATE_CONTENT
+    );
+  },
 };
+
+export default API;

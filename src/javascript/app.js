@@ -1,7 +1,7 @@
 import Model from './model/model.js';
 import View from './view/view.js';
 import Controller from './controller/controller.js';
-import { getUsers } from './utils/api.js';
+import API from './utils/api.js';
 import * as UTILS from './utils/utils.js';
 
 class App {
@@ -20,7 +20,7 @@ class App {
   }
 
   async initUsers() {
-    this.users = await getUsers();
+    this.users = await API.getUsers();
   }
 
   initModel() {
