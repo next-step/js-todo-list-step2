@@ -7,7 +7,7 @@ async function getUserList(){
     return response.json()
 }
 
-function addUser(userName) {
+async function addUser(userName) {
     const method = "/api/users";
     const requestUrl = baseUrl + method;
     fetch(requestUrl, {
