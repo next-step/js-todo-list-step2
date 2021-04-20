@@ -1,10 +1,12 @@
 import API from '../utils/api.js';
 import { ERROR_MESSAGE } from '../utils/constants.js';
 export default class Model {
-  constructor() {}
+  constructor() {
+    this._validOfMinimumLength = 2;
+  }
 
   createUser(userName) {
-    if (!userName || userName.length < 2) {
+    if (!userName || userName.length < this._validOfMinimumLength) {
       throw new Error(ERROR_MESSAGE.USERNAME_LENGTH);
     }
     return API.addUser(userName);
@@ -49,6 +51,6 @@ export default class Model {
   }
 
   _checkValidOfLength(contents) {
-    return contents.length >= 2;
+    return contents.length >= this._validOfMinimumLength;
   }
 }
