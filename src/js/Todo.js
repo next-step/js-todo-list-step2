@@ -1,7 +1,7 @@
 import { BASEURL } from "./API.js";
-import { getUserTodoList, pushData, saveUserTodoList } from "./List.js";
+import { getUserTodoList, saveUserTodoList } from "./List.js";
 
-const TODOITEMS = "todoItems";
+// const TODOITEMS = "todoItems";
 const PENDING = "false";
 const COMPLETED = "completed";
 
@@ -12,6 +12,7 @@ const todoCount = document.querySelector(".todo-count strong");
 const showAllBtn = document.querySelector(".all");
 const completedBtn = document.querySelector(".completed");
 const pendingBtn = document.querySelector(".active");
+const deleteAllBtn = document.querySelector(".clear-completed");
 
 let todoItemList = [];
 
@@ -146,7 +147,7 @@ async function finishEdit(event) {
 
 // 할 일 입력
 async function enterItem(event) {
-	if (event.key === "Enter") {
+	if (!event.isComposing && event.key === "Enter") {
 		const inputText = todoInput.value;
 		if (inputText.length >= 2) {
 			const user = document.querySelector(".active");
@@ -177,6 +178,15 @@ function showProgress(event) {
 	setTodoNum();
 }
 
+async function removeAllItems(event) {
+	const user = document.querySelector(".active");
+	todoList.innerHTML = "";
+	setTodoNum();
+	await fetchDeleteAll(user.dataset.id);
+	todoItemList = [];
+	saveUserTodoList(todoItemList);
+}
+
 // localStorage
 // export function saveData() {
 // 	localStorage.setItem(TODOITEMS, JSON.stringify(todoItemList));
@@ -193,10 +203,11 @@ function showProgress(event) {
 export function todoRole() {
 	// loadData();
 	// todoItemList = getUserTodoList();
-	todoInput.addEventListener("keyup", enterItem);
+	todoInput.addEventListener("keydown", enterItem);
 	showAllBtn.addEventListener("click", showProgress);
 	completedBtn.addEventListener("click", showProgress);
 	pendingBtn.addEventListener("click", showProgress);
+	deleteAllBtn.addEventListener("click", removeAllItems);
 }
 
 const fetchAddItem = (userId, inputText) => {
@@ -229,4 +240,8 @@ const fetchEditItem = (userId, itemId, inputText) => {
 		},
 		body: JSON.stringify({ contents: `${inputText}` }),
 	});
+};
+
+const fetchDeleteAll = (userId) => {
+	return fetch(`${BASEURL}/api/users/${userId}/items`, { method: "DELETE" });
 };
