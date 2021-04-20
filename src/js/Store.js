@@ -13,17 +13,19 @@ export const subscribeSelectedUser = (callbackFunction) =>
   selectedUserListeners.push(callbackFunction);
 
 const publishUserList = () => {
-  if (isEmptyObject(selectedUser)) {
-    setSelectedUser(userList[0]);
-  }
   userListListeners.map((listener) => listener(userList, selectedUser));
 };
 
 const publishSelectedUser = () =>
   selectedUserListeners.map((listener) => listener(selectedUser));
 
-export const setUserList = (update) => {
-  userList = update;
+export const setUserList = (updateUserList, updateSelectedUser) => {
+  const updateSelectedUserDataFromUserList = FindUserInArray(
+    updateUserList,
+    updateSelectedUser
+  );
+  userList = updateUserList;
+  setSelectedUser(updateSelectedUserDataFromUserList);
   publishUserList();
 };
 
@@ -31,3 +33,8 @@ export const setSelectedUser = (update) => {
   selectedUser = update;
   publishSelectedUser();
 };
+
+const FindUserInArray = (list, findUser = {}) =>
+  isEmptyObject(findUser) || findUser._id.length === 0
+    ? list[0]
+    : list.find((user) => user._id === findUser._id);

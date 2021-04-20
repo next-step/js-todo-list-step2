@@ -2,7 +2,10 @@ import { UserButtonTemplate } from '../Config/Template.js';
 import { isValidUserName } from '../helper/Validation.js';
 import { subscribeUserList } from '../Store.js';
 
-function UserList({ onCreate }) {
+function UserList({ onCreate, onChangeUser }) {
+  const userListElement = document.getElementById('user-list');
+  const userCreateButton = document.querySelector('.user-create-button');
+
   const createUser = () => {
     const userName = prompt(
       '추가하고 싶은 이름을 입력해주세요.\n(이름은 최소 2글자 이상이어야 합니다.)'
@@ -17,24 +20,35 @@ function UserList({ onCreate }) {
     return onCreate(userName);
   };
 
-  const userCreateButton = document.querySelector('.user-create-button');
-  userCreateButton.addEventListener('click', createUser);
-
-  const render = (list, selectedUser) => {
-    if (list.length === 0) {
+  const changeSelectedUser = (e) => {
+    if (!e.target.dataset.type || e.target.dataset.type !== 'user') {
       return;
     }
 
-    const userListElement = document.getElementById('user-list');
+    return onChangeUser(e.target.dataset);
+  };
+
+  const render = (userList, selectedUser) => {
+    if (userList.length === 0) {
+      return;
+    }
+
     [...userListElement.children].map(
       (element) => element.dataset.type === 'user' && element.remove()
     );
 
+    const selectedIndex = userList.indexOf(selectedUser);
+
     userListElement.insertAdjacentHTML(
       'afterbegin',
-      list.map((user) => UserButtonTemplate(user, selectedUser)).join('')
+      userList
+        .map((user, index) => UserButtonTemplate(user, index === selectedIndex))
+        .join('')
     );
   };
+
+  userListElement.addEventListener('click', changeSelectedUser);
+  userCreateButton.addEventListener('click', createUser);
 
   subscribeUserList(render);
 }

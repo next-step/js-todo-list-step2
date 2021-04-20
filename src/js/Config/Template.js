@@ -1,12 +1,13 @@
-export const UserButtonTemplate = ({ _id, name }, selectedUser) =>
+export const UserButtonTemplate = (user, selected = false) =>
   `
     <button
-      data-id="${_id}"
       data-type="user"
-      data-name=${name}
-      class="ripple${selectedUser._id === _id ? ' active' : ''}"
+      ${Object.keys(user)
+        .map((key) => `data-${key}="${user[key]}"`)
+        .join('')}
+      class="ripple${selected ? ' active' : ''}"
     >
-      ${name}
+      ${user.name}
     </button>
   `;
 
