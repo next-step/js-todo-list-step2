@@ -39,7 +39,7 @@ class TodoList extends Observer {
     if (!$li) return;
     const { id: itemId, contents } = $li.dataset;
 
-    const assingAction = {
+    const assignAction = {
       [CLASS_NAME.TOGGLE]: () => this.toggleComplete($li, itemId, target),
       [CLASS_NAME.DESTROY]: () =>
         confirm(POPUP_MESSAGE.REMOVE_TODO) && this.removeTodo(itemId),
@@ -52,7 +52,7 @@ class TodoList extends Observer {
       },
     };
 
-    return assingAction[target.className]();
+    return assignAction[target.className]();
   }
 
   onDoubleClick({ target }) {
