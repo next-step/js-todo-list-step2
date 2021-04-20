@@ -13,3 +13,6 @@ export const POST_TODO_URL = (userId) =>
 
 export const COMPLETE_TODO_URL = (userId, itemId) =>
   `${BASE_URL}/api/users/${userId}/items/${itemId}/toggle`;
+
+export const DELETE_TODO_URL = (userId, itemId) =>
+  `${BASE_URL}/api/users/${userId}/items/${itemId}`;
