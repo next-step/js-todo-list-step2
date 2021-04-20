@@ -17,7 +17,7 @@ export const CLASS_NAME = {
   EDITING: 'editing',
   TOGGLE: 'toggle',
   DESTROY: 'destroy',
-  PRIORITY_SELECT: 'select',
+  PRIORITY_SELECT: 'chip select',
 };
 
 export const ACTION_NAME = {

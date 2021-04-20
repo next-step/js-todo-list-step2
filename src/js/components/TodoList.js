@@ -38,16 +38,21 @@ class TodoList extends Observer {
     const $li = target.closest(NODE_NAME.LIST);
     if (!$li) return;
     const { id: itemId, contents } = $li.dataset;
-    const targetClassList = target.classList;
-    if (targetClassList.contains(CLASS_NAME.TOGGLE)) {
-      return this.toggleComplete($li, itemId, target);
-    } else if (targetClassList.contains(CLASS_NAME.DESTROY)) {
-      return confirm(POPUP_MESSAGE.REMOVE_TODO) && this.removeTodo(itemId);
-    } else if (targetClassList.contains(CLASS_NAME.PRIORITY_SELECT)) {
-      const priority = target.value;
-      if (priority === PRIORITY.NONE) return;
-      return this.changePriority($li, itemId, contents, priority);
-    }
+
+    const assingAction = {
+      [CLASS_NAME.TOGGLE]: () => this.toggleComplete($li, itemId, target),
+      [CLASS_NAME.DESTROY]: () =>
+        confirm(POPUP_MESSAGE.REMOVE_TODO) && this.removeTodo(itemId),
+      [CLASS_NAME.PRIORITY_SELECT]: () => {
+        const priority = target.value;
+        return (
+          priority !== PRIORITY.NONE &&
+          this.changePriority($li, itemId, contents, priority)
+        );
+      },
+    };
+
+    return assingAction[target.className]();
   }
 
   onDoubleClick({ target }) {
