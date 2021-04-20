@@ -30,8 +30,8 @@
 - [x] 1. User 추가하기
 - [x] 2. User의 투두리스트 불러오기
 - [x] 3. User 삭제하기
-- [ ] 3. todoItem 추가하기
-- [ ] 4. todoItem 불러오기
+- [x] 3. todoItem 추가하기
+- [x] 4. todoItem 불러오기
 - [ ] 5. todoItem complete하기
 - [ ] 6. todoItem 삭제하기
 - [ ] 7. todoItem contents 내용 수정하기
@@ -49,7 +49,7 @@
 ## 🕵️‍♂️ 제약사항
 
 - [x] 1. User의 이름은 최소 2글자 이상이어야 한다.
-- [ ] 2. TodoItem Contents는 최소 2글자 이상이어야 한다.
+- [x] 2. TodoItem Contents는 최소 2글자 이상이어야 한다.
 
 <br/>
 

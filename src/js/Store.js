@@ -32,7 +32,6 @@ export const setUserList = (updateUserList, updateSelectedUser) => {
 
 export const setSelectedUser = (update) => {
   selectedUser = update;
-  console.log(update);
   publishSelectedUser();
 };
 
