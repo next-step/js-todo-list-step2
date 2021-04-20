@@ -5,3 +5,5 @@ export const POST_USER_URL = () => `${BASE_URL}/api/users`;
 export const GET_USER_LIST_URL = () => `${BASE_URL}/api/users`;
 
 export const GET_USER_URL = (id) => `${BASE_URL}/api/user${id}`;
+
+export const DELETE_USER_URL = (id) => `${BASE_URL}/api/users/${id}`;

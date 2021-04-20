@@ -1,5 +1,9 @@
-import { getData, postData } from './Helper/FetchApi.js';
-import { GET_USER_LIST_URL, POST_USER_URL } from './Config/API_URL.js';
+import { getData, postData, deleteData } from './Helper/FetchApi.js';
+import {
+  GET_USER_LIST_URL,
+  POST_USER_URL,
+  DELETE_USER_URL,
+} from './Config/API_URL.js';
 
 import { setUserList } from './Store.js';
 
@@ -28,11 +32,20 @@ const App = () => {
     return onUserListLoadHandler(selectedUser);
   };
 
+  const onUserDeleteHandler = (userId) => {
+    const fetchURL = DELETE_USER_URL(userId);
+
+    return deleteData(fetchURL).then((data) => {
+      return onUserListLoadHandler();
+    });
+  };
+
   const init = () => {
     UserTitle();
     UserList({
       onCreate: onUserCreateHandler,
-      onChangeUser: onUserChangeHandler,
+      onChange: onUserChangeHandler,
+      onDelete: onUserDeleteHandler,
     });
     TodoList();
 

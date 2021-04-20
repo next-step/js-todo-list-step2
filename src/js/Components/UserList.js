@@ -1,10 +1,15 @@
 import { UserButtonTemplate } from '../Config/Template.js';
 import { isValidUserName } from '../Helper/Validation.js';
-import { subscribeUserList } from '../Store.js';
+import {
+  getSelectedUserId,
+  getSelectedUserName,
+  subscribeUserList,
+} from '../Store.js';
 
-const UserList = ({ onCreate, onChangeUser }) => {
+const UserList = ({ onCreate, onChange, onDelete }) => {
   const userListElement = document.getElementById('user-list');
   const userCreateButton = document.querySelector('.user-create-button');
+  const userDeleteButton = document.querySelector('.user-delete-button');
 
   const createUser = () => {
     const userName = prompt(
@@ -20,12 +25,22 @@ const UserList = ({ onCreate, onChangeUser }) => {
     return onCreate(userName);
   };
 
+  const deleteUser = () => {
+    const userId = getSelectedUserId();
+    const userName = getSelectedUserName();
+
+    const isDelete = confirm(`${userName}을 삭제하시겠습니까?`);
+    if (isDelete) {
+      return onDelete(userId);
+    }
+  };
+
   const changeSelectedUser = (e) => {
     if (!e.target.dataset.type || e.target.dataset.type !== 'user') {
       return;
     }
 
-    return onChangeUser(e.target.dataset);
+    return onChange(e.target.dataset);
   };
 
   const render = (userList, selectedUser) => {
@@ -49,6 +64,7 @@ const UserList = ({ onCreate, onChangeUser }) => {
 
   userListElement.addEventListener('click', changeSelectedUser);
   userCreateButton.addEventListener('click', createUser);
+  userDeleteButton.addEventListener('click', deleteUser);
 
   subscribeUserList(render);
 };

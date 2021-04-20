@@ -1,5 +1,5 @@
 import { isEmptyObject } from './Helper/util.js';
-import { getUserId } from './Helper/UserHelper.js';
+import { getUserId, getUserName } from './Helper/UserHelper.js';
 
 let userList = [];
 const userListListeners = [];
@@ -43,3 +43,6 @@ const FindUserInArray = (list, findUser = {}) => {
   const findUserId = getUserId(findUser);
   return list.find((user) => getUserId(user) === findUserId) || list[0];
 };
+
+export const getSelectedUserId = () => getUserId(selectedUser);
+export const getSelectedUserName = () => getUserName(selectedUser);
