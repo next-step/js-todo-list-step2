@@ -47,6 +47,7 @@ const renderUserTodo = async (userId) => {
 				_id: todo._id,
 				contents: todo.contents,
 				isCompleted: todo.isCompleted,
+				priority: todo.priority,
 			};
 			pushData(todoItem);
 			renderTodoItem(getUserTodoList());

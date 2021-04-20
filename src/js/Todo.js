@@ -14,13 +14,46 @@ const completedBtn = document.querySelector(".completed");
 const pendingBtn = document.querySelector(".active");
 const deleteAllBtn = document.querySelector(".clear-completed");
 
+const priorityList = {
+	NONE: "select",
+	FIRST: "primary",
+	SECOND: "secondary",
+};
+
 let todoItemList = [];
 
-const todoItemTemplate = (id, inputText, completed) =>
+const priortyTemplate = {
+	NONE: `
+	<select class="chip select">
+		<option value="NONE" selected="">순위</option>
+		<option value="FIRST">1순위</option>
+		<option value="SECOND">2순위</option>
+  	</select>
+`,
+	FIRST: `
+	<select class="chip primary">
+		<option value="NONE">순위</option>
+		<option value="FIRST" selected="">1순위</option>
+		<option value="SECOND">2순위</option>
+  	</select>
+`,
+	SECOND: `
+	<select class="chip secondary">
+		<option value="NONE">순위</option>
+		<option value="FIRST">1순위</option>
+		<option value="SECOND" selected="">2순위</option>
+  	</select>
+`,
+};
+
+const todoItemTemplate = (id, inputText, completed, priority) =>
 	`<li id=${id} class=${completed ? "completed" : "false"}>
 	<div class="view">
 		<input class="toggle" type="checkbox" id=${id} ${completed ? "checked" : ""}>
-		<label class="label">${inputText}</label>
+		<label class="label">
+			${priortyTemplate[priority]}
+		${inputText}
+		</label>
 		<button class="destroy" id=${id}></button>
 	</div>
 	<input class="edit" value=${inputText}>
@@ -46,13 +79,19 @@ function itemEventTrigger() {
 	todoList.addEventListener("click", removeItem);
 	todoList.addEventListener("dblclick", editItem);
 	todoList.addEventListener("keyup", finishEdit);
+	todoList.addEventListener("change", selectPriority);
 }
 
 // 리스트 랜더링
 export function renderTodoItem(todoItems) {
-	const mergedTemplate = todoItems.map((item) =>
-		todoItemTemplate(item._id, item.contents, item.isCompleted)
-	);
+	const mergedTemplate = todoItems.map((item) => {
+		return todoItemTemplate(
+			item._id,
+			item.contents,
+			item.isCompleted,
+			item.priority
+		);
+	});
 	todoList.innerHTML = mergedTemplate.join("");
 
 	itemEventTrigger();
@@ -60,18 +99,19 @@ export function renderTodoItem(todoItems) {
 	setTodoNum();
 }
 
-function updatedTodoItems(_id, contents, isCompleted) {
+function updatedTodoItems(_id, contents, isCompleted, priority) {
 	const todoItemInfo = {
 		_id,
 		contents,
 		isCompleted,
+		priority,
 	};
 	todoItemList.push(todoItemInfo);
 	return todoItemList;
 }
 
 // 할 일 추가
-export function addItem(id, inputText, completed) {
+function addItem(id, inputText, completed) {
 	todoItemList = updatedTodoItems(id, inputText, completed);
 	renderTodoItem(todoItemList);
 	// saveData();
@@ -152,9 +192,27 @@ async function enterItem(event) {
 		if (inputText.length >= 2) {
 			const user = document.querySelector(".active");
 			const addedItem = await fetchAddItem(user.dataset.id, inputText);
-			addItem(addedItem._id, inputText, false);
+			addItem(addedItem._id, inputText, false, "NONE");
 			todoInput.value = "";
 		} else alert("두 글자 이상으로 적어주세요!");
+	}
+}
+
+async function selectPriority(event) {
+	const todoItem = event.target.closest("li");
+	const user = document.querySelector(".active");
+	if (event.target.classList.contains("chip")) {
+		const select = event.target;
+		const result = select.value;
+		Object.keys(priorityList).map((priority) => {
+			if (result === priority) {
+				select.classList.remove("select", "primary", "secondary");
+				select.classList.add(priorityList[result]);
+			}
+		});
+		await fetchPriority(user.dataset.id, todoItem.id, result);
+		const idx = todoItemList.findIndex((item) => item._id === todoItem.id);
+		todoItemList[idx].priority = result;
 	}
 }
 
@@ -232,16 +290,26 @@ const fetchCompleteItem = (userId, itemId) => {
 	}).then((res) => res.json());
 };
 
-const fetchEditItem = (userId, itemId, inputText) => {
+const fetchEditItem = (userId, itemId, contents) => {
 	return fetch(`${BASEURL}/api/users/${userId}/items/${itemId}`, {
 		method: "PUT",
 		headers: {
 			"Content-Type": "application/json",
 		},
-		body: JSON.stringify({ contents: `${inputText}` }),
+		body: JSON.stringify({ contents }),
 	});
 };
 
 const fetchDeleteAll = (userId) => {
 	return fetch(`${BASEURL}/api/users/${userId}/items`, { method: "DELETE" });
+};
+
+const fetchPriority = (userID, itemId, priority) => {
+	return fetch(`${BASEURL}/api/users/${userID}/items/${itemId}/priority`, {
+		method: "PUT",
+		headers: {
+			"Content-Type": "application/json",
+		},
+		body: JSON.stringify({ priority }),
+	});
 };
