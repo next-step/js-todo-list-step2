@@ -1,5 +1,5 @@
 import { UserButtonTemplate } from '../Config/Template.js';
-import { isValidUserName } from '../helper/Validation.js';
+import { isValidUserName } from '../Helper/Validation.js';
 import { subscribeUserList } from '../Store.js';
 
 const UserList = ({ onCreate, onChangeUser }) => {

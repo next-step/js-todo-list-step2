@@ -1,21 +1,28 @@
-import { getData, postData } from './helper/FetchApi.js';
+import { getData, postData } from './Helper/FetchApi.js';
 import { GET_USER_LIST_URL, POST_USER_URL } from './Config/API_URL.js';
 
 import { setUserList } from './Store.js';
 
 import UserList from './Components/UserList.js';
 import UserTitle from './Components/UserTitle.js';
+import TodoList from './Components/TodoList.js';
 
 const App = () => {
-  const onUserListLoadHandler = (selectedUser = {}) =>
-    getData(GET_USER_LIST_URL).then((data) => {
+  const onUserListLoadHandler = (selectedUser = {}) => {
+    const fetchURL = GET_USER_LIST_URL();
+
+    return getData(fetchURL).then((data) => {
       setUserList(data, selectedUser);
     });
+  };
 
-  const onUserCreateHandler = (userName) =>
-    postData(POST_USER_URL, { name: userName }).then((data) => {
+  const onUserCreateHandler = (userName) => {
+    const fetchURL = POST_USER_URL();
+
+    return postData(fetchURL, { name: userName }).then((data) => {
       return onUserListLoadHandler(data);
     });
+  };
 
   const onUserChangeHandler = (selectedUser) => {
     return onUserListLoadHandler(selectedUser);
@@ -27,6 +34,7 @@ const App = () => {
       onCreate: onUserCreateHandler,
       onChangeUser: onUserChangeHandler,
     });
+    TodoList();
 
     onUserListLoadHandler();
   };

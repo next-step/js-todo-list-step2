@@ -1,4 +1,5 @@
-import { isEmptyObject } from './helper/util.js';
+import { isEmptyObject } from './Helper/util.js';
+import { getUserId } from './Helper/UserHelper.js';
 
 let userList = [];
 const userListListeners = [];
@@ -31,10 +32,14 @@ export const setUserList = (updateUserList, updateSelectedUser) => {
 
 export const setSelectedUser = (update) => {
   selectedUser = update;
+  console.log(update);
   publishSelectedUser();
 };
 
-const FindUserInArray = (list, findUser = {}) =>
-  isEmptyObject(findUser) || findUser._id.length === 0
-    ? list[0]
-    : list.find((user) => user._id === findUser._id);
+const FindUserInArray = (list, findUser = {}) => {
+  if (isEmptyObject(findUser)) {
+    return list[0];
+  }
+  const findUserId = getUserId(findUser);
+  return list.find((user) => getUserId(user) === findUserId) || list[0];
+};
