@@ -8,7 +8,7 @@ const $api = (() => {
             return connectApi(BASE_URL + '/api/users');
         },
 
-        addUsers(newUser) {
+        addUser(newUser) {
             const option = {
                 method : 'POST',
                 headers : {
@@ -18,6 +18,17 @@ const $api = (() => {
             };
             newUser.body = JSON.stringify(newUser)
             return connectApi(BASE_URL + '/api/users', option);
+        },
+
+        deleteUser(_id) {
+            const option = {
+                method : 'DELETE',
+            }
+            return connectApi(BASE_URL + '/api/users/' + _id, option);
+        },
+
+        loadTodoItem(_id) {
+            return connectApi(BASE_URL + '/api/users/' + _id + '/items')
         }
     }
 

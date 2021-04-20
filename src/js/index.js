@@ -1,14 +1,7 @@
-import userList from './dom/userList.js';
-
-const onUserCreateHandler = () => {
-  userList.add();
-};
-const userCreateButton = document.querySelector('.user-create-button')
-userCreateButton.addEventListener('click', onUserCreateHandler)
-
+import {initList} from './util/eventListner.js';
 
 let init = () => {
-  userList.init();
+  initList();
 }
 
 init();
