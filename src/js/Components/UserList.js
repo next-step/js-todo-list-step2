@@ -1,4 +1,6 @@
+import { UserButtonTemplate } from '../Config/Template.js';
 import { isValidUserName } from '../helper/Validation.js';
+import { subscribeUserList } from '../Store.js';
 
 function UserList({ onCreate }) {
   const createUser = () => {
@@ -18,7 +20,23 @@ function UserList({ onCreate }) {
   const userCreateButton = document.querySelector('.user-create-button');
   userCreateButton.addEventListener('click', createUser);
 
-  this.render = (items = []) => {};
+  const render = (list, selectedUser) => {
+    if (list.length === 0) {
+      return;
+    }
+
+    const userListElement = document.getElementById('user-list');
+    [...userListElement.children].map(
+      (element) => element.dataset.type === 'user' && element.remove()
+    );
+
+    userListElement.insertAdjacentHTML(
+      'afterbegin',
+      list.map((user) => UserButtonTemplate(user, selectedUser)).join('')
+    );
+  };
+
+  subscribeUserList(render);
 }
 
 export default UserList;
