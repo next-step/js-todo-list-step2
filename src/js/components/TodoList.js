@@ -52,7 +52,8 @@ class TodoList extends Observer {
       },
     };
 
-    return assignAction[target.className]();
+    const className = target.className;
+    return assignAction[className] && assignAction[className]();
   }
 
   onDoubleClick({ target }) {
