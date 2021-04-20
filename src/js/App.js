@@ -6,7 +6,7 @@ import { setUserList } from './Store.js';
 import UserList from './Components/UserList.js';
 import UserTitle from './Components/UserTitle.js';
 
-function App() {
+const App = () => {
   const onUserListLoadHandler = (selectedUser = {}) =>
     getData(GET_USER_LIST_URL).then((data) => {
       setUserList(data, selectedUser);
@@ -21,17 +21,17 @@ function App() {
     return onUserListLoadHandler(selectedUser);
   };
 
-  new UserTitle();
-  new UserList({
-    onCreate: onUserCreateHandler,
-    onChangeUser: onUserChangeHandler,
-  });
-
   const init = () => {
+    UserTitle();
+    UserList({
+      onCreate: onUserCreateHandler,
+      onChangeUser: onUserChangeHandler,
+    });
+
     onUserListLoadHandler();
   };
 
   init();
-}
+};
 
 export default App;

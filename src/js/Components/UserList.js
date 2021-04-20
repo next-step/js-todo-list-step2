@@ -2,7 +2,7 @@ import { UserButtonTemplate } from '../Config/Template.js';
 import { isValidUserName } from '../helper/Validation.js';
 import { subscribeUserList } from '../Store.js';
 
-function UserList({ onCreate, onChangeUser }) {
+const UserList = ({ onCreate, onChangeUser }) => {
   const userListElement = document.getElementById('user-list');
   const userCreateButton = document.querySelector('.user-create-button');
 
@@ -51,6 +51,6 @@ function UserList({ onCreate, onChangeUser }) {
   userCreateButton.addEventListener('click', createUser);
 
   subscribeUserList(render);
-}
+};
 
 export default UserList;
