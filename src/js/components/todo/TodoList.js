@@ -14,7 +14,7 @@ export default class TodoList {
     this.handleEditItem = onEditItem;
     this.handleSetPriorityItem = onSetPriorityItem;
     this.handleDeleteItem = onDeleteItem;
-    console.log(this.todoPrioritySelect);
+
     this.init();
   }
 
@@ -54,7 +54,7 @@ export default class TodoList {
     const editInput = parentLi.querySelector("input.edit");
     editInput.focus();
     editInput.onkeydown = ({ keyCode, target }) =>
-      this.editInputHandler({ keyCode, target }, parentLi);
+      this.editInputKeydownHandler({ keyCode, target }, parentLi);
   }
 
   todoChangeHandler(target) {
@@ -66,7 +66,7 @@ export default class TodoList {
     );
   }
 
-  editInputHandler({ keyCode, target }, parentLi) {
+  editInputKeydownHandler({ keyCode, target }, parentLi) {
     if (keyCode === 13) {
       const title = target.value.trim();
       const parentId = target.closest("li").id;

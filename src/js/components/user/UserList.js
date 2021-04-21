@@ -26,7 +26,7 @@ export default class UserList {
 
     this.userCreateButton.addEventListener(
       'click',
-      this.userCreateHandler.bind(this)
+      this.createUserHandler.bind(this)
     );
 
     this.userDeleteButton.addEventListener('click', () => {
@@ -34,7 +34,7 @@ export default class UserList {
     });
   }
 
-  userCreateHandler() {
+  createUserHandler() {
     const userName = prompt('추가하고 싶은 이름을 입력해주세요.');
     if (userName.trim().length < 2) {
       alert('User의 이름은 최소 2글자 이상이어야 합니다.');
