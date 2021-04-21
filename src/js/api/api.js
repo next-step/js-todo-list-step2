@@ -1,13 +1,13 @@
 const ENDPOINT = "https://js-todo-list-9ca3a.df.r.appspot.com";
 
-const request = async (url, method, name) => {
+const request = async (url, method, bodyData) => {
   try {
     const result = await fetch(url, {
       method: method,
       headers: {
         "Content-Type": "application/json;charset=utf-8",
       },
-      body: JSON.stringify(name),
+      body: JSON.stringify(bodyData),
     });
     return result.json();
   } catch (e) {
