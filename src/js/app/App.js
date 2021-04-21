@@ -26,23 +26,23 @@ export default class App {
     });
   }
 
-  handleGetAllUser = async () => {
-    await userApi.getUser().then((data) => {
+  handleGetAllUser() {
+    userApi.getUser().then((data) => {
       this.appData = data;
+      this.selectedUserId = this.appData[0]._id;
+      this.render();
     });
-    this.selectedUserId = this.appData[0]._id;
-    this.render();
-  };
+  }
 
   handleCreateUser = async (name) => {
     await userApi.setUser(name);
     this.handleGetAllUser();
   };
 
-  handleSelectUser = async (userId) => {
+  handleSelectUser(userId) {
     this.selectedUserId = userId;
     this.render();
-  };
+  }
 
   handleDeleteUser = async (userId) => {
     await userApi.deleteUser(userId);
