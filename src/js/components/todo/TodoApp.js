@@ -38,12 +38,12 @@ export default class TodoApp {
     this.getTodoData();
   }
 
-  getTodoData = async () => {
+  getTodoData() {
     this.todoList.isLoading();
-    await todoApi.getItem(this.userId).then((data) => {
+    todoApi.getItem(this.userId).then((data) => {
       this.setState(data);
     });
-  };
+  }
 
   setState(todoData) {
     this.todoData = todoData;

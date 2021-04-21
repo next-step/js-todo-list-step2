@@ -32,8 +32,6 @@ export const todoItem = (data) => {
     `;
 };
 
-export const todoPriority = (data) => {};
-
 export const loading = () => {
   return `
         <li>
