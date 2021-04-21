@@ -5,19 +5,21 @@ export class UserList{
     constructor(todoApp){
         this.todoApp = todoApp;
         const list = $("#user-list");
-        list.addEventListener("click", function (e) {
-            if(e.target && ( e.target.classList.contains("user-create-button") || e.target.classList.contains("user-delete-button"))) {
+        list.addEventListener("click", ({target}) => {
+            if(!target) return;
+            if(target.classList.contains("user-create-button") || target.classList.contains("user-delete-button")) {
                 return true;
             }
-            if (e.target && e.target.nodeName == "BUTTON") {
-                const selectedButton = e.target;
+            if(target.nodeName == "BUTTON") {
+                const selectedButton = target;
                 $$("#user-list button").forEach(button => button.classList.remove(UserList.ACTIVE));
                 selectedButton.classList.toggle(UserList.ACTIVE);
                 todoApp.changeUser(selectedButton.dataset.userid);
             }
         });
-        list.addEventListener("click", async function (e) {
-            if (e.target && e.target.classList.contains("user-create-button")) {
+        list.addEventListener("click", async ({target}) => {
+            if (!target) return;
+            if (target.classList.contains("user-create-button")) {
                 const userName = prompt("추가하고 싶은 이름을 입력해주세요.");
                 if(userName.trim().length < 2){
                     alert('유저명은 최소 2자 이상 입력해 주세요.');
@@ -26,8 +28,9 @@ export class UserList{
                 await todoApp.addUser(userName);
             }
         });
-        list.addEventListener("click", async function (e) {
-            if (e.target && e.target.classList.contains("user-delete-button")) {
+        list.addEventListener("click", async ({target})=>{
+            if (!target) return;
+            if (target.classList.contains("user-delete-button")) {
                 const deleteUserName =  todoApp.currentUser.name;
                 if(confirm(deleteUserName +"을 삭제하시겠습니까?")){
                     await todoApp.deleteUser(todoApp.currentUser._id);

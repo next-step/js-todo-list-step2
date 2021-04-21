@@ -42,9 +42,7 @@ export class TodoStatusContainer {
       });
     });
     const deleteAllButton =$(".count-container .clear-completed" );
-    deleteAllButton.addEventListener("click", async function(e){
-      await todoApp.deleteItemAll();
-    });
+    deleteAllButton.addEventListener("click", async () => await todoApp.deleteItemAll());
   }
   setState() {
     let count = 0;

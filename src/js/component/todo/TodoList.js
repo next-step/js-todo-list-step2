@@ -1,49 +1,53 @@
 import { TodoItem } from "./TodoItem.js";
-import { $, $$ } from "../../util/domSelection.js";
+import { $ } from "../../util/domSelection.js";
 export class TodoList {
   constructor(todoApp) {
     this.todoApp = todoApp;
 
     const list = $(".todo-list");
     
-    list.addEventListener("click", async function (e) {
-      if (e.target && e.target.className == "destroy") {
-        const targetLi = e.target.closest("li");
+    list.addEventListener("click", async ({target}) => {
+      if (!target) return;
+      if (target.className == "destroy") {
+        const targetLi = target.closest("li");
         const itemId =targetLi.dataset.itemid;
         await todoApp.deleteItem(itemId);
         targetLi.outerHTML = "";
       }
     });
-    list.addEventListener("click",async function (e) {
-      if (e.target && e.target.className == "toggle") {
-        const targetLi = e.target.closest("li");
+    list.addEventListener("click", async ({target}) => {
+      if (!target) return;
+      if (target.className == "toggle") {
+        const targetLi = target.closest("li");
         await todoApp.updateItemState(targetLi.dataset.itemid);
       }
     });
 
-    list.addEventListener("dblclick", function (e) {
-      if (e.target && e.target.nodeName == "LABEL") {
-        const targetLi = e.target.closest("li");
+    list.addEventListener("dblclick", ({target}) => {
+      if (!target) return;
+      if (target.nodeName == "LABEL") {
+        const targetLi = target.closest("li");
         targetLi.classList.add("editing");
       }
     });
-    list.addEventListener("keydown", async function (e) {
-      if (e.target && e.target.nodeName == "INPUT") {
-        const targetLi = e.target.closest("li");
-        if (e.key == "Escape") {
+    list.addEventListener("keydown", async ({target,key}) => {
+      if (!target) return;
+      if (target.nodeName == "INPUT") {
+        const targetLi = target.closest("li");
+        if (key == "Escape") {
           targetLi.classList.remove("editing");
-        } else if (e.key == "Enter") {
-          await todoApp.updateItem(targetLi.dataset.itemid, e.target.value);
+        } else if (key == "Enter") {
+          await todoApp.updateItem(targetLi.dataset.itemid, target.value);
           targetLi.classList.remove("editing");
-          
         }
       }
     });
-    list.addEventListener("change", async function (e) {
-      if (e.target && e.target.nodeName == "SELECT" && e.target.classList.contains('chip')) {
-        const targetLi = e.target.closest("li");
-        const selectedIndex = e.target.options.selectedIndex;
-        const priority = e.target.options[selectedIndex].value;
+    list.addEventListener("change", async ({target}) => {
+      if (!target) return;
+      if (target.nodeName == "SELECT" && target.classList.contains('chip')) {
+        const targetLi = target.closest("li");
+        const selectedIndex = target.options.selectedIndex;
+        const priority = target.options[selectedIndex].value;
         await todoApp.updateItemPriority(targetLi.dataset.itemid,priority);
       }
     });
