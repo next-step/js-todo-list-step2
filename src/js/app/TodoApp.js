@@ -1,5 +1,5 @@
 import { DAO } from "../datastore/datastore.js";
-import { TodoItem } from "../component/todo/Todo.js";
+import { TodoItem , TodoStatusContainer} from "../component/todo/Todo.js";
 
 export class TodoApp {
   async init(userId = '') {
@@ -12,6 +12,7 @@ export class TodoApp {
     }
     
     this.todoItemArray = this.currentUser.todoList.map(item => new TodoItem(item));
+    this.filterState = TodoStatusContainer.FILTER_STATE.ALL;
     this.setState();
   }
   async getUsers(){
@@ -69,13 +70,19 @@ export class TodoApp {
     await DAO.updateItemPriority(this.currentUser._id, itemId,priorityArray[priority]);
     await this.refreshUserItems(this.currentUser._id);
   }
-
+  changeFilter(filterState) {
+    if(Object.values(TodoStatusContainer.FILTER_STATE).find(value => value ==filterState)) {
+      
+      this.filterState = filterState;
+      this.setState();
+    }
+  }
   setState() {
     if (this.todoList) {
       this.todoList.setState(this.todoItemArray);
     }
     if (this.todoStatusContainer) {
-      this.todoStatusContainer.setState();
+      this.todoStatusContainer.setState(this.filterState);
     }
     if (this.userList) {
       this.userList.setState(this.userListArray,this.currentUser);
