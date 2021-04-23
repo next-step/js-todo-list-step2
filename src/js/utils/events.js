@@ -24,8 +24,15 @@ export const onUserCreateHandler = () => {
   getFetchItems('users', 'POST', { name: userName });
 }
 
-export const onUserDeleteHandler = (e) => {
-  console.log(e);
+export const onUserDeleteHandler = () => {
+  const userListElement = $('#user-list');
+  const userList = $All('[data-_id]');
+  const user = Array.from(userList).find(user => user.className.includes('active'));
+  const userId = user.dataset._id;
+
+  userListElement.removeChild(user);
+  userListElement.firstChild.classList.add('active');
+  getFetchItems(`/users/${userId}`, 'DELETE');
 }
 
 export const onUserSelected = (e) => {
