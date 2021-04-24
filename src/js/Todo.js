@@ -1,13 +1,13 @@
 import { todoAPI } from "./API.js";
-import { $, $all } from "./Dom.js";
-import { getUserTodoList, saveUserTodoList } from "./List.js";
+import { $ } from "./Dom.js";
+import { getUserTodoList, saveUserTodoList } from "./UserTodoList.js";
 import { template } from "./Template.js";
 
 const PENDING = "false";
 const COMPLETED = "completed";
 
 const todoInput = $("#new-todo-title");
-const todoList = $("#todo-list");
+const $todoList = $("#todo-list");
 const todoCount = $(".todo-count strong");
 
 const showAllBtn = $(".all");
@@ -25,7 +25,7 @@ let todoItemList = [];
 
 // 할 일들의 개수
 function setTodoNum() {
-	const todoNum = todoList.children.length;
+	const todoNum = $todoList.children.length;
 	todoCount.textContent = todoNum;
 }
 
@@ -37,12 +37,13 @@ function isComplete(toggle) {
 	return true;
 }
 
+// todoItem 이벤트
 function itemEventTrigger() {
-	todoList.addEventListener("click", setItemState);
-	todoList.addEventListener("click", removeItem);
-	todoList.addEventListener("dblclick", editItem);
-	todoList.addEventListener("keyup", finishEdit);
-	todoList.addEventListener("change", selectPriority);
+	$todoList.addEventListener("click", setItemState);
+	$todoList.addEventListener("click", removeItem);
+	$todoList.addEventListener("dblclick", editItem);
+	$todoList.addEventListener("keyup", finishEdit);
+	$todoList.addEventListener("change", selectPriority);
 }
 
 // 리스트 랜더링
@@ -55,13 +56,13 @@ export function renderTodoItem(todoItems) {
 			item.priority
 		);
 	});
-	todoList.innerHTML = mergedTemplate.join("");
-
+	$todoList.innerHTML = mergedTemplate.join("");
 	itemEventTrigger();
-	todoItemList = getUserTodoList();
+	todoItemList = getUserTodoList(); // 얕은 복사
 	setTodoNum();
 }
 
+// toDoList 업데이트
 function updatedTodoItems(_id, contents, isCompleted, priority) {
 	const todoItemInfo = {
 		_id,
@@ -77,82 +78,15 @@ function updatedTodoItems(_id, contents, isCompleted, priority) {
 function addItem(id, inputText, completed, priority) {
 	todoItemList = updatedTodoItems(id, inputText, completed, priority);
 	renderTodoItem(todoItemList);
-	// saveData();
-}
-
-// 할 일 상태 설정
-async function setItemState(event) {
-	if (event.target.className === "toggle") {
-		//event.target.classList.contains("toggle")
-		const user = $(".active");
-		const toggle = event.target;
-		toggle.toggleAttribute("checked");
-		const todoItem = toggle.closest("li");
-		todoItem.className = isComplete(toggle) ? COMPLETED : PENDING;
-		const idx = todoItemList.findIndex((item) => item._id === todoItem.id);
-		todoItemList[idx].isCompleted = isComplete(toggle) ? true : false;
-		await todoAPI.fetchCompleteItem(user.dataset.id, todoItem.id);
-		// saveUserTodoList(todoItemList);
-		// saveData();
-	}
-}
-
-// 할 일 삭제
-async function removeItem(event) {
-	if (event.target.className === "destroy") {
-		const user = $(".active");
-		const destroy = event.target;
-		const todoItem = destroy.closest("li");
-		todoList.removeChild(todoItem);
-		todoItemList = todoItemList.filter((item) => item._id !== todoItem.id);
-		await todoAPI.fetchDeleteItem(user.dataset.id, todoItem.id);
-		saveUserTodoList(todoItemList);
-		setTodoNum();
-		// saveData();
-	}
-}
-
-// 할 일 수정
-function editItem(event) {
-	if (event.target.className === "label") {
-		const label = event.target;
-		const todoItem = label.closest("li");
-		todoItem.classList.add("editing");
-	}
-}
-
-// 수정 종료
-async function finishEdit(event) {
-	const todoItem = event.target.closest("li");
-	const user = $(".active");
-	if (todoItem.classList.contains("editing")) {
-		const edit = event.target;
-		const label = todoItem.querySelector("label");
-		const editText = edit.value;
-
-		if (event.key === "Escape") {
-			todoItem.classList.remove("editing");
-			edit.value = label.textContent;
-		}
-
-		if (event.key === "Enter") {
-			todoItem.classList.remove("editing");
-			edit.setAttribute("value", editText);
-			label.textContent = editText;
-			await todoAPI.fetchEditItem(user.dataset.id, todoItem.id, editText);
-			const idx = todoItemList.findIndex(
-				(item) => item._id === todoItem.id
-			);
-			todoItemList[idx].contents = editText;
-		}
-	}
 }
 
 // 할 일 입력
 async function enterItem(event) {
 	if (!event.isComposing && event.key === "Enter") {
 		const inputText = todoInput.value;
-		if (inputText.length >= 2) {
+		if (inputText.length < 2) {
+			alert("두 글자 이상으로 적어주세요!");
+		} else {
 			const user = $(".active");
 			const addedItem = await todoAPI.fetchAddItem(
 				user.dataset.id,
@@ -160,13 +94,83 @@ async function enterItem(event) {
 			);
 			addItem(addedItem._id, inputText, false, "NONE");
 			todoInput.value = "";
-		} else alert("두 글자 이상으로 적어주세요!");
+		}
 	}
 }
 
+// 할 일 상태 설정
+async function setItemState(event) {
+	if (event.target.className === "toggle") {
+		//event.target.classList.contains("toggle")
+		const $user = $(".active");
+		const toggle = event.target;
+		toggle.toggleAttribute("checked");
+		const $todoItem = toggle.closest("li");
+		$todoItem.className = isComplete(toggle) ? COMPLETED : PENDING;
+		const idx = todoItemList.findIndex((item) => item._id === $todoItem.id);
+		todoItemList[idx].isCompleted = isComplete(toggle) ? true : false;
+		await todoAPI.fetchCompleteItem($user.dataset.id, $todoItem.id);
+	}
+}
+
+// 할 일 삭제
+async function removeItem(event) {
+	if (event.target.className === "destroy") {
+		const $user = $(".active");
+		const destroy = event.target;
+		const $todoItem = destroy.closest("li");
+		$todoList.removeChild($todoItem);
+		todoItemList = todoItemList.filter((item) => item._id !== $todoItem.id);
+		await todoAPI.fetchDeleteItem($user.dataset.id, $todoItem.id);
+		saveUserTodoList($todoItemList); // todoItemList는 새로운 주소값
+		setTodoNum();
+	}
+}
+
+// 할 일 수정
+function editItem(event) {
+	if (event.target.className === "label") {
+		const label = event.target;
+		const $todoItem = label.closest("li");
+		$todoItem.classList.add("editing");
+	}
+}
+
+// 수정 종료
+async function finishEdit(event) {
+	const $todoItem = event.target.closest("li");
+	const $user = $(".active");
+	if (todoItem.classList.contains("editing")) {
+		const edit = event.target;
+		const $label = $todoItem.querySelector("label");
+		const editText = edit.value;
+
+		if (event.key === "Escape") {
+			$todoItem.classList.remove("editing");
+			edit.value = $label.textContent;
+		}
+
+		if (event.key === "Enter") {
+			$todoItem.classList.remove("editing");
+			edit.setAttribute("value", editText);
+			$label.textContent = editText;
+			const idx = todoItemList.findIndex(
+				(item) => item._id === $todoItem.id
+			);
+			todoItemList[idx].contents = editText;
+			await todoAPI.fetchEditItem(
+				$user.dataset.id,
+				$todoItem.id,
+				editText
+			);
+		}
+	}
+}
+
+// 우선 순위 정하기
 async function selectPriority(event) {
-	const todoItem = event.target.closest("li");
-	const user = $(".active");
+	const $todoItem = event.target.closest("li");
+	const $user = $(".active");
 	if (event.target.classList.contains("chip")) {
 		const select = event.target;
 		const result = select.value;
@@ -176,8 +180,8 @@ async function selectPriority(event) {
 				select.classList.add(priorityList[result]);
 			}
 		});
-		await todoAPI.fetchPriority(user.dataset.id, todoItem.id, result);
-		const idx = todoItemList.findIndex((item) => item._id === todoItem.id);
+		await todoAPI.fetchPriority($user.dataset.id, $todoItem.id, result);
+		const idx = todoItemList.findIndex((item) => item._id === $todoItem.id);
 		todoItemList[idx].priority = result;
 	}
 }
@@ -202,31 +206,17 @@ function showProgress(event) {
 	setTodoNum();
 }
 
+// 전체 삭제
 async function removeAllItems(event) {
-	const user = $(".active");
-	todoList.innerHTML = "";
+	const $user = $(".active");
+	$todoList.innerHTML = "";
 	setTodoNum();
-	await todoAPI.fetchDeleteAll(user.dataset.id);
+	await todoAPI.fetchDeleteAll($user.dataset.id);
 	todoItemList = [];
 	saveUserTodoList(todoItemList);
 }
 
-// localStorage
-// export function saveData() {
-// 	localStorage.setItem(TODOITEMS, JSON.stringify(todoItemList));
-// }
-
-// function loadData() {
-// 	const loadedItems = localStorage.getItem(TODOITEMS);
-// 	if (loadedItems !== null) {
-// 		const parsedItems = JSON.parse(loadedItems);
-// 		parsedItems.map((item) => pushData(item));
-// 	}
-// }
-
 export function todoRole() {
-	// loadData();
-	// todoItemList = getUserTodoList();
 	todoInput.addEventListener("keydown", enterItem);
 	showAllBtn.addEventListener("click", showProgress);
 	completedBtn.addEventListener("click", showProgress);
