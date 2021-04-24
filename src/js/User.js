@@ -1,23 +1,20 @@
 import { userAPI } from "./API.js";
+import { $, $all } from "./Dom.js";
 import { getUserTodoList, newTodoList, pushData } from "./List.js";
+import { template } from "./Template.js";
 import { renderTodoItem } from "./Todo.js";
 
 const users = [];
 
-const userTitle = document.querySelector("#user-title");
-const userList = document.querySelector("#user-list");
-
-const userTitleTemplate = (userName) =>
-	`<span><strong>${userName}</strong>'s Todo List</span>`;
-const userBtnTemplate = (id, userName) =>
-	`<button class="ripple" data-id=${id} data-contents=${userName}>${userName}</button>`;
+const userTitle = $("#user-title");
+const userList = $("#user-list");
 
 const loadingUser = () => {
 	userTitle.innerHTML = `🙏 NOW LOADING... 🙏`;
 };
 
 const userBtnEvent = () => {
-	const userBtns = document.querySelectorAll(".ripple");
+	const userBtns = $all(".ripple");
 	const userBtnsAry = Array.prototype.slice.call(userBtns, 0, -2);
 	userBtnsAry.map((userBtn) =>
 		userBtn.addEventListener("click", userBtnClicked)
@@ -25,13 +22,13 @@ const userBtnEvent = () => {
 };
 
 const renderUserBtn = (newUser) => {
-	const newUserTemplate = userBtnTemplate(newUser._id, newUser.name);
+	const newUserTemplate = template.userBtnTemplate(newUser._id, newUser.name);
 	userList.insertAdjacentHTML("afterbegin", newUserTemplate);
 	userBtnEvent();
 };
 
 const getUserTitle = (user) => {
-	const title = userTitleTemplate(user.dataset.contents);
+	const title = template.userTitleTemplate(user.dataset.contents);
 	userTitle.dataset.username = user.dataset.contents;
 	userTitle.innerHTML = title;
 };
@@ -102,15 +99,15 @@ const renderUserList = () => {
 };
 
 const onUserDeleteHandler = async (event) => {
-	const clickedUser = document.querySelector(".active");
+	const clickedUser = $(".active");
 	await userAPI.fetchUserDelete(clickedUser.dataset.id);
 	userList.removeChild(clickedUser);
 };
 
-const userCreateButton = document.querySelector(".user-create-button");
+const userCreateButton = $(".user-create-button");
 userCreateButton.addEventListener("click", onUserCreateHandler);
 
-const userDeleteButton = document.querySelector(".user-delete-button");
+const userDeleteButton = $(".user-delete-button");
 userDeleteButton.addEventListener("click", onUserDeleteHandler);
 
 export { showUserList };

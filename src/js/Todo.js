@@ -1,18 +1,19 @@
 import { todoAPI } from "./API.js";
+import { $, $all } from "./Dom.js";
 import { getUserTodoList, saveUserTodoList } from "./List.js";
+import { template } from "./Template.js";
 
-// const TODOITEMS = "todoItems";
 const PENDING = "false";
 const COMPLETED = "completed";
 
-const todoInput = document.getElementById("new-todo-title");
-const todoList = document.getElementById("todo-list");
-const todoCount = document.querySelector(".todo-count strong");
+const todoInput = $("#new-todo-title");
+const todoList = $("#todo-list");
+const todoCount = $(".todo-count strong");
 
-const showAllBtn = document.querySelector(".all");
-const completedBtn = document.querySelector(".completed");
-const pendingBtn = document.querySelector(".active");
-const deleteAllBtn = document.querySelector(".clear-completed");
+const showAllBtn = $(".all");
+const completedBtn = $(".completed");
+const pendingBtn = $(".active");
+const deleteAllBtn = $(".clear-completed");
 
 const priorityList = {
 	NONE: "select",
@@ -21,44 +22,6 @@ const priorityList = {
 };
 
 let todoItemList = [];
-
-const priortyTemplate = {
-	NONE: `
-	<select class="chip select">
-		<option value="NONE" selected="">순위</option>
-		<option value="FIRST">1순위</option>
-		<option value="SECOND">2순위</option>
-  	</select>
-`,
-	FIRST: `
-	<select class="chip primary">
-		<option value="NONE">순위</option>
-		<option value="FIRST" selected="">1순위</option>
-		<option value="SECOND">2순위</option>
-  	</select>
-`,
-	SECOND: `
-	<select class="chip secondary">
-		<option value="NONE">순위</option>
-		<option value="FIRST">1순위</option>
-		<option value="SECOND" selected="">2순위</option>
-  	</select>
-`,
-};
-
-const todoItemTemplate = (id, inputText, completed, priority) =>
-	`<li id=${id} class=${completed ? "completed" : "false"}>
-	<div class="view">
-		<input class="toggle" type="checkbox" id=${id} ${completed ? "checked" : ""}>
-		<label class="label">
-			${priortyTemplate[priority]}
-			${inputText}
-		</label>
-		<button class="destroy" id=${id}></button>
-	</div>
-	<input class="edit" value=${inputText}>
-</li>
-`;
 
 // 할 일들의 개수
 function setTodoNum() {
@@ -85,7 +48,7 @@ function itemEventTrigger() {
 // 리스트 랜더링
 export function renderTodoItem(todoItems) {
 	const mergedTemplate = todoItems.map((item) => {
-		return todoItemTemplate(
+		return template.todoItemTemplate(
 			item._id,
 			item.contents,
 			item.isCompleted,
@@ -121,7 +84,7 @@ function addItem(id, inputText, completed, priority) {
 async function setItemState(event) {
 	if (event.target.className === "toggle") {
 		//event.target.classList.contains("toggle")
-		const user = document.querySelector(".active");
+		const user = $(".active");
 		const toggle = event.target;
 		toggle.toggleAttribute("checked");
 		const todoItem = toggle.closest("li");
@@ -137,7 +100,7 @@ async function setItemState(event) {
 // 할 일 삭제
 async function removeItem(event) {
 	if (event.target.className === "destroy") {
-		const user = document.querySelector(".active");
+		const user = $(".active");
 		const destroy = event.target;
 		const todoItem = destroy.closest("li");
 		todoList.removeChild(todoItem);
@@ -161,7 +124,7 @@ function editItem(event) {
 // 수정 종료
 async function finishEdit(event) {
 	const todoItem = event.target.closest("li");
-	const user = document.querySelector(".active");
+	const user = $(".active");
 	if (todoItem.classList.contains("editing")) {
 		const edit = event.target;
 		const label = todoItem.querySelector("label");
@@ -190,7 +153,7 @@ async function enterItem(event) {
 	if (!event.isComposing && event.key === "Enter") {
 		const inputText = todoInput.value;
 		if (inputText.length >= 2) {
-			const user = document.querySelector(".active");
+			const user = $(".active");
 			const addedItem = await todoAPI.fetchAddItem(
 				user.dataset.id,
 				inputText
@@ -203,7 +166,7 @@ async function enterItem(event) {
 
 async function selectPriority(event) {
 	const todoItem = event.target.closest("li");
-	const user = document.querySelector(".active");
+	const user = $(".active");
 	if (event.target.classList.contains("chip")) {
 		const select = event.target;
 		const result = select.value;
@@ -240,7 +203,7 @@ function showProgress(event) {
 }
 
 async function removeAllItems(event) {
-	const user = document.querySelector(".active");
+	const user = $(".active");
 	todoList.innerHTML = "";
 	setTodoNum();
 	await todoAPI.fetchDeleteAll(user.dataset.id);
