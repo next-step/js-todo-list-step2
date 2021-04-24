@@ -1,4 +1,4 @@
-import { BASEURL } from "./API.js";
+import { todoAPI } from "./API.js";
 import { getUserTodoList, saveUserTodoList } from "./List.js";
 
 // const TODOITEMS = "todoItems";
@@ -52,7 +52,7 @@ const todoItemTemplate = (id, inputText, completed, priority) =>
 		<input class="toggle" type="checkbox" id=${id} ${completed ? "checked" : ""}>
 		<label class="label">
 			${priortyTemplate[priority]}
-		${inputText}
+			${inputText}
 		</label>
 		<button class="destroy" id=${id}></button>
 	</div>
@@ -111,8 +111,8 @@ function updatedTodoItems(_id, contents, isCompleted, priority) {
 }
 
 // 할 일 추가
-function addItem(id, inputText, completed) {
-	todoItemList = updatedTodoItems(id, inputText, completed);
+function addItem(id, inputText, completed, priority) {
+	todoItemList = updatedTodoItems(id, inputText, completed, priority);
 	renderTodoItem(todoItemList);
 	// saveData();
 }
@@ -128,7 +128,7 @@ async function setItemState(event) {
 		todoItem.className = isComplete(toggle) ? COMPLETED : PENDING;
 		const idx = todoItemList.findIndex((item) => item._id === todoItem.id);
 		todoItemList[idx].isCompleted = isComplete(toggle) ? true : false;
-		await fetchCompleteItem(user.dataset.id, todoItem.id);
+		await todoAPI.fetchCompleteItem(user.dataset.id, todoItem.id);
 		// saveUserTodoList(todoItemList);
 		// saveData();
 	}
@@ -142,7 +142,7 @@ async function removeItem(event) {
 		const todoItem = destroy.closest("li");
 		todoList.removeChild(todoItem);
 		todoItemList = todoItemList.filter((item) => item._id !== todoItem.id);
-		await fetchDeleteItem(user.dataset.id, todoItem.id);
+		await todoAPI.fetchDeleteItem(user.dataset.id, todoItem.id);
 		saveUserTodoList(todoItemList);
 		setTodoNum();
 		// saveData();
@@ -176,7 +176,7 @@ async function finishEdit(event) {
 			todoItem.classList.remove("editing");
 			edit.setAttribute("value", editText);
 			label.textContent = editText;
-			await fetchEditItem(user.dataset.id, todoItem.id, editText);
+			await todoAPI.fetchEditItem(user.dataset.id, todoItem.id, editText);
 			const idx = todoItemList.findIndex(
 				(item) => item._id === todoItem.id
 			);
@@ -191,7 +191,10 @@ async function enterItem(event) {
 		const inputText = todoInput.value;
 		if (inputText.length >= 2) {
 			const user = document.querySelector(".active");
-			const addedItem = await fetchAddItem(user.dataset.id, inputText);
+			const addedItem = await todoAPI.fetchAddItem(
+				user.dataset.id,
+				inputText
+			);
 			addItem(addedItem._id, inputText, false, "NONE");
 			todoInput.value = "";
 		} else alert("두 글자 이상으로 적어주세요!");
@@ -210,7 +213,7 @@ async function selectPriority(event) {
 				select.classList.add(priorityList[result]);
 			}
 		});
-		await fetchPriority(user.dataset.id, todoItem.id, result);
+		await todoAPI.fetchPriority(user.dataset.id, todoItem.id, result);
 		const idx = todoItemList.findIndex((item) => item._id === todoItem.id);
 		todoItemList[idx].priority = result;
 	}
@@ -240,7 +243,7 @@ async function removeAllItems(event) {
 	const user = document.querySelector(".active");
 	todoList.innerHTML = "";
 	setTodoNum();
-	await fetchDeleteAll(user.dataset.id);
+	await todoAPI.fetchDeleteAll(user.dataset.id);
 	todoItemList = [];
 	saveUserTodoList(todoItemList);
 }
@@ -267,49 +270,3 @@ export function todoRole() {
 	pendingBtn.addEventListener("click", showProgress);
 	deleteAllBtn.addEventListener("click", removeAllItems);
 }
-
-const fetchAddItem = (userId, inputText) => {
-	return fetch(`${BASEURL}/api/users/${userId}/items`, {
-		method: "POST",
-		headers: {
-			"Content-Type": "application/json",
-		},
-		body: JSON.stringify({ contents: `${inputText}` }),
-	}).then((res) => res.json());
-};
-
-const fetchDeleteItem = (userId, itemId) => {
-	return fetch(`${BASEURL}/api/users/${userId}/items/${itemId}`, {
-		method: "DELETE",
-	});
-};
-
-const fetchCompleteItem = (userId, itemId) => {
-	return fetch(`${BASEURL}/api/users/${userId}/items/${itemId}/toggle`, {
-		method: "PUT",
-	}).then((res) => res.json());
-};
-
-const fetchEditItem = (userId, itemId, contents) => {
-	return fetch(`${BASEURL}/api/users/${userId}/items/${itemId}`, {
-		method: "PUT",
-		headers: {
-			"Content-Type": "application/json",
-		},
-		body: JSON.stringify({ contents }),
-	});
-};
-
-const fetchDeleteAll = (userId) => {
-	return fetch(`${BASEURL}/api/users/${userId}/items`, { method: "DELETE" });
-};
-
-const fetchPriority = (userID, itemId, priority) => {
-	return fetch(`${BASEURL}/api/users/${userID}/items/${itemId}/priority`, {
-		method: "PUT",
-		headers: {
-			"Content-Type": "application/json",
-		},
-		body: JSON.stringify({ priority }),
-	});
-};

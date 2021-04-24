@@ -1,4 +1,4 @@
-import { BASEURL } from "./API.js";
+import { userAPI } from "./API.js";
 import { getUserTodoList, newTodoList, pushData } from "./List.js";
 import { renderTodoItem } from "./Todo.js";
 
@@ -37,7 +37,7 @@ const getUserTitle = (user) => {
 };
 
 const renderUserTodo = async (userId) => {
-	const selectedUserTodos = await fetchUserTodos(userId);
+	const selectedUserTodos = await userAPI.fetchUserTodos(userId);
 	newTodoList();
 	if (selectedUserTodos.length === 0) {
 		renderTodoItem(getUserTodoList());
@@ -72,10 +72,6 @@ const userBtnClicked = (event) => {
 	renderUserTodo(clickedBtn.dataset.id);
 };
 
-const fetchUserTodos = (id) => {
-	return fetch(`${BASEURL}/api/users/${id}/items`).then((res) => res.json());
-};
-
 const updateUser = (userData) => {
 	users.push(userData);
 };
@@ -83,30 +79,16 @@ const updateUser = (userData) => {
 const onUserCreateHandler = async (event) => {
 	const userName = prompt("추가하고 싶은 이름을 입력해주세요.");
 	if (userName && userName.length >= 2) {
-		const userData = await addUser(userName);
+		const userData = await userAPI.addUser(userName);
 		updateUser(userData);
 		const newUser = users[users.length - 1];
 		renderUserBtn(newUser);
 	} else alert("두 글자 이상으로 적어주세요!");
 };
 
-const addUser = (userName) => {
-	return fetch(`${BASEURL}/api/users`, {
-		method: "POST",
-		headers: {
-			"Content-Type": "application/json",
-		},
-		body: JSON.stringify({ name: `${userName}` }),
-	}).then((res) => res.json());
-};
-
-const fetchUserList = () => {
-	return fetch(`${BASEURL}/api/users`).then((res) => res.json());
-};
-
 const showUserList = async () => {
 	loadingUser();
-	const fetchedUserList = await fetchUserList();
+	const fetchedUserList = await userAPI.fetchUserList();
 	users.push(...fetchedUserList);
 	renderUserList();
 	const userBtn = userList.children[0];
@@ -121,15 +103,10 @@ const renderUserList = () => {
 
 const onUserDeleteHandler = async (event) => {
 	const clickedUser = document.querySelector(".active");
-	await fetchUserDelete(clickedUser.dataset.id);
+	await userAPI.fetchUserDelete(clickedUser.dataset.id);
 	userList.removeChild(clickedUser);
 };
 
-const fetchUserDelete = (userId) => {
-	return fetch(`${BASEURL}/api/users/${userId}`, {
-		method: "DELETE",
-	}).then((res) => res.json());
-};
 const userCreateButton = document.querySelector(".user-create-button");
 userCreateButton.addEventListener("click", onUserCreateHandler);
 
