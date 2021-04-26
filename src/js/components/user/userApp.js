@@ -13,44 +13,44 @@ export default function UserApp(todoApp) {
 
   this.render = async () => {
     const getUsers = await GET_USERS();
-    users = getUsers.map(user => parseUser(user));
+    users = getUsers.map((user) => parseUser(user));
 
-    users.forEach(user => user.inActivate());
+    users.forEach((user) => user.inActivate());
     activeUser = activeUser ?? users[0];
-    users.find(user => user.matchId(activeUser.getId())).activate();
+    users.find((user) => user.matchId(activeUser.getId())).activate();
 
+    userTitle.render(activeUser.getName());
     userList.render(users);
-  }
+  };
 
-  this.add = async name => {
+  this.add = async (name) => {
     const user = await ADD_USER(name);
     activeUser = parseUser(user);
     changeActive();
     this.render();
-  }
+  };
 
   this.delete = async () => {
     await DELETE_USER(activeUser.getId());
     activeUser = users[0];
     changeActive();
     this.init();
-  }
+  };
 
-  this.active = id => {
-    activeUser = users.find(user => user.matchId(id));
+  this.active = (id) => {
+    activeUser = users.find((user) => user.matchId(id));
     changeActive();
     this.init();
-  }
+  };
 
   const changeActive = () => {
     const name = activeUser.getName();
     userTitle.render(name);
     userEditor.changeUser(name);
-  }
+  };
 
   this.init = async () => {
     await this.render();
     todoApp.init(activeUser);
-  }
-
+  };
 }
