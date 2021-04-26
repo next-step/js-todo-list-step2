@@ -37,7 +37,10 @@ function fetchAPI(uri, options) {
 }
 
 const API = {
-  getUserList: fetchAPI(URI.handleUsers, option('GET'))
+  getUserList: fetchAPI(URI.handleUsers, option(Method.GET)),
+  addUser: (userName) => fetchAPI(URI.handleUsers, option(Method.POST, { name: userName })),
+  deleteUser: (userId) => fetchAPI(URI.handleUser(userId), option(Method.DELETE)),
+  getUserTodoList: (userId) => fetchAPI(URI.handleTodos(userId), option(Method.GET)),
 }
 
 export default API;
