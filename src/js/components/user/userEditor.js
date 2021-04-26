@@ -6,22 +6,25 @@ export default function UserEditor(app) {
   const deleteButton = document.querySelector('[data-action="deleteUser"]');
   let selectUserName;
 
-  this.changeUser = name => selectUserName = name;
+  this.changeUser = (name) => (selectUserName = name);
 
   const onUserCreateHandler = () => {
-    const userName = prompt(ASK_MESSAGE['ADD_NAME']);
+    const userName = prompt(ASK_MESSAGE.ADD_NAME);
     if (checkEmpty(userName)) {
-      alert(ILLEGAL_MESSAGE['EMPTY_VALUE']);
+      alert(ILLEGAL_MESSAGE.EMPTY_VALUE);
       return;
     }
     app.add(userName);
-  }
+  };
 
   const onUserDeleteHandler = () => {
-    if(!checkNull(selectUserName) && confirm(ASK_MESSAGE['DELETE_NAME'](selectUserName))) {
+    if (
+      !checkNull(selectUserName) &&
+      confirm(ASK_MESSAGE.DELETE_NAME(selectUserName))
+    ) {
       app.delete();
     }
-  }
+  };
 
   createButton.addEventListener("click", onUserCreateHandler);
   deleteButton.addEventListener("click", onUserDeleteHandler);
