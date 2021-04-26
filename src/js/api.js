@@ -74,7 +74,6 @@ const $api = (() => {
             return connectApi(BASE_URL + '/api/users/' + _id + '/items/' + item.id + '/toggle', option)
         }
     }
-
   
     return {
         user
