@@ -30,6 +30,10 @@ const $TODO_DOM = {
 
     todoList() {
         return document.querySelector('.todo-list');
+    },
+
+    todoFilter() {
+        return document.querySelector('.filters');
     }
     
 }

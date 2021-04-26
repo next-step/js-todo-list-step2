@@ -92,26 +92,27 @@ export default class Todo {
         this._todoList.append(this._todoLi);
     }
 
-    changeTodoState(li, toggleCheck) {
+    async changeTodoState(_id, li, toggleCheck) {
+        const toggleItem = await $api.user.toggleTodoItem(_id, li);
         if (li.className == '') {
             li.classList.add('completed');
             toggleCheck.setAttribute('checked', '');
-            this.updateItems(li);
+            //this.updateItems(li);
             return;
         } 
         li.removeAttribute('class');
         toggleCheck.removeAttribute('checked');
-        this.updateItems(li);
+        //this.updateItems(li);
     }
     
-    updateItems(li) {
-        this._todoItems.filter(todo => todo.id == parseInt(li.id))
-                       .map(todo => {
-            todo.class = li.className;
-            todo.checked = li.classList.contains('completed')? 'true' : 'false';
-        });
-        this.saveLocalStorage();
-    }
+    // updateItems(li) {
+    //     this._todoItems.filter(todo => todo.id == parseInt(li.id))
+    //                    .map(todo => {
+    //         todo.class = li.className;
+    //         todo.checked = li.classList.contains('completed')? 'true' : 'false';
+    //     });
+    //     this.saveLocalStorage();
+    // }
 
     deleteItems(li) {
         const filterdItems = this._todoItems.filter(function (todo) {

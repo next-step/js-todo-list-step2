@@ -35,7 +35,7 @@ $TODO_DOM.todoList().addEventListener('dblclick', function(event) {
 });
 
 
-todoApp.todoFilter.addEventListener('click', function(event) {
+$TODO_DOM.todoFilter().addEventListener('click', function(event) {
     const { _id, name } = userList.getSelected();
     const statusList = {
         all () {
@@ -54,6 +54,20 @@ todoApp.todoFilter.addEventListener('click', function(event) {
     const index = statusList[event.target.classList[0]]();
     todoApp.initClassList(index);
 })
+
+$TODO_DOM.todoList().addEventListener('click', function(event) {
+    const { _id, name } = userList.getSelected();
+    const li = event.target.closest('li');
+    const destroyButton = event.target.closest('.destroy');
+    const toggleCheck = event.target.closest('.toggle');
+    if (toggleCheck) {
+        todoApp.changeTodoState(_id, li, toggleCheck);
+    }
+    if (destroyButton) {
+        todoApp.destroy(this, li);
+    }
+})
+
 // todoApp.todoList.addEventListener('click', function(event) {
 //     const toggleCheck = event.target.closest('.toggle');
 //     const destroyButton = event.target.closest('.destroy');

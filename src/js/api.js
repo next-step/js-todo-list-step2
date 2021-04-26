@@ -51,6 +51,13 @@ const $api = (() => {
                 body: JSON.stringify(contents),
             }
             return connectApi(BASE_URL + '/api/users/' + _id + '/items/' + itemId, option)
+        },
+
+        toggleTodoItem(_id, item) {
+            const option = {
+                method : 'PUT'
+            }
+            return connectApi(BASE_URL + '/api/users/' + _id + '/items/' + item.id + '/toggle', option)
         }
     }
 
