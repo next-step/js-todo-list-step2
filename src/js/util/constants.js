@@ -34,8 +34,11 @@ const $TODO_DOM = {
 
     todoFilter() {
         return document.querySelector('.filters');
+    },
+
+    clear() {
+        return document.querySelector('.clear-completed');
     }
-    
 }
 
 

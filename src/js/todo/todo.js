@@ -2,14 +2,9 @@ import $api from '../api.js';
 import  {$USER_DOM, $TODO_DOM} from '../util/constants.js';
 export default class Todo {
     constructor() {
-        this._todoListKey = "todo";
-        this._todoItems = [];
-        this._id = 0;
-        this._todoInput = document.getElementsByClassName('new-todo');
         this._todoList = document.querySelector('.todo-list');
         this._todoFilter = document.querySelector('.filters');
         this._todoCount = document.querySelector('.todo-count').firstElementChild;
-        //this.loadTodos();
     }
 
     async loadById(_id) {
@@ -38,10 +33,9 @@ export default class Todo {
         this.loadById(_id);
     }
 
-    destroy(target, li) {
-        target.removeChild(li);
-        this._todoCount.innerText = this.todoCount;
-        this.deleteItems(li);
+    async destroy(_id, li) {
+        //target.removeChild(li);
+        this.deleteItems(_id, li);
     }
 
     edit({target, key}, userId, labelArea, originalValue) {
@@ -97,29 +91,19 @@ export default class Todo {
         if (li.className == '') {
             li.classList.add('completed');
             toggleCheck.setAttribute('checked', '');
-            //this.updateItems(li);
             return;
         } 
         li.removeAttribute('class');
         toggleCheck.removeAttribute('checked');
-        //this.updateItems(li);
     }
-    
-    // updateItems(li) {
-    //     this._todoItems.filter(todo => todo.id == parseInt(li.id))
-    //                    .map(todo => {
-    //         todo.class = li.className;
-    //         todo.checked = li.classList.contains('completed')? 'true' : 'false';
-    //     });
-    //     this.saveLocalStorage();
-    // }
 
-    deleteItems(li) {
-        const filterdItems = this._todoItems.filter(function (todo) {
-            return todo.id != parseInt(li.id);
-        });
-        this._todoItems = filterdItems;
-        this.saveLocalStorage();
+    async deleteItems(_id, li) {
+        if (li != undefined) {
+            await $api.user.deleteTodoItem(_id, li.id);
+            return await this.allList(_id);
+        }
+        await $api.user.deleteTodoAll(_id);
+        await this.allList(_id);
     }
 
     initTodoList() {
@@ -149,17 +133,6 @@ export default class Todo {
         const filterd = allTodos.filter(todo => todo.isCompleted == true)
                    .map(todo => todoApp.printTodos(todo));
         this._todoCount.innerText = filterd.length;
-    }
-    
-    getLocalStorage() {
-        const loadedTodos = localStorage.getItem(this._todoListKey);
-        if (!loadedTodos) return [];
-        const paredTodos = JSON.parse(loadedTodos);
-        return paredTodos;
-    }
-
-    saveLocalStorage() {
-        localStorage.setItem(this._todoListKey, JSON.stringify(this._todoItems))
     }
 
     checkTodoSize(todo) {

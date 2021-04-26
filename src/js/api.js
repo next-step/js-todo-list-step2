@@ -53,6 +53,20 @@ const $api = (() => {
             return connectApi(BASE_URL + '/api/users/' + _id + '/items/' + itemId, option)
         },
 
+        deleteTodoItem(_id, itemId) {
+            const option = {
+                method : 'DELETE',
+            }
+            return connectApi(BASE_URL + '/api/users/' + _id + '/items/' + itemId, option)
+        },
+
+        deleteTodoAll(_id) {
+            const option = {
+                method : 'DELETE',
+            }
+            return connectApi(BASE_URL + '/api/users/' + _id + '/items/', option)
+        },
+
         toggleTodoItem(_id, item) {
             const option = {
                 method : 'PUT'

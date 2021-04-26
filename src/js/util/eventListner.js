@@ -64,10 +64,14 @@ $TODO_DOM.todoList().addEventListener('click', function(event) {
         todoApp.changeTodoState(_id, li, toggleCheck);
     }
     if (destroyButton) {
-        todoApp.destroy(this, li);
+        todoApp.destroy(_id, li);
     }
 })
 
+$TODO_DOM.clear().addEventListener('click', function(event) {
+    const { _id, name } = userList.getSelected();
+    todoApp.destroy(_id);
+})
 // todoApp.todoList.addEventListener('click', function(event) {
 //     const toggleCheck = event.target.closest('.toggle');
 //     const destroyButton = event.target.closest('.destroy');
