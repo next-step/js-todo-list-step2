@@ -28,8 +28,8 @@ export default class Todo {
     }
 
     async add(_id, todo) {
-        if (this.checkNull(todo)) {
-            return alert('빈 값을 입력할 수 없습니다.');
+        if (this.checkTodoSize(todo)) {
+            return alert('todo는 최소 2글자 이상으로 입력해야 합니다.');
         };
         const todoObj = {
             contents : todo
@@ -162,8 +162,8 @@ export default class Todo {
         localStorage.setItem(this._todoListKey, JSON.stringify(this._todoItems))
     }
 
-    checkNull(todo) {
-        if (todo.trim() == '') {
+    checkTodoSize(todo) {
+        if (todo.trim().length < 2) {
             return true;
         }
         return false;

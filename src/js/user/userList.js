@@ -62,7 +62,9 @@ const userList = (() => {
     }
 
     const add = async (userName) => {
-        
+        if (userName.trim().length < 2) {
+            return alert('이름은 최소 2글자 이상이어야 합니다.');
+        }
         const newUser = {
             name : userName
         }
