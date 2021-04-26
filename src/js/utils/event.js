@@ -14,15 +14,18 @@ export const onUserHandler = (e) => {
 
 const onUserCreateHandler = () => {
   const userName = prompt("추가하고 싶은 이름을 입력해주세요.");
-  const user = addUser(userName);
 
+  if (!userName) return;
+
+  const user = addUser(userName);
+  
   return user;
 }
 
 async function addUser(userName) {
   const createUser = await API.addUser(userName);
   const userTemplate = `<button class="ripple" data-_id="${createUser._id}">${createUser.name}</button>`;
-  
+
   $('#user-list').insertAdjacentHTML('afterbegin', userTemplate);
   rippleActiveHandler($('#user-list').firstChild);
 
@@ -50,7 +53,9 @@ const onUserTodos = (e) => {
 
 export function rippleActiveHandler(ripple) {
   const $ripples = $All('.ripple');
+  const $userTitle = $('#user-title');
 
   Array.from($ripples).map(ripple => ripple.classList.remove('active'));
   ripple.classList.add('active');
+  $userTitle.querySelector('strong').innerText = ripple.innerText;
 }
