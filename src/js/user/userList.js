@@ -1,7 +1,6 @@
 import {$USER_DOM, $TODO_DOM} from '../util/constants.js';
 import $api from '../api.js';
-import Todo from '../todo/todo.js';
-const todoApp = new Todo();
+import todoApp from '../todo/initTodoClass.js';
 
 let seletedButton;
 const $user_createButton = document.querySelector('.user-create-button');
@@ -50,9 +49,9 @@ const userList = (() => {
         return seletedButton;
     };
 
-    const setSelectedButton = (userButton) => {
+    const setSelectedButton = async (userButton) => {
         seletedButton._id = userButton.id;
-        todoApp.loadById(userButton.id);
+        await todoApp.allList(userButton.id);
         if(userButton.name != "") {
             seletedButton.name = userButton.name;
             drawTitle(seletedButton.name);
@@ -99,6 +98,8 @@ const userList = (() => {
         Array.from($USER_DOM.list().children).filter(data => data.id == userButton.id)
             .map(data => data.classList.add('active'));
     }
+
+    
 
     return {
         init,

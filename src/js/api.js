@@ -29,6 +29,28 @@ const $api = (() => {
 
         loadTodoItem(_id) {
             return connectApi(BASE_URL + '/api/users/' + _id + '/items')
+        },
+
+        addTodoItem(_id, todo) {
+            const option = {
+                method : 'POST',
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(todo),
+            }
+            return connectApi(BASE_URL + '/api/users/' + _id + '/items', option)
+        },
+
+        editTodoItem(_id, itemId, contents) {
+            const option = {
+                method : 'PUT',
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(contents),
+            }
+            return connectApi(BASE_URL + '/api/users/' + _id + '/items/' + itemId, option)
         }
     }
 

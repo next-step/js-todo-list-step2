@@ -6,47 +6,36 @@ export default class Todo {
         this._todoItems = [];
         this._id = 0;
         this._todoInput = document.getElementsByClassName('new-todo');
-        this._todoList = document.getElementsByClassName('todo-list');
+        this._todoList = document.querySelector('.todo-list');
         this._todoFilter = document.querySelector('.filters');
         this._todoCount = document.querySelector('.todo-count').firstElementChild;
-        this.loadTodos();
+        //this.loadTodos();
     }
 
     async loadById(_id) {
-        const loadItems = await $api.user.loadTodoItem(_id);
+        const loadItems = await this.loadTodoItems(_id);
+        const todoApp = this;
         $TODO_DOM.initItems();
         loadItems.forEach(function(todo){
-        `<li>
-            <div class="view">
-            <input class="toggle" type="checkbox" />
-            <label class="label">
-                <select class="chip select">
-                    <option value="0" selected>순위</option>
-                    <option value="1">1순위</option>
-                    <option value="2">2순위</option>
-                </select>
-                해야할 아이템
-            </label>
-            <button class="destroy"></button>
-            </div>
-            <input class="edit" value="완료된 타이틀" />
-        </li>`
+            todoApp.printTodos(todo);
         });
+        this.initClassList(0);
+        return loadItems;
     }
 
-    add(todo) {
+    async loadTodoItems(_id) {
+        return await $api.user.loadTodoItem(_id);
+    }
+
+    async add(_id, todo) {
         if (this.checkNull(todo)) {
             return alert('빈 값을 입력할 수 없습니다.');
         };
         const todoObj = {
-            text : todo,
-            id : this._id,
-            class : '',
-            checked : 'false'
+            contents : todo
         }
-        this._todoItems.push(todoObj);
-        this.saveLocalStorage();
-        this.loadTodos();
+        const createTodo = await $api.user.addTodoItem(_id, todoObj);
+        this.loadById(_id);
     }
 
     destroy(target, li) {
@@ -55,15 +44,18 @@ export default class Todo {
         this.deleteItems(li);
     }
 
-    edit({target, key},labelArea, originalValue) {
+    edit({target, key}, userId, labelArea, originalValue) {
         const todoApp = this;
         const editType = {
-            Enter () {
-                labelArea.innerText = target.value;
+            async Enter () {
+                labelArea.lastChild.textContent = target.value;
                 target.closest('li').classList.remove('editing');
-                todoApp._todoItems.filter(todo => todo.id == target.closest('li').id)
-                                  .map(todo => todo.text = target.value);
-                todoApp.saveLocalStorage();
+                const itemId = target.closest('li').id;
+                const itemObj = {
+                    contents : target.value
+                }
+                const editTodo = await $api.user.editTodoItem(userId, itemId, itemObj);
+                this.loadById(userId);
             },
 
             Escape () {
@@ -78,33 +70,26 @@ export default class Todo {
     }
 
     printTodos(todoObj) {
-        const checked = todoObj.checked == 'true' ? 'checked' : '';
-        const completed = todoObj.class == 'completed' ? 'completed' : ''; 
+        const checked = todoObj.isCompleted == true ? 'checked' : '';
+        const completed = todoObj.isCompleted == true ? 'completed' : ''; 
         this._todoLi = document.createElement('li');
-        this._todoLi.id = todoObj.id;
+        this._todoLi.id = todoObj._id;
         this._todoLi.className = completed;
         this._todoLi.innerHTML = `
                 <div class='view'>
                     <input class="toggle" type="checkbox" ${checked}>
-                    <label class="label">${todoObj.text}</label>
+                    <label class="label">
+                    <select class="chip select">
+                        <option value="0" selected>순위</option>
+                        <option value="1">1순위</option>
+                        <option value="2">2순위</option>
+                    </select>
+                    ${todoObj.contents}</label>
                     <button class="destroy"></button>
                 </div>
-                <input class="edit" value=${todoObj.text}> 
+                <input class="edit" value=${todoObj.contents}> 
         `;
         this._todoList.append(this._todoLi);
-    }
-
-    loadTodos() {
-        this.initTodoList();
-        const todoApp = this;
-        this._todoItems = this.getLocalStorage();
-        if (Object.keys(this._todoItems).length == 0) {
-            this._id = 1;
-            return;
-        }
-        this._id = parseInt(this._todoItems[this._todoItems.length - 1].id) + 1;
-        this._todoItems.map((value, index) => todoApp.printTodos(value));
-        this._todoCount.innerText = this.todoCount;
     }
 
     changeTodoState(li, toggleCheck) {
@@ -142,26 +127,27 @@ export default class Todo {
          }
     }
 
-    allList() {
-        this.loadTodos();
+    async allList(_id) {
+        const loadItems = await this.loadById(_id);
+        this._todoCount.innerText = loadItems.length;
     }
 
-    activeList() {
+    async activeList(_id) {
         this.initTodoList();
         const todoApp = this;
-        const parsedTodos = this.getLocalStorage();
-        parsedTodos.filter(todo => todo.class != 'completed')
+        const allTodos = await todoApp.loadTodoItems(_id);
+        const filterd = allTodos.filter(todo => todo.isCompleted != true)
                    .map(todo => todoApp.printTodos(todo));
-        this._todoCount.innerText = this.todoCount;
+        this._todoCount.innerText = filterd.length;
     }
 
-    completedList() {
+    async completedList(_id) {
         this.initTodoList();
         const todoApp = this;
-        const parsedTodos = this.getLocalStorage();
-        parsedTodos.filter(todo => todo.class == 'completed')
+        const allTodos = await todoApp.loadTodoItems(_id);
+        const filterd = allTodos.filter(todo => todo.isCompleted == true)
                    .map(todo => todoApp.printTodos(todo));
-        this._todoCount.innerText = this.todoCount;
+        this._todoCount.innerText = filterd.length;
     }
     
     getLocalStorage() {
@@ -180,6 +166,13 @@ export default class Todo {
             return true;
         }
         return false;
+    }
+
+    initClassList = (index) => {
+        for (let item of this._todoFilter.children) {
+            item.children[0].classList.remove('selected');
+        }
+        this._todoFilter.children[index].children[0].classList.add('selected');
     }
 
     get todoCount() {

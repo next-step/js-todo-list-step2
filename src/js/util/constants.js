@@ -22,6 +22,14 @@ const $TODO_DOM = {
        li.forEach(function(node) {
             node.parentNode.removeChild(node); 
        });
+    },
+
+    input() {
+        return document.querySelector('.new-todo');
+    },
+
+    todoList() {
+        return document.querySelector('.todo-list');
     }
     
 }
