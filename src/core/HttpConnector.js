@@ -2,11 +2,15 @@ import HttpMethods from "../constants/HttpMethods.js";
 
 const defaultConfig = {
   baseUrl: "",
-  headers: { "Content-type": "application/json" },
+  baseHeaders: { "Content-type": "application/json" },
 };
 
-function HttpConnector(initConfig = defaultConfig) {
-  this.defaultConfig = initConfig;
+function HttpConnector({ url, headers }) {
+  const { baseUrl, baseHeaders } = defaultConfig;
+  this.defaultConfig = {
+    baseUrl: url ?? baseUrl,
+    headers: headers ?? baseHeaders,
+  };
 }
 
 HttpConnector.prototype.getEndPoint = function (url) {
@@ -49,3 +53,5 @@ HttpConnector.prototype.requestWithBody = function (url, config) {
     });
   };
 });
+
+export default HttpConnector;
