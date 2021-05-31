@@ -1,56 +1,56 @@
-import baseUrl from "../configs/baseUrl.js";
-import HttpConnector from "../core/HttpConnector.js";
+import baseUrl from '../configs/baseUrl.js'
+import HttpConnector from '../core/HttpConnector.js'
 
-const todoConnector = new HttpConnector({ url: baseUrl + "/api/users" });
+const todoConnector = new HttpConnector({ url: baseUrl + '/api/users' })
 
-const userIDUrl = (userId) => `/${userId}`;
-const userItemsUrl = (userId) => `/${userId}/items`;
-const userItemUrl = (userId, itemId) => `/${userId}/items/${itemId}`;
+const userIDUrl = (userId) => `/${userId}`
+const userItemsUrl = (userId) => `/${userId}/items`
+const userItemUrl = (userId, itemId) => `/${userId}/items/${itemId}`
 
 export default Object.freeze({
   getUsers() {
-    return todoConnector.get("");
+    return todoConnector.get('')
   },
 
   createUser(name) {
-    return todoConnector.post("", { name });
+    return todoConnector.post('', { name })
   },
 
   getUser(userId) {
-    return todoConnector.get(userIDUrl(userId));
+    return todoConnector.get(userIDUrl(userId))
   },
 
   deleteUser(userId) {
-    return todoConnector.delete(userIdUrl(userId));
+    return todoConnector.delete(userIdUrl(userId))
   },
 
   getUserItems(userId) {
-    return todoConnector.get(userItemsUrl(userId));
+    return todoConnector.get(userItemsUrl(userId))
   },
 
   createTodoItem(userId, contents) {
-    return todoConnector.post(userItemsUrl(userId), { contents });
+    return todoConnector.post(userItemsUrl(userId), { contents })
   },
 
   deleteAllTodoItems(userId) {
-    return todoConnector.delete(userItemsUrl(userId));
+    return todoConnector.delete(userItemsUrl(userId))
   },
 
   deleteTodoItem(userId, itemId) {
-    return todoConnector.delete(userItemUrl(userId, itemId));
+    return todoConnector.delete(userItemUrl(userId, itemId))
   },
 
   updateTodoItem(userId, itemId, contents) {
-    return todoConnector.put(userItemUrl(userId, itemId), { contents });
+    return todoConnector.put(userItemUrl(userId, itemId), { contents })
   },
 
   updatePriority(userId, itemId, priority) {
-    return todoConnector.put(userItemUrl(userId, itemId) + "/priority", {
+    return todoConnector.put(userItemUrl(userId, itemId) + '/priority', {
       priority,
-    });
+    })
   },
 
   toggleTodoItem(userId, itemId) {
-    return todoConnector.put(userItemUrl(userId, itemId) + "/toggle");
+    return todoConnector.put(userItemUrl(userId, itemId) + '/toggle')
   },
-});
+})
