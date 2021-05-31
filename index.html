@@ -16,27 +16,32 @@
       </h1>
       <section>
         <div id="user-list">
-          <button class="ripple active">makerjun</button>
-          <button class="ripple">eastjun</button>
-          <button class="ripple user-create-button" data-action="createUser">
-            + 유저 생성
-          </button>
-          <button class="ripple user-delete-button" data-action="deleteUser">
-            삭제 -
-          </button>
+          <span class="users">
+            <button class="ripple active">makerjun</button>
+            <button class="ripple">eastjun</button>
+          </span>
+          <span class="buttons">
+            <button class="ripple user-create-button" data-action="createUser">
+              + 유저 생성
+            </button>
+            <button class="ripple user-delete-button" data-action="deleteUser">
+              삭제 -
+            </button>
+          </span>
         </div>
       </section>
 
       <section class="todoapp">
         <section class="input-container">
           <input
+            id="new-todo-title"
             class="new-todo"
             placeholder="할 일을 입력해주세요."
             autofocus
           />
         </section>
         <section class="main">
-          <ul class="todo-list">
+          <ul id="todo-list" class="todo-list">
             <li>
               <div class="view">
                 <label class="label">
@@ -123,6 +128,6 @@
         </div>
       </section>
     </div>
-    <script src="./src/js/index.js"></script>
+    <script type="module" src="./src/js/index.js"></script>
   </body>
 </html>
