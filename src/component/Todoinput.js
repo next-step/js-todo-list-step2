@@ -1,5 +1,5 @@
-class TodoInput {
+class Todoinput {
   constructor() {}
 }
 
-export default TodoInput;
+export default Todoinput;

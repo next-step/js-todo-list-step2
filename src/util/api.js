@@ -31,7 +31,9 @@ const request = async (url, method, body) => {
 };
 
 const api = {
-  getUserList: () => request(`${Router.USERS}`, CONSTANT.GET, ''),
+  getUsersList: () => request(`${Router.USERS}`, CONSTANT.GET, ''),
+  getUserInfo: (userId) => request(`${Router.USER(userId)}`, CONSTANT.GET),
+  getUserTodos: (userId) => request(`${Router.ITEM(userId)}`, CONSTANT.GET),
 };
 
 export default api;

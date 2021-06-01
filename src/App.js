@@ -1,3 +1,4 @@
+import Userlist from './component/Userlist.js';
 import Usertitle from './component/Usertitle.js';
 import api from './util/api.js';
 
@@ -10,19 +11,32 @@ class App {
     };
     this.init();
 
-    this.userTitle = new Usertitle({
+    this.Usertitle = new Usertitle({
       $app,
       userName: this.state.userName,
+    });
+    this.Userlist = new Userlist({
+      $app,
     });
   }
 
   setState(nextState) {
     this.state = { ...this.state, ...nextState };
-    this.userTitle.setState(this.state.userName);
+    this.Usertitle.setState(this.state.userName);
+    this.Userlist.setState({
+      userList: this.state.userList,
+      userName: this.state.userName,
+    });
   }
   async init() {
-    const initData = await api.getUserList();
-    console.log(initData);
+    const userList = await api.getUsersList();
+    const { name, todoList } = userList[0];
+    const userNameList = userList.map((user) => user.name);
+    this.setState({
+      userList: userNameList,
+      toDos: todoList,
+      userName: name,
+    });
   }
 }
 

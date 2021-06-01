@@ -1,5 +1,5 @@
-class TodoCount {
+class Todocount {
   constructor() {}
 }
 
-export default TodoCount;
+export default Todocount;
