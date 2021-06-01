@@ -9,6 +9,8 @@ export class Component {
     this.$props = props
     this.$state = state
 
+    this.componentDidMount()
+
     this.$render = () => {
       target.innerHTML = this.render()
     }
@@ -16,6 +18,8 @@ export class Component {
     this.setState(state)
     this.setEvent(target)
   }
+
+  componentDidMount() {}
 
   setState(state) {
     this.$state = { ...this.$state, ...state }
