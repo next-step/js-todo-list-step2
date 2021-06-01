@@ -17,13 +17,13 @@ HttpConnector.prototype.getEndPoint = function (url) {
   return this.defaultConfig.baseUrl + url
 }
 
-HttpConnector.prototype.request = function (url, config) {
+HttpConnector.prototype.request = async function (url, config) {
   const endPoint = this.getEndPoint(url)
 
   return fetch(endPoint, config).then((response) => response.json())
 }
 
-HttpConnector.prototype.requestWithBody = function (url, config) {
+HttpConnector.prototype.requestWithBody = async function (url, config) {
   const endPoint = this.getEndPoint(url)
   const headers = config.headers || this.defaultConfig.headers
 
@@ -34,7 +34,6 @@ HttpConnector.prototype.requestWithBody = function (url, config) {
     headers,
   }).then((response) => response.json())
 }
-
 ;[HttpMethods.GET, HttpMethods.DELETE].forEach((method) => {
   HttpConnector.prototype[method.toLowerCase()] = function (url, config) {
     return this.request(url, {
@@ -43,7 +42,6 @@ HttpConnector.prototype.requestWithBody = function (url, config) {
     })
   }
 })
-
 ;[HttpMethods.POST, HttpMethods.PUT, HttpMethods.PATCH].forEach((method) => {
   HttpConnector.prototype[method.toLowerCase()] = function (url, data, config) {
     return this.requestWithBody(url, {
