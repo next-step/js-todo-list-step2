@@ -1,5 +1,6 @@
 class Todoinput {
-  constructor({ $todoapp }) {
+  constructor({ $todoapp, onKeyup }) {
+    this.onKeyup = onKeyup;
     this.$target = document.createElement('section');
     this.$target.className = 'input-container';
     $todoapp.appendChild(this.$target);
@@ -8,7 +9,6 @@ class Todoinput {
   }
   template() {
     return `
-    <section class="input-container">
     <input
       class="new-todo"
       placeholder="할 일을 입력해주세요."
@@ -18,6 +18,10 @@ class Todoinput {
   }
   render() {
     this.$target.innerHTML = this.template();
+    this.mounted();
+  }
+  mounted() {
+    this.$target.addEventListener('keyup', this.onKeyup);
   }
 }
 

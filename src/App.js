@@ -6,8 +6,8 @@ import api from './util/api.js';
 class App {
   constructor($app) {
     this.state = {
-      userList: [],
-      todoList: [],
+      userList: null,
+      activeUserInfo: null,
       activeName: 'unknown',
       isLoading: true,
     };
@@ -41,12 +41,12 @@ class App {
 
     if (!response.isError) {
       const userList = response.data;
-      const { name, todoList } = userList[0];
+      const activeUserInfo = userList[0];
 
       this.setState({
         userList,
-        todoList,
-        activeName: name,
+        activeUserInfo,
+        activeName: activeUserInfo.name,
         isLoading: false,
       });
     } else {

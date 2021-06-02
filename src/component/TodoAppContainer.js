@@ -1,3 +1,4 @@
+import api from '../util/api.js';
 import Todocount from './Todocount.js';
 import Todoinput from './Todoinput.js';
 import Todolist from './Todolist.js';
@@ -12,14 +13,23 @@ class TodoAppContainer {
 
     new Todoinput({
       $todoapp,
+      onKeyup: async ({ target, key }) => {
+        if (key === 'Enter' && target.value) {
+          const { _id } = this.state.activeUserInfo;
+          const response = await api.addTodoItem(_id, target.value);
+          if (!response.isError) {
+            this.getNewTodos(_id);
+          } else {
+            //에러에러
+          }
+
+          target.value = '';
+        }
+      },
     });
 
     this.Todolist = new Todolist({
       $todoapp,
-      initState: {
-        todoList: this.state.todoList,
-        isLoading: false,
-      },
     });
     this.Todocount = new Todocount({
       $todoapp,
@@ -29,9 +39,25 @@ class TodoAppContainer {
   setState(nextState) {
     this.state = { ...this.state, ...nextState };
     this.Todolist.setState({
-      todoList: this.state.todoList,
+      activeUserInfo: this.state.activeUserInfo,
       isLoading: false,
     });
+  }
+
+  async getNewTodos(id) {
+    this.setState({
+      isLoading: true,
+    });
+    const response = await api.getUserInfo(id);
+    if (!response.isError) {
+      const data = response.data;
+      this.setState({
+        activeUserInfo: data,
+        isLoading: false,
+      });
+    } else {
+      //에러에러
+    }
   }
 }
 

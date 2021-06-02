@@ -3,15 +3,14 @@
 import CONSTANT from "../constants.js";
 
 class Todolist {
-  constructor({ $todoapp, initState }) {
-    this.state = initState;
+  constructor({ $todoapp }) {
     this.$section = document.createElement('section');
     this.$section.className = 'main';
     this.$target = document.createElement('ul');
     this.$target.className = 'todo-list';
     this.$section.appendChild(this.$target);
     $todoapp.appendChild(this.$section);
-    this.render();
+
   }
   setState(nextState) {
     this.state = { ...this.state, ...nextState };
@@ -33,8 +32,8 @@ class Todolist {
           </li>
     `;
     }
-
-    return this.state.todoList.map(({ contents, isCompleted, priority }) => {
+    
+    return this.state.activeUserInfo.todoList.map(({ contents, isCompleted, priority }) => {
       const priorityTemplate = {
         "NONE" : CONSTANT.NONE_TEMPLATE,
         "FIRST" : CONSTANT.FIRST_TEMPLATE,

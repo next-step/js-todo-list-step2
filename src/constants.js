@@ -1,5 +1,7 @@
 const GET = 'GET';
 const POST = 'POST';
+const PUT = 'PUT';
+const DELETE = 'DELETE';
 const UNKNOWN = 'unknown';
 const NONE_TEMPLATE = `
 <select class="chip select">
@@ -14,6 +16,8 @@ const SECOND_TEMPLATE = `<span class="chip secondary">2순위</span>`;
 const CONSTANT = {
   GET,
   POST,
+  PUT,
+  DELETE,
   UNKNOWN,
   NONE_TEMPLATE,
   FIRST_TEMPLATE,

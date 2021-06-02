@@ -1,21 +1,27 @@
 import CONSTANT from '../constants.js';
 import Router from '../Router.js';
 
-const getFetchOption = (method, body) => {
-  if (method === CONSTANT.POST) {
+const headers = { 'Content-Type': 'application/json' };
+const options = {
+  GET: { method: CONSTANT.GET },
+  POST: (body) => {
     return {
-      method,
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(body),
+      method: CONSTANT.POST,
+      headers,
+      body: JSON.stringify(body) ?? '',
     };
-  }
-
-  return { method };
+  },
+  PUT: (body) => {
+    return {
+      method: CONSTANT.PUT,
+      headers,
+      body: JSON.stringify(body) ?? '',
+    };
+  },
+  DELETE: { method: CONSTANT.DELETE },
 };
-const request = async (url, method, body) => {
-  const option = getFetchOption(method, body);
+
+const request = async (url, option) => {
   try {
     const response = await fetch(url, option);
     if (response.ok) {
@@ -35,7 +41,7 @@ const request = async (url, method, body) => {
 const api = {
   getUsersList: async () => {
     try {
-      const userList = await request(`${Router.USERS}`, CONSTANT.GET, '');
+      const userList = await request(`${Router.USERS}`, options.GET);
       return {
         isError: false,
         data: userList,
@@ -49,7 +55,7 @@ const api = {
   },
   getUserInfo: async (userId) => {
     try {
-      const userInfo = await request(`${Router.USER(userId)}`, CONSTANT.GET);
+      const userInfo = await request(`${Router.USER(userId)}`, options.GET);
       return {
         isError: false,
         data: userInfo,
@@ -63,10 +69,27 @@ const api = {
   },
   getUserTodos: async (userId) => {
     try {
-      const userTodos = await request(`${Router.ITEM(userId)}`, CONSTANT.GET);
+      const userTodos = await request(`${Router.ITEM(userId)}`, options.GET);
       return {
         isError: false,
         data: userTodos,
+      };
+    } catch (error) {
+      return {
+        isError: true,
+        data: error,
+      };
+    }
+  },
+  addTodoItem: async (userId, contents) => {
+    try {
+      const userInfo = await request(
+        `${Router.ITEM(userId)}`,
+        options.POST({ contents })
+      );
+      return {
+        isError: false,
+        data: userInfo,
       };
     } catch (error) {
       return {
