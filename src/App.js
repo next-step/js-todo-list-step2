@@ -29,9 +29,11 @@ class App {
           // eslint-disable-next-line prettier/prettier
           'ripple': selectUser,
         }[target.className];
+        if (!callback) return;
 
         callback({
           activeUserInfo: this.state.activeUserInfo,
+          targetId: target.dataset.id,
           setState: this.setState.bind(this),
         });
       },

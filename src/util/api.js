@@ -55,7 +55,7 @@ const api = {
   },
   getUserInfo: async (userId) => {
     try {
-      const userInfo = await request(`${Router.USER(userId)}`, options.GET);
+      const userInfo = await request(Router.USER(userId), options.GET);
       return {
         isError: false,
         data: userInfo,
@@ -69,7 +69,7 @@ const api = {
   },
   getUserTodos: async (userId) => {
     try {
-      const userTodos = await request(`${Router.ITEM(userId)}`, options.GET);
+      const userTodos = await request(Router.ITEM(userId), options.GET);
       return {
         isError: false,
         data: userTodos,
@@ -83,7 +83,7 @@ const api = {
   },
   addUser: async (name) => {
     try {
-      const userInfo = await request(`${Router.USERS}`, options.POST({ name }));
+      const userInfo = await request(Router.USERS, options.POST({ name }));
       return {
         isError: false,
         data: userInfo,
@@ -95,10 +95,24 @@ const api = {
       };
     }
   },
+  deleteUser: async (userId) => {
+    try {
+      const response = await request(Router.USER(userId), options.DELETE);
+      return {
+        isError: false,
+        data: response,
+      };
+    } catch (error) {
+      return {
+        isError: false,
+        data: error,
+      };
+    }
+  },
   addTodoItem: async (userId, contents) => {
     try {
       const userInfo = await request(
-        `${Router.ITEM(userId)}`,
+        Router.ITEM(userId),
         options.POST({ contents })
       );
       return {
