@@ -1,4 +1,5 @@
 import api from './api.js';
+import { showError } from './error.js';
 
 //USER 추가하기
 const createUser = async ({ setState }) => {
@@ -9,7 +10,7 @@ const createUser = async ({ setState }) => {
   }
   const response = await api.addUser(name);
   if (response.isError) {
-    return null;
+    return showError(response.data);
   }
   const userList = await getUsersList();
 
@@ -29,7 +30,7 @@ const deleteUser = async ({ setState, activeUserInfo }) => {
 
   const response = await api.deleteUser(_id);
   if (response.isError) {
-    return null;
+    return showError(response.data);
   }
   const userList = await getUsersList();
   const newUserInfo = userList[0];
@@ -42,20 +43,36 @@ const deleteUser = async ({ setState, activeUserInfo }) => {
 };
 
 //USER 불러오기
-const selectUser = () => {
-  console.log('selectUser');
+const selectUser = async ({ setState, targetId }) => {
+  setState({
+    isLoading: true,
+  });
+  const response = await api.getUserInfo(targetId);
+
+  if (response.isError) {
+    return showError(response.data);
+  }
+  const userList = await getUsersList();
+  if (!userList) {
+    return alert(`유저 리스트를 불러오던 도중 오류가 발생했습니다.`);
+  }
+  const newUserInfo = response.data;
+  setState({
+    userList,
+    activeUserInfo: newUserInfo,
+    activeName: newUserInfo.name,
+    isLoading: false,
+  });
 };
 
 //USER list 불러오기
 const getUsersList = async () => {
   const response = await api.getUsersList();
-
-  if (!response.isError) {
-    const userList = response.data;
-    return userList;
-  } else {
-    //에러처리
+  if (response.isError) {
+    return null;
   }
+  const userList = response.data;
+  return userList;
 };
 
 export { createUser, deleteUser, selectUser };

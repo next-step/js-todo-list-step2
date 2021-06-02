@@ -2,6 +2,7 @@ import TodoAppContainer from './component/TodoAppContainer.js';
 import Userlist from './component/Userlist.js';
 import Usertitle from './component/Usertitle.js';
 import api from './util/api.js';
+import { showError } from './util/error.js';
 import { createUser, deleteUser, selectUser } from './util/modifyUser.js';
 
 class App {
@@ -58,19 +59,18 @@ class App {
   async init() {
     const response = await api.getUsersList();
 
-    if (!response.isError) {
-      const userList = response.data;
-      const activeUserInfo = userList[0];
-
-      this.setState({
-        userList,
-        activeUserInfo,
-        activeName: activeUserInfo.name,
-        isLoading: false,
-      });
-    } else {
-      //에러처리
+    if (response.isError) {
+      return showError(response.data);
     }
+    const userList = response.data;
+    const activeUserInfo = userList[0];
+
+    this.setState({
+      userList,
+      activeUserInfo,
+      activeName: activeUserInfo.name,
+      isLoading: false,
+    });
   }
 }
 
