@@ -1,8 +1,8 @@
 import CONSTANT from '../constants.js';
 
 class Usertitle {
-  constructor({ $app, userName }) {
-    this.userName = userName;
+  constructor({ $app, activeName }) {
+    this.activeName = activeName;
     const $target = document.createElement('h1');
     this.$target = $target;
     this.$target.id = 'user-title';
@@ -10,14 +10,14 @@ class Usertitle {
     this.render();
   }
   setState(nextName) {
-    this.userName = nextName;
+    this.activeName = nextName;
     this.render();
   }
 
   template() {
-    return this.userName === CONSTANT.UNKNOWN
+    return this.activeName === CONSTANT.UNKNOWN
       ? '<span>Loading⏰</span>'
-      : `<span><strong>${this.userName}</strong>'s Todo List</span>`;
+      : `<span><strong>${this.activeName}</strong>'s Todo List</span>`;
   }
 
   render() {
