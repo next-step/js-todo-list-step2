@@ -121,13 +121,10 @@ export default class TodoList extends Component {
         store.dispatch(editingTodo(itemId, !editing))
       }
 
-      console.log(event.target)
-
       event.stopImmediatePropagation()
     })
 
     target.addEventListener(Event.KEY_DOWN, (event) => {
-      const closest = event.target.closest('li')
       const itemId = this.getItemIdByClosest(event.target)
       const editing = false
 
@@ -200,8 +197,6 @@ export default class TodoList extends Component {
 
   template() {
     const todoList = getSelectedTodos()
-
-    console.log(todoList)
 
     return `
         <ul class="todo-list">

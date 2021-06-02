@@ -1,5 +1,6 @@
 import {
   ADD_TODO,
+  CHANGE_FILTER,
   DELETE_TODO,
   DELETE_TODOS,
   EDITING_TODO,
@@ -27,12 +28,10 @@ const addTodo = (todo) => {
   }
 }
 
-const deleteTodos = (todoId) => {
+const deleteTodos = () => {
   return {
     type: DELETE_TODOS,
-    payload: {
-      todoId,
-    },
+    payload: {},
   }
 }
 
@@ -71,6 +70,13 @@ const toggleTodo = (itemId, isCompleted) => {
   }
 }
 
+const changeFilter = (filter) => {
+  return {
+    type: CHANGE_FILTER,
+    payload: { filter },
+  }
+}
+
 export {
   getTodos,
   addTodo,
@@ -80,4 +86,5 @@ export {
   updateTodo,
   priorityTodo,
   toggleTodo,
+  changeFilter,
 }

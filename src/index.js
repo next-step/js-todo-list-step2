@@ -1,4 +1,4 @@
-import { UserList, TodoInput, TodoList } from './components/index.js'
+import { UserList, TodoInput, TodoList, TodoCount } from './components/index.js'
 import { store } from './modules/index.js'
 import { getUser, getUsers } from './modules/user/creator.js'
 import TodoConnector from './utils/TodoConnector.js'
@@ -9,15 +9,18 @@ class App {
     const userListTarget = document.querySelector('#user-list')
     const todoInputTarget = document.querySelector('#todo-input')
     const todoListTarget = document.querySelector('#todo-main')
+    const todoCountTarget = document.querySelector('#count-container')
 
     new UserList(userListTarget)
     new TodoInput(todoInputTarget)
     new TodoList(todoListTarget)
+    new TodoCount(todoCountTarget)
 
     store.subscribe(() => {
       new UserList(userListTarget)
       new TodoInput(todoInputTarget)
       new TodoList(todoListTarget)
+      new TodoCount(todoCountTarget)
     })
 
     this.fetchUsers()
