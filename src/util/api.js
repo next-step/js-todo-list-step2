@@ -26,14 +26,55 @@ const request = async (url, method, body) => {
       throw errorData;
     }
   } catch (error) {
-    console.log(error);
+    throw {
+      message: error.message,
+    };
   }
 };
 
 const api = {
-  getUsersList: () => request(`${Router.USERS}`, CONSTANT.GET, ''),
-  getUserInfo: (userId) => request(`${Router.USER(userId)}`, CONSTANT.GET),
-  getUserTodos: (userId) => request(`${Router.ITEM(userId)}`, CONSTANT.GET),
+  getUsersList: async () => {
+    try {
+      const userList = await request(`${Router.USERS}`, CONSTANT.GET, '');
+      return {
+        isError: false,
+        data: userList,
+      };
+    } catch (error) {
+      return {
+        isError: true,
+        data: error,
+      };
+    }
+  },
+  getUserInfo: async (userId) => {
+    try {
+      const userInfo = await request(`${Router.USER(userId)}`, CONSTANT.GET);
+      return {
+        isError: false,
+        data: userInfo,
+      };
+    } catch (error) {
+      return {
+        isError: true,
+        data: error,
+      };
+    }
+  },
+  getUserTodos: async (userId) => {
+    try {
+      const userTodos = await request(`${Router.ITEM(userId)}`, CONSTANT.GET);
+      return {
+        isError: false,
+        data: userTodos,
+      };
+    } catch (error) {
+      return {
+        isError: true,
+        data: error,
+      };
+    }
+  },
 };
 
 export default api;

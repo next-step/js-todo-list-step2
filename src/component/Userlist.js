@@ -11,11 +11,12 @@ class Userlist {
   }
   template() {
     if(!this.state) return ""
-    const {userList, userName} = this.state;
+
+    const {userList, activeName} = this.state;
     return `
       <div id="user-list">
         ${userList.map((user) => `
-          <button class="ripple ${userName === user ? "active" : ""}">${user}</button>
+          <button class="ripple ${activeName === user ? "active" : ""}">${user}</button>
         `
         ).join("")}
         <button class="ripple user-create-button" data-action="createUser">
