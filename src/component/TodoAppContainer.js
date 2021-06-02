@@ -40,7 +40,7 @@ class TodoAppContainer {
     this.state = { ...this.state, ...nextState };
     this.Todolist.setState({
       activeUserInfo: this.state.activeUserInfo,
-      isLoading: false,
+      isLoading: this.state.isLoading,
     });
   }
 

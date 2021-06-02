@@ -81,6 +81,20 @@ const api = {
       };
     }
   },
+  addUser: async (name) => {
+    try {
+      const userInfo = await request(`${Router.USERS}`, options.POST({ name }));
+      return {
+        isError: false,
+        data: userInfo,
+      };
+    } catch (error) {
+      return {
+        isError: false,
+        data: error,
+      };
+    }
+  },
   addTodoItem: async (userId, contents) => {
     try {
       const userInfo = await request(

@@ -2,6 +2,7 @@ import TodoAppContainer from './component/TodoAppContainer.js';
 import Userlist from './component/Userlist.js';
 import Usertitle from './component/Usertitle.js';
 import api from './util/api.js';
+import { createUser, deleteUser, selectUser } from './util/modifyUser.js';
 
 class App {
   constructor($app) {
@@ -20,6 +21,20 @@ class App {
 
     this.Userlist = new Userlist({
       $app,
+      onClick: async ({ target }) => {
+        const callback = {
+          'ripple user-create-button': createUser,
+          'ripple user-delete-button': deleteUser,
+          'ripple active': selectUser,
+          // eslint-disable-next-line prettier/prettier
+          'ripple': selectUser,
+        }[target.className];
+
+        callback({
+          activeUserInfo: this.state.activeUserInfo,
+          setState: this.setState.bind(this),
+        });
+      },
     });
     this.TodoAppContainer = new TodoAppContainer({
       $app,
@@ -31,7 +46,9 @@ class App {
     this.state = { ...this.state, ...nextState };
     this.Usertitle.setState(this.state.activeName);
     this.Userlist.setState({
-      userList: this.state.userList.map((user) => user.name),
+      userList: this.state.userList.map(({ _id, name }) => {
+        return { _id, name };
+      }),
       activeName: this.state.activeName,
     });
     this.TodoAppContainer.setState(this.state);
