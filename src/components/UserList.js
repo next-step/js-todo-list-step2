@@ -2,7 +2,13 @@ import Component from '../core/Component.js'
 import EVENT from '../constants/Event.js'
 import { store } from '../modules/index.js'
 import TodoConnector from '../utils/TodoConnector.js'
-import { createUser, deleteUser, getUser } from '../modules/user/creator.js'
+import {
+  createUser,
+  deleteUser,
+  getUser,
+  loadingEnd,
+  loadingStart,
+} from '../modules/user/creator.js'
 import { getActiveUserId, getFirstUser } from '../utils/userUtil.js'
 
 const UserListActions = {
@@ -23,13 +29,17 @@ const UserListItem = (user, isActive) => {
 
 export default class UserList extends Component {
   async selectUser(userId) {
+    store.dispatch(loadingStart())
     const user = await TodoConnector.getUser(userId)
     store.dispatch(getUser(user))
+    store.dispatch(loadingEnd())
   }
 
   async createUser(userName) {
+    store.dispatch(loadingStart())
     const user = await TodoConnector.createUser(userName)
     store.dispatch(createUser(user))
+    store.dispatch(loadingEnd())
   }
 
   async deleteUser() {
@@ -39,6 +49,7 @@ export default class UserList extends Component {
       return
     }
 
+    store.dispatch(loadingStart())
     await TodoConnector.deleteUser(userId)
     store.dispatch(deleteUser(userId))
     this.selectFirstUser()
@@ -53,6 +64,7 @@ export default class UserList extends Component {
 
     const user = await TodoConnector.getUser(firstUser._id)
     store.dispatch(getUser(user))
+    store.dispatch(loadingEnd())
   }
 
   setEvent(target) {

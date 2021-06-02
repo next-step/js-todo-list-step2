@@ -3,6 +3,8 @@ import {
   CREATE_USER,
   GET_USER,
   DELETE_USER,
+  LOADING_START,
+  LOADING_END,
 } from './user/actions.js'
 import Filter from '../constants/TodoFilter.js'
 import TODO_STATE from '../constants/TodoState.js'
@@ -88,7 +90,7 @@ const reducer = (state = initialState, { type, payload }) => {
           ...state.selectedUser,
           todoList: [...state.selectedUser.todoList, payload.todo],
         },
-        seletedAllTodos: [...state.selectedUser, payload.todo],
+        seletedAllTodos: [...state.seletedAllTodos, payload.todo],
       }
 
     case DELETE_TODO:
@@ -175,6 +177,18 @@ const reducer = (state = initialState, { type, payload }) => {
           todoList: getFilteredList(state, payload.filter),
         },
         filter: payload.filter,
+      }
+
+    case LOADING_START:
+      return {
+        ...state,
+        loading: payload.loading,
+      }
+
+    case LOADING_END:
+      return {
+        ...state,
+        loading: payload.loading,
       }
 
     default:

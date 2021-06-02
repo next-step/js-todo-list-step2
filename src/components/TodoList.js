@@ -1,20 +1,27 @@
 import Component from '../core/Component.js'
 import Priority from '../constants/Priority.js'
 import TodoItemStatus from '../constants/TodoItemStatus.js'
-import { getSelectedTodos, validationTodo } from '../utils/todoUtil.js'
+import {
+  getFilter,
+  getSelectedTodos,
+  validationTodo,
+} from '../utils/todoUtil.js'
 import Event from '../constants/Event.js'
 import TodoConnector from '../utils/TodoConnector.js'
 import Keyboard from '../constants/Keyboard.js'
+import Filter from '../constants/TodoFilter.js'
 import { getActiveUserId } from '../utils/userUtil.js'
 import { store } from '../modules/index.js'
 
 import {
+  changeFilter,
   deleteTodo,
   editingTodo,
   priorityTodo,
   toggleTodo,
   updateTodo,
 } from '../modules/todo/creator.js'
+import { loadingEnd, loadingStart } from '../modules/user/creator.js'
 
 const actions = Object.freeze({
   TOGGLE_TODO: 'toggleTodo',
@@ -171,10 +178,23 @@ export default class TodoList extends Component {
   }
 
   async toggleTodo(target) {
+    store.dispatch(loadingStart())
     const userId = getActiveUserId()
     const itemId = this.getItemIdByClosest(target)
     const { isCompleted } = await TodoConnector.toggleTodoItem(userId, itemId)
     store.dispatch(toggleTodo(itemId, isCompleted))
+
+    const filter = getFilter()
+
+    if (filter === Filter.COMPLETE) {
+      store.dispatch(changeFilter(Filter.COMPLETE))
+    }
+
+    if (filter === Filter.ACTIVE) {
+      store.dispatch(changeFilter(Filter.ACTIVE))
+    }
+
+    store.dispatch(loadingEnd())
   }
 
   async deleteTodo(target) {
