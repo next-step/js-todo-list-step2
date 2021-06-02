@@ -21,7 +21,7 @@ export default Object.freeze({
   },
 
   deleteUser(userId) {
-    return todoConnector.delete(userIdUrl(userId))
+    return todoConnector.delete(userIDUrl(userId))
   },
 
   getUserItems(userId) {

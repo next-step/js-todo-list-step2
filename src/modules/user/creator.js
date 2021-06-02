@@ -1,6 +1,8 @@
+import { CREATE_USER, DELETE_USER, GET_USER, GET_USERS } from './actions.js'
+
 const getUsers = (users) => {
   return {
-    type: GETUSERS,
+    type: GET_USERS,
     payload: {
       users,
     },
@@ -9,7 +11,7 @@ const getUsers = (users) => {
 
 const getUser = (user) => {
   return {
-    type: GETUSER,
+    type: GET_USER,
     payload: {
       user,
     },
@@ -18,7 +20,7 @@ const getUser = (user) => {
 
 const deleteUser = (userId) => {
   return {
-    type: DELETEUSER,
+    type: DELETE_USER,
     payload: {
       userId,
     },
@@ -27,7 +29,7 @@ const deleteUser = (userId) => {
 
 const createUser = (user) => {
   return {
-    type: CREATEUSER,
+    type: CREATE_USER,
     payload: {
       user,
     },

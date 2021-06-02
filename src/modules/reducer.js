@@ -32,14 +32,15 @@ const reducer = (state = initialState, { type, payload }) => {
       return {
         ...state,
         seletedUser: {
-          ...user,
+          ...payload.user,
         },
       }
 
     case DELETE_USER:
+      console.log(payload)
       return {
         ...state,
-        users: [...state.users.filter((user) => user.id !== payload.userId)],
+        users: state.users.filter((user) => user._id !== payload.userId),
       }
 
     case CREATE_USER:
@@ -114,13 +115,20 @@ const reducer = (state = initialState, { type, payload }) => {
           todolist: updateTodoState(state, payload, TODO_STATE.ISCOMPLETED),
         },
       }
+
+    default:
+      return {
+        ...state,
+      }
   }
 }
 
-function updateTodoState(state, payload, state) {
+function updateTodoState(state, payload, updateState) {
   const todoList = state.seletedUser.todolist
   return todoList.map((todo) =>
-    todo.id === payload.itemId ? { ...todo, [state]: payload[state] } : todo
+    todo.id === payload.itemId
+      ? { ...todo, [updateState]: payload[updateState] }
+      : todo
   )
 }
 
