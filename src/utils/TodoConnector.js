@@ -28,7 +28,7 @@ export default Object.freeze({
     return todoConnector.get(userItemsUrl(userId))
   },
 
-  createTodoItem(userId, contents) {
+  addTodoItem(userId, contents) {
     return todoConnector.post(userItemsUrl(userId), { contents })
   },
 

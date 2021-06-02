@@ -1,5 +1,5 @@
-const getFirstUser = (users) => {
-  return users[0]
+const validationTodo = (contents) => {
+  return !contents ? false : contents.length >= 2
 }
 
-export { getFirstUser }
+export { validationTodo }

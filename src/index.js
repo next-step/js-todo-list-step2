@@ -1,16 +1,21 @@
 import { UserList } from './components/index.js'
+import TodoInput from './components/TodoInput.js'
 import { store } from './modules/index.js'
 import { getUser, getUsers } from './modules/user/creator.js'
 import TodoConnector from './utils/TodoConnector.js'
-import { getFirstUser } from './utils/todoUtil.js'
+import { getFirstUser } from './utils/userUtil.js'
 
 class App {
   constructor() {
     const userListTarget = document.querySelector('#user-list')
+    const todoInputTarget = document.querySelector('#todo-input')
+
     new UserList(userListTarget)
+    new TodoInput(todoInputTarget)
 
     store.subscribe(() => {
       new UserList(userListTarget)
+      new TodoInput(todoInputTarget)
     })
 
     this.fetchUsers()
@@ -27,7 +32,6 @@ class App {
 
     const user = await TodoConnector.getUser(firstUser._id)
     store.dispatch(getUser(user))
-    console.log(store.getState())
   }
 }
 
