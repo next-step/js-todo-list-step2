@@ -9,9 +9,9 @@ const getFirstUser = (userList) => {
 }
 
 const getActiveUserId = () => {
-  const { seletedUser } = store.getState()
+  const { selectedUser } = store.getState()
 
-  return seletedUser?._id
+  return selectedUser?._id
 }
 
 export { getActiveUserId, getFirstUser }

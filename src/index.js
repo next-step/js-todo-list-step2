@@ -1,6 +1,4 @@
-import { UserList } from './components/index.js'
-import TodoInput from './components/TodoInput.js'
-import TodoList from './components/TodoList.js'
+import { UserList, TodoInput, TodoList } from './components/index.js'
 import { store } from './modules/index.js'
 import { getUser, getUsers } from './modules/user/creator.js'
 import TodoConnector from './utils/TodoConnector.js'

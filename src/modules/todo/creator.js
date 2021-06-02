@@ -2,6 +2,7 @@ import {
   ADD_TODO,
   DELETE_TODO,
   DELETE_TODOS,
+  EDITING_TODO,
   GET_TODOS,
   PRIORITY_TODO,
   TOGGLE_TODO,
@@ -35,10 +36,17 @@ const deleteTodos = (todoId) => {
   }
 }
 
-const deleteTodo = (userId, itemId) => {
+const deleteTodo = (itemId) => {
   return {
     type: DELETE_TODO,
-    payload: { userId, itemId },
+    payload: { itemId },
+  }
+}
+
+const editingTodo = (itemId, editing) => {
+  return {
+    type: EDITING_TODO,
+    payload: { itemId, editing },
   }
 }
 
@@ -56,10 +64,10 @@ const priorityTodo = (itemId, priority) => {
   }
 }
 
-const toggleTodo = (userId, itemId) => {
+const toggleTodo = (itemId, isCompleted) => {
   return {
     type: TOGGLE_TODO,
-    payload: { userId, itemId },
+    payload: { itemId, isCompleted },
   }
 }
 
@@ -68,6 +76,7 @@ export {
   addTodo,
   deleteTodos,
   deleteTodo,
+  editingTodo,
   updateTodo,
   priorityTodo,
   toggleTodo,

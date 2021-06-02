@@ -20,7 +20,7 @@ export default class TodoInput extends Component {
   }
 
   setEvent(target) {
-    target.addEventListener(EVENT.KEY_PRESS, (event) => {
+    target.addEventListener(EVENT.KEY_DOWN, (event) => {
       if (event.key !== KEY.ENTER) {
         return
       }

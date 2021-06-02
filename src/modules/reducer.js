@@ -8,15 +8,19 @@ import Filter from '../constants/TodoFilter.js'
 import TODO_STATE from '../constants/TodoState.js'
 import {
   ADD_TODO,
+  DELETE_TODO,
+  DELETE_TODOS,
+  EDITING_TODO,
   GET_TODOS,
   PRIORITY_TODO,
+  TOGGLE_TODO,
   UPDATE_TODO,
 } from './todo/actions.js'
 
 const initialState = {
   filted: Filter.ALL,
   users: [],
-  seletedUser: {
+  selectedUser: {
     _id: '',
     name: '',
     todoList: [],
@@ -36,7 +40,8 @@ const reducer = (state = initialState, { type, payload }) => {
     case GET_USER:
       return {
         ...state,
-        seletedUser: {
+        selectedUser: {
+          ...state.selectedUser,
           ...payload.user,
         },
       }
@@ -56,7 +61,8 @@ const reducer = (state = initialState, { type, payload }) => {
             ...payload.user,
           },
         ],
-        seletedUser: {
+        selectedUser: {
+          ...state.selectedUser,
           ...payload.user,
         },
       }
@@ -65,7 +71,8 @@ const reducer = (state = initialState, { type, payload }) => {
     case GET_TODOS:
       return {
         ...state,
-        seletedUser: {
+        selectedUser: {
+          ...state.selectedUser,
           ...payload.todoList,
         },
       }
@@ -73,17 +80,19 @@ const reducer = (state = initialState, { type, payload }) => {
     case ADD_TODO:
       return {
         ...state,
-        seletedUser: {
-          todoList: [...state.seletedUser.todoList, payload.todo],
+        selectedUser: {
+          ...state.selectedUser,
+          todoList: [...state.selectedUser.todoList, payload.todo],
         },
       }
 
     case DELETE_TODO:
       return {
         ...state,
-        seletedUser: {
-          todoList: state.seletedUser.todoList.filter(
-            (todo) => todo.id !== payload.todoId
+        selectedUser: {
+          ...state.selectedUser,
+          todoList: state.selectedUser.todoList.filter(
+            (todo) => todo._id !== payload.itemId
           ),
         },
       }
@@ -91,15 +100,26 @@ const reducer = (state = initialState, { type, payload }) => {
     case DELETE_TODOS:
       return {
         ...state,
-        seletedUser: {
+        selectedUser: {
+          ...state.selectedUser,
           todoList: [],
+        },
+      }
+
+    case EDITING_TODO:
+      return {
+        ...state,
+        selectedUser: {
+          ...state.selectedUser,
+          todoList: updateTodoState(state, payload, TODO_STATE.EDITING),
         },
       }
 
     case UPDATE_TODO:
       return {
         ...state,
-        seletedUser: {
+        selectedUser: {
+          ...state.selectedUser,
           todoList: updateTodoState(state, payload, TODO_STATE.CONTENTS),
         },
       }
@@ -107,7 +127,8 @@ const reducer = (state = initialState, { type, payload }) => {
     case PRIORITY_TODO:
       return {
         ...state,
-        seletedUser: {
+        selectedUser: {
+          ...state.selectedUser,
           todoList: updateTodoState(state, payload, TODO_STATE.PRIORITY),
         },
       }
@@ -115,7 +136,8 @@ const reducer = (state = initialState, { type, payload }) => {
     case TOGGLE_TODO:
       return {
         ...state,
-        seletedUser: {
+        selectedUser: {
+          ...state.selectedUser,
           todoList: updateTodoState(state, payload, TODO_STATE.ISCOMPLETED),
         },
       }
@@ -128,9 +150,10 @@ const reducer = (state = initialState, { type, payload }) => {
 }
 
 function updateTodoState(state, payload, updateState) {
-  const todoList = state.seletedUser.todoList
+  const todoList = state.selectedUser.todoList
+
   return todoList.map((todo) =>
-    todo.id === payload.itemId
+    todo._id === payload.itemId
       ? { ...todo, [updateState]: payload[updateState] }
       : todo
   )

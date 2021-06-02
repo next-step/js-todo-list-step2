@@ -14,7 +14,7 @@ const UserListActions = {
 const UserListItem = (user, isActive) => {
   return `
         <button class='ripple ${isActive ? 'active' : ''}'
-            data-action="${UserListActions.SELECT_USER}"
+            data-action=${UserListActions.SELECT_USER}
             data-user=${user._id}>
             ${user.name}
         </button>
@@ -92,24 +92,24 @@ export default class UserList extends Component {
   }
 
   template() {
-    const { users, seletedUser } = store.getState()
+    const { users, selectedUser } = store.getState()
 
     return `
         <div id='user-list'>
             ${
               users &&
               users.map((user) =>
-                UserListItem(user, user._id === seletedUser._id)
+                UserListItem(user, user._id === selectedUser._id)
               )
             }
-            <button class='ripple user-create-button' data-action='${
+            <button class='ripple user-create-button' data-action=${
               UserListActions.CREATE_USER
-            }'>
+            }>
             + 유저 생성
             </button>
-            <button class='ripple user-delete-button' data-action='${
+            <button class='ripple user-delete-button' data-action=${
               UserListActions.DELETE_USER
-            }'>
+            }>
             삭제 -
             </button>
         </div>
