@@ -17,6 +17,9 @@ class DataController {
     if (body) {
       res = await fetch(this.baseURL + url, {
         method,
+        headers: {
+          'Content-type' : 'application/json'
+        },
         body: JSON.stringify(body)
       })
     } else {
@@ -24,20 +27,39 @@ class DataController {
         method,
       })
     }
-    return await res.json();
+    if (res.ok) {
+      return await res.json();
+    }
+    throw new Error();
   }
 
   getData = async (url) => {
-    return await this.fetching(url, 'GET');
+    try {
+      return await this.fetching(url, 'GET');
+    } catch (e) {
+      throw new Error("response was not ok");
+    }
   }
   postData =  async (url, body) => {
-    return await this.fetching(url, 'POST', body);
+    try {
+      return await this.fetching(url, 'POST', body);
+    } catch (e) {
+      throw new Error("response was not ok");
+    }
   }
   putData = async (url, body) => {
-    return await this.fetching(url, 'PUT', body);
+    try {
+      return await this.fetching(url, 'PUT', body);
+    } catch (e) {
+      throw new Error("response was not ok");
+    }
   }
   deleteData = async (url) => {
-    return await this.fetching(url, 'DELETE');
+    try {
+      return await this.fetching(url, 'DELETE');
+    } catch (e) {
+      throw new Error("response was not ok");
+    }
   }
 }
 

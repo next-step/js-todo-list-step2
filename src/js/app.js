@@ -13,7 +13,11 @@ class App {
     this.dataController = dataController;
     
     // userList
-    this.userList = new UserList(document.querySelector('#user-list-container'), this.dataController);
+    this.userList = new UserList(document.querySelector('#user-list-container'),
+    this.dataController,
+    {
+      onAddUser: this.onAddUser
+    });
 
 
     // header
@@ -44,6 +48,11 @@ class App {
   init = async () => {
     this.state.users = await this.userList.getUsers();
     this.userList.setState(this.state.users);
+  }
+
+  onAddUser = (newUser) => {
+    const newUsers = [...this.state.users, newUser];
+    this.setState({...this.state, users: newUsers});
   }
 
   // onKeyDown = (value) => {
@@ -80,12 +89,13 @@ class App {
   // };
   // // NOTE onKeyPress(value) {}는 동작하지 않습니다.
   // // 왜 안되는지 this에 대해서 다시 공부해봅시다.
-  // setState = (nextState) => {
-  //   this.state = nextState;
-  //   localStorage.setItem('myState', JSON.stringify(this.state));
-  //   this.todoList.setState(this.state);
-  //   this.todoCount.setState(this.state);
-  // };
+  setState = (nextState) => {
+    this.state = nextState;
+    this.userList.setState(this.state.users);
+    // localStorage.setItem('myState', JSON.stringify(this.state));
+    // this.todoList.setState(this.state);
+    // this.todoCount.setState(this.state);
+  };
 }
 
 export default App;
