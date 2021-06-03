@@ -12,12 +12,14 @@ function getUserTemplate(users) {
     '',
   );
 
-  html += `<button class="ripple user-create-button" data-action="createUser">+ 유저 생성</button>
-  <button class="ripple user-delete-button" data-action="deleteUser">삭제 -</button>`;
+  html += `
+    <button class="ripple user-create-button" data-action="createUser">+ 유저 생성</button>
+    <button class="ripple user-delete-button" data-action="deleteUser">삭제 -</button>
+  `;
   return html;
 }
 
-export default class User {
+export default class UserList {
   constructor() {
     this.target = $(DOM_ID.USER_LIST);
 
