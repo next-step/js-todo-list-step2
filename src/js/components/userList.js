@@ -1,7 +1,8 @@
-import { GET_USER_LIST, CREATE_NEW_USER } from "../constant/constant.js";
+import { USER_API } from "../constant/constant.js";
+import { validName } from '../utils/utils.js';
 
 class UserList {
-  constructor($target, dataController, { onAddUser }) {
+  constructor($target, dataController, { onUpdateUser }) {
     this.$target = $target;
     this.$target.innerHTML = `<div class="user-list"></div>
     <button class="ripple user-create-button" data-action="createUser">
@@ -12,7 +13,7 @@ class UserList {
     </button>`;
     this.state = {};
     this.dataController = dataController;
-    this.addEvent(onAddUser);
+    this.addEvent(onUpdateUser);
   }
 
   setState = (nextState) => {
@@ -22,7 +23,7 @@ class UserList {
 
   getUsers = async () => {
     try {
-      return await this.dataController.getData(GET_USER_LIST);
+      return await this.dataController.getData(USER_API);
     } catch (e) {
       console.error(e);
     }
@@ -36,20 +37,20 @@ class UserList {
     return template;
   };
 
-  addEvent = (onAddUser) => {
+  addEvent = (onUpdateUser) => {
     const userCreateButton = this.$target.querySelector(".user-create-button");
     const userDeleteButton = this.$target.querySelector(".user-delete-button");
     const userButton = this.$target.querySelector('.user-list');
 
     const onUserCreateHandler = async () => {
       const userName = prompt("추가하고 싶은 이름을 입력해주세요.");
-      if (userName && userName.trim()) {
+      if (userName && validName(userName.trim(), this.state)) {
         const newUser = {
           name: userName
         };
         try {
-          const res = await this.dataController.postData(CREATE_NEW_USER, newUser);
-          onAddUser(res);
+          const user = await this.dataController.postData(USER_API, newUser);
+          onUpdateUser(user);
         } catch (e) {
           console.error(e);
         }
@@ -58,7 +59,9 @@ class UserList {
 
     const onUserHandler = async (event) => {
       const { target } = event;
-      console.log(target.textContent);
+      const id = this.state[`${target.textContent}`]['_id'];
+      const user = await this.dataController.getData(USER_API+`/${id}`);
+      onUpdateUser(user);
     }
 
     userCreateButton.addEventListener("click", onUserCreateHandler);

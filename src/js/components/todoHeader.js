@@ -1,7 +1,7 @@
 class TodoHeader {
-  constructor($target, props) {
+  constructor($target, name) {
     this.$target = $target;
-    this.state = props;
+    this.state = name;
     this.render();
   }
   setState(nextState) {
@@ -9,8 +9,8 @@ class TodoHeader {
     this.render();
   }
   render() {
-    const template = `<h1>${this.state}</h1>`;
-    this.$target.insertAdjacentHTML('beforeend', template);
+    const strongDOM = this.$target.querySelector('strong');
+    strongDOM.textContent = this.state;
   }
 }
 

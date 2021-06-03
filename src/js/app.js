@@ -7,7 +7,8 @@ class App {
     // // Nullish coalescing operator
     // this.state = JSON.parse(defaultState) ?? { todos: [], selected: ALL };
     this.state = {
-      users: {}
+      currentUser : 'default',
+      users : {}
     }
     this.$target = $target;
     this.dataController = dataController;
@@ -16,12 +17,12 @@ class App {
     this.userList = new UserList(document.querySelector('#user-list-container'),
     this.dataController,
     {
-      onAddUser: this.onAddUser
+      onUpdateUser: this.onUpdateUser
     });
 
 
     // header
-    // this.header = new TodoHeader(this.$target, );
+    this.header = new TodoHeader(document.querySelector('#user-title'), this.state.currentUser);
 
     // // todoinput
     // this.todoInput = new TodoInput(
@@ -49,15 +50,22 @@ class App {
     const userList = await this.userList.getUsers();
     const users = {};
     userList.forEach((user) => {
-      users[`${user._id}`] = user;
+      users[`${user.name}`] = user;
     });
     this.setState({...this.state, users})
     this.userList.setState(this.state.users);
   }
 
-  onAddUser = (newUser) => {
-    const newUsers = {...this.state.users, newUser};
-    this.setState({...this.state, users: newUsers});
+  onChangeCurrentUser = (user) => {
+    this.header.setState(user);
+  }
+
+  onUpdateUser = (newUser) => {
+    const newUsers = {...this.state.users};
+    const currentUser = newUser.name;
+    newUsers[`${currentUser}`] = newUser;
+    this.onChangeCurrentUser(currentUser);
+    this.setState({...this.state, currentUser, users: newUsers});
   }
 
   // onKeyDown = (value) => {
