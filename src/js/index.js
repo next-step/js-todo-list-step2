@@ -1,6 +1,8 @@
-import App from "./App.js";
+import App from "../js/App.js";
+new App();
 
-const todoApp = new App();
+// import TodoApp from "./todoApp.js";
+// new TodoApp().render();
 
 
 // const onUserCreateHandler = () => {
