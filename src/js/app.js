@@ -1,14 +1,21 @@
 import TodoHeader from './components/todoHeader.js';
-import { GET_USER_LIST } from './constant/constant.js';
+import UserList from './components/userList.js';
 
 class App {
   constructor($target, dataController) {
-    console.log("createApp");
     // const defaultState = localStorage.getItem('myState');
     // // Nullish coalescing operator
     // this.state = JSON.parse(defaultState) ?? { todos: [], selected: ALL };
+    this.state = {
+      users: []
+    }
     this.$target = $target;
     this.dataController = dataController;
+    
+    // userList
+    this.userList = new UserList(document.querySelector('#user-list-container'), this.dataController);
+
+
     // header
     // this.header = new TodoHeader(this.$target, );
 
@@ -31,6 +38,12 @@ class App {
     //   state: this.state,
     //   changeSelected: this.changeSelected,
     // });
+    this.init();
+  }
+
+  init = async () => {
+    this.state.users = await this.userList.getUsers();
+    this.userList.setState(this.state.users);
   }
 
   // onKeyDown = (value) => {

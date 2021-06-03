@@ -5,6 +5,9 @@ class DataController {
     this._baseURL = BASE_URL;
   }
 
+  /* 내부 변수선언은 _baseURL로 해놓고
+    해당 내부 변수에 대한 set없이 get 메서드만 구현해 놓으면
+    클래스 외부에서 baseURL을 조작할 수 없기 때문에 private하게 사용할 수 있다. */
   get baseURL() {
     return this._baseURL;
   }
