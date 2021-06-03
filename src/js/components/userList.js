@@ -10,14 +10,13 @@ class UserList {
     <button class="ripple user-delete-button" data-action="deleteUser">
       삭제 -
     </button>`;
-    this.state = [];
+    this.state = {};
     this.dataController = dataController;
     this.addEvent(onAddUser);
   }
 
   setState = (nextState) => {
     this.state = nextState;
-    console.log(this.state);
     this.render();
   };
 
@@ -30,24 +29,24 @@ class UserList {
   };
 
   userListTemplate = () => {
-    return this.state
-      .map((user) => `<button class="ripple">${user.name}</button>`)
-      .join("");
+    let template = '';
+    for (const [key, user] of Object.entries(this.state)) {
+      template += `<button class="ripple">${user.name}</button>`;
+    }
+    return template;
   };
 
   addEvent = (onAddUser) => {
+    const userCreateButton = this.$target.querySelector(".user-create-button");
+    const userDeleteButton = this.$target.querySelector(".user-delete-button");
+    const userButton = this.$target.querySelector('.user-list');
+
     const onUserCreateHandler = async () => {
       const userName = prompt("추가하고 싶은 이름을 입력해주세요.");
       if (userName && userName.trim()) {
-        // const newUser = {
-        //   _id: this.randomGenerator.getString(8),
-        //   todoList: [],
-        //   name: userName
-        // };
         const newUser = {
           name: userName
         };
-        
         try {
           const res = await this.dataController.postData(CREATE_NEW_USER, newUser);
           onAddUser(res);
@@ -56,8 +55,14 @@ class UserList {
         }
       }
     };
-    const userCreateButton = this.$target.querySelector(".user-create-button");
+
+    const onUserHandler = async (event) => {
+      const { target } = event;
+      console.log(target.textContent);
+    }
+
     userCreateButton.addEventListener("click", onUserCreateHandler);
+    userButton.addEventListener("click", onUserHandler);
   };
 
   render = () => {

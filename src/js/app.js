@@ -7,7 +7,7 @@ class App {
     // // Nullish coalescing operator
     // this.state = JSON.parse(defaultState) ?? { todos: [], selected: ALL };
     this.state = {
-      users: []
+      users: {}
     }
     this.$target = $target;
     this.dataController = dataController;
@@ -46,12 +46,17 @@ class App {
   }
 
   init = async () => {
-    this.state.users = await this.userList.getUsers();
+    const userList = await this.userList.getUsers();
+    const users = {};
+    userList.forEach((user) => {
+      users[`${user._id}`] = user;
+    });
+    this.setState({...this.state, users})
     this.userList.setState(this.state.users);
   }
 
   onAddUser = (newUser) => {
-    const newUsers = [...this.state.users, newUser];
+    const newUsers = {...this.state.users, newUser};
     this.setState({...this.state, users: newUsers});
   }
 
@@ -91,7 +96,6 @@ class App {
   // // 왜 안되는지 this에 대해서 다시 공부해봅시다.
   setState = (nextState) => {
     this.state = nextState;
-    this.userList.setState(this.state.users);
     // localStorage.setItem('myState', JSON.stringify(this.state));
     // this.todoList.setState(this.state);
     // this.todoCount.setState(this.state);
