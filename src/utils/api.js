@@ -1,35 +1,35 @@
 export const API = {
-  get(url = "") {
+  get(url = '') {
     return fetch(url);
   },
 
-  post(url = "", body = {}) {
+  post(url = '', body = {}) {
     const option = {
-      method: "POST",
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify(body),
     };
 
     return fetch(url, option);
   },
-  put(url = "", body = {}) {
+  put(url = '', body = {}) {
     const option = {
-      method: "PUT",
+      method: 'PUT',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify(body),
     };
     return fetch(url, option);
   },
 
-  delete(url = "") {
+  delete(url = '') {
     const option = {
-      method: "DELETE",
+      method: 'DELETE',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
     };
     return fetch(url, option);
