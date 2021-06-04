@@ -8,5 +8,6 @@ export const setTodos = (obj) => {
 }
 
 export const clearTodos = () => {
+	if (!window.localStorage["todos"]) return;
 	window.localStorage.removeItem("todos");
 }

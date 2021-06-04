@@ -1,7 +1,7 @@
 import { $ } from "../utils/querySelector.js";
 import { setTodos } from "../utils/Storage.js";
 
-export default function TodoInput () {
+export default function TodoInput ({ reload }) {
 	const $input = $(".new-todo");
 
 	$input.addEventListener("keyup", ({key, currentTarget}) => {
@@ -11,6 +11,7 @@ export default function TodoInput () {
 			status: "done",
 		};
 
- 		key === "Enter" && setTodos(addItem);
+		key === "Enter" && setTodos(addItem);
+		key === "Enter" && reload();
 	});
 }
