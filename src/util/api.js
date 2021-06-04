@@ -126,6 +126,40 @@ const api = {
       };
     }
   },
+  deleteTodoItem: async (userId, itemId) => {
+    try {
+      const response = await request(
+        Router.USER_ITEM(userId, itemId),
+        options.DELETE
+      );
+      return {
+        isError: false,
+        data: response,
+      };
+    } catch (error) {
+      return {
+        isError: true,
+        data: error,
+      };
+    }
+  },
+  toggleTodoItem: async (userId, itemId) => {
+    try {
+      const response = await request(
+        Router.ITEM_TOGGLE(userId, itemId),
+        options.PUT()
+      );
+      return {
+        isError: false,
+        data: response,
+      };
+    } catch (error) {
+      return {
+        isError: true,
+        data: error,
+      };
+    }
+  },
 };
 
 export default api;

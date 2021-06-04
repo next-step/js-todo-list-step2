@@ -1,9 +1,9 @@
 /* eslint-disable prettier/prettier */
-
 import CONSTANT from "../constants.js";
 
 class Todolist {
-  constructor({ $todoapp }) {
+  constructor({ $todoapp, onClick }) {
+    this.onClick = onClick;
     this.$section = document.createElement('section');
     this.$section.className = 'main';
     this.$target = document.createElement('ul');
@@ -32,15 +32,17 @@ class Todolist {
           </li>
     `;
     }
-    
-    return this.state.activeUserInfo.todoList.map(({ contents, isCompleted, priority }) => {
-      const priorityTemplate = {
-        "NONE" : CONSTANT.NONE_TEMPLATE,
-        "FIRST" : CONSTANT.FIRST_TEMPLATE,
-        "SECOND" : CONSTANT.SECOND_TEMPLATE}[priority]
+
+    return this.state.activeUserInfo.todoList
+      .map(({ _id, contents, isCompleted, priority }) => {
+        const priorityTemplate = {
+          NONE: CONSTANT.NONE_TEMPLATE,
+          FIRST: CONSTANT.FIRST_TEMPLATE,
+          SECOND: CONSTANT.SECOND_TEMPLATE,
+        }[priority];
 
       return `
-            <li ${isCompleted ? 'class="completed"' : ""}>
+            <li ${isCompleted ? 'class="completed"' : ""} data-id=${_id}>
               <div class="view">
                 <input class="toggle" type="checkbox" ${isCompleted ? 'checked' : ""}/>
                 <label class="label">
@@ -54,6 +56,16 @@ class Todolist {
   }
   render() {
     this.$target.innerHTML = this.template();
+    this.mounted();
+  }
+  mounted() {
+    this.$target.querySelectorAll("li").forEach($li => {
+      $li.addEventListener("click", (e) => {
+          const { id } = e.target.closest("li").dataset;
+          const className = e.target.className;
+          this.onClick(id, className)
+      })
+   })
   }
 }
 

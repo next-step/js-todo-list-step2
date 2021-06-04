@@ -1,4 +1,5 @@
 import api from '../util/api.js';
+import { changeTodo } from '../util/changeTodo.js';
 import { showError } from '../util/error.js';
 import Todocount from './Todocount.js';
 import Todoinput from './Todoinput.js';
@@ -16,6 +17,9 @@ class TodoAppContainer {
       $todoapp,
       onKeyup: async ({ target, key }) => {
         if (key === 'Enter' && target.value) {
+          if (target.value.length < 2) {
+            return showError({ message: '두 글자 이상이어야합니다!' });
+          }
           const { _id } = this.state.activeUserInfo;
           const response = await api.addTodoItem(_id, target.value);
           if (response.isError) {
@@ -30,6 +34,12 @@ class TodoAppContainer {
 
     this.Todolist = new Todolist({
       $todoapp,
+      onClick: async (itemId, className) => {
+        const userId = this.state.activeUserInfo._id;
+        await changeTodo(userId, itemId, className);
+        const { _id } = this.state.activeUserInfo;
+        this.getNewTodos(_id);
+      },
     });
     this.Todocount = new Todocount({
       $todoapp,
@@ -45,9 +55,6 @@ class TodoAppContainer {
   }
 
   async getNewTodos(id) {
-    this.setState({
-      isLoading: true,
-    });
     const response = await api.getUserInfo(id);
     if (response.isError) {
       return showError(response.data);
