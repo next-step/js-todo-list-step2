@@ -17,8 +17,20 @@ const removeTodo = async (userId, itemId) => {
   return;
 };
 
+const removeAll = async (userId) => {
+  const response = await api.removeAllTodoItem(userId);
+  if (response.isError) {
+    return showError(response.data);
+  }
+  return;
+};
+
 const changeTodo = async (userId, itemId, className, getNewTodos) => {
-  const callback = { toggle: toggleTodo, destroy: removeTodo }[className];
+  const callback = {
+    toggle: toggleTodo,
+    destroy: removeTodo,
+    'clear-completed': removeAll,
+  }[className];
   if (!callback) return;
 
   await callback(userId, itemId);

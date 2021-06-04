@@ -10,6 +10,8 @@ class App {
     this.state = {
       userList: null,
       activeUserInfo: null,
+      todoList: [],
+      filter: 'all',
       activeName: 'unknown',
       isLoading: true,
     };
@@ -64,10 +66,12 @@ class App {
     }
     const userList = response.data;
     const activeUserInfo = userList[0];
+    const todoList = activeUserInfo.todoList;
 
     this.setState({
       userList,
       activeUserInfo,
+      todoList,
       activeName: activeUserInfo.name,
       isLoading: false,
     });

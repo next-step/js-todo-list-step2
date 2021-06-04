@@ -1,8 +1,10 @@
+import CONSTANT from '../constants.js';
 import api from '../util/api.js';
 import { changeLabel } from '../util/changeLabel.js';
 import { changeTodo } from '../util/changeTodo.js';
 import { editTodo } from '../util/editTodo.js';
 import { showError } from '../util/error.js';
+import { filterTodo } from '../util/filterTodo.js';
 import Todocount from './Todocount.js';
 import Todoinput from './Todoinput.js';
 import Todolist from './Todolist.js';
@@ -36,34 +38,50 @@ class TodoAppContainer {
 
     this.Todolist = new Todolist({
       $todoapp,
-      onClick: async (itemId, className) => {
+      onClick: (itemId, className) => {
         const userId = this.state.activeUserInfo._id;
-        await changeTodo(
-          userId,
-          itemId,
-          className,
-          this.getNewTodos.bind(this)
-        );
+        changeTodo(userId, itemId, className, this.getNewTodos.bind(this));
       },
-      onDbClick: async (target) => {
+      onDbClick: (target) => {
         const userId = this.state.activeUserInfo._id;
         editTodo(userId, target, this.getNewTodos.bind(this));
       },
-      onChange: async (itemId, value) => {
+      onChange: (itemId, value) => {
         const userId = this.state.activeUserInfo._id;
         changeLabel(userId, itemId, value, this.getNewTodos.bind(this));
       },
     });
     this.Todocount = new Todocount({
       $todoapp,
+      onClick: (className) => {
+        if (
+          [CONSTANT.ACTIVE, CONSTANT.ALL, CONSTANT.COMPLETED].includes(
+            className
+          )
+        ) {
+          const filtedTodos = filterTodo(
+            className,
+            this.state.activeUserInfo.todoList
+          );
+          this.setState({ todoList: filtedTodos, filter: className });
+        }
+        if (CONSTANT.CLEAR_COMPLETED === className) {
+          const userId = this.state.activeUserInfo._id;
+          changeTodo(userId, null, className, this.getNewTodos.bind(this));
+        }
+      },
     });
   }
 
   setState(nextState) {
     this.state = { ...this.state, ...nextState };
     this.Todolist.setState({
-      activeUserInfo: this.state.activeUserInfo,
+      todoList: this.state.todoList,
       isLoading: this.state.isLoading,
+    });
+    this.Todocount.setState({
+      filter: this.state.filter,
+      counter: this.state.todoList.length,
     });
   }
 
@@ -75,6 +93,7 @@ class TodoAppContainer {
     const data = response.data;
     this.setState({
       activeUserInfo: data,
+      todoList: data.todoList,
       isLoading: false,
     });
   }

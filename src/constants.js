@@ -18,6 +18,10 @@ const ENTER = 'Enter';
 const NONE = 'NONE';
 const FIRST = 'FIRST';
 const SECOND = 'SECOND';
+const ALL = 'all';
+const ACTIVE = 'active';
+const COMPLETED = 'completed';
+const CLEAR_COMPLETED = 'clear-completed';
 
 const CONSTANT = {
   GET,
@@ -34,6 +38,10 @@ const CONSTANT = {
   NONE,
   FIRST,
   SECOND,
+  ALL,
+  ACTIVE,
+  COMPLETED,
+  CLEAR_COMPLETED,
 };
 
 export default CONSTANT;

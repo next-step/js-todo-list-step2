@@ -60,6 +60,7 @@ const selectUser = async ({ setState, targetId }) => {
   setState({
     userList,
     activeUserInfo: newUserInfo,
+    todoList: newUserInfo.todoList,
     activeName: newUserInfo.name,
     isLoading: false,
   });

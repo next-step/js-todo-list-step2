@@ -34,7 +34,7 @@ class Todolist {
     `;
     }
 
-    return this.state.activeUserInfo.todoList
+    return this.state.todoList
       .map(({ _id, contents, isCompleted, priority }) => {
         const priorityTemplate = {
           NONE: CONSTANT.NONE_TEMPLATE,

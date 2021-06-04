@@ -143,6 +143,20 @@ const api = {
       };
     }
   },
+  removeAllTodoItem: async (userId) => {
+    try {
+      const response = await request(Router.ITEM(userId), options.DELETE);
+      return {
+        isError: false,
+        data: response,
+      };
+    } catch (error) {
+      return {
+        isError: true,
+        data: error,
+      };
+    }
+  },
   toggleTodoItem: async (userId, itemId) => {
     try {
       const response = await request(
