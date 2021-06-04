@@ -1,19 +1,19 @@
-import { USER_API } from "../constant/constant.js";
-import { validName } from '../utils/utils.js';
+import { USER_API } from '../constant/constant.js';
+import { hasName } from '../utils/utils.js';
 
 class UserList {
-  constructor($target, dataController, { onUpdateUser }) {
+  constructor($target, dataController, { onUpdateUser, onDeleteUser }) {
     this.$target = $target;
-    this.$target.innerHTML = `<div class="user-list"></div>
-    <button class="ripple user-create-button" data-action="createUser">
+    this.$target.innerHTML = `<div class='user-list'></div>
+    <button class='ripple user-create-button' data-action='createUser'>
     + 유저 생성
     </button>
-    <button class="ripple user-delete-button" data-action="deleteUser">
+    <button class='ripple user-delete-button' data-action='deleteUser'>
       삭제 -
     </button>`;
     this.state = {};
     this.dataController = dataController;
-    this.addEvent(onUpdateUser);
+    this.addEvent(onUpdateUser, onDeleteUser);
   }
 
   setState = (nextState) => {
@@ -31,20 +31,23 @@ class UserList {
 
   userListTemplate = () => {
     let template = '';
-    for (const [key, user] of Object.entries(this.state)) {
-      template += `<button class="ripple">${user.name}</button>`;
+    for (const [key, user] of Object.entries(this.state.users)) {
+      const selected = key === this.state.currentUser ? 'active' : '';
+      template += `<button class='ripple ${selected}'>${user.name}</button>`;
     }
     return template;
   };
 
-  addEvent = (onUpdateUser) => {
-    const userCreateButton = this.$target.querySelector(".user-create-button");
-    const userDeleteButton = this.$target.querySelector(".user-delete-button");
+  addEvent = (onUpdateUser, onDeleteUser) => {
+    const userCreateButton = this.$target.querySelector('.user-create-button');
+    const userDeleteButton = this.$target.querySelector('.user-delete-button');
     const userButton = this.$target.querySelector('.user-list');
 
     const onUserCreateHandler = async () => {
-      const userName = prompt("추가하고 싶은 이름을 입력해주세요.");
-      if (userName && validName(userName.trim(), this.state)) {
+      const name = prompt('추가하고 싶은 이름을 입력해주세요.');
+      if (name) {
+        const userName = name.trim();
+        if (!userName || hasName(userName, this.state.users)) return
         const newUser = {
           name: userName
         };
@@ -59,20 +62,39 @@ class UserList {
 
     const onUserHandler = async (event) => {
       const { target } = event;
-      const id = this.state[`${target.textContent}`]['_id'];
+      if (!(target instanceof HTMLButtonElement)) {
+        return;
+      }
+      const id = this.state.users[`${target.textContent}`]['_id'];
       const user = await this.dataController.getData(USER_API+`/${id}`);
       onUpdateUser(user);
     }
 
-    userCreateButton.addEventListener("click", onUserCreateHandler);
-    userButton.addEventListener("click", onUserHandler);
+    const onUserDeleteHandler = async () => {
+      const name = prompt('삭제하고 싶은 이름을 입력해주세요.');
+      if (name) {
+        const userName = name.trim();
+        if (!userName || !hasName(userName, this.state.users)) return
+        const id = this.state.users[`${userName}`]['_id'];
+        try {
+          await this.dataController.deleteData(USER_API+`/${id}`);
+          onDeleteUser(userName);
+        } catch (e) {
+          console.error(e);
+        }
+      }
+    }
+
+    userCreateButton.addEventListener('click', onUserCreateHandler);
+    userButton.addEventListener('click', onUserHandler);
+    userDeleteButton.addEventListener('click', onUserDeleteHandler);
   };
 
   render = () => {
     const targetDOM = this.$target.querySelector('.user-list');
     const template = this.userListTemplate();
     targetDOM.innerHTML = '';
-    targetDOM.insertAdjacentHTML("beforeend", template);
+    targetDOM.insertAdjacentHTML('beforeend', template);
   };
 }
 

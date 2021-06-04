@@ -1,5 +1,7 @@
 import TodoHeader from './components/todoHeader.js';
 import UserList from './components/userList.js';
+import TodoList from './components/todoList.js';
+import { ALL } from './constant/constant.js';
 
 class App {
   constructor($target, dataController) {
@@ -7,7 +9,8 @@ class App {
     // // Nullish coalescing operator
     // this.state = JSON.parse(defaultState) ?? { todos: [], selected: ALL };
     this.state = {
-      currentUser : 'default',
+      currentUser : '',
+      filter: ALL,
       users : {}
     }
     this.$target = $target;
@@ -17,12 +20,13 @@ class App {
     this.userList = new UserList(document.querySelector('#user-list-container'),
     this.dataController,
     {
-      onUpdateUser: this.onUpdateUser
+      onUpdateUser: this.onUpdateUser,
+      onDeleteUser: this.onDeleteUser
     });
 
 
     // header
-    this.header = new TodoHeader(document.querySelector('#user-title'), this.state.currentUser);
+    this.header = new TodoHeader(document.querySelector('#user-title'));
 
     // // todoinput
     // this.todoInput = new TodoInput(
@@ -30,13 +34,15 @@ class App {
     //   this.onKeyDown
     // );
 
-    // // todolist
-    // this.todoList = new TodoList(document.querySelector('.todo-list'), {
-    //   state: this.state,
-    //   onDeleteItem: this.onDeleteItem,
-    //   changeTodoState: this.changeTodoState,
-    //   changeTodoValue: this.changeTodoValue,
-    // });
+    // todolist
+    this.todoList = new TodoList(document.querySelector('.todo-list'),
+    {
+      todoList: [],
+      filter: this.state.filter,
+      onDeleteItem: this.onDeleteItem,
+      changeTodoState: this.changeTodoState,
+      changeTodoValue: this.changeTodoValue,
+    });
 
     // // todoCount
     // this.todoCount = new TodoCount(document.querySelector('.count-container'), {
@@ -49,23 +55,36 @@ class App {
   init = async () => {
     const userList = await this.userList.getUsers();
     const users = {};
+    let currentUser = '';
     userList.forEach((user) => {
       users[`${user.name}`] = user;
+      currentUser = user.name;
     });
-    this.setState({...this.state, users})
-    this.userList.setState(this.state.users);
-  }
-
-  onChangeCurrentUser = (user) => {
-    this.header.setState(user);
+    this.userList.setState({users, currentUser});
+    this.header.setState(currentUser);
+    this.setState({...this.state, users, currentUser})
   }
 
   onUpdateUser = (newUser) => {
-    const newUsers = {...this.state.users};
+    const users = {...this.state.users};
     const currentUser = newUser.name;
-    newUsers[`${currentUser}`] = newUser;
-    this.onChangeCurrentUser(currentUser);
-    this.setState({...this.state, currentUser, users: newUsers});
+    users[`${currentUser}`] = newUser;
+    this.header.setState(currentUser);
+    this.userList.setState({users, currentUser});
+    this.setState({...this.state, currentUser, users});
+  }
+
+  onDeleteUser = (userName) => {
+    const users = {...this.state.users};
+    let currentUser = this.state.currentUser;
+    if (userName === this.state.currentUser) {
+      const keys = Object.keys(users)[0];
+      currentUser = keys;
+      this.header.setState(currentUser);
+    }
+    delete users[userName];
+    this.userList.setState({users, currentUser});
+    this.setState({...this.state, currentUser, users});
   }
 
   // onKeyDown = (value) => {
@@ -75,26 +94,26 @@ class App {
   //   };
   //   this.setState(newTodoItems);
   // };
-  // onDeleteItem = (index) => {
-  //   const newTodoItems = this.state.todos;
-  //   newTodoItems.splice(index, 1);
-  //   const newState = { ...this.state, todos: newTodoItems };
-  //   this.setState(newState);
-  // };
+  onDeleteItem = (index) => {
+    const newTodoItems = this.state.todos;
+    newTodoItems.splice(index, 1);
+    const newState = { ...this.state, todos: newTodoItems };
+    this.setState(newState);
+  };
 
-  // changeTodoState = (index, state) => {
-  //   const newTodos = [...this.state.todos];
-  //   newTodos[index].state = state;
-  //   const newState = { ...this.state, todos: newTodos };
-  //   this.setState(newState);
-  // };
+  changeTodoState = (index, state) => {
+    const newTodos = [...this.state.todos];
+    newTodos[index].state = state;
+    const newState = { ...this.state, todos: newTodos };
+    this.setState(newState);
+  };
 
-  // changeTodoValue = (index, value) => {
-  //   const newTodos = [...this.state.todos];
-  //   newTodos[index].value = value;
-  //   const newState = { ...this.state, todos: newTodos };
-  //   this.setState(newState);
-  // };
+  changeTodoValue = (index, value) => {
+    const newTodos = [...this.state.todos];
+    newTodos[index].value = value;
+    const newState = { ...this.state, todos: newTodos };
+    this.setState(newState);
+  };
 
   // changeSelected = (name) => {
   //   const newState = { ...this.state, selected: name };

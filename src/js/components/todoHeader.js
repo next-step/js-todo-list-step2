@@ -1,7 +1,7 @@
 class TodoHeader {
-  constructor($target, name) {
+  constructor($target) {
     this.$target = $target;
-    this.state = name;
+    this.state = '';
     this.render();
   }
   setState(nextState) {
