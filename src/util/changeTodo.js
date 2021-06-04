@@ -17,13 +17,13 @@ const removeTodo = async (userId, itemId) => {
   return;
 };
 
-const changeTodo = async (userId, itemId, className) => {
+const changeTodo = async (userId, itemId, className, getNewTodos) => {
   const callback = { toggle: toggleTodo, destroy: removeTodo }[className];
   if (!callback) return;
 
   await callback(userId, itemId);
 
-  return;
+  return getNewTodos(userId);
 };
 
 export { changeTodo };

@@ -160,6 +160,23 @@ const api = {
       };
     }
   },
+  editTodoItem: async (userId, itemId, contents) => {
+    try {
+      const response = await request(
+        Router.USER_ITEM(userId, itemId),
+        options.PUT({ contents })
+      );
+      return {
+        isError: false,
+        data: response,
+      };
+    } catch (error) {
+      return {
+        isError: true,
+        data: error,
+      };
+    }
+  },
 };
 
 export default api;

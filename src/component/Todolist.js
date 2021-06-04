@@ -2,7 +2,8 @@
 import CONSTANT from "../constants.js";
 
 class Todolist {
-  constructor({ $todoapp, onClick }) {
+  constructor({ $todoapp, onClick, onDbClick }) {
+    this.onDbClick = onDbClick;
     this.onClick = onClick;
     this.$section = document.createElement('section');
     this.$section.className = 'main';
@@ -10,7 +11,6 @@ class Todolist {
     this.$target.className = 'todo-list';
     this.$section.appendChild(this.$target);
     $todoapp.appendChild(this.$section);
-
   }
   setState(nextState) {
     this.state = { ...this.state, ...nextState };
@@ -51,7 +51,7 @@ class Todolist {
                 </label>
                 <button class="destroy"></button>
               </div>
-              <input class="edit" value="완료된 타이틀" />
+              <input class="edit" value="${contents}" />
             </li>`}).join("")
   }
   render() {
@@ -63,9 +63,12 @@ class Todolist {
       $li.addEventListener("click", (e) => {
           const { id } = e.target.closest("li").dataset;
           const className = e.target.className;
-          this.onClick(id, className)
-      })
-   })
+          this.onClick(id, className);
+      });
+      $li.addEventListener("dblclick", (e) => {
+        this.onDbClick(e.target);
+      });
+    })
   }
 }
 

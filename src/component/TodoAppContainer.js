@@ -1,5 +1,6 @@
 import api from '../util/api.js';
 import { changeTodo } from '../util/changeTodo.js';
+import { editTodo } from '../util/editTodo.js';
 import { showError } from '../util/error.js';
 import Todocount from './Todocount.js';
 import Todoinput from './Todoinput.js';
@@ -35,10 +36,18 @@ class TodoAppContainer {
     this.Todolist = new Todolist({
       $todoapp,
       onClick: async (itemId, className) => {
+        console.log(className);
         const userId = this.state.activeUserInfo._id;
-        await changeTodo(userId, itemId, className);
-        const { _id } = this.state.activeUserInfo;
-        this.getNewTodos(_id);
+        await changeTodo(
+          userId,
+          itemId,
+          className,
+          this.getNewTodos.bind(this)
+        );
+      },
+      onDbClick: async (target) => {
+        const userId = this.state.activeUserInfo._id;
+        editTodo(userId, target, this.getNewTodos.bind(this));
       },
     });
     this.Todocount = new Todocount({
