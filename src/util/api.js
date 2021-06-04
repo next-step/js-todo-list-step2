@@ -177,6 +177,23 @@ const api = {
       };
     }
   },
+  changeTodoLabel: async (userId, itemId, priority) => {
+    try {
+      const response = await request(
+        Router.ITEM_PRIORITY(userId, itemId),
+        options.PUT({ priority })
+      );
+      return {
+        isError: false,
+        data: response,
+      };
+    } catch (error) {
+      return {
+        isError: true,
+        data: error,
+      };
+    }
+  },
 };
 
 export default api;

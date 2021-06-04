@@ -2,7 +2,8 @@
 import CONSTANT from "../constants.js";
 
 class Todolist {
-  constructor({ $todoapp, onClick, onDbClick }) {
+  constructor({ $todoapp, onClick, onDbClick, onChange }) {
+    this.onChange = onChange;
     this.onDbClick = onDbClick;
     this.onClick = onClick;
     this.$section = document.createElement('section');
@@ -67,6 +68,10 @@ class Todolist {
       });
       $li.addEventListener("dblclick", (e) => {
         this.onDbClick(e.target);
+      });
+      $li.addEventListener("change", (e) => {
+        const { id } = e.target.closest("li").dataset;
+        this.onChange(id, e.target.value)
       });
     })
   }

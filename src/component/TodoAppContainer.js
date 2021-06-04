@@ -1,4 +1,5 @@
 import api from '../util/api.js';
+import { changeLabel } from '../util/changeLabel.js';
 import { changeTodo } from '../util/changeTodo.js';
 import { editTodo } from '../util/editTodo.js';
 import { showError } from '../util/error.js';
@@ -36,7 +37,6 @@ class TodoAppContainer {
     this.Todolist = new Todolist({
       $todoapp,
       onClick: async (itemId, className) => {
-        console.log(className);
         const userId = this.state.activeUserInfo._id;
         await changeTodo(
           userId,
@@ -48,6 +48,10 @@ class TodoAppContainer {
       onDbClick: async (target) => {
         const userId = this.state.activeUserInfo._id;
         editTodo(userId, target, this.getNewTodos.bind(this));
+      },
+      onChange: async (itemId, value) => {
+        const userId = this.state.activeUserInfo._id;
+        changeLabel(userId, itemId, value, this.getNewTodos.bind(this));
       },
     });
     this.Todocount = new Todocount({
