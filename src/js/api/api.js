@@ -1,9 +1,10 @@
-const baseUrl = "https://js-todo-list-9ca3a.df.r.appspot.com/";
+const baseURL = "https://js-todo-list-9ca3a.df.r.appspot.com/api/users/";
 
-
-const fetchAPI = async function(url, method, body){
+ export const storage = window.localStorage;
+/*body에 값 보내주는 API*/
+const fetchAPI_body = async function(url, method, body){
    try{
-        const result=  await fetch(baseUrl+url, {
+        const result=  await fetch(baseURL+url, {
             method : method,
             headers: {
             'Content-Type': 'application/json;charset=utf-8'
@@ -15,19 +16,34 @@ const fetchAPI = async function(url, method, body){
        console.error("error"+url);
    }
 }
+/*body값 없는 API*/
+const fetchAPI = async function(url, method){
+    try{
+        let response = await fetch(baseURL+url);
+        return await response.json();
+    } catch (error){
+        console.error("error"+error);
+    }
+ }
+
+//  const fetchAPI =  function(url, method){
+//      return fetch(baseURL+url)
+//         .then((response) => response.json())
+//         .then((data) =>{return data} );
+//  }
 
 export const userAPI = {
     addUser : (userName) => {
-        return fetchAPI(api/users,"POST",userName);
+        return fetchAPI_body("","POST",userName);
     },
-    getUserList : () =>{
-        return fetchAPI();
+    getAllUserList : () =>{
+        return  fetchAPI("","GET");
     },
-    loadUser : (userID) =>{
+    getUserList : (userID) =>{
         return fetchAPI();
     },
     deleteUser : (userID) =>{
-        return fetchAPI();
+        return fetchAPI(baseUrl);
     }
 }
 
