@@ -1,6 +1,20 @@
 import { $ } from '../../utils/utils.js';
-import { KEY, DOM_ID } from '../../constants/constants.js';
+import { KEY, DOM_ID, PRIORITY } from '../../constants/constants.js';
 import TodoState from '../../store/todoState.js';
+
+function getPriortyTemplate(priority) {
+  return PRIORITY[priority] === 'select'
+    ? `
+        <select class="chip select">
+        <option value="0" selected>순위</option>
+        <option value="1">1순위</option>
+        <option value="2">2순위</option>
+        </select>
+      `
+    : `
+        <span class="chip ${PRIORITY[priority]}">1순위</span>해야할 아이템
+      `;
+}
 
 export default class TodoList {
   constructor({ setTodoList }) {
@@ -69,17 +83,22 @@ export default class TodoList {
     this._updateTodoValue(todoId, updatedValue);
   }
 
-  _getTodoItemTemplate({ id, value, isDone }) {
+  _getTodoItemTemplate({ _id, contents, isCompleted, priority }) {
+    const selectView = getPriortyTemplate(priority);
+
     return `
-    <li id="${id}" class="${isDone && 'completed'}">
+    <li id="${_id}" class="${isCompleted && 'completed'}">
       <div class="view">
-        <input id="${id}" class="toggle" type="checkbox" ${isDone && 'checked'}/>
-        <label class="label">${value}</label>
-        <button id="${id}" class="destroy"></button>
+        <input id="${_id}" class="toggle" type="checkbox" ${isCompleted && 'checked'}/>
+        <label class="label">
+          ${selectView}
+          해야할 아이템
+        </label>
+        <button class="destroy"></button>
       </div>
-      <input id="${id}" class="edit" value=${value} />
+      <input id="${_id}" class="edit" value=${contents} />
     </li>
-  `;
+    `;
   }
 
   render(todoListState) {

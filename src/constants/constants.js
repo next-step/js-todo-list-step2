@@ -16,6 +16,12 @@ export const FILTER = {
   ACTIVE: 'active',
   COMPLETED: 'completed',
 };
+// priority
+export const PRIORITY = {
+  NONE: 'select',
+  FIRST: 'primary',
+  SECOND: 'secondary',
+};
 
 export const LOCAL_DB_KEY = 'todos';
 

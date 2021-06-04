@@ -1,12 +1,13 @@
 import { $ } from '../../utils/utils.js';
 import { DOM_ID } from '../../constants/constants.js';
+import UserState from '../../store/userState.js';
 
 import { getUsers, createUser, deleteUser } from '../../api/user.js';
 
 function getUserTemplate(users) {
   let html = users.reduce(
     (acc, user, idx) =>
-      (acc += `<button class="ripple ${idx === 0 && 'active'}" data-id=${user._id}>${
+      (acc += `<button class="ripple ${idx === 0 ? 'active' : ''}" data-id=${user._id}>${
         user.name
       }</button>`),
     '',
@@ -20,15 +21,18 @@ function getUserTemplate(users) {
 }
 
 export default class UserList {
-  constructor() {
-    this.target = $(DOM_ID.USER_LIST);
+  constructor({ setUser }) {
+    this.$usersList = $(DOM_ID.USER_LIST);
+
+    this.userState = UserState;
+    this.setUser = setUser;
 
     this._addEvent();
     this.render();
   }
 
   _addEvent() {
-    this.target.addEventListener('click', this.userListClickHandler.bind(this));
+    this.$usersList.addEventListener('click', this.userListClickHandler.bind(this));
   }
 
   userListClickHandler({ target }) {
@@ -50,7 +54,7 @@ export default class UserList {
 
   changeUser(target) {
     // Change User Active
-    const $usersList = this.target.querySelectorAll('button.ripple');
+    const $usersList = this.$usersList.querySelectorAll('button.ripple');
     [...$usersList].map((element) => element.classList.remove('active'));
     target.classList.add('active');
 
@@ -65,11 +69,15 @@ export default class UserList {
     const $userTitle = $('#user-title strong');
     const $activeUser = this.getActiveUser();
 
-    $userTitle.innerHTML = $activeUser.textContent;
+    const userId = $activeUser.dataset['id'];
+    const activeUserName = $activeUser.textContent;
+
+    this.setUser({ userId, name: activeUserName });
+    $userTitle.innerHTML = activeUserName;
   }
 
   getActiveUser() {
-    return this.target.querySelector('.active');
+    return this.$usersList.querySelector('.active');
   }
 
   async createUser() {
@@ -101,7 +109,7 @@ export default class UserList {
     const users = await getUsers();
     const userListHTMl = getUserTemplate(users);
 
-    this.target.innerHTML = userListHTMl;
+    this.$usersList.innerHTML = userListHTMl;
     this.changeUserTitle();
   }
 }
