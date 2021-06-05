@@ -37,10 +37,7 @@ class Todocount {
     this.mounted();
   }
   mounted() {
-    this.$target.addEventListener('click', (e) => {
-      const className = e.target.className.split(' ')[0];
-      this.onClick(className);
-    });
+    this.$target.addEventListener('click', this.onClick);
   }
 }
 

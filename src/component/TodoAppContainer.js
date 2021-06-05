@@ -53,17 +53,14 @@ class TodoAppContainer {
     });
     this.Todocount = new Todocount({
       $todoapp,
-      onClick: (className) => {
+      onClick: (event) => {
+        const className = event.target.className.split(' ')[0];
         if (
           [CONSTANT.ACTIVE, CONSTANT.ALL, CONSTANT.COMPLETED].includes(
             className
           )
         ) {
-          const filtedTodos = filterTodo(
-            className,
-            this.state.activeUserInfo.todoList
-          );
-          this.setState({ todoList: filtedTodos, filter: className });
+          this.setState({ filter: className });
         }
         if (CONSTANT.CLEAR_COMPLETED === className) {
           const userId = this.state.activeUserInfo._id;
@@ -75,13 +72,17 @@ class TodoAppContainer {
 
   setState(nextState) {
     this.state = { ...this.state, ...nextState };
+    const filtedTodos = filterTodo(
+      this.state.filter,
+      this.state.activeUserInfo.todoList
+    );
     this.Todolist.setState({
-      todoList: this.state.todoList,
+      todoList: filtedTodos,
       isLoading: this.state.isLoading,
     });
     this.Todocount.setState({
       filter: this.state.filter,
-      counter: this.state.todoList.length,
+      counter: filtedTodos.length,
     });
   }
 
