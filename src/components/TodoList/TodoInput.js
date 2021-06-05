@@ -36,9 +36,8 @@ export default class TodoInput {
 
     // 상태 업데이트
     // const todoList = this.todoState.get();
-    // createTodoItem()
     // const addedTodoList = todoList.concat(todoItem);
-    // this.setTodoList(addedTodoList);
+    this.setTodoList();
 
     this._initInput();
   }

@@ -21,7 +21,10 @@ export default class TodoApp {
 
     // components
     new TodoInput({ setTodoList: this.setTodoList.bind(this), userState: this.userState });
-    this.todoList = new TodoList({ setTodoList: this.setTodoList.bind(this) });
+    this.todoList = new TodoList({
+      setTodoList: this.setTodoList.bind(this),
+      userState: this.userState,
+    });
     this.todoCount = new TodoCount({ setFilter: this.setFilter.bind(this) });
     this.userList = new UserList({ setUser: this.setUser.bind(this) });
   }
@@ -32,8 +35,10 @@ export default class TodoApp {
   }
 
   setTodoList(updatedTodoList) {
-    this.todoState.set(updatedTodoList);
-    this._render();
+    console.log('change');
+    // this.todoState.set(updatedTodoList);
+    this.todoList.render();
+    // this._render();
   }
 
   setUser(updateduser) {

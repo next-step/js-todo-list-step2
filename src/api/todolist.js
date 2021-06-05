@@ -26,3 +26,17 @@ export const createTodoItem = async (userId, contents) => {
     console.error(`Add Todo List Item Error:${error}`);
   }
 };
+
+export const toggleTodoItem = async (userId, itemId) => {
+  try {
+    // 	/api/users/:userId/items/:itemId/toggle
+    const response = await API.put(`${BASE_URL}/${userId}/items/${itemId}/toggle`);
+    if (response.ok) {
+      return response.json();
+    }
+
+    throw new Error(`${response.status}, ${response.statusText}`);
+  } catch (error) {
+    console.error(`Toggle Todo Item Error:${error}`);
+  }
+};

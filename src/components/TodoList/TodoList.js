@@ -2,6 +2,8 @@ import { $ } from '../../utils/utils.js';
 import { KEY, DOM_ID, PRIORITY } from '../../constants/constants.js';
 import TodoState from '../../store/todoState.js';
 
+import { toggleTodoItem, getTodoList } from '../../api/todolist.js';
+
 function getPriortyTemplate(priority) {
   return PRIORITY[priority] === 'select'
     ? `
@@ -17,11 +19,12 @@ function getPriortyTemplate(priority) {
 }
 
 export default class TodoList {
-  constructor({ setTodoList }) {
+  constructor({ setTodoList, userState }) {
     this.$target = $(DOM_ID.TODO_LIST);
 
     this.todoState = TodoState;
     this.setTodoList = setTodoList;
+    this.userState = userState;
 
     this._addEvent();
   }
@@ -41,15 +44,19 @@ export default class TodoList {
     this.setTodoList(deletedTodoList);
   }
 
-  _toggleTodoDone({ target }) {
+  async _toggleTodoDone({ target }) {
     if (target.classList.value !== 'toggle') return;
 
+    const userId = this.userState.get().userId;
     const todoId = target.id;
-    const updatedTodoList = TodoState.get().map((todoItem) =>
-      todoItem.id == todoId ? { ...todoItem, isDone: !todoItem.isDone } : todoItem,
-    );
 
-    this.setTodoList(updatedTodoList);
+    const result = await toggleTodoItem(userId, todoId);
+    // console.log(result);
+
+    // const todoList = await getTodoList(userId);
+    this.render();
+    // console.log(todoList);
+    // this.setTodoList(updatedTodoList);
   }
 
   _updateTodoValue(todoId, updatedValue) {
@@ -101,8 +108,13 @@ export default class TodoList {
     `;
   }
 
-  render(todoListState) {
-    const todoItemTemplate = todoListState.map(this._getTodoItemTemplate);
+  async render(todoListState) {
+    console.log('change 2');
+    const userId = this.userState.get().userId;
+    const todoList = await getTodoList(userId);
+    const todoItemTemplate = todoList.map(this._getTodoItemTemplate);
     this.$target.innerHTML = todoItemTemplate.join('');
+
+    // this.render(todoList);
   }
 }
