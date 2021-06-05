@@ -15,6 +15,7 @@ export const FILTER = {
   ALL: 'all',
   ACTIVE: 'active',
   COMPLETED: 'completed',
+  ALL_DELETED: 'clear-completed',
 };
 // priority
 export const PRIORITY = {

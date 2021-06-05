@@ -25,7 +25,10 @@ export default class TodoApp {
       setTodoList: this.setTodoList.bind(this),
       userState: this.userState,
     });
-    this.todoCount = new TodoCount({ setFilter: this.setFilter.bind(this) });
+    this.todoCount = new TodoCount({
+      setFilter: this.setFilter.bind(this),
+      userState: this.userState,
+    });
     this.userList = new UserList({ setUser: this.setUser.bind(this) });
   }
 

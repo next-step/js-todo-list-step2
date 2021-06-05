@@ -1,8 +1,9 @@
 import { $ } from '../../utils/utils.js';
 import { DOM_ID, FILTER } from '../../constants/constants.js';
+import { deleteAllItem } from '../../api/todolist.js';
 
 export default class TodoCount {
-  constructor({ setFilter }) {
+  constructor({ setFilter, userState }) {
     this.$target = $(DOM_ID.TODO_COUNT);
 
     this.$filterMenu = {
@@ -12,15 +13,30 @@ export default class TodoCount {
     };
 
     this.setFilter = setFilter;
+    this.userState = userState;
 
     this._addEvent();
   }
 
   _addEvent() {
     this.$target.addEventListener('click', this._changeFilter.bind(this));
+    this.$target.addEventListener('click', this.allDelete.bind(this));
+  }
+
+  async allDelete({ target }) {
+    if (!target.classList.contains(FILTER.ALL_DELETED)) return;
+
+    const { userId } = this.userState.get();
+    // console.log('deleted', userId);
+
+    const result = await deleteAllItem(userId);
+    console.log(result);
+
+    this.setFilter();
   }
 
   _changeFilter(event) {
+    // console.log('click');
     event.stopPropagation();
 
     const filter = event.target.classList[0];
