@@ -36,7 +36,6 @@ export default class TodoCount {
   }
 
   _changeFilter(event) {
-    // console.log('click');
     event.stopPropagation();
 
     const filter = event.target.classList[0];
@@ -54,6 +53,7 @@ export default class TodoCount {
   }
 
   renderCount(count) {
+    console.log('1', count);
     this.$target.querySelector('.todo-count > strong').innerHTML = count;
   }
 }

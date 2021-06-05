@@ -112,9 +112,19 @@ export default class TodoList {
     `;
   }
 
-  async render(todoListState) {
+  // async render(todoListState) {
+  //   const userId = this.userState.get().userId;
+  //   const todoList = await getTodoList(userId);
+  //   const todoItemTemplate = todoList.map(this._getTodoItemTemplate);
+  //   this.$target.innerHTML = todoItemTemplate.join('');
+
+  //   // this.render(todoList);
+  // }
+  async render(todoList) {
+    // console.log(todoList);
     const userId = this.userState.get().userId;
-    const todoList = await getTodoList(userId);
+    todoList = todoList || (await getTodoList(userId));
+    // const todoList = await getTodoList(userId);
     const todoItemTemplate = todoList.map(this._getTodoItemTemplate);
     this.$target.innerHTML = todoItemTemplate.join('');
 

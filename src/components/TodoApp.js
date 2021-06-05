@@ -53,19 +53,17 @@ export default class TodoApp {
     const filter = this.filterState.get();
 
     let todoList = await getTodoList(this.userState.get().userId);
-    // console.log(todoList);
-    // todoList = this._getFilteredTodoList(filter);
+    todoList = this._getFilteredTodoList(todoList, filter);
 
     this.todoList.render(todoList);
-    this.todoCount.renderCount(todoList.length);
+    this.todoCount.renderCount(todoList ? todoList.length : 0);
   }
 
-  _getFilteredTodoList(filter) {
-    console.log(filter);
+  _getFilteredTodoList(todoList, filter) {
     return {
-      [FILTER.ALL]: this.todoState.get(),
-      [FILTER.ACTIVE]: this.todoState.get().filter((todoItem) => !todoItem.isDone),
-      [FILTER.COMPLETED]: this.todoState.get().filter((todoItem) => todoItem.isDone),
+      [FILTER.ALL]: todoList,
+      [FILTER.ACTIVE]: todoList.filter((todoItem) => !todoItem.isCompleted),
+      [FILTER.COMPLETED]: todoList.filter((todoItem) => todoItem.isCompleted),
     }[filter];
   }
 }
