@@ -54,7 +54,7 @@ class App {
       userList: this.state.userList.map(({ _id, name }) => {
         return { _id, name };
       }),
-      activeName: this.state.activeName,
+      activeId: this.state.activeUserInfo._id,
     });
     this.TodoAppContainer.setState(this.state);
   }

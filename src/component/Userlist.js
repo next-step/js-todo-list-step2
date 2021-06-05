@@ -14,11 +14,11 @@ class Userlist {
   template() {
     if (!this.state) return '';
     
-    const { userList, activeName } = this.state;
+    const { userList, activeId } = this.state;
     return `
       <div id="user-list">
         ${userList.map(({name, _id}) => `
-          <button class="ripple${activeName === name ? " active" : ""}" data-id=${_id}>${name}</button>
+          <button class="ripple${activeId === _id ? " active" : ""}" data-id=${_id}>${name}</button>
         `
         ).join("")}
         <button class="ripple user-create-button" data-action="createUser">
