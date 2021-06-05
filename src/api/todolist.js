@@ -82,3 +82,17 @@ export const updateItemContents = async (userId, itemId, contents) => {
     console.error(`Toggle Todo Item Error:${error}`);
   }
 };
+
+export const updateItemPriority = async (userId, itemId, priority) => {
+  try {
+    // /api/users/:userId/items/:itemId/priority
+    const response = await API.put(`${BASE_URL}/${userId}/items/${itemId}/priority`, priority);
+    if (response.ok) {
+      return response.json();
+    }
+
+    throw new Error(`${response.status}, ${response.statusText}`);
+  } catch (error) {
+    console.error(`Toggle Todo Item Error:${error}`);
+  }
+};

@@ -27,10 +27,9 @@ export default class TodoCount {
     if (!target.classList.contains(FILTER.ALL_DELETED)) return;
 
     const { userId } = this.userState.get();
-    // console.log('deleted', userId);
 
     const result = await deleteAllItem(userId);
-    console.log(result);
+    // console.log(result);
 
     this.setFilter();
   }
@@ -53,7 +52,6 @@ export default class TodoCount {
   }
 
   renderCount(count) {
-    console.log('1', count);
     this.$target.querySelector('.todo-count > strong').innerHTML = count;
   }
 }

@@ -38,7 +38,6 @@ export default class TodoApp {
   }
 
   setTodoList(updatedTodoList) {
-    console.log('change');
     // this.todoState.set(updatedTodoList);
     this.todoList.render();
     // this._render();
