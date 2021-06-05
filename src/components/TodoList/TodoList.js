@@ -2,7 +2,7 @@ import { $ } from '../../utils/utils.js';
 import { KEY, DOM_ID, PRIORITY } from '../../constants/constants.js';
 import TodoState from '../../store/todoState.js';
 
-import { toggleTodoItem, getTodoList } from '../../api/todolist.js';
+import { toggleTodoItem, getTodoList, deleteItem } from '../../api/todolist.js';
 
 function getPriortyTemplate(priority) {
   return PRIORITY[priority] === 'select'
@@ -36,12 +36,16 @@ export default class TodoList {
     this.$target.addEventListener('keyup', this._closeEditMode.bind(this));
   }
 
-  _deleteTodo({ target }) {
+  async _deleteTodo({ target }) {
     if (target.classList.value !== 'destroy') return;
 
+    const userId = this.userState.get().userId;
     const todoId = target.id;
-    const deletedTodoList = TodoState.get().filter((todoItem) => todoItem.id !== todoId);
-    this.setTodoList(deletedTodoList);
+
+    const result = await deleteItem(userId, todoId);
+    // console.log('delete', result);
+
+    this.render();
   }
 
   async _toggleTodoDone({ target }) {
@@ -101,7 +105,7 @@ export default class TodoList {
           ${selectView}
           ${contents}
         </label>
-        <button class="destroy"></button>
+        <button id=${_id} class="destroy"></button>
       </div>
       <input id="${_id}" class="edit" value=${contents} />
     </li>
@@ -109,7 +113,6 @@ export default class TodoList {
   }
 
   async render(todoListState) {
-    console.log('change 2');
     const userId = this.userState.get().userId;
     const todoList = await getTodoList(userId);
     const todoItemTemplate = todoList.map(this._getTodoItemTemplate);

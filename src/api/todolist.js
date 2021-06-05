@@ -40,3 +40,31 @@ export const toggleTodoItem = async (userId, itemId) => {
     console.error(`Toggle Todo Item Error:${error}`);
   }
 };
+
+export const deleteAllItem = async (userId) => {
+  try {
+    // 	/api/users/:userId/items/
+    const response = await API.delete(`${BASE_URL}/${userId}/items`);
+    if (response.ok) {
+      return response.json();
+    }
+
+    throw new Error(`${response.status}, ${response.statusText}`);
+  } catch (error) {
+    console.error(`Toggle Todo Item Error:${error}`);
+  }
+};
+
+export const deleteItem = async (userId, itemId) => {
+  try {
+    // 	/api/users/:userId/items/:itemId
+    const response = await API.delete(`${BASE_URL}/${userId}/items/${itemId}`);
+    if (response.ok) {
+      return response.json();
+    }
+
+    throw new Error(`${response.status}, ${response.statusText}`);
+  } catch (error) {
+    console.error(`Toggle Todo Item Error:${error}`);
+  }
+};
