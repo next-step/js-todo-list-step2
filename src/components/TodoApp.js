@@ -20,7 +20,7 @@ export default class TodoApp {
     this.userState = UserState;
 
     // components
-    new TodoInput({ setTodoList: this.setTodoList.bind(this) });
+    new TodoInput({ setTodoList: this.setTodoList.bind(this), userState: this.userState });
     this.todoList = new TodoList({ setTodoList: this.setTodoList.bind(this) });
     this.todoCount = new TodoCount({ setFilter: this.setFilter.bind(this) });
     this.userList = new UserList({ setUser: this.setUser.bind(this) });

@@ -9,6 +9,7 @@ class TodoState {
 
   set(updateTodoList) {
     this._todoList = updateTodoList;
+    console.log('updated', this._todoList);
   }
 }
 
