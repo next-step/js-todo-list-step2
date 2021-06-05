@@ -2,7 +2,7 @@ import { $ } from '../../utils/utils.js';
 import { KEY, DOM_ID, PRIORITY } from '../../constants/constants.js';
 import TodoState from '../../store/todoState.js';
 
-import { toggleTodoItem, getTodoList, deleteItem } from '../../api/todolist.js';
+import { toggleTodoItem, getTodoList, deleteItem, updateItemContents } from '../../api/todolist.js';
 
 function getPriortyTemplate(priority) {
   return PRIORITY[priority] === 'select'
@@ -63,12 +63,17 @@ export default class TodoList {
     // this.setTodoList(updatedTodoList);
   }
 
-  _updateTodoValue(todoId, updatedValue) {
-    const updatedItem = TodoState.get().map((todoItem) => {
-      return todoItem.id === todoId ? { ...todoItem, value: updatedValue } : todoItem;
-    });
+  async _updateTodoValue(todoId, updatedValue) {
+    const userId = this.userState.get().userId;
 
-    this.setTodoList(updatedItem);
+    const result = await updateItemContents(userId, todoId, { contents: updatedValue });
+    console.log(result);
+
+    this.render();
+    // const updatedItem = TodoState.get().map((todoItem) => {
+    //   return todoItem.id === todoId ? { ...todoItem, value: updatedValue } : todoItem;
+    // });
+    // this.setTodoList(updatedItem);
   }
 
   _openEditMode({ target }) {
