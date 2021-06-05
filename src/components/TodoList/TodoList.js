@@ -92,7 +92,7 @@ export default class TodoList {
         <input id="${_id}" class="toggle" type="checkbox" ${isCompleted && 'checked'}/>
         <label class="label">
           ${selectView}
-          해야할 아이템
+          ${contents}
         </label>
         <button class="destroy"></button>
       </div>
