@@ -20,40 +20,26 @@ export default class TodoApp {
     this.userState = UserState;
 
     // components
-    new TodoInput({ setTodoList: this.setTodoList.bind(this), userState: this.userState });
-    this.todoList = new TodoList({
-      setTodoList: this.setTodoList.bind(this),
-      userState: this.userState,
-    });
-    this.todoCount = new TodoCount({
-      setFilter: this.setFilter.bind(this),
-      userState: this.userState,
-    });
-    this.userList = new UserList({ setUser: this.setUser.bind(this) });
-  }
+    new TodoInput({ userState: this.userState });
+    this.todoList = new TodoList({ userState: this.userState });
+    this.todoCount = new TodoCount({ userState: this.userState });
+    this.userList = new UserList({ userState: this.userState });
 
-  setFilter(updatedFilter) {
-    this.filterState.set(updatedFilter);
-    this._render();
-  }
-
-  setTodoList(updatedTodoList) {
-    // this.todoState.set(updatedTodoList);
-    this.todoList.render();
-    // this._render();
-  }
-
-  setUser(updateduser) {
-    this.userState.set(updateduser);
-    this._render();
+    this.todoState.subscribe(this._render.bind(this));
+    this.filterState.subscribe(this._render.bind(this));
+    this.userState.subscribe(this._render.bind(this));
   }
 
   async _render() {
     const filter = this.filterState.get();
+    const userId = this.userState.get().userId;
 
-    let todoList = await getTodoList(this.userState.get().userId);
+    if (!userId) return;
+
+    let todoList = await getTodoList(userId);
     todoList = this._getFilteredTodoList(todoList, filter);
 
+    this.userList.render();
     this.todoList.render(todoList);
     this.todoCount.renderCount(todoList ? todoList.length : 0);
   }

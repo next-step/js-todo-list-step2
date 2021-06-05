@@ -1,5 +1,6 @@
 import { $ } from '../../utils/utils.js';
 import { KEY, DOM_ID, PRIORITY } from '../../constants/constants.js';
+
 import TodoState from '../../store/todoState.js';
 
 import {
@@ -9,20 +10,6 @@ import {
   updateItemContents,
   updateItemPriority,
 } from '../../api/todolist.js';
-
-function getPriortyTemplate(priority) {
-  return PRIORITY[priority] === 'select'
-    ? `
-        <select class="chip select">
-        <option value="${PRIORITY['NONE']}" selected>순위</option>
-        <option value="${PRIORITY['FIRST']}">1순위</option>
-        <option value="${PRIORITY['SECOND']}">2순위</option>
-        </select>
-      `
-    : `
-        <span class="chip ${priority}">${priority === PRIORITY['FIRST'] ? '1' : '2'}순위</span>
-      `;
-}
 
 export default class TodoList {
   constructor({ setTodoList, userState }) {
@@ -45,15 +32,15 @@ export default class TodoList {
 
   async changeSelector({ target }) {
     if (!target.classList.contains('chip')) return;
-    const userId = this.userState.get().userId;
-    const todoId = target.closest('li').id;
     const selectValue = target.value;
     if (selectValue === PRIORITY['select']) return;
 
+    const userId = this.userState.get().userId;
+    const todoId = target.closest('li').id;
+
     const result = await updateItemPriority(userId, todoId, { priority: selectValue });
     // console.log(result);
-
-    this.render();
+    this.todoState.set();
   }
 
   async _deleteTodo({ target }) {
@@ -65,7 +52,7 @@ export default class TodoList {
     const result = await deleteItem(userId, todoId);
     // console.log('delete', result);
 
-    this.render();
+    this.todoState.set();
   }
 
   async _toggleTodoDone({ target }) {
@@ -77,8 +64,7 @@ export default class TodoList {
     const result = await toggleTodoItem(userId, todoId);
     // console.log(result);
 
-    // this.setTodoList(updatedTodoList);
-    this.render();
+    this.todoState.set();
   }
 
   async _updateTodoValue(todoId, updatedValue) {
@@ -87,11 +73,7 @@ export default class TodoList {
     const result = await updateItemContents(userId, todoId, { contents: updatedValue });
     // console.log(result);
 
-    this.render();
-    // const updatedItem = TodoState.get().map((todoItem) => {
-    //   return todoItem.id === todoId ? { ...todoItem, value: updatedValue } : todoItem;
-    // });
-    // this.setTodoList(updatedItem);
+    this.todoState.set();
   }
 
   _openEditMode({ target }) {
@@ -117,39 +99,43 @@ export default class TodoList {
     this._updateTodoValue(todoId, updatedValue);
   }
 
-  _getTodoItemTemplate({ _id, contents, isCompleted, priority }) {
-    const selectView = getPriortyTemplate(priority);
-
-    return `
-    <li id="${_id}" class="${isCompleted && 'completed'}">
-      <div class="view">
-        <input id="${_id}" class="toggle" type="checkbox" ${isCompleted && 'checked'}/>
-        <label class="label">
-          ${selectView}
-          ${contents}
-        </label>
-        <button id=${_id} class="destroy"></button>
-      </div>
-      <input id="${_id}" class="edit" value=${contents} />
-    </li>
-    `;
-  }
-
-  // async render(todoListState) {
-  //   const userId = this.userState.get().userId;
-  //   const todoList = await getTodoList(userId);
-  //   const todoItemTemplate = todoList.map(this._getTodoItemTemplate);
-  //   this.$target.innerHTML = todoItemTemplate.join('');
-
-  //   // this.render(todoList);
-  // }
   async render(todoList) {
     const userId = this.userState.get().userId;
     todoList = todoList || (await getTodoList(userId));
-    // const todoList = await getTodoList(userId);
-    const todoItemTemplate = todoList.map(this._getTodoItemTemplate);
-    this.$target.innerHTML = todoItemTemplate.join('');
 
-    // this.render(todoList);
+    const todoItemTemplate = todoList.map(getTodoItemTemplate);
+    this.$target.innerHTML = todoItemTemplate.join('');
   }
+}
+
+function getPriortyTemplate(priority) {
+  return PRIORITY[priority] === 'select'
+    ? `
+        <select class="chip select">
+        <option value="${PRIORITY['NONE']}" selected>순위</option>
+        <option value="${PRIORITY['FIRST']}">1순위</option>
+        <option value="${PRIORITY['SECOND']}">2순위</option>
+        </select>
+      `
+    : `
+        <span class="chip ${priority}">${priority === PRIORITY['FIRST'] ? '1' : '2'}순위</span>
+      `;
+}
+
+function getTodoItemTemplate({ _id, contents, isCompleted, priority }) {
+  const selectView = getPriortyTemplate(priority);
+
+  return `
+  <li id="${_id}" class="${isCompleted && 'completed'}">
+    <div class="view">
+      <input id="${_id}" class="toggle" type="checkbox" ${isCompleted && 'checked'}/>
+      <label class="label">
+        ${selectView}
+        ${contents}
+      </label>
+      <button id=${_id} class="destroy"></button>
+    </div>
+    <input id="${_id}" class="edit" value=${contents} />
+  </li>
+  `;
 }
