@@ -264,9 +264,19 @@ function ondeleteButtonClick(){
 }
 
 
-function onAllDeleteButtonClick(){
+function clearTodo(){
   console.log("ondeleteButtonClick");
-  
+  const userID = document.querySelector('.todo-list').dataset.userid;
+  todoAPI.deleteAllTodo(userID)
+  .then(data =>{
+    console.log(data);
+    if(data.success){
+      userAPI.getUserItems(userID)
+      .then((todolist)=> {
+        drawTodoList(todolist);
+      });
+    }
+  })
 }
 
 
@@ -281,3 +291,5 @@ userDeleteButton.addEventListener('click', onUserDeleteHandler)
 const newTodoAdd = document.querySelector('.new-todo');
 newTodoAdd.addEventListener('keypress', makeTodo);
 
+const allTodoClear =  document.querySelector('.clear-completed');
+allTodoClear.addEventListener('click', clearTodo);

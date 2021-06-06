@@ -64,8 +64,9 @@ export const todoAPI = {
     addTodo : (userid, item) => {
         return fetchAPI_body(`${userid}/items`,"POST",item);
     },
+    ///api/users/:userId/items/ DELETE
     deleteAllTodo : (userID) => {
-        return fetchAPI();
+        return fetchAPI_DELETE(`${userID}/items`,"DELETE");
     },
     //DELETE	/api/users/:userId/items/:itemId
     deleteTodo :(userID, ItemID) => {
