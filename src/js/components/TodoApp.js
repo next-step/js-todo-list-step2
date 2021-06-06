@@ -9,6 +9,7 @@ class TodoApp {
     this.userList = new UserList({
       onAddUser: this.onAddUser.bind(this),
       onDeleteUser: this.onDeleteUser.bind(this),
+      onSelectUser: this.onSelectUser.bind(this),
     });
     this.users = [];
     this.selectedUser = {};
@@ -29,9 +30,16 @@ class TodoApp {
     });
 
     this.users = userListData;
-    this.userList.setState(this.users);
+    this.selectedUser = userListData[0];
     this.userList.render(this.users);
   }
+
+  onSelectUser(id) {
+    if (!id) return;
+
+    this.selectedUser = this.users.find((user) => {
+      return user.id == id;
+    });
   }
 
   async onAddUser() {
