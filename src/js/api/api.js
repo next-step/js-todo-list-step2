@@ -4,7 +4,6 @@ export default {
 	getFetch: async function (url) {
 		try {
 			const data = await fetch(`${baseAPI}${url}`).then((response) => response.json());
-
 			return data;
 		} catch (e) {
 			console.log("[err] ", e);
@@ -21,7 +20,6 @@ export default {
 				body: JSON.stringify(obj)
 			})
 			.then((response) => response.json());
-			console.log("POST res :: ", res);
 		} catch (e) {
 			console.log("[err] ", e);
 		}
@@ -37,8 +35,6 @@ export default {
 				body: JSON.stringify(obj)
 			})
 			.then((response) => response.json());
-
-			console.log("PUT res :: ", res);
 		} catch (e) {
 			console.log("[err] ", e);
 		}
@@ -46,13 +42,10 @@ export default {
 
 	deleteFetch: async function (url) {
 		try {
-			console.log("url", url)
 			const res = await fetch(`${baseAPI}${url}`, {
 				method: "DELETE"
 			})
-				.then((response) => response.json());
-
-			console.log("PUT res :: ", res);
+			.then((response) => response.json());
 		} catch (e) {
 			console.log("[err] ", e);
 		}

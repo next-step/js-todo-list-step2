@@ -1,5 +1,6 @@
 import { $, $$ } from "../utils/querySelector.js";
 import API from "../api/api.js";
+import Message from "../config/message.js"
 
 export default function UserList () {
 
@@ -35,15 +36,24 @@ export default function UserList () {
 		currentTarget.classList.add("active");
 	}
 
-	const onUserCreateHandler = () => {
-		const userName = prompt("추가하고 싶은 이름을 입력해주세요.");
+	const onUserCreateHandler = async () => {
+		const userName = prompt(Message.ADD_USER);
+
+		if (!userName) return;
+		if (userName.length < 2) return alert(Message.SHORT_INPUT_LENGTH);
+
+		await API.postFetch("/api/users", { "name": userName, "todoList": [] });
+		this.setState(await API.getFetch("/api/users"));
+
 	}
 
 	const onUserDeleteHandler = async () => {
-		const activeUserId = $(".active").dataset.id;
+		const $activeUser = $(".active");
+		const deleteBool = confirm(`${$activeUser.textContent}${Message.DELETE_USER}`);
 
-		await API.deleteFetch(`/api/users/${ activeUserId }`);
+		if (!deleteBool) return;
 
+		await API.deleteFetch(`/api/users/${ $activeUser.dataset.id }`);
 		this.setState(await API.getFetch("/api/users"));
 	}
 }

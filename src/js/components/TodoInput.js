@@ -1,6 +1,6 @@
 import { $ } from "../utils/querySelector.js";
 import { setTodos } from "../utils/storage.js";
-import MSG from "../config/message.js"
+import Message from "../config/message.js"
 
 export default function TodoInput ({ addList }) {
 	const $input = $(".new-todo");
@@ -10,7 +10,7 @@ export default function TodoInput ({ addList }) {
 	});
 
 	const addTodo = (content) => {
-		if (content.length < 2) return alert(MSG.CONTENTS_LENGTH);
+		if (content.length < 2) return alert(Message.SHORT_INPUT_LENGTH);
 
 		const addItem = {
 			user: "user01",
