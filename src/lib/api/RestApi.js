@@ -5,11 +5,8 @@ const request = async (uri, method, body = undefined) => {
   const config = { method };
   const url = baseUrl + uri;
   if (body) {
-    config = {
-      ...method,
-      body: JSON.stringify(body),
-      headers: { 'Content-Type': 'application/json' },
-    };
+    config.body = JSON.stringify(body);
+    config.headers = { 'Content-Type': 'application/json' };
   }
   fetch(url, config);
 };

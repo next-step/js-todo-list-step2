@@ -1,5 +1,6 @@
 export const UserListContainer = () => {
   const dom = document.createElement('section');
+
   const render = () => {
     dom.innerHTML = `
        <button class="ripple user-create-button">+ 유저 생성</button>
@@ -8,6 +9,7 @@ export const UserListContainer = () => {
      </button>
       `;
   };
+
   render();
   return dom;
 };
