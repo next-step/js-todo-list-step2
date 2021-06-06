@@ -1,6 +1,6 @@
 import { getUser } from '../../user/controller.js';
 export const UserList = async () => {
-  const users = await getUser().then((response) => response.json());
+  const users = await getUser();
   return `${users
     .map((user) => {
       return `

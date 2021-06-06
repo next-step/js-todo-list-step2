@@ -1,7 +1,7 @@
 import { setUserCreateEvent } from '../event/AddEvent.js';
 import render from './Render/index.js';
-const Home = () => {
-  render();
+const Home = async () => {
+  await render();
   setUserCreateEvent();
 };
 

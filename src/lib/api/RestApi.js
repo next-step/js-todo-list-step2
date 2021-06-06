@@ -9,7 +9,7 @@ const request = async (uri, method, body = undefined) => {
     config.headers = { 'Content-Type': 'application/json' };
   }
   if (method === HttpMethod.GET) {
-    return await fetch(url);
+    return await fetch(url).then((res) => res.json());
   }
   fetch(url, config);
 };
