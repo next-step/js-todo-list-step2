@@ -1,11 +1,14 @@
 import TodoInput from "./components/TodoInput.js";
 import TodoTotal from "./components/TodoTotal.js";
 import TodoList from "./components/TodoList.js";
+import UserList	from "./components/UserList.js";
 import { getTodos } from "./utils/storage.js";
-
+import { getFetch } from "./api/api.js";
 
 export default function App () {
 	this.todos = "";
+
+	this.userList = new UserList();
 
 	this.todoInput = new TodoInput({
 		addList: () => setSate(getTodos())
@@ -14,13 +17,18 @@ export default function App () {
 	this.todoList = new TodoList();
 	this.todoTotal = new TodoTotal();
 
-	const setSate = (todos) => {
+	const setSate = (users) => {
+		this.userList.setState(users);
 		this.todoList.setState();
-		this.todoTotal.setState(todos);
+		this.todoTotal.setState();
 	}
 
-	const init = () => {
-		setSate(getTodos());
+	const init = async () => {
+		const users = await getFetch("/api/users");
+		setSate(users);
+
+		// const todos = await getFetch("/api/users");
+		// setSate(getTodos());
 	}
 
 	init();
