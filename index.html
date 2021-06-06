@@ -4,36 +4,20 @@
     <title>Mission 2 Todo List</title>
     <meta charset="utf-8" />
     <link href="./src/css/app.css" rel="stylesheet" />
-    <link
-      href="https://fonts.googleapis.com/icon?family=Material+Icons"
-      rel="stylesheet"
-    />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
   </head>
   <body>
     <div id="app">
-      <h1 id="user-title" data-username="eastjun">
-        <span><strong>eastjun</strong>'s Todo List</span>
+      <h1 id="user-title" data-username="">
+        <span><strong></strong>'s Todo List</span>
       </h1>
       <section>
-        <div id="user-list">
-          <button class="ripple active">makerjun</button>
-          <button class="ripple">eastjun</button>
-          <button class="ripple user-create-button" data-action="createUser">
-            + 유저 생성
-          </button>
-          <button class="ripple user-delete-button" data-action="deleteUser">
-            삭제 -
-          </button>
-        </div>
+        <div id="user-list"></div>
       </section>
 
       <section class="todoapp">
         <section class="input-container">
-          <input
-            class="new-todo"
-            placeholder="할 일을 입력해주세요."
-            autofocus
-          />
+          <input class="new-todo" placeholder="할 일을 입력해주세요." autofocus />
         </section>
         <section class="main">
           <ul class="todo-list">
