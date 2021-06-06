@@ -1,24 +1,31 @@
 import { $ } from "../utils/querySelector.js";
 import { setTodos } from "../utils/storage.js";
 import Message from "../config/message.js"
+import API from "../api/api.js";
 
-export default function TodoInput ({ addList }) {
-	const $input = $(".new-todo");
+export default function TodoInput ({ reloadList }) {
+	this.todos = [];
+	this.setState = (todos) => this.todos = todos;
 
-	$input.addEventListener("keyup", ({key, currentTarget}) => {
-		if (key === "Enter") addTodo(currentTarget.value);
-	});
+	$(".new-todo").addEventListener("keyup", ({key, currentTarget}) =>
+		(key === "Enter") && addTodo(currentTarget.value));
 
-	const addTodo = (content) => {
+	const addTodo = async (content) => {
 		if (content.length < 2) return alert(Message.SHORT_INPUT_LENGTH);
 
 		const addItem = {
-			user: "user01",
-			content: content,
-			status: "todo",	// new: 해야할 일 / completed: 완료한 일
+			contents: content,
+			// priority: "NONE",
+			// isCompleted: false,
 		};
 
-		setTodos(addItem);
-		addList();
+		const $activeUser = $(".active");
+
+		await API.postFetch(`/api/users/${ $activeUser.dataset.id }/items/`, addItem);
+
+		// setTodos(addItem);
+
+		reloadList();
 	}
+
 }

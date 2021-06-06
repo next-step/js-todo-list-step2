@@ -1,6 +1,7 @@
 import { $, $$ } from "../utils/querySelector.js";
 import API from "../api/api.js";
 import Message from "../config/message.js"
+import TodoList from "./TodoList.js";
 
 export default function UserList () {
 
@@ -58,4 +59,7 @@ export default function UserList () {
 		await API.deleteFetch(`/api/users/${ $activeUser.dataset.id }`);
 		this.setState(await API.getFetch("/api/users"));
 	}
+
+	// this.todoList = new TodoList();
+	// this.todoList.set
 }

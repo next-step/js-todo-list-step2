@@ -22,10 +22,8 @@ export default function TodoList () {
 	};
 
 
-	this.setState = async () => {
+	this.setState = (todos) => {
 		let items = "";
-		const id = $(".active").dataset.id;
-		const todos = await API.getFetch(`/api/users/${ id }/items/`);
 
 		todos.map(todo => items += $new(todo));
 
