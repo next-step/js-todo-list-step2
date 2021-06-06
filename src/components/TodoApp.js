@@ -1,7 +1,7 @@
 import { FILTER } from '../constants/constants.js';
 
 // state
-import UserState from '../store/UserState.js';
+import UserState from '../store/userState.js';
 import TodoState from '../store/todoState.js';
 import FilterState from '../store/filterState.js';
 
