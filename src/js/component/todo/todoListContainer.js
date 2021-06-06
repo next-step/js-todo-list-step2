@@ -1,9 +1,12 @@
 import TodoList from "./todoList.js";
 
 export default class TodoListContainer {
+  constructor() {
+    // $(".new-todo").
+  }
   todoList = new TodoList();
 
-  render = (userInfo) => {
-    this.todoList.render(userInfo.todoList);
+  render = (todoList) => {
+    this.todoList.render(todoList);
   };
 }

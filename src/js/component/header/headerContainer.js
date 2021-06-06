@@ -14,9 +14,10 @@ export default class HeaderContainer {
     this.$title = $("#user-title");
   }
 
-  render = (userList, selectedUserInfo) => {
-    this.userList.render(userList, selectedUserInfo);
-    this.$title.dataset.username = selectedUserInfo.name;
-    this.$title.innerHTML = `<span><strong>${selectedUserInfo.name}</strong>'s Todo List</span>`;
+  render = (userList, selectedUserId) => {
+    const name = userList.find((user) => user._id === selectedUserId).name;
+    this.userList.render(userList, selectedUserId);
+    this.$title.dataset.username = name;
+    this.$title.innerHTML = `<span><strong>${name}</strong>'s Todo List</span>`;
   };
 }

@@ -6,7 +6,6 @@ export default class TodoList {
   $todoList = $(".todo-list");
 
   render = (todoList) => {
-    console.dir(todoList);
     this.$todoList.innerHTML = todoList
       .map(
         (todo) =>

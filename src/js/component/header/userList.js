@@ -8,29 +8,14 @@ export default class UserList {
     this.selectUser = selectUser;
 
     const onClickAction = {
-      createUser: async (e) => {
-        const userName = prompt("추가하고 싶은 이름을 입력해주세요.");
-        const newUserData = await requests.post("/users", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ name: userName }),
-        });
-
-        if (newUserData) {
-          addUser(newUserData);
-        }
+      createUser: (e) => {
+        addUser();
       },
-      deleteUser: async (e) => {
-        await requests.delete(`/users/${e.target.dataset.userid}`, {
-          method: "DELETE",
-        });
-        deleteUser();
+      deleteUser: (e) => {
+        deleteUser(e.target.dataset.userid);
       },
-      selectUser: async (e) => {
-        const userdata = await requests.post(
-          `/users/${e.target.dataset.userid}`
-        );
-        selectUser(userdata);
+      selectUser: (e) => {
+        selectUser(e.target.dataset.userid);
       },
     };
 
@@ -52,19 +37,19 @@ export default class UserList {
   }
   $userList = $("#user-list");
 
-  render = (userList, selectedUserInfo) => {
+  render = (userList, selectedUserId) => {
     this.$userList.innerHTML = userList
       .map(
         (user) =>
           `<button class="ripple ${
-            user._id === selectedUserInfo._id ? "active" : ""
+            user._id === selectedUserId ? "active" : ""
           }" data-userid=${user._id} data-action=${
-            user._id === selectedUserInfo._id ? "" : "selectUser"
+            user._id === selectedUserId ? "" : "selectUser"
           } >${user.name}</button>`
       )
       .concat([
         `<button class="ripple user-create-button" data-action="createUser"> + 유저 생성 </button>`,
-        `<button class="ripple user-delete-button" data-action="deleteUser" data-userId=${selectedUserInfo._id}> 삭제 - </button>`,
+        `<button class="ripple user-delete-button" data-action="deleteUser" data-userId=${selectedUserId}> 삭제 - </button>`,
       ])
       .join(" ");
 
