@@ -22,7 +22,7 @@ export default class TodoApp {
     // components
     new TodoInput({ userState: this.userState });
     this.todoList = new TodoList({ userState: this.userState });
-    this.todoCount = new TodoCount({ userState: this.userState });
+    this.todoCount = new TodoCount({ userState: this.userState, filterState: this.filterState });
     this.userList = new UserList({ userState: this.userState });
 
     this.todoState.subscribe(this._render.bind(this));

@@ -2,10 +2,8 @@ import { $ } from '../../utils/utils.js';
 import { DOM_ID, FILTER } from '../../constants/constants.js';
 import { deleteAllItem } from '../../api/todolist.js';
 
-import FilterState from '../../store/filterState.js';
-
 export default class TodoCount {
-  constructor({ userState }) {
+  constructor({ userState, filterState }) {
     this.$target = $(DOM_ID.TODO_COUNT);
 
     this.$filterMenu = {
@@ -14,7 +12,7 @@ export default class TodoCount {
       [FILTER.COMPLETED]: this.$target.querySelector(`.${FILTER.COMPLETED}`),
     };
 
-    this.filterState = FilterState;
+    this.filterState = filterState;
     this.userState = userState;
 
     this._addEvent();
@@ -31,7 +29,9 @@ export default class TodoCount {
     const { userId } = this.userState.get();
 
     const result = await deleteAllItem(userId);
-    this.filterState.set();
+    if (result['success']) {
+      this.filterState.set(FILTER.ALL);
+    }
   }
 
   _changeFilter(event) {
