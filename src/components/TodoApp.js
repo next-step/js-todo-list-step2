@@ -6,6 +6,7 @@ import {
   getUserData,
   getUsersData,
   removeTodoItemData,
+  removeTodoListData,
   toggleTodoItemData,
   updateTodoItemData,
 } from '../api.js';
@@ -108,6 +109,15 @@ export default class TodoApp {
         this.filterStatus = status;
         this.renderTodoList();
         this.renderTodoCount();
+      },
+      onClear: async () => {
+        const response = await removeTodoListData(this.activeUser._id);
+        if (response.message) {
+          this.init();
+          return;
+        }
+
+        this.initTodoListAndCount();
       },
     });
 

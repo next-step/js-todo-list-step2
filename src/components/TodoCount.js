@@ -1,7 +1,7 @@
 import { SELECTED } from '../constants.js';
 
 export default class TodoCount {
-  constructor({ onFilter }) {
+  constructor({ onFilter, onClear }) {
     this.$todoCountContainer = document.querySelector('.count-container');
 
     this.$filterButtons = {
@@ -11,6 +11,7 @@ export default class TodoCount {
     };
 
     this.$todoCountContainer.addEventListener('click', (event) => this.changeFilterButtonStatus(event, onFilter));
+    this.$todoCountContainer.addEventListener('click', (event) => this.clearTodoList(event, onClear));
   }
 
   render(count) {
@@ -26,5 +27,11 @@ export default class TodoCount {
     Object.keys(this.$filterButtons).map((key) => this.$filterButtons[key].classList.remove(SELECTED));
     this.$filterButtons[filterName].classList.add(SELECTED);
     onFilter(filterName);
+  }
+
+  clearTodoList(event, onClear) {
+    const clearButtonTarget = event.target;
+    if (!clearButtonTarget.classList.contains('clear-completed')) return;
+    onClear();
   }
 }

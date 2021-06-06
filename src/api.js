@@ -54,6 +54,14 @@ export async function getTodoListData(userId) {
   return response.json();
 }
 
+export async function removeTodoListData(userId) {
+  const todoListURL = getTodoListURL(userId);
+  const response = await fetch(todoListURL, {
+    method: DELETE,
+  });
+  return response.json();
+}
+
 export async function addTodoItemData(userId, data = {}) {
   const todoListURL = getTodoListURL(userId);
   const response = await fetch(todoListURL, {
