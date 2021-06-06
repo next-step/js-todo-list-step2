@@ -1,14 +1,15 @@
-import { ENTER, ESCAPE } from '../constants.js';
+import { ENTER, ESCAPE, FIRST, SECOND } from '../constants.js';
 import { todoItemTemplate } from '../templates.js';
 
 export default class TodoList {
-  constructor({ onToggle, onRemove, onUpdate }) {
+  constructor({ onToggle, onRemove, onUpdate, onSetPriority }) {
     this.$todoList = document.querySelector('.todo-list');
 
     this.$todoList.addEventListener('click', (event) => this.toggleTodoItem(event, onToggle));
     this.$todoList.addEventListener('click', (event) => this.removeTodoItem(event, onRemove));
     this.$todoList.addEventListener('dblclick', (event) => this.editTodoItem(event));
     this.$todoList.addEventListener('keydown', (event) => this.updateTodoItem(event, onUpdate));
+    this.$todoList.addEventListener('change', (event) => this.setTodoItemPriority(event, onSetPriority));
   }
 
   render(todoList) {
@@ -57,5 +58,16 @@ export default class TodoList {
     const { value } = editingInputTarget;
     if (value === '') return;
     onUpdate(todoItem.id, value);
+  }
+
+  setTodoItemPriority(event, onSetPriority) {
+    const selectTarget = event.target;
+    if (!selectTarget.classList.contains('select')) return;
+
+    const todoItem = selectTarget.closest('li');
+
+    const { value } = selectTarget;
+    const priority = value === '1' ? FIRST : SECOND;
+    onSetPriority(todoItem.id, priority);
   }
 }

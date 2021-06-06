@@ -18,6 +18,10 @@ function getTodoItemToggleURL(userId, itemId) {
   return `${BASE_URL}/${userId}/items/${itemId}/toggle`;
 }
 
+function getTodoItemPriorityURL(userId, itemId) {
+  return `${BASE_URL}/${userId}/items/${itemId}/priority`;
+}
+
 export async function getUsersData() {
   const response = await fetch(BASE_URL);
   return response.json();
@@ -93,6 +97,18 @@ export async function removeTodoItemData(userId, itemId) {
 export async function updateTodoItemData(userId, itemId, data = {}) {
   const todoItemURL = getTodoItemURL(userId, itemId);
   const response = await fetch(todoItemURL, {
+    method: PUT,
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(data),
+  });
+  return response.json();
+}
+
+export async function setTodoItemPriorityData(userId, itemId, data = {}) {
+  const todoItemPriorityURL = getTodoItemPriorityURL(userId, itemId);
+  const response = await fetch(todoItemPriorityURL, {
     method: PUT,
     headers: {
       'Content-Type': 'application/json',

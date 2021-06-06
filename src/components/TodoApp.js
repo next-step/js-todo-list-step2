@@ -7,6 +7,7 @@ import {
   getUsersData,
   removeTodoItemData,
   removeTodoListData,
+  setTodoItemPriorityData,
   toggleTodoItemData,
   updateTodoItemData,
 } from '../api.js';
@@ -95,6 +96,15 @@ export default class TodoApp {
       },
       onUpdate: async (itemId, contents) => {
         const response = await updateTodoItemData(this.activeUser._id, itemId, { contents });
+        if (response.message) {
+          this.init();
+          return;
+        }
+
+        this.initTodoList();
+      },
+      onSetPriority: async (itemId, priority) => {
+        const response = await setTodoItemPriorityData(this.activeUser._id, itemId, { priority });
         if (response.message) {
           this.init();
           return;
