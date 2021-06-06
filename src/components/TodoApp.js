@@ -5,7 +5,8 @@ import {
   getTodoListData,
   getUserData,
   getUsersData,
-  updateTodoItemToggleData,
+  removeTodoItemData,
+  toggleTodoItemData,
 } from '../api.js';
 import TodoInput from './TodoInput.js';
 import TodoList from './TodoList.js';
@@ -72,9 +73,19 @@ export default class TodoApp {
     this.todoList = new TodoList({
       onToggle: async (itemId) => {
         const todoItem = this.activeUser.todoList.find(({ _id }) => _id === itemId);
-        const response = await updateTodoItemToggleData(this.activeUser._id, itemId, {
+        const response = await toggleTodoItemData(this.activeUser._id, itemId, {
           isCompleted: !todoItem.isCompleted,
         });
+        if (response.message) {
+          this.init();
+          return;
+        }
+
+        this.activeUser.todoList = await getTodoListData(this.activeUser._id);
+        this.renderTodoList();
+      },
+      onRemove: async (itemId) => {
+        const response = await removeTodoItemData(this.activeUser._id, itemId);
         if (response.message) {
           this.init();
           return;

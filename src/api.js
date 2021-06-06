@@ -10,6 +10,10 @@ function getTodoListURL(userId) {
   return `${BASE_URL}/${userId}/items`;
 }
 
+function getTodoItemURL(userId, itemId) {
+  return `${BASE_URL}/${userId}/items/${itemId}`;
+}
+
 function getTodoItemToggleURL(userId, itemId) {
   return `${BASE_URL}/${userId}/items/${itemId}/toggle`;
 }
@@ -62,11 +66,19 @@ export async function addTodoItemData(userId, data = {}) {
   return response.json();
 }
 
-export async function updateTodoItemToggleData(userId, itemId, data = {}) {
+export async function toggleTodoItemData(userId, itemId, data = {}) {
   const todoItemToggleURL = getTodoItemToggleURL(userId, itemId);
   const response = await fetch(todoItemToggleURL, {
     method: PUT,
     body: JSON.stringify(data),
+  });
+  return response.json();
+}
+
+export async function removeTodoItemData(userId, itemId) {
+  const todoItemURL = getTodoItemURL(userId, itemId);
+  const response = await fetch(todoItemURL, {
+    method: DELETE,
   });
   return response.json();
 }

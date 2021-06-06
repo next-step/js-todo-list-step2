@@ -1,10 +1,11 @@
 import { todoItemTemplate } from '../templates.js';
 
 export default class TodoList {
-  constructor({ onToggle }) {
+  constructor({ onToggle, onRemove }) {
     this.$todoList = document.querySelector('.todo-list');
 
     this.$todoList.addEventListener('click', (event) => this.toggleTodoItem(event, onToggle));
+    this.$todoList.addEventListener('click', (event) => this.removeTodoItem(event, onRemove));
   }
 
   render(todoList) {
@@ -16,5 +17,11 @@ export default class TodoList {
     const toggleButtonTarget = event.target;
     if (!toggleButtonTarget.classList.contains('toggle')) return;
     onToggle(toggleButtonTarget.id);
+  }
+
+  removeTodoItem(event, onRemove) {
+    const deleteButtonTarget = event.target;
+    if (!deleteButtonTarget.classList.contains('destroy')) return;
+    onRemove(deleteButtonTarget.id);
   }
 }
