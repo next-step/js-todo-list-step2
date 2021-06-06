@@ -12,8 +12,9 @@ export default function UserList () {
 		let items = "";
 
 		users.map(({ _id, name }, id) => {
+			id === 0 && ($(".active-user").innerHTML = name);
 			items += `<button class="user ripple ${ id === 0 && "active" }" data-id="${ _id }">${ name }</button>`;
-		})
+		});
 
 		items += `
 			<button class="ripple user-create-button" data-action="createUser">
@@ -34,6 +35,8 @@ export default function UserList () {
 	const onUserClickHandler = ({ currentTarget }) => {
 		$(".active").classList.remove("active");
 		currentTarget.classList.add("active");
+
+		$(".active-user").innerText = currentTarget.innerHTML;
 	}
 
 	const onUserCreateHandler = async () => {
@@ -44,7 +47,6 @@ export default function UserList () {
 
 		await API.postFetch("/api/users", { "name": userName, "todoList": [] });
 		this.setState(await API.getFetch("/api/users"));
-
 	}
 
 	const onUserDeleteHandler = async () => {
