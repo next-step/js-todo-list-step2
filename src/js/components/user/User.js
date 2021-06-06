@@ -41,3 +41,7 @@ class User {
     }
   }
 }
+
+export default function($userList) {
+  return new User($userList);
+}
