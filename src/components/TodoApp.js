@@ -9,6 +9,8 @@ import {
   toggleTodoItemData,
   updateTodoItemData,
 } from '../api.js';
+import { ACTIVE, ALL, COMPLETED } from '../constants.js';
+import TodoCount from './TodoCount.js';
 import TodoInput from './TodoInput.js';
 import TodoList from './TodoList.js';
 import UserList from './UserList.js';
@@ -18,6 +20,7 @@ export default class TodoApp {
   constructor() {
     this.users = [];
     this.activeUser = { _id: '', name: '', todoList: [] };
+    this.filterStatus = ALL;
 
     this.username = new Username();
 
@@ -66,7 +69,7 @@ export default class TodoApp {
           return;
         }
 
-        this.initTodoList();
+        this.initTodoListAndCount();
       },
     });
 
@@ -78,7 +81,7 @@ export default class TodoApp {
           return;
         }
 
-        this.initTodoList();
+        this.initTodoListAndCount();
       },
       onRemove: async (itemId) => {
         const response = await removeTodoItemData(this.activeUser._id, itemId);
@@ -87,7 +90,7 @@ export default class TodoApp {
           return;
         }
 
-        this.initTodoList();
+        this.initTodoListAndCount();
       },
       onUpdate: async (itemId, contents) => {
         const response = await updateTodoItemData(this.activeUser._id, itemId, { contents });
@@ -97,6 +100,14 @@ export default class TodoApp {
         }
 
         this.initTodoList();
+      },
+    });
+
+    this.todoCount = new TodoCount({
+      onFilter: (status) => {
+        this.filterStatus = status;
+        this.renderTodoList();
+        this.renderTodoCount();
       },
     });
 
@@ -112,27 +123,49 @@ export default class TodoApp {
   }
 
   renderTodoList() {
-    this.todoList.render(this.activeUser.todoList);
+    const todoList = this.getFilteredTodoList();
+    this.todoList.render(todoList);
+  }
+
+  renderTodoCount() {
+    const todoList = this.getFilteredTodoList();
+    this.todoCount.render(todoList.length);
   }
 
   renderAll() {
     this.renderUsername();
     this.renderUserList();
     this.renderTodoList();
+    this.renderTodoCount();
   }
 
   async loadUsers() {
     this.users = await getUsersData();
   }
 
-  async init() {
-    await this.loadUsers();
-    this.activeUser = this.users[0];
-    this.renderAll();
+  getFilteredTodoList() {
+    if (this.filterStatus === ALL) return this.activeUser.todoList;
+    if (this.filterStatus === ACTIVE) {
+      return this.activeUser.todoList.filter((item) => !item.isCompleted);
+    }
+    if (this.filterStatus === COMPLETED) {
+      return this.activeUser.todoList.filter((item) => item.isCompleted);
+    }
   }
 
   async initTodoList() {
     this.activeUser.todoList = await getTodoListData(this.activeUser._id);
     this.renderTodoList();
+  }
+
+  async initTodoListAndCount() {
+    await this.initTodoList();
+    this.renderTodoCount();
+  }
+
+  async init() {
+    await this.loadUsers();
+    this.activeUser = this.users[0];
+    this.renderAll();
   }
 }

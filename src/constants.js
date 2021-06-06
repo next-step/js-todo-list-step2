@@ -8,3 +8,9 @@ export const SECOND = 'SECOND';
 
 export const ENTER = 'Enter';
 export const ESCAPE = 'Escape';
+
+export const SELECTED = 'selected';
+
+export const ACTIVE = 'active';
+export const ALL = 'all';
+export const COMPLETED = 'completed';
