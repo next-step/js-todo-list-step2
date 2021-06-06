@@ -1,7 +1,7 @@
 import { $, isEmptyObject } from '../../utils/utils.js';
 import { DOM_ID, KEY } from '../../constants/constants.js';
 import TodoState from '../../store/todoState.js';
-import { createTodoItem } from '../../api/todolist.js';
+import { todoListService } from '../../api/todolist.js';
 
 export default class TodoInput {
   constructor({ userState }) {
@@ -29,7 +29,7 @@ export default class TodoInput {
     }
 
     const { userId } = this.userState.get();
-    const result = await createTodoItem(userId, { contents: todoContents });
+    const result = await todoListService.createTodoItem(userId, { contents: todoContents });
     if (isEmptyObject(result)) return;
 
     // 상태 업데이트

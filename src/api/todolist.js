@@ -1,7 +1,7 @@
 import { API } from '../utils/api.js';
 import { BASE_URL } from '../constants/constants.js';
 
-export const getTodoList = async (userId) => {
+const getTodoList = async (userId) => {
   try {
     const response = await API.get(`${BASE_URL}/${userId}/items`);
     if (response.ok) {
@@ -14,7 +14,7 @@ export const getTodoList = async (userId) => {
   }
 };
 
-export const createTodoItem = async (userId, contents) => {
+const createTodoItem = async (userId, contents) => {
   try {
     const response = await API.post(`${BASE_URL}/${userId}/items`, contents);
     if (response.ok) {
@@ -27,7 +27,7 @@ export const createTodoItem = async (userId, contents) => {
   }
 };
 
-export const toggleTodoItem = async (userId, itemId) => {
+const toggleTodoItem = async (userId, itemId) => {
   try {
     // 	/api/users/:userId/items/:itemId/toggle
     const response = await API.put(`${BASE_URL}/${userId}/items/${itemId}/toggle`);
@@ -41,7 +41,7 @@ export const toggleTodoItem = async (userId, itemId) => {
   }
 };
 
-export const deleteAllItem = async (userId) => {
+const deleteAllItem = async (userId) => {
   try {
     // 	/api/users/:userId/items/
     const response = await API.delete(`${BASE_URL}/${userId}/items`);
@@ -55,10 +55,9 @@ export const deleteAllItem = async (userId) => {
   }
 };
 
-export const deleteItem = async (userId, itemId) => {
+const deleteItem = async (userId, itemId) => {
   try {
     // 	/api/users/:userId/items/:itemId
-    console.log(userId, itemId);
     const response = await API.delete(`${BASE_URL}/${userId}/items/${itemId}`);
     if (response.ok) {
       return response.json();
@@ -70,7 +69,7 @@ export const deleteItem = async (userId, itemId) => {
   }
 };
 
-export const updateItemContents = async (userId, itemId, contents) => {
+const updateItemContents = async (userId, itemId, contents) => {
   try {
     // /api/users/:userId/items/:itemId
     const response = await API.put(`${BASE_URL}/${userId}/items/${itemId}`, contents);
@@ -84,7 +83,7 @@ export const updateItemContents = async (userId, itemId, contents) => {
   }
 };
 
-export const updateItemPriority = async (userId, itemId, priority) => {
+const updateItemPriority = async (userId, itemId, priority) => {
   try {
     // /api/users/:userId/items/:itemId/priority
     const response = await API.put(`${BASE_URL}/${userId}/items/${itemId}/priority`, priority);
@@ -96,4 +95,14 @@ export const updateItemPriority = async (userId, itemId, priority) => {
   } catch (error) {
     console.error(`Toggle Todo Item Error:${error}`);
   }
+};
+
+export const todoListService = {
+  getTodoList,
+  createTodoItem,
+  toggleTodoItem,
+  deleteAllItem,
+  deleteItem,
+  updateItemContents,
+  updateItemPriority,
 };

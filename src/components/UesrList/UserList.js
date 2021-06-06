@@ -1,7 +1,8 @@
 import { $ } from '../../utils/utils.js';
 import { DOM_ID } from '../../constants/constants.js';
-import { getUsers, createUser, deleteUser } from '../../api/user.js';
-import { getTodoList } from '../../api/todolist.js';
+
+import { userService } from '../../api/user.js';
+import { todoListService } from '../../api/todolist.js';
 
 export default class UserList {
   constructor({ userState, todoState }) {
@@ -49,7 +50,7 @@ export default class UserList {
     $userTitle.innerHTML = name;
 
     // user의 todoList 값 변경
-    const todoList = await getTodoList(userId);
+    const todoList = await todoListService.getTodoList(userId);
     this.todoState.set(todoList);
   }
 
@@ -62,7 +63,7 @@ export default class UserList {
       return;
     }
 
-    const result = await createUser({ name: userName });
+    const result = await userService.createUser({ name: userName });
     this.userState.set({ userId: result._id, name: result.name });
   }
 
@@ -71,7 +72,7 @@ export default class UserList {
     if (!clickResult) return;
 
     const userId = this.userState.get().userId;
-    const result = await deleteUser(userId);
+    const result = await userService.deleteUser(userId);
     // 삭제가 정상동작 하지 않으면 처리 취소
     if (!result['message']) return;
 
@@ -86,7 +87,7 @@ export default class UserList {
 
   async init() {
     // userList 렌더링
-    const users = await getUsers();
+    const users = await userService.getUsers();
     const userListHTMl = this.getUserTemplate(users);
     this.$usersList.innerHTML = userListHTMl;
 
@@ -106,7 +107,7 @@ export default class UserList {
   }
 
   async render() {
-    const users = await getUsers();
+    const users = await userService.getUsers();
     const userListHTMl = this.getUserTemplate(users);
 
     this.$usersList.innerHTML = userListHTMl;

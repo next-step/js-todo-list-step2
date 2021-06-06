@@ -1,7 +1,7 @@
 import { API } from '../utils/api.js';
 import { BASE_URL } from '../constants/constants.js';
 
-export const getUsers = async () => {
+const getUsers = async () => {
   try {
     const response = await API.get(BASE_URL);
     if (response.ok) {
@@ -14,7 +14,7 @@ export const getUsers = async () => {
   }
 };
 
-export const createUser = async (body) => {
+const createUser = async (body) => {
   try {
     const response = await API.post(BASE_URL, body);
     if (response.ok) {
@@ -27,7 +27,7 @@ export const createUser = async (body) => {
   }
 };
 
-export const deleteUser = async (userId) => {
+const deleteUser = async (userId) => {
   try {
     const response = await API.delete(`${BASE_URL}/${userId}`);
     if (response.ok) {
@@ -38,4 +38,10 @@ export const deleteUser = async (userId) => {
   } catch (error) {
     console.error(`Delete User Error:${error}`);
   }
+};
+
+export const userService = {
+  getUsers,
+  createUser,
+  deleteUser,
 };

@@ -2,11 +2,12 @@ import { $, isEmptyObject } from '../../utils/utils.js';
 import { KEY, DOM_ID, PRIORITY } from '../../constants/constants.js';
 
 import {
-  toggleTodoItem,
-  getTodoList,
-  deleteItem,
-  updateItemContents,
-  updateItemPriority,
+  todoListService,
+  // toggleTodoItem,
+  // getTodoList,
+  // deleteItem,
+  // updateItemContents,
+  // updateItemPriority,
 } from '../../api/todolist.js';
 
 export default class TodoList {
@@ -36,7 +37,9 @@ export default class TodoList {
     const userId = this.userState.get().userId;
     const todoId = target.closest('li').id;
 
-    const result = await updateItemPriority(userId, todoId, { priority: selectValue });
+    const result = await todoListService.updateItemPriority(userId, todoId, {
+      priority: selectValue,
+    });
     // toggleTodoItem 요청 에러 - 작업 취소
     if (isEmptyObject(result)) return;
 
@@ -54,7 +57,7 @@ export default class TodoList {
     const userId = this.userState.get().userId;
     const todoId = target.id;
 
-    const result = await deleteItem(userId, todoId);
+    const result = await todoListService.deleteItem(userId, todoId);
     if (isEmptyObject(result)) return;
 
     const prevTodoList = this.todoState.get();
@@ -69,7 +72,7 @@ export default class TodoList {
     const userId = this.userState.get().userId;
     const todoId = target.id;
 
-    const result = await toggleTodoItem(userId, todoId);
+    const result = await todoListService.toggleTodoItem(userId, todoId);
     if (isEmptyObject(result)) return;
 
     const prevTodoList = this.todoState.get();
@@ -82,7 +85,9 @@ export default class TodoList {
   async _updateTodoValue(todoId, updatedValue) {
     const userId = this.userState.get().userId;
 
-    const result = await updateItemContents(userId, todoId, { contents: updatedValue });
+    const result = await todoListService.updateItemContents(userId, todoId, {
+      contents: updatedValue,
+    });
     if (isEmptyObject(result)) return;
 
     const prevTodoList = this.todoState.get();
@@ -123,7 +128,7 @@ export default class TodoList {
 
   async init() {
     const userId = this.userState.get().userId;
-    const todoList = await getTodoList(userId);
+    const todoList = await todoListService.getTodoList(userId);
 
     this.todoState.set(todoList);
   }
