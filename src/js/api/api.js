@@ -60,8 +60,9 @@ export const userAPI = {
 }
 
 export const todoAPI = {
-    addTodo : (item) => {
-        return fetchAPI();
+    //POST /api/users/:userId/items/
+    addTodo : (userid, item) => {
+        return fetchAPI_body(`${userid}/items`,"POST",item);
     },
     deleteAllTodo : (userID) => {
         return fetchAPI();
@@ -75,7 +76,8 @@ export const todoAPI = {
     updatePriorty :(userID, ItemID, priority) => {
         return fetchAPI();
     },
+    //put /api/users/:userId/items/:itemId/toggle
     toggleItem : (userID, ItemID) => {
-        return fetchAPI();
+        return fetchAPI_body(`${userID}/items/${ItemID}/toggle`,'PUT');
     }
 }

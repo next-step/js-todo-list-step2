@@ -24,7 +24,7 @@ export const todoItem = (item) =>{
   const checked = item.isCompleted ? "checked" : "";
 
   let todo =
-   `<li id="li_${id}" class="${isCompleted}">
+   `<li data-id="${id}" class="${isCompleted}">
       <div class="view">
         <input class="toggle" type="checkbox" ${checked}/>
         <label class="label">

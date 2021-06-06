@@ -60,6 +60,8 @@ const onClickUserHander = (id) => {
 }
 //onClickUserHander("J-BuG57Uc");
 
+
+
 function init() {
   //console.log("init");
   userAPI.getAllUserItems()
@@ -73,10 +75,12 @@ function init() {
       drawTodoList(todolist);
     });
   });
-
 }
 
 init();
+
+
+
 
 function drawTitle(name){
   console.log("drawTitle");
@@ -129,6 +133,10 @@ function drawUserButton(response, clickedID) {
   userButtons.forEach(button => button.addEventListener('click',userSeleteButton));
 }
 
+
+
+
+
 function userSeleteButton(){
   console.log(this);
   const userButtons = document.querySelectorAll(".user.ripple");
@@ -141,18 +149,32 @@ function userSeleteButton(){
       ClickedID = button.dataset.id;
       button.setAttribute("class","user ripple active");
       drawTitle(button.innerText);
+      console.log("button.dataset.id;"+ button.dataset.id);
     }
   });
   console.log(ClickedID);
+  document.querySelector('.todo-list').setAttribute('data-userid',ClickedID);
+  document.querySelector('.new-todo').setAttribute('data-userid',ClickedID);
   userAPI.getUserItems(ClickedID)
   .then(todoList => drawTodoList(todoList));
 }
+
+
+
+
+
+
 
 
 function drawTodoList(userTodo){
   let todoList ="";
   console.log("drawTodoList");
   console.log(userTodo.todoList);
+  let userId =  document.querySelector('.user.ripple.active').dataset.id;
+  console.log('닭'+ userId);
+  document.querySelector('.todo-list').setAttribute('data-userid',userId);
+  document.querySelector('.new-todo').setAttribute('data-userid',userId);
+
   //todoList +=loadingBar;
   userTodo.forEach(todo => {
     //console.log(todo);
@@ -162,21 +184,75 @@ function drawTodoList(userTodo){
   });
   console.log("todoList최종"+todoList);
   document.querySelector(".todo-list").innerHTML = todoList;
-
   //deletebutton 이벤트 추가 
   document.querySelectorAll(".destroy").forEach(deleteButton=> deleteButton.addEventListener("click", ondeleteButtonClick));
   //toggle 버튼 이벤트 추가
   document.querySelectorAll(".toggle").forEach(toggleButton=> toggleButton.addEventListener("click", onToggleButtonClick));
   
 }
-function onToggleButtonClick(){
+
+
+
+
+
+
+
+
+
+
+function onToggleButtonClick(){  
   console.log("onToggleButtonClick");
+  const userID = document.querySelector('.todo-list').dataset.userid;
+  const ItemID = this.parentNode.parentNode.dataset.id;
+  console.log(ItemID);
+  
+  
+  todoAPI.toggleItem(userID, ItemID)
+  .then(data => {
+    if(Object.keys(data).includes('message')){
+      alert("문제발생 : "+error);
+      return;
+    }else{
+
+      this.parentNode.parentNode.setAttribute("class", 'completed');
+    }
+  })
+
+  console.log("onToggleButtonClick");
+  console.log(this.parentNode.parentNode);
 }
+
+function makeTodo(){
+  if(window.event.key == 'Enter'){
+    console.log("enter발생");
+    if(!newTodoAdd.value ||!newTodoAdd.value.trim())
+    {
+      alert("빈 값입니다.");
+      return ; 
+    }
+    //{name : userName}
+    const body = {"contents" :newTodoAdd.value};
+    const userid = document.querySelector('.new-todo').dataset.userid;
+    todoAPI.addTodo(userid,body)
+    .then(data =>{
+      console.log(data)
+      userAPI.getUserItems(userid)
+      .then((todolist)=> {
+        console.log(todolist);
+        drawTodoList(todolist);
+        newTodoAdd.value ="";
+      });
+    });
+  }
+ 
+}
+
 
 function ondeleteButtonClick(){
   console.log("ondeleteButtonClick");
   
 }
+
 
 const userCreateButton = document.querySelector('.user-create-button')
 userCreateButton.addEventListener('click', onUserCreateHandler)
@@ -184,3 +260,8 @@ userCreateButton.addEventListener('click', onUserCreateHandler)
 
 const userDeleteButton = document.querySelector('.user-delete-button')
 userDeleteButton.addEventListener('click', onUserDeleteHandler)
+
+
+const newTodoAdd = document.querySelector('.new-todo');
+newTodoAdd.addEventListener('keypress', makeTodo);
+
