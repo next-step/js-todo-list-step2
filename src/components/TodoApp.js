@@ -1,4 +1,4 @@
-import { addUserData, getUsersData } from '../api.js';
+import { addUserData, deleteUserData, getUsersData } from '../api.js';
 import UserList from './UserList.js';
 import Username from './Username.js';
 
@@ -18,9 +18,16 @@ export default class TodoApp {
           window.alert('2글자 이상이어야 합니다.');
           return;
         }
-        await addUserData({ name });
+        const newUser = await addUserData({ name });
         await this.loadUsers();
+        this.activeUser = this.users.find((user) => user._id === newUser._id);
         this.render();
+      },
+      onDelete: async () => {
+        const confirmation = window.confirm(`${this.activeUser.name}을 삭제하시겠습니까?`);
+        if (confirmation === false) return;
+        await deleteUserData(this.activeUser._id);
+        this.initUsers();
       },
     });
 
