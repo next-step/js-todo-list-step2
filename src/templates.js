@@ -2,7 +2,7 @@ import { FIRST, NONE } from './constants.js';
 
 export const userTemplate = (user, activeUserId) => {
   const { _id, name } = user;
-  return `<button class="ripple ${_id === activeUserId && 'active'}" id=${_id}>${name}</button>`;
+  return `<button class="ripple ${_id === activeUserId ? 'active' : ''}" id=${_id}>${name}</button>`;
 };
 
 export const userControlButtonTemplate = `
