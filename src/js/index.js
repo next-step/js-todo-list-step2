@@ -1,5 +1,5 @@
 import {userAPI, todoAPI, storage} from "./api/api.js";
-import {loadingBar, todoItem} from './component/todoList.js';
+import {todoItem} from './component/todoList.js';
 
 
 
@@ -15,7 +15,6 @@ const onUserCreateHandler = () => {
     .then((userList)=>{
       drawTitle(data.name);
       drawUserButton(userList, data._id);
-      drawTodoList(data);
     });  
   });
  
@@ -40,8 +39,8 @@ const onUserDeleteHandler = () =>{
 }
 
 
-console.log( loadingBar());
-console.log( todoItem());
+//console.log( loadingBar());
+//console.log( todoItem());
 
 const onClickUserHander = (id) => {
   userAPI.getUserItems(id)
@@ -53,14 +52,19 @@ const onClickUserHander = (id) => {
 //onClickUserHander("J-BuG57Uc");
 
 function init() {
-  console.log("init");
+  //console.log("init");
   userAPI.getAllUserItems()
   .then((userList)=>{
-    console.log("init userList[0]"+ userList[0].name);
-    drawTitle(userList[0].name);
-    drawUserButton(userList, userList[0]._id);
-    //drawTodoList(userList[0]);
-  });  
+   console.log("init userList[0]"+ userList[0]);
+   drawTitle(userList[0].name);
+   drawUserButton(userList, userList[0]._id);
+    userAPI.getUserItems(userList[0]._id)
+    .then((todolist)=> {
+      console.log(todolist);
+      drawTodoList(todolist);
+    });
+  });
+
 }
 
 init();
@@ -81,7 +85,7 @@ function drawUserButton(response, clickedID) {
   // console.log(removeDom);
   // console.log(removeDom.length); 
   if(removeDom.length!=0){
-    console.log("들오왓니")
+    //console.log("들오왓니")
     removeDom.forEach(dom => {
       console.log("dom.dataset.action");
       console.log(dom.dataset.action);
@@ -96,22 +100,9 @@ function drawUserButton(response, clickedID) {
   console.log(response);
   const buttonDiv = document.getElementById('user-list');
   const userCreateButton = document.querySelector('#user-list > button.ripple.user-create-button');
-  console.log(Object.keys(response).length);//사이즈가 잘 안나옴 
-  
-  // if(Object.keys(response).length===3){
-  //   const active_button = document.querySelector('#user-list > button.ripple.active');
-  //   //#user-list > button:nth-child(7)
-  //   active_button.setAttribute('class', 'ripple');
-  //   const button_= document.createElement('button');
-  //   button_.setAttribute('class', 'ripple active');
-  //   button_.setAttribute("data-id",response._id);
-  //   button_.innerText = response.name;
-  //   buttonDiv.insertBefore(button_,userCreateButton);
-  //   return ;
-  // }
+  //console.log(Object.keys(response).length);//사이즈가 잘 안나옴 
 
-
-  console.log("1개이상"+Object.keys(response).length);
+  //console.log("1개이상"+Object.keys(response).length);
   for(let i of response){
     const button_= document.createElement('button');
     button_.setAttribute('class', 'user ripple');
@@ -124,11 +115,11 @@ function drawUserButton(response, clickedID) {
     }
      
     
-    console.log(button_);
+    //console.log(button_);
     buttonDiv.insertBefore(button_,userCreateButton);
   }
   const userButtons = document.querySelectorAll(".user.ripple");
-  console.log(userButtons);
+  //console.log(userButtons);
   userButtons.forEach(button => button.addEventListener('click',userSeleteButton));
 }
 
@@ -136,21 +127,49 @@ function userSeleteButton(){
   console.log(this);
   const userButtons = document.querySelectorAll(".user.ripple");
   console.log(userButtons);
+  let ClickedID ="";
   userButtons.forEach(button =>{
     button.setAttribute("class","user ripple");
 
     if(button.dataset.id === this.dataset.id) {
+      ClickedID = button.dataset.id;
       button.setAttribute("class","user ripple active");
       drawTitle(button.innerText);
     }
   });
-  drawTodoList(this.dataset.id);
+  console.log(ClickedID);
+  userAPI.getUserItems(ClickedID)
+  .then(todoList => drawTodoList(todoList));
 }
 
-function drawTodoList(user){
+
+function drawTodoList(userTodo){
+  let todoList ="";
   console.log("drawTodoList");
-  console.log(user);
-  const li_list = document.getElementsByClassName("todo-list");
+  console.log(userTodo.todoList);
+  //todoList +=loadingBar;
+  userTodo.forEach(todo => {
+    //console.log(todo);
+    console.log(todoItem(todo));
+    todoList += todoItem(todo);
+    //console.log(todoList);
+  });
+  console.log("todoList최종"+todoList);
+  document.querySelector(".todo-list").innerHTML = todoList;
+
+  //deletebutton 이벤트 추가 
+  document.querySelectorAll(".destroy").forEach(deleteButton=> deleteButton.addEventListener("click", ondeleteButtonClick));
+  //toggle 버튼 이벤트 추가
+  document.querySelectorAll(".toggle").forEach(toggleButton=> toggleButton.addEventListener("click", onToggleButtonClick));
+  
+}
+function onToggleButtonClick(){
+  console.log("onToggleButtonClick");
+}
+
+function ondeleteButtonClick(){
+  console.log("ondeleteButtonClick");
+  
 }
 
 const userCreateButton = document.querySelector('.user-create-button')

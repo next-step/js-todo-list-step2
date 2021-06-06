@@ -49,8 +49,9 @@ export const userAPI = {
     getAllUserItems : () =>{
         return  fetchAPI_GET("","GET");
     },
+    //https://js-todo-list-9ca3a.df.r.appspot.com/api/users/J-BuG57Uc/items/
     getUserItems : (userID) =>{
-        return fetchAPI_GET(`${userID}/items/`);
+        return fetchAPI_GET(`${userID}/items/`,"GET");
     },
     deleteUser : (userID) =>{
         console.log("deleteUser");
