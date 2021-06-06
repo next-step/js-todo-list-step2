@@ -2,15 +2,8 @@ import { $ } from "../lib/util.js";
 import template from "../constants/template.js";
 
 class UserList {
-  constructor({ onAddUser }) {
-    this.target = $("#user-list");
+  constructor({ onAddUser, onDeleteUser, onSelectUser }) {
     this.onAddUser = onAddUser;
-    this.init();
-  }
-
-  init() {
-    this.render();
-  }
 
   setState(updatedUsers) {
     this.users = updatedUsers;

@@ -6,13 +6,21 @@ import { API_URL } from "../constants/config.js";
 
 class TodoApp {
   constructor() {
+    this.userList = new UserList({
+      onAddUser: this.onAddUser.bind(this),
     this.users = [];
     this.userList = new UserList({ onAddUser: this.onAddUser.bind(this) });
     this.init();
   }
 
-  async init() {
-    const { result } = await fetchRequest(API_URL.USER, "get");
+  init() {
+    this.getUserList();
+  }
+
+  async getUserList() {
+    const { result, error, errorMessage } = await fetchRequest(API_URL.USERS, "get");
+
+    if (error) return alert(errorMessage);
 
     const userListData = result.map((user) => {
       return new UserModel({ id: user._id, name: user.name, todoList: user.todoList });
@@ -20,13 +28,17 @@ class TodoApp {
 
     this.users = userListData;
     this.userList.setState(this.users);
+    this.userList.render(this.users);
+  }
   }
 
-  onAddUser() {
+  async onAddUser() {
     const userName = prompt("추가하고 싶은 이름을 입력해주세요.");
-    const newUser = new UserModel({ name: userName });
-    this.users.push(newUser);
-    this.userList.setState(this.users);
+
+    const { error, errorMessage } = await fetchRequest(API_URL.USERS, "post", { name: userName });
+    if (error) return alert(errorMessage);
+    this.getUserList();
+  }
   }
 }
 
