@@ -3,6 +3,8 @@ import API from "../api/api.js";
 
 export default function TodoList () {
 
+	const userId = $(".active").dataset.id;
+
 	const $new = ({ _id, contents, isCompleted }) => {
 		return `
 			<li class="${isCompleted ? "completed" : "new"}">
@@ -36,7 +38,6 @@ export default function TodoList () {
 	}
 
 	const deleteItem = async ({currentTarget}) => {
-		const userId = $(".active").dataset.id;
 		const itemId = currentTarget.dataset.id;
 
 		await API.deleteFetch(`/api/users/${ userId }/items/${ itemId }`);
