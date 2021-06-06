@@ -247,8 +247,24 @@ function makeTodo(){
  
 }
 
-
+//	/api/users/:userId/items/:itemId
 function ondeleteButtonClick(){
+  console.log("ondeleteButtonClick");
+  const itemId = this.dataset.id;
+  const userId = this.parentNode.parentNode.parentNode.dataset.userid;
+  todoAPI.deleteTodo(userId,  itemId)
+  .then(data =>{
+    console.log(data);
+    userAPI.getUserItems(userId)
+      .then((todolist)=> {
+        console.log(todolist);
+        drawTodoList(todolist);
+      });
+  })
+}
+
+
+function onAllDeleteButtonClick(){
   console.log("ondeleteButtonClick");
   
 }

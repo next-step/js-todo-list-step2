@@ -67,8 +67,9 @@ export const todoAPI = {
     deleteAllTodo : (userID) => {
         return fetchAPI();
     },
+    //DELETE	/api/users/:userId/items/:itemId
     deleteTodo :(userID, ItemID) => {
-        return fetchAPI();
+        return fetchAPI_DELETE(`${userID}/items/${ItemID}`,"DELETE");
     },
     updateItem : (userID, ItemID, Item) => {
         return fetchAPI();

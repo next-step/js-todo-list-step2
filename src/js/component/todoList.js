@@ -33,7 +33,7 @@ export const todoItem = (item) =>{
           </select>
           ${contents}
         </label>
-        <button class="destroy"></button>
+        <button class="destroy" data-id="${id}"></button>
       </div>
       <input class="edit" value="${contents}" />
     </li>
