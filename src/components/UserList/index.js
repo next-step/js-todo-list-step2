@@ -1,12 +1,17 @@
+import { getUser } from '../../user/controller.js';
 export const UserList = () => {
   const dom = document.createElement('div');
-  dom.style.className = 'user-list';
+  dom.className = 'user-list';
 
-  const render = () => {
-    dom.innerHTML = `
-      <button class="ripple active">makerjun</button>
-      <button class="ripple">eastjun</button>
-      `;
+  const render = async () => {
+    const users = await getUser().then((response) => response.json());
+    dom.innerHTML = `${users
+      .map((user) => {
+        return `
+        <button class="ripple">${user.name}</button>
+        `;
+      })
+      .join('')}`;
   };
   render();
   return dom;
