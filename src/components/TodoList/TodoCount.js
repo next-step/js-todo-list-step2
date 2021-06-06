@@ -3,7 +3,7 @@ import { DOM_ID, FILTER } from '../../constants/constants.js';
 import { deleteAllItem } from '../../api/todolist.js';
 
 export default class TodoCount {
-  constructor({ userState, filterState }) {
+  constructor({ userState, filterState, todoState }) {
     this.$target = $(DOM_ID.TODO_COUNT);
 
     this.$filterMenu = {
@@ -14,6 +14,7 @@ export default class TodoCount {
 
     this.filterState = filterState;
     this.userState = userState;
+    this.todoState = todoState;
 
     this._addEvent();
   }
@@ -31,6 +32,7 @@ export default class TodoCount {
     const result = await deleteAllItem(userId);
     if (result['success']) {
       this.filterState.set(FILTER.ALL);
+      this.todoState.set([]);
     }
   }
 

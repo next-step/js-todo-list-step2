@@ -1,5 +1,4 @@
-import { FILTER, LOCAL_DB_KEY } from '../constants/constants.js';
-import { getTodoList } from '../api/todolist.js';
+import { FILTER } from '../constants/constants.js';
 
 // state
 import UserState from '../store/UserState.js';
@@ -28,22 +27,24 @@ export default class TodoApp {
       this.userList = await new UserList({ userState: this.userState, todoState: this.todoState });
       new TodoInput({ userState: this.userState });
       this.todoList = new TodoList({ userState: this.userState, todoState: this.todoState });
-      this.todoCount = new TodoCount({ userState: this.userState, filterState: this.filterState });
+      this.todoCount = new TodoCount({
+        userState: this.userState,
+        filterState: this.filterState,
+        todoState: this.todoState,
+      });
 
       return this;
     })();
   }
 
-  async _render() {
+  _render() {
     const filter = this.filterState.get();
-    const userId = this.userState.get().userId;
-
-    let todoList = await getTodoList(userId);
+    let todoList = this.todoState.get();
     todoList = this._getFilteredTodoList(todoList, filter);
 
-    await this.userList.render();
-    this.todoList.render(todoList);
-    this.todoCount.renderCount(todoList ? todoList.length : 0);
+    this.userList && this.userList.render();
+    this.todoList && this.todoList.render(todoList);
+    this.todoCount && this.todoCount.renderCount(todoList ? todoList.length : 0);
   }
 
   _getFilteredTodoList(todoList, filter) {

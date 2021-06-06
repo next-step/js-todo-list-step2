@@ -17,20 +17,11 @@ export const FILTER = {
   COMPLETED: 'completed',
   ALL_DELETED: 'clear-completed',
 };
-// priority
+
 export const PRIORITY = {
   NONE: 'select',
   FIRST: 'primary',
   SECOND: 'secondary',
 };
 
-export const LOCAL_DB_KEY = 'todos';
-
 export const BASE_URL = `https://js-todo-list-9ca3a.df.r.appspot.com/api/users`;
-
-// export const URL = {
-//   BASE_URL: `https://js-todo-list-9ca3a.df.r.appspot.com/api/users`,
-//   GET_USERS: 'https://js-todo-list-9ca3a.df.r.appspot.com/api/users',
-//   CREATE_USERS: 'https://js-todo-list-9ca3a.df.r.appspot.com/api/users',
-//   // DELETE_USERS: `https://js-todo-list-9ca3a.df.r.appspot.com/api/users/${userId}`,
-// };
