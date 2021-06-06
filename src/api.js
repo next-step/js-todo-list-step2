@@ -1,4 +1,4 @@
-import { DELETE, POST } from './constants.js';
+import { DELETE, POST, PUT } from './constants.js';
 
 const BASE_URL = 'https://js-todo-list-9ca3a.df.r.appspot.com/api/users';
 
@@ -6,8 +6,12 @@ function getUserURL(userId) {
   return `${BASE_URL}/${userId}`;
 }
 
-function getTodoItemsURL(userId) {
+function getTodoListURL(userId) {
   return `${BASE_URL}/${userId}/items`;
+}
+
+function getTodoItemToggleURL(userId, itemId) {
+  return `${BASE_URL}/${userId}/items/${itemId}/toggle`;
 }
 
 export async function getUsersData() {
@@ -34,19 +38,35 @@ export async function addUserData(data = {}) {
 
 export async function deleteUserData(userId) {
   const userURL = getUserURL(userId);
-  await fetch(userURL, {
+  const response = await fetch(userURL, {
     method: DELETE,
   });
+  return response.json();
+}
+
+export async function getTodoListData(userId) {
+  const todoListURL = getTodoListURL(userId);
+  const response = await fetch(todoListURL);
+  return response.json();
 }
 
 export async function addTodoItemData(userId, data = {}) {
-  const todoItemsURL = getTodoItemsURL(userId);
-  const response = await fetch(todoItemsURL, {
+  const todoListURL = getTodoListURL(userId);
+  const response = await fetch(todoListURL, {
     method: POST,
     headers: {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify(data),
   });
-  return response;
+  return response.json();
+}
+
+export async function updateTodoItemToggleData(userId, itemId, data = {}) {
+  const todoItemToggleURL = getTodoItemToggleURL(userId, itemId);
+  const response = await fetch(todoItemToggleURL, {
+    method: PUT,
+    body: JSON.stringify(data),
+  });
+  return response.json();
 }

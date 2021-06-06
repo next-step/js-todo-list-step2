@@ -1,4 +1,12 @@
-import { addTodoItemData, addUserData, deleteUserData, getUserData, getUsersData } from '../api.js';
+import {
+  addTodoItemData,
+  addUserData,
+  deleteUserData,
+  getTodoListData,
+  getUserData,
+  getUsersData,
+  updateTodoItemToggleData,
+} from '../api.js';
 import TodoInput from './TodoInput.js';
 import TodoList from './TodoList.js';
 import UserList from './UserList.js';
@@ -51,17 +59,31 @@ export default class TodoApp {
         }
 
         const response = await addTodoItemData(this.activeUser._id, { contents });
-        if (!response.ok) {
+        if (response.message) {
           this.init();
           return;
         }
 
-        this.activeUser = await getUserData(this.activeUser._id);
+        this.activeUser.todoList = await getTodoListData(this.activeUser._id);
         this.renderTodoList();
       },
     });
 
-    this.todoList = new TodoList();
+    this.todoList = new TodoList({
+      onToggle: async (itemId) => {
+        const todoItem = this.activeUser.todoList.find(({ _id }) => _id === itemId);
+        const response = await updateTodoItemToggleData(this.activeUser._id, itemId, {
+          isCompleted: !todoItem.isCompleted,
+        });
+        if (response.message) {
+          this.init();
+          return;
+        }
+
+        this.activeUser.todoList = await getTodoListData(this.activeUser._id);
+        this.renderTodoList();
+      },
+    });
 
     this.init();
   }
