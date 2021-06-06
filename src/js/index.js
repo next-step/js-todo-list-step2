@@ -15,6 +15,11 @@ const onUserCreateHandler = () => {
     .then((userList)=>{
       drawTitle(data.name);
       drawUserButton(userList, data._id);
+      userAPI.getUserItems(data._id)
+        .then((todolist)=> {
+          console.log(todolist);
+          drawTodoList(todolist);
+        });
     });  
   });
  
@@ -32,6 +37,11 @@ const onUserDeleteHandler = () =>{
           console.log(data);
           if(data ==='"user를 삭제하였습니다."'){
             drawUserButton(data,data._id);
+            // userAPI.getUserItems(data._id)
+            // .then((todolist)=> {
+            //   console.log(todolist);
+            //   drawTodoList(todolist);
+            // });
           }
       });
   // drawUserList(response.user);
@@ -46,7 +56,6 @@ const onClickUserHander = (id) => {
   userAPI.getUserItems(id)
   .then((todo) => {
     drawTodoList(todo);
-    console.log(todo);
   });
 }
 //onClickUserHander("J-BuG57Uc");
@@ -113,9 +122,6 @@ function drawUserButton(response, clickedID) {
       button_.setAttribute('class', 'user ripple active');
       drawTitle(i.name);
     }
-     
-    
-    //console.log(button_);
     buttonDiv.insertBefore(button_,userCreateButton);
   }
   const userButtons = document.querySelectorAll(".user.ripple");
