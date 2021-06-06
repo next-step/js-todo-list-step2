@@ -4,10 +4,7 @@ import template from "../constants/template.js";
 class UserList {
   constructor({ onAddUser, onDeleteUser, onSelectUser }) {
     this.onAddUser = onAddUser;
-
-  setState(updatedUsers) {
-    this.users = updatedUsers;
-    this.render(this.users);
+    this.onDeleteUser = onDeleteUser;
   }
 
   render(users) {
@@ -27,6 +24,7 @@ class UserList {
 
   registerEventListener() {
     $(".user-create-button").addEventListener("click", this.onAddUser);
+    $(".user-delete-button").addEventListener("click", this.onDeleteUser);
   }
 }
 

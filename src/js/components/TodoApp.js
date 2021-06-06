@@ -8,8 +8,10 @@ class TodoApp {
   constructor() {
     this.userList = new UserList({
       onAddUser: this.onAddUser.bind(this),
+      onDeleteUser: this.onDeleteUser.bind(this),
+    });
     this.users = [];
-    this.userList = new UserList({ onAddUser: this.onAddUser.bind(this) });
+    this.selectedUser = {};
     this.init();
   }
 
@@ -39,6 +41,13 @@ class TodoApp {
     if (error) return alert(errorMessage);
     this.getUserList();
   }
+
+  async onDeleteUser() {
+    const deleteId = this.selectedUser.id;
+    const { error, errorMessage } = await fetchRequest(API_URL.USER(deleteId), "delete");
+    if (error) return alert(errorMessage);
+    this.selectedUser = {};
+    this.getUserList();
   }
 }
 
