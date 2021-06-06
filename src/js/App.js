@@ -3,7 +3,7 @@ import TodoTotal from "./components/TodoTotal.js";
 import TodoList from "./components/TodoList.js";
 import UserList	from "./components/UserList.js";
 import { getTodos } from "./utils/storage.js";
-import { getFetch } from "./api/api.js";
+import API from "./api/api.js";
 
 export default function App () {
 	this.todos = "";
@@ -24,7 +24,7 @@ export default function App () {
 	}
 
 	const init = async () => {
-		const users = await getFetch("/api/users");
+		const users = await API.getFetch("/api/users");
 		setSate(users);
 
 		// const todos = await getFetch("/api/users");

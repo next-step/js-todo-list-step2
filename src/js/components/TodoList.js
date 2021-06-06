@@ -1,5 +1,5 @@
 import { $, $$ } from "../utils/querySelector.js";
-import { getFetch } from "../api/api.js";
+import API from "../api/api.js";
 
 export default function TodoList () {
 	const $new = ({ contents, isCompleted }) => {
@@ -24,7 +24,8 @@ export default function TodoList () {
 
 	this.setState = async () => {
 		let items = "";
-		const todos = await getFetch(`/api/users/${"AhooHHZsN"}/items/`);
+		const id = $(".active").dataset.id;
+		const todos = await API.getFetch(`/api/users/${ id }/items/`);
 
 		todos.map(todo => items += $new(todo));
 

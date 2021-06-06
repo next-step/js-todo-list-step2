@@ -1,28 +1,61 @@
-// export const baseAPI = "https://js-todo-list-9ca3a.df.r.appspot.com";
-import { baseAPI } from "../config/config.js";
+import {baseAPI} from "../config/config.js";
 
-// export function app () {
-// 	const getFetch = async () => {
-// 		try {
-// 			const data = await fetch(`${baseAPI}/api/users`).then((response) => response.json())
-// 			console.log(data)
-// 			return data;
-// 		}
-// 		catch (e) {
-// 			console.log("err :: ", e);
-// 		}
-// 	}
-// }
-
-
-
-export async function getFetch (url) {
+export default {
+	getFetch: async function (url) {
 		try {
 			const data = await fetch(`${baseAPI}${url}`).then((response) => response.json());
 
 			return data;
+		} catch (e) {
+			console.log("[err] ", e);
 		}
-		catch (e) {
-			console.log("err :: ", e);
+	},
+
+	postFetch: async function (url, obj) {
+		try {
+			const res = await fetch(`${baseAPI}${url}`, {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json"
+				},
+				body: JSON.stringify(obj)
+			})
+			.then((response) => response.json());
+			console.log("POST res :: ", res);
+		} catch (e) {
+			console.log("[err] ", e);
 		}
+	},
+
+	putFetch: async function (url, obj) {
+		try {
+			const res = await fetch(`${baseAPI}${url}`, {
+				method: "PUT",
+				headers: {
+					"Content-Type": "application/json"
+				},
+				body: JSON.stringify(obj)
+			})
+			.then((response) => response.json());
+
+			console.log("PUT res :: ", res);
+		} catch (e) {
+			console.log("[err] ", e);
+		}
+	},
+
+	deleteFetch: async function (url) {
+		try {
+			console.log("url", url)
+			const res = await fetch(`${baseAPI}${url}`, {
+				method: "DELETE"
+			})
+				.then((response) => response.json());
+
+			console.log("PUT res :: ", res);
+		} catch (e) {
+			console.log("[err] ", e);
+		}
+	}
+
 }
