@@ -26,7 +26,6 @@ export default class UserList {
   }
 
   changeUser(target) {
-    console.log('change user');
     // Change User Active
     const $usersList = this.$usersList.querySelectorAll('button.ripple');
     [...$usersList].map((element) => element.classList.remove('active'));

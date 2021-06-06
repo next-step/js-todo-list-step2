@@ -1,7 +1,9 @@
-class TodoState {
+import Subject from '../core/Subject.js';
+
+class TodoState extends Subject {
   constructor() {
+    super();
     this._todoList = [];
-    this.observers = [];
   }
 
   get() {
@@ -11,14 +13,6 @@ class TodoState {
   set(updateTodoList) {
     this._todoList = updateTodoList;
     this.publish();
-  }
-
-  subscribe(observer) {
-    this.observers = this.observers.concat(observer);
-  }
-
-  publish() {
-    this.observers.forEach((cb) => cb());
   }
 }
 

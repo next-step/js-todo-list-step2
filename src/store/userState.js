@@ -1,7 +1,9 @@
-class UserState {
+import Subject from '../core/Subject.js';
+
+class UserState extends Subject {
   constructor() {
+    super();
     this._user = {};
-    this.observers = [];
   }
 
   get() {
@@ -11,15 +13,6 @@ class UserState {
   set(updateUser) {
     this._user = updateUser;
     this.publish();
-  }
-
-  subscribe(observer) {
-    this.observers = this.observers.concat(observer);
-  }
-
-  publish() {
-    console.log('notify', this._user);
-    this.observers.forEach((cb) => cb());
   }
 }
 

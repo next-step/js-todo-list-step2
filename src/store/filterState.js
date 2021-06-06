@@ -1,9 +1,10 @@
 import { FILTER } from '../constants/constants.js';
+import Subject from '../core/Subject.js';
 
-class FilterState {
+class FilterState extends Subject {
   constructor() {
+    super();
     this._filter = FILTER.ALL;
-    this.observers = [];
   }
 
   get() {
@@ -13,14 +14,6 @@ class FilterState {
   set(updateFilter) {
     this._filter = updateFilter;
     this.publish();
-  }
-
-  subscribe(observer) {
-    this.observers = this.observers.concat(observer);
-  }
-
-  publish() {
-    this.observers.forEach((cb) => cb());
   }
 }
 
