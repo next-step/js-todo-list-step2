@@ -2,6 +2,7 @@ import { $, $$ } from "../utils/querySelector.js";
 import API from "../api/api.js";
 
 export default function TodoList () {
+
 	const $new = ({ _id, contents, isCompleted }) => {
 		return `
 			<li class="${isCompleted ? "completed" : "new"}">
@@ -15,7 +16,7 @@ export default function TodoList () {
 						</select>
 						${ contents }
 					</label>
-					<button class="destroy"></button>
+					<button class="destroy" data-id="${ _id }"></button>
 				</div>
 				<input class="edit" value="완료된 타이틀" />
 			</li>`;
@@ -25,23 +26,30 @@ export default function TodoList () {
 	this.setState = (todos) => {
 		let items = "";
 
-		console.log("todo" , todos)
-
 		todos.map(todo => items += $new(todo));
 
 		$(".todo-list").innerHTML = items;
 
-		$$(".toggle").forEach(chk => {
-			chk.addEventListener("click", ({ currentTarget }) => complete(currentTarget))
-		});
+		$$(".destroy").forEach(destroy => destroy.addEventListener("click", deleteItem));
+
+		$$(".toggle").forEach(chk => chk.addEventListener("click", completeItem));
 	}
 
-	const complete = (target) => {
+	const deleteItem = async ({currentTarget}) => {
 		const userId = $(".active").dataset.id;
-		const itemId = target.dataset.id;
-		
-		const chrBool = target.checked;
-		const $parentLi = (target.parentElement).parentElement;
+		const itemId = currentTarget.dataset.id;
+
+		await API.deleteFetch(`/api/users/${ userId }/items/${ itemId }`);
+		const todos = await API.getFetch(`/api/users/${ userId }`);
+
+		this.setState(todos.todoList);
+	}
+
+	const completeItem = ({currentTarget}) => {
+		const itemId = currentTarget.dataset.id;
+
+		const chrBool = currentTarget.checked;
+		const $parentLi = (currentTarget.parentElement).parentElement;
 
 		$parentLi.classList.remove(chrBool ? "new" : "completed" );
 		$parentLi.classList.add(chrBool ? "completed" : "new");
