@@ -26,9 +26,16 @@ export default class UserList {
   }
   $userList = $("#user-list");
 
-  render = (userList) => {
+  render = (userList, selectedUserInfo) => {
+    console.dir(userList);
+    console.dir(selectedUserInfo);
     this.$userList.innerHTML = userList
-      .map((user) => `<button class="ripple">${user.name}</button>`)
+      .map(
+        (user) =>
+          `<button class="ripple ${
+            user._id === selectedUserInfo._id ? "active" : ""
+          }">${user.name}</button>`
+      )
       .concat([
         `<button class="ripple user-create-button" data-action="createUser"> + 유저 생성 </button>`,
         `<button class="ripple user-delete-button" data-action="deleteUser"> 삭제 - </button>`,
