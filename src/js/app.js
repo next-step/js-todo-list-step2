@@ -3,34 +3,37 @@ import TodoListContainer from "./component/todo/todoListContainer.js";
 import requests from "./util/fetch.js";
 
 export default class App {
-  // constructor() {
-  //   const userData = requests.get("/users/co_E3OYed").then((res) => res);
-  //   console.dir(userData);
-  // }
+  init = async () => {
+    this.userList = [{ _id: "slQAW-lSB", name: "yt" }];
+    this.selectedUserInfo = await requests.get("/users/slQAW-lSB");
+    console.dir(this.selectUser);
+    this.render();
+  };
 
-  userList = [{ _id: "Mp2jurL72", name: "yt" }];
   addUser = ({ _id, name }) => {
     this.userList.push({ _id, name });
     this.render();
   };
 
-  // deleteUser = ({ _id }) => {
-  //   const index = this.userList.findIndex((user) => user._id === _id);
-  //   this.userList.splice(index, 1);
-  // };
+  deleteUser = (userid) => {
+    const index = this.userList.findIndex((user) => user._id === userid);
+    this.userList.splice(index, 1);
+    this.render();
+  };
 
-  selectedUserInfo = {};
-  setSelectedUserInfo = (data) => {
+  selectUser = (data) => {
     this.selectedUserInfo = data;
     this.render();
   };
 
-  headerContainer = new HeaderContainer({ addUser: this.addUser });
+  headerContainer = new HeaderContainer({
+    addUser: this.addUser,
+    deleteUser: this.deleteUser,
+    selectUser: this.selectUser,
+  });
   todoListContainer = new TodoListContainer();
 
   render = async () => {
-    this.selectedUserInfo = await requests.get("/users/Mp2jurL72");
-    console.dir(this.selectedUserInfo);
     this.headerContainer.render(this.userList, this.selectedUserInfo);
     this.todoListContainer.render(this.selectedUserInfo);
   };

@@ -10,7 +10,7 @@ export default class TodoList {
     this.$todoList.innerHTML = todoList
       .map(
         (todo) =>
-          `<li ${todo.isCompleted ? "class='completed'" : ""} data-todo-id=${
+          `<li ${todo.isCompleted ? "class='completed'" : ""} data-todoid=${
             todo._id
           }>
             <div class="view">

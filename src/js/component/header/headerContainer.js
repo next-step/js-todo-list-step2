@@ -2,13 +2,13 @@ import { $ } from "../../util/querySelector.js";
 import UserList from "./userList.js";
 
 export default class HeaderContainer {
-  constructor({ addUser }) {
+  constructor({ addUser, deleteUser, selectUser }) {
     this.onChangeUserList = addUser;
 
     this.userList = new UserList({
-      addUser: this.onChangeUserList,
-      deleteUser: () => {},
-      changeCurrentUser: () => {},
+      addUser,
+      deleteUser,
+      selectUser,
     });
 
     this.$title = $("#user-title");

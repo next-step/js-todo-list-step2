@@ -13,7 +13,17 @@ const requests = {
       .catch((e) => {
         alert(e);
       }),
-  delete: (path) => fetch(BASE_URL + path),
+  delete: (path, option) =>
+    fetch(BASE_URL + path, option)
+      .then((data) => {
+        if (!data.ok) {
+          throw new Error(data.statusText);
+        }
+        return data.json();
+      })
+      .catch((e) => {
+        alert(e);
+      }),
 };
 
 export default requests;
