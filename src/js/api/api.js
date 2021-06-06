@@ -17,9 +17,19 @@ const fetchAPI_body = async function(url, method, body){
    }
 }
 /*body값 없는 API*/
-const fetchAPI = async function(url, method){
+const fetchAPI_GET = async function(url){
     try{
         let response = await fetch(baseURL+url);
+        return await response.json();
+    } catch (error){
+        console.error("error"+error);
+    }
+ }
+
+ const fetchAPI_DELETE = async function(url, method){
+    try{
+        let response = await fetch(baseURL+url,{
+        method:"DELETE"})
         return await response.json();
     } catch (error){
         console.error("error"+error);
@@ -36,14 +46,15 @@ export const userAPI = {
     addUser : (userName) => {
         return fetchAPI_body("","POST",userName);
     },
-    getAllUserList : () =>{
-        return  fetchAPI("","GET");
+    getAllUserItems : () =>{
+        return  fetchAPI_GET("","GET");
     },
-    getUserList : (userID) =>{
-        return fetchAPI();
+    getUserItems : (userID) =>{
+        return fetchAPI_GET(`${userID}/items/`);
     },
     deleteUser : (userID) =>{
-        return fetchAPI(baseUrl);
+        console.log("deleteUser");
+        return fetchAPI_DELETE(userID,"DELETE");
     }
 }
 
