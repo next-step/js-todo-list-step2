@@ -15,33 +15,24 @@ export default function App () {
 		reloadList: async () => {
 			const $activeUser = $(".active");
 			const todos = await API.getFetch(`/api/users/${ $activeUser.dataset.id }/items/`);
-			console.log("id ", $activeUser.dataset.id)
-			console.log("mmm", todos)
 
-			this.todoList.setState(todos)
+			this.todoList.setState(todos);
 		}
-		// reloadList: () => setSate(getTodos())
 	});
 
 	this.todoList = new TodoList();
 	this.todoTotal = new TodoTotal();
 
 	const setSate = ({users, todos}) => {
-
 		this.userList.setState(users);
 		this.todoInput.setState(todos);
-
 		this.todoList.setState(todos);
 		this.todoTotal.setState(todos);
 	}
 
 	const init = async () => {
 		const users = await API.getFetch("/api/users");
-
 		setSate({users: users, todos: users[0].todoList});
-
-		// const todos = await getFetch("/api/users");
-		// setSate(getTodos());
 	}
 
 	init();

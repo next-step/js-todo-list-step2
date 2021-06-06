@@ -15,15 +15,11 @@ export default function TodoInput ({ reloadList }) {
 
 		const addItem = {
 			contents: content,
-			// priority: "NONE",
-			// isCompleted: false,
 		};
 
 		const $activeUser = $(".active");
 
 		await API.postFetch(`/api/users/${ $activeUser.dataset.id }/items/`, addItem);
-
-		// setTodos(addItem);
 
 		reloadList();
 	}

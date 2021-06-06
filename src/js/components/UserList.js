@@ -33,11 +33,15 @@ export default function UserList () {
 		$('.user-delete-button').addEventListener('click', onUserDeleteHandler);
 	}
 
-	const onUserClickHandler = ({ currentTarget }) => {
+	const onUserClickHandler = async ({ currentTarget }) => {
 		$(".active").classList.remove("active");
 		currentTarget.classList.add("active");
 
 		$(".active-user").innerText = currentTarget.innerHTML;
+
+		this.todoList = new TodoList();
+		const todos = await API.getFetch(`/api/users/${ currentTarget.dataset.id }/items`);
+		this.todoList.setState(todos);
 	}
 
 	const onUserCreateHandler = async () => {
@@ -60,6 +64,4 @@ export default function UserList () {
 		this.setState(await API.getFetch("/api/users"));
 	}
 
-	// this.todoList = new TodoList();
-	// this.todoList.set
 }

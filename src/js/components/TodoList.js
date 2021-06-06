@@ -36,10 +36,11 @@ export default function TodoList () {
 
 	const complete = (target) => {
 		const chrBool = target.checked;
-		const $parentLi = (currentTarget.parentElement).parentElement;
+		const $parentLi = (target.parentElement).parentElement;
 
 		$parentLi.classList.remove(chrBool ? "new" : "completed" );
 		$parentLi.classList.add(chrBool ? "completed" : "new");
+
 	}
 
 
