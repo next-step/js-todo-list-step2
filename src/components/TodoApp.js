@@ -1,15 +1,16 @@
 import { addUserData, deleteUserData, getUsersData } from '../api.js';
+import TodoList from './TodoList.js';
 import UserList from './UserList.js';
 import Username from './Username.js';
 
 export default class TodoApp {
   constructor() {
     this.users = [];
-    this.activeUser = { _id: '', name: '' };
+    this.activeUser = { _id: '', name: '', todoList: [] };
 
     this.userList = new UserList({
-      onSelect: ({ _id, name }) => {
-        this.activeUser = { _id, name };
+      onSelect: (userId) => {
+        this.activeUser = this.users.find(({ _id }) => _id === userId);
         this.render();
       },
       onAdd: async () => {
@@ -33,18 +34,16 @@ export default class TodoApp {
 
     this.username = new Username();
 
+    this.todoList = new TodoList();
+
     this.initUsers();
   }
 
   render() {
-    const usersTemplate = this.users.map(this.getUserTemplate);
-    this.userList.render(usersTemplate);
+    this.userList.render(this.users, this.activeUser._id);
     this.username.render(this.activeUser.name);
+    this.todoList.render(this.activeUser.todoList);
   }
-
-  getUserTemplate = ({ _id, name }) => {
-    return `<button class="ripple ${_id === this.activeUser._id && 'active'}" id=${_id}>${name}</button>`;
-  };
 
   async loadUsers() {
     this.users = await getUsersData();

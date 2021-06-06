@@ -1,4 +1,4 @@
-import { userControlButtonTemplate } from '../templates.js';
+import { userControlButtonTemplate, userTemplate } from '../templates.js';
 
 export default class UserList {
   constructor({ onSelect, onAdd, onDelete }) {
@@ -9,14 +9,15 @@ export default class UserList {
     this.$userList.addEventListener('click', (event) => this.deleteUser(event, onDelete));
   }
 
-  render(usersTemplate) {
+  render(users, activeUserId) {
+    const usersTemplate = users.map((user) => userTemplate(user, activeUserId));
     this.$userList.innerHTML = usersTemplate.join('') + userControlButtonTemplate;
   }
 
   selectUser(event, onSelect) {
     const userTarget = event.target;
     if (!userTarget.classList.contains('ripple') || userTarget.id === '') return;
-    onSelect({ _id: userTarget.id, name: userTarget.innerText });
+    onSelect(userTarget.id);
   }
 
   addUser(event, onAdd) {
