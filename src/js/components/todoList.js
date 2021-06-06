@@ -1,16 +1,22 @@
 import TodoItem from './todoItem.js';
-import { ALL, VIEW, COMPLETE } from '../constant/constant.js';
+import { ALL, VIEW, COMPLETE, USER_API } from '../constant/constant.js';
+import { validLength } from '../utils/utils.js';
 
 class TodoList {
   constructor(
     $target,
-    { todoList, filter, onDeleteItem, changeTodoState, changeTodoValue }
+    { filter, onDeleteItem, changeTodoState, changeTodoValue, dataController }
   ) {
     this.$target = $target;
     this.state = {
-      todoList,
+      user: {
+        name: '',
+        _id: '',
+        todoList: []
+      },
       filter
-    }
+    };
+    this.dataController = dataController;
     this.render();
     this.addEvent(onDeleteItem, changeTodoState, changeTodoValue);
   }
@@ -26,12 +32,18 @@ class TodoList {
       const { className } = target;
       const closestLi = target.closest('li');
       const index = closestLi.dataset['index'];
+
+      const id = this.state.user._id;
+      const itemId = this.state.user.todoList[+index]._id;
+
       if (className === 'destroy') {
-        onDeleteItem(index);
+        this.dataController.deleteData(USER_API + `/${id}/items/${itemId}`);
+        onDeleteItem(+index);
       } else if (target.classList.contains('toggle')) {
+        this.dataController.putData(USER_API + `/${id}/items/${itemId}/toggle`);
         closestLi.classList.contains('completed')
-          ? changeTodoState(+index, VIEW)
-          : changeTodoState(+index, COMPLETE);
+          ? changeTodoState(+index, false)
+          : changeTodoState(+index, true);
       }
     });
 
@@ -52,12 +64,20 @@ class TodoList {
       const { key } = e;
       const closestLi = target.closest('li');
       const index = closestLi.dataset['index'];
+
+      const id = this.state.user._id;
+      const itemId = this.state.user.todoList[+index]._id;
+
       if (key !== 'Enter' && key !== 'Escape') return;
       closestLi.classList.remove('editing');
       closestLi.classList.add('view');
       if (key === 'Enter') {
         const value = e.target.value.trim();
-        if (value) {
+        if (value && validLength(value)) {
+          const body = {
+            contents: value
+          };
+          this.dataController.putData(USER_API + `/${id}/items/${itemId}`, body);
           changeTodoValue(+index, value);
         }
       }
@@ -66,7 +86,7 @@ class TodoList {
 
   render = () => {
     this.$target.innerHTML = '';
-    this.state.todoList.map((item, index) => {
+    this.state.user.todoList.map((item, index) => {
       // item.isCompleted 와 state.filter는 falsy한 값으로 비교
       if (this.state.filter !== ALL && item.isCompleted != this.state.filter) {
         return;
@@ -75,8 +95,8 @@ class TodoList {
         'beforeend',
         new TodoItem(
           item.isCompleted === true ? COMPLETE : VIEW,
-          item.content,
-          item.id,
+          item.contents,
+          index,
           item.priority
         ).template()
       );

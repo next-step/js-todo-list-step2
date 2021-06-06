@@ -1,20 +1,32 @@
-import { COMPLETE } from '../constant/constant.js';
+import { COMPLETE, FIRST, NONE } from "../constant/constant.js";
 
 class TodoItem {
-  constructor(state, title, index, priority) {
-    this.state = state;
-    this.title = title;
+  constructor(isCompleted, content, index, priority) {
+    this.isCompleted = isCompleted;
+    this.content = content;
     this.index = index;
     this.priority = priority;
   }
   template() {
-    const classTemplate = this.state === COMPLETE ? 'class="completed"' : '';
-    const checkedTemplate = this.state === COMPLETE ? 'checked' : '';
-    let template = `<li ${classTemplate} data-index=${this.index}>
+    const classTemplate =
+      this.isCompleted === COMPLETE ? 'class="completed"' : "";
+    const checkedTemplate = this.isCompleted === COMPLETE ? "checked" : "";
+    const priority = this.priority === FIRST ? "primary" : "secondary";
+    const chip =
+      this.priority === NONE
+        ? `<select class="chip select">
+    <option value="0" selected>순위</option>
+    <option value="1">1순위</option>
+    <option value="2">2순위</option>
+  </select>`
+        : `<span class="chip ${priority}">${this.priority}</span>`;
+    const template = `<li ${classTemplate} data-index=${this.index}>
     <div class="view">
       <input class="toggle" type="checkbox" ${checkedTemplate}/>
-      <label class="label">${this.title}</label>
-      <span class="chip secondary">${this.priority}{</span>
+      <label class="label">
+        ${chip}
+        ${this.content}
+      </label>
       <button class="destroy"></button>
     </div>
     <input class="edit" value="새로운 타이틀" />

@@ -47,13 +47,28 @@ class UserList {
       const name = prompt('추가하고 싶은 이름을 입력해주세요.');
       if (name) {
         const userName = name.trim();
-        if (!userName || hasName(userName, this.state.users)) return
+        if (!userName || hasName(userName, this.state.users)) return;
         const newUser = {
-          name: userName
+          name: userName,
         };
         try {
           const user = await this.dataController.postData(USER_API, newUser);
           onUpdateUser(user);
+        } catch (e) {
+          console.error(e);
+        }
+      }
+    };
+
+    const onUserDeleteHandler = async () => {
+      const name = prompt('삭제하고 싶은 이름을 입력해주세요.');
+      if (name) {
+        const userName = name.trim();
+        if (!userName || !hasName(userName, this.state.users)) return;
+        const id = this.state.users[userName]._id;
+        try {
+          await this.dataController.deleteData(USER_API + `/${id}`);
+          onDeleteUser(userName);
         } catch (e) {
           console.error(e);
         }
@@ -65,29 +80,14 @@ class UserList {
       if (!(target instanceof HTMLButtonElement)) {
         return;
       }
-      const id = this.state.users[`${target.textContent}`]['_id'];
-      const user = await this.dataController.getData(USER_API+`/${id}`);
+      const id = this.state.users[target.textContent]._id;
+      const user = await this.dataController.getData(USER_API + `/${id}`);
       onUpdateUser(user);
-    }
-
-    const onUserDeleteHandler = async () => {
-      const name = prompt('삭제하고 싶은 이름을 입력해주세요.');
-      if (name) {
-        const userName = name.trim();
-        if (!userName || !hasName(userName, this.state.users)) return
-        const id = this.state.users[`${userName}`]['_id'];
-        try {
-          await this.dataController.deleteData(USER_API+`/${id}`);
-          onDeleteUser(userName);
-        } catch (e) {
-          console.error(e);
-        }
-      }
-    }
+    };
 
     userCreateButton.addEventListener('click', onUserCreateHandler);
-    userButton.addEventListener('click', onUserHandler);
     userDeleteButton.addEventListener('click', onUserDeleteHandler);
+    userButton.addEventListener('click', onUserHandler);
   };
 
   render = () => {
