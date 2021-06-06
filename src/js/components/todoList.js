@@ -1,11 +1,11 @@
 import TodoItem from './todoItem.js';
-import { ALL, VIEW, COMPLETE, USER_API } from '../constant/constant.js';
+import { ALL, VIEW, COMPLETE, USER_API, NONE, convertToPriority } from '../constant/constant.js';
 import { validLength } from '../utils/utils.js';
 
 class TodoList {
   constructor(
     $target,
-    { filter, onDeleteItem, changeTodoState, changeTodoValue, dataController }
+    { filter, onDeleteItem, changeTodoState, changeTodoValue, changeTodoPriority, dataLoader, loader }
   ) {
     this.$target = $target;
     this.state = {
@@ -16,9 +16,10 @@ class TodoList {
       },
       filter
     };
-    this.dataController = dataController;
+    this.dataLoader = dataLoader;
+    this.loader = loader;
     this.render();
-    this.addEvent(onDeleteItem, changeTodoState, changeTodoValue);
+    this.addEvent(onDeleteItem, changeTodoState, changeTodoValue, changeTodoPriority);
   }
 
   setState = (nextState) => {
@@ -26,24 +27,33 @@ class TodoList {
     this.render();
   };
 
-  addEvent = (onDeleteItem, changeTodoState, changeTodoValue) => {
-    this.$target.addEventListener('click', (e) => {
+  addEvent = (onDeleteItem, changeTodoState, changeTodoValue, changeTodoPriority) => {
+    this.$target.addEventListener('click', async (e) => {
       const { target } = e;
       const { className } = target;
       const closestLi = target.closest('li');
       const index = closestLi.dataset['index'];
-
       const id = this.state.user._id;
       const itemId = this.state.user.todoList[+index]._id;
 
       if (className === 'destroy') {
-        this.dataController.deleteData(USER_API + `/${id}/items/${itemId}`);
+        await this.dataLoader.deleteData(USER_API + `/${id}/items/${itemId}`);
         onDeleteItem(+index);
       } else if (target.classList.contains('toggle')) {
-        this.dataController.putData(USER_API + `/${id}/items/${itemId}/toggle`);
+        await this.dataLoader.putData(USER_API + `/${id}/items/${itemId}/toggle`);
         closestLi.classList.contains('completed')
           ? changeTodoState(+index, false)
           : changeTodoState(+index, true);
+      } else if (target.classList.contains('chip')) {
+        if (this.state.user.todoList[+index].priority !== NONE) {
+          console.log("???");
+        }
+        const priority = convertToPriority[+target.value];
+        const body = {
+          priority
+        };
+        await this.dataLoader.putData(USER_API + `/${id}/items/${itemId}/priority`, body);
+        changeTodoPriority(+index, priority);
       }
     });
 
@@ -59,7 +69,7 @@ class TodoList {
       }
     });
 
-    this.$target.addEventListener('keyup', (e) => {
+    this.$target.addEventListener('keyup', async (e) => {
       const { target } = e;
       const { key } = e;
       const closestLi = target.closest('li');
@@ -77,7 +87,7 @@ class TodoList {
           const body = {
             contents: value
           };
-          this.dataController.putData(USER_API + `/${id}/items/${itemId}`, body);
+          await this.dataLoader.putData(USER_API + `/${id}/items/${itemId}`, body);
           changeTodoValue(+index, value);
         }
       }

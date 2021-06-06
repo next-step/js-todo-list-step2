@@ -2,7 +2,7 @@ import { USER_API } from '../constant/constant.js';
 import { hasName } from '../utils/utils.js';
 
 class UserList {
-  constructor($target, dataController, { onUpdateUser, onDeleteUser }) {
+  constructor($target, dataLoader, { onUpdateUser, onDeleteUser }) {
     this.$target = $target;
     this.$target.innerHTML = `<div class='user-list'></div>
     <button class='ripple user-create-button' data-action='createUser'>
@@ -12,7 +12,7 @@ class UserList {
       삭제 -
     </button>`;
     this.state = {};
-    this.dataController = dataController;
+    this.dataLoader = dataLoader;
     this.addEvent(onUpdateUser, onDeleteUser);
   }
 
@@ -22,11 +22,7 @@ class UserList {
   };
 
   getUsers = async () => {
-    try {
-      return await this.dataController.getData(USER_API);
-    } catch (e) {
-      console.error(e);
-    }
+    return await this.dataLoader.getData(USER_API);
   };
 
   userListTemplate = () => {
@@ -51,12 +47,8 @@ class UserList {
         const newUser = {
           name: userName,
         };
-        try {
-          const user = await this.dataController.postData(USER_API, newUser);
-          onUpdateUser(user);
-        } catch (e) {
-          console.error(e);
-        }
+        const user = await this.dataLoader.postData(USER_API, newUser);
+        onUpdateUser(user);
       }
     };
 
@@ -66,12 +58,8 @@ class UserList {
         const userName = name.trim();
         if (!userName || !hasName(userName, this.state.users)) return;
         const id = this.state.users[userName]._id;
-        try {
-          await this.dataController.deleteData(USER_API + `/${id}`);
-          onDeleteUser(userName);
-        } catch (e) {
-          console.error(e);
-        }
+        await this.dataLoader.deleteData(USER_API + `/${id}`);
+        onDeleteUser(userName);
       }
     };
 
@@ -81,7 +69,7 @@ class UserList {
         return;
       }
       const id = this.state.users[target.textContent]._id;
-      const user = await this.dataController.getData(USER_API + `/${id}`);
+      const user = await this.dataLoader.getData(USER_API + `/${id}`);
       onUpdateUser(user);
     };
 

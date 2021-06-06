@@ -1,7 +1,7 @@
 import { ALL, VIEW, COMPLETE, currentFilter, USER_API } from '../constant/constant.js';
 
 class TodoCount {
-  constructor($target, { filter, changeFilter, clearList, dataController }) {
+  constructor($target, { filter, changeFilter, clearList, dataLoader }) {
     this.$target = $target;
     this.state = {
       user: {
@@ -11,7 +11,7 @@ class TodoCount {
       },
       filter,
     };
-    this.dataController = dataController;
+    this.dataLoader = dataLoader;
     this.render();
     this.addEvent(changeFilter, clearList);
   }
@@ -27,12 +27,12 @@ class TodoCount {
       if (target.classList.contains('all')) {
         changeFilter(ALL);
       } else if (target.classList.contains('active')) {
-        changeFilter(false);
+        changeFilter(VIEW);
       } else if (target.classList.contains('completed')) {
-        changeFilter(true);
+        changeFilter(COMPLETE);
       } else if (target.classList.contains('clear-completed')) {
         const id = this.state.user._id;
-        await this.dataController.deleteData(USER_API + `/${id}/items`);
+        await this.dataLoader.deleteData(USER_API + `/${id}/items`);
         clearList();
       }
     });

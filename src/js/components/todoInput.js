@@ -2,10 +2,10 @@ import { USER_API } from '../constant/constant.js';
 import {validLength} from '../utils/utils.js';
 
 class TodoInput {
-  constructor($target, { dataController, onKeyDown }) {
+  constructor($target, { dataLoader, onKeyDown }) {
     this.$target = $target;
     this.state = {};
-    this.dataController = dataController;
+    this.dataLoader = dataLoader;
     this.$target.addEventListener('keydown', async (e) => {
       const value = e.target.value.trim();
       if (e.key === 'Enter') {
@@ -14,13 +14,9 @@ class TodoInput {
           const body = {
             contents: value
           };
-          try {
-            const res = await this.dataController.postData(USER_API + `/${id}/items`, body);
-            onKeyDown(res);
-            e.target.value = '';
-          } catch (e) {
-            console.error(e);
-          }
+          const res = await this.dataLoader.postData(USER_API + `/${id}/items`, body);
+          onKeyDown(res);
+          e.target.value = '';
         }
       }
     });

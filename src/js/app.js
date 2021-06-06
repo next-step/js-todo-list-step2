@@ -3,6 +3,7 @@ import UserList from './components/userList.js';
 import TodoList from './components/todoList.js';
 import TodoInput from './components/todoInput.js';
 import TodoCount from './components/todoCount.js';
+import DataLoader from './components/dataLoader.js';
 import { ALL } from './constant/constant.js';
 
 class App {
@@ -14,13 +15,16 @@ class App {
     };
     this.$target = $target;
 
+    // loader
+    this.dataLoader = new DataLoader(this.$target, dataController);
+
     // header
     this.header = new TodoHeader(document.querySelector('#user-title'));
 
     // userList
     this.userList = new UserList(
       document.querySelector('#user-list-container'),
-      dataController,
+      this.dataLoader,
       {
         onUpdateUser: this.onUpdateUser,
         onDeleteUser: this.onDeleteUser,
@@ -31,7 +35,7 @@ class App {
     // todoinput
     this.todoInput = new TodoInput(document.querySelector('.new-todo'),
     {
-      dataController,
+      dataLoader: this.dataLoader,
       onKeyDown: this.onKeyDown,
     });
 
@@ -42,7 +46,9 @@ class App {
       onDeleteItem: this.onDeleteItem,
       changeTodoState: this.changeTodoState,
       changeTodoValue: this.changeTodoValue,
-      dataController,
+      changeTodoPriority: this.changeTodoPriority,
+      dataLoader: this.dataLoader,
+      loader: this.loader
     });
 
     // todoCount
@@ -51,7 +57,7 @@ class App {
       filter: this.state.filter,
       changeFilter: this.changeFilter,
       clearList: this.clearList,
-       dataController
+       dataLoader: this.dataLoader
     });
 
     this.init();
@@ -83,7 +89,6 @@ class App {
       filter: this.state.filter,
     });
     this.setState({ ...this.state, users, currentUser });
-    console.log(this.state);
   };
 
   onUpdateUser = (newUser) => {
@@ -181,6 +186,22 @@ class App {
     });
     this.setState(newState);
   };
+
+  changeTodoPriority = (index, priority) => {
+    const { currentUser } = this.state;
+    const newState = { ...this.state };
+    const todoList = [...newState.users[currentUser].todoList];
+
+    if (todoList[index].priority === priority) return;
+
+    todoList[index].priority = priority;
+    newState.users[currentUser].todoList = todoList;
+    this.todoList.setState({
+      user: newState.users[currentUser],
+      filter: this.state.filter
+    });
+    this.setState(newState);
+  }
 
   changeFilter = (name) => {
     const newState = { ...this.state, filter: name };

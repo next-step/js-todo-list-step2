@@ -17,3 +17,9 @@ export const currentFilter = {
   1: 'completed',
   2: 'all',
 };
+
+export const convertToPriority = {
+  0: 'NONE',
+  1: 'FIRST',
+  2: 'SECOND'
+}
