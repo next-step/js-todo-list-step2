@@ -7,3 +7,4 @@ export const NONE = 'NONE';
 export const SECOND = 'SECOND';
 
 export const ENTER = 'Enter';
+export const ESCAPE = 'Escape';

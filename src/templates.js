@@ -39,7 +39,7 @@ export const todoItemTemplate = ({ _id, contents, isCompleted, priority }) => {
         </label>
         <button id="${_id}" class="destroy"></button>
       </div>
-      <input class="edit" value=${contents} />
+      <input class="edit" value="${contents}" />
     </li>
   `;
 };

@@ -1,11 +1,14 @@
+import { ENTER, ESCAPE } from '../constants.js';
 import { todoItemTemplate } from '../templates.js';
 
 export default class TodoList {
-  constructor({ onToggle, onRemove }) {
+  constructor({ onToggle, onRemove, onUpdate }) {
     this.$todoList = document.querySelector('.todo-list');
 
     this.$todoList.addEventListener('click', (event) => this.toggleTodoItem(event, onToggle));
     this.$todoList.addEventListener('click', (event) => this.removeTodoItem(event, onRemove));
+    this.$todoList.addEventListener('dblclick', (event) => this.editTodoItem(event));
+    this.$todoList.addEventListener('keydown', (event) => this.updateTodoItem(event, onUpdate));
   }
 
   render(todoList) {
@@ -23,5 +26,36 @@ export default class TodoList {
     const deleteButtonTarget = event.target;
     if (!deleteButtonTarget.classList.contains('destroy')) return;
     onRemove(deleteButtonTarget.id);
+  }
+
+  editTodoItem(event) {
+    const labelTarget = event.target;
+    if (!labelTarget.classList.contains('label')) return;
+
+    const todoItem = labelTarget.closest('li');
+    todoItem.classList.toggle('editing');
+
+    const editingInput = todoItem.querySelector('.edit');
+    editingInput.focus();
+    const { length } = editingInput.value;
+    editingInput.setSelectionRange(length, length);
+  }
+
+  updateTodoItem(event, onUpdate) {
+    const { key, target: editingInputTarget } = event;
+    if (!editingInputTarget.classList.contains('edit')) return;
+
+    const todoItem = editingInputTarget.closest('li');
+
+    if (key === ESCAPE) {
+      todoItem.classList.remove('editing');
+      return;
+    }
+
+    if (key !== ENTER) return;
+
+    const { value } = editingInputTarget;
+    if (value === '') return;
+    onUpdate(todoItem.id, value);
   }
 }

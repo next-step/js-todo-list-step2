@@ -66,11 +66,10 @@ export async function addTodoItemData(userId, data = {}) {
   return response.json();
 }
 
-export async function toggleTodoItemData(userId, itemId, data = {}) {
+export async function toggleTodoItemData(userId, itemId) {
   const todoItemToggleURL = getTodoItemToggleURL(userId, itemId);
   const response = await fetch(todoItemToggleURL, {
     method: PUT,
-    body: JSON.stringify(data),
   });
   return response.json();
 }
@@ -79,6 +78,18 @@ export async function removeTodoItemData(userId, itemId) {
   const todoItemURL = getTodoItemURL(userId, itemId);
   const response = await fetch(todoItemURL, {
     method: DELETE,
+  });
+  return response.json();
+}
+
+export async function updateTodoItemData(userId, itemId, data = {}) {
+  const todoItemURL = getTodoItemURL(userId, itemId);
+  const response = await fetch(todoItemURL, {
+    method: PUT,
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(data),
   });
   return response.json();
 }

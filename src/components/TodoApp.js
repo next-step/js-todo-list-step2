@@ -7,6 +7,7 @@ import {
   getUsersData,
   removeTodoItemData,
   toggleTodoItemData,
+  updateTodoItemData,
 } from '../api.js';
 import TodoInput from './TodoInput.js';
 import TodoList from './TodoList.js';
@@ -65,24 +66,19 @@ export default class TodoApp {
           return;
         }
 
-        this.activeUser.todoList = await getTodoListData(this.activeUser._id);
-        this.renderTodoList();
+        this.initTodoList();
       },
     });
 
     this.todoList = new TodoList({
       onToggle: async (itemId) => {
-        const todoItem = this.activeUser.todoList.find(({ _id }) => _id === itemId);
-        const response = await toggleTodoItemData(this.activeUser._id, itemId, {
-          isCompleted: !todoItem.isCompleted,
-        });
+        const response = await toggleTodoItemData(this.activeUser._id, itemId);
         if (response.message) {
           this.init();
           return;
         }
 
-        this.activeUser.todoList = await getTodoListData(this.activeUser._id);
-        this.renderTodoList();
+        this.initTodoList();
       },
       onRemove: async (itemId) => {
         const response = await removeTodoItemData(this.activeUser._id, itemId);
@@ -91,8 +87,16 @@ export default class TodoApp {
           return;
         }
 
-        this.activeUser.todoList = await getTodoListData(this.activeUser._id);
-        this.renderTodoList();
+        this.initTodoList();
+      },
+      onUpdate: async (itemId, contents) => {
+        const response = await updateTodoItemData(this.activeUser._id, itemId, { contents });
+        if (response.message) {
+          this.init();
+          return;
+        }
+
+        this.initTodoList();
       },
     });
 
@@ -125,5 +129,10 @@ export default class TodoApp {
     await this.loadUsers();
     this.activeUser = this.users[0];
     this.renderAll();
+  }
+
+  async initTodoList() {
+    this.activeUser.todoList = await getTodoListData(this.activeUser._id);
+    this.renderTodoList();
   }
 }
