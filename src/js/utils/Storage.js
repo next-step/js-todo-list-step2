@@ -5,6 +5,8 @@ export const getTodos = () => {
 export const setTodos = (obj) => {
 	let arr = getTodos();
 	arr.push(obj);
+
+	window.localStorage["todos"] = JSON.stringify(arr);
 }
 
 export const clearTodos = () => {
