@@ -2,7 +2,14 @@ class DataLoader {
   constructor($target, dataController) {
     this.$target = $target;
     this.dataController = dataController;
-    this.$target.insertAdjacentHTML('beforeend', `<div class="loader"  style="display: none;"></div>`);
+    this.$target.insertAdjacentHTML('afterbegin', 
+    `<div class="loader-container" style="display: none;">
+      <div class="loader"></div>
+    </div>`);
+    // this.$container = this.$target.querySelector('.loader-container');
+    // this.$container.addEventListener('click', (e) => {
+    //   e.preventDefault();
+    // });
   }
 
   getData = async (url) => {
@@ -54,10 +61,10 @@ class DataLoader {
   }
 
   show = () => {
-    this.$target.querySelector('.loader').style.display = 'block';
+    this.$target.querySelector('.loader-container').style.display = 'block';
   }
   hide = () => {
-    this.$target.querySelector('.loader').style.display = 'none';
+    this.$target.querySelector('.loader-container').style.display = 'none';
   }
 }
 

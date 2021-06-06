@@ -16,7 +16,7 @@ class App {
     this.$target = $target;
 
     // loader
-    this.dataLoader = new DataLoader(this.$target, dataController);
+    this.dataLoader = new DataLoader(document.querySelector('body'), dataController);
 
     // header
     this.header = new TodoHeader(document.querySelector('#user-title'));
@@ -30,7 +30,6 @@ class App {
         onDeleteUser: this.onDeleteUser,
       }
     );
-
 
     // todoinput
     this.todoInput = new TodoInput(document.querySelector('.new-todo'),
@@ -48,7 +47,6 @@ class App {
       changeTodoValue: this.changeTodoValue,
       changeTodoPriority: this.changeTodoPriority,
       dataLoader: this.dataLoader,
-      loader: this.loader
     });
 
     // todoCount
@@ -68,7 +66,7 @@ class App {
     const users = {};
     let currentUser = '';
     userList.forEach((user) => {
-      users[`${user.name}`] = user;
+      users[user.name] = user;
       currentUser = user.name;
     });
     this.header.setState(currentUser);

@@ -5,7 +5,7 @@ import { validLength } from '../utils/utils.js';
 class TodoList {
   constructor(
     $target,
-    { filter, onDeleteItem, changeTodoState, changeTodoValue, changeTodoPriority, dataLoader, loader }
+    { filter, onDeleteItem, changeTodoState, changeTodoValue, changeTodoPriority, dataLoader }
   ) {
     this.$target = $target;
     this.state = {
@@ -17,7 +17,6 @@ class TodoList {
       filter
     };
     this.dataLoader = dataLoader;
-    this.loader = loader;
     this.render();
     this.addEvent(onDeleteItem, changeTodoState, changeTodoValue, changeTodoPriority);
   }
@@ -45,13 +44,12 @@ class TodoList {
           ? changeTodoState(+index, false)
           : changeTodoState(+index, true);
       } else if (target.classList.contains('chip')) {
-        if (this.state.user.todoList[+index].priority !== NONE) {
-          console.log("???");
-        }
+        if (this.state.user.todoList[+index].priority !== NONE) return;
         const priority = convertToPriority[+target.value];
         const body = {
           priority
         };
+        if (priority === NONE) return;
         await this.dataLoader.putData(USER_API + `/${id}/items/${itemId}/priority`, body);
         changeTodoPriority(+index, priority);
       }
