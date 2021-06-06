@@ -11,8 +11,10 @@ class TodoState extends Subject {
   }
 
   set(updateTodoList) {
+    console.log('before', this.get());
     this._todoList = updateTodoList;
     this.publish();
+    console.log('after', this.get());
   }
 }
 

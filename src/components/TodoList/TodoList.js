@@ -1,7 +1,5 @@
-import { $ } from '../../utils/utils.js';
+import { $, isEmptyObject } from '../../utils/utils.js';
 import { KEY, DOM_ID, PRIORITY } from '../../constants/constants.js';
-
-import TodoState from '../../store/todoState.js';
 
 import {
   toggleTodoItem,
@@ -12,13 +10,13 @@ import {
 } from '../../api/todolist.js';
 
 export default class TodoList {
-  constructor({ setTodoList, userState }) {
+  constructor({ userState, todoState }) {
     this.$target = $(DOM_ID.TODO_LIST);
 
-    this.todoState = TodoState;
-    this.setTodoList = setTodoList;
+    this.todoState = todoState;
     this.userState = userState;
 
+    this.init();
     this._addEvent();
   }
 
@@ -39,8 +37,15 @@ export default class TodoList {
     const todoId = target.closest('li').id;
 
     const result = await updateItemPriority(userId, todoId, { priority: selectValue });
-    // console.log(result);
-    this.todoState.set();
+    // toggleTodoItem 요청 에러 - 작업 취소
+    if (isEmptyObject(result)) return;
+
+    const prevTodoList = this.todoState.get();
+    const updatedTodoList = prevTodoList.map((todoItem) =>
+      todoItem._id == todoId ? { ...todoItem, priority: selectValue } : todoItem,
+    );
+
+    this.todoState.set(updatedTodoList);
   }
 
   async _deleteTodo({ target }) {
@@ -50,9 +55,12 @@ export default class TodoList {
     const todoId = target.id;
 
     const result = await deleteItem(userId, todoId);
-    // console.log('delete', result);
+    if (isEmptyObject(result)) return;
 
-    this.todoState.set();
+    const prevTodoList = this.todoState.get();
+    const deletedTodoList = prevTodoList.filter((todoItem) => todoItem._id !== todoId);
+
+    this.todoState.set(deletedTodoList);
   }
 
   async _toggleTodoDone({ target }) {
@@ -62,18 +70,27 @@ export default class TodoList {
     const todoId = target.id;
 
     const result = await toggleTodoItem(userId, todoId);
-    // console.log(result);
+    if (isEmptyObject(result)) return;
 
-    this.todoState.set();
+    const prevTodoList = this.todoState.get();
+    const updatedTodoList = prevTodoList.map((todoItem) =>
+      todoItem._id == todoId ? { ...todoItem, isCompleted: !todoItem.isCompleted } : todoItem,
+    );
+    this.todoState.set(updatedTodoList);
   }
 
   async _updateTodoValue(todoId, updatedValue) {
     const userId = this.userState.get().userId;
 
     const result = await updateItemContents(userId, todoId, { contents: updatedValue });
-    // console.log(result);
+    if (isEmptyObject(result)) return;
 
-    this.todoState.set();
+    const prevTodoList = this.todoState.get();
+    const updatedTodoList = prevTodoList.map((todoItem) => {
+      return todoItem._id === todoId ? { ...todoItem, contents: updatedValue } : todoItem;
+    });
+
+    this.todoState.set(updatedTodoList);
   }
 
   _openEditMode({ target }) {
@@ -99,12 +116,16 @@ export default class TodoList {
     this._updateTodoValue(todoId, updatedValue);
   }
 
-  async render(todoList) {
-    const userId = this.userState.get().userId;
-    todoList = todoList || (await getTodoList(userId));
-
+  render(todoList) {
     const todoItemTemplate = todoList.map(getTodoItemTemplate);
     this.$target.innerHTML = todoItemTemplate.join('');
+  }
+
+  async init() {
+    const userId = this.userState.get().userId;
+    const todoList = await getTodoList(userId);
+
+    this.todoState.set(todoList);
   }
 }
 

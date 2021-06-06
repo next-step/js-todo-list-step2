@@ -58,6 +58,7 @@ export const deleteAllItem = async (userId) => {
 export const deleteItem = async (userId, itemId) => {
   try {
     // 	/api/users/:userId/items/:itemId
+    console.log(userId, itemId);
     const response = await API.delete(`${BASE_URL}/${userId}/items/${itemId}`);
     if (response.ok) {
       return response.json();

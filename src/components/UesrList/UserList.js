@@ -1,14 +1,20 @@
 import { $ } from '../../utils/utils.js';
 import { DOM_ID } from '../../constants/constants.js';
 import { getUsers, createUser, deleteUser } from '../../api/user.js';
+import { getTodoList } from '../../api/todolist.js';
 
 export default class UserList {
-  constructor({ userState }) {
+  constructor({ userState, todoState }) {
     this.$usersList = $(DOM_ID.USER_LIST);
     this.userState = userState;
+    this.todoState = todoState;
 
-    this.init();
     this._addEvent();
+
+    return (async () => {
+      await this.init();
+      return this;
+    })();
   }
 
   _addEvent() {
@@ -25,32 +31,26 @@ export default class UserList {
     userEvent[target.dataset['action']](target);
   }
 
-  changeUser(target) {
+  async changeUser(target) {
+    if (!target.classList.contains('ripple')) return;
+
     // Change User Active
     const $usersList = this.$usersList.querySelectorAll('button.ripple');
     [...$usersList].map((element) => element.classList.remove('active'));
     target.classList.add('active');
 
+    const userId = target.dataset['id'];
+    const name = target.textContent;
+
+    this.userState.set({ userId, name });
+
     // Change User Title
-    this.changeUserTitle();
-  }
-
-  changeUserTitle() {
     const $userTitle = $('#user-title strong');
-    const $activeUser = this.getActiveUser();
+    $userTitle.innerHTML = name;
 
-    // 초기 렌더링
-    if (!$activeUser) return;
-
-    const userId = $activeUser.dataset['id'];
-    const activeUserName = $activeUser.textContent;
-
-    this.userState.set({ userId, name: activeUserName });
-    $userTitle.innerHTML = activeUserName;
-  }
-
-  getActiveUser() {
-    return this.$usersList.querySelector('.active');
+    // user의 todoList 값 변경
+    const todoList = await getTodoList(userId);
+    this.todoState.set(todoList);
   }
 
   async createUser() {
@@ -68,13 +68,12 @@ export default class UserList {
 
   async deleteUser() {
     const clickResult = confirm('정말로 삭제하시겠습니까?');
-
     if (!clickResult) return;
 
-    const userId = this.getActiveUser().dataset['id'];
-
+    const userId = this.userState.get().userId;
     const result = await deleteUser(userId);
-    // console.log(result);
+    // 삭제가 정상동작 하지 않으면 처리 취소
+    if (!result['message']) return;
 
     const $firstUser = this.$usersList.querySelector('button');
     if ($firstUser) {
