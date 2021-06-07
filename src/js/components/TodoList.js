@@ -17,10 +17,10 @@ class TodoList {
   render = (items) => {
     if (!items) return;
     const template = items.map((item) => {
-      return `<li class=${item.completed ? "completed" : ""} ${item.editing ? "editing" : ""}> 
+      return `<li class=${item.isCompleted ? "completed" : ""} ${item.editing ? "editing" : ""}> 
       <div class= "view">
         <input class="toggle" data-id=${item.id} type="checkbox" ${
-        item.completed ? "checked" : ""
+        item.isCompleted ? "checked" : ""
       }/>
         <label class="label" data-id=${item.id}>${item.contents}</label>
         <button data-id=${item.id} class="destroy"></button>
