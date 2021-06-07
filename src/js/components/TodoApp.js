@@ -8,6 +8,7 @@ import UserList from "./UserList.js";
 import TodoList from "./TodoList.js";
 import TodoInput from "./TodoInput.js";
 import TodoDeleteAll from "./TodoDeleteAll.js";
+import TodoFilter from "./TodoFilter.js";
 import TodoItemModel from "../model/TodoItemModel.js";
 import UserModel from "../model/UserModel.js";
 
@@ -29,6 +30,7 @@ class TodoApp {
     });
     this.todoInput = new TodoInput({ onAddItem: this.onAddItem.bind(this) });
     this.todoDeleteAll = new TodoDeleteAll({ onDeleteAll: this.onDeleteAllItem.bind(this) });
+    this.todoFilter = new TodoFilter({ filtering: this.filtering.bind(this) });
     this.init();
   }
 
@@ -217,6 +219,29 @@ class TodoApp {
       return item;
     });
     this.todoList.setState(this.selectedUser.todoList);
+  }
+
+  //filter 함수
+  filtering(clickedButton) {
+    const filter = {
+      active: () => {
+        const activeItems = this.selectedUser.todoList.filter((item) => {
+          return !item.isCompleted;
+        });
+        this.todoList.setState(activeItems);
+      },
+      completed: () => {
+        const completedItems = this.selectedUser.todoList.filter((item) => {
+          return item.isCompleted;
+        });
+        this.todoList.setState(completedItems);
+      },
+      all: () => {
+        this.todoList.setState(this.selectedUser.todoList);
+      },
+    };
+
+    filter[clickedButton]();
   }
 }
 
