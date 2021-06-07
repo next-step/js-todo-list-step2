@@ -102,7 +102,19 @@ const onUserCreateHandler = () => {
 };
 
 const onUserDeleteHandler = () => {
-  alert('delete');
+  const targetId = $('button.active').dataset.id
+  alert(targetId)
+  fetch(`${baseUrl}/api/users/${targetId}`, {
+    method: "DELETE"
+  }).then(res => {
+    if (!res.ok) {
+      throw new Error(res.status);
+    }
+    init();
+  })
+    .catch(error => {
+      console.log(error)
+    });
 }
 
 const showUserList = users => {
@@ -128,9 +140,3 @@ const init = () => {
 }
 
 init();
-
-
-async function getUsers() {
-  const response = await fetch(API_URL);
-  return response.json();
-}
