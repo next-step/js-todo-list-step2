@@ -1,0 +1,12 @@
+# GET https://js-todo-list-9ca3a.df.r.appspot.com/api/users
+
+
+
+GET https://js-todo-list-9ca3a.df.r.appspot.com/api/users/y07-Sf7_4/items/
+
+  # {
+  #   "_id": "Wsai1U5Fx",
+  #   "contents": "안녕",
+  #   "isCompleted": false,
+  #   "priority": "NONE"
+  # },
