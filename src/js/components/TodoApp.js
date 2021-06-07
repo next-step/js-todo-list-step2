@@ -20,6 +20,8 @@ class TodoApp {
     this.todoList = new TodoList({
       onDelete: this.onDeleteItem.bind(this),
       onComplete: this.onCompleteItem.bind(this),
+      onEditing: this.onEditingItem.bind(this),
+      onEdit: this.onEditItem.bind(this),
     });
     this.todoInput = new TodoInput({ onAddItem: this.onAddItem.bind(this) });
     this.todoDeleteAll = new TodoDeleteAll({ onDeleteAll: this.onDeleteAllItem.bind(this) });
@@ -137,8 +139,6 @@ class TodoApp {
 
     if (error) return alert("할 일 완료 저장에 실패했습니다.");
 
-    console.log(result);
-
     this.selectedUser.todoList = this.selectedUser.todoList.map((item) => {
       if (item.id === itemId) {
         return new TodoItemModel({ ...item, isCompleted: result.isCompleted });
@@ -149,9 +149,48 @@ class TodoApp {
     this.todoList.setState(this.selectedUser.todoList);
   }
 
-  onEditItem() {}
+  onEditingItem(itemId) {
+    this.selectedUser.todoList = this.selectedUser.todoList.map((item) => {
+      if (item.id == itemId) {
+        item.editing = !item.editing;
+      }
+      return item;
+    });
 
-  onEditingItem() {}
+    this.todoList.setState(this.selectedUser.todoList);
+  }
+
+  async onEditItem(event, itemId) {
+    if (event.key === "Escape") {
+      this.selectedUser.todoList = this.selectedUser.todoList.map((item) => {
+        if (item.id == itemId) {
+          item.editing = !item.editing;
+        }
+        return item;
+      });
+
+      this.todoList.setState(this.selectedUser.todoList);
+    }
+    if (event.key === "Enter") {
+      const { result, error } = await fetchRequest(
+        API_URL.USER_ITEM(this.selectedUser.id, itemId),
+        "put",
+        { contents: event.target.value }
+      );
+
+      if (error) return alert("할 일 수정에 실패했습니다.");
+
+      this.selectedUser.todoList = this.selectedUser.todoList.map((item) => {
+        if (item.id == itemId) {
+          item.editing = !item.editing;
+          item.contents = result.contents;
+        }
+        return item;
+      });
+
+      this.todoList.setState(this.selectedUser.todoList);
+    }
+  }
 }
 
 export default TodoApp;
