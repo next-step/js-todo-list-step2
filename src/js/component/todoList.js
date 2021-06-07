@@ -27,7 +27,7 @@ export const todoItem = (item) =>{
    `<li data-id="${id}" class="${isCompleted}">
       <div class="view">
         <input class="toggle" type="checkbox" ${checked}/>
-        <label class="label">
+        <label class="label" data-itemid="${id}">
          
             ${selectHTML}
           </select>

@@ -188,11 +188,57 @@ function drawTodoList(userTodo){
   document.querySelectorAll(".destroy").forEach(deleteButton=> deleteButton.addEventListener("click", ondeleteButtonClick));
   //toggle 버튼 이벤트 추가
   document.querySelectorAll(".toggle").forEach(toggleButton=> toggleButton.addEventListener("click", onToggleButtonClick));
-  
+  //더블클릭 이벤트 추가
+  document.querySelectorAll('.label').forEach(label => label.addEventListener("dblclick", onEditLabel));
+
+  document.querySelectorAll('.edit').forEach(edit =>edit.addEventListener('keyup',oneditKeyup));
+}
+// NodeList.children.childNodes.input.toggle.checked
+function onEditLabel(){
+  console.log("dfsdfsdsdf");
+  console.log(this);
+  const lis = document.querySelectorAll('.todo-list >li');
+  lis.forEach(li =>{
+    if(li.classList.value =='editing'){
+      if(li.children[1].checked) li.setAttribute("class","completed");
+      else  li.setAttribute("class","");
+    }
+  });
+  //선택값 편집모드로 변경
+  const li_edit = this.parentNode.parentNode.setAttribute('class','editing');
 }
 
-
-
+function oneditKeyup(event){
+  const userID = document.querySelector('.todo-list').dataset.userid;
+  const ItemID = this.parentNode.dataset.id;
+  //console.log(this.parentNode.dataset.id);
+  let item ={'contents' : this.value} ;
+  console.log(this.value);
+  if(event.key === 'Enter'){
+      console.log(this);
+      console.log(item);
+      todoAPI.updateItem(userID, ItemID, item)
+      .then(data =>{
+        console.log(data);
+        userAPI.getUserItems(userID)
+        .then((todolist)=> {
+          console.log(todolist);
+          drawTodoList(todolist);
+          newTodoAdd.value ="";
+        });
+      });
+      return;
+    }
+    if(event.key == 'Escape')
+    {
+      console.log('escape')
+      this.value = document.querySelector('.view.lable').textContent;
+      
+        // const boforeValue = this.previousSibling.childNodes[1].outerText;
+        // this.value = boforeValue;
+        // this.parentNode.classList.remove('editing');
+    }
+}
 
 
 function onToggleButtonClick(){  
@@ -218,8 +264,6 @@ function onToggleButtonClick(){
       }
     }
   })
-
-  console.log("onToggleButtonClick");
   console.log(this.parentNode.parentNode);
 }
 
@@ -294,3 +338,4 @@ newTodoAdd.addEventListener('keypress', makeTodo);
 
 const allTodoClear =  document.querySelector('.clear-completed');
 allTodoClear.addEventListener('click', clearTodo);
+
