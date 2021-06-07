@@ -61,7 +61,7 @@ class TodoApp {
       return user.id == id;
     });
 
-    this.todoList.setState(this.selectedUser.todoList);
+    this.getUserTodoList(id);
   }
 
   async onAddUser() {
@@ -86,11 +86,12 @@ class TodoApp {
     const { result, error } = await fetchRequest(API_URL.ITEM(userId), "get");
     if (error) alert("사용자의 리스트를 불러오는데 실패했습니다.");
 
-    this.selectedUser.todoList = result.map((todoList) => {
+    this.selectedUser.todoList = result.map((item) => {
       return new TodoItemModel({
-        id: todoList._id,
-        contents: todoList.contents,
-        isCompleted: todoList.isCompleted,
+        id: item._id,
+        contents: item.contents,
+        isCompleted: item.isCompleted,
+        priority: item.priority,
       });
     });
 
@@ -98,13 +99,26 @@ class TodoApp {
   }
 
   async onAddItem(contents) {
-    const { error } = await fetchRequest(API_URL.ITEM(this.selectedUser.id), "post", {
+    const { result, error } = await fetchRequest(API_URL.ITEM(this.selectedUser.id), "post", {
       contents,
     });
 
-    if (error) alert("할 일 추가에 실패했습니다.");
+    if (error) return alert("할 일 추가에 실패했습니다.");
 
-    this.getUserTodoList(this.selectedUser.id);
+    this.selectedUser.todoList.push(
+      new TodoItemModel({
+        id: result._id,
+        contents: result.contents,
+        isCompleted: result.isCompleted,
+        priority: result.priority,
+      })
+    );
+
+    this.todoList.setState(this.selectedUser.todoList);
+  }
+
+  // User의 TodoList 함수
+
   }
 }
 
