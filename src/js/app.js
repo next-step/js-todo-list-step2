@@ -51,12 +51,18 @@ export default class App {
     this.render();
   };
 
+  addTodo = async (contents) => {
+    await requests.post(`/users/${this.selectedUserId}/items`, { contents });
+
+    this.selectUser(this.selectedUserId);
+  };
+
   headerContainer = new HeaderContainer({
     addUser: this.addUser,
     deleteUser: this.deleteUser,
     selectUser: this.selectUser,
   });
-  todoListContainer = new TodoListContainer();
+  todoListContainer = new TodoListContainer({ addTodo: this.addTodo });
 
   render = async () => {
     console.dir(this.userList);
