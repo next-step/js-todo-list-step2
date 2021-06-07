@@ -3,7 +3,7 @@ import user from './store.js';
 import UserListBtn from './UserSelect.js';
 import UserList from './UserList.js';
 
-function UserTodo() {
+export default function User() {
   let userData = {};
   let selectedUser = {};
   let userTitle = {};
@@ -61,4 +61,4 @@ function UserTodo() {
   
 }
 
-new UserTodo();
+new User();

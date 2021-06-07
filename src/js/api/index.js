@@ -13,7 +13,7 @@ const $api = (() => {
       return requestJsonData('');
     },
     create(data) {
-      return requestJsonData('',HTTP_METHOD.POST(data));
+      return requestJsonData('', HTTP_METHOD.POST(data));
     },
     delete(userId) {
       return request(`/${userId}`, HTTP_METHOD.DELETE());

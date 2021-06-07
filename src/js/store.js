@@ -32,7 +32,6 @@ const user =(() => {
     await init();
   }
   const setSelected = async (value) => {
-
     selected = value
   }
 
@@ -50,57 +49,4 @@ const user =(() => {
   }
 })();
 
-const todo = (() => {
-  let selectedUserId;
-
-  const init = async () => {
-    selectedUserId = user.getSelected()._id;
-  };
-
-  const getAll = () => {
-    return await $api.todo.getAll(selectedUserId);
-  };
-
-  const create = async (contents) => {
-    const todos = await $api.todo.create(selectedUserId, { contents });
-    return todos;
-  };
-
-  const deleteTodo = async (todoId) => {
-    const todos = await $api.todo.remove(selectedUserId, todoId);
-    return todos;
-  };
-
-  const deleteAll = async () => {
-    const todos = await $api.todo.remove(selectedUserId);
-    return todos;
-  };
-
-  const toggle = async (todoId) => {
-    const todos = await $api.todo.toggle(selectedUserId, todoId);
-    return todos;
-  };
-
-  const edit = async (todoId, contents) => {
-    const todos = await $api.todo.update(selectedUserId, todoId, {contents});
-    return todos;
-  };
-
-  const setPriority = async (todoId, contents) => {
-    const todos = await $api.todo.priority(selectedUserId, todoId, {contents})
-    return todos;
-  };
-
-  return {
-    init,
-    getAll,
-    create,
-    deleteTodo,
-    deleteAll,
-    toggle,
-    edit,
-    setPriority
-  }
-})();
-
-export default {user, todo}
+export default user;
