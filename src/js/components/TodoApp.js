@@ -18,10 +18,7 @@ class TodoApp {
     this.users = [];
     this.selectedUser = {};
     this.todoList = new TodoList({
-      onDeleteItem: this.onDeleteItem,
-      onCompleteItem: this.onCompleteItem,
-      onEditingItem: this.onEditingItem,
-      onEditItem: this.onEditItem,
+      onDelete: this.onDeleteItem.bind(this),
     });
     this.todoInput = new TodoInput({ onAddItem: this.onAddItem.bind(this) });
     this.todoDeleteAll = new TodoDeleteAll({ onDeleteAll: this.onDeleteAllItem.bind(this) });
@@ -129,6 +126,25 @@ class TodoApp {
     this.selectedUser.todoList = [];
     this.todoList.setState(this.selectedUser.todoList);
   }
+
+  async onDeleteItem(itemId) {
+    const { result, error } = await fetchRequest(
+      API_URL.USER_ITEM(this.selectedUser.id, itemId),
+      "delete"
+    );
+    if (error) return alert("할 일 삭제하기에 실패했습니다.");
+
+    this.selectedUser.todoList = result.todoList.map((item) => {
+      return new TodoItemModel({
+        id: item._id,
+        contents: item.contents,
+        isCompleted: item.isCompleted,
+        priority: item.priority,
+      });
+    });
+    this.todoList.setState(this.selectedUser.todoList);
+  }
+
 }
 
 export default TodoApp;
