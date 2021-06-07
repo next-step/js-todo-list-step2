@@ -12,7 +12,7 @@ const $completedBtn = $('.completed');
 
 const baseUrl = 'https://js-todo-list-9ca3a.df.r.appspot.com';
 
-const postOption = (name) => {
+const userCreateOption = (name) => {
   return ({
     method: "POST",
     headers: {
@@ -20,6 +20,18 @@ const postOption = (name) => {
     },
     body: JSON.stringify({
       "name": name
+    })
+  });
+};
+
+const toDoItemCreateOption = (content) => {
+  return ({
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      "contents": content
     })
   });
 };
@@ -40,6 +52,11 @@ const CountToDo = (items) => {
   let count = items.then(items =>
     $toDoCount.children[0].innerText = items.length)
 };
+
+const AddToDo = (contents) => {
+  const targetId = $('button.active').dataset.id;
+  fetch(`${baseUrl}/api/users/${targetId}/items/`, toDoItemCreateOption(contents));
+}
 
 /* start 아이템 불러오기 */
 const toDoItemTemplate = (item) => {
@@ -73,8 +90,8 @@ const toDoRender = itemsPromise => {
   );
 }
 
-const loadToDoItems = async (user) => {
-  const toDoItems = await fetch(`${baseUrl}/api/users/${user._id}/items/`);
+const loadToDoItems = async (id) => {
+  const toDoItems = await fetch(`${baseUrl}/api/users/${id}/items/`);
   return toDoItems.json();
 };
 /* end 아이템 불러오기 */
@@ -122,7 +139,7 @@ const onUserSelectHandler = e => {
     users.map(user => {
       if (userBtnId == user._id) {
         changeTitle(user);
-        const toDoItems = loadToDoItems(user);
+        const toDoItems = loadToDoItems(user._id);
         toDoRender(toDoItems);
         CountToDo(toDoItems);
       }
@@ -136,7 +153,7 @@ const onUserCreateHandler = () => {
   const flag = userName.length < 2 ? false : true;
 
   if (flag) {
-    fetch(`${baseUrl}/api/users/`, postOption(userName))
+    fetch(`${baseUrl}/api/users/`, userCreateOption(userName))
       .then(res => {
         if (!res.ok) {
           throw new Error(res.status)
@@ -186,6 +203,21 @@ const showUserList = users => {
   $userCreateButton.addEventListener('click', onUserCreateHandler);
   $userDeleteButton.addEventListener('click', onUserDeleteHandler);
 };
+
+$todoInput.addEventListener('keydown', e => {
+  if (e.key === 'Enter') {
+    if (e.target.value.length < 2) {
+      alert('2글자 이상이어야 합니다.');
+    } else {
+      AddToDo(e.target.value);
+      e.target.value = "";
+    }
+  }
+  const targetId = $('button.active').dataset.id;
+  const toDoItems = loadToDoItems(targetId);
+  toDoRender(toDoItems);
+  CountToDo(toDoItems);
+});
 
 const init = () => {
   const allUsersPromise = loadUserList();
