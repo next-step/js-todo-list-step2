@@ -1,5 +1,5 @@
 import { USER_API } from '../constant/constant.js';
-import { hasName } from '../utils/utils.js';
+import { hasName, validLength } from '../utils/utils.js';
 
 class UserList {
   constructor($target, dataLoader, { onUpdateUser, onDeleteUser }) {
@@ -43,12 +43,15 @@ class UserList {
       const name = prompt('추가하고 싶은 이름을 입력해주세요.');
       if (name) {
         const userName = name.trim();
-        if (!userName || hasName(userName, this.state.users)) return;
+        if (!userName || hasName(userName, this.state.users) || !validLength(userName)) {
+          alert('유저의 이름은 중복되어선 안되며, 2이상의 길이어야 합니다.');
+          return
+        };
         const newUser = {
           name: userName,
         };
-        onUpdateUser(user);
         const user = await this.dataLoader.postData(USER_API, newUser);
+        onUpdateUser(user);
       }
     };
 
@@ -68,8 +71,8 @@ class UserList {
         return;
       }
       const id = this.state.users[target.textContent]._id;
-      onUpdateUser(user);
       const user = await this.dataLoader.getData(USER_API + `/${id}`);
+      onUpdateUser(user);
     };
 
     userCreateButton.addEventListener('click', onUserCreateHandler);

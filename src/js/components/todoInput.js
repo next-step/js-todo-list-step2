@@ -18,10 +18,12 @@ class TodoInput {
           const body = {
             contents: value
           };
-          onKeyDown(res);
           const res = await this.dataLoader.postData(USER_API + `/${id}/items`, body);
+          onKeyDown(res);
           e.target.value = '';
+          return;
         }
+        alert('공백을 제외한 입력의 길이가 2이상이어야 합니다.');
       }
     });
   }
