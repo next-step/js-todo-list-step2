@@ -2,14 +2,13 @@ import { $, $$ } from "../utils/querySelector.js";
 import API from "../api/api.js";
 
 export default function TodoList () {
-
 	const userId = $(".active").dataset.id;
 
 	const $new = ({ _id, contents, isCompleted }) => {
 		return `
 			<li class="${isCompleted ? "completed" : "new"}">
 				<div class="view">
-					<input class="toggle" type="checkbox" data-id="${ _id }"/>
+					<input class="toggle" type="checkbox" data-id="${ _id }" ${isCompleted && "checked"}/>
 					<label class="label">
 						<select class="chip select">
 							<option value="0" selected>순위</option>
