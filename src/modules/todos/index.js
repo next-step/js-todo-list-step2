@@ -43,8 +43,14 @@ export const getTodos = (id) => async (dispatch) => {
   }
 };
 
-export const addTodo = () => async (dispatch) => {
-  dispatch({});
+export const addTodo = (id, contents) => async (dispatch) => {
+  dispatch({ type: ADD_TODO });
+  try {
+    const todo = await todoAPI.addTodo(id, contents);
+    dispatch({ type: ADD_TODO_SUCCESS, payload: todo });
+  } catch (e) {
+    dispatch({ type: ADD_TODO_ERROR, payload: e });
+  }
 };
 
 // 초기값

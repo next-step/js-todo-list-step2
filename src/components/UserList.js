@@ -3,6 +3,7 @@ import { store } from '../index.js';
 import { createElement } from '../lib/React.js';
 import { useSelector } from '../lib/Redux.js';
 import { getTodos } from '../modules/todos/';
+import { getUser } from '../modules/user/';
 
 const UserList = () => {
   const {
@@ -11,6 +12,7 @@ const UserList = () => {
 
   const handleClick = (id) => {
     store.dispatch(getTodos(id));
+    store.dispatch(getUser(id));
   };
 
   return (

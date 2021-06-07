@@ -6,12 +6,13 @@ import { useSelector } from '../lib/Redux.js';
 import { ADD_TODO } from '../modules/todos/index.js';
 
 const TodoInput = () => {
-  const todos = useSelector((state) => state.todos);
-  const [_, setData] = useLocalStorage('todos');
-  setData(todos);
+  const { user } = useSelector((state) => state.user);
 
   const handleChange = (e) => {
-    store.dispatch({ type: ADD_TODO, payload: e.target.value });
+    store.dispatch({
+      type: ADD_TODO,
+      payload: { id: user.id, contents: e.target.value },
+    });
     document.getElementById('new-todo-title').focus();
   };
 

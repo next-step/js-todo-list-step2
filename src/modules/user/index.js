@@ -28,6 +28,16 @@ export const getUsers = () => async (dispatch) => {
   }
 };
 
+export const getUser = (id) => async (dispatch) => {
+  dispatch({ type: GET_USER });
+  try {
+    const user = await userAPI.getUser(id);
+    dispatch({ type: GET_USER_SUCCESS, payload: user });
+  } catch (e) {
+    dispatch({ type: GET_USERS_ERROR, payload: e });
+  }
+};
+
 // 초기값
 const initialState = {
   loading: false,

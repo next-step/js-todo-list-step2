@@ -11,7 +11,6 @@ import {
 
 const TodoListItem = ({ todo }) => {
   const checked = todo.isCompleted;
-  console.log(todo);
 
   const toggleClick = () => {
     store.dispatch({ type: TOGGLE_TODO, payload: todo.id });
