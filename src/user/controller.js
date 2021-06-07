@@ -14,3 +14,11 @@ export const getUser = async () => {
     console.log(error);
   }
 };
+
+export const getOneUser = async (userId) => {
+  try {
+    return await GET(`/api/users/${userId}`);
+  } catch (error) {
+    console.log(error);
+  }
+};

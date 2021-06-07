@@ -14,6 +14,34 @@
       <h1 id="user-title"></h1>
       <div class="user-list"></div>
       <section id="section_container"></section>
+      <section class="todoapp">
+        <section class="input-container">
+          <input
+            class="new-todo"
+            placeholder="할 일을 입력해주세요"
+            autofocus
+          />
+        </section>
+        <section class="main">
+          <ul class="todo-list">
+            <li>
+              <div class="view">
+                <input class="toggle" type="checkbox" />
+                <label class="label">
+                  <select class="chip select">
+                    <option value="0" selected>순위</option>
+                    <option value="1">1순위</option>
+                    <option value="2">2순위</option>
+                  </select>
+                  해야할 아이템
+                </label>
+                <button class="destroy"></button>
+              </div>
+              <input class="edit" value="완료된 타이틀" />
+            </li>
+          </ul>
+        </section>
+      </section>
     </div>
     <script type="module" src="./src/js/index.js"></script>
   </body>

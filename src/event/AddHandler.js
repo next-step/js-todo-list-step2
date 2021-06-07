@@ -1,6 +1,7 @@
 import { createUser } from '../user/controller.js';
 import render from '../components/Render/index.js';
 import { timer } from '../utils/timer.js';
+import { UserList } from '../components/UserList/index.js';
 export const setUserHandler = async (e) => {
   let nickname = prompt('추가하고 싶은 이름을 입력하세요');
   if (nickname === '') return;
@@ -9,4 +10,11 @@ export const setUserHandler = async (e) => {
   }
   createUser(nickname);
   timer(render, 2000);
+};
+
+export const getOneUserHandler = (e) => {
+  if (e.target.className.replace(' ', '') === 'ripple') {
+    UserList(e.target.dataset.id);
+    render();
+  }
 };

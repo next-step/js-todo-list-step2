@@ -17,3 +17,5 @@ const request = async (uri, method, body = undefined) => {
 export const POST = (uri, body) => request(uri, HttpMethod.POST, body);
 
 export const GET = (uri) => request(uri, HttpMethod.GET);
+
+export const DELETE = (uri) => request(uri, HttpMethod.DELETE);
