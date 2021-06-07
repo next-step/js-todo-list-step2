@@ -1,8 +1,5 @@
 import { $, $$, addEvent, fetchApi } from "./utils/index.js";
-export default function User(activeUser, users) {
-  let userList = [];
-  // let activeUser = "";
-  console.log({ users });
+export default function User({activeUser, users, fetchTodos, updateActive,deleteUser}) {
   const userControlBtns = `
     <button class="ripple user-create-button" data-action="createUser">
       + 유저 생성
@@ -25,7 +22,8 @@ export default function User(activeUser, users) {
       },
     })
       .then(async (res) => {
-        activeUser = res._id;
+        console.log(res._id)
+        updateActive(res._id);
         const newList = await fetchApi();
         console.log("new", { newList });
         userList = newList;
@@ -44,26 +42,32 @@ export default function User(activeUser, users) {
   function onClickUsers(e) {
     const id = e.target.dataset.id;
     activateUser(e);
+    fetchTodos(id);
+    console.log({id});
+    updateActive(id)
   }
 
   const onUserCreateHandler = (e) => {
     const userName = prompt("추가하고 싶은 이름을 입력해주세요.");
     userAddApi(userName);
-    // const addedUserList = [...userList, {name: userName}]
-    // addedUserList.sort();
-    // console.log({addedUserList})
 
     this.renderUsers();
   };
+
+  const onUserDelete =e => {
+    const target = e.target.value;
+    deleteUser();
+    console.log({activeUser})
+    
+  }
 
   this.renderUsers = () => {
     const userListHtml =
       users.length > 0
         ? users
             .map(
-              (user, idx) =>
-                `<button class="ripple user ${
-                  user.active ? "active" : ""
+              (user, idx) =>`<button class="ripple user ${
+                  user._id === activeUser ? "active" : ""
                 }" data-id='${user._id}'>${user.name}</button>`
             )
             .join("")
@@ -74,9 +78,10 @@ export default function User(activeUser, users) {
 
     const userCreateButton = $(".user-create-button");
     addEvent(userCreateButton, "click", onUserCreateHandler);
+    const userDeleteButton = $(".user-delete-button");
+    addEvent(userDeleteButton, "click", onUserDelete);
 
     const $users = $$("button.user");
-    console.log(userList);
 
     addEvent($users, "click", onClickUsers);
   };

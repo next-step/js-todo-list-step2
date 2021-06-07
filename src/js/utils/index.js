@@ -10,7 +10,7 @@ export function addEvent(target, eventName, eventFn) {
     target.forEach(function (tg) {
       tg.addEventListener(eventName, eventFn);
     });
-  } else if (target.length !== 0) {
+  } else if (!target?.length) {
     if (target) {
       target.addEventListener(eventName, eventFn);
     }

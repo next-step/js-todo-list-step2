@@ -12,8 +12,14 @@ export default function TodoApp() {
     todoList.setState(updatedItems);
   };
 
+  this.updateActiveUser = (id) => {
+    this.activeUser = id;
+    console.log(this, this.activeUser);
+  }
+
+
   this.fetchTodos = async (id) => {
-    const todos = await fetchApi(`${id}/items/`);
+    const todos = await fetchApi(`${id}/items`);
     console.log({ todos });
     return todos;
   };
@@ -24,19 +30,29 @@ export default function TodoApp() {
     const fetchedTodos = await this.fetchTodos(firstUserId);
 
     this.activeUser = firstUserId;
-    new User(this.activeUser, this.users);
+    
+    const user = new User({activeUser: this.activeUser, users: this.users, updateActive: this.updateActiveUser, fetchTodos: async (id)=>{this.todoItems = await this.fetchTodos(id); todoList.render(this.todoItems );}, deleteUser: this.deleteUser});
     todoList.render(fetchedTodos);
     this.todoItems = fetchedTodos;
   };
 
+  this.deleteUser = async () => {
+    console.log(this.activeUser);
+    await fetchApi(this.activeUser);
+    
+    // const newUsers = await fetchApi()
+    // user.renderUsers(newUsers);
+    await this.hydrate();
+  }
+
   this.hydrate();
 
   new TodoInput({
-    onAdd: (contents) => {
+    onAdd: async (contents) => {
       const newTodoItem = new TodoItem(this.activeUser, contents);
       const newTodoList = [...this.todoItems, newTodoItem];
       this.todoItems = newTodoList;
-      focusId = fetchApi(`${this.activeUser._id}/items`, {
+      fetchApi(`${this.activeUser}/items`, {
         method: "POST",
         mode: "cors",
         body: JSON.stringify({ contents }),
@@ -44,7 +60,7 @@ export default function TodoApp() {
           "Content-Type": "application/json",
         },
       });
-      console.log({ newTodoList });
+      console.log(this.activeUser , { newTodoList });
       this.setState(newTodoList);
     },
   });
@@ -70,7 +86,7 @@ function TodoInput({ onAdd }) {
 
   this.addTodoItem = (event) => {
     const $newTodoTarget = event.target;
-    if (this.isValid(event, $newTodoTarget.value)) {
+    if (this.isValid(event)) {
       onAdd($newTodoTarget.value);
       $newTodoTarget.value = "";
     }
@@ -117,8 +133,10 @@ function TodoList(todoItems) {
     </li>`;
 
   this.render = (items) => {
-    const template = items.map(todoItemTemplate);
+    
+    const template = items.length > 0 ? items.map(todoItemTemplate) : [];
+    console.log({items, template});
     this.$todoList = $(".todo-list");
-    this.$todoList.innerHTML = template.join("");
+    this.$todoList.innerHTML = (template || []).join("");
   };
 }
