@@ -4,6 +4,7 @@ import { API_URL } from "../constants/config.js";
 import UserList from "./UserList.js";
 import TodoList from "./TodoList.js";
 import TodoInput from "./TodoInput.js";
+import TodoDeleteAll from "./TodoDeleteAll.js";
 import TodoItemModel from "../model/TodoItemModel.js";
 import UserModel from "../model/UserModel.js";
 
@@ -23,6 +24,7 @@ class TodoApp {
       onEditItem: this.onEditItem,
     });
     this.todoInput = new TodoInput({ onAddItem: this.onAddItem.bind(this) });
+    this.todoDeleteAll = new TodoDeleteAll({ onDeleteAll: this.onDeleteAllItem.bind(this) });
     this.init();
   }
 
@@ -43,6 +45,7 @@ class TodoApp {
           id: todoList._id,
           contents: todoList.contents,
           isCompleted: todoList.isCompleted,
+          priority: todoList.priority,
         });
       });
       return new UserModel({ id: user._id, name: user.name, todoList: userTodoList });
@@ -119,6 +122,12 @@ class TodoApp {
 
   // User의 TodoList 함수
 
+  async onDeleteAllItem() {
+    const { result, error } = await fetchRequest(API_URL.ITEM(this.selectedUser.id), "delete");
+    if (error) return alert("모두 삭제하기에 실패했습니다.");
+
+    this.selectedUser.todoList = [];
+    this.todoList.setState(this.selectedUser.todoList);
   }
 }
 
