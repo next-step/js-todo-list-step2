@@ -1,8 +1,8 @@
 import { $, $$ } from "../utils/querySelector.js";
 import API from "../api/api.js";
 
-export default function TodoList () {
-	const userId = $(".active").dataset.id;
+export default function TodoList ({ reloadTodos }) {
+	this.userId = "";
 
 	const $new = ({ _id, contents, isCompleted }) => {
 		return `
@@ -26,23 +26,20 @@ export default function TodoList () {
 
 	this.setState = (todos) => {
 		let items = "";
+		this.userId = $(".user.active").dataset.id;
 
 		todos.map(todo => items += $new(todo));
-
 		$(".todo-list").innerHTML = items;
 
 		$$(".destroy").forEach(destroy => destroy.addEventListener("click", deleteItem));
-
 		$$(".toggle").forEach(chk => chk.addEventListener("click", completeItem));
 	}
 
-	const deleteItem = async ({currentTarget}) => {
+	const deleteItem = async ({ currentTarget }) => {
 		const itemId = currentTarget.dataset.id;
 
-		await API.deleteFetch(`/api/users/${ userId }/items/${ itemId }`);
-		const todos = await API.getFetch(`/api/users/${ userId }`);
-
-		this.setState(todos.todoList);
+		await API.deleteFetch(`/api/users/${ this.userId }/items/${ itemId }`);
+		reloadTodos();
 	}
 
 	const completeItem = ({currentTarget}) => {
@@ -54,8 +51,6 @@ export default function TodoList () {
 		$parentLi.classList.remove(chrBool ? "new" : "completed" );
 		$parentLi.classList.add(chrBool ? "completed" : "new");
 
-		API.putFetch(`/api/users/${ userId }/items/${ itemId }/toggle`);
+		API.putFetch(`/api/users/${ this.userId }/items/${ itemId }/toggle`);
 	}
-
-
 }

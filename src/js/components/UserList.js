@@ -3,13 +3,12 @@ import API from "../api/api.js";
 import Message from "../config/message.js"
 import TodoList from "./TodoList.js";
 
-export default function UserList () {
+export default function UserList ({ reloadTodos }) {
 
 	this.setState = (users) => {
 		addUser(users);
 		addEvent();
 	}
-
 
 	const addUser = (users) => {
 		let items = "";
@@ -44,7 +43,8 @@ export default function UserList () {
 
 		$(".active-user").innerText = currentTarget.innerHTML;
 
-		reloadTodos(currentTarget.dataset.id);
+		reloadTodos();
+		// reloadTodos(currentTarget.dataset.id);
 	}
 
 	const onUserCreateHandler = async () => {
@@ -73,9 +73,9 @@ export default function UserList () {
 		this.setState(users);
 	}
 
-	const reloadTodos = async (userId) => {
-		this.todoList = new TodoList();
-		const todos = await API.getFetch(`/api/users/${ userId }/items`);
-		this.todoList.setState(todos);
-	}
+	// const reloadTodos = async (userId) => {
+	// 	this.todoList = new TodoList();
+	// 	const todos = await API.getFetch(`/api/users/${ userId }/items`);
+	// 	this.todoList.setState(todos);
+	// }
 }
