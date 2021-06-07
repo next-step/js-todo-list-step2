@@ -27,37 +27,39 @@ class TodoList {
   };
 
   addEvent = (onDeleteItem, changeTodoState, changeTodoValue, changeTodoPriority) => {
-    this.$target.addEventListener('click', async (e) => {
-      const { target } = e;
-      const { className } = target;
+    this.$target.addEventListener('click', async ({ target, target: { className }}) => {
       const closestLi = target.closest('li');
       const index = closestLi.dataset['index'];
       const id = this.state.user._id;
       const itemId = this.state.user.todoList[+index]._id;
 
       if (className === 'destroy') {
-        await this.dataLoader.deleteData(USER_API + `/${id}/items/${itemId}`);
         onDeleteItem(+index);
+        await this.dataLoader.deleteData(USER_API + `/${id}/items/${itemId}`);
       } else if (target.classList.contains('toggle')) {
-        await this.dataLoader.putData(USER_API + `/${id}/items/${itemId}/toggle`);
         closestLi.classList.contains('completed')
-          ? changeTodoState(+index, false)
-          : changeTodoState(+index, true);
-      } else if (target.classList.contains('chip')) {
-        if (this.state.user.todoList[+index].priority !== NONE) return;
-        const priority = convertToPriority[+target.value];
-        const body = {
-          priority
-        };
-        if (priority === NONE) return;
-        await this.dataLoader.putData(USER_API + `/${id}/items/${itemId}/priority`, body);
-        changeTodoPriority(+index, priority);
+        ? changeTodoState(+index, false)
+        : changeTodoState(+index, true);
+        await this.dataLoader.putData(USER_API + `/${id}/items/${itemId}/toggle`);
       }
     });
+    
+    this.$target.addEventListener('change', async ({ target, target : { className }}) => {
+      const closestLi = target.closest('li');
+      const index = closestLi.dataset['index'];
+      const id = this.state.user._id;
+      const itemId = this.state.user.todoList[+index]._id;
+      if (this.state.user.todoList[+index].priority !== NONE) return;
+      const priority = convertToPriority[+target.value];
+      const body = {
+        priority
+      };
+      // if (priority === NONE) return;
+      changeTodoPriority(+index, priority);
+      await this.dataLoader.putData(USER_API + `/${id}/items/${itemId}/priority`, body);
+    });
 
-    this.$target.addEventListener('dblclick', (e) => {
-      const { target } = e;
-      const { className } = target;
+    this.$target.addEventListener('dblclick', ({target, target: { className }}) => {
       const closestLi = target.closest('li');
       const inputElem = closestLi.querySelector('.edit');
       if (className === 'label') {
@@ -67,9 +69,7 @@ class TodoList {
       }
     });
 
-    this.$target.addEventListener('keyup', async (e) => {
-      const { target } = e;
-      const { key } = e;
+    this.$target.addEventListener('keyup', async ({ target, key }) => {
       const closestLi = target.closest('li');
       const index = closestLi.dataset['index'];
 
@@ -85,8 +85,8 @@ class TodoList {
           const body = {
             contents: value
           };
-          await this.dataLoader.putData(USER_API + `/${id}/items/${itemId}`, body);
           changeTodoValue(+index, value);
+          await this.dataLoader.putData(USER_API + `/${id}/items/${itemId}`, body);
         }
       }
     });
