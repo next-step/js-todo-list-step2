@@ -6,6 +6,7 @@ const API_URL = {
   ITEM: (userId) => `${baseUrl}/api/users/${userId}/items/`,
   USER_ITEM: (userId, itemId) => `${baseUrl}/api/users/${userId}/items/${itemId}`,
   ITEM_TOGGLE: (userId, itemId) => `${baseUrl}/api/users/${userId}/items/${itemId}/toggle`,
+  ITEM_PRIORITY: (userId, itemId) => `${baseUrl}/api/users/${userId}/items/${itemId}/priority`,
 };
 
 const METHOD = {

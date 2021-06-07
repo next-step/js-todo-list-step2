@@ -1,6 +1,0 @@
-const MINIMUM_LENGTH = {
-  USER_NAME: 2,
-  ITEM_CONTENTS: 2,
-};
-
-export { MINIMUM_LENGTH };

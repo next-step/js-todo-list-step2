@@ -1,11 +1,12 @@
 import { $, $$ } from "../lib/util.js";
 
 class TodoList {
-  constructor({ onDelete, onComplete, onEditing, onEdit }) {
+  constructor({ onDelete, onComplete, onEditing, onEdit, onSetPriority }) {
     this.onDelete = onDelete;
     this.onComplete = onComplete;
     this.onEditing = onEditing;
     this.onEdit = onEdit;
+    this.onSetPriority = onSetPriority;
   }
 
   setState = (updatedTodoItems) => {
@@ -23,11 +24,18 @@ class TodoList {
         item.isCompleted ? "checked" : ""
       }/>
         <label class="label" data-id=${item.id}>
-        <select class="chip select">
-                    <option value="0" selected>순위</option>
-                    <option value="1">1순위</option>
-                    <option value="2">2순위</option>
-                  </select>${item.contents}</label>
+        ${
+          item.priority === "NONE"
+            ? `<select class="chip select" data-id=${item.id}> 
+        <option value="0" selected>순위</option>
+        <option value="1">1순위</option>
+        <option value="2">2순위</option>
+      </select>`
+            : ` <span class="chip ${item.priority === "FIRST" ? "primary" : "secondary"}">${
+                item.priority === "FIRST" ? 1 : 2
+              }순위</span>`
+        }
+        ${item.contents}</label>
         <button data-id=${item.id} class="destroy"></button>
       </div>
       <input  data-id=${item.id} class="edit" value="${item.contents}" />
@@ -52,6 +60,12 @@ class TodoList {
 
     $$(".edit").forEach((input) => {
       input.addEventListener("keydown", (e) => this.onEdit(e, e.target.dataset.id));
+    });
+
+    $$(".select").forEach((select) => {
+      select.addEventListener("click", (e) => {
+        this.onSetPriority(e, e.target.dataset.id);
+      });
     });
   };
 }

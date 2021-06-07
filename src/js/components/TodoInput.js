@@ -1,6 +1,6 @@
 import { $ } from "../lib/util.js";
 import { ERROR_MESSAGES } from "../constants/message.js";
-import { MINIMUM_LENGTH } from "../constants/limitValue.js";
+import { MINIMUM_LENGTH } from "../constants/constant.js";
 import { KEY } from "../constants/eventKey.js";
 
 class TodoInput {

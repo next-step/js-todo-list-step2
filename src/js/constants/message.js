@@ -1,4 +1,4 @@
-import { MINIMUM_LENGTH } from "../constants/limitValue.js";
+import { MINIMUM_LENGTH } from "./constant.js";
 
 const INFORM_MESSAGES = {
   ADD_USER: "추가하고 싶은 이름을 입력해주세요.",
@@ -16,6 +16,7 @@ const ERROR_MESSAGES = {
   DELETE_ITEM: "할 일 삭제하기에 실패했습니다.",
   COMPLETE_ITEM: "할 일 완료에 실패했습니다.",
   EDIT_ITEM: "할 일 수정에 실패했습니다.",
+  SET_PRIORITY: "우선순위 지정에 실패했습니다.",
 };
 
 export { INFORM_MESSAGES, ERROR_MESSAGES };

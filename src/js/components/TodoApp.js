@@ -1,7 +1,7 @@
 import { fetchRequest } from "../lib/fetchRequest.js";
 import { API_URL, METHOD } from "../constants/config.js";
 import { INFORM_MESSAGES, ERROR_MESSAGES } from "../constants/message.js";
-import { MINIMUM_LENGTH } from "../constants/limitValue.js";
+import { MINIMUM_LENGTH, PRIORITY } from "../constants/constant.js";
 import { KEY } from "../constants/eventKey.js";
 
 import UserList from "./UserList.js";
@@ -25,6 +25,7 @@ class TodoApp {
       onComplete: this.onCompleteItem.bind(this),
       onEditing: this.onEditingItem.bind(this),
       onEdit: this.onEditItem.bind(this),
+      onSetPriority: this.onSetPriority.bind(this),
     });
     this.todoInput = new TodoInput({ onAddItem: this.onAddItem.bind(this) });
     this.todoDeleteAll = new TodoDeleteAll({ onDeleteAll: this.onDeleteAllItem.bind(this) });
@@ -117,7 +118,7 @@ class TodoApp {
   // User의 TodoList 함수
 
   async onDeleteAllItem() {
-    const { result, error } = await fetchRequest(API_URL.ITEM(this.selectedUser.id), METHOD.DELETE);
+    const { error } = await fetchRequest(API_URL.ITEM(this.selectedUser.id), METHOD.DELETE);
     if (error) return alert(ERROR_MESSAGES.DELETE_ALL_ITEMS);
 
     this.selectedUser.todoList = [];
@@ -196,6 +197,26 @@ class TodoApp {
 
       this.todoList.setState(this.selectedUser.todoList);
     }
+  }
+
+  async onSetPriority(event, itemId) {
+    if (event.target.value == 0) return;
+
+    const { error } = await fetchRequest(
+      API_URL.ITEM_PRIORITY(this.selectedUser.id, itemId),
+      METHOD.PUT,
+      { priority: PRIORITY[event.target.value] }
+    );
+
+    if (error) return alert(ERROR_MESSAGES.SET_PRIORITY);
+
+    this.selectedUser.todoList = this.selectedUser.todoList.map((item) => {
+      if (item.id == itemId) {
+        item.priority = PRIORITY[event.target.value];
+      }
+      return item;
+    });
+    this.todoList.setState(this.selectedUser.todoList);
   }
 }
 
