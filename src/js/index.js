@@ -3,6 +3,13 @@ const $ = selector => document.querySelector(selector);
 const $userList = $('#user-list');
 const $userTitle = $('#user-title strong');
 const $todoList = $('.todo-list');
+const $todoInput = $('.new-todo');
+const $filters = $('.filters');
+
+const $allSelectedBtn = $('.all');
+const $activeBtn = $('.active');
+const $completedBtn = $('.completed');
+
 const baseUrl = 'https://js-todo-list-9ca3a.df.r.appspot.com';
 
 const postOption = (name) => {
@@ -27,6 +34,50 @@ const userBtn = `
     </button>
   </div>
   `;
+
+const CountToDo = (items) => {
+  const $toDoCount = $('.todo-count');
+  let count = items.then(items =>
+    $toDoCount.children[0].innerText = items.length)
+};
+
+/* start 아이템 불러오기 */
+const toDoItemTemplate = (item) => {
+  return (
+    `
+    <li data-id="${item._id}">
+      <div class="view">
+        <input class="toggle" type="checkbox" />
+        <label class="label">
+          <select class="chip select">
+            <option value="0" selected>순위</option>
+            <option value="1">1순위</option>
+            <option value="2">2순위</option>
+          </select>
+          ${item.contents}
+        </label>
+        <button class="destroy"></button>
+      </div>
+      <input class="edit" value="완료된 타이틀" />
+    </li>
+    `
+  );
+}
+
+const toDoRender = itemsPromise => {
+  $todoList.innerHTML = '';
+  itemsPromise.then(items =>
+    items.map(item =>
+      $todoList.innerHTML += toDoItemTemplate(item)
+    ),
+  );
+}
+
+const loadToDoItems = async (user) => {
+  const toDoItems = await fetch(`${baseUrl}/api/users/${user._id}/items/`);
+  return toDoItems.json();
+};
+/* end 아이템 불러오기 */
 
 const loadUserList = async () => {
   const response = await fetch(`${baseUrl}/api/users`);
@@ -71,7 +122,9 @@ const onUserSelectHandler = e => {
     users.map(user => {
       if (userBtnId == user._id) {
         changeTitle(user);
-        //loadToDos(); 투두 구현후 ㄱㄱ
+        const toDoItems = loadToDoItems(user);
+        toDoRender(toDoItems);
+        CountToDo(toDoItems);
       }
     })
   })
