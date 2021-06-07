@@ -6,9 +6,9 @@ export default function TodoList () {
 
 	const $new = ({ _id, contents, isCompleted }) => {
 		return `
-			<li class="${isCompleted ? "completed" : "new"}">
+			<li class="${ isCompleted ? "completed" : "new" }">
 				<div class="view">
-					<input class="toggle" type="checkbox" data-id="${ _id }" ${isCompleted && "checked"}/>
+					<input class="toggle" type="checkbox" data-id="${ _id }" ${ isCompleted && "checked" }/>
 					<label class="label">
 						<select class="chip select">
 							<option value="0" selected>순위</option>

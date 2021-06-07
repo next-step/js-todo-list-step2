@@ -7,7 +7,9 @@ export default function UserList () {
 
 	this.setState = (users) => {
 		addUser(users);
+		addEvent();
 	}
+
 
 	const addUser = (users) => {
 		let items = "";
@@ -26,22 +28,23 @@ export default function UserList () {
 			</button>`;
 
 		$("#user-list").innerHTML = items;
+	}
 
+	const addEvent = () => {
 		$$('.user').forEach(item => item.addEventListener('click', onUserClickHandler));
 
 		$('.user-create-button').addEventListener('click', onUserCreateHandler);
 		$('.user-delete-button').addEventListener('click', onUserDeleteHandler);
 	}
 
-	const onUserClickHandler = async ({ currentTarget }) => {
+
+	const onUserClickHandler = ({ currentTarget }) => {
 		$(".active").classList.remove("active");
 		currentTarget.classList.add("active");
 
 		$(".active-user").innerText = currentTarget.innerHTML;
 
-		this.todoList = new TodoList();
-		const todos = await API.getFetch(`/api/users/${ currentTarget.dataset.id }/items`);
-		this.todoList.setState(todos);
+		reloadTodos(currentTarget.dataset.id);
 	}
 
 	const onUserCreateHandler = async () => {
@@ -51,7 +54,7 @@ export default function UserList () {
 		if (userName.length < 2) return alert(Message.SHORT_INPUT_LENGTH);
 
 		await API.postFetch("/api/users", { "name": userName, "todoList": [] });
-		this.setState(await API.getFetch("/api/users"));
+		await reloadUsers();
 	}
 
 	const onUserDeleteHandler = async () => {
@@ -61,7 +64,18 @@ export default function UserList () {
 		if (!deleteBool) return;
 
 		await API.deleteFetch(`/api/users/${ $activeUser.dataset.id }`);
-		this.setState(await API.getFetch("/api/users"));
+		await reloadUsers();
 	}
 
+
+	const reloadUsers = async () => {
+		const users = await API.getFetch(`/api/users`);
+		this.setState(users);
+	}
+
+	const reloadTodos = async (userId) => {
+		this.todoList = new TodoList();
+		const todos = await API.getFetch(`/api/users/${ userId }/items`);
+		this.todoList.setState(todos);
+	}
 }

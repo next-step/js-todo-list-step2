@@ -9,11 +9,8 @@ import API from "./api/api.js";
 export default function App () {
 	this.todos = "";
 
-
-	const listReload = async () => {
-		console.log("..");
-
-		const $activeUser = $(".active");
+	const reloadTodos = async () => {
+		const $activeUser = $(".user.active");
 		const todos = await API.getFetch(`/api/users/${ $activeUser.dataset.id }/items/`);
 		this.todoList.setState(todos);
 	}
@@ -21,24 +18,17 @@ export default function App () {
 	this.userList = new UserList();
 
 	this.todoInput = new TodoInput({
-		// reloadList: listReload(),
-		reloadList: async () => {
-			const $activeUser = $(".active");
-			const todos = await API.getFetch(`/api/users/${ $activeUser.dataset.id }/items/`);
-
-			this.todoList.setState(todos);
-		}
+		reloadTodos: reloadTodos,
 	});
 
 	this.todoList = new TodoList();
 	this.todoTotal = new TodoTotal({
-		// reloadList: listReload(),
+		reloadTodos: reloadTodos,
 	});
 
 
 	const setSate = ({users, todos}) => {
 		this.userList.setState(users);
-		this.todoInput.setState(todos);
 		this.todoList.setState(todos);
 		// this.todoTotal.setState(todos);
 	}
