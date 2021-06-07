@@ -4,24 +4,34 @@ import API from "../api/api.js";
 export default function TodoList ({ reloadTodos, filterTodos }) {
 	this.userId = "";
 
-	const $new = ({ _id, contents, isCompleted }) => {
+	const $new = ({ _id, contents, isCompleted, priority }) => {
 		return `
 			<li class="${ isCompleted && "completed" }" data-id="${ _id }">
 				<div class="view">
 					<input class="toggle" type="checkbox" data-id="${ _id }" ${ isCompleted && "checked" }/>
 					<label class="label">
-						<select class="chip select">
-							<option value="0" selected>순위</option>
-							<option value="1">1순위</option>
-							<option value="2">2순위</option>
-						</select>
+						${ setPriority(priority) }
 						${ contents }
 					</label>
-					<button class="destroy" data-id="${ _id }"></button>
+					<button class="destroy"></button>
 				</div>
 				<input class="edit" value="${ contents }" />
 			</li>`;
 	};
+
+	const setPriority = (priority) => {
+		let item = "";
+		if (priority === "NONE")
+			item = `<select class="chip select">
+						<option value="0" selected>순위</option>
+						<option value="1">1순위</option>
+						<option value="2">2순위</option>
+					</select>`
+		else if (priority === "FIRST") item = `<span class="chip primary">1순위</span>`
+		else if (priority === "SECOND") item = `<span class="chip secondary">2순위</span>`
+		
+		return item;
+	}
 
 	const editItem = ({ currentTarget }) => {
 		const $parentLi = currentTarget.parentElement.parentElement;
@@ -39,7 +49,6 @@ export default function TodoList ({ reloadTodos, filterTodos }) {
 		reloadTodos();
 	}
 
-
 	this.setState = (todos) => {
 		let items = "";
 		this.userId = $(".user.active").dataset.id;
@@ -47,9 +56,25 @@ export default function TodoList ({ reloadTodos, filterTodos }) {
 		todos.map(todo => items += $new(todo));
 		$(".todo-list").innerHTML = items;
 
-		$$(".label").forEach(destroy => destroy.addEventListener("dblclick", editItem));
+		$$(".label").forEach(label => label.addEventListener("dblclick", editItem));
 		$$(".destroy").forEach(destroy => destroy.addEventListener("click", deleteItem));
 		$$(".toggle").forEach(chk => chk.addEventListener("click", completeItem));
+		$$(".chip").forEach(chip => chip.addEventListener("change", changePriority));
+	}
+
+	const changePriority = async ({ currentTarget }) => {
+		const itemId = currentTarget.parentElement.parentElement.parentElement.dataset.id;
+		let priority = currentTarget.value;
+
+		console.log("priority : ", priority);
+
+		if (priority === "1") priority = "FIRST";
+		else if (priority === "2") priority = "SECOND";
+		else priority = "NONE";
+
+		console.log(priority);
+		await API.putFetch(`/api/users/${ this.userId }/items/${ itemId }/priority`, { priority: priority });
+		reloadTodos();
 	}
 
 	const deleteItem = async ({ currentTarget }) => {
