@@ -1,4 +1,5 @@
 import { $, $$ } from "../lib/util.js";
+import TodoCount from "./TodoCount.js";
 
 class TodoList {
   constructor({ onDelete, onComplete, onEditing, onEdit, onSetPriority }) {
@@ -7,12 +8,14 @@ class TodoList {
     this.onEditing = onEditing;
     this.onEdit = onEdit;
     this.onSetPriority = onSetPriority;
+    this.todoCount = new TodoCount();
   }
 
   setState = (updatedTodoItems) => {
     this.todoItems = updatedTodoItems;
     this.render(this.todoItems);
     this.registerEventHandler();
+    this.todoCount.setState(updatedTodoItems);
   };
 
   render = (items) => {
