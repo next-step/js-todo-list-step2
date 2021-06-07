@@ -9,12 +9,15 @@ import API from "./api/api.js";
 export default function App () {
 	this.todos = "";
 
-	const reloadTodos = async () => {
+	const reloadTodos = async (filter) => {
+
 		const $activeUser = $(".user.active");
-		const todos = await API.getFetch(`/api/users/${ $activeUser.dataset.id }/items/`);
+		let todos = await API.getFetch(`/api/users/${ $activeUser.dataset.id }/items/`);
+
+		(filter && filter !== "ALL") && (todos = todos.filter(({ isCompleted }) => isCompleted === (filter === "COMPLETE") ))
+
 		this.todoList.setState(todos);
 
-		// setSate({ users: this.users, todos: todos});
 		setSate({ todos: todos});
 	}
 
@@ -33,7 +36,6 @@ export default function App () {
 	this.todoTotal = new TodoTotal({
 		reloadTodos: reloadTodos,
 	});
-
 
 	const setSate = ({users, todos}) => {
 		users && this.userList.setState(users);

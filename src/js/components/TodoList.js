@@ -1,7 +1,7 @@
 import { $, $$ } from "../utils/querySelector.js";
 import API from "../api/api.js";
 
-export default function TodoList ({ reloadTodos }) {
+export default function TodoList ({ reloadTodos, filterTodos }) {
 	this.userId = "";
 
 	const $new = ({ _id, contents, isCompleted }) => {
