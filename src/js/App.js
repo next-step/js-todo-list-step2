@@ -14,7 +14,7 @@ export default function App () {
 		const $activeUser = $(".user.active");
 		let todos = await API.getFetch(`/api/users/${ $activeUser.dataset.id }/items/`);
 
-		(filter && filter !== "ALL") && (todos = todos.filter(({ isCompleted }) => isCompleted === (filter === "COMPLETE") ))
+		(filter && filter !== "ALL") && (todos = todos.filter(({ isCompleted }) => isCompleted === (filter === "COMPLETED") ))
 
 		this.todoList.setState(todos);
 

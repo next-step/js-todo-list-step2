@@ -6,7 +6,7 @@ export default function TodoList ({ reloadTodos, filterTodos }) {
 
 	const $new = ({ _id, contents, isCompleted }) => {
 		return `
-			<li class="${ isCompleted ? "completed" : "new" }">
+			<li class="${ isCompleted && "completed" }" data-id="${ _id }">
 				<div class="view">
 					<input class="toggle" type="checkbox" data-id="${ _id }" ${ isCompleted && "checked" }/>
 					<label class="label">
@@ -19,9 +19,25 @@ export default function TodoList ({ reloadTodos, filterTodos }) {
 					</label>
 					<button class="destroy" data-id="${ _id }"></button>
 				</div>
-				<input class="edit" value="완료된 타이틀" />
+				<input class="edit" value="${ contents }" />
 			</li>`;
 	};
+
+	const editItem = ({ currentTarget }) => {
+		const $parentLi = currentTarget.parentElement.parentElement;
+		const $edit = $parentLi.querySelector(".edit");
+		const itemId = $parentLi.dataset.id;
+
+		$$(".todo-list li").forEach(li => li.classList.remove("editing"));
+		$parentLi.classList.add("editing");
+
+		$edit.addEventListener("keyup",({ key, currentTarget }) => key === "Enter" && saveEditItem(itemId, currentTarget.value))
+	}
+
+	const saveEditItem = async (itemId, contents) => {
+		await API.putFetch(`/api/users/${ this.userId }/items/${ itemId }`, {contents: contents});
+		reloadTodos();
+	}
 
 
 	this.setState = (todos) => {
@@ -31,22 +47,22 @@ export default function TodoList ({ reloadTodos, filterTodos }) {
 		todos.map(todo => items += $new(todo));
 		$(".todo-list").innerHTML = items;
 
+		$$(".label").forEach(destroy => destroy.addEventListener("dblclick", editItem));
 		$$(".destroy").forEach(destroy => destroy.addEventListener("click", deleteItem));
 		$$(".toggle").forEach(chk => chk.addEventListener("click", completeItem));
 	}
 
 	const deleteItem = async ({ currentTarget }) => {
-		const itemId = currentTarget.dataset.id;
+		const itemId = currentTarget.parentElement.parentElement.dataset.id;
 
 		await API.deleteFetch(`/api/users/${ this.userId }/items/${ itemId }`);
 		reloadTodos();
 	}
 
-	const completeItem = ({currentTarget}) => {
-		const itemId = currentTarget.dataset.id;
-
+	const completeItem = ({ currentTarget }) => {
+		const $parentLi = currentTarget.parentElement.parentElement;
+		const itemId = $parentLi.dataset.id;
 		const chrBool = currentTarget.checked;
-		const $parentLi = (currentTarget.parentElement).parentElement;
 
 		$parentLi.classList.remove(chrBool ? "new" : "completed" );
 		$parentLi.classList.add(chrBool ? "completed" : "new");

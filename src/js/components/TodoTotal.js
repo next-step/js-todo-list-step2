@@ -1,31 +1,13 @@
-import { $ } from "../utils/querySelector.js";
+import { $, $$ } from "../utils/querySelector.js";
 import API from "../api/api.js";
 
 export default function TodoTotal  ({ reloadTodos }) {
 	this.setState = (todos) => $(".todo-count strong").innerHTML = todos.length;
 
-	$(".all").addEventListener("click", ()=> selectTodos({ type: "ALL" }));
-	$(".active").addEventListener("click", ()=> selectTodos({ type: "ACTIVE" }));
-	$(".completed").addEventListener("click", ()=> selectTodos({ type: "COMPLETE" }));
-
-	$(".clear-completed").addEventListener("click", () => deleteAll);
-
-	const selectTodos = ({ type }) => {
-		reloadTodos(type);
-
-
-
-		// switch (type) {
-		// 	case "ALL":
-		// 		reloadTodos("all");
-		// 		break;
-		// 	case "ACTIVE":
-		// 		reloadTodos("all");
-		// 		break;
-		// 	case "COMPLETE":
-		// 		reloadTodos("all");
-		// 		break;
-		// }
+	const selectTodos = ({ currentTarget }) => {
+		$$(".filter").forEach(item => item.classList.remove("selected"));
+		currentTarget.classList.add("selected");
+		reloadTodos(currentTarget.dataset.filter);
 	}
 
 	const deleteAll =  async () => {
@@ -34,4 +16,7 @@ export default function TodoTotal  ({ reloadTodos }) {
 		await API.deleteFetch(`/api/users/${ $activeUserId }/items/`);
 		reloadTodos();
 	}
+
+	$$(".filter").forEach(item => item.addEventListener("click", selectTodos));
+	$(".clear-completed").addEventListener("click", () => deleteAll);
 }

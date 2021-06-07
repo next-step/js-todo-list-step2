@@ -35,8 +35,6 @@ export default {
 				body: JSON.stringify(obj)
 			})
 			.then((response) => response.json());
-
-			console.log("res", res)
 		} catch (e) {
 			console.log("[err] ", e);
 		}
