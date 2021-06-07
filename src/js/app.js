@@ -230,13 +230,8 @@ class App {
     this.setState(newState);
   }
 
-  // // NOTE onKeyPress(value) {}는 동작하지 않습니다.
-  // // 왜 안되는지 this에 대해서 다시 공부해봅시다.
   setState = (nextState) => {
     this.state = nextState;
-    // localStorage.setItem('myState', JSON.stringify(this.state));
-    // this.todoList.setState(this.state);
-    // this.todoCount.setState(this.state);
   };
 }
 

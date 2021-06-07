@@ -44,7 +44,7 @@ class TodoList {
       }
     });
     
-    this.$target.addEventListener('change', async ({ target, target : { className }}) => {
+    this.$target.addEventListener('change', async ({ target }) => {
       const closestLi = target.closest('li');
       const index = closestLi.dataset['index'];
       const id = this.state.user._id;
@@ -54,7 +54,6 @@ class TodoList {
       const body = {
         priority
       };
-      // if (priority === NONE) return;
       changeTodoPriority(+index, priority);
       await this.dataLoader.putData(USER_API + `/${id}/items/${itemId}/priority`, body);
     });

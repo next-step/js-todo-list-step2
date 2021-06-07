@@ -6,10 +6,6 @@ class DataLoader {
     `<div class="loader-container" style="display: none;">
       <div class="loader"></div>
     </div>`);
-    // this.$container = this.$target.querySelector('.loader-container');
-    // this.$container.addEventListener('click', (e) => {
-    //   e.preventDefault();
-    // });
   }
 
   getData = async (url) => {

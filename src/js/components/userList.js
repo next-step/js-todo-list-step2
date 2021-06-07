@@ -47,8 +47,8 @@ class UserList {
         const newUser = {
           name: userName,
         };
-        const user = await this.dataLoader.postData(USER_API, newUser);
         onUpdateUser(user);
+        const user = await this.dataLoader.postData(USER_API, newUser);
       }
     };
 
@@ -58,19 +58,18 @@ class UserList {
         const userName = name.trim();
         if (!userName || !hasName(userName, this.state.users)) return;
         const id = this.state.users[userName]._id;
-        await this.dataLoader.deleteData(USER_API + `/${id}`);
         onDeleteUser(userName);
+        await this.dataLoader.deleteData(USER_API + `/${id}`);
       }
     };
 
-    const onUserHandler = async (event) => {
-      const { target } = event;
+    const onUserHandler = async ({target}) => {
       if (!(target instanceof HTMLButtonElement)) {
         return;
       }
       const id = this.state.users[target.textContent]._id;
-      const user = await this.dataLoader.getData(USER_API + `/${id}`);
       onUpdateUser(user);
+      const user = await this.dataLoader.getData(USER_API + `/${id}`);
     };
 
     userCreateButton.addEventListener('click', onUserCreateHandler);

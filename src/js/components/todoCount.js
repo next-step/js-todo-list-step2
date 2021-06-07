@@ -21,8 +21,7 @@ class TodoCount {
   };
 
   addEvent = (changeFilter, clearList) => {
-    this.$target.addEventListener('click', async (event) => {
-      const { target } = event;
+    this.$target.addEventListener('click', async ({ target }) => {
       if (target.classList.contains('selected')) return;
       if (target.classList.contains('all')) {
         changeFilter(ALL);
