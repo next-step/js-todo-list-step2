@@ -2,4 +2,8 @@ const $ = (target) => {
   return document.querySelector(target);
 };
 
-export { $ };
+const $$ = (target) => {
+  return document.querySelectorAll(target);
+};
+
+export { $, $$ };

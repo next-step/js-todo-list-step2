@@ -1,4 +1,4 @@
-import { $ } from "../lib/util.js";
+import { $, $$ } from "../lib/util.js";
 
 class TodoList {
   constructor({ onDelete, onComplete, onEditing, onEdit }) {
@@ -22,7 +22,12 @@ class TodoList {
         <input class="toggle" data-id=${item.id} type="checkbox" ${
         item.isCompleted ? "checked" : ""
       }/>
-        <label class="label" data-id=${item.id}>${item.contents}</label>
+        <label class="label" data-id=${item.id}>
+        <select class="chip select">
+                    <option value="0" selected>순위</option>
+                    <option value="1">1순위</option>
+                    <option value="2">2순위</option>
+                  </select>${item.contents}</label>
         <button data-id=${item.id} class="destroy"></button>
       </div>
       <input  data-id=${item.id} class="edit" value="${item.contents}" />
@@ -33,24 +38,19 @@ class TodoList {
   };
 
   registerEventHandler = () => {
-    const deleteButtons = document.querySelectorAll(".destroy");
-    const completeButtons = document.querySelectorAll(".toggle");
-    const itemTitles = document.querySelectorAll(".label");
-    const editInputs = document.querySelectorAll(".edit");
-
-    deleteButtons.forEach((button) => {
+    $$(".destroy").forEach((button) => {
       button.addEventListener("click", (e) => this.onDelete(e.target.dataset.id));
     });
 
-    completeButtons.forEach((button) => {
+    $$(".toggle").forEach((button) => {
       button.addEventListener("click", (e) => this.onComplete(e.target.dataset.id));
     });
 
-    itemTitles.forEach((title) => {
+    $$(".label").forEach((title) => {
       title.addEventListener("dblclick", (e) => this.onEditing(e.target.dataset.id));
     });
 
-    editInputs.forEach((input) => {
+    $$(".edit").forEach((input) => {
       input.addEventListener("keydown", (e) => this.onEdit(e, e.target.dataset.id));
     });
   };
