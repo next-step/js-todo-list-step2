@@ -5,7 +5,6 @@ export default function UserListBtn() {
 
   this.setState = (newState) => {
     userList = newState;
-    console.log(userList);
     this.render();
   }
 

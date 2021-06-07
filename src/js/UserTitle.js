@@ -1,5 +1,3 @@
-
-
 function UserTitle() {
   const $userTitle = document.querySelector('#user-title');
   let $state = '';

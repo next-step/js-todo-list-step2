@@ -58,7 +58,6 @@ export default function UserList({onSelect, onAdd, onDelete}) {
 
   this.addEvent3 = () => {
     const $userDeleteBtn = document.querySelector('.user-delete-button');
-    console.log($userDeleteBtn);
     
     $userDeleteBtn.addEventListener('click', () => {
       onDelete();
