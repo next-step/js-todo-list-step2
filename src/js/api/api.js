@@ -36,12 +36,6 @@ const fetchAPI_GET = async function(url){
     }
  }
 
-//  const fetchAPI =  function(url, method){
-//      return fetch(baseURL+url)
-//         .then((response) => response.json())
-//         .then((data) =>{return data} );
-//  }
-
 export const userAPI = {
     addUser : (userName) => {
         return fetchAPI_body("","POST",userName);
@@ -49,7 +43,6 @@ export const userAPI = {
     getAllUserItems : () =>{
         return  fetchAPI_GET("","GET");
     },
-    //https://js-todo-list-9ca3a.df.r.appspot.com/api/users/J-BuG57Uc/items/
     getUserItems : (userID) =>{
         return fetchAPI_GET(`${userID}/items/`,"GET");
     },
@@ -60,26 +53,21 @@ export const userAPI = {
 }
 
 export const todoAPI = {
-    //POST /api/users/:userId/items/
     addTodo : (userid, item) => {
         return fetchAPI_body(`${userid}/items`,"POST",item);
     },
-    ///api/users/:userId/items/ DELETE
     deleteAllTodo : (userID) => {
         return fetchAPI_DELETE(`${userID}/items`,"DELETE");
     },
-    //DELETE	/api/users/:userId/items/:itemId
     deleteTodo :(userID, ItemID) => {
         return fetchAPI_DELETE(`${userID}/items/${ItemID}`,"DELETE");
     },
-    //put /api/users/:userId/items/:itemId
     updateItem : (userID, ItemID, updateItem) => {
         return fetchAPI_body(`${userID}/items/${ItemID}`,"PUT",updateItem);
     },
     updatePriorty :(userID, ItemID, priority) => {
         return fetchAPI();
     },
-    //put /api/users/:userId/items/:itemId/toggle
     toggleItem : (userID, ItemID) => {
         return fetchAPI_body(`${userID}/items/${ItemID}/toggle`,'PUT');
     }
