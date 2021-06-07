@@ -29,7 +29,7 @@ export default function TodoList ({ reloadTodos, filterTodos }) {
 					</select>`
 		else if (priority === "FIRST") item = `<span class="chip primary">1순위</span>`
 		else if (priority === "SECOND") item = `<span class="chip secondary">2순위</span>`
-		
+
 		return item;
 	}
 
