@@ -11,8 +11,16 @@ class Todolist {
     this.$target = document.createElement('ul');
     this.$target.className = 'todo-list';
     this.$section.appendChild(this.$target);
+    this.setEvent();
     $todoapp.appendChild(this.$section);
   }
+
+  setEvent() {
+    this.$target.addEventListener("click", (event) => this.onClick(event.target.closest("li").dataset.id, event.target.className))
+    this.$target.addEventListener("dblclick", (event) => this.onDbClick(event.target))
+    this.$target.addEventListener("change", (event) => this.onChange(event.target.closest("li").dataset.id, event.target.value))
+  }
+
   setState(nextState) {
     this.state = { ...this.state, ...nextState };
     this.render();
@@ -57,23 +65,6 @@ class Todolist {
   }
   render() {
     this.$target.innerHTML = this.template();
-    this.mounted();
-  }
-  mounted() {
-    this.$target.querySelectorAll("li").forEach($li => {
-      $li.addEventListener("click", (e) => {
-          const { id } = e.target.closest("li").dataset;
-          const className = e.target.className;
-          this.onClick(id, className);
-      });
-      $li.addEventListener("dblclick", (e) => {
-        this.onDbClick(e.target);
-      });
-      $li.addEventListener("change", (e) => {
-        const { id } = e.target.closest("li").dataset;
-        this.onChange(id, e.target.value)
-      });
-    })
   }
 }
 

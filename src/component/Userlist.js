@@ -5,7 +5,11 @@ class Userlist {
     this.onClick = onClick;
     this.$target = document.createElement('section');
     $app.appendChild(this.$target);
+    this.setEvent()
     this.render();
+  }
+  setEvent() {
+    this.$target.addEventListener("click", this.onClick)
   }
   setState(nextState) {
     this.state = { ...this.state, ...nextState };
@@ -32,11 +36,6 @@ class Userlist {
   }
   render() {
     this.$target.innerHTML = this.template();
-    this.mounted();
-  }
-
-  mounted() {
-    this.$target.addEventListener("click", this.onClick)
   }
 }
 

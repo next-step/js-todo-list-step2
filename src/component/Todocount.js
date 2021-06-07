@@ -7,8 +7,14 @@ class Todocount {
     this.$target = document.createElement('div');
     this.$target.className = 'count-container';
     $todoapp.appendChild(this.$target);
+    this.setEvent();
     this.render();
   }
+  
+  setEvent() {
+    this.$target.addEventListener('click', this.onClick);
+  }
+
   setState(nextState) {
     this.state = { ...this.state, ...nextState };
     this.render();
@@ -34,10 +40,6 @@ class Todocount {
   }
   render() {
     this.$target.innerHTML = this.template();
-    this.mounted();
-  }
-  mounted() {
-    this.$target.addEventListener('click', this.onClick);
   }
 }
 

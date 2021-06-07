@@ -5,8 +5,13 @@ class Todoinput {
     this.$target.className = 'input-container';
     $todoapp.appendChild(this.$target);
 
+    this.setEvent();
     this.render();
   }
+  setEvent() {
+    this.$target.addEventListener('keyup', this.onKeyup);
+  }
+
   template() {
     return `
     <input
@@ -18,10 +23,6 @@ class Todoinput {
   }
   render() {
     this.$target.innerHTML = this.template();
-    this.mounted();
-  }
-  mounted() {
-    this.$target.addEventListener('keyup', this.onKeyup);
   }
 }
 
