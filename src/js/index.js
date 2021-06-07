@@ -195,11 +195,6 @@ function drawTodoList(userTodo){
 
 
 
-
-
-
-
-
 function onToggleButtonClick(){  
   console.log("onToggleButtonClick");
   const userID = document.querySelector('.todo-list').dataset.userid;
@@ -213,8 +208,14 @@ function onToggleButtonClick(){
       alert("문제발생 : "+error);
       return;
     }else{
-
-      this.parentNode.parentNode.setAttribute("class", 'completed');
+      const li = this.parentNode.parentNode;
+      const li_completed = li.getAttribute('class');
+      console.log(li_completed);
+      if(li_completed==='completed'){
+        li.setAttribute('class', '');
+      }else{
+        li.setAttribute('class', 'completed');
+      }
     }
   })
 
