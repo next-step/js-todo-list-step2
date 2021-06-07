@@ -1,7 +1,8 @@
 'use strict'
 const $ = selector => document.querySelector(selector);
-const $userList = $('#user-list')
-const $userTitle = $('#user-title strong')
+const $userList = $('#user-list');
+const $userTitle = $('#user-title strong');
+const $todoList = $('.todo-list');
 const baseUrl = 'https://js-todo-list-9ca3a.df.r.appspot.com';
 
 const postOption = (name) => {
@@ -27,30 +28,23 @@ const userBtn = `
   </div>
   `;
 
-const loadUserList = () => {
-  fetch(`${baseUrl}/api/users`)
-    .then(res => {
-      if (!res.ok) {
-        throw new Error(res.status)
-      }
-      return res.json()
-    })
-    .then(data => {
-      showUserList(data)
-    })
-    .catch(error => {
-      console.log(error)
-    })
+const loadUserList = async () => {
+  const response = await fetch(`${baseUrl}/api/users`);
+  return response.json();
+}
+
+const changeTitle = user => {
+  $('#user-title').dataset.username = user.name;
+  $userTitle.innerText = user.name;
 };
 
-const loadUserInformation = (users) => {
+const defaultLoadUserInformation = (users) => {
   const $userListbtns = document.querySelectorAll('button.ripple');
   [...$userListbtns].map(btn => {
     btn.dataset.id == users[0]._id ? btn.classList.add('active') : ''
   });
-  alert(users[0].name)
-  $('#user-title').dataset.username = users[0].name;
-  $userTitle.innerText = users[0].name;
+  alert("첫번째 유저명" + users[0].name);
+  changeTitle(users[0]);
 };
 
 const userListTemplate = users => {
@@ -65,50 +59,78 @@ const userListTemplate = users => {
   return html
 };
 
+const onUserSelectHandler = e => {
+  const userBtnId = e.target.dataset.id
+  const $userListbtns = document.querySelectorAll('button.ripple');
+
+  [...$userListbtns].map(btn => {
+    userBtnId == btn.dataset.id ? btn.classList.add('active') : btn.classList.remove('active')
+  });
+
+  loadUserList().then(users => {
+    users.map(user => {
+      if (userBtnId == user._id) {
+        changeTitle(user);
+        //loadToDos(); 투두 구현후 ㄱㄱ
+      }
+    })
+  })
+
+}
+
+const onUserCreateHandler = () => {
+  const userName = prompt("추가하고 싶은 이름을 입력해주세요.");
+  const flag = userName.length < 2 ? false : true;
+
+  if (flag) {
+    fetch(`${baseUrl}/api/users/`, postOption(userName))
+      .then(res => {
+        if (!res.ok) {
+          throw new Error(res.status)
+        }
+        return res.json()
+      })
+      .then(data => {
+        init()
+      })
+      .catch(error => {
+        console.log(error)
+      })
+  } else {
+    alert('2글자 이상이어야 합니다.');
+  }
+};
+
+const onUserDeleteHandler = () => {
+  alert('delete');
+}
+
 const showUserList = users => {
   const user = userListTemplate(users)
   $userList.innerHTML = user;
 
-  loadUserInformation(users);
-
-  const onUserCreateHandler = () => {
-    const userName = prompt("추가하고 싶은 이름을 입력해주세요.");
-    const flag = userName.length < 2 ? false : true;
-
-    if (flag) {
-      fetch(`${baseUrl}/api/users/`, postOption(userName))
-        .then(res => {
-          if (!res.ok) {
-            throw new Error(res.status)
-          }
-          return res.json()
-        })
-        .then(data => {
-          loadUserList()
-
-        })
-        .catch(error => {
-          console.log(error)
-        })
-    } else {
-      alert('2글자 이상이어야 합니다.');
-    }
-  };
-
-  const onUserDeleteHandler = () => {
-    alert('delete');
-  }
+  defaultLoadUserInformation(users);
 
   const $userCreateButton = document.querySelector('.user-create-button');
   const $userDeleteButton = document.querySelector('.user-delete-button');
+  $userList.addEventListener('click', e => {
+    if (e.target.dataset.action == 'selectUser') {
+      onUserSelectHandler(e);
+    };
+  });
   $userCreateButton.addEventListener('click', onUserCreateHandler);
   $userDeleteButton.addEventListener('click', onUserDeleteHandler);
 };
 
 const init = () => {
-  loadUserList();
+  const allUsersPromise = loadUserList();
+  allUsersPromise.then(users => showUserList(users));
 }
 
 init();
 
 
+async function getUsers() {
+  const response = await fetch(API_URL);
+  return response.json();
+}
