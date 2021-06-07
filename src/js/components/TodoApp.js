@@ -1,5 +1,8 @@
 import { fetchRequest } from "../lib/fetchRequest.js";
-import { API_URL } from "../constants/config.js";
+import { API_URL, METHOD } from "../constants/config.js";
+import { INFORM_MESSAGES, ERROR_MESSAGES } from "../constants/message.js";
+import { MINIMUM_LENGTH } from "../constants/limitValue.js";
+import { KEY } from "../constants/eventKey.js";
 
 import UserList from "./UserList.js";
 import TodoList from "./TodoList.js";
@@ -35,9 +38,9 @@ class TodoApp {
   // UserList 함수
 
   async getUserList() {
-    const { result, error } = await fetchRequest(API_URL.USERS, "get");
+    const { result, error } = await fetchRequest(API_URL.USERS, METHOD.GET);
 
-    if (error) return alert("사용자 목록 조회에 실패했습니다.");
+    if (error) return alert(ERROR_MESSAGES.GET_USER_LIST);
 
     const userListData = result.map((user) => {
       const userTodoList = user.todoList.map((todoList) => {
@@ -68,28 +71,27 @@ class TodoApp {
   }
 
   async onAddUser() {
-    const userName = prompt("추가하고 싶은 이름을 입력해주세요.");
+    const userName = prompt(INFORM_MESSAGES.ADD_USER);
+    if (!userName) return;
+    if (userName.length < MINIMUM_LENGTH.USER_NAME)
+      return alert(ERROR_MESSAGES.TOO_SHORT_USER_NAME);
 
-    if (userName.length < 2) return alert("최소 2글자 이상이어야 합니다.");
-
-    const { error } = await fetchRequest(API_URL.USERS, "post", { name: userName });
-    if (error) return alert("사용자 추가에 실패했습니다.");
+    const { error } = await fetchRequest(API_URL.USERS, METHOD.POST, { name: userName });
+    if (error) return alert(ERROR_MESSAGES.ADD_USER);
     this.getUserList();
   }
 
   async onDeleteUser() {
     const deleteId = this.selectedUser.id;
-    const { error } = await fetchRequest(API_URL.USER(deleteId), "delete");
-    if (error) return alert("사용자 삭제에 실패했습니다.");
+    const { error } = await fetchRequest(API_URL.USER(deleteId), METHOD.DELETE);
+    if (error) return alert(ERROR_MESSAGES.DELETE_USER);
     this.selectedUser = {};
     this.getUserList();
   }
 
-  // TodoInput 함수
-
   async getUserTodoList(userId) {
-    const { result, error } = await fetchRequest(API_URL.ITEM(userId), "get");
-    if (error) alert("사용자의 리스트를 불러오는데 실패했습니다.");
+    const { result, error } = await fetchRequest(API_URL.ITEM(userId), METHOD.GET);
+    if (error) alert(ERROR_MESSAGES.GET_TODO_LIST);
 
     this.selectedUser.todoList = result.map((item) => {
       return new TodoItemModel({ ...item, id: item._id });
@@ -98,12 +100,14 @@ class TodoApp {
     this.todoList.setState(this.selectedUser.todoList);
   }
 
+  // TodoInput 함수
+
   async onAddItem(contents) {
-    const { result, error } = await fetchRequest(API_URL.ITEM(this.selectedUser.id), "post", {
+    const { result, error } = await fetchRequest(API_URL.ITEM(this.selectedUser.id), METHOD.POST, {
       contents,
     });
 
-    if (error) return alert("할 일 추가에 실패했습니다.");
+    if (error) return alert(ERROR_MESSAGES.ADD_ITEM);
 
     this.selectedUser.todoList.push(new TodoItemModel({ ...result, id: result._id }));
 
@@ -113,8 +117,8 @@ class TodoApp {
   // User의 TodoList 함수
 
   async onDeleteAllItem() {
-    const { result, error } = await fetchRequest(API_URL.ITEM(this.selectedUser.id), "delete");
-    if (error) return alert("모두 삭제하기에 실패했습니다.");
+    const { result, error } = await fetchRequest(API_URL.ITEM(this.selectedUser.id), METHOD.DELETE);
+    if (error) return alert(ERROR_MESSAGES.DELETE_ALL_ITEMS);
 
     this.selectedUser.todoList = [];
     this.todoList.setState(this.selectedUser.todoList);
@@ -123,9 +127,9 @@ class TodoApp {
   async onDeleteItem(itemId) {
     const { result, error } = await fetchRequest(
       API_URL.USER_ITEM(this.selectedUser.id, itemId),
-      "delete"
+      METHOD.DELETE
     );
-    if (error) return alert("할 일 삭제하기에 실패했습니다.");
+    if (error) return alert(ERROR_MESSAGES.DELETE_ITEM);
 
     this.selectedUser.todoList = result.todoList.map((item) => {
       return new TodoItemModel({ ...item, id: item._id });
@@ -136,10 +140,10 @@ class TodoApp {
   async onCompleteItem(itemId) {
     const { result, error } = await fetchRequest(
       API_URL.ITEM_TOGGLE(this.selectedUser.id, itemId),
-      "put"
+      METHOD.PUT
     );
 
-    if (error) return alert("할 일 완료 저장에 실패했습니다.");
+    if (error) return alert(ERROR_MESSAGES.COMPLETE_ITEM);
 
     this.selectedUser.todoList = this.selectedUser.todoList.map((item) => {
       if (item.id === itemId) {
@@ -163,7 +167,7 @@ class TodoApp {
   }
 
   async onEditItem(event, itemId) {
-    if (event.key === "Escape") {
+    if (event.key === KEY.ESCAPE) {
       this.selectedUser.todoList = this.selectedUser.todoList.map((item) => {
         if (item.id == itemId) {
           item.editing = !item.editing;
@@ -173,14 +177,14 @@ class TodoApp {
 
       this.todoList.setState(this.selectedUser.todoList);
     }
-    if (event.key === "Enter") {
+    if (event.key === KEY.ENTER) {
       const { result, error } = await fetchRequest(
         API_URL.USER_ITEM(this.selectedUser.id, itemId),
-        "put",
+        METHOD.PUT,
         { contents: event.target.value }
       );
 
-      if (error) return alert("할 일 수정에 실패했습니다.");
+      if (error) return alert(ERROR_MESSAGES.EDIT_ITEM);
 
       this.selectedUser.todoList = this.selectedUser.todoList.map((item) => {
         if (item.id == itemId) {

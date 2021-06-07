@@ -1,4 +1,7 @@
 import { $ } from "../lib/util.js";
+import { ERROR_MESSAGES } from "../constants/message.js";
+import { MINIMUM_LENGTH } from "../constants/limitValue.js";
+import { KEY } from "../constants/eventKey.js";
 
 class TodoInput {
   constructor({ onAddItem }) {
@@ -15,8 +18,9 @@ class TodoInput {
   }
 
   addTodoItem = (event) => {
-    if (event.key !== "Enter") return;
-    if (event.target.value < 2) return alert("최소 2글자 이상이어야 합니다.");
+    if (event.key !== KEY.ENTER) return;
+    if (event.target.value.length < MINIMUM_LENGTH.ITEM_CONTENTS)
+      return alert(ERROR_MESSAGES.TOO_SHORT_ITEM_CONTENTS);
 
     this.onAddItem(event.target.value);
     event.target.value = "";

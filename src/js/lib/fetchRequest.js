@@ -17,13 +17,11 @@ const fetchRequest = async (url, method, data) => {
     return {
       result: result,
       error: false,
-      errorMessage: "",
     };
   } catch (e) {
     return {
       result: null,
       error: true,
-      errorMessage: e.message,
     };
   }
 };

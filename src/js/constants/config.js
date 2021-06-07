@@ -8,4 +8,11 @@ const API_URL = {
   ITEM_TOGGLE: (userId, itemId) => `${baseUrl}/api/users/${userId}/items/${itemId}/toggle`,
 };
 
-export { API_URL };
+const METHOD = {
+  GET: "GET",
+  POST: "POST",
+  PUT: "PUT",
+  DELETE: "DELETE",
+};
+
+export { API_URL, METHOD };
