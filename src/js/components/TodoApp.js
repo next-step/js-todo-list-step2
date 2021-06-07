@@ -87,12 +87,7 @@ class TodoApp {
     if (error) alert("사용자의 리스트를 불러오는데 실패했습니다.");
 
     this.selectedUser.todoList = result.map((item) => {
-      return new TodoItemModel({
-        id: item._id,
-        contents: item.contents,
-        isCompleted: item.isCompleted,
-        priority: item.priority,
-      });
+      return new TodoItemModel({ ...item, id: item._id });
     });
 
     this.todoList.setState(this.selectedUser.todoList);
@@ -105,14 +100,7 @@ class TodoApp {
 
     if (error) return alert("할 일 추가에 실패했습니다.");
 
-    this.selectedUser.todoList.push(
-      new TodoItemModel({
-        id: result._id,
-        contents: result.contents,
-        isCompleted: result.isCompleted,
-        priority: result.priority,
-      })
-    );
+    this.selectedUser.todoList.push(new TodoItemModel({ ...result, id: result._id }));
 
     this.todoList.setState(this.selectedUser.todoList);
   }
@@ -135,12 +123,7 @@ class TodoApp {
     if (error) return alert("할 일 삭제하기에 실패했습니다.");
 
     this.selectedUser.todoList = result.todoList.map((item) => {
-      return new TodoItemModel({
-        id: item._id,
-        contents: item.contents,
-        isCompleted: item.isCompleted,
-        priority: item.priority,
-      });
+      return new TodoItemModel({ ...item, id: item._id });
     });
     this.todoList.setState(this.selectedUser.todoList);
   }
