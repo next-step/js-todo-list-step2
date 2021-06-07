@@ -30,7 +30,7 @@ export default function App () {
 	const setSate = ({users, todos}) => {
 		this.userList.setState(users);
 		this.todoList.setState(todos);
-		// this.todoTotal.setState(todos);
+		this.todoTotal.setState(todos);
 	}
 
 	const init = async () => {
