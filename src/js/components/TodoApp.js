@@ -70,6 +70,8 @@ class TodoApp {
   async onAddUser() {
     const userName = prompt("추가하고 싶은 이름을 입력해주세요.");
 
+    if (userName.length < 2) return alert("최소 2글자 이상이어야 합니다.");
+
     const { error } = await fetchRequest(API_URL.USERS, "post", { name: userName });
     if (error) return alert("사용자 추가에 실패했습니다.");
     this.getUserList();
