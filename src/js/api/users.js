@@ -8,9 +8,7 @@ const postUser = async({ name }) => {
   const { data } = await request({
     url,
     method: METHOD.POST,
-    body: {
-      name,
-    }
+    body: { name }
   });
 
   return data;
@@ -32,12 +30,12 @@ const getUserByUserId = async({ userId }) => {
 }
 
 const deleteUserByUserId = async({ userId }) => {
-  const { status } = await request({
+  const { data } = await request({
     url: `${url}/${userId}`,
     method: METHOD.DELETE
   });
-  console.log(status);
-  return true;
+
+  return data;
 }
 
 export default {
