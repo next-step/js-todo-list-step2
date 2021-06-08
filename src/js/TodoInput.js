@@ -4,6 +4,7 @@ export default function TodoInput({ onAdd }) {
   const addTodoItem = (event) => {
     if (event.target !== $todoInput) return;
     if (event.key === 'Enter') {
+      console.log($todoInput.value.trim());
       onAdd($todoInput.value.trim());
       $todoInput.value = '';
     }

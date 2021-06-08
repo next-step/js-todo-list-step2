@@ -46,12 +46,12 @@ export default function TodoList({ onToggle, onDelete, onEdit }) {
     const {$li,id} = EventHandler(event) 
 
     if (event.key === 'Escape') {
-      onEdit(label.textContent, id);
+      onEdit(id, label.textContent);
       $li.classList.remove('editing');  
     }
 
     if (event.key === 'Enter') {
-      onEdit(event.target.value.trim(), id);
+      onEdit(id, event.target.value.trim());
     }
   }
 

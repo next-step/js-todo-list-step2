@@ -3,7 +3,7 @@ import user from './store/user.js';
 import UserListBtn from './UserSelect.js';
 import UserList from './UserList.js';
 
-export default function User() {
+export default function UserContainer({onUpdateUser}) {
   this.userData = {};
   this.selectedUser = {};
   this.userTitle = {};
@@ -25,9 +25,10 @@ export default function User() {
     this.userList = await new UserList({
       onSelect: async (id) => {
         const temp = this.userData.find(user => user._id === id);
-        user.setSelected(temp);
+        await user.setSelected(temp);
         await updateData();
-        this.setState();
+        await this.setState();
+        onUpdateUser();
       },
       onAdd: async (name) => {
         const temp = await user.createUser(name);
@@ -56,4 +57,3 @@ export default function User() {
   }
 }
 
-new User();

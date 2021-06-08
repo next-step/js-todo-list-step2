@@ -1,5 +1,5 @@
 export default function TodoItem(todoText) {
   this.id = Date.now().toString();
-  this.todo = todoText;
+  this.contents = todoText;
   this.completed = false;
 } 
