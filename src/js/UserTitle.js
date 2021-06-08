@@ -1,18 +1,18 @@
 function UserTitle() {
-  const $userTitle = document.querySelector('#user-title');
-  let $state = '';
+  this.$userTitle = document.querySelector('#user-title');
+  this.$state = '';
   
   this.setState = async (value) => {
-    $state = value;  
+    this.$state = value;  
     this.render();
   }
 
   this.template = () => {
-    return `<span><strong>${$state}</strong>'s Todo List</span>`
+    return `<span><strong>${this.$state}</strong>'s Todo List</span>`
   }
   
   this.render = () => {
-    $userTitle.innerHTML = this.template();
+    this.$userTitle.innerHTML = this.template();
   }
 }
 

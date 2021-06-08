@@ -1,4 +1,4 @@
-import $api from './api/index.js'
+import $api from '../api/index.js'
 
 const user =(() => {
   let selected = {};
@@ -7,6 +7,7 @@ const user =(() => {
     const users = await user.getAll();
     users[0].active = true;
     selected = users[0]; 
+    return users;
   }
 
   const mapUser = (user) => {

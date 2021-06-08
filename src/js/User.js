@@ -1,64 +1,59 @@
 import UserTitle from './UserTitle.js';
-import user from './store.js';
+import user from './store/user.js';
 import UserListBtn from './UserSelect.js';
 import UserList from './UserList.js';
 
 export default function User() {
-  let userData = {};
-  let selectedUser = {};
-  let userTitle = {};
-  let userListBtn = {};
-  let userList = {}; 
+  this.userData = {};
+  this.selectedUser = {};
+  this.userTitle = {};
+  this.userListBtn = {};
+  this.userList = {}; 
 
   const loadData = async () => {
-    await user.init();
-    userData = await user.getAll();
-    selectedUser = await user.getSelected();
+    this.userData = await user.init();
+    this.selectedUser = await user.getSelected();
   }
   const updateData = async () => {
-    userData = await user.getAll();
-    selectedUser = await user.getSelected();
+    this.userData = await user.getAll();
+    this.selectedUser = await user.getSelected();
   }
 
   const drawComponent = async () => {
-    userTitle = await new UserTitle();
-    userListBtn = await new UserListBtn();
-    userList = await new UserList({
+    this.userTitle = await new UserTitle();
+    this.userListBtn = await new UserListBtn();
+    this.userList = await new UserList({
       onSelect: async (id) => {
-        const temp = userData.find(user => user._id === id);
+        const temp = this.userData.find(user => user._id === id);
         user.setSelected(temp);
         await updateData();
-        setState();
+        this.setState();
       },
       onAdd: async (name) => {
         const temp = await user.createUser(name);
         await user.setSelected(temp);
         await updateData();
-        setState();
+        this.setState();
       },
       onDelete: () => {
-        const selectedId = selectedUser._id
+        const selectedId = this.selectedUser._id
         user.deleteUser(selectedId);
-        init();
-  
+        this.init();
       }
     });
   }
   
-  const setState = async () => {
-    await userTitle.setState(selectedUser.name);
-    await userListBtn.setState(userData);
-    await userList.setState(userData);
+  this.setState = async () => {
+    await this.userTitle.setState(this.selectedUser.name);
+    await this.userListBtn.setState(this.userData);
+    await this.userList.setState(this.userData);
   }
 
-  const init = async () => {
+  this.init = async () => {
     await loadData();
     await drawComponent();
-    await setState();
+    await this.setState();
   }
-  
-  init();
-  
 }
 
 new User();

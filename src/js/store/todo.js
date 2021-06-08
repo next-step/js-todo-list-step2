@@ -1,5 +1,5 @@
-import $api from './api/index.js'
-import user from './store.js';
+import $api from '../api/index.js'
+import user from './user.js';
 
 
 const todo = (() => {
@@ -8,6 +8,7 @@ const todo = (() => {
   const init = async () => {
     const selectedUser = await user.getSelected();
     selectedUserId = selectedUser._id;
+    return selectedUserId;
   };
 
   const getAll = async () => {

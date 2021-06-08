@@ -1,16 +1,16 @@
 export default function UserListBtn() {
-  const $userList = document.querySelector('#user-list');
-  let userList = {};
+  this.$userList = document.querySelector('#user-list');
+  this.userList = {};
 
 
   this.setState = (newState) => {
-    userList = newState;
+    this.userList = newState;
     this.render();
   }
 
   this.template = () => {
   
-    const userSelectHtml = userList.map(user => {
+    const userSelectHtml = this.userList.map(user => {
     return `
     <button class="${user.active ? "ripple active": "ripple"}" id="${user._id}">
       ${user.name}
@@ -21,7 +21,7 @@ export default function UserListBtn() {
     }
 
     this.render = () => {
-      $userList.innerHTML = this.template();
+      this.$userList.innerHTML = this.template();
     }
 }
 

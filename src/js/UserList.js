@@ -1,16 +1,16 @@
 
 export default function UserList({onSelect, onAdd, onDelete}) {
-  const $userList = document.querySelector('#user-list');
+  this.$userList = document.querySelector('#user-list');
   
-  let $state = {};
+  this.$state = {};
   
   this.setState = (newState) => {
-    $state = newState;
+    this.$state = newState;
     this.render();
   }
 
   this.render = () => {
-    $userList.insertAdjacentHTML('beforeend',this.template());
+    this.$userList.insertAdjacentHTML('beforeend',this.template());
     this.setEvent();
   }
   
@@ -25,13 +25,12 @@ export default function UserList({onSelect, onAdd, onDelete}) {
   }
   this.setEvent = () => {
     
-    this.addEvent1();
-    this.addEvent2();
-    this.addEvent3();
+    this.onSelectHander();
+    this.onAddUserHandler();
+    this.onDeleteUserHandler();
   } 
 
-
-  this.addEvent1 = () => {
+  this.onSelectHander = () => {
     const $userListBtn = document.querySelectorAll('.ripple');
     
     [...$userListBtn].map(btn => btn.addEventListener('click', event => {
@@ -43,7 +42,7 @@ export default function UserList({onSelect, onAdd, onDelete}) {
     }))
   }
 
-  this.addEvent2 = () => {
+  this.onAddUserHandler = () => {
     const $userCreateBtn = document.querySelector('.user-create-button');
     $userCreateBtn.addEventListener('click', () => {
         const userName = prompt("추가하고 싶은 이름을 입력해주세요.");
@@ -56,7 +55,7 @@ export default function UserList({onSelect, onAdd, onDelete}) {
     })
   }
 
-  this.addEvent3 = () => {
+  this.onDeleteUserHandler = () => {
     const $userDeleteBtn = document.querySelector('.user-delete-button');
     
     $userDeleteBtn.addEventListener('click', () => {

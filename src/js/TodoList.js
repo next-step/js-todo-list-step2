@@ -1,8 +1,8 @@
 import todoItemTemplate from './todoItemTemplate.js';
 
 export default function TodoList({ onToggle, onDelete, onEdit }) {
-  const $todoList = document.querySelector(".todo-list"); 
-  console.log($todoList)
+  this.$todoList = document.querySelector(".todo-list"); 
+  console.log(this.$todoList)
 
   const EventHandler = (event) => {
     return {
@@ -12,13 +12,14 @@ export default function TodoList({ onToggle, onDelete, onEdit }) {
   }
 
   this.setState = (updatedTodoItems) => {
-    this.todoItems = updatedTodoItems;
-    this.render(this.todoItems);
+    const todoItems = updatedTodoItems;
+    console.log(todoItems);
+    this.render(todoItems);
   }
 
   this.render = (items) => {  
-    const htmlItems = items.map(todoItemTemplate).join("");
-    $todoList.innerHTML = htmlItems;
+    const htmlItems = items.map(todoItemTemplate).join('');
+    this.$todoList.innerHTML = htmlItems;
   };
 
   this.toggleTodoItem = (event) => {
@@ -54,9 +55,9 @@ export default function TodoList({ onToggle, onDelete, onEdit }) {
     }
   }
 
-  $todoList.addEventListener('click', event => this.toggleTodoItem(event));
-  $todoList.addEventListener('click', event => this.deleteTodoItem(event));
-  $todoList.addEventListener('dblclick', event => this.activeEdit(event));
-  $todoList.addEventListener('keyup', event => this.endEdit(event));
+  this.$todoList.addEventListener('click', event => this.toggleTodoItem(event));
+  this.$todoList.addEventListener('click', event => this.deleteTodoItem(event));
+  this.$todoList.addEventListener('dblclick', event => this.activeEdit(event));
+  this.$todoList.addEventListener('keyup', event => this.endEdit(event));
 
 } 
