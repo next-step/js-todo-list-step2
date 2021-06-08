@@ -1,7 +1,7 @@
 const response = async res => {
-  
+
   if (!res.ok) {
-    throw new Error(res.status);
+    throw new Error(res);
   }
 
   const data = await res.json();
@@ -22,9 +22,9 @@ export const request = async params => {
 
   const config = {
     method,
-    headers: new window.Headers({ headers: {
+    headers: {
       'Content-Type': 'application/json'
-    }}),
+    },
   }
 
   if (body) {
@@ -35,4 +35,12 @@ export const request = async params => {
   const res = await window.fetch(`${baseUrl}${url}`, config);
 
   return response(res);
+}
+
+import todos from './todos.js';
+import users from './users.js';
+
+export default {
+  ...todos,
+  ...users,
 }
