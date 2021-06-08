@@ -118,6 +118,8 @@ function userSeleteButton(){
 }
 
 
+
+
 function drawTodoList(userTodo){
   let todoList ="";
   let userId =  document.querySelector('.user.ripple.active').dataset.id;
@@ -125,7 +127,6 @@ function drawTodoList(userTodo){
   document.querySelector('.new-todo').setAttribute('data-userid',userId);
 
   userTodo.forEach(todo => {
-    console.log(todoItem(todo));
     todoList += todoItem(todo);
   });
   document.querySelector(".todo-list").innerHTML = todoList;
@@ -135,8 +136,64 @@ function drawTodoList(userTodo){
   document.querySelectorAll(".toggle").forEach(toggleButton=> toggleButton.addEventListener("click", onToggleButtonClick));
   //더블클릭 이벤트 추가
   document.querySelectorAll('.label').forEach(label => label.addEventListener("dblclick", onEditLabel));
+  document.querySelectorAll('.select').forEach(select => select.addEventListener('change',onSelectHandler));
+  document.querySelectorAll('.edit').forEach(edit => edit.addEventListener('keyup',oneditKeyup));
+  
+  // fillter 이벤트 추가
+  document.querySelectorAll('.filters > li > a').forEach(li => li.addEventListener('click',fillterTodo));
+}
 
-  document.querySelectorAll('.edit').forEach(edit =>edit.addEventListener('keyup',oneditKeyup));
+function fillterTodo(){
+  document.querySelectorAll('.filters > li > a').forEach(a => {
+    let aText = a.getAttribute('class').replace('selected','');
+    let selectedText = this.getAttribute('class').replace('selected','');
+    
+    if(aText ==selectedText ){  
+      a.setAttribute("class",aText+' selected');
+    }else{
+      a.setAttribute('class',aText);
+    }  
+  });
+  showCount();
+}
+
+function showCount(){
+  let aSelect = document.querySelector('.filters > li > a.selected');
+  let selectedName = aSelect.getAttribute('class').replace('selected','').trim(' ');
+  //console.log(selectedName);
+  let totalNum = document.querySelectorAll('.todo-list >li').length;
+  let activeNum =  document.querySelectorAll('.todo-list >li.completed').length;
+  if(selectedName =='all'){
+     showListCount(totalNum);
+  }else if(selectedName =='active'){
+    showListCount(totalNum-activeNum);
+  }else{
+    showListCount(activeNum);
+  }
+}
+
+function showListCount(listLength){
+  const str = document.querySelector('.todo-count > strong');
+  console.log(str)
+  //console.log(listLength);
+  str.innerHTML = listLength;
+}
+
+function onSelectHandler(){
+  console.log("dfsdfsdfd");
+  const selectedValue = this.value;
+  if(selectedValue==1){
+    const labelvalue = this.parentNode;
+    console.log(labelvalue);
+    const el_label = this.parentNode.dataset.itemid;
+    console.log(el_label);
+    this.remove();
+    this.parentNode.innerHTML +=  `<span class="chip primary">1순위</span>`;
+    
+
+  }else if(selectedValue==2){
+
+  }
 }
 
 function onEditLabel(){
@@ -245,6 +302,8 @@ function clearTodo(){
     }
   })
 }
+
+
 
 
 const userCreateButton = document.querySelector('.user-create-button')

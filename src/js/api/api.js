@@ -66,7 +66,7 @@ export const todoAPI = {
         return fetchAPI_body(`${userID}/items/${ItemID}`,"PUT",updateItem);
     },
     updatePriorty :(userID, ItemID, priority) => {
-        return fetchAPI();
+        return fetchAPI_body(`${userID}/items/${ItemID}/priority`,"PUT",priority);
     },
     toggleItem : (userID, ItemID) => {
         return fetchAPI_body(`${userID}/items/${ItemID}/toggle`,'PUT');
