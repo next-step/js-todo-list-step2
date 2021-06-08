@@ -2,9 +2,6 @@ import { METHOD } from "../const/COMMON.js";
 import { request } from "./index.js";
 
 const url = '/users';
-
-// todos
-
 const getTodosByUserId = async({ userId }) => {
   const { data } = await request({
     url: `${url}/${userId}/items`
