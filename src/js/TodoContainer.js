@@ -13,9 +13,7 @@ export default function TodoContainer() {
 
   this.load = async() => {
     this.selectedUserId = await todo.init();
-    console.log(this.selectedUserId);
     this.todoItems = await todo.getAll(); 
-    console.log(this.todoItems);
   };
 
   this.update = async () => {
@@ -36,19 +34,16 @@ export default function TodoContainer() {
     this.todoList = new TodoList({
       onToggle: async (id) => {
         const toggleItem = this.todoItems.find((item) => item._id === id);
-        console.log(toggleItem);
         toggleItem.isCompleted = !toggleItem.isCompleted;
         await todo.toggle(id);
         await this.update();
       },
       onDelete: async (id) => {
         const deletedItem = await todo.deleteTodo(id);
-        console.log(deletedItem);
         await this.update();
       },
       onEdit: async (id, contents) => { 
         const editItem = this.todoItems.find((item) => item._id === id);
-        console.log(editItem);
         editItem.contents = contents;
         await todo.edit(id, contents)
         await this.update();

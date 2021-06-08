@@ -2,7 +2,6 @@ import todoItemTemplate from './todoItemTemplate.js';
 
 export default function TodoList({ onToggle, onDelete, onEdit }) {
   this.$todoList = document.querySelector(".todo-list"); 
-  console.log(this.$todoList)
 
   const EventHandler = (event) => {
     return {
@@ -13,7 +12,6 @@ export default function TodoList({ onToggle, onDelete, onEdit }) {
 
   this.setState = (updatedTodoItems) => {
     const todoItems = updatedTodoItems;
-    console.log(todoItems);
     this.render(todoItems);
   }
 
