@@ -1,5 +1,4 @@
 import todo from './store/todo.js';
-import user from './store/user.js';
 import TodoList from './TodoList.js';
 import TodoInput from './TodoInput.js';
 import TodoCount from './TodoCount.js';
@@ -30,14 +29,12 @@ export default function TodoContainer() {
       onRenderAll: async () => {
         await this.update();
       },
-      onActive: async () => {
-        console.log(this.todoItems)      
+      onActive: async () => {   
         const temp = await todo.getAll()
         this.todoItems = temp.filter(item => !item.isCompleted); 
         this.setState()
       },
-      onCompleted: async () => {
-        console.log(this.todoItems)      
+      onCompleted: async () => {   
         const temp = await todo.getAll()
         this.todoItems = temp.filter(item => item.isCompleted); 
         this.setState()

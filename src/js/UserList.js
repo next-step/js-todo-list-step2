@@ -1,4 +1,3 @@
-
 export default function UserList({onSelect, onAdd, onDelete}) {
   this.$userList = document.querySelector('#user-list');
   
