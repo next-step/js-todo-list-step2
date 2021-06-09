@@ -18,24 +18,16 @@ export default function App () {
 
 		this.todoList.setState(todos);
 
-		setSate({ todos: todos});
+		setSate({ todos: todos });
 	}
 
-	this.userList = new UserList({
-		reloadTodos: reloadTodos,
-	});
+	this.userList = new UserList({ reloadTodos });
 
-	this.todoInput = new TodoInput({
-		reloadTodos: reloadTodos,
-	});
+	this.todoInput = new TodoInput({ reloadTodos });
 
-	this.todoList = new TodoList({
-		reloadTodos: reloadTodos,
-	});
+	this.todoList = new TodoList({ reloadTodos });
 
-	this.todoTotal = new TodoTotal({
-		reloadTodos: reloadTodos,
-	});
+	this.todoTotal = new TodoTotal({ reloadTodos });
 
 	const setSate = ({users, todos}) => {
 		users && this.userList.setState(users);
@@ -45,8 +37,8 @@ export default function App () {
 	}
 
 	const init = async () => {
-		this.users = await API.getFetch("/api/users");
-		setSate({users: this.users, todos: this.users[0].todoList});
+		const users = await API.getFetch("/api/users");
+		setSate({users: users, todos: users[0].todoList});
 	}
 
 	init();

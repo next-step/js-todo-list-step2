@@ -53,26 +53,27 @@ export default function TodoList ({ reloadTodos, filterTodos }) {
 		let items = "";
 		this.userId = $(".user.active").dataset.id;
 
+
 		todos.map(todo => items += $new(todo));
 		$(".todo-list").innerHTML = items;
 
-		$$(".label").forEach(label => label.addEventListener("dblclick", editItem));
-		$$(".destroy").forEach(destroy => destroy.addEventListener("click", deleteItem));
-		$$(".toggle").forEach(chk => chk.addEventListener("click", completeItem));
-		$$(".chip").forEach(chip => chip.addEventListener("change", changePriority));
+		$$(".todo-list li").forEach($li => {
+			$li.querySelector(".label").addEventListener("dblclick", editItem);
+			$li.querySelector(".destroy").addEventListener("click", deleteItem);
+			$li.querySelector(".toggle").addEventListener("click", completeItem);
+			$li.querySelector(".chip").addEventListener("change", changePriority);
+		});
+
 	}
 
 	const changePriority = async ({ currentTarget }) => {
 		const itemId = currentTarget.parentElement.parentElement.parentElement.dataset.id;
 		let priority = currentTarget.value;
 
-		console.log("priority : ", priority);
-
 		if (priority === "1") priority = "FIRST";
 		else if (priority === "2") priority = "SECOND";
 		else priority = "NONE";
 
-		console.log(priority);
 		await API.putFetch(`/api/users/${ this.userId }/items/${ itemId }/priority`, { priority: priority });
 		reloadTodos();
 	}
