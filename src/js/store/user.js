@@ -84,9 +84,6 @@ class Store {
   getTodoItem(itemId) {
     return this.todos.find(todo => todo._id === itemId)
   }
-  filter() {
-
-  }
 }
 
 export default function() {
