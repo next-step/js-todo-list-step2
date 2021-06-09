@@ -30,7 +30,9 @@ const user =(() => {
 
   const deleteUser = async(userId) => {
     await $api.user.delete(userId);
-    await init();
+    const users = await user.getAll();
+    users[0].active = true;
+    selected = users[0];
   }
   const setSelected = async (value) => {
     selected = value

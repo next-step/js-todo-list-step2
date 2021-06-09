@@ -34,12 +34,14 @@ export default function UserContainer({onUpdateUser}) {
         const temp = await user.createUser(name);
         await user.setSelected(temp);
         await updateData();
+        onUpdateUser()
         this.setState();
       },
-      onDelete: () => {
-        const selectedId = this.selectedUser._id
-        user.deleteUser(selectedId);
-        this.init();
+      onDelete: async () => {
+        const selectedId = this.selectedUser._id;
+        await user.deleteUser(selectedId);
+        onUpdateUser();
+        await this.init();
       }
     });
   }

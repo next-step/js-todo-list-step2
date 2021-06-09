@@ -1,7 +1,8 @@
 import todoItemTemplate from './todoItemTemplate.js';
 
-export default function TodoList({ onToggle, onDelete, onEdit }) {
+export default function TodoList({ onToggle, onDelete, onEdit, onDeleteAll }) {
   this.$todoList = document.querySelector(".todo-list"); 
+  this.$deleteAllBtn = document.querySelector(".clear-completed"); 
 
   const EventHandler = (event) => {
     return {
@@ -32,6 +33,11 @@ export default function TodoList({ onToggle, onDelete, onEdit }) {
     onDelete(id);
   }
 
+  this.deleteAllTodo = () => {
+    console.log(3333333333);
+    onDeleteAll();
+  }
+
   this.activeEdit = (event) => {
     if (!event.target.matches('label')) return;
     const {$li} = EventHandler(event); 
@@ -57,5 +63,6 @@ export default function TodoList({ onToggle, onDelete, onEdit }) {
   this.$todoList.addEventListener('click', event => this.deleteTodoItem(event));
   this.$todoList.addEventListener('dblclick', event => this.activeEdit(event));
   this.$todoList.addEventListener('keyup', event => this.endEdit(event));
+  this.$deleteAllBtn.addEventListener('click', () => this.deleteAllTodo());
 
 } 

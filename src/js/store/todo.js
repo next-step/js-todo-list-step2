@@ -26,7 +26,7 @@ const todo = (() => {
   };
 
   const deleteAll = async () => {
-    const todos = await $api.todo.remove(selectedUserId);
+    const todos = await $api.todo.removeAll(selectedUserId);
     return todos;
   };
 
