@@ -1,44 +1,46 @@
-import { $ } from "../../utils/element";
+import { ALERT } from '../../const/USER.js';
 
-// 삭제, 등록
 class User {
   constructor($userList) {
     this.$userList = $userList;
     this.name = '';
   }
 
-  setEvent(customEvent) {
-    this.$userList.addEventListener('click', ({ target }) => this.onClickEvent(target, customEvent))
+  get nameSize() {
+    return this.name.length;
+  }
+
+  event = {
+    createUser: ({add}) => {
+      this.name = prompt(ALERT.PLZ_INSERT_NAME);
+      this.isValidName(this.name) && add(this.name);
+    },
+    deleteUser: ({delete: deleteUser}) => deleteUser()
   }
 
   reset() {
     this.name = '';
   }
-
+  
   isValidName() {
     const MIN_NAME_SIZE = 2;
-    if (this.name.length < MIN_NAME_SIZE) {
-      alert('노노');
+    if (this.nameSize < MIN_NAME_SIZE) {
+
+      alert(ALERT.PLZ_CHECK_NAME_SIZE);
       this.reset();
       return false
     }
     return true;
   }
 
-  onClickEvent(target, { add, delete: deleteUser }) {
-    if (!target.dataset.action) return;
+  onClickEvent({ dataset: { action } }, event) {
+    if (!action) return;
     
-    const { action } = target.dataset;
-    
-    if (action === 'createUser') {
-      this.name = prompt('추가하고 싶은 이름을 입력해주세요.');
-      this.isValidName(this.name) && add(this.name);
-      return;
-    }
+    this.event[action](event);
+  }
 
-    if (action === 'deleteUser') {
-      deleteUser(Number(target.id));
-    }
+  setEvent(customEvent) {
+    this.$userList.addEventListener('click', ({ target }) => this.onClickEvent(target, customEvent))
   }
 }
 

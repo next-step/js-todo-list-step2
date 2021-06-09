@@ -61,10 +61,13 @@ const putTodoPriorityByUserIdAndItemId = async({ userId, itemId, priority }) => 
   return data;
 }
 
-const putTodoCompleteByUserIdAndItemId = async({ userId, itemId, completed }) => {
+const putTodoCompleteByUserIdAndItemId = async({ userId, itemId, isCompleted }) => {
   const { data } = await request({
-    url: `${url}/${userId}/items/${itemId}/${completed}`,
-    method: METHOD.PUT
+    url: `${url}/${userId}/items/${itemId}/toggle`,
+    method: METHOD.PUT,
+    body: {
+      isCompleted
+    }
   });
 
   return data;
