@@ -4,7 +4,7 @@ import API from "../api/api.js";
 export default function TodoTotal  ({ reloadTodos }) {
 	this.setState = (todos) => $(".todo-count strong").innerHTML = todos.length;
 
-	const selectTodos = ({ currentTarget }) => {
+	const filterTodos = ({ currentTarget }) => {
 		$$(".filter").forEach(item => item.classList.remove("selected"));
 		currentTarget.classList.add("selected");
 		reloadTodos(currentTarget.dataset.filter);
@@ -17,6 +17,6 @@ export default function TodoTotal  ({ reloadTodos }) {
 		reloadTodos();
 	}
 
-	$$(".filter").forEach(item => item.addEventListener("click", selectTodos));
+	$$(".filter").forEach(item => item.addEventListener("click", filterTodos));
 	$(".clear-completed").addEventListener("click", () => deleteAll);
 }
