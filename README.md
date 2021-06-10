@@ -270,3 +270,27 @@ live-server 폴더명
 ## 📝 License
 
 This project is [MIT](https://github.com/next-step/js-todo-list-step2/blob/main/LICENSE) licensed.
+
+<br>
+
+### Getting Started
+
+1. Clone Repository
+   ```sh
+   git clone https://github.com/KIMSEUNGGYU/js-todo-list-step2.git
+   ```
+2. Start Local Environment
+   ```sh
+   # <repo down path>/megazone
+   cd js-todo-list-step2
+   ```
+   ```sh
+   npm install
+   ```
+   ```sh
+   # dev mode
+   npm run start:dev
+   ```
+3. To Visit App
+
+- http://localhost:5500 접속 (개발 모드)
