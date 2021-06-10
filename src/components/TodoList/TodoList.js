@@ -1,36 +1,33 @@
-import { $, isEmptyObject } from '../../utils/utils.js';
-import { KEY, DOM_ID, PRIORITY } from '../../constants/constants.js';
+import { $, isEmptyObject } from '@utils/utils.js';
+import { KEY, DOM_ID, PRIORITY } from '@constants/constants.js';
 
-import {
-  todoListService,
-  // toggleTodoItem,
-  // getTodoList,
-  // deleteItem,
-  // updateItemContents,
-  // updateItemPriority,
-} from '../../api/todolist.js';
+import { todoListService } from '@api/todolist.js';
+
+import todoState from '@store/todoState.js';
+import userState from '@store/userState.js';
 
 export default class TodoList {
-  constructor({ userState, todoState }) {
+  constructor() {
     this.$target = $(DOM_ID.TODO_LIST);
 
     this.todoState = todoState;
     this.userState = userState;
 
     this.init();
-    this._addEvent();
+    this.addEvent();
   }
 
-  _addEvent() {
-    this.$target.addEventListener('click', this._toggleTodoDone.bind(this));
-    this.$target.addEventListener('click', this._deleteTodo.bind(this));
-    this.$target.addEventListener('dblclick', this._openEditMode.bind(this));
-    this.$target.addEventListener('keyup', this._closeEditMode.bind(this));
+  addEvent() {
+    this.$target.addEventListener('click', this.toggleTodoDone.bind(this));
+    this.$target.addEventListener('click', this.deleteTodo.bind(this));
+    this.$target.addEventListener('dblclick', this.openEditMode.bind(this));
+    this.$target.addEventListener('keyup', this.closeEditMode.bind(this));
     this.$target.addEventListener('change', this.changeSelector.bind(this));
   }
 
   async changeSelector({ target }) {
     if (!target.classList.contains('chip')) return;
+
     const selectValue = target.value;
     if (selectValue === PRIORITY['select']) return;
 
@@ -51,7 +48,7 @@ export default class TodoList {
     this.todoState.set(updatedTodoList);
   }
 
-  async _deleteTodo({ target }) {
+  async deleteTodo({ target }) {
     if (target.classList.value !== 'destroy') return;
 
     const userId = this.userState.get().userId;
@@ -66,7 +63,7 @@ export default class TodoList {
     this.todoState.set(deletedTodoList);
   }
 
-  async _toggleTodoDone({ target }) {
+  async toggleTodoDone({ target }) {
     if (target.classList.value !== 'toggle') return;
 
     const userId = this.userState.get().userId;
@@ -82,7 +79,7 @@ export default class TodoList {
     this.todoState.set(updatedTodoList);
   }
 
-  async _updateTodoValue(todoId, updatedValue) {
+  async updateTodoValue(todoId, updatedValue) {
     const userId = this.userState.get().userId;
 
     const result = await todoListService.updateItemContents(userId, todoId, {
@@ -98,14 +95,14 @@ export default class TodoList {
     this.todoState.set(updatedTodoList);
   }
 
-  _openEditMode({ target }) {
+  openEditMode({ target }) {
     if (target.classList.value !== 'label') return;
 
     const todoItem = target.closest('li');
     todoItem.classList.add('editing');
   }
 
-  _closeEditMode({ target, key }) {
+  closeEditMode({ target, key }) {
     if (!(key === KEY.ESC || key === KEY.ENTER)) return;
 
     const todoItem = target.closest('li');
@@ -118,7 +115,7 @@ export default class TodoList {
       return;
     }
 
-    this._updateTodoValue(todoId, updatedValue);
+    this.updateTodoValue(todoId, updatedValue);
   }
 
   render(todoList) {
@@ -138,14 +135,14 @@ function getPriortyTemplate(priority) {
   return PRIORITY[priority] === 'select'
     ? `
         <select class="chip select">
-        <option value="${PRIORITY['NONE']}" selected>순위</option>
-        <option value="${PRIORITY['FIRST']}">1순위</option>
-        <option value="${PRIORITY['SECOND']}">2순위</option>
+          <option value="${PRIORITY['NONE']}" selected>순위</option>
+          <option value="${PRIORITY['FIRST']}">1순위</option>
+          <option value="${PRIORITY['SECOND']}">2순위</option>
         </select>
       `
     : `
-        <span class="chip ${priority}">${priority === PRIORITY['FIRST'] ? '1' : '2'}순위</span>
-      `;
+      <span class="chip ${priority}">${priority === PRIORITY['FIRST'] ? '1' : '2'}순위</span>
+    `;
 }
 
 function getTodoItemTemplate({ _id, contents, isCompleted, priority }) {

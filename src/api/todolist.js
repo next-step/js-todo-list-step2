@@ -1,9 +1,19 @@
-import { API } from '../utils/api.js';
-import { BASE_URL } from '../constants/constants.js';
+import { API } from '@utils/api.js';
+import { BASE_URL } from '@constants/constants.js';
+
+const URL = {
+  getTodoList: (userId) => `${BASE_URL}/${userId}/items`,
+  createTodoItem: (userId) => `${BASE_URL}/${userId}/items`,
+  toggleTodoItem: (userId, itemId) => `${BASE_URL}/${userId}/items/${itemId}/toggle`,
+  deleteAllItem: (userId) => `${BASE_URL}/${userId}/items`,
+  deleteItem: (userId, itemId) => `${BASE_URL}/${userId}/items/${itemId}`,
+  updateItemContents: (userId, itemId) => `${BASE_URL}/${userId}/items/${itemId}`,
+  updateItemPriority: (userId, itemId) => `${BASE_URL}/${userId}/items/${itemId}/priority`,
+};
 
 const getTodoList = async (userId) => {
   try {
-    const response = await API.get(`${BASE_URL}/${userId}/items`);
+    const response = await API.get(URL.getTodoList(userId));
     if (response.ok) {
       return response.json();
     }
@@ -16,7 +26,7 @@ const getTodoList = async (userId) => {
 
 const createTodoItem = async (userId, contents) => {
   try {
-    const response = await API.post(`${BASE_URL}/${userId}/items`, contents);
+    const response = await API.post(URL.createTodoItem(userId), contents);
     if (response.ok) {
       return response.json();
     }
@@ -29,8 +39,7 @@ const createTodoItem = async (userId, contents) => {
 
 const toggleTodoItem = async (userId, itemId) => {
   try {
-    // 	/api/users/:userId/items/:itemId/toggle
-    const response = await API.put(`${BASE_URL}/${userId}/items/${itemId}/toggle`);
+    const response = await API.put(URL.toggleTodoItem(userId, itemId));
     if (response.ok) {
       return response.json();
     }
@@ -43,8 +52,7 @@ const toggleTodoItem = async (userId, itemId) => {
 
 const deleteAllItem = async (userId) => {
   try {
-    // 	/api/users/:userId/items/
-    const response = await API.delete(`${BASE_URL}/${userId}/items`);
+    const response = await API.delete(URL.deleteAllItem(userId));
     if (response.ok) {
       return response.json();
     }
@@ -57,8 +65,7 @@ const deleteAllItem = async (userId) => {
 
 const deleteItem = async (userId, itemId) => {
   try {
-    // 	/api/users/:userId/items/:itemId
-    const response = await API.delete(`${BASE_URL}/${userId}/items/${itemId}`);
+    const response = await API.delete(URL.deleteItem(userId, itemId));
     if (response.ok) {
       return response.json();
     }
@@ -71,8 +78,7 @@ const deleteItem = async (userId, itemId) => {
 
 const updateItemContents = async (userId, itemId, contents) => {
   try {
-    // /api/users/:userId/items/:itemId
-    const response = await API.put(`${BASE_URL}/${userId}/items/${itemId}`, contents);
+    const response = await API.put(URL.updateItemContents(userId, itemId), contents);
     if (response.ok) {
       return response.json();
     }
@@ -85,8 +91,7 @@ const updateItemContents = async (userId, itemId, contents) => {
 
 const updateItemPriority = async (userId, itemId, priority) => {
   try {
-    // /api/users/:userId/items/:itemId/priority
-    const response = await API.put(`${BASE_URL}/${userId}/items/${itemId}/priority`, priority);
+    const response = await API.put(URL.updateItemPriority(userId, itemId), priority);
     if (response.ok) {
       return response.json();
     }

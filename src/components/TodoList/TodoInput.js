@@ -1,30 +1,30 @@
-import { $, isEmptyObject } from '../../utils/utils.js';
-import { DOM_ID, KEY } from '../../constants/constants.js';
-import TodoState from '../../store/todoState.js';
-import { todoListService } from '../../api/todolist.js';
+import { DOM_ID, KEY, MESSAGGE } from '@constants/constants.js';
+import { $, isEmptyObject } from '@utils/utils.js';
+import { todoListService } from '@api/todolist.js';
+
+import todoState from '@store/todoState.js';
+import userState from '@store/userState.js';
 
 export default class TodoInput {
-  constructor({ userState }) {
+  constructor() {
     this.$target = $(DOM_ID.TODO_INPUT);
 
-    this.todoState = TodoState;
+    this.todoState = todoState;
     this.userState = userState;
 
-    this._addEvent();
+    this.addEvent();
   }
 
-  _addEvent() {
-    this.$target.addEventListener('keyup', this._addTodo.bind(this));
+  addEvent() {
+    this.$target.addEventListener('keypress', this.addTodo.bind(this));
   }
 
-  async _addTodo({ code }) {
+  async addTodo({ code }) {
     if (code !== KEY.ENTER) return;
 
     const todoContents = this.$target.value;
-    if (todoContents === '') return null;
-
     if (todoContents.length < 2) {
-      alert('2글자 이상이어야 합니다.');
+      alert(MESSAGGE.CREATE_CONTENTS_VALIDATE_ERROR);
       return;
     }
 
@@ -37,10 +37,10 @@ export default class TodoInput {
     const addedTodoList = prevTodoList.concat(result);
     this.todoState.set(addedTodoList);
 
-    this._initInput();
+    this.initInput();
   }
 
-  _initInput() {
+  initInput() {
     this.$target.value = '';
   }
 }

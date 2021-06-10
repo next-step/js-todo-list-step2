@@ -1,4 +1,4 @@
-import Subject from '../core/Subject.js';
+import Subject from '@core/Subject.js';
 
 class TodoState extends Subject {
   constructor() {
