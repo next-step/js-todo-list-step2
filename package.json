@@ -1,0 +1,32 @@
+{
+  "name": "js-todo-list-step2",
+  "version": "1.0.0",
+  "description": "<p align=\"middle\" >\r   <img width=\"200px;\" src=\"./src/images/check_list.png\"/>\r </p>\r <h2 align=\"middle\">JS 투두리스트 스텝2</h2>\r <p align=\"middle\">자바스크립트와 AJAX를 이용하여 구현 하는 투두리스트</p>\r <p align=\"middle\">\r   <img src=\"https://img.shields.io/badge/version-1.0.0-blue?style=flat-square\" alt=\"template version\"/>\r   <img src=\"https://img.shields.io/badge/language-html-red.svg?style=flat-square\"/>\r   <img src=\"https://img.shields.io/badge/language-css-blue.svg?style=flat-square\"/>\r   <img src=\"https://img.shields.io/badge/language-js-yellow.svg?style=flat-square\"/>\r   <a href=\"https://github.com/next-step/js-todo-list-step2/blob/main/LICENSE\" target=\"_blank\">\r     <img src=\"https://img.shields.io/github/license/next-step/js-todo-list-step2.svg?style=flat-square&label=license&color=08CE5D\"/>\r   </a>\r </p>",
+  "main": "index.js",
+  "dependencies": {},
+  "devDependencies": {
+    "css-loader": "^5.2.6",
+    "html-webpack-plugin": "^5.3.1",
+    "style-loader": "^2.0.0",
+    "webpack": "^5.38.1",
+    "webpack-cli": "^4.7.2",
+    "webpack-dev-server": "^3.11.2"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "webpack serve --mode=production",
+    "start:dev": "webpack serve --mode=development --hot",
+    "build": "webpack --mode=production",
+    "build:dev": "webpack --mode=production"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/KIMSEUNGGYU/js-todo-list-step2.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/KIMSEUNGGYU/js-todo-list-step2/issues"
+  },
+  "homepage": "https://github.com/KIMSEUNGGYU/js-todo-list-step2#readme"
+}
