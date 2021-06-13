@@ -28,89 +28,98 @@ export default class TodoApp {
 
     this.userList = new UserList({
       onSelect: async (userId) => {
-        const selectedUser = await getUserData(userId);
-        if (selectedUser.message) {
+        try {
+          const selectedUser = await getUserData(userId);
+          this.activeUser = selectedUser;
+          this.renderAll();
+        } catch (error) {
+          console.error(error);
           this.init();
-          return;
         }
-
-        this.activeUser = selectedUser;
-        this.renderAll();
       },
       onAdd: async () => {
-        const name = prompt('추가하고 싶은 이름을 입력해주세요.');
-        if (name.length < 2) {
-          window.alert('2글자 이상이어야 합니다.');
-          return;
-        }
+        try {
+          const name = prompt('추가하고 싶은 이름을 입력해주세요.');
+          if (name.length < 2) {
+            window.alert('2글자 이상이어야 합니다.');
+            return;
+          }
 
-        const newUser = await addUserData({ name });
-        await this.loadUsers();
-        this.activeUser = this.users.find(({ _id }) => _id === newUser._id);
-        this.renderAll();
+          const newUser = await addUserData({ name });
+          await this.loadUsers();
+          this.activeUser = this.users.find(({ _id }) => _id === newUser._id);
+          this.renderAll();
+        } catch (error) {
+          console.error(error);
+        }
       },
       onDelete: async () => {
-        const confirmation = window.confirm(`${this.activeUser.name}을 삭제하시겠습니까?`);
-        if (confirmation === false) return;
+        try {
+          const confirmation = window.confirm(`${this.activeUser.name}을 삭제하시겠습니까?`);
+          if (confirmation === false) return;
 
-        await deleteUserData(this.activeUser._id);
-        this.init();
+          await deleteUserData(this.activeUser._id);
+          this.init();
+        } catch (error) {
+          console.error(error);
+          this.init();
+        }
       },
     });
 
     this.todoInput = new TodoInput({
       onAdd: async (contents) => {
-        if (contents.length < 2) {
-          window.alert('2글자 이상이어야 합니다.');
-          return;
-        }
+        try {
+          if (contents.length < 2) {
+            window.alert('2글자 이상이어야 합니다.');
+            return;
+          }
 
-        const response = await addTodoItemData(this.activeUser._id, { contents });
-        if (response.message) {
+          await addTodoItemData(this.activeUser._id, { contents });
+          this.initTodoListAndCount();
+        } catch (error) {
+          console.error(error);
           this.init();
-          return;
         }
-
-        this.initTodoListAndCount();
       },
     });
 
     this.todoList = new TodoList({
       onToggle: async (itemId) => {
-        const response = await toggleTodoItemData(this.activeUser._id, itemId);
-        if (response.message) {
+        try {
+          await toggleTodoItemData(this.activeUser._id, itemId);
+          this.initTodoListAndCount();
+        } catch (error) {
+          console.error(error);
           this.init();
-          return;
         }
-
-        this.initTodoListAndCount();
       },
       onRemove: async (itemId) => {
-        const response = await removeTodoItemData(this.activeUser._id, itemId);
-        if (response.message) {
+        try {
+          await removeTodoItemData(this.activeUser._id, itemId);
+          this.initTodoListAndCount();
+        } catch (error) {
+          console.error(error);
           this.init();
-          return;
         }
-
-        this.initTodoListAndCount();
       },
       onUpdate: async (itemId, contents) => {
-        const response = await updateTodoItemData(this.activeUser._id, itemId, { contents });
-        if (response.message) {
+        try {
+          await updateTodoItemData(this.activeUser._id, itemId, { contents });
+          this.initTodoList();
+        } catch (error) {
+          console.error(error);
           this.init();
-          return;
         }
-
-        this.initTodoList();
       },
       onSetPriority: async (itemId, priority) => {
-        const response = await setTodoItemPriorityData(this.activeUser._id, itemId, { priority });
-        if (response.message) {
+        try {
+          await setTodoItemPriorityData(this.activeUser._id, itemId, { priority });
+          this.initTodoList();
+        } catch (error) {
+          console.error(error);
           this.init();
-          return;
         }
-
-        this.initTodoList();
       },
     });
 
@@ -121,13 +130,13 @@ export default class TodoApp {
         this.renderTodoCount();
       },
       onClear: async () => {
-        const response = await removeTodoListData(this.activeUser._id);
-        if (response.message) {
+        try {
+          await removeTodoListData(this.activeUser._id);
+          this.initTodoListAndCount();
+        } catch (error) {
+          console.error(error);
           this.init();
-          return;
         }
-
-        this.initTodoListAndCount();
       },
     });
 
@@ -174,13 +183,23 @@ export default class TodoApp {
   }
 
   async initTodoList() {
-    this.activeUser.todoList = await getTodoListData(this.activeUser._id);
-    this.renderTodoList();
+    try {
+      this.activeUser.todoList = await getTodoListData(this.activeUser._id);
+      this.renderTodoList();
+    } catch (error) {
+      console.error(error);
+      this.init();
+    }
   }
 
   async initTodoListAndCount() {
-    await this.initTodoList();
-    this.renderTodoCount();
+    try {
+      await this.initTodoList();
+      this.renderTodoCount();
+    } catch (error) {
+      console.error(error);
+      this.init();
+    }
   }
 
   async init() {

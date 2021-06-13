@@ -23,97 +23,163 @@ function getTodoItemPriorityURL(userId, itemId) {
 }
 
 export async function getUsersData() {
-  const response = await fetch(BASE_URL);
-  return response.json();
+  try {
+    const response = await fetch(BASE_URL);
+    if (!response.ok) throw new Error('유효하지 않은 URL');
+
+    return response.json();
+  } catch (error) {
+    console.error(error);
+  }
 }
 
 export async function getUserData(userId) {
-  const userURL = getUserURL(userId);
-  const response = await fetch(userURL);
-  return response.json();
+  try {
+    const userURL = getUserURL(userId);
+    const response = await fetch(userURL);
+    if (!response.ok) throw new Error('유효하지 않은 URL');
+
+    return response.json();
+  } catch (error) {
+    console.error(error);
+  }
 }
 
 export async function addUserData(data = {}) {
-  const response = await fetch(BASE_URL, {
-    method: POST,
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(data),
-  });
-  return response.json();
+  try {
+    const response = await fetch(BASE_URL, {
+      method: POST,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    });
+    if (!response.ok) throw new Error('유효하지 않은 URL');
+
+    return response.json();
+  } catch (error) {
+    console.error(error);
+  }
 }
 
 export async function deleteUserData(userId) {
-  const userURL = getUserURL(userId);
-  const response = await fetch(userURL, {
-    method: DELETE,
-  });
-  return response.json();
+  try {
+    const userURL = getUserURL(userId);
+    const response = await fetch(userURL, {
+      method: DELETE,
+    });
+    if (!response.ok) throw new Error('유효하지 않은 URL');
+
+    return response.json();
+  } catch (error) {
+    console.error(error);
+  }
 }
 
 export async function getTodoListData(userId) {
-  const todoListURL = getTodoListURL(userId);
-  const response = await fetch(todoListURL);
-  return response.json();
+  try {
+    const todoListURL = getTodoListURL(userId);
+    const response = await fetch(todoListURL);
+    if (!response.ok) throw new Error('유효하지 않은 URL');
+
+    return response.json();
+  } catch (error) {
+    console.error(error);
+  }
 }
 
 export async function removeTodoListData(userId) {
-  const todoListURL = getTodoListURL(userId);
-  const response = await fetch(todoListURL, {
-    method: DELETE,
-  });
-  return response.json();
+  try {
+    const todoListURL = getTodoListURL(userId);
+    const response = await fetch(todoListURL, {
+      method: DELETE,
+    });
+    if (!response.ok) throw new Error('유효하지 않은 URL');
+
+    return response.json();
+  } catch (error) {
+    console.error(error);
+  }
 }
 
 export async function addTodoItemData(userId, data = {}) {
-  const todoListURL = getTodoListURL(userId);
-  const response = await fetch(todoListURL, {
-    method: POST,
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(data),
-  });
-  return response.json();
+  try {
+    const todoListURL = getTodoListURL(userId);
+    const response = await fetch(todoListURL, {
+      method: POST,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    });
+    if (!response.ok) throw new Error('유효하지 않은 URL');
+
+    return response.json();
+  } catch (error) {
+    console.error(error);
+  }
 }
 
 export async function toggleTodoItemData(userId, itemId) {
-  const todoItemToggleURL = getTodoItemToggleURL(userId, itemId);
-  const response = await fetch(todoItemToggleURL, {
-    method: PUT,
-  });
-  return response.json();
+  try {
+    const todoItemToggleURL = getTodoItemToggleURL(userId, itemId);
+    const response = await fetch(todoItemToggleURL, {
+      method: PUT,
+    });
+    if (!response.ok) throw new Error('유효하지 않은 URL');
+
+    return response.json();
+  } catch (error) {
+    console.error(error);
+  }
 }
 
 export async function removeTodoItemData(userId, itemId) {
-  const todoItemURL = getTodoItemURL(userId, itemId);
-  const response = await fetch(todoItemURL, {
-    method: DELETE,
-  });
-  return response.json();
+  try {
+    const todoItemURL = getTodoItemURL(userId, itemId);
+    const response = await fetch(todoItemURL, {
+      method: DELETE,
+    });
+    if (!response.ok) throw new Error('유효하지 않은 URL');
+
+    return response.json();
+  } catch (error) {
+    console.error(error);
+  }
 }
 
 export async function updateTodoItemData(userId, itemId, data = {}) {
-  const todoItemURL = getTodoItemURL(userId, itemId);
-  const response = await fetch(todoItemURL, {
-    method: PUT,
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(data),
-  });
-  return response.json();
+  try {
+    const todoItemURL = getTodoItemURL(userId, itemId);
+    const response = await fetch(todoItemURL, {
+      method: PUT,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    });
+    if (!response.ok) throw new Error('유효하지 않은 URL');
+
+    return response.json();
+  } catch (error) {
+    console.error(error);
+  }
 }
 
 export async function setTodoItemPriorityData(userId, itemId, data = {}) {
-  const todoItemPriorityURL = getTodoItemPriorityURL(userId, itemId);
-  const response = await fetch(todoItemPriorityURL, {
-    method: PUT,
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(data),
-  });
-  return response.json();
+  try {
+    const todoItemPriorityURL = getTodoItemPriorityURL(userId, itemId);
+    const response = await fetch(todoItemPriorityURL, {
+      method: PUT,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    });
+    if (!response.ok) throw new Error('유효하지 않은 URL');
+
+    return response.json();
+  } catch (error) {
+    console.error(error);
+  }
 }
