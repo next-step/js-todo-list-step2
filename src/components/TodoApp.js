@@ -21,7 +21,7 @@ import Username from './Username.js';
 export default class TodoApp {
   constructor() {
     this.users = [];
-    this.activeUser = { _id: '', name: '', todoList: [] };
+    this.currentUser = { _id: '', name: '', todoList: [] };
     this.filterStatus = ALL;
 
     this.username = new Username();
@@ -30,7 +30,7 @@ export default class TodoApp {
       onSelect: async (userId) => {
         try {
           const selectedUser = await getUserData(userId);
-          this.activeUser = selectedUser;
+          this.currentUser = selectedUser;
           this.renderAll();
         } catch (error) {
           console.error(error);
@@ -47,7 +47,7 @@ export default class TodoApp {
 
           const newUser = await addUserData({ name });
           await this.loadUsers();
-          this.activeUser = this.users.find(({ _id }) => _id === newUser._id);
+          this.currentUser = this.users.find(({ _id }) => _id === newUser._id);
           this.renderAll();
         } catch (error) {
           console.error(error);
@@ -55,10 +55,10 @@ export default class TodoApp {
       },
       onDelete: async () => {
         try {
-          const confirmation = window.confirm(`${this.activeUser.name}을 삭제하시겠습니까?`);
+          const confirmation = window.confirm(`${this.currentUser.name}을 삭제하시겠습니까?`);
           if (confirmation === false) return;
 
-          await deleteUserData(this.activeUser._id);
+          await deleteUserData(this.currentUser._id);
           this.init();
         } catch (error) {
           console.error(error);
@@ -75,7 +75,7 @@ export default class TodoApp {
             return;
           }
 
-          await addTodoItemData(this.activeUser._id, { contents });
+          await addTodoItemData(this.currentUser._id, { contents });
           this.initTodoListAndCount();
         } catch (error) {
           console.error(error);
@@ -87,7 +87,7 @@ export default class TodoApp {
     this.todoList = new TodoList({
       onToggle: async (itemId) => {
         try {
-          await toggleTodoItemData(this.activeUser._id, itemId);
+          await toggleTodoItemData(this.currentUser._id, itemId);
           this.initTodoListAndCount();
         } catch (error) {
           console.error(error);
@@ -96,7 +96,7 @@ export default class TodoApp {
       },
       onRemove: async (itemId) => {
         try {
-          await removeTodoItemData(this.activeUser._id, itemId);
+          await removeTodoItemData(this.currentUser._id, itemId);
           this.initTodoListAndCount();
         } catch (error) {
           console.error(error);
@@ -105,7 +105,7 @@ export default class TodoApp {
       },
       onUpdate: async (itemId, contents) => {
         try {
-          await updateTodoItemData(this.activeUser._id, itemId, { contents });
+          await updateTodoItemData(this.currentUser._id, itemId, { contents });
           this.initTodoList();
         } catch (error) {
           console.error(error);
@@ -114,7 +114,7 @@ export default class TodoApp {
       },
       onSetPriority: async (itemId, priority) => {
         try {
-          await setTodoItemPriorityData(this.activeUser._id, itemId, { priority });
+          await setTodoItemPriorityData(this.currentUser._id, itemId, { priority });
           this.initTodoList();
         } catch (error) {
           console.error(error);
@@ -131,7 +131,7 @@ export default class TodoApp {
       },
       onClear: async () => {
         try {
-          await removeTodoListData(this.activeUser._id);
+          await removeTodoListData(this.currentUser._id);
           this.initTodoListAndCount();
         } catch (error) {
           console.error(error);
@@ -144,11 +144,11 @@ export default class TodoApp {
   }
 
   renderUsername() {
-    this.username.render(this.activeUser.name);
+    this.username.render(this.currentUser.name);
   }
 
   renderUserList() {
-    this.userList.render(this.users, this.activeUser._id);
+    this.userList.render(this.users, this.currentUser._id);
   }
 
   renderTodoList() {
@@ -173,18 +173,18 @@ export default class TodoApp {
   }
 
   getFilteredTodoList() {
-    if (this.filterStatus === ALL) return this.activeUser.todoList;
+    if (this.filterStatus === ALL) return this.currentUser.todoList;
     if (this.filterStatus === ACTIVE) {
-      return this.activeUser.todoList.filter((item) => !item.isCompleted);
+      return this.currentUser.todoList.filter((item) => !item.isCompleted);
     }
     if (this.filterStatus === COMPLETED) {
-      return this.activeUser.todoList.filter((item) => item.isCompleted);
+      return this.currentUser.todoList.filter((item) => item.isCompleted);
     }
   }
 
   async initTodoList() {
     try {
-      this.activeUser.todoList = await getTodoListData(this.activeUser._id);
+      this.currentUser.todoList = await getTodoListData(this.currentUser._id);
       this.renderTodoList();
     } catch (error) {
       console.error(error);
@@ -204,7 +204,7 @@ export default class TodoApp {
 
   async init() {
     await this.loadUsers();
-    this.activeUser = this.users[0];
+    this.currentUser = this.users[0];
     this.renderAll();
   }
 }

@@ -9,8 +9,8 @@ export default class UserList {
     this.$userList.addEventListener('click', (event) => this.deleteUser(event, onDelete));
   }
 
-  render(users, activeUserId) {
-    const usersTemplate = users.map((user) => userTemplate(user, activeUserId));
+  render(users, currentUserId) {
+    const usersTemplate = users.map((user) => userTemplate(user, currentUserId));
     this.$userList.innerHTML = usersTemplate.join('') + userControlButtonTemplate;
   }
 
