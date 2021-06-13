@@ -4,6 +4,6 @@ export default class Username {
   }
 
   render(name) {
-    this.$username.innerText = name;
+    this.$username.textContent = name;
   }
 }

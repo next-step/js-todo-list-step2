@@ -16,7 +16,7 @@ export default class TodoCount {
 
   render(count) {
     const todoCount = this.$todoCountContainer.querySelector('strong');
-    todoCount.innerText = count;
+    todoCount.textContent = count;
   }
 
   changeFilterButtonStatus(event, onFilter) {
