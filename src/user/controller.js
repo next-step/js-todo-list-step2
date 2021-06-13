@@ -23,7 +23,7 @@ export const getOneUser = async (userId) => {
   }
 };
 
-export const deleteUser = async (userId) => {
+export const deleteUserAPI = async (userId) => {
   try {
     return await DELETE(`/api/users/${userId}`);
   } catch (error) {

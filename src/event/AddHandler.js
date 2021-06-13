@@ -1,9 +1,9 @@
-import { createUser } from '../user/controller.js';
+import { createUser, deleteUserAPI } from '../user/controller.js';
 import render from '../components/Render/index.js';
 import { timer } from '../utils/timer.js';
 import { UserList } from '../components/UserList/index.js';
 import { store } from '../store/index.js';
-import { getUserItem } from '../store/dispatcher.js';
+import { getUserItem, deleteUser } from '../store/dispatcher.js';
 export const setUserHandler = async (e) => {
   const nickname = prompt('추가하고 싶은 이름을 입력하세요');
   if (nickname === '') return;
@@ -19,6 +19,12 @@ export const getOneUserHandler = ({ target }) => {
   UserList(target.dataset.id);
   userOneItem(target.dataset.id);
   render();
+};
+
+export const deleteUserHandler = () => {
+  const { userList } = store.getState();
+  deleteUserAPI(userList[0]._id);
+  timer(render, 2000);
 };
 
 const userOneItem = (userId) => {

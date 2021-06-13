@@ -27,7 +27,7 @@ const reducer = (state = initialState, { type, payload }) => {
     case DELETE_USER:
       return {
         ...state,
-        users: state.users.filter((user) => user._id !== payload.userId),
+        userList: state.userList.filter((user) => user._id !== payload.userId),
       };
   }
 };

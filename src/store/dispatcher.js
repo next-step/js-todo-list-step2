@@ -17,6 +17,7 @@ export const getUserItem = (userId) => {
     },
   };
 };
+
 export const deleteUser = (userId) => {
   return {
     type: DELETE_USER,
