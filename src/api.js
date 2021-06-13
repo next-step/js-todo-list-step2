@@ -1,4 +1,4 @@
-import { DELETE, POST, PUT } from './constants.js';
+import { METHOD } from './constants.js';
 
 const BASE_URL = 'https://js-todo-list-9ca3a.df.r.appspot.com/api/users';
 
@@ -48,7 +48,7 @@ export async function getUserData(userId) {
 export async function addUserData(data = {}) {
   try {
     const response = await fetch(BASE_URL, {
-      method: POST,
+      method: METHOD.POST,
       headers: {
         'Content-Type': 'application/json',
       },
@@ -66,7 +66,7 @@ export async function deleteUserData(userId) {
   try {
     const userURL = getUserURL(userId);
     const response = await fetch(userURL, {
-      method: DELETE,
+      method: METHOD.DELETE,
     });
     if (!response.ok) throw new Error('유효하지 않은 URL');
 
@@ -92,7 +92,7 @@ export async function removeTodoListData(userId) {
   try {
     const todoListURL = getTodoListURL(userId);
     const response = await fetch(todoListURL, {
-      method: DELETE,
+      method: METHOD.DELETE,
     });
     if (!response.ok) throw new Error('유효하지 않은 URL');
 
@@ -106,7 +106,7 @@ export async function addTodoItemData(userId, data = {}) {
   try {
     const todoListURL = getTodoListURL(userId);
     const response = await fetch(todoListURL, {
-      method: POST,
+      method: METHOD.POST,
       headers: {
         'Content-Type': 'application/json',
       },
@@ -124,7 +124,7 @@ export async function toggleTodoItemData(userId, itemId) {
   try {
     const todoItemToggleURL = getTodoItemToggleURL(userId, itemId);
     const response = await fetch(todoItemToggleURL, {
-      method: PUT,
+      method: METHOD.PUT,
     });
     if (!response.ok) throw new Error('유효하지 않은 URL');
 
@@ -138,7 +138,7 @@ export async function removeTodoItemData(userId, itemId) {
   try {
     const todoItemURL = getTodoItemURL(userId, itemId);
     const response = await fetch(todoItemURL, {
-      method: DELETE,
+      method: METHOD.DELETE,
     });
     if (!response.ok) throw new Error('유효하지 않은 URL');
 
@@ -152,7 +152,7 @@ export async function updateTodoItemData(userId, itemId, data = {}) {
   try {
     const todoItemURL = getTodoItemURL(userId, itemId);
     const response = await fetch(todoItemURL, {
-      method: PUT,
+      method: METHOD.PUT,
       headers: {
         'Content-Type': 'application/json',
       },
@@ -170,7 +170,7 @@ export async function setTodoItemPriorityData(userId, itemId, data = {}) {
   try {
     const todoItemPriorityURL = getTodoItemPriorityURL(userId, itemId);
     const response = await fetch(todoItemPriorityURL, {
-      method: PUT,
+      method: METHOD.PUT,
       headers: {
         'Content-Type': 'application/json',
       },

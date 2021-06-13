@@ -1,4 +1,4 @@
-import { ENTER } from '../constants.js';
+import { KEY } from '../constants.js';
 
 export default class TodoInput {
   constructor({ onAdd }) {
@@ -8,7 +8,7 @@ export default class TodoInput {
   }
 
   addTodoItem(event, onAdd) {
-    if (event.key !== ENTER) return;
+    if (event.key !== KEY.ENTER) return;
 
     const todoInputTarget = event.target;
     if (todoInputTarget.value === '') return;

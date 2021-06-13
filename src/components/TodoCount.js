@@ -1,4 +1,4 @@
-import { SELECTED } from '../constants.js';
+import { CLASS_NAME } from '../constants.js';
 
 export default class TodoCount {
   constructor({ onFilter, onClear }) {
@@ -24,8 +24,8 @@ export default class TodoCount {
     if (filterButtonTarget.tagName !== 'A') return;
 
     const [filterName] = filterButtonTarget.classList;
-    Object.keys(this.$filterButtons).map((key) => this.$filterButtons[key].classList.remove(SELECTED));
-    this.$filterButtons[filterName].classList.add(SELECTED);
+    Object.keys(this.$filterButtons).map((key) => this.$filterButtons[key].classList.remove(CLASS_NAME.SELECTED));
+    this.$filterButtons[filterName].classList.add(CLASS_NAME.SELECTED);
     onFilter(filterName);
   }
 

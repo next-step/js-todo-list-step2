@@ -11,7 +11,7 @@ import {
   toggleTodoItemData,
   updateTodoItemData,
 } from '../api.js';
-import { ACTIVE, ALL, COMPLETED } from '../constants.js';
+import { FILTER_STATUS } from '../constants.js';
 import TodoCount from './TodoCount.js';
 import TodoInput from './TodoInput.js';
 import TodoList from './TodoList.js';
@@ -22,7 +22,7 @@ export default class TodoApp {
   constructor() {
     this.users = [];
     this.currentUser = { _id: '', name: '', todoList: [] };
-    this.filterStatus = ALL;
+    this.filterStatus = FILTER_STATUS.ALL;
 
     this.username = new Username();
 
@@ -173,11 +173,11 @@ export default class TodoApp {
   }
 
   getFilteredTodoList() {
-    if (this.filterStatus === ALL) return this.currentUser.todoList;
-    if (this.filterStatus === ACTIVE) {
+    if (this.filterStatus === FILTER_STATUS.ALL) return this.currentUser.todoList;
+    if (this.filterStatus === FILTER_STATUS.ACTIVE) {
       return this.currentUser.todoList.filter((item) => !item.isCompleted);
     }
-    if (this.filterStatus === COMPLETED) {
+    if (this.filterStatus === FILTER_STATUS.COMPLETED) {
       return this.currentUser.todoList.filter((item) => item.isCompleted);
     }
   }

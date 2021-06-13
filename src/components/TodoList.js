@@ -1,4 +1,4 @@
-import { ENTER, ESCAPE, FIRST, SECOND } from '../constants.js';
+import { KEY, PRIORITY } from '../constants.js';
 import { todoItemTemplate } from '../templates.js';
 
 export default class TodoList {
@@ -48,12 +48,12 @@ export default class TodoList {
 
     const todoItem = editingInputTarget.closest('li');
 
-    if (key === ESCAPE) {
+    if (key === KEY.ESCAPE) {
       todoItem.classList.remove('editing');
       return;
     }
 
-    if (key !== ENTER) return;
+    if (key !== KEY.ENTER) return;
 
     const { value } = editingInputTarget;
     if (value === '') return;
@@ -67,7 +67,7 @@ export default class TodoList {
     const todoItem = selectTarget.closest('li');
 
     const { value } = selectTarget;
-    const priority = value === '1' ? FIRST : SECOND;
+    const priority = value === '1' ? PRIORITY.FIRST : PRIORITY.SECOND;
     onSetPriority(todoItem.id, priority);
   }
 }

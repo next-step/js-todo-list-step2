@@ -1,16 +1,26 @@
-export const DELETE = 'DELETE';
-export const POST = 'POST';
-export const PUT = 'PUT';
+export const METHOD = {
+  DELETE: 'DELETE',
+  POST: 'POST',
+  PUT: 'PUT',
+};
 
-export const FIRST = 'FIRST';
-export const NONE = 'NONE';
-export const SECOND = 'SECOND';
+export const PRIORITY = {
+  FIRST: 'FIRST',
+  NONE: 'NONE',
+  SECOND: 'SECOND',
+};
 
-export const ENTER = 'Enter';
-export const ESCAPE = 'Escape';
+export const KEY = {
+  ENTER: 'Enter',
+  ESCAPE: 'Escape',
+};
 
-export const SELECTED = 'selected';
+export const CLASS_NAME = {
+  SELECTED: 'selected',
+};
 
-export const ACTIVE = 'active';
-export const ALL = 'all';
-export const COMPLETED = 'completed';
+export const FILTER_STATUS = {
+  ACTIVE: 'active',
+  ALL: 'all',
+  COMPLETED: 'completed',
+};

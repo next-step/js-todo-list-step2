@@ -1,4 +1,4 @@
-import { FIRST, NONE } from './constants.js';
+import { PRIORITY } from './constants.js';
 
 export const userTemplate = (user, currentUserId) => {
   const { _id, name } = user;
@@ -24,8 +24,8 @@ export const todoItemTemplate = ({ _id, contents, isCompleted, priority }) => {
   `;
 
   const priorityTemplate = `
-    <span class="chip ${priority === FIRST ? 'primary' : 'secondary'}">
-      ${priority === FIRST ? '1' : '2'}순위
+    <span class="chip ${priority === PRIORITY.FIRST ? 'primary' : 'secondary'}">
+      ${priority === PRIORITY.FIRST ? '1' : '2'}순위
     </span>
   `;
 
@@ -34,7 +34,7 @@ export const todoItemTemplate = ({ _id, contents, isCompleted, priority }) => {
       <div class="view">
         <input id="${_id}" class="toggle" type="checkbox" ${isCompleted ? 'checked' : ''}/>
         <label class="label">
-          ${priority === NONE ? selectTemplate : priorityTemplate}
+          ${priority === PRIORITY.NONE ? selectTemplate : priorityTemplate}
           ${contents}
         </label>
         <button id="${_id}" class="destroy"></button>
