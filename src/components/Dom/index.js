@@ -1,5 +1,6 @@
-const $userTitle = document.querySelector('#user-title');
-const $userList = document.querySelector('.user-list');
-const $sectionContainer = document.querySelector('#section_container');
-const $userCreateButton = document.querySelector('.user-create-button');
-export { $userTitle, $userList, $sectionContainer, $userCreateButton };
+import { $ } from '../../utils/selector.js';
+const $userTitle = $('#user-title');
+const $userList = $('.user-list');
+const $sectionContainer = $('#section_container');
+
+export { $userTitle, $userList, $sectionContainer };
