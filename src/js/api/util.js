@@ -2,6 +2,10 @@ const HTTP_REQUEST ={
   POST(data){
     return {
       method : "POST",
+      headers:{
+        'Content-Type' :'application/json;charset=uft-8'
+      },
+      body: JSON.stringify(data)
     }
   },
   DELETE(){
@@ -12,6 +16,10 @@ const HTTP_REQUEST ={
   PUT(data){
     return {
      method : "PUT",
+     headers :{
+       'Content-Type' :'application/json'
+     },
+     body:JSON.stringify(data)
     }
   }  
 }
