@@ -1,13 +1,17 @@
 export default class Title {
   constructor({ $target }) {
-    const h1 = document.createElement('h1');
-    h1.id = 'user-title';
-    h1.dataset.username = 'eastjun';
+    this.$title = document.createElement('h1');
+    this.$title.id = 'user-title';
 
-    const span = document.createElement('span');
-    span.innerHTML = "<strong>eastjun</strong>'s Todo List";
+    $target.appendChild(this.$title);
+  }
 
-    h1.appendChild(span);
-    $target.appendChild(h1);
+  setState(nextState) {
+    this.state = nextState;
+    this.render();
+  }
+
+  render() {
+    this.$title.innerHTML = `<span><strong>${this.state}</strong>'s Todo List</span>`;
   }
 }

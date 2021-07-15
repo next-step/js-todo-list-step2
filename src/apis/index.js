@@ -4,11 +4,11 @@ const $request = async (url = '', options) => {
   try {
     const res = await fetch(`${BASE_URL}/${url}`, options);
     if (!res.ok) {
-      throw new Error('서버의 상태가 이상합니다');
+      throw new Error(res.status);
     }
     return await res.json();
   } catch (error) {
-    throw new Error(`무언가 잘못되었습니다! ${error.message}`);
+    throw new Error(error);
   }
 };
 

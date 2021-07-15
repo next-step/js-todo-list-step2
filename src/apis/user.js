@@ -2,7 +2,7 @@ import { $http } from './index.js';
 
 export const userAPI = {
   fetchUserList() {
-    return $http.get('/api/users');
+    return $http.get('api/users');
   },
 
   createUser(body) {
