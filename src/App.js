@@ -14,6 +14,7 @@ export default class App {
       activeId: '',
       activeUsername: '',
       activeTodoList: [],
+      isLoading: true,
     };
 
     this.title = new Title({ $target: $app });
@@ -55,7 +56,7 @@ export default class App {
       addTodo: async (todo) => {
         try {
           await todoListAPI.createItem(this.state.activeId, todo);
-          this.fetch();
+          this.setState({ ...this.state });
         } catch (error) {
           throw new Error(error);
         }
@@ -65,7 +66,13 @@ export default class App {
     const main = document.createElement('section');
     main.className = 'main';
 
-    new TodoList({ $target: main });
+    this.todoList = new TodoList({
+      $target: main,
+      initialState: {
+        isLoading: this.state.isLoading,
+        todoList: this.state.activeTodoList,
+      },
+    });
     new TodoCount({ $target: main });
 
     todoApp.appendChild(main);
@@ -75,21 +82,35 @@ export default class App {
   }
 
   setState(nextState) {
-    this.fetch();
     this.state = nextState;
+    this.fetch();
     this.title.setState(this.state.activeUsername);
     this.userList.setState({
       activeId: this.state.activeId,
       activeUsername: this.state.activeUsername,
       userList: this.state.userList,
     });
+    this.todoList.setState({
+      isLoading: this.state.isLoading,
+      todoList: this.state.activeTodoList,
+    });
   }
 
   async fetch() {
     try {
+      this.state.isLoading = true;
       this.state.userList = await userAPI.fetchUserList();
+      this.state.activeTodoList = await todoListAPI.fetchTodoItems(
+        this.state.activeId
+      );
     } catch (error) {
       throw new Error(error);
+    }
+    {
+      this.todoList.setState({
+        ...this.todoList.state,
+        isLoading: false,
+      });
     }
   }
 
@@ -100,6 +121,7 @@ export default class App {
       activeId: user._id,
       activeUsername: user.name,
       activeTodoList: user.todoList,
+      isLoading: false,
     });
   }
 
