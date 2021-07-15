@@ -5,6 +5,7 @@ import TodoList from './components/TodoList.js';
 import TodoCount from './components/TodoCount.js';
 
 import { userAPI } from './apis/user.js';
+import { todoListAPI } from './apis/todolist.js';
 
 export default class App {
   constructor($app) {
@@ -49,7 +50,17 @@ export default class App {
     const todoApp = document.createElement('section');
     todoApp.className = 'todoapp';
 
-    new TodoInput({ $target: todoApp });
+    new TodoInput({
+      $target: todoApp,
+      addTodo: async (todo) => {
+        try {
+          await todoListAPI.createItem(this.state.activeId, todo);
+          this.fetch();
+        } catch (error) {
+          throw new Error(error);
+        }
+      },
+    });
 
     const main = document.createElement('section');
     main.className = 'main';
@@ -64,6 +75,7 @@ export default class App {
   }
 
   setState(nextState) {
+    this.fetch();
     this.state = nextState;
     this.title.setState(this.state.activeUsername);
     this.userList.setState({
@@ -75,8 +87,7 @@ export default class App {
 
   async fetch() {
     try {
-      const userList = await userAPI.fetchUserList();
-      this.state.userList = userList;
+      this.state.userList = await userAPI.fetchUserList();
     } catch (error) {
       throw new Error(error);
     }
@@ -93,8 +104,12 @@ export default class App {
   }
 
   async init() {
-    await this.fetch();
-    if (this.state.userList.length === 0) return;
-    this.setActiveData(this.state.userList[0]._id);
+    try {
+      this.state.userList = await userAPI.fetchUserList();
+      if (this.state.userList.length === 0) return;
+      this.setActiveData(this.state.userList[0]._id);
+    } catch (error) {
+      throw new Error(error);
+    }
   }
 }

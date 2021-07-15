@@ -1,5 +1,5 @@
 export default class TodoInput {
-  constructor({ $target }) {
+  constructor({ $target, addTodo }) {
     const section = document.createElement('section');
     section.className = 'input-container';
 
@@ -7,6 +7,11 @@ export default class TodoInput {
     input.className = 'new-todo';
     input.placeholder = '할 일을 입력해주세요';
     input.autofocus = true;
+    input.addEventListener('keypress', ({ key, target }) => {
+      if (key !== 'Enter' || target.value < 2) return;
+      addTodo(target.value);
+      target.value = '';
+    });
 
     section.appendChild(input);
     $target.appendChild(section);
