@@ -1,20 +1,20 @@
-import { HTTP_REQUEST } from "./util";
+import { HTTP_REQUEST } from "./util.js";
 
 const BASE_URL = 'https://js-todo-list-9ca3a.df.r.appspot.com/api/users';
 
 
 export const userAPI = {
   getAllUser(){
-    return fetch(BASE_URL).then(data => data.json());
+    return  fetch(BASE_URL).then(data => data.json());
   },
   deleteUser(id){
-    return fetch(`${BASE_URL}/${id}`,HTTP_REQUEST.DELETE);
+    return  fetch(`${BASE_URL}/${id}`,HTTP_REQUEST.DELETE);
   },
   addUser(data){
-    return fetch(`${BASE_URL}`,HTTP_REQUEST.POST(data));
+    return  fetch(`${BASE_URL}`,HTTP_REQUEST.POST(data));
   },
   getUser(id){
-    return fetch(`${BASE_URL}/${id}`).then(data =>{data.json()});
+    return  fetch(`${BASE_URL}/${id}`).then(data =>{data.json()});
   }
 }
 
