@@ -14,4 +14,14 @@ const FILTER_TYPES = Object.freeze({
   COMPLETED: "completed",
 });
 
-export { TODO_BUTTONS, FILTER_TYPES };
+const USER_HANDLE_TYPES = Object.freeze({
+  CREATE: "createUser",
+  DELETE: "deleteUser",
+});
+
+const ALERT_MESSAGE = Object.freeze({
+  CREATE: "추가하고 싶은 이름을 입력해주세요.",
+  DELETE: (name) => `${name}을 삭제하시겠습니까?`,
+});
+
+export { TODO_BUTTONS, FILTER_TYPES, USER_HANDLE_TYPES, ALERT_MESSAGE };
