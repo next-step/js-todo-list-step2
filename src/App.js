@@ -7,27 +7,44 @@ import TodoCount from './components/TodoCount.js';
 import { userAPI } from './apis/user.js';
 import { todoListAPI } from './apis/todolist.js';
 
+import { ALL, ACTIVE, COMPLETED } from './constants/todo.js';
+
 export default class App {
   constructor($app) {
     this.state = {
       userList: [],
       activeId: '',
       activeUsername: '',
-      activeTodoList: [],
-      isLoading: true,
+      activeTodolist: [],
+      show: ALL,
+      count: 0,
     };
 
     this.title = new Title({ $target: $app });
     this.userList = new UserList({
       $target: $app,
-      changeActiveUser: (id) => {
-        this.setActiveData(id);
+      changeActiveUser: async (id) => {
+        try {
+          const { _id, name, todoList } = await userAPI.fetchUser(id);
+          this.setState({
+            ...this.state,
+            activeId: _id,
+            activeUsername: name,
+            activeTodolist: todoList,
+          });
+        } catch (error) {
+          throw new Error(error);
+        }
       },
       createUser: async (name) => {
         try {
-          const userData = await userAPI.createUser({ name });
-          this.state.userList.push(userData);
-          this.setActiveData(userData._id);
+          const newUser = await userAPI.createUser({ name });
+          this.setState({
+            ...this.state,
+            activeId: newUser._id,
+            activeUsername: newUser.name,
+            activeTodolist: newUser.todoList,
+          });
         } catch (error) {
           throw new Error(error);
         }
@@ -41,7 +58,8 @@ export default class App {
               ({ _id }) => this.state.activeId !== _id
             ),
           });
-          this.setActiveData(this.state.userList[0]._id);
+          this.init();
+          // this.setActiveData(this.state.userList[0]._id);
         } catch (error) {
           throw new Error(error);
         }
@@ -73,7 +91,16 @@ export default class App {
         todoList: this.state.activeTodoList,
       },
     });
-    new TodoCount({ $target: main });
+    this.todoCount = new TodoCount({
+      $target: main,
+      initialState: {
+        show: this.state.show,
+        count: this.state.count,
+      },
+      onClick: (show) => {
+        this.setState({ ...this.state, show });
+      },
+    });
 
     todoApp.appendChild(main);
     $app.appendChild(todoApp);
@@ -81,38 +108,57 @@ export default class App {
     this.init();
   }
 
-  setState(nextState) {
-    this.state = nextState;
-    this.fetch();
-    this.title.setState(this.state.activeUsername);
-    this.userList.setState({
-      activeId: this.state.activeId,
-      activeUsername: this.state.activeUsername,
-      userList: this.state.userList,
-    });
-    this.todoList.setState({
-      isLoading: this.state.isLoading,
-      todoList: this.state.activeTodoList,
-    });
-  }
-
-  async fetch() {
+  async setState(nextState) {
     try {
-      this.state.isLoading = true;
+      this.state = nextState;
+      this.todoList.setState({
+        isLoading: true,
+        todoList: [],
+      });
       this.state.userList = await userAPI.fetchUserList();
-      this.state.activeTodoList = await todoListAPI.fetchTodoItems(
+      this.state.activeTodolist = await todoListAPI.fetchTodoItems(
         this.state.activeId
       );
+      this.title.setState(this.state.activeUsername);
+      this.userList.setState({
+        activeId: this.state.activeId,
+        activeUsername: this.state.activeUsername,
+        userList: this.state.userList,
+      });
+      this.todoCount.setState({
+        show: this.state.show,
+        count: this.state.activeTodolist.filter(({ isCompleted }) => {
+          if (this.state.show === ACTIVE) return !isCompleted;
+          else if (this.state.show === COMPLETED) return isCompleted;
+          else return true;
+        }).length,
+      });
     } catch (error) {
       throw new Error(error);
-    }
-    {
+    } finally {
+      this.state.isLoading = false;
       this.todoList.setState({
-        ...this.todoList.state,
-        isLoading: false,
+        isLoading: this.state.isLoading,
+        todoList: this.state.activeTodolist.filter(({ isCompleted }) => {
+          if (this.state.show === ACTIVE) return !isCompleted;
+          else if (this.state.show === COMPLETED) return isCompleted;
+          else return true;
+        }),
       });
     }
   }
+
+  // async fetch() {
+  //   try {
+
+  //   } catch (error) {
+  //     throw new Error(error);
+  //   } finally {
+  //     this.todoList.setState({
+  //       ...this.todoList.state,
+  //     });
+  //   }
+  // }
 
   setActiveData(user_id) {
     const user = this.state.userList.filter(({ _id }) => user_id === _id)[0];
@@ -120,8 +166,7 @@ export default class App {
       ...this.state,
       activeId: user._id,
       activeUsername: user.name,
-      activeTodoList: user.todoList,
-      isLoading: false,
+      activeTodolist: user.todoList,
     });
   }
 
@@ -129,7 +174,13 @@ export default class App {
     try {
       this.state.userList = await userAPI.fetchUserList();
       if (this.state.userList.length === 0) return;
-      this.setActiveData(this.state.userList[0]._id);
+      const firstUser = this.state.userList[0];
+      this.setState({
+        ...this.state,
+        activeId: firstUser._id,
+        activeUsername: firstUser.name,
+        activeTodolist: firstUser.todoList,
+      });
     } catch (error) {
       throw new Error(error);
     }

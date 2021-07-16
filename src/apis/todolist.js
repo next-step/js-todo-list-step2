@@ -6,7 +6,7 @@ export const todoListAPI = {
   },
 
   createItem(userId, contents) {
-    return $http.post(`api/users/${userId}/items`, contents);
+    return $http.post(`api/users/${userId}/items`, { contents });
   },
 
   removeAllItems(userId) {

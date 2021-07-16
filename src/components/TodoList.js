@@ -15,6 +15,7 @@ export default class TodoList {
   }
 
   render() {
+    console.log(this.state.todoList);
     if (this.state.isLoading)
       this.todoList.innerHTML = `
         <li>

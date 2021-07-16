@@ -10,7 +10,7 @@ export const userAPI = {
   },
 
   fetchUser(id) {
-    $http.get(`api/users/${id}`);
+    return $http.get(`api/users/${id}`);
   },
 
   removeUser(id) {
