@@ -4,6 +4,13 @@ export default class TodoStore extends Subject {
   constructor(todoList) {
     super();
     this.todoList = todoList ?? [];
-    console.log(todoList);
+  }
+
+  /**
+   * @param {Object[]} newTodoList
+   */
+  setTodoList(newTodoList) {
+    this.todoList = newTodoList;
+    console.lot(this.todoList);
   }
 }
