@@ -83,6 +83,10 @@ export default class App {
         isLoading: true,
         todoList: this.state.activeTodolist,
       },
+      deleteTodo: async (itemId) => {
+        await todoListAPI.removeItem(this.state.activeId, itemId);
+        this.setState({ ...this.state });
+      },
       onClick: async (itemId) => {
         await todoListAPI.toggleItemComplete(this.state.activeId, itemId);
         this.setState({ ...this.state });

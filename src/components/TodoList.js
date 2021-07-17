@@ -1,15 +1,26 @@
 import { PRIORITY } from '../constants/todo.js';
 export default class TodoList {
-  constructor({ $target, initialState, onClick, onChange, onKeypress }) {
+  constructor({
+    $target,
+    initialState,
+    deleteTodo,
+    onClick,
+    onChange,
+    onKeypress,
+  }) {
     this.state = initialState;
 
     this.todoList = document.createElement('ul');
     this.todoList.className = 'todo-list';
 
     this.todoList.addEventListener('click', ({ target }) => {
-      if (target.className !== 'toggle') return;
-      const { id } = target.parentNode.parentNode.dataset;
-      onClick(id);
+      if (target.className === 'toggle') {
+        const { id } = target.parentNode.parentNode.dataset;
+        onClick(id);
+      } else if (target.className === 'destroy') {
+        const { id } = target.parentNode.parentNode.dataset;
+        deleteTodo(id);
+      }
     });
 
     this.todoList.addEventListener('change', ({ target }) => {
