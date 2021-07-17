@@ -1,6 +1,6 @@
-function todoItemTemplate(todo) {
+function todoItemTemplate({ _id, contents }) {
   return `
-  <li>
+  <li data-id=${_id}>
     <div class="view">
       <input class="toggle" type="checkbox">
       <label class="label">
@@ -9,20 +9,24 @@ function todoItemTemplate(todo) {
           <option value="1">1순위</option>
           <option value="2">2순위</option>
         </select>
-        해야할 아이템
+        ${contents}
       </label>
-      <button class="destroy"></button>
+      <button class="destroy" data-id=${_id}></button>
     </div>
-    <input class="edit" value="완료된 타이틀">
+    <input class="edit" value="${contents}">
   </li>
   `;
 }
 
-function TodoList() {
+function TodoList({ deleteTodo }) {
+  const todoList = document.querySelector('.todo-list');
   this.render = todoData => {
-    const todoList = document.querySelector('.todo-list');
-    if(todoData.length === 0) return todoList.innerHTML="데이터 없음"
-    todoList.innerHTML = todoData.map(todo=>todoItemTemplate(todo)).join('')
+    if (todoData.length === 0) return (todoList.innerHTML = '데이터 없음');
+    todoList.innerHTML = todoData.map(todo => todoItemTemplate(todo)).join('');
+    this.event();
+  };
+  this.event = () => {
+    todoList.addEventListener('click',deleteTodo)
   };
 }
 
