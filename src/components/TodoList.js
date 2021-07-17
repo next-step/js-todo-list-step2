@@ -1,9 +1,43 @@
+import { PRIORITY } from '../constants/todo.js';
 export default class TodoList {
-  constructor({ $target, initialState }) {
+  constructor({ $target, initialState, onClick, onChange, onKeypress }) {
     this.state = initialState;
 
     this.todoList = document.createElement('ul');
     this.todoList.className = 'todo-list';
+
+    this.todoList.addEventListener('click', ({ target }) => {
+      if (target.className !== 'toggle') return;
+      const { id } = target.parentNode.parentNode.dataset;
+      onClick(id);
+    });
+
+    this.todoList.addEventListener('change', ({ target }) => {
+      if (target.tagName !== 'SELECT') return;
+      const { id } = target.parentNode.parentNode.parentNode.dataset;
+      const selectedItem = target.options[target.selectedIndex].value;
+      onChange(id, PRIORITY[selectedItem]);
+    });
+
+    this.todoList.addEventListener('dblclick', ({ target }) => {
+      if (target.className !== 'label') return;
+      const todoItem = target.parentNode.parentNode;
+      todoItem.className = 'editing';
+    });
+
+    this.todoList.addEventListener('keypress', ({ key, target }) => {
+      if (key !== 'Enter' || target.value < 2) return;
+      const { id } = target.parentNode.dataset;
+      onKeypress(id, target.value);
+    });
+
+    window.addEventListener('click', ({ target }) => {
+      if (target.className === 'edit') return;
+      const edits = document.querySelectorAll('.editing');
+      edits.forEach(todo => {
+        todo.className = '';
+      });
+    });
 
     $target.appendChild(this.todoList);
     this.render();
@@ -15,7 +49,6 @@ export default class TodoList {
   }
 
   render() {
-    console.log(this.state.todoList);
     if (this.state.isLoading)
       this.todoList.innerHTML = `
         <li>
@@ -36,8 +69,7 @@ export default class TodoList {
           return `
         <li data-id="${_id}"${isCompleted ? ' class="completed"' : ''}>
             <div class="view">
-            <input class="toggle" type="checkbox"${
-              isCompleted ? ' checked' : ''
+            <input class="toggle" type="checkbox"${isCompleted ? ' checked' : ''
             } />
             <label class="label">
                ${this.todoItemTemplate(priority)}
@@ -45,7 +77,7 @@ export default class TodoList {
             </label>
             <button class="destroy"></button>
             </div>
-            <input class="edit" value="완료된 타이틀" />
+            <input class="edit" value="${contents}" />
         </li>
         `;
         })

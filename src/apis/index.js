@@ -14,7 +14,7 @@ const $request = async (url = '', options) => {
 
 export const $http = {
   get: (url) => $request(url),
-  post: (url, body = '') => {
+  post: (url, body) => {
     const options = {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -22,7 +22,7 @@ export const $http = {
     };
     return $request(url, options);
   },
-  put: (url, body = '') => {
+  put: (url, body) => {
     const options = {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },

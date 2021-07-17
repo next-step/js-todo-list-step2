@@ -7,7 +7,7 @@ import TodoCount from './components/TodoCount.js';
 import { userAPI } from './apis/user.js';
 import { todoListAPI } from './apis/todolist.js';
 
-import { ALL, ACTIVE, COMPLETED } from './constants/todo.js';
+import { ALL, ACTIVE, COMPLETED, PRIORITY } from './constants/todo.js';
 
 export default class App {
   constructor($app) {
@@ -52,14 +52,7 @@ export default class App {
       deleteUser: async () => {
         try {
           await userAPI.removeUser(this.state.activeId);
-          this.setState({
-            ...this.state,
-            userList: this.state.userList.filter(
-              ({ _id }) => this.state.activeId !== _id
-            ),
-          });
           this.init();
-          // this.setActiveData(this.state.userList[0]._id);
         } catch (error) {
           throw new Error(error);
         }
@@ -71,9 +64,9 @@ export default class App {
 
     new TodoInput({
       $target: todoApp,
-      addTodo: async (todo) => {
+      addTodo: async (contents) => {
         try {
-          await todoListAPI.createItem(this.state.activeId, todo);
+          await todoListAPI.createItem(this.state.activeId, { contents });
           this.setState({ ...this.state });
         } catch (error) {
           throw new Error(error);
@@ -87,9 +80,21 @@ export default class App {
     this.todoList = new TodoList({
       $target: main,
       initialState: {
-        isLoading: this.state.isLoading,
-        todoList: this.state.activeTodoList,
+        isLoading: true,
+        todoList: this.state.activeTodolist,
       },
+      onClick: async (itemId) => {
+        await todoListAPI.toggleItemComplete(this.state.activeId, itemId);
+        this.setState({ ...this.state });
+      },
+      onChange: async (id, priority) => {
+        await todoListAPI.editItemPriority(this.state.activeId, id, { priority });
+        this.setState({ ...this.state });
+      },
+      onKeypress: async (itemId, contents) => {
+        await todoListAPI.editItemContent(this.state.activeId, itemId, { contents });
+        this.setState({ ...this.state });
+      }
     });
     this.todoCount = new TodoCount({
       $target: main,
@@ -97,9 +102,13 @@ export default class App {
         show: this.state.show,
         count: this.state.count,
       },
-      onClick: (show) => {
+      changeShow: (show) => {
         this.setState({ ...this.state, show });
       },
+      deleteAll: async () => {
+        await todoListAPI.removeAllItems(this.state.activeId);
+        this.setState({ ...this.state });
+      }
     });
 
     todoApp.appendChild(main);
@@ -147,18 +156,6 @@ export default class App {
       });
     }
   }
-
-  // async fetch() {
-  //   try {
-
-  //   } catch (error) {
-  //     throw new Error(error);
-  //   } finally {
-  //     this.todoList.setState({
-  //       ...this.todoList.state,
-  //     });
-  //   }
-  // }
 
   setActiveData(user_id) {
     const user = this.state.userList.filter(({ _id }) => user_id === _id)[0];

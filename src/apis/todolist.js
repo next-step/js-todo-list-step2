@@ -6,7 +6,7 @@ export const todoListAPI = {
   },
 
   createItem(userId, contents) {
-    return $http.post(`api/users/${userId}/items`, { contents });
+    return $http.post(`api/users/${userId}/items`, contents);
   },
 
   removeAllItems(userId) {
@@ -22,7 +22,7 @@ export const todoListAPI = {
   },
 
   editItemPriority(userId, itemId, priority) {
-    return $http.put(`api/users/${userId}/items/${itemId}`, priority);
+    return $http.put(`api/users/${userId}/items/${itemId}/priority`, priority);
   },
 
   toggleItemComplete(userId, itemId) {

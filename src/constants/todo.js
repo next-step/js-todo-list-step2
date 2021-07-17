@@ -2,4 +2,6 @@ const ALL = 'all';
 const ACTIVE = 'active';
 const COMPLETED = 'completed';
 
-export { ALL, ACTIVE, COMPLETED };
+const PRIORITY = ['NONE', 'FIRST', 'SECOND'];
+
+export { ALL, ACTIVE, COMPLETED, PRIORITY };
