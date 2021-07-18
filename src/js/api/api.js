@@ -85,6 +85,10 @@ const deleteAllTodo = async (userId) => {
   await request(BASE_URL + API.USER + `/${userId}${API.ITEM}`, deleteMessageForm());
 };
 
+/**
+ * @param {string} userId
+ * @param {string} todoId
+ */
 const putCompleteTodo = async (userId, todoId) => {
   const todoInfo = await request(
     BASE_URL + API.USER + `/${userId}${API.ITEM}/${todoId}${API.TOGGLE}`,
@@ -93,4 +97,37 @@ const putCompleteTodo = async (userId, todoId) => {
   return todoInfo;
 };
 
-export { getUserList, getUserTodoList, postUser, deleteUser, postTodo, deleteAllTodo, putCompleteTodo };
+/**
+ * @param {string} userId
+ * @param {string} todoId
+ */
+const deleteTodo = async (todoContentsForm, userId, todoId) => {
+  const todoInfo = await request(BASE_URL + API.USER + `/${userId}${API.ITEM}/${todoId}`, deleteMessageForm());
+  return todoInfo;
+};
+
+/**
+ * @param {Object} todoContentsForm
+ * @param {string} todoContentsForm.contents
+ * @param {string} userId
+ * @param {string} todoId
+ */
+const editTodo = async (todoContentsForm, userId, todoId) => {
+  const todoInfo = await request(
+    BASE_URL + API.USER + `/${userId}${API.ITEM}/${todoId}`,
+    postMessageForm(todoContentsForm, "PUT"),
+  );
+  return todoInfo;
+};
+
+export {
+  getUserList,
+  getUserTodoList,
+  postUser,
+  deleteUser,
+  postTodo,
+  deleteAllTodo,
+  putCompleteTodo,
+  deleteTodo,
+  editTodo,
+};

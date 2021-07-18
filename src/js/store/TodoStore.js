@@ -34,6 +34,10 @@ export default class TodoStore extends Subject {
     this.todoStatus = FILTER_TYPES.ALL;
   }
 
+  /**
+   * @param {string} todoId
+   * @param {object} newTodo
+   */
   editTodoList(todoId, newTodo) {
     const newTodoList = this.todoList.map((todo) => {
       if (todo._id === todoId) {
@@ -41,6 +45,13 @@ export default class TodoStore extends Subject {
       }
       return todo;
     });
+    this.todoList = newTodoList;
+  }
+
+  /**
+   * @param {object[]} newTodoList
+   */
+  deleteTodoList(newTodoList) {
     this.todoList = newTodoList;
   }
 

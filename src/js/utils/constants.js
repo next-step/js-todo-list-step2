@@ -29,6 +29,8 @@ const ALERT_MESSAGE = Object.freeze({
   CREATE: "추가하고 싶은 이름을 입력해주세요.",
   DELETE: (name) => `${name}을 삭제하시겠습니까?`,
   DELETE_ALL: "모든 할 일은 삭제하시겠습니까?",
+  DELETE_ITEM: "할 일을 삭제하시겠습니까?",
+  LENGTH_ALERT: "2글자 이상이어야 합니다.",
 });
 
 const KEY_NAME = Object.freeze({
@@ -36,4 +38,6 @@ const KEY_NAME = Object.freeze({
   ESCAPE: "Escape",
 });
 
-export { TODO_BUTTONS, FILTER_TYPES, USER_HANDLE_TYPES, ALERT_MESSAGE, PRIORITY_TYPE, KEY_NAME };
+const CONSTRAINTS = 2;
+
+export { TODO_BUTTONS, FILTER_TYPES, USER_HANDLE_TYPES, ALERT_MESSAGE, PRIORITY_TYPE, KEY_NAME, CONSTRAINTS };
