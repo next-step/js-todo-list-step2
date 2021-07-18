@@ -3,12 +3,14 @@ import { PRIORITY } from "../constants/constants.js"
 import { $, $$ } from "../util/util.js";
 
 export class TodoList extends Observer{
-    constructor(todoState){
+    constructor(selectedUserState){
         super();
-        this.state = todoState;
+        this.selectedUserState = selectedUserState;
+        console.log(selectedUserState)
     }
     template(){
-        const todoList = this.state.get();
+        const todoList = this.selectedUserState.get().todoList;
+        console.log(todoList)
         return `
             ${todoList.map(item =>`                
             <li class=${item.isCompleted?"completed":""}>
@@ -25,7 +27,7 @@ export class TodoList extends Observer{
             `).join('')}
         ` 
     }
-    
+     
     render(){
         const target = $(".todo-list");
         target.innerHTML = this.template();
@@ -56,5 +58,5 @@ export class TodoList extends Observer{
             `
         }
     }
-    
+   
 }

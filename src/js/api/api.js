@@ -14,17 +14,17 @@ export const userAPI = {
     return await fetch(`${BASE_URL}`,HTTP_REQUEST.POST(data)).then(data=>data.json());
   },
   async getUser(id){
-    return await fetch(`${BASE_URL}/${id}`).then(data =>{data.json()});
+    return await fetch(`${BASE_URL}/${id}`).then(data => data.json());
   }
 }
 
 
 export const todoAPI = {
   async getTodoItem(id){
-    return await fetch(`${BASE_URL}/${id}/items/`).then(data => data.json);
+    return await fetch(`${BASE_URL}/${id}/items`).then(data => data.json);
   },
   async addTodoItem(id, item){
-    return await fetch(`${BASE_URL}/${id}/items/`, HTTP_REQUEST.POST(item));
+    return await fetch(`${BASE_URL}/${id}/items`, HTTP_REQUEST.POST(item));
   },
   async deleteAllTodoItem(id){
     return await fetch(`${BASE_URL}/${id}/ items/`,HTTP_REQUEST.DELETE);

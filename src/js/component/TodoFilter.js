@@ -3,15 +3,18 @@ import { $, $$ } from "../util/util.js";
 import { FILTER } from "../constants/constants.js";
 
 export class TodoFilter extends Observer{
-    constructor(todoState, filterState){
+    constructor(selectedUserState, filterState){
         super();
-        this.state= {todoState, filterState};
+        this.selectedUserState = selectedUserState;
+        this.filterState = filterState;
         //console.log(this.state);
     }
     templete(){
-        const filter = this.state.filterState.filter;
-        const todo = this.state.todoState.todoList;
+        const filter = this.filterState.get();
+        const todo = this.selectedUserState.get().todoList;
+        
         const count = this.counTotalTodo(filter, todo);
+         //conso
         return `
         <span class="todo-count">총 <strong>${count}</strong> 개</span>
         <ul class="filters">
@@ -37,7 +40,7 @@ export class TodoFilter extends Observer{
         this.render();
     }
     counTotalTodo(filter, todo){
-       // console.log(todo);
+        console.log(todo);
         if(filter ==FILTER.ALL){
             return todo.length;
         }
