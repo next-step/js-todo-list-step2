@@ -7,9 +7,9 @@ export default class TodoInput extends Component {
     this.$target.addEventListener("keypress", (e) => this.onKeyupEnter(e));
   }
 
-  async onKeyupEnter({ key, isComposing }) {
+  async onKeyupEnter({ key }) {
     const contents = this.$target.value;
-    console.log(isComposing);
+
     if (key !== KEY_NAME.ENTER) return;
     if (!contents.trim()) return;
     if (contents.length < CONSTRAINTS) {
