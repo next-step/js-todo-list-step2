@@ -30,4 +30,9 @@ const ALERT_MESSAGE = Object.freeze({
   DELETE: (name) => `${name}을 삭제하시겠습니까?`,
 });
 
-export { TODO_BUTTONS, FILTER_TYPES, USER_HANDLE_TYPES, ALERT_MESSAGE, PRIORITY_TYPE };
+const KEY_NAME = Object.freeze({
+  ENTER: "Enter",
+  ESCAPE: "Escape",
+});
+
+export { TODO_BUTTONS, FILTER_TYPES, USER_HANDLE_TYPES, ALERT_MESSAGE, PRIORITY_TYPE, KEY_NAME };

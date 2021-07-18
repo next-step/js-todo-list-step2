@@ -15,6 +15,10 @@ export default class TodoStore extends Subject {
     this.todoList = newTodoList;
   }
 
+  addTodo(todo) {
+    this.todoList = [...this.todoList, todo];
+  }
+
   /**
    * @param {string} status
    */

@@ -2,6 +2,7 @@ import UserStore from "./store/UserStore.js";
 import TodoStore from "./store/TodoStore.js";
 import UserList from "./components/user/UserList.js";
 import UserTitle from "./components/user/UserTitle.js";
+import TodoInput from "./components/todo/TodoInput.js";
 import TodoList from "./components/todo/TodoList.js";
 import TodoCount from "./components/todo/TodoCount.js";
 import TodoFilter from "./components/todo/TodoFilter.js";
@@ -33,11 +34,14 @@ const App = async () => {
 
   [userTitleView, userListView].forEach((component) => userStore.subscribe(component));
 
+  const todoInputView = new TodoInput($(".new-todo"), todoStore, {
+    userStore: userStore,
+  });
   const todoListView = new TodoList($(".todo-list"), todoStore);
   const todoCountView = new TodoCount($(".todo-count"), todoStore);
   const todoFilterView = new TodoFilter($(".filters"), todoStore);
 
-  [todoListView, todoCountView, todoFilterView].forEach((component) => todoStore.subscribe(component));
+  [todoInputView, todoListView, todoCountView, todoFilterView].forEach((component) => todoStore.subscribe(component));
 };
 
 export default App;

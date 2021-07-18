@@ -1,0 +1,19 @@
+import { postTodo } from "../../api/api.js";
+import Component from "../../core/Component.js";
+import { KEY_NAME } from "../../utils/constants.js";
+
+export default class TodoInput extends Component {
+  bindEvents() {
+    this.$target.addEventListener("keyup", (e) => this.onKeyupEnter(e));
+  }
+
+  async onKeyupEnter({ key }) {
+    const contents = this.$target.value;
+    if (key !== KEY_NAME.ENTER || !contents) return;
+
+    const todoInfo = await postTodo({ contents }, this.props.userStore.selectedUserId);
+    this.store.addTodo(todoInfo);
+    this.store.notifyObservers();
+    this.$target.value = "";
+  }
+}
