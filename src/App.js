@@ -88,7 +88,8 @@ export default function App() {
     },
     updateTodo: async ({ key, target }) => {
       const userId = this.currentUser._id;
-      const todoId = target.closest('li').dataset.id;
+      const todoItem = target.closest('li');
+      const todoId = todoItem.dataset.id
       const data = {
         contents: target.value,
       };
@@ -118,12 +119,9 @@ export default function App() {
       await setPriorityTodo(userId, todoId, data);
       this.render();
     },
-    cancleEdit : ({target}) => {
-      if (target.classList.contains('edit') || this.editTarget === null) {
-        return;
-      }
-      this.editTarget.classList.remove('editing');
-    }
+    // cancleEdit : ({target}) => {
+    //   this.editTarget.classList.remove('editing');
+    // }
   });
 
   this.todoInput = new TodoInput({

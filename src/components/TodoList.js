@@ -32,7 +32,7 @@ function todoItemTemplate({ _id, contents, isCompleted, priority }) {
   `;
 }
 
-function TodoList({ deleteTodo, completeToggle, prioritySelecte, editTodo, updateTodo,cancleEdit}) {
+function TodoList({ deleteTodo, completeToggle, prioritySelect, editTodo, updateTodo, cancleEdit }) {
   const todoList = document.querySelector('.todo-list');
   this.editTarget = null;
   this.render = todoData => {
@@ -43,10 +43,10 @@ function TodoList({ deleteTodo, completeToggle, prioritySelecte, editTodo, updat
   this.event = () => {
     todoList.addEventListener('click', deleteTodo);
     todoList.addEventListener('click', completeToggle);
-    todoList.addEventListener('change', prioritySelecte);
+    todoList.addEventListener('change', prioritySelect);
     todoList.addEventListener('dblclick', editTodo);
     todoList.addEventListener('keydown', updateTodo);
-    window.addEventListener('click', cancleEdit)
+    window.addEventListener('click', cancleEdit);
   };
 }
 
