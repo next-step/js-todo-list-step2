@@ -105,3 +105,17 @@ export const setPriorityTodo = async (userId, todoId, data) => {
     console.error(error);
   }
 };
+
+export const setUpdateTodo = async (userId, todoId, data) => {
+  try {
+    await fetch(`${BASE_URL}/${userId}/items/${todoId}`, {
+      method: 'PUT',
+      headers: {
+        'content-type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    });
+  } catch (error) {
+    console.error(error);
+  }
+};

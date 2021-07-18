@@ -32,8 +32,9 @@ function todoItemTemplate({ _id, contents, isCompleted, priority }) {
   `;
 }
 
-function TodoList({ deleteTodo, completeToggle, prioritySelecte }) {
+function TodoList({ deleteTodo, completeToggle, prioritySelecte, editTodo, updateTodo,cancleEdit}) {
   const todoList = document.querySelector('.todo-list');
+  this.editTarget = null;
   this.render = todoData => {
     if (todoData.length === 0) return (todoList.innerHTML = '데이터 없음');
     todoList.innerHTML = todoData.map(todo => todoItemTemplate(todo)).join('');
@@ -43,6 +44,9 @@ function TodoList({ deleteTodo, completeToggle, prioritySelecte }) {
     todoList.addEventListener('click', deleteTodo);
     todoList.addEventListener('click', completeToggle);
     todoList.addEventListener('change', prioritySelecte);
+    todoList.addEventListener('dblclick', editTodo);
+    todoList.addEventListener('keydown', updateTodo);
+    window.addEventListener('click', cancleEdit)
   };
 }
 

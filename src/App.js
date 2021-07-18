@@ -8,6 +8,7 @@ import {
   setDeleteTodo,
   setCompleteToggle,
   setPriorityTodo,
+  setUpdateTodo,
 } from './api.js';
 import TodoInput from './components/TodoInput.js';
 import TodoList from './components/TodoList.js';
@@ -18,7 +19,6 @@ export default function App() {
   this.users = [];
   this.currentUser = [];
   this.loading = false;
-
   this.init = async () => {
     this.todoInput.render();
     this.users = await getUsersList();
@@ -37,8 +37,8 @@ export default function App() {
   this.userName = new UserName();
 
   this.userList = new UserList({
-    userSelecteHandler: async event => {
-      const id = event.target.dataset.id;
+    userSelecteHandler: async ({target}) => {
+      const id = target.dataset.id;
       if (id === undefined || id === '') return;
       const currentUserData = await getUser(id);
       this.currentUser = currentUserData;
@@ -64,26 +64,49 @@ export default function App() {
   });
 
   this.todoList = new TodoList({
-    deleteTodo: async event => {
-      const target = event.target;
+    deleteTodo: async ({target}) => {
       const userId = this.currentUser._id;
       const todoId = target.closest('li').dataset.id;
       if (!target.classList.contains('destroy')) return;
       await setDeleteTodo(userId, todoId);
       this.render();
     },
-    completeToggle: async event => {
-      const target = event.target;
+    completeToggle: async ({target}) => {
       const userId = this.currentUser._id;
       const todoId = target.closest('li').dataset.id;
       if (!target.classList.contains('toggle')) return;
       await setCompleteToggle(userId, todoId);
       this.render();
     },
-    prioritySelecte: async event => {
-      const target = event.target;
+    editTodo: ({target}) => {
+      if (!target.classList.contains('label')) return;
+      const todoItem = target.closest('li');
+      this.editTarget = todoItem;
+      const editInput = document.querySelector('.edit');
+      todoItem.classList.toggle('editing');
+      editInput.focus();
+    },
+    updateTodo: async ({ key, target }) => {
       const userId = this.currentUser._id;
       const todoId = target.closest('li').dataset.id;
+      const data = {
+        contents: target.value,
+      };
+      if (!target.classList.contains('edit')) return;
+      if (key === 'Escape') {
+        todoItem.classList.remove('editing');
+      }
+      if (key !== 'Enter') return;
+      if (target.value === '') return;
+      if (key !== 'Enter') return;
+      else if (target.value.length < 2) return alert('최소 2글자 이상이어야 합니다.');
+      await setUpdateTodo(userId,todoId, data);
+      this.render();
+    },
+    prioritySelecte: async ({target}) => {
+      const userId = this.currentUser._id;
+      const todoId = target.closest('li').dataset.id;
+
       if (!target.classList.contains('select')) return;
       const { value } = target;
       const priority = {
@@ -97,19 +120,24 @@ export default function App() {
       await setPriorityTodo(userId, todoId, data);
       this.render();
     },
+    cancleEdit : ({target}) => {
+      if (target.classList.contains('edit') || this.editTarget === null) {
+        return;
+      }
+      this.editTarget.classList.remove('editing');
+    }
   });
 
   this.todoInput = new TodoInput({
-    addTodo: async event => {
-      const target = event.target;
+    addTodo: async ({ key, target } ) => {
       const userId = this.currentUser._id;
       const data = {
         contents: target.value,
       };
-      if (event.code !== 'Enter') return;
+      if (key !== 'Enter') return;
       else if (target.value.length < 2) return alert('최소 2글자 이상이어야 합니다.');
       await setAddTodo(userId, data);
-      event.target.value = '';
+      target.value = '';
       this.render();
     },
   });
