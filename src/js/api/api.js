@@ -27,10 +27,10 @@ export const todoAPI = {
     return await fetch(`${BASE_URL}/${id}/items`, HTTP_REQUEST.POST(item));
   },
   async deleteAllTodoItem(id){
-    return await fetch(`${BASE_URL}/${id}/ items/`,HTTP_REQUEST.DELETE);
+    return await fetch(`${BASE_URL}/${id}/ items/`,HTTP_REQUEST.DELETE());
   },
   async deleteTodoItem(userId, itemId){
-    return await fetch(`${BASE_URL}/${userId}/ items/${itemId}`,HTTP_REQUEST.DELETE);
+    return await fetch(`${BASE_URL}/${userId}/ items/${itemId}`,HTTP_REQUEST.DELETE());
   },
   async updateTodoItem(userId, itemId, newItem){
     return await fetch(`${BASE_URL}/${userId}/items/${itemId}`, HTTP_REQUEST.PUT(newItem));
@@ -39,6 +39,6 @@ export const todoAPI = {
     return await fetch(`${BASE_URL}/${userId}/items/${itemId}/`, HTTP_REQUEST.PUT(priority));
   },
   async toggleTodoItem(userId, itemId){
-    return await fetch(`${BASE_URL}/${userId}/items/${itemId}`, HTTP_REQUEST.PUT)
+    return await fetch(`${BASE_URL}/${userId}/items/${itemId}/toggle`, HTTP_REQUEST.PUT())
   }
 }
