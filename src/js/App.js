@@ -9,6 +9,7 @@ import TodoFilter from "./components/todo/TodoFilter.js";
 import TodoClearButton from "./components/todo/TodoClearButton.js";
 import { $ } from "./utils/utils.js";
 import { getUserList, getUserTodoList } from "./api/api.js";
+import { FILTER_TYPES } from "./utils/constants.js";
 // import Component from "./core/Component.js";
 
 const App = async () => {
@@ -23,6 +24,7 @@ const App = async () => {
   const setTodoList = async (id = _id) => {
     const todoListData = await getUserTodoList(id);
     todoStore.setTodoList(todoListData);
+    todoStore.setTodoStatus(FILTER_TYPES.ALL);
     todoStore.notifyObservers();
   };
 
