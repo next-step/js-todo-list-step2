@@ -1,5 +1,5 @@
 import Observer from "../core/observer.js";
-import { $ } from "../util/util.js"
+import { $, $$ } from "../util/util.js"
 import { userAPI, todoAPI } from "../api/api.js";
 
 export class UserList extends Observer{
@@ -15,7 +15,7 @@ export class UserList extends Observer{
 
         return `
         ${userlist.map(item => `
-         <button id="${item._id}" class="ripple ${item._id ===selectedUser._id ? "active":""}">${item.name}</button>
+         <button id="${item._id}" class="ripple user-button ${item._id ===selectedUser._id ? "active":""}">${item.name}</button>
          `).join('')}
          <button class="ripple user-create-button" data-action="createUser">
          + 유저 생성
@@ -32,18 +32,27 @@ export class UserList extends Observer{
     }
     mounted(){
         const createUserBtn = $('.user-create-button');
-        //conasole.log(createUserBtn);
         createUserBtn.addEventListener('click', this.onCreateUser.bind(this));
         const deleteuserBtn = $('.user-delete-button');
         deleteuserBtn.addEventListener('click', this.onDeleteUser.bind(this));
+        
+        const userBtns= $$('.user-button');
+        userBtns.forEach(element => {
+            element.addEventListener('click', this.onFocusUser.bind(this));
+        });
     }
     update(){
         this.render();
     }
+    async onFocusUser(e){
+        const userId = e.target.id;
+        const data = await userAPI.getUser(userId);
+        this.selectedUserState.set(data);
+    }
+
     async onCreateUser(){
         console.log( this.selectedUserState);
         const userName = prompt("추가하고 싶은 이름을 입력해주세요.");
-    
         const data = await userAPI.addUser({name : userName});
         this.selectedUserState.set(data);
         const userlist = await userAPI.getAllUser();
