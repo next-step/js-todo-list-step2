@@ -1,4 +1,4 @@
-import { getUser, getUsersList, setUser, setDeleteUser, setAddTodo, getUserTodos, setDeleteTodo } from './api.js';
+import { getUser, getUsersList, setUser, setDeleteUser, setAddTodo, getUserTodos, setDeleteTodo, setCompleteToggle } from './api.js';
 import TodoInput from './components/TodoInput.js';
 import TodoList from './components/TodoList.js';
 import UserController from './components/UserController.js';
@@ -18,6 +18,7 @@ export default function App() {
 
   this.render = async () => {
     const userTodoData = await getUserTodos(this.currentUser._id);
+    console.log(userTodoData)
     this.userList.render(this.users, this.currentUser);
     this.userName.render(this.currentUser);
     this.todoList.render(userTodoData);
@@ -56,11 +57,19 @@ export default function App() {
     deleteTodo: async event => {
       const target = event.target;
       const userId = this.currentUser._id;
-      const todoId = target.dataset.id;
+      const todoId = target.closest("li").dataset.id;
       if (!target.classList.contains('destroy')) return;
       await setDeleteTodo(userId, todoId);
       this.render();
     },
+    completeToggle : async event => {
+      const target = event.target;
+      const userId = this.currentUser._id;
+      const todoId = target.closest("li").dataset.id;
+      if (!target.classList.contains('toggle')) return;
+      await setCompleteToggle(userId, todoId)
+      this.render();
+    }
   });
   
   this.todoInput = new TodoInput({
