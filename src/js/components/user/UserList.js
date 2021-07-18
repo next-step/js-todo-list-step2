@@ -1,6 +1,6 @@
 import { getUserList, postUser, deleteUser } from "../../api/api.js";
 import Component from "../../core/Component.js";
-import { ALERT_MESSAGE, USER_HANDLE_TYPES } from "../../utils/constants.js";
+import { ALERT_MESSAGE, CONSTRAINTS, USER_HANDLE_TYPES } from "../../utils/constants.js";
 import { confirmAlert, promtAlert } from "../../utils/utils.js";
 
 export default class UserList extends Component {
@@ -48,6 +48,11 @@ export default class UserList extends Component {
       const promtUserName = promtAlert(ALERT_MESSAGE.CREATE);
 
       if (!promtUserName) return;
+      if (promtUserName.length < CONSTRAINTS) {
+        alert(ALERT_MESSAGE.LENGTH_ALERT);
+        return;
+      }
+
       const { name } = await postUser({ name: promtUserName });
       const userList = await getUserList();
 
