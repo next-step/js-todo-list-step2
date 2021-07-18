@@ -73,8 +73,8 @@ export default class TodoList extends Component {
   }
 
   async onChangePriority({ target }) {
-    const todoId = target.closest(".label").dataset.todoId;
     if (checkClassList(target, TODO_BUTTONS.CHIP)) {
+      const todoId = target.closest(".label").dataset.todoId;
       target.value === "1" && this.editPriorityTodo(todoId, PRIORITY_TYPE.FIRST);
       target.value === "2" && this.editPriorityTodo(todoId, PRIORITY_TYPE.SECOND);
     }

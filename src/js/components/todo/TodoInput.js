@@ -4,12 +4,12 @@ import { ALERT_MESSAGE, CONSTRAINTS, KEY_NAME } from "../../utils/constants.js";
 
 export default class TodoInput extends Component {
   bindEvents() {
-    this.$target.addEventListener("keyup", (e) => this.onKeyupEnter(e));
+    this.$target.addEventListener("keypress", (e) => this.onKeyupEnter(e));
   }
 
-  async onKeyupEnter({ key }) {
+  async onKeyupEnter({ key, isComposing }) {
     const contents = this.$target.value;
-
+    console.log(isComposing);
     if (key !== KEY_NAME.ENTER) return;
     if (!contents.trim()) return;
     if (contents.length < CONSTRAINTS) {
