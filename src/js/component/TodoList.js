@@ -4,16 +4,31 @@ import { $, $$ } from "../util/util.js";
 import { userAPI, todoAPI } from "../api/api.js";
 
 export class TodoList extends Observer{
-    constructor(selectedUserState){
+    constructor(selectedUserState, filterState){
         super();
         this.selectedUserState = selectedUserState;
-        console.log(selectedUserState)
+        this.filterState = filterState;
+        console.log(filterState)
     }
     template(){
         const todoList = this.selectedUserState.get().todoList;
-        console.log(todoList)
+        console.log(this.filterState);
+        //const mode = this.filterState.get();
+        //console.log(mode)
+        const filteredList = (() =>{
+            const mode = this.filterState.get();
+            if(mode=='all'){
+                return todoList;
+            }
+            if(mode=='active'){
+                return todoList.filter(item => !item.isCompleted)
+            }
+            if(mode=='completed'){
+                return todoList.filter(item => item.isCompleted)
+            }
+        })();
         return `
-            ${todoList.map(item =>`                
+            ${filteredList.map(item =>`                
             <li class=${item.isCompleted?"completed":""}>
             <div class="view">
               <input id="${item._id}" class="toggle" type="checkbox" ${item.isCompleted?"checked":""} />

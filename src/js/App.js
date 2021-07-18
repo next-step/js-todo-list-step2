@@ -20,17 +20,15 @@ export default class App{
         this.init();
     }
     async init(){
-
-        
-       
         //conponent
         this.title = new Title(this.selectedUserState);
         this.userList = new UserList(this.userState, this.selectedUserState);
-        console.log(this.selectedUserState)
+        //console.log(this.selectedUserState)
         this.todoInput = new TodoInput(this.selectedUserState);
-        this.todoList = new TodoList(this.selectedUserState);
+        this.todoList = new TodoList(this.selectedUserState, this.filterState);
         this.todoFilter = new TodoFilter(this.selectedUserState, this.filterState);
         //subscribe
+
         this.selectedUserState.subscribe(this.title);
         this.selectedUserState.subscribe(this.userList);
         this.selectedUserState.subscribe(this.todoFilter);
