@@ -13,8 +13,6 @@ export class TodoList extends Observer{
     template(){
         const todoList = this.selectedUserState.get().todoList;
         console.log(this.filterState);
-        //const mode = this.filterState.get();
-        //console.log(mode)
         const filteredList = (() =>{
             const mode = this.filterState.get();
             if(mode=='all'){

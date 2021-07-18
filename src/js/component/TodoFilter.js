@@ -42,10 +42,17 @@ export class TodoFilter extends Observer{
     mounted(){
         const filterBtn = $$('.li-filter');
         filterBtn.forEach(btn => btn.addEventListener('click',this.onFilterChange.bind(this)));
+    
+        const deleteAllBtn = $('.clear-completed');
+        deleteAllBtn.addEventListener('click', this.onDeleteAllTodo.bind(this));
     }
     update(){
-        console.log("filterupdate")
+        //console.log("filterupdate")
         this.render();
+    }
+    onDeleteAllTodo(){
+        console.log("dfsdjkfs");
+        const 
     }
     onFilterChange(e){  
        // console.log(e);
