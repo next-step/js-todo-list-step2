@@ -1,5 +1,7 @@
+import { putCompleteTodo } from "../../api/api.js";
 import Component from "../../core/Component.js";
-import { PRIORITY_TYPE } from "../../utils/constants.js";
+import { PRIORITY_TYPE, TODO_BUTTONS } from "../../utils/constants.js";
+import { $, checkClassList } from "../../utils/utils.js";
 
 export default class TodoList extends Component {
   render() {
@@ -8,7 +10,7 @@ export default class TodoList extends Component {
         return `
         <li class=${isCompleted && "completed"}>
           <div class="view" data-todo-id=${_id}>
-            <input class="toggle" type="checkbox" ${isCompleted && "checked"}/>
+            <input data-todo-id=${_id} class="toggle" type="checkbox" ${isCompleted && "checked"}/>
             <label class="label">
               ${this.setChipView(priority)}
               ${contents}
@@ -21,6 +23,21 @@ export default class TodoList extends Component {
       })
       .join("");
     this.$target.innerHTML = todoListView;
+  }
+
+  bindEvents() {
+    this.$target.addEventListener("click", (e) => this.onClickCheckbox(e));
+  }
+
+  async onClickCheckbox({ target }) {
+    const todoId = target.dataset.todoId;
+    checkClassList(target, TODO_BUTTONS.TOGGLE) && (await this.checkTodo(todoId));
+  }
+
+  async checkTodo(todoId) {
+    const todo = await putCompleteTodo(this.props.userStore.selectedUserId, todoId);
+    this.store.editTodoList(todo._id, todo);
+    this.store.notifyObservers();
   }
 
   setChipView(priority) {

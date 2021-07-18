@@ -34,8 +34,18 @@ export default class TodoStore extends Subject {
     this.todoStatus = FILTER_TYPES.ALL;
   }
 
+  editTodoList(todoId, newTodo) {
+    const newTodoList = this.todoList.map((todo) => {
+      if (todo._id === todoId) {
+        return newTodo;
+      }
+      return todo;
+    });
+    this.todoList = newTodoList;
+  }
+
   get todoListLength() {
-    return this.todoList.length;
+    return this.filteredTodoList.length;
   }
 
   get filteredTodoList() {

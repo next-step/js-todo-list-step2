@@ -2,6 +2,7 @@ const BASE_URL = "https://js-todo-list-9ca3a.df.r.appspot.com";
 const API = Object.freeze({
   USER: "/api/users",
   ITEM: "/items",
+  TOGGLE: "/toggle",
 });
 
 /**
@@ -84,4 +85,12 @@ const deleteAllTodo = async (userId) => {
   await request(BASE_URL + API.USER + `/${userId}${API.ITEM}`, deleteMessageForm());
 };
 
-export { getUserList, getUserTodoList, postUser, deleteUser, postTodo, deleteAllTodo };
+const putCompleteTodo = async (userId, todoId) => {
+  const todoInfo = await request(
+    BASE_URL + API.USER + `/${userId}${API.ITEM}/${todoId}${API.TOGGLE}`,
+    postMessageForm({}, "PUT"),
+  );
+  return todoInfo;
+};
+
+export { getUserList, getUserTodoList, postUser, deleteUser, postTodo, deleteAllTodo, putCompleteTodo };

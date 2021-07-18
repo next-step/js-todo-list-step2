@@ -38,7 +38,9 @@ const App = async () => {
   const todoInputView = new TodoInput($(".new-todo"), todoStore, {
     userStore: userStore,
   });
-  const todoListView = new TodoList($(".todo-list"), todoStore);
+  const todoListView = new TodoList($(".todo-list"), todoStore, {
+    userStore: userStore,
+  });
   const todoCountView = new TodoCount($(".todo-count"), todoStore);
   const todoFilterView = new TodoFilter($(".filters"), todoStore);
   const todoClearButtonView = new TodoClearButton($(".clear-completed"), todoStore, {
