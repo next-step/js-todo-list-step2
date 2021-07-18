@@ -97,8 +97,6 @@ export default function App() {
         todoItem.classList.remove('editing');
       }
       if (key !== 'Enter') return;
-      if (target.value === '') return;
-      if (key !== 'Enter') return;
       else if (target.value.length < 2) return alert('최소 2글자 이상이어야 합니다.');
       await setUpdateTodo(userId,todoId, data);
       this.render();
