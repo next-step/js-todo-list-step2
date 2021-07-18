@@ -5,7 +5,7 @@ export default class TodoStore extends Subject {
   constructor(todoList) {
     super();
     this.todoList = todoList ?? [];
-    this.todoStatus = "all";
+    this.todoStatus = FILTER_TYPES.ALL;
   }
 
   /**
@@ -15,6 +15,9 @@ export default class TodoStore extends Subject {
     this.todoList = newTodoList;
   }
 
+  /**
+   * @param {Object} todo
+   */
   addTodo(todo) {
     this.todoList = [...this.todoList, todo];
   }
@@ -24,6 +27,11 @@ export default class TodoStore extends Subject {
    */
   setTodoStatus(status) {
     this.todoStatus = status;
+  }
+
+  clearTodo() {
+    this.todoList = [];
+    this.todoStatus = FILTER_TYPES.ALL;
   }
 
   get todoListLength() {

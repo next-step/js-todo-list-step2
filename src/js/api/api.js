@@ -77,4 +77,11 @@ const postTodo = async (todoContentsForm, userId) => {
   return todoInfo;
 };
 
-export { getUserList, getUserTodoList, postUser, deleteUser, postTodo };
+/**
+ * @param {string} userId
+ */
+const deleteAllTodo = async (userId) => {
+  await request(BASE_URL + API.USER + `/${userId}${API.ITEM}`, deleteMessageForm());
+};
+
+export { getUserList, getUserTodoList, postUser, deleteUser, postTodo, deleteAllTodo };

@@ -28,6 +28,7 @@ const PRIORITY_TYPE = Object.freeze({
 const ALERT_MESSAGE = Object.freeze({
   CREATE: "추가하고 싶은 이름을 입력해주세요.",
   DELETE: (name) => `${name}을 삭제하시겠습니까?`,
+  DELETE_ALL: "모든 할 일은 삭제하시겠습니까?",
 });
 
 const KEY_NAME = Object.freeze({
