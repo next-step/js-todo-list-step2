@@ -11,6 +11,6 @@ export default class TodoStore extends Subject {
    */
   setTodoList(newTodoList) {
     this.todoList = newTodoList;
-    console.lot(this.todoList);
+    console.log(this.todoList);
   }
 }

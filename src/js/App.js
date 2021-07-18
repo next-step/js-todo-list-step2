@@ -2,6 +2,7 @@ import UserStore from "./store/UserStore.js";
 import TodoStore from "./store/TodoStore.js";
 import UserList from "./components/user/UserList.js";
 import UserTitle from "./components/user/UserTitle.js";
+import TodoList from "./components/todo/TodoList.js";
 import { $ } from "./utils/utils.js";
 import { getUserList, getUserTodoList } from "./api/api.js";
 // import Component from "./core/Component.js";
@@ -17,18 +18,22 @@ const App = async () => {
    */
   const setTodoList = async (id = _id) => {
     const todoListData = await getUserTodoList(id);
-    console.log(todoListData);
-    // todoStore.setTodoList(todoListData);
+    todoStore.setTodoList(todoListData);
+    todoStore.notifyObservers();
   };
 
   // setTodoList();
 
-  const userTitle = new UserTitle($("#user-title"), userStore);
-  const userList = new UserList($("#user-list"), userStore, {
+  const userTitleView = new UserTitle($("#user-title"), userStore);
+  const userListView = new UserList($("#user-list"), userStore, {
     setTodoList: setTodoList.bind(this),
   });
 
-  [userTitle, userList].forEach((component) => userStore.subscribe(component));
+  [userTitleView, userListView].forEach((component) => userStore.subscribe(component));
+
+  const todoListView = new TodoList($(".todo-list"), todoStore);
+
+  [todoListView].forEach((component) => todoStore.subscribe(component));
 };
 
 export default App;

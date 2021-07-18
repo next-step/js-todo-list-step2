@@ -41,6 +41,7 @@ export default class UserList extends Component {
     if (userId) {
       this.store.setSelectedUser({ _id: userId, name: userName });
       this.store.notifyObservers();
+      this.props.setTodoList(userId);
     }
 
     if (action === USER_HANDLE_TYPES.CREATE) {
