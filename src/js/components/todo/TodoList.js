@@ -1,4 +1,4 @@
-import { deleteTodo, editTodo, putCompleteTodo } from "../../api/api.js";
+import { deleteTodo, editPriority, editTodo, putCompleteTodo } from "../../api/api.js";
 import Component from "../../core/Component.js";
 import { ALERT_MESSAGE, CONSTRAINTS, KEY_NAME, PRIORITY_TYPE, TODO_BUTTONS } from "../../utils/constants.js";
 import { $, checkClassList, confirmAlert } from "../../utils/utils.js";
@@ -32,6 +32,8 @@ export default class TodoList extends Component {
     this.$target.addEventListener("dblclick", (e) => this.onDblclickTodo(e));
 
     this.$target.addEventListener("keyup", (e) => this.onKeyupTodo(e));
+
+    this.$target.addEventListener("change", (e) => this.onChangePriority(e));
   }
 
   async onClickTodo({ target }) {
@@ -70,6 +72,14 @@ export default class TodoList extends Component {
     }
   }
 
+  async onChangePriority({ target }) {
+    const todoId = target.closest(".label").dataset.todoId;
+    if (checkClassList(target, TODO_BUTTONS.CHIP)) {
+      target.value === "1" && this.editPriorityTodo(todoId, PRIORITY_TYPE.FIRST);
+      target.value === "2" && this.editPriorityTodo(todoId, PRIORITY_TYPE.SECOND);
+    }
+  }
+
   async checkTodo(todoId) {
     const todo = await putCompleteTodo(this.props.userStore.selectedUserId, todoId);
     this.store.editTodoList(todo._id, todo);
@@ -84,6 +94,12 @@ export default class TodoList extends Component {
 
   async editTodo(todoId, contents) {
     const todoInfo = await editTodo({ contents }, this.props.userStore.selectedUserId, todoId);
+    this.store.editTodoList(todoInfo._id, todoInfo);
+    this.store.notifyObservers();
+  }
+
+  async editPriorityTodo(todoId, priority) {
+    const todoInfo = await editPriority({ priority }, this.props.userStore.selectedUserId, todoId);
     this.store.editTodoList(todoInfo._id, todoInfo);
     this.store.notifyObservers();
   }

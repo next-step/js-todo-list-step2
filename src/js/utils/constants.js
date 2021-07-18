@@ -6,6 +6,7 @@ const TODO_BUTTONS = Object.freeze({
   EDITING: "editing",
   COMPLETED: "completed",
   SELECTED: "selected",
+  CHIP: "chip",
 });
 
 const FILTER_TYPES = Object.freeze({

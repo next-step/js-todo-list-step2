@@ -3,6 +3,7 @@ const API = Object.freeze({
   USER: "/api/users",
   ITEM: "/items",
   TOGGLE: "/toggle",
+  PRIORITY: "/priority",
 });
 
 /**
@@ -120,6 +121,20 @@ const editTodo = async (todoContentsForm, userId, todoId) => {
   return todoInfo;
 };
 
+/**
+ * @param {Object} todoPriorityForm
+ * @param {string} todoContentsForm.contents
+ * @param {string} userId
+ * @param {string} todoId
+ */
+const editPriority = async (todoPriorityForm, userId, todoId) => {
+  const todoInfo = await request(
+    BASE_URL + API.USER + `/${userId}${API.ITEM}/${todoId}${API.PRIORITY}`,
+    postMessageForm(todoPriorityForm, "PUT"),
+  );
+  return todoInfo;
+};
+
 export {
   getUserList,
   getUserTodoList,
@@ -130,4 +145,5 @@ export {
   putCompleteTodo,
   deleteTodo,
   editTodo,
+  editPriority,
 };
