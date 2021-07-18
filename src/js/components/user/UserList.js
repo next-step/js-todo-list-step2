@@ -1,11 +1,13 @@
+import { getUserList, postUser, deleteUser } from "../../api/api.js";
 import Component from "../../core/Component.js";
-import { USER_HANDLE_TYPES } from "../../utils/constants.js";
+import { ALERT_MESSAGE, USER_HANDLE_TYPES } from "../../utils/constants.js";
+import { confirmAlert, promtAlert } from "../../utils/utils.js";
 
 export default class UserList extends Component {
   render() {
     const userListElement = this.store.userList.reduce((html, { _id, name }) => {
       return (html += `<button class="ripple ${this.setActiveClass(
-        name,
+        _id,
       )}" data-user-id=${_id} data-user-name=${name}>${name}</button>`);
     }, "");
 
@@ -23,27 +25,44 @@ export default class UserList extends Component {
   /**
    * @param {string} userName
    */
-  setActiveClass(userName) {
-    return this.store.selectedUser === userName && "active";
+  setActiveClass(userId) {
+    return this.store.selectedUserId === userId && "active";
   }
 
   bindEvents() {
     this.$target.addEventListener("click", (e) => this.onClickRippleButton(e));
   }
 
-  onClickRippleButton({ target }) {
+  async onClickRippleButton({ target }) {
     const action = target.dataset.action;
     const userId = target.dataset.userId;
     const userName = target.dataset.userName;
 
     if (userId) {
-      this.store.setSelectedUser(userName);
+      this.store.setSelectedUser({ _id: userId, name: userName });
       this.store.notifyObservers();
-      // this.props.setTodoStore(userId);
     }
 
     if (action === USER_HANDLE_TYPES.CREATE) {
-      console.log(1);
+      const promtUserName = promtAlert(ALERT_MESSAGE.CREATE);
+
+      if (!promtUserName) return;
+      const { name } = await postUser({ name: promtUserName });
+      const userList = await getUserList();
+
+      this.store.setNewUserList(userList);
+      this.store.setSelectedUser(name);
+      this.store.notifyObservers();
+    }
+
+    if (action === USER_HANDLE_TYPES.DELETE) {
+      const confirmChecked = confirmAlert(ALERT_MESSAGE.DELETE(this.store.selectedUserName));
+      confirmChecked && (await deleteUser(this.store.selectedUserId));
+      const userList = await getUserList();
+
+      this.store.setNewUserList(userList);
+      this.store.setSelectedUser();
+      this.store.notifyObservers();
     }
   }
 }

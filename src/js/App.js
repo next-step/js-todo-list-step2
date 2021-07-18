@@ -9,23 +9,23 @@ import { getUserList, getUserTodoList } from "./api/api.js";
 const App = async () => {
   const initialUserData = await getUserList();
   const { _id, name, todoList } = initialUserData[0];
-  console.log(initialUserData);
-  const userStore = new UserStore(initialUserData, name);
+  const userStore = new UserStore(initialUserData, { _id, name });
   const todoStore = new TodoStore(todoList);
 
   /**
    * @param {string} id
    */
-  const setTodoStore = async (id = _id) => {
+  const setTodoList = async (id = _id) => {
     const todoListData = await getUserTodoList(id);
+    console.log(todoListData);
     // todoStore.setTodoList(todoListData);
   };
 
-  setTodoStore();
+  // setTodoList();
 
   const userTitle = new UserTitle($("#user-title"), userStore);
   const userList = new UserList($("#user-list"), userStore, {
-    setTodoStore,
+    setTodoList: setTodoList.bind(this),
   });
 
   [userTitle, userList].forEach((component) => userStore.subscribe(component));

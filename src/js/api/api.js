@@ -4,6 +4,26 @@ const API = Object.freeze({
   ITEM: "/items",
 });
 
+/**
+ * @param {Object} data
+ * @param {string} methodType
+ */
+const postMessageForm = (data, methodType = "POST") => {
+  return {
+    method: methodType,
+    body: JSON.stringify(data),
+    headers: {
+      "Content-Type": "application/json",
+    },
+  };
+};
+
+const deleteMessageForm = () => {
+  return {
+    method: "DELETE",
+  };
+};
+
 const request = async (url, message = null) => {
   try {
     const res = await fetch(url, message);
@@ -29,4 +49,21 @@ const getUserTodoList = async (userId) => {
   return todoList;
 };
 
-export { getUserList, getUserTodoList };
+/**
+ * @param {Object} userNameForm
+ * @param {string} userNameForm.name
+ */
+const postUser = async (userNameForm) => {
+  const message = postMessageForm(userNameForm);
+  const userInfo = await request(BASE_URL + API.USER, message);
+  return userInfo;
+};
+
+/**
+ * @param {string} userId
+ */
+const deleteUser = async (userId) => {
+  await request(BASE_URL + API.USER + `/${userId}`, deleteMessageForm());
+};
+
+export { getUserList, getUserTodoList, postUser, deleteUser };

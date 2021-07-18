@@ -5,4 +5,8 @@ const confirmAlert = (message) => {
   return confirm(message);
 };
 
-export { $, $$, confirmAlert };
+const promtAlert = (message, defaultMessage = "") => {
+  return prompt(message, defaultMessage);
+};
+
+export { $, $$, confirmAlert, promtAlert };
