@@ -1,14 +1,28 @@
-function todoItemTemplate({ _id, contents, isCompleted }) {
+function priorityTemplate(priority) {
+  // <span class="chip primary">1순위</span>
+  // <span class="chip secondary">2순위</span>
+}
+
+function todoItemTemplate({ _id, contents, isCompleted, priority }) {
   return `
   <li data-id=${_id} class=${isCompleted ? 'completed' : ''}>
     <div class="view">
       <input class="toggle" type="checkbox" ${isCompleted ? 'checked' : ''}>
       <label class="label">
-        <select class="chip select">
-          <option value="0" selected="">순위</option>
-          <option value="1">1순위</option>
-          <option value="2">2순위</option>
-        </select>
+        ${
+          priority === 'NONE'
+            ? `       
+          <select class="chip select">
+            <option value="0" selected="">순위</option>
+            <option value="1">1순위</option>
+            <option value="2">2순위</option>
+          </select>
+          `
+            : `
+          <span class="chip ${priority === 'FIRST' ? 'primary' : 'secondary'}">
+          ${priority === 'FIRST' ? '1' : '2'}순위
+          </span>`
+        }
         ${contents}
       </label>
       <button class="destroy"></button>
@@ -18,7 +32,7 @@ function todoItemTemplate({ _id, contents, isCompleted }) {
   `;
 }
 
-function TodoList({ deleteTodo, completeToggle }) {
+function TodoList({ deleteTodo, completeToggle, prioritySelecte }) {
   const todoList = document.querySelector('.todo-list');
   this.render = todoData => {
     if (todoData.length === 0) return (todoList.innerHTML = '데이터 없음');
@@ -28,6 +42,7 @@ function TodoList({ deleteTodo, completeToggle }) {
   this.event = () => {
     todoList.addEventListener('click', deleteTodo);
     todoList.addEventListener('click', completeToggle);
+    todoList.addEventListener('change', prioritySelecte);
   };
 }
 

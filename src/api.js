@@ -55,21 +55,21 @@ export const setDeleteUser = async data => {
   }
 };
 
-export const setAddTodo = async(userId, todo) => {
+export const setAddTodo = async (userId, data) => {
   try {
     await fetch(`${BASE_URL}/${userId}/items`, {
       method: 'POST',
       headers: {
         'content-type': 'application/json',
       },
-      body: JSON.stringify(todo),
+      body: JSON.stringify(data),
     });
   } catch (error) {
     console.error(error);
   }
 };
 
-export const setDeleteTodo = async(userId, todoId) => {
+export const setDeleteTodo = async (userId, todoId) => {
   try {
     await fetch(`${BASE_URL}/${userId}/items/${todoId}`, {
       method: 'DELETE',
@@ -82,10 +82,24 @@ export const setDeleteTodo = async(userId, todoId) => {
   }
 };
 
-export const setCompleteToggle = async(userId, todoId) => {
+export const setCompleteToggle = async (userId, todoId) => {
   try {
     await fetch(`${BASE_URL}/${userId}/items/${todoId}/toggle`, {
-      method: 'put',
+      method: 'PUT',
+    });
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const setPriorityTodo = async (userId, todoId, data) => {
+  try {
+    await fetch(`${BASE_URL}/${userId}/items/${todoId}/priority`, {
+      method: 'PUT',
+      headers: {
+        'content-type': 'application/json',
+      },
+      body: JSON.stringify(data),
     });
   } catch (error) {
     console.error(error);

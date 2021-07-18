@@ -1,4 +1,14 @@
-import { getUser, getUsersList, setUser, setDeleteUser, setAddTodo, getUserTodos, setDeleteTodo, setCompleteToggle } from './api.js';
+import {
+  getUser,
+  getUsersList,
+  setUser,
+  setDeleteUser,
+  setAddTodo,
+  getUserTodos,
+  setDeleteTodo,
+  setCompleteToggle,
+  setPriorityTodo,
+} from './api.js';
 import TodoInput from './components/TodoInput.js';
 import TodoList from './components/TodoList.js';
 import UserController from './components/UserController.js';
@@ -18,7 +28,7 @@ export default function App() {
 
   this.render = async () => {
     const userTodoData = await getUserTodos(this.currentUser._id);
-    console.log(userTodoData)
+    console.log(userTodoData);
     this.userList.render(this.users, this.currentUser);
     this.userName.render(this.currentUser);
     this.todoList.render(userTodoData);
@@ -57,30 +67,48 @@ export default function App() {
     deleteTodo: async event => {
       const target = event.target;
       const userId = this.currentUser._id;
-      const todoId = target.closest("li").dataset.id;
+      const todoId = target.closest('li').dataset.id;
       if (!target.classList.contains('destroy')) return;
       await setDeleteTodo(userId, todoId);
       this.render();
     },
-    completeToggle : async event => {
+    completeToggle: async event => {
       const target = event.target;
       const userId = this.currentUser._id;
-      const todoId = target.closest("li").dataset.id;
+      const todoId = target.closest('li').dataset.id;
       if (!target.classList.contains('toggle')) return;
-      await setCompleteToggle(userId, todoId)
+      await setCompleteToggle(userId, todoId);
       this.render();
-    }
+    },
+    prioritySelecte: async event => {
+      const target = event.target;
+      const userId = this.currentUser._id;
+      const todoId = target.closest('li').dataset.id;
+      if (!target.classList.contains('select')) return;
+      const { value } = target;
+      const priority = {
+        1: 'FIRST',
+        2: 'SECOND',
+      };
+      const data = {
+        priority: priority[value],
+      };
+
+      await setPriorityTodo(userId, todoId, data);
+      this.render();
+    },
   });
-  
+
   this.todoInput = new TodoInput({
     addTodo: async event => {
-      const id = this.currentUser._id;
-      const value = {
-        contents: event.target.value,
+      const target = event.target;
+      const userId = this.currentUser._id;
+      const data = {
+        contents: target.value,
       };
       if (event.code !== 'Enter') return;
-      else if (value.length < 2) return alert('최소 2글자 이상이어야 합니다.');
-      await setAddTodo(id, value);
+      else if (target.value.length < 2) return alert('최소 2글자 이상이어야 합니다.');
+      await setAddTodo(userId, data);
       event.target.value = '';
       this.render();
     },
