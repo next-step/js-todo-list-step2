@@ -2,10 +2,8 @@ const HTTP_REQUEST ={
   POST(data){
     return {
       method : "POST",
-      headers:{
-        'Content-Type' :'application/json;charset=uft-8',
-        'Access-Control-Allow-Origin' : 'http://localhost:5500',
-        'Access-Control-Allow-Credentials' :'true'
+      headers :{
+        'Content-Type' :'application/json'
       },
       body: JSON.stringify(data)
     }
@@ -13,6 +11,7 @@ const HTTP_REQUEST ={
   DELETE(){
     return {
      method : "DELETE",
+     
     }
   },
   PUT(data){

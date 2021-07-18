@@ -8,10 +8,10 @@ export const userAPI = {
     return  await fetch(BASE_URL).then(data => data.json());
   },
   async deleteUser(id){
-    return await fetch(`${BASE_URL}/${id}`,HTTP_REQUEST.DELETE);
+    return await fetch(`${BASE_URL}/${id}`,HTTP_REQUEST.DELETE());
   },
   async addUser(data){
-    return await fetch(`${BASE_URL}`,HTTP_REQUEST.POST(data));
+    return await fetch(`${BASE_URL}`,HTTP_REQUEST.POST(data)).then(data=>data.json());
   },
   async getUser(id){
     return await fetch(`${BASE_URL}/${id}`).then(data =>{data.json()});

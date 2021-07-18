@@ -7,6 +7,7 @@ export class UserList extends Observer{
         super();
         this.userState = userState;
         this.selectedUserState = selectedUserState;
+       
     }
     template(){
         const userlist = this.userState.get();
@@ -14,7 +15,7 @@ export class UserList extends Observer{
 
         return `
         ${userlist.map(item => `
-         <button class="ripple ${item._id ===selectedUser._id ? "active":""}">${item.name}</button>
+         <button id="${item._id}" class="ripple ${item._id ===selectedUser._id ? "active":""}">${item.name}</button>
          `).join('')}
          <button class="ripple user-create-button" data-action="createUser">
          + 유저 생성
@@ -32,29 +33,27 @@ export class UserList extends Observer{
     mounted(){
         const createUserBtn = $('.user-create-button');
         //conasole.log(createUserBtn);
-        createUserBtn.addEventListener('click', this.onCreateUser);
-        const deleteuserBtn = $('user-delete-button');
+        createUserBtn.addEventListener('click', this.onCreateUser.bind(this));
+        const deleteuserBtn = $('.user-delete-button');
+        deleteuserBtn.addEventListener('click', this.onDeleteUser.bind(this));
     }
     update(){
         this.render();
     }
-    onCreateUser(){
+    async onCreateUser(){
+        console.log( this.selectedUserState);
         const userName = prompt("추가하고 싶은 이름을 입력해주세요.");
-        console.log(userName);
-        userAPI.addUser(userName).then(
-            data => console.log(data)
-        )
-        
-
-    //     const initData = userAPI.getAllUser().then(
-    //         data => {
-    //            this.userState.set(data);
-    //            this.selectedUserState.set(data[0]);
-    //            console.log(data[0])
-    //            this.todoState.set(data[0].todoList);
-               
-    //         }
-    //    )
-
+    
+        const data = await userAPI.addUser({name : userName});
+        this.selectedUserState.set(data);
+        const userlist = await userAPI.getAllUser();
+        this.userState.set(userlist);
     }
-}
+    async onDeleteUser(){
+        const selectedID = this.selectedUserState.get()._id;
+        await userAPI.deleteUser(selectedID);
+        const userlist = await userAPI.getAllUser();
+        this.userState.set(userlist);
+        this.selectedUserState.set(userlist[0]);
+    }
+} 
