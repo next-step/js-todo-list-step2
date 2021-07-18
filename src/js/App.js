@@ -3,6 +3,7 @@ import TodoStore from "./store/TodoStore.js";
 import UserList from "./components/user/UserList.js";
 import UserTitle from "./components/user/UserTitle.js";
 import TodoList from "./components/todo/TodoList.js";
+import TodoCount from "./components/todo/TodoCount.js";
 import { $ } from "./utils/utils.js";
 import { getUserList, getUserTodoList } from "./api/api.js";
 // import Component from "./core/Component.js";
@@ -32,8 +33,9 @@ const App = async () => {
   [userTitleView, userListView].forEach((component) => userStore.subscribe(component));
 
   const todoListView = new TodoList($(".todo-list"), todoStore);
+  const todoCountView = new TodoCount($(".todo-count"), todoStore);
 
-  [todoListView].forEach((component) => todoStore.subscribe(component));
+  [todoListView, todoCountView].forEach((component) => todoStore.subscribe(component));
 };
 
 export default App;
