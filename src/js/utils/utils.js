@@ -9,4 +9,8 @@ const promtAlert = (message, defaultMessage = "") => {
   return prompt(message, defaultMessage);
 };
 
-export { $, $$, confirmAlert, promtAlert };
+const checkClassList = (target, className) => {
+  return target.classList.contains(className);
+};
+
+export { $, $$, confirmAlert, promtAlert, checkClassList };

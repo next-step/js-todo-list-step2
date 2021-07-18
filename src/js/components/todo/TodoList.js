@@ -1,9 +1,9 @@
 import Component from "../../core/Component.js";
+import { PRIORITY_TYPE } from "../../utils/constants.js";
 
 export default class TodoList extends Component {
   render() {
-    console.log(this.store.todoList);
-    const todoListView = this.store.todoList
+    const todoListView = this.store.filteredTodoList
       .map(({ _id, contents, isCompleted, priority }) => {
         return `
         <li class=${isCompleted && "completed"}>
@@ -25,9 +25,9 @@ export default class TodoList extends Component {
 
   setChipView(priority) {
     switch (priority) {
-      case "1순위":
+      case PRIORITY_TYPE.FIRST:
         return `<span class="chip primary">1순위</span>`;
-      case "2순위":
+      case PRIORITY_TYPE.SECOND:
         return `<span class="chip secondary">2순위</span>`;
       default:
         return `
