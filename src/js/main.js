@@ -1,7 +1,6 @@
 import App from './App.js';
-import { userAPI, todoAPI } from "./api/api.js";
 
-new App(document.querySelector('#app', userAPI, todoAPI));
+new App();
 
 
 // const onUserCreateHandler = () => {

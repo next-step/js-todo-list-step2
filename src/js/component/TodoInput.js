@@ -1,6 +1,4 @@
-import Component from "../core/component.js";
-
-export class TodoInput extends Component{
+export class TodoInput {
     setup($target,$props){
 
     }

@@ -3,7 +3,9 @@ const HTTP_REQUEST ={
     return {
       method : "POST",
       headers:{
-        'Content-Type' :'application/json;charset=uft-8'
+        'Content-Type' :'application/json;charset=uft-8',
+        'Access-Control-Allow-Origin' : 'http://localhost:5500',
+        'Access-Control-Allow-Credentials' :'true'
       },
       body: JSON.stringify(data)
     }
