@@ -30,13 +30,13 @@ export class TodoList extends Observer{
             <li class=${item.isCompleted?"completed":""}>
             <div class="view">
               <input id="${item._id}" class="toggle" type="checkbox" ${item.isCompleted?"checked":""} />
-              <label class="label">
+              <label id="${item._id}" class="label">
                 ${this.getRanking(item.priority)}
                 ${item.contents}
               </label>
               <button id="${item._id}" class="destroy"></button>
             </div>
-            <input class="edit" value="${item.contents}" />
+            <input id="${item._id}" class="edit" value="${item.contents}" />
           </li>
             `).join('')}
         ` 
@@ -54,11 +54,45 @@ export class TodoList extends Observer{
     
         const deleteBtns = $$('.destroy');
         deleteBtns.forEach(Btn => Btn.addEventListener('click', this.onDeleteTodo.bind(this)));
+    
+        const editBtns = $$('.label');
+        editBtns.forEach(Btn =>  Btn.addEventListener('dblclick', this.onEditTodo.bind(this)));
+    
+        const editInputs = $$('.edit');
+        editInputs.forEach((editInput) => editInput.addEventListener('keydown', this.onEditKey.bind(this)));
     }
 
     update(){
         this.render();
     }
+
+    onEditTodo(e){
+        e.stopPropagation();
+        console.log(e.target);
+        const _edit = $$('.todo-list > li');
+        _edit.forEach((li) => {
+            li.classList.remove('editing');
+        });
+        e.target.parentNode.parentNode.classList.add('editing');
+    }
+
+    async onEditKey(e){
+        e.stopPropagation();
+        if (e.key == 'Enter') {
+           const userId = this.selectedUserState.get()._id;
+           const itemId = e.target.id;
+           const newItem = e.target.value;
+           const response = await todoAPI.updateTodoItem(userId, itemId, {"contents": newItem});
+            if(response.ok){
+                const data = await userAPI.getUser(userId);
+                this.selectedUserState.set(data);
+           }
+        }
+        if (e.key == 'Escape') {
+            e.target.parentNode.classList.remove('editing');
+        }
+    }
+
 
     async onToggleTodo(e){
         const itemId = e.target.id;
@@ -69,13 +103,9 @@ export class TodoList extends Observer{
     }
 
     async onDeleteTodo(e){
-        console.log(e);
         const itemId = e.target.id;
         const userId = this.selectedUserState.get()._id;
-        console.log(itemId);
-        console.log(userId);
         const response = await todoAPI.deleteTodoItem(userId, itemId);
-        console.log(response);
         if(response.ok){
             const data = await userAPI.getUser(userId);
             this.selectedUserState.set(data);
