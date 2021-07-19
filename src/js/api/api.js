@@ -36,7 +36,7 @@ export const todoAPI = {
     return await fetch(`${BASE_URL}/${userId}/items/${itemId}`, HTTP_REQUEST.PUT(newItem));
   },
   async updateTodoPriority(userId, itemId, priority){
-    return await fetch(`${BASE_URL}/${userId}/items/${itemId}`, HTTP_REQUEST.PUT(priority));
+    return await fetch(`${BASE_URL}/${userId}/items/${itemId}/priority`, HTTP_REQUEST.PUT(priority));
   },
   async toggleTodoItem(userId, itemId){
     return await fetch(`${BASE_URL}/${userId}/items/${itemId}/toggle`, HTTP_REQUEST.PUT())

@@ -59,7 +59,10 @@ export class TodoList extends Observer{
         editBtns.forEach(Btn =>  Btn.addEventListener('dblclick', this.onEditTodo.bind(this)));
     
         const editInputs = $$('.edit');
-        editInputs.forEach((editInput) => editInput.addEventListener('keydown', this.onEditKey.bind(this)));
+        editInputs.forEach(Btn => Btn.addEventListener('keydown', this.onEditKey.bind(this)));
+    
+        const selectedBoxs = $$('.select');
+        selectedBoxs.forEach(Btn => Btn.addEventListener('click', this.onSelectPriority.bind(this)));
     }
 
     update(){
@@ -74,6 +77,25 @@ export class TodoList extends Observer{
             li.classList.remove('editing');
         });
         e.target.parentNode.parentNode.classList.add('editing');
+    }
+    async onSelectPriority(e){
+        e.stopPropagation();
+        //updateTodoPriority(userId, itemId, priority)
+        const selectedPriroty = e.target.value;
+        console.log(selectedPriroty);
+        if(selectedPriroty == PRIORITY.NONE) return;
+
+        const itemId = e.target.parentNode.id;
+        const userId = this.selectedUserState.get()._id;
+        console.log(itemId);
+        console.log(userId);
+        
+        const response = await todoAPI.updateTodoPriority(userId, itemId, {"priority": selectedPriroty});
+        console.log(response);
+        if(response.ok){
+            const data = await userAPI.getUser(userId);
+            this.selectedUserState.set(data);
+        }
     }
 
     async onEditKey(e){
@@ -125,10 +147,10 @@ export class TodoList extends Observer{
         }
         if(priority==PRIORITY.NONE){
             return `
-            <select class="chip select">
-                  <option value="0" selected>순위</option>
-                  <option value="1">1순위</option>
-                  <option value="2">2순위</option>
+            <select  class="chip select">
+                  <option value="NONE" selected>순위</option>
+                  <option value="FIRST">1순위</option>
+                  <option value="SECOND">2순위</option>
             </select>
             `
         }
