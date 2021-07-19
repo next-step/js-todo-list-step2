@@ -53,11 +53,11 @@ export default class UserList extends Component {
         return;
       }
 
-      const { name } = await postUser({ name: promtUserName });
+      const userData = await postUser({ name: promtUserName });
       const userList = await getUserList();
 
       this.store.setNewUserList(userList);
-      this.store.setSelectedUser(name);
+      this.store.setSelectedUser(userData);
       this.store.notifyObservers();
     }
 
