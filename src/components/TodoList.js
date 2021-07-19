@@ -1,3 +1,5 @@
+import { $ } from '../utils/selectors.js';
+
 function todoItemTemplate({ _id, contents, isCompleted, priority }) {
   return `
   <li data-id=${_id} class=${isCompleted ? 'completed' : ''}>
@@ -27,8 +29,8 @@ function todoItemTemplate({ _id, contents, isCompleted, priority }) {
   `;
 }
 
-function TodoList({ deleteTodo, completeToggle, prioritySelect, editTodo, updateTodo, cancleEdit }) {
-  const todoList = document.querySelector('.todo-list');
+function TodoList({ deleteTodo, completeToggle, prioritySelect, editTodo, updateTodo }) {
+  const todoList = $('.todo-list');
   this.render = todoData => {
     if (todoData.length === 0) return (todoList.innerHTML = '데이터 없음');
     todoList.innerHTML = todoData.map(todo => todoItemTemplate(todo)).join('');

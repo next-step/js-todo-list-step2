@@ -11,6 +11,7 @@ import {
   setUpdateTodo,
   setDeleteAllTodo,
 } from './api.js';
+import { $, isClassContains } from './utils/selectors.js';
 import TodoCount from './components/TodoCount.js';
 import TodoInput from './components/TodoInput.js';
 import TodoList from './components/TodoList.js';
@@ -70,21 +71,21 @@ export default function App() {
     deleteTodo: async ({ target }) => {
       const userId = this.currentUser._id;
       const todoId = target.closest('li').dataset.id;
-      if (!target.classList.contains('destroy')) return;
+      if (!isClassContains(target, 'destroy')) return;
       await setDeleteTodo(userId, todoId);
       this.render();
     },
     completeToggle: async ({ target }) => {
       const userId = this.currentUser._id;
       const todoId = target.closest('li').dataset.id;
-      if (!target.classList.contains('toggle')) return;
+      if (!isClassContains(target, 'toggle')) return;
       await setCompleteToggle(userId, todoId);
       this.render();
     },
     editTodo: ({ target }) => {
-      if (!target.classList.contains('label')) return;
+      if (!isClassContains(target, 'label')) return;
       const todoItem = target.closest('li');
-      const editInput = document.querySelector('.edit');
+      const editInput = $('.edit');
       todoItem.classList.toggle('editing');
       editInput.focus();
     },
@@ -95,7 +96,7 @@ export default function App() {
       const data = {
         contents: target.value,
       };
-      if (!target.classList.contains('edit')) return;
+      if (!isClassContains(target, 'edit')) return;
       if (key === 'Escape') {
         todoItem.classList.remove('editing');
       }
@@ -108,7 +109,7 @@ export default function App() {
       const userId = this.currentUser._id;
       const todoId = target.closest('li').dataset.id;
 
-      if (!target.classList.contains('select')) return;
+      if (!isClassContains(target, 'select')) return;
       const { value } = target;
       const priority = {
         1: 'FIRST',
@@ -138,18 +139,18 @@ export default function App() {
   });
 
   this.todoCount = new TodoCount({
-    filter: (status) => {
+    filter: status => {
       const completedTodos = this.userTodoData.filter(todo => todo.isCompleted === true);
       const activeTodos = this.userTodoData.filter(todo => todo.isCompleted === false);
-      status === "all" && this.todoList.render(this.userTodoData);
-      status === "active" && this.todoList.render(activeTodos);
-      status === "completed" && this.todoList.render(completedTodos);
+      status === 'all' && this.todoList.render(this.userTodoData);
+      status === 'active' && this.todoList.render(activeTodos);
+      status === 'completed' && this.todoList.render(completedTodos);
     },
-    clear : ({target}) => {
+    clear: ({ target }) => {
       const userId = this.currentUser._id;
-      if(!target.classList.contains('clear-completed')) return;
-      setDeleteAllTodo(userId)
+      if (!isClassContains(target, 'clear-completed')) return;
+      setDeleteAllTodo(userId);
       this.render();
-    }
+    },
   });
 }

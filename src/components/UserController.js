@@ -1,8 +1,8 @@
-import { setUser } from '../api.js';
+import { $ } from '../utils/selectors.js';
 
 function UserController({userCreateHandler,userDeleteHandler}) {
-  const userCreateButton = document.querySelector('.user-create-button');
-  const userDeleteButton = document.querySelector('.user-delete-button');
+  const userCreateButton = $('.user-create-button');
+  const userDeleteButton = $('.user-delete-button');
 
   userCreateButton.addEventListener('click',userCreateHandler)
   userDeleteButton.addEventListener('click',userDeleteHandler)

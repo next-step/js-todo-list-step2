@@ -1,6 +1,8 @@
+import { $ } from '../utils/selectors.js';
+
 function UserName() {
   this.render = user => {
-    const userName = document.querySelector('#user-title strong');
+    const userName = $('#user-title strong');
     if (user.name === '') return;
     userName.textContent = user.name;
   };
