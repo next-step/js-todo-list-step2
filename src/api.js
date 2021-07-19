@@ -119,3 +119,13 @@ export const setUpdateTodo = async (userId, todoId, data) => {
     console.error(error);
   }
 };
+
+export const setDeleteAllTodo = async (userId) => {
+  try {
+    await fetch(`${BASE_URL}/${userId}/items/`, {
+      method: 'DELETE',
+    });
+  } catch (error) {
+    console.error(error);
+  }
+};

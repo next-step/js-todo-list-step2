@@ -9,6 +9,7 @@ import {
   setCompleteToggle,
   setPriorityTodo,
   setUpdateTodo,
+  setDeleteAllTodo,
 } from './api.js';
 import TodoCount from './components/TodoCount.js';
 import TodoInput from './components/TodoInput.js';
@@ -144,5 +145,11 @@ export default function App() {
       status === "active" && this.todoList.render(activeTodos);
       status === "completed" && this.todoList.render(completedTodos);
     },
+    clear : ({target}) => {
+      const userId = this.currentUser._id;
+      if(!target.classList.contains('clear-completed')) return;
+      setDeleteAllTodo(userId)
+      this.render();
+    }
   });
 }

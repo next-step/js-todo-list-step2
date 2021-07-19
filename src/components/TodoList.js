@@ -1,8 +1,3 @@
-function priorityTemplate(priority) {
-  // <span class="chip primary">1순위</span>
-  // <span class="chip secondary">2순위</span>
-}
-
 function todoItemTemplate({ _id, contents, isCompleted, priority }) {
   return `
   <li data-id=${_id} class=${isCompleted ? 'completed' : ''}>
