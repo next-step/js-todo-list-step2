@@ -51,8 +51,11 @@ export class UserList extends Observer{
     }
 
     async onCreateUser(){
-        console.log( this.selectedUserState);
         const userName = prompt("추가하고 싶은 이름을 입력해주세요.");
+        if(userName.length<2) {
+            alert("이름의 길이는 최소2글자이상입니다.");
+            return;
+        }
         const data = await userAPI.addUser({name : userName});
         this.selectedUserState.set(data);
         const userlist = await userAPI.getAllUser();

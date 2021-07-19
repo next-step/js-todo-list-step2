@@ -8,7 +8,6 @@ export class Title extends Observer{
    }  
    template(){
         const name = this.state.get().name;
-        //console.log(name);
         return `
         <span><strong>${name}</strong>'s Todo List</span>
         `
@@ -18,7 +17,6 @@ export class Title extends Observer{
        target.innerHTML = this.template();
    }
    update(){
-      // console.log(this.state);
        this.render();
    }
 }

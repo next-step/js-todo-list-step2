@@ -8,16 +8,11 @@ export class TodoFilter extends Observer{
         super();
         this.selectedUserState = selectedUserState;
         this.filterState = filterState;
-        //console.log(this.state);
     }
     templete(){
         const filter = this.filterState.get();
-        console.log("template");
-        console.log(filter)
         const todo = this.selectedUserState.get().todoList;
-        
         const count = this.counTotalTodo(filter, todo);
-         //conso
         return `
         <span class="todo-count">총 <strong>${count}</strong> 개</span>
         <ul class="filters">
@@ -60,23 +55,18 @@ export class TodoFilter extends Observer{
     }
     onFilterChange(e){  
         const mode= e.target.className.replace('selected','').trim();
-        console.log(this.filterState.get());
         this.filterState.set(mode);
     }
     counTotalTodo(filter, todo){
-        console.log(todo);
         if(filter ==FILTER.ALL){
             return todo.length;
         }
 
         if(filter == FILTER.ACTIVE){
-            console.log("active")
             return todo.filter(item => !item.isCompleted).length
         }
         if(filter == FILTER.COMPLETED){
-            console.log("compolete")
             return todo.filter(item => item.isCompleted).length
         }
-        return 110;
     }
 }

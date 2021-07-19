@@ -8,11 +8,10 @@ export class TodoList extends Observer{
         super();
         this.selectedUserState = selectedUserState;
         this.filterState = filterState;
-        console.log(filterState)
     }
-    template(){
-        const todoList = this.selectedUserState.get().todoList;
-        console.log(this.filterState);
+    
+     template(){      
+        const todoList =  this.selectedUserState.get().todoList;
         const filteredList = (() =>{
             const mode = this.filterState.get();
             if(mode=='all'){
@@ -80,18 +79,13 @@ export class TodoList extends Observer{
     }
     async onSelectPriority(e){
         e.stopPropagation();
-        //updateTodoPriority(userId, itemId, priority)
         const selectedPriroty = e.target.value;
-        console.log(selectedPriroty);
         if(selectedPriroty == PRIORITY.NONE) return;
 
         const itemId = e.target.parentNode.id;
         const userId = this.selectedUserState.get()._id;
-        console.log(itemId);
-        console.log(userId);
         
         const response = await todoAPI.updateTodoPriority(userId, itemId, {"priority": selectedPriroty});
-        console.log(response);
         if(response.ok){
             const data = await userAPI.getUser(userId);
             this.selectedUserState.set(data);
@@ -155,5 +149,4 @@ export class TodoList extends Observer{
             `
         }
     }
-   
 }
