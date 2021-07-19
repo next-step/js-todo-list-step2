@@ -2,10 +2,16 @@ import { deleteTodo, editPriority, editTodo, putCompleteTodo } from "../../api/a
 import Component from "../../core/Component.js";
 import { ALERT_MESSAGE, CONSTRAINTS, KEY_NAME, PRIORITY_TYPE, TODO_BUTTONS } from "../../utils/constants.js";
 import { $, checkClassList, confirmAlert } from "../../utils/utils.js";
+import TodoLoading from "./TodoLoading.js";
 
 export default class TodoList extends Component {
   render() {
     this.editing = false;
+
+    if (!this.store.filteredTodoList) {
+      this.$target.innerHTML = TodoLoading();
+    }
+
     const todoListView = this.store.filteredTodoList
       .map(({ _id, contents, isCompleted, priority }) => {
         return `
