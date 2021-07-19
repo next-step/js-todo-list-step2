@@ -7,7 +7,7 @@ import TodoCount from './components/TodoCount.js';
 import { userAPI } from './apis/user.js';
 import { todoListAPI } from './apis/todolist.js';
 
-import { ALL, ACTIVE, COMPLETED, PRIORITY } from './constants/todo.js';
+import { ALL, ACTIVE, COMPLETED } from './constants/todo.js';
 
 export default class App {
   constructor($app) {
@@ -51,7 +51,7 @@ export default class App {
       },
       deleteUser: async () => {
         try {
-          await userAPI.removeUser(this.state.activeId);
+          await userAPI.deleteUser(this.state.activeId);
           this.init();
         } catch (error) {
           throw new Error(error);
@@ -84,20 +84,36 @@ export default class App {
         todoList: this.state.activeTodolist,
       },
       deleteTodo: async (itemId) => {
-        await todoListAPI.removeItem(this.state.activeId, itemId);
-        this.setState({ ...this.state });
+        try {
+          await todoListAPI.deleteItem(this.state.activeId, itemId);
+          this.setState({ ...this.state });
+        } catch (error) {
+          throw new Error(error);
+        }
       },
       onClick: async (itemId) => {
-        await todoListAPI.toggleItemComplete(this.state.activeId, itemId);
-        this.setState({ ...this.state });
+        try {
+          await todoListAPI.toggleItemComplete(this.state.activeId, itemId);
+          this.setState({ ...this.state });
+        } catch (error) {
+          throw new Error(error);
+        }
       },
       onChange: async (id, priority) => {
-        await todoListAPI.editItemPriority(this.state.activeId, id, { priority });
-        this.setState({ ...this.state });
+        try {
+          await todoListAPI.editItemPriority(this.state.activeId, id, { priority });
+          this.setState({ ...this.state });
+        } catch (error) {
+          throw new Error(error);
+        }
       },
       onKeypress: async (itemId, contents) => {
-        await todoListAPI.editItemContent(this.state.activeId, itemId, { contents });
-        this.setState({ ...this.state });
+        try {
+          await todoListAPI.editItemContent(this.state.activeId, itemId, { contents });
+          this.setState({ ...this.state });
+        } catch (error) {
+          throw new Error(error);
+        }
       }
     });
     this.todoCount = new TodoCount({
@@ -110,8 +126,12 @@ export default class App {
         this.setState({ ...this.state, show });
       },
       deleteAll: async () => {
-        await todoListAPI.removeAllItems(this.state.activeId);
-        this.setState({ ...this.state });
+        try {
+          await todoListAPI.deleteAllItems(this.state.activeId);
+          this.setState({ ...this.state });
+        } catch (error) {
+          throw new Error(error);
+        }
       }
     });
 

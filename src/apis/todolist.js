@@ -9,11 +9,11 @@ export const todoListAPI = {
     return $http.post(`api/users/${userId}/items`, contents);
   },
 
-  removeAllItems(userId) {
+  deleteAllItems(userId) {
     return $http.delete(`api/users/${userId}/items`);
   },
 
-  removeItem(userId, itemId) {
+  deleteItem(userId, itemId) {
     return $http.delete(`api/users/${userId}/items/${itemId}`);
   },
 

@@ -13,7 +13,7 @@ export const userAPI = {
     return $http.get(`api/users/${id}`);
   },
 
-  removeUser(id) {
+  deleteUser(id) {
     $http.delete(`api/users/${id}`);
   },
 };
