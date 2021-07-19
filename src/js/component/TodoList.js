@@ -34,7 +34,7 @@ export class TodoList extends Observer{
                 ${this.getRanking(item.priority)}
                 ${item.contents}
               </label>
-              <button class="destroy"></button>
+              <button id="${item._id}" class="destroy"></button>
             </div>
             <input class="edit" value="${item.contents}" />
           </li>
@@ -47,20 +47,39 @@ export class TodoList extends Observer{
         target.innerHTML = this.template();
         this.mounted();
     }
+
     mounted(){
         const toggleBtns = $$('.toggle');
-        console.log(toggleBtns)
-        toggleBtns.forEach(Btn => Btn.addEventListener('click',this.onToggleTodo.bind(this)))
+        toggleBtns.forEach(Btn => Btn.addEventListener('click',this.onToggleTodo.bind(this)));
+    
+        const deleteBtns = $$('.destroy');
+        deleteBtns.forEach(Btn => Btn.addEventListener('click', this.onDeleteTodo.bind(this)));
     }
+
     update(){
         this.render();
     }
+
     async onToggleTodo(e){
         const itemId = e.target.id;
         const userId = this.selectedUserState.get()._id;
         await todoAPI.toggleTodoItem(userId, itemId);
         const data = await userAPI.getUser(userId);
         this.selectedUserState.set(data);
+    }
+
+    async onDeleteTodo(e){
+        console.log(e);
+        const itemId = e.target.id;
+        const userId = this.selectedUserState.get()._id;
+        console.log(itemId);
+        console.log(userId);
+        const response = await todoAPI.deleteTodoItem(userId, itemId);
+        console.log(response);
+        if(response.ok){
+            const data = await userAPI.getUser(userId);
+            this.selectedUserState.set(data);
+        }
     }
 
     getRanking(priority){

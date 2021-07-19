@@ -52,7 +52,6 @@ export class TodoFilter extends Observer{
     }
     async onDeleteAllTodo(){
         const selectedId = this.selectedUserState.get()._id;
-        console.log(selectedId);
         const response = await todoAPI.deleteAllTodoItem(selectedId);
         if(response.ok){
             const data = await userAPI.getUser(selectedId);
