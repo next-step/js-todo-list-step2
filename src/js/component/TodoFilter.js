@@ -1,6 +1,7 @@
 import Observer from "../core/observer.js";
 import { $, $$ } from "../util/util.js";
 import { FILTER } from "../constants/constants.js";
+import { todoAPI, userAPI } from "../api/api.js";
 
 export class TodoFilter extends Observer{
     constructor(selectedUserState, filterState){
@@ -47,15 +48,18 @@ export class TodoFilter extends Observer{
         deleteAllBtn.addEventListener('click', this.onDeleteAllTodo.bind(this));
     }
     update(){
-        //console.log("filterupdate")
         this.render();
     }
-    onDeleteAllTodo(){
-        console.log("dfsdjkfs");
-        const 
+    async onDeleteAllTodo(){
+        const selectedId = this.selectedUserState.get()._id;
+        console.log(selectedId);
+        const response = await todoAPI.deleteAllTodoItem(selectedId);
+        if(response.ok){
+            const data = await userAPI.getUser(selectedId);
+            this.selectedUserState.set(data);
+        }
     }
     onFilterChange(e){  
-       // console.log(e);
         const mode= e.target.className.replace('selected','').trim();
         console.log(this.filterState.get());
         this.filterState.set(mode);

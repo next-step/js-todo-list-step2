@@ -27,7 +27,7 @@ export const todoAPI = {
     return await fetch(`${BASE_URL}/${id}/items`, HTTP_REQUEST.POST(item));
   },
   async deleteAllTodoItem(id){
-    return await fetch(`${BASE_URL}/${id}/ items/`,HTTP_REQUEST.DELETE());
+    return await fetch(`${BASE_URL}/${id}/items`,HTTP_REQUEST.DELETE());
   },
   async deleteTodoItem(userId, itemId){
     return await fetch(`${BASE_URL}/${userId}/ items/${itemId}`,HTTP_REQUEST.DELETE());
