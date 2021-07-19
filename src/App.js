@@ -10,6 +10,7 @@ import {
   setPriorityTodo,
   setUpdateTodo,
 } from './api.js';
+import TodoCount from './components/TodoCount.js';
 import TodoInput from './components/TodoInput.js';
 import TodoList from './components/TodoList.js';
 import UserController from './components/UserController.js';
@@ -19,6 +20,7 @@ export default function App() {
   this.users = [];
   this.currentUser = [];
   this.loading = false;
+  this.userTodoData = [];
   this.init = async () => {
     this.todoInput.render();
     this.users = await getUsersList();
@@ -27,17 +29,17 @@ export default function App() {
   };
 
   this.render = async () => {
-    const userTodoData = await getUserTodos(this.currentUser._id);
-    console.log(userTodoData);
+    this.userTodoData = await getUserTodos(this.currentUser._id);
     this.userList.render(this.users, this.currentUser);
     this.userName.render(this.currentUser);
-    this.todoList.render(userTodoData);
+    this.todoList.render(this.userTodoData);
+    this.todoCount.render(this.userTodoData);
   };
 
   this.userName = new UserName();
 
   this.userList = new UserList({
-    userSelecteHandler: async ({target}) => {
+    userSelecteHandler: async ({ target }) => {
       const id = target.dataset.id;
       if (id === undefined || id === '') return;
       const currentUserData = await getUser(id);
@@ -64,24 +66,23 @@ export default function App() {
   });
 
   this.todoList = new TodoList({
-    deleteTodo: async ({target}) => {
+    deleteTodo: async ({ target }) => {
       const userId = this.currentUser._id;
       const todoId = target.closest('li').dataset.id;
       if (!target.classList.contains('destroy')) return;
       await setDeleteTodo(userId, todoId);
       this.render();
     },
-    completeToggle: async ({target}) => {
+    completeToggle: async ({ target }) => {
       const userId = this.currentUser._id;
       const todoId = target.closest('li').dataset.id;
       if (!target.classList.contains('toggle')) return;
       await setCompleteToggle(userId, todoId);
       this.render();
     },
-    editTodo: ({target}) => {
+    editTodo: ({ target }) => {
       if (!target.classList.contains('label')) return;
       const todoItem = target.closest('li');
-      this.editTarget = todoItem;
       const editInput = document.querySelector('.edit');
       todoItem.classList.toggle('editing');
       editInput.focus();
@@ -89,7 +90,7 @@ export default function App() {
     updateTodo: async ({ key, target }) => {
       const userId = this.currentUser._id;
       const todoItem = target.closest('li');
-      const todoId = todoItem.dataset.id
+      const todoId = todoItem.dataset.id;
       const data = {
         contents: target.value,
       };
@@ -99,10 +100,10 @@ export default function App() {
       }
       if (key !== 'Enter') return;
       else if (target.value.length < 2) return alert('최소 2글자 이상이어야 합니다.');
-      await setUpdateTodo(userId,todoId, data);
+      await setUpdateTodo(userId, todoId, data);
       this.render();
     },
-    prioritySelecte: async ({target}) => {
+    prioritySelect: async ({ target }) => {
       const userId = this.currentUser._id;
       const todoId = target.closest('li').dataset.id;
 
@@ -119,13 +120,10 @@ export default function App() {
       await setPriorityTodo(userId, todoId, data);
       this.render();
     },
-    // cancleEdit : ({target}) => {
-    //   this.editTarget.classList.remove('editing');
-    // }
   });
 
   this.todoInput = new TodoInput({
-    addTodo: async ({ key, target } ) => {
+    addTodo: async ({ key, target }) => {
       const userId = this.currentUser._id;
       const data = {
         contents: target.value,
@@ -135,6 +133,16 @@ export default function App() {
       await setAddTodo(userId, data);
       target.value = '';
       this.render();
+    },
+  });
+
+  this.todoCount = new TodoCount({
+    filter: (status) => {
+      const completedTodos = this.userTodoData.filter(todo => todo.isCompleted === true);
+      const activeTodos = this.userTodoData.filter(todo => todo.isCompleted === false);
+      status === "all" && this.todoList.render(this.userTodoData);
+      status === "active" && this.todoList.render(activeTodos);
+      status === "completed" && this.todoList.render(completedTodos);
     },
   });
 }
