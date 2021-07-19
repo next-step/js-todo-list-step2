@@ -242,6 +242,7 @@ body {
   color: #cc9a9a;
   margin-bottom: 11px;
   transition: color 0.2s ease-out;
+  cursor: pointer;
 }
 
 .todo-list li .destroy:hover {

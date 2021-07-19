@@ -1,0 +1,42 @@
+/* eslint-disable prettier/prettier */
+
+class Userlist {
+  constructor({ $app, onClick }) {
+    this.onClick = onClick;
+    this.$target = document.createElement('section');
+    $app.appendChild(this.$target);
+    this.setEvent()
+    this.render();
+  }
+  setEvent() {
+    this.$target.addEventListener("click", this.onClick)
+  }
+  setState(nextState) {
+    this.state = { ...this.state, ...nextState };
+    this.render();
+  }
+  template() {
+    if (!this.state) return '';
+    
+    const { userList, activeId } = this.state;
+    return `
+      <div id="user-list">
+        ${userList.map(({name, _id}) => `
+          <button class="ripple${activeId === _id ? " active" : ""}" data-id=${_id}>${name}</button>
+        `
+        ).join("")}
+        <button class="ripple user-create-button" data-action="createUser">
+            + 유저 생성
+        </button>
+        <button class="ripple user-delete-button" data-action="deleteUser">
+            삭제 -
+        </button>
+      </div>
+      `;
+  }
+  render() {
+    this.$target.innerHTML = this.template();
+  }
+}
+
+export default Userlist;
