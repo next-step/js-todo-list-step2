@@ -14,7 +14,7 @@ import { FILTER_TYPES } from "./utils/constants.js";
 
 const App = async () => {
   const initialUserData = await getUserList();
-  const { _id, name, todoList } = initialUserData[0];
+  const [{ _id, name, todoList }] = initialUserData;
   const userStore = new UserStore(initialUserData, { _id, name });
   const todoStore = new TodoStore(todoList);
 

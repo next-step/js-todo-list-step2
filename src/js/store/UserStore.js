@@ -8,8 +8,8 @@ export default class UserStore extends Subject {
   }
 
   setSelectedUser(userInfo) {
-    const { _id, name } = this.userList[0];
-    this.selectedUser = userInfo ?? { _id, name };
+    const [userData] = this.userList;
+    this.selectedUser = userInfo ?? userData;
   }
 
   setNewUserList(newUserList) {
