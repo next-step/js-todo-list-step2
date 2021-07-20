@@ -9,7 +9,6 @@ export default class TodoFilterItem extends Component {
     return `
       <li>
         <a 
-          href="${href}" 
           class="${isSelected ? "selected" : ""}"
           data-state="${state}"
           data-action="selectFilter"
