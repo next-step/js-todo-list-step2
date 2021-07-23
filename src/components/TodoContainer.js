@@ -5,7 +5,7 @@ import { Filter } from "./constants.js";
 export default class TodoContainer extends Component {
 
   template() {
-    const { itemCouunt } = this.$props;
+    const { itemCount } = this.$props;
     return `
        
         <span class="todo-count">총 <strong>${itemCount}</strong> 개</span>
@@ -28,8 +28,7 @@ export default class TodoContainer extends Component {
     const { onFilterTodo, onDeleteTodoList } = this.$props;
     $$("li a")
     this.addEvent("click", "li>a", ({ target }) => {
-      
-      Array.from($$("li>a")).forEach(item => item.classList.remove('selected'));
+      if (target.classList.contains('selected')) return;
       target.classList.add('selected');
       const filter = Filter(target.className);
       onFilterTodo(filter)

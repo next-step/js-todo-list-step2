@@ -17,12 +17,17 @@
   },
   "homepage": "https://github.com/inust33/js-todo-list-step2#readme",
   "dependencies": {
+    "@babel/runtime": "^7.14.8",
     "create-react-app": "^4.0.3"
   },
   "devDependencies": {
+    "@babel/plugin-transform-runtime": "^7.14.5",
     "parcel-bundler": "^1.12.5",
     "webpack": "^5.45.1",
     "webpack-cli": "^4.7.2"
   },
-  "keywords": []
+  "keywords": [],
+  "browserslist": [
+    "last 2 Chrome versions"
+  ]
 }

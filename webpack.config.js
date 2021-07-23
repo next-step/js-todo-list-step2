@@ -1,6 +1,6 @@
 module.exports = {
-    entry: "./src/main.js",
-    output: {
-        filename: 'bundle.js'
-    }
-};
+    
+    plugins: ["@babel/plugin-transform-runtime"],
+    entry: './src/main.js'
+
+}

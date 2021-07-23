@@ -1,5 +1,5 @@
 import Component from "../core/Component";
-import { $, $$, checkLength } from "../utils.js";
+import { $, $$, checkLength } from "./utils.js";
 
 export default class TodoInput extends Component{
     template() {

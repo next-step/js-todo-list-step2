@@ -1,6 +1,7 @@
 import { fetchAPI, METHOD } from "./constants";
 
-export const getTodolist = (userid) => fetchAPI(`${userid}/items`);
+
+export const getTodolist = (userid)=> fetchAPI(`${userid}/items`); 
 
 export const addTodo = (userid, contents) => fetchAPI(`${userid}/items`, METHOD.POST, { contents }); 
 
@@ -14,5 +15,13 @@ export const setPriorityTodo = (userid, itemid, priority) => fetchAPI(`${userid}
 
 export const deleteTodoList = (userid) =>  fetchAPI(`${userid}/items`, METHOD.DELETE);
 
+export const getUserList = () => fetchAPI();
+
+export const getUser = (userid) => fetchAPI(`${userid}`);
+
+export const addUser = (name) => fetchAPI(``, METHOD.POST, { name });
+
+export const deleteUser = (userid) => fetchAPI(`${userid}`, METHOD.DELETE);
 
 
+ 

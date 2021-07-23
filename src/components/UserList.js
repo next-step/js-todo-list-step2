@@ -1,36 +1,38 @@
 import Component from "../core/Component";
-import {$,$$} from "../utils.js"
+import {$,$$} from "./utils.js"
 
 export default class UserList extends Component{
+   
     template() {
-        const { $users } = this.$props;
+        const { Users, currentId } = this.$props;
         
         return `
-        ${$users.map(({_id, name, todoList})=>`
-        <button class="ripple" data-id=${_id}>${name}</button>`).join('')}
+        ${Users&&Users.map(({_id:userid ,name,todoList})=>`
+        <button class="ripple ${currentId===userid? `active`: ``}" data-id=${userid}>${name}</button>`).join('')}
         <button class="ripple user-create-button" data-action="createUser">
           + 유저 생성
-        </button>
+        </button>  
         <button class="ripple user-delete-button" data-action="deleteUser">
           삭제 -
         </button>`
     }
     setEvent() {
+        const { UserList, _id } = this.$props;
         const { onAddUser, onDeleteUser, onGetUser } = this.$props;
         this.addEvent("click", "[data-id]", ({ target }) => {
+            if (target.classList.contains('active')) return;
+            target.classList.add('active');
             onGetUser(target.dataset.id);
         });
         this.addEvent("click", "[data-action]", ({ target }) => {
-            const name = propmt("이름을 입력하세요");
-            const userid = target.dataset.id;
-            switch (target.dataset.action) {
-                case "createUser": onAddUser(name);
-                    break;
-                case "deleteUser": onDeleteUser(userid);
-                    break;
-                default:
-                    break;
+            if (target.dataset.action === 'createUser') {
+                const name = prompt("이름을 입력하세요");
+                onAddUser(name);
             }
+            else if (target.dataset.action === 'deleteUser'){
+                onDeleteUser(_id);
+            }
+            return;
         });
     }
 }

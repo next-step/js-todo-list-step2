@@ -1,57 +1,54 @@
 import Component from "../core/Component";
-import { $, $$, checkLength } from "../utils.js";
+import { $, $$, checkLength } from "./utils.js";
 import { PRIORITY } from "./constants";
 
 export default class TodoList extends Component {
     template() {
         const { todoList } = this.$props;
       return `
-      <ul class="to do-list">
-    ${todoList.map(({ _id, contents, isCompleted, priority }) => `
+    ${todoList.map(({_id, contents, isCompleted, priority}) => `
         <li class=${isCompleted ? "completed" : ''} data-id=${_id}>
           <div class="view">
-            <input class="toggle" type="checkbox" ${isComplete ? "checked" : ''} }/>
+            <input class="toggle" type="checkbox" ${isCompleted ? "checked" : ''} }/>
             <label class="label">
             ${priority === 'NONE' ? `
               <select class="chip select">
                 <option value="0" selected}>순위</option>
                 <option value="1">1순위</option>
                 <option value="2">2순위</option>
-              </select>`: `<span class="chip ${priorirty === 'FIRST' ? 'primary' : 'secondary'}">
-              ${priority === 'FIRST' ? '1순위' : '2순위'}</span>`}
+              </select>`: (priorirty === 'FIRST' ? `<span class="chip primary">1순위</span>`: '<span class="chip secondary">2순위</span>')}
               ${contents}
             </label>
             <button class="destroy"></button>
           </div>
-          <input class="edit" value="${content}" />
+          <input class="edit" value="${contents}" />
         </li>
-      `).join('')}
-      </ul>`
+      `).join('')}`
       
         
         
     }
     setEvent() {
-        const {  onDeleteTodo, onSetPriorityTodo, onToggleTodo, onUpdateTodo } = this.$props;
+        const {  onDeleteTodo, onSetPriorityTodo, onToggleTodo, onUpdateTodo, currentId} = this.$props;
         
         this.addEvent("click", ".destroy", ({ target }) => {
             const itemid = target.closest("li").dataset.id;
-             onDeleteTodo(itemid);
+             onDeleteTodo( itemid);
         });
         this.addEvent("change", ".chip", ({ target }) => {
             const itemid = target.closest('li').dataset.id;
-           onSetPriorityTodo(itemid, PRIORITY[target.value]);
+            onSetPriorityTodo(itemid, PRIORITY[target.value]);
         });
         this.addEvent("dblclick", ".label", (event) => {
-            event.target.closest(`[data-id]`).classList.add("editing");
+            event.target.closest(`li`).classList.add("editing");
         });
         this.addEvent("keyup", ".edit", ({ key, target }) => {
             const itemid = target.closest('li').dataset.id;
             const content = target.value.trim();
-            if (key === 'Escape') target.closest('[data-id]').classList.remove('editing');
+            if (key === 'Escape') target.closest('li').classList.remove('editing');
             else if (key === 'Enter') {
                 checkLength(content);
-                onUpdateTodo(itemid, content);
+                onUpdateTodo( itemid, content);
             }
         });
         this.addEvent("input", ".toggle", ({ target }) => {
