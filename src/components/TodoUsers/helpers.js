@@ -1,11 +1,11 @@
 export const updateUserTodos = (newUserTodos, state, userId, userName) => {
-  const { todos } = state;
-  const newTodos = todos.map((user) => {
+  const { users } = state;
+  const newUsers = users.map((user) => {
     return user._id === userId ? { ...user, todoList: newUserTodos } : user;
   });
   const newState = {
     ...state,
-    todos: newTodos,
+    users: newUsers,
     userId,
     userName,
   };
@@ -13,15 +13,15 @@ export const updateUserTodos = (newUserTodos, state, userId, userName) => {
 };
 
 export const buildTodos = (state) => {
-  const { todos, userId } = state;
-  const newTodos = todos.filter((user) => {
+  const { users, userId } = state;
+  const newUsers = users.filter((user) => {
     return user._id === userId ? false : true;
   });
   const newState = {
     ...state,
-    todos: [...newTodos],
-    userName: newTodos[0].name,
-    userId: newTodos[0]._id,
+    users: [...newUsers],
+    userName: newUsers[0].name,
+    userId: newUsers[0]._id,
   };
   return newState;
 };

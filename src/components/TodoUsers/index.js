@@ -26,10 +26,10 @@ export default class TodoUsers extends Component {
           return;
         }
         if (newUserName) {
-          const { todos } = this.props.getState();
+          const { users } = this.props.getState();
           const newUser = await createUserAPI({ name: newUserName });
           const newState = {
-            todos: [newUser, ...todos],
+            users: [newUser, ...users],
             userName: newUser.name,
             userId: newUser._id,
           };
@@ -52,10 +52,10 @@ export default class TodoUsers extends Component {
     });
   }
   render() {
-    const { todos } = this.props.getState();
+    const { users } = this.props.getState();
     const usersTemplate =
-      todos.length &&
-      todos
+      users.length &&
+      users
         .map((user) => {
           return `<button class="ripple" data-name="${user.name}" data-id=${user._id}>${user.name}</button>`;
         })

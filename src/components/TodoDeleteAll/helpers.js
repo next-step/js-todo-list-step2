@@ -1,8 +1,8 @@
 export const deleteAllTodos = (state) => {
-  const { todos, userId } = state;
-  const newTodos = todos.map((user) => {
+  const { users, userId } = state;
+  const newUsers = users.map((user) => {
     return user._id === userId ? { ...user, todoList: [] } : user;
   });
-  const newState = { ...state, todos: newTodos };
+  const newState = { ...state, users: newUsers };
   return newState;
 };

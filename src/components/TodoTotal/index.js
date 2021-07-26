@@ -6,7 +6,7 @@ export default class TodoTotal extends Component {
   }
   mount() {}
   render() {
-    const { todos, userId } = this.props.getState();
-    this.$app.innerHTML = `총 <strong>${countTodosLength(todos, userId)}</strong> 개`;
+    const { users, userId } = this.props.getState();
+    this.$app.innerHTML = `총 <strong>${countTodosLength(users, userId)}</strong> 개`;
   }
 }

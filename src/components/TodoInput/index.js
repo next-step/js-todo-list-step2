@@ -1,7 +1,7 @@
 import { createTodoAPI } from "../../api/requests.js";
 import { ERRORMESSAGE } from "../../utils/constants.js";
 import Component from "../component.js";
-import { AddedTodos } from "./helpers.js";
+import { AddTodos } from "./helpers.js";
 
 export default class TodoInput extends Component {
   constructor($app, props) {
@@ -20,7 +20,7 @@ export default class TodoInput extends Component {
           contents: e.target.value,
         });
         if (newTodo) {
-          const newState = AddedTodos(newTodo, state);
+          const newState = AddTodos(newTodo, state);
           e.target.value = "";
           this.props.setState(newState);
         }

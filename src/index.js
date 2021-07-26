@@ -9,7 +9,7 @@ import Store from "./store/index.js";
 // userCreateButton.addEventListener("click", onUserCreateHandler);
 
 const initState = {
-  todos: [],
+  users: [],
   userName: "",
   userId: "",
   filter: "all",

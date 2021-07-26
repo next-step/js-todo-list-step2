@@ -4,9 +4,9 @@ export const createTodo = async (userId, data) => {
   return await createTodoAPI(userId, data);
 };
 
-export const AddedTodos = (newTodo, state) => {
-  const { todos, userId } = state;
-  const newTodos = todos.map((user) => {
+export const AddTodos = (newTodo, state) => {
+  const { users, userId } = state;
+  const newUsers = users.map((user) => {
     if (user._id === userId) {
       const newTodoList = [...user.todoList, newTodo];
       return { ...user, todoList: newTodoList };
@@ -15,7 +15,7 @@ export const AddedTodos = (newTodo, state) => {
   });
   const newState = {
     ...state,
-    todos: newTodos,
+    users: newUsers,
   };
   return newState;
 };

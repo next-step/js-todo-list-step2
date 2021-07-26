@@ -6,7 +6,7 @@ import {
 } from "../../api/requests.js";
 import { $, $all } from "../../utils/selectors.js";
 import Component from "../component.js";
-import { currentTodos, deletedTodos, updateTodos } from "./helpers.js";
+import { filterTodos, deletedTodos, updateTodos } from "./helpers.js";
 import { PRIORITY } from "./constants.js";
 export default class TodoItems extends Component {
   constructor($app, props) {
@@ -70,8 +70,8 @@ export default class TodoItems extends Component {
   }
   render() {
     const state = this.props.getState();
-    const curTodos = currentTodos(state);
-    this.$app.innerHTML = curTodos
+    const filteredTodos = filterTodos(state);
+    this.$app.innerHTML = filteredTodos
       .map(({ _id, contents, isCompleted, priority }) => {
         return `<li ${isCompleted ? `class="completed"` : ``}>
           <div class="view" data-id="${_id}" data-contents="${contents}" data-priority="${priority}">
@@ -84,7 +84,9 @@ export default class TodoItems extends Component {
                   <option value="1">1순위</option>
                   <option value="2">2순위</option>
                 </select>`
-              : `<span class="chip ${priority === "FIRST" ? "primary" : "secondary"}">${priority === "FIRST" ? "1" : "2"}순위</span>`
+              : `<span class="chip ${
+                  priority === "FIRST" ? "primary" : "secondary"
+                }">${priority === "FIRST" ? "1" : "2"}순위</span>`
           }${contents}</label><button class="destroy""></button></div>
         <input class="edit"" value="${contents}" />
       </li>

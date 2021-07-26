@@ -51,7 +51,7 @@ export default class App {
     const data = await getUsersAPI();
     const newState = {
       ...this.state,
-      todos: data,
+      users: data,
       userName: data[0].name,
       userId: data[0]._id,
     };
