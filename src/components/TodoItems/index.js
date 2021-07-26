@@ -10,12 +10,7 @@ import { currentTodos, deletedTodos, updateTodos } from "./helpers.js";
 import { PRIORITY } from "./constants.js";
 export default class TodoItems extends Component {
   constructor($app, props) {
-    super();
-    this.$app = $app;
-    this.props = props;
-    this.state = "";
-    this.mount();
-    this.render();
+    super($app, props);
   }
   mount() {
     this.$app.addEventListener("click", async (e) => {

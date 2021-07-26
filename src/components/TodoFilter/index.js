@@ -3,11 +3,7 @@ import Component from "../component.js";
 
 export default class TodoFilter extends Component {
   constructor($app, props) {
-    super();
-    this.$app = $app;
-    this.props = props;
-    this.mount();
-    this.render();
+    super($app, props);
   }
   mount() {
     this.$app.addEventListener("click", (e) => {

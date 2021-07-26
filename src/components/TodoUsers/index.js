@@ -8,11 +8,7 @@ import {
 import { ERRORMESSAGE } from "../../utils/constants.js";
 export default class TodoUsers extends Component {
   constructor($app, props) {
-    super();
-    this.$app = $app;
-    this.props = props;
-    this.mount();
-    this.render();
+    super($app, props);
   }
   mount() {
     this.$app.addEventListener("click", async (e) => {

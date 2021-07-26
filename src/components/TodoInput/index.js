@@ -5,11 +5,7 @@ import { AddedTodos } from "./helpers.js";
 
 export default class TodoInput extends Component {
   constructor($app, props) {
-    super();
-    this.$app = $app;
-    this.props = props;
-    this.mount();
-    this.render();
+    super($app, props);
   }
   mount() {
     this.$app.addEventListener("keyup", async (e) => {

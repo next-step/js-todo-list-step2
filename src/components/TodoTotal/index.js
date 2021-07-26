@@ -2,11 +2,7 @@ import Component from "../component.js";
 import { countTodosLength } from "./helpers.js";
 export default class TodoTotal extends Component {
   constructor($app, props) {
-    super();
-    this.$app = $app;
-    this.props = props;
-    this.mount();
-    this.render();
+    super($app, props);
   }
   mount() {}
   render() {

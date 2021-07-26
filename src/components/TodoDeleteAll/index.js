@@ -4,11 +4,7 @@ import { deleteAllTodos } from "./helpers.js";
 
 export default class TodoDeleteAll extends Component {
   constructor($app, props) {
-    super();
-    this.$app = $app;
-    this.props = props;
-    this.mount();
-    this.render();
+    super($app, props);
   }
   mount() {
     this.$app.addEventListener("click", async (e) => {
